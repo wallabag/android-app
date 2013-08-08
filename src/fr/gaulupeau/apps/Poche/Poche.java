@@ -68,6 +68,7 @@ import android.widget.TextView;
 				e.printStackTrace();
 			}
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+			System.out.println(base64);
 			deliciousSaveUrl.appendQueryParameter("url", base64);
 			//System.out.println("base64 : " + base64);
 			//System.out.println("pageurl : " + pageUrl);
@@ -92,7 +93,6 @@ import android.widget.TextView;
             btnDone.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
 					// close the app
-					System.out.println(editPocheUrl.getText().toString());
 					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		        	SharedPreferences.Editor editor = settings.edit();
 		        	editor.putString("pocheUrl", editPocheUrl.getText().toString());

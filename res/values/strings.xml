@@ -3,9 +3,10 @@
     <string name="hello">Welcome to Android2Poche !</string>
     <string name="app_name">Android2Poche</string>
     <string name="author">By GAULUPEAU Jonathan</string>
-    <string name="instructions">To save a web page to Poche, open the page in a browser then tap <i>Share</i> and tap on <i>Android to Poche</i>. You should then see a save window. When you have finished the browser will return to the original location.</string>
+    <string name="instructions">To save a web page to Poche, open the page in a browser then tap <i>Share</i> and tap on <i>Android2Poche</i>. \nYou could then see your Poche login page. \nAnd it\'s done !</string>
     <string name="btnDone">Done</string>
     <string name="which_browser">Which browser would you like to use?</string>
     <string name="authorSite">http://links.gaulupeau.fr</string>
-    <string name="url_label">Your Poche URL :</string>
+    <string name="url_label"><b><u>Your Poche URL :</u></b></string>
+    <string name="url_help">Examples:\n<i>http://poche.example.fr</i>\n<i>http://www.example.fr/poche</i></string>
 </resources>
