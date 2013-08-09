@@ -51,15 +51,10 @@ import android.widget.TextView;
         	// ACTION_SEND is called when sharing, get the title and URL from 
         	// the call
         	String pageUrl = extras.getString("android.intent.extra.TEXT");
-			String pageTitle = extras.getString("android.intent.extra.SUBJECT");
-			// Some apps do not provide the page title, so in this case use the URL again
-            if (pageTitle == null) {
-            	pageTitle = pageUrl;
-            }
             // Start to build the Delicious URL
-			Uri.Builder deliciousSaveUrl = Uri.parse(pocheUrl).buildUpon();
+			Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
 			// Add the parameters from the call
-			deliciousSaveUrl.appendQueryParameter("action", "add");
+			pocheSaveUrl.appendQueryParameter("action", "add");
 			byte[] data = null;
 			try {
 				data = pageUrl.getBytes("UTF-8");
@@ -69,16 +64,18 @@ import android.widget.TextView;
 			}
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
 			System.out.println(base64);
-			deliciousSaveUrl.appendQueryParameter("url", base64);
+			pocheSaveUrl.appendQueryParameter("url", base64);
 			//System.out.println("base64 : " + base64);
 			//System.out.println("pageurl : " + pageUrl);
 			
 			// Load the constructed URL in the browser
 			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(deliciousSaveUrl.build());
+			i.setData(pocheSaveUrl.build());
 			// If user has more then one browser installed give them a chance to
 			// select which one they want to use 
-			startActivity(Intent.createChooser(i, getString(R.string.which_browser)));
+			
+			//startActivity(Intent.createChooser(i, getString(R.string.which_browser)));
+			startActivity(i);
 			// That is all this app needs to do, so call finish()
 			this.finish();
         }
