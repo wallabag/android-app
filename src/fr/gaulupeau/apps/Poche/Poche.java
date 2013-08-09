@@ -17,6 +17,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Browser;
 import android.util.Base64;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -63,14 +64,14 @@ import android.widget.TextView;
 				e.printStackTrace();
 			}
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-			System.out.println(base64);
 			pocheSaveUrl.appendQueryParameter("url", base64);
-			//System.out.println("base64 : " + base64);
-			//System.out.println("pageurl : " + pageUrl);
+			System.out.println("base64 : " + base64);
+			System.out.println("pageurl : " + pageUrl);
 			
 			// Load the constructed URL in the browser
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(pocheSaveUrl.build());
+			i.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
 			// If user has more then one browser installed give them a chance to
 			// select which one they want to use 
 			
