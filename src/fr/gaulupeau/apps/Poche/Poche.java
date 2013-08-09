@@ -44,10 +44,10 @@ import android.widget.TextView;
         String action = intent.getAction();
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        String pocheUrl = settings.getString("pocheUrl", "");
+        String pocheUrl = settings.getString("pocheUrl", "http://");
         
         // Find out if Sharing or if app has been launched from icon
-        if (action.equals(Intent.ACTION_SEND)) {
+        if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
         	// ACTION_SEND is called when sharing, get the title and URL from 
         	// the call
         	String pageUrl = extras.getString("android.intent.extra.TEXT");
@@ -74,7 +74,6 @@ import android.widget.TextView;
 			// If user has more then one browser installed give them a chance to
 			// select which one they want to use 
 			
-			//startActivity(Intent.createChooser(i, getString(R.string.which_browser)));
 			startActivity(i);
 			// That is all this app needs to do, so call finish()
 			this.finish();

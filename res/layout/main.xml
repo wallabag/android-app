@@ -19,7 +19,7 @@
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:scaleType="center"
                 android:src="@drawable/icon" />
@@ -60,7 +60,8 @@
             android:maxLines="1"
             android:scrollHorizontally="false" >
 
-            <requestFocus />
+            <requestFocus android:layout_width="wrap_content" />
+
         </EditText>
 
         <TextView
@@ -69,9 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/toppadding"
             android:layout_weight="1"
-            android:paddingBottom="30sp"
             android:paddingTop="5sp"
             android:text="@string/instructions"
+            android:autoLink="web"
             android:textSize="22sp" >
         </TextView>
 
