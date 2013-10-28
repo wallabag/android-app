@@ -8,6 +8,7 @@
 
 package fr.gaulupeau.apps.Poche;
 
+import fr.gaulupeau.apps.InThePoche.R;
 import java.io.UnsupportedEncodingException;
 
 import android.annotation.TargetApi;
@@ -52,7 +53,7 @@ import android.widget.TextView;
         	// ACTION_SEND is called when sharing, get the title and URL from 
         	// the call
         	String pageUrl = extras.getString("android.intent.extra.TEXT");
-            // Start to build the Delicious URL
+            // Start to build the poche URL
 			Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
 			// Add the parameters from the call
 			pocheSaveUrl.appendQueryParameter("action", "add");
