@@ -2,6 +2,7 @@
 <resources>
     <string name="hello">In the poche !</string>
     <string name="app_name">In the poche</string>
+    <string name="label_name">Add in the poche</string>
     <string name="author">By GAULUPEAU Jonathan</string>
     <string name="instructions">To save a web page to poche, open the page in a browser then tap <i>Share</i> and tap on <i>In the poche</i>. \nYou could then see your Poche login page. \nAnd it\'s done ! \nMore infos about poche at http://www.inthepoche.com</string>
     <string name="btnDone">Save</string>
