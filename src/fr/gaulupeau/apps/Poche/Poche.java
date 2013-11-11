@@ -9,7 +9,10 @@
 package fr.gaulupeau.apps.Poche;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 import java.io.UnsupportedEncodingException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -19,32 +22,33 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
+import android.text.Html;
 import android.util.Base64;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 
 /**
  * Main activity class
  */
 @TargetApi(Build.VERSION_CODES.FROYO) public class Poche extends Activity {
-	TextView authorSite; // the author and site line on the information page
-	Button btnDone; // done/close button
+	TextView authorSite;
+	
+	Button btnDone;
+	Button btnGetPost;
 	EditText editPocheUrl;
-	public static final String PREFS_NAME = "MyPrefsFile";
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
      * displaying information page. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        
-        // Get information about the call to start this activity
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         String action = intent.getAction();
-        
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "http://");
         
@@ -68,6 +72,7 @@ import android.widget.TextView;
 			pocheSaveUrl.appendQueryParameter("url", base64);
 			System.out.println("base64 : " + base64);
 			System.out.println("pageurl : " + pageUrl);
+			
 			
 			// Load the constructed URL in the browser
 			Intent i = new Intent(Intent.ACTION_VIEW);
@@ -98,6 +103,19 @@ import android.widget.TextView;
 					Poche.this.finish();
 				}
             });
+
+            
+            btnGetPost = (Button)findViewById(R.id.btnGetPost);
+			btnGetPost.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getBaseContext(), ReadArticle.class));
+				}
+			});
+			
         }
     }
+
+
+    
 }
