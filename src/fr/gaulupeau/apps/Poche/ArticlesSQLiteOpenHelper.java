@@ -20,6 +20,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static String ARTICLE_CONTENT = "content";
     public static String ARTICLE_TITLE = "title";
     public static String ARTICLE_URL = "url";
+    public static String ARCHIVE = "archive";
     Context c;
     
     public ArticlesSQLiteOpenHelper(Context context) {
@@ -51,7 +52,19 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             ARTICLE_TITLE + " text, " +
                             ARTICLE_URL + " text, " +
                             ARTICLE_ID + " integer, " +
+                            ARCHIVE + " integer" +
                             ");"
+            );
+            db.execSQL(
+            				"INSERT INTO " + ARTICLE_TABLE +
+            				" (" +
+            				ARTICLE_TITLE + ", " +
+            				ARTICLE_CONTENT + ", " +
+            				ARTICLE_ID + ", " +
+            				ARTICLE_URL + ", " +
+            				ARCHIVE +
+            				") VALUES (" +
+            				"'Ceci est un test', 'coucou', 1, 'toto', 0);"
             );
     }
 

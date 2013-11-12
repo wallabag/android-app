@@ -9,15 +9,17 @@
 package fr.gaulupeau.apps.Poche;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 import java.io.UnsupportedEncodingException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,15 +32,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 
 /**
  * Main activity class
  */
 @TargetApi(Build.VERSION_CODES.FROYO) public class Poche extends Activity {
 	TextView authorSite;
-	
+	private SQLiteDatabase database;
 	Button btnDone;
 	Button btnGetPost;
+	Button btnSync;
 	EditText editPocheUrl;
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
@@ -104,12 +114,33 @@ import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 				}
             });
 
+            btnSync = (Button)findViewById(R.id.btnSync);
+            btnSync.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
+					try {
+						JSONObject rootobj = new JSONObject(ret);
+						ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+						database = helper.getWritableDatabase();
+						ContentValues values = new ContentValues();
+						values.put(ARTICLE_TITLE, Html.fromHtml(rootobj.getString("titre")).toString());
+						values.put(ARTICLE_CONTENT, Html.fromHtml(rootobj.getString("content")).toString());
+						values.put(ARTICLE_ID, Html.fromHtml(rootobj.getString("id")).toString());
+						values.put(ARTICLE_URL, Html.fromHtml(rootobj.getString("url")).toString());
+						values.put(ARCHIVE, 0);
+						database.insert(ARTICLE_TABLE, null, values);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			});
             
             btnGetPost = (Button)findViewById(R.id.btnGetPost);
 			btnGetPost.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					startActivity(new Intent(getBaseContext(), ReadArticle.class));
+					startActivity(new Intent(getBaseContext(), ListArticles.class));
 				}
 			});
 			
