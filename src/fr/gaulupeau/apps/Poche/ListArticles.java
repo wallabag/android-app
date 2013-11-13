@@ -59,7 +59,7 @@ public class ListArticles extends Activity {
 	}
 	
 	public ReadingListAdapter getAdapterQuery(String filter, ArrayList<Article> articleInfo) {
-		Log.e("getAdapterQuery", "running query");
+		//Log.e("getAdapterQuery", "running query");
 		//String url, String domain, String id, String title, String content
 		String[] getStrColumns = new String[] {ARTICLE_URL, ARTICLE_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE};
 		Cursor ac = database.query(

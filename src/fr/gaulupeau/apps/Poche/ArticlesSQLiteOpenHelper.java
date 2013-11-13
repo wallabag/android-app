@@ -52,7 +52,8 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             ARTICLE_TITLE + " text, " +
                             ARTICLE_URL + " text, " +
                             ARTICLE_ID + " integer, " +
-                            ARCHIVE + " integer" +
+                            ARCHIVE + " integer," +
+                            "UNIQUE (" + ARTICLE_ID + ")" +
                             ");"
             );
             db.execSQL(

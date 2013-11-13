@@ -11,6 +11,7 @@ package fr.gaulupeau.apps.Poche;
 import fr.gaulupeau.apps.InThePoche.R;
 import java.io.UnsupportedEncodingException;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,6 +20,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Build;
@@ -80,8 +82,6 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 			}
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
 			pocheSaveUrl.appendQueryParameter("url", base64);
-			System.out.println("base64 : " + base64);
-			System.out.println("pageurl : " + pageUrl);
 			
 			
 			// Load the constructed URL in the browser
@@ -119,17 +119,25 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 				@Override
 				public void onClick(View v) {
 					String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
+					ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+					database = helper.getWritableDatabase();
 					try {
-						JSONObject rootobj = new JSONObject(ret);
-						ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-						database = helper.getWritableDatabase();
-						ContentValues values = new ContentValues();
-						values.put(ARTICLE_TITLE, Html.fromHtml(rootobj.getString("titre")).toString());
-						values.put(ARTICLE_CONTENT, Html.fromHtml(rootobj.getString("content")).toString());
-						values.put(ARTICLE_ID, Html.fromHtml(rootobj.getString("id")).toString());
-						values.put(ARTICLE_URL, Html.fromHtml(rootobj.getString("url")).toString());
-						values.put(ARCHIVE, 0);
-						database.insert(ARTICLE_TABLE, null, values);
+						JSONArray rootobj = new JSONArray(ret);
+						for (int i=0; i<rootobj.length(); i++) {
+							JSONObject article = rootobj.getJSONObject(i);
+							ContentValues values = new ContentValues();
+							values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("titre")).toString());
+							values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
+							values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
+							values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
+							values.put(ARCHIVE, 0);
+							try {
+								database.insertOrThrow(ARTICLE_TABLE, null, values);
+							} catch (SQLiteConstraintException e) {
+								continue;
+							}
+						}
+						
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}

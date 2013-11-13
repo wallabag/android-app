@@ -42,7 +42,7 @@ public class ReadingListAdapter extends BaseAdapter {
                     convertView = inflater.inflate(R.layout.article_list, null);
             }
             TextView tvTitle = (TextView) convertView.findViewById(R.id.listitem_titre);
-            Log.e("title", entry.title);
+            //Log.e("title", entry.title);
             tvTitle.setText(entry.title);
 
             return convertView;

@@ -16,10 +16,30 @@
             android:textSize="25sp" />
 
         <TextView
+            android:id="@+id/txtAuthor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Author"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/viewLine"
+            android:layout_width="fill_parent"
+			android:layout_height="2dip"
+			android:background="#000000" />
+
+        <TextView
             android:id="@+id/txtContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contenu" />
+            android:text="Contenu"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btnMarkRead"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btnMarkRead" />
 
     </LinearLayout>
     

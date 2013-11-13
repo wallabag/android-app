@@ -10,6 +10,7 @@
     <string name="authorSite">http://cv.gaulupeau.fr</string>
     <string name="url_label"><b><u>Your poche URL :</u></b></string>
     <string name="url_help">Examples:\n<i>http://poche.example.fr</i>\n<i>http://www.example.fr/poche</i></string>
-    <string name="btnGetPost">Save the post</string>
-    <string name="btnSync">Syncroniser</string>
+    <string name="btnGetPost">List articles</string>
+    <string name="btnSync">Syncronise</string>
+    <string name="btnMarkRead">Mark as Read</string>
 </resources>
