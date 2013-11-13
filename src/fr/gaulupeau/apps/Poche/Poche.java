@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
@@ -32,6 +33,9 @@ import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -103,20 +107,7 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         	// app has been launched from menu - show information window
         	setContentView(R.layout.main);
             // handle done/close button
-        	editPocheUrl = (EditText)findViewById(R.id.pocheUrl);
-        	editPocheUrl.setText(pocheUrl);
-        	
-            btnDone = (Button)findViewById(R.id.btnDone);
-            btnDone.setOnClickListener(new OnClickListener() {
-				public void onClick(View v) {
-					// close the app
-					SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		        	SharedPreferences.Editor editor = settings.edit();
-		        	editor.putString("pocheUrl", editPocheUrl.getText().toString());
-					editor.commit();
-					Poche.this.finish();
-				}
-            });
+
 
             btnSync = (Button)findViewById(R.id.btnSync);
             btnSync.setOnClickListener(new OnClickListener() {
@@ -172,6 +163,23 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         }
     }
 
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+           MenuInflater inflater = getMenuInflater();
+           inflater.inflate(R.menu.option, menu);
+           return true;
+    } 
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        	case R.id.menuSettings:
+        		startActivity(new Intent(getBaseContext(), Settings.class));
+                // write code to execute when clicked on this option
+            	//return true;   
+    		default:
+    			return super.onOptionsItemSelected(item);
+        }
+    }
     
 }

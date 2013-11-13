@@ -12,76 +12,29 @@
         android:paddingRight="30sp"
         android:paddingTop="15dp" >
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/imageView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1" >
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:scaleType="center"
-                android:src="@drawable/icon" />
-
-            <TextView
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="3"
-                android:text="@string/hello"
-                android:textSize="25sp" />
-
-        </LinearLayout>
+            android:layout_weight="0"
+            android:scaleType="center"
+            android:src="@drawable/icon" />
 
         <TextView
-            android:id="@+id/pageUrl_label"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/url_label"
-            android:textSize="20sp" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="@string/hello"
+            android:textSize="25sp" />
 
-        <TextView
-            android:id="@+id/txtTitre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/url_help" />
-
-        <EditText
-            android:id="@+id/pocheUrl"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textFilter"
-            android:linksClickable="false"
-            android:maxLines="1"
-            android:scrollHorizontally="false" >
-
-            <requestFocus android:layout_width="wrap_content" />
-
-        </EditText>
-
-        <TextView
-            android:id="@+id/instructions"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/toppadding"
-            android:layout_weight="1"
-            android:paddingTop="5sp"
-            android:text="@string/instructions"
-            android:autoLink="web"
-            android:textSize="22sp" >
-        </TextView>
-
-        <Button
-            android:id="@+id/btnDone"
+        <View
+            android:id="@+id/view1"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btnDone" />
+            android:layout_height="1sp"
+            android:layout_marginBottom="6sp"
+            android:layout_marginTop="6sp"
+            android:layout_weight="0"
+            android:background="#000000" />
 
         <Button
             android:id="@+id/btnGetPost"

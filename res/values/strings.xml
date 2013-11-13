@@ -13,4 +13,5 @@
     <string name="btnGetPost">List articles</string>
     <string name="btnSync">Syncronise</string>
     <string name="btnMarkRead">Mark as Read</string>
+    <string name="menuSettings">Settings</string>
 </resources>
