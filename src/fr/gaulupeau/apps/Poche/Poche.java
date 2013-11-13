@@ -11,6 +11,9 @@ package fr.gaulupeau.apps.Poche;
 import fr.gaulupeau.apps.InThePoche.R;
 import java.io.UnsupportedEncodingException;
 
+import org.alexd.jsonrpc.JSONRPCClient;
+import org.alexd.jsonrpc.JSONRPCException;
+import org.alexd.jsonrpc.JSONRPCParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,7 @@ import android.os.Bundle;
 import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -118,6 +122,19 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
             btnSync.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+//					JSONRPCClient client = JSONRPCClient.create("http://v2.inthepoche.com/jsonrpc.php", JSONRPCParams.Versions.VERSION_2);
+//					client.setConnectionTimeout(8000);
+//					client.setSoTimeout(8000);
+//					JSONObject params = new JSONObject();
+//					try {
+//						params.put("admin", "PYBRAYc4ebUuRoa");
+//						String ret = client.callString("authentication");
+//						Log.e("API", ret);
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+					
 					String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
 					ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 					database = helper.getWritableDatabase();
