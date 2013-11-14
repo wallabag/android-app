@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class Settings extends Activity {
 	Button btnDone;
@@ -17,7 +16,6 @@ public class Settings extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -28,7 +26,6 @@ public class Settings extends Activity {
         btnDone = (Button)findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				// close the app
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 	        	SharedPreferences.Editor editor = settings.edit();
 	        	editor.putString("pocheUrl", editPocheUrl.getText().toString());

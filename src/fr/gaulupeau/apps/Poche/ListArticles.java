@@ -8,7 +8,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -23,17 +25,34 @@ public class ListArticles extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
 		setupDB();
-		setupList();
+		setupList(false);
 	}
 	
     public void onResume() {
         super.onResume();
-        setupList();
+        setupList(false);
     }
     
     public void onDestroy() {
         super.onDestroy();
         database.close();
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+           MenuInflater inflater = getMenuInflater();
+           inflater.inflate(R.menu.option_list, menu);
+           return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        	case R.id.menuShowAll:
+        		setupList(true);
+    		default:
+    			return super.onOptionsItemSelected(item);
+        }
     }
 	
 	public void setupDB() {
@@ -41,10 +60,14 @@ public class ListArticles extends Activity {
 		database = helper.getWritableDatabase();
 	}
 	
-	public void setupList() {
+	public void setupList(Boolean showAll) {
 		readList = (ListView) findViewById(R.id.liste_articles);
         readArticlesInfo = new ArrayList<Article>();
-        ReadingListAdapter ad = getAdapterQuery(ARCHIVE + "=0", readArticlesInfo);
+        String filter = null;
+        if (showAll == false) {
+			filter = ARCHIVE + "=0";
+		}
+        ReadingListAdapter ad = getAdapterQuery(filter, readArticlesInfo);
         readList.setAdapter(ad);
         
         readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {

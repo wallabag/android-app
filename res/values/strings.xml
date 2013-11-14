@@ -14,4 +14,5 @@
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="menuSettings">Settings</string>
+    <string name="menuShowAll">Show All</string>
 </resources>

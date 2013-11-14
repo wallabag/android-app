@@ -5,21 +5,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/txtTitre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Titre"
             android:textSize="25sp" />
 
         <TextView
             android:id="@+id/txtAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Author"
             android:textSize="12sp" />
 
         <View
@@ -32,7 +30,6 @@
             android:id="@+id/txtContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Contenu"
             android:textSize="18sp" />
 
         <Button

@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
@@ -31,9 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.text.Html;
-import android.text.InputFilter.LengthFilter;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,7 +38,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
@@ -85,7 +81,6 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 			try {
 				data = pageUrl.getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
@@ -100,14 +95,10 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 			// select which one they want to use 
 			
 			startActivity(i);
-			// That is all this app needs to do, so call finish()
 			this.finish();
         }
         else {
-        	// app has been launched from menu - show information window
         	setContentView(R.layout.main);
-            // handle done/close button
-        	
 
             btnSync = (Button)findViewById(R.id.btnSync);
             btnSync.setOnClickListener(new OnClickListener() {
@@ -149,15 +140,13 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
+					updateUnread();
 				}
 			});
             
-            ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-            database = helper.getReadableDatabase();
-            int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-            
             btnGetPost = (Button)findViewById(R.id.btnGetPost);
-            btnGetPost.append(" - " + news + " unread");
+            updateUnread();
+            
 			btnGetPost.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -168,31 +157,34 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         }
     }
     
-@Override
-protected void onResume() {
-	super.onResume();
-    ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-	database = helper.getReadableDatabase();
-    int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-}
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	updateUnread();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-           MenuInflater inflater = getMenuInflater();
-           inflater.inflate(R.menu.option, menu);
-           return true;
+    	MenuInflater inflater = getMenuInflater();
+    	inflater.inflate(R.menu.option, menu);
+    	return true;
     } 
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-        	case R.id.menuSettings:
-        		startActivity(new Intent(getBaseContext(), Settings.class));
-                // write code to execute when clicked on this option
-            	//return true;   
-    		default:
-    			return super.onOptionsItemSelected(item);
-        }
+    	switch (item.getItemId()) {
+    	case R.id.menuSettings:
+    		startActivity(new Intent(getBaseContext(), Settings.class));
+    	default:
+    		return super.onOptionsItemSelected(item);
+    	}
+    }
+    
+    private void updateUnread(){
+    	ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+    	database = helper.getReadableDatabase();
+    	int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+    	btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " unread");
     }
     
 }
