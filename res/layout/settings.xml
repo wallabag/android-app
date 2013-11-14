@@ -33,7 +33,7 @@
             android:layout_height="0dp"
             android:layout_weight="2"
             android:ems="10"
-            android:inputType="textFilter"
+            android:inputType="textUri"
             android:linksClickable="false"
             android:maxLines="1"
             android:scrollHorizontally="false" >
@@ -49,8 +49,7 @@
             android:layout_weight="1"
             android:autoLink="web"
             android:paddingTop="5sp"
-            android:text="@string/instructions"
-            android:textSize="22sp" />
+            android:text="@string/instructions" />
 
         <Button
             android:id="@+id/btnDone"
@@ -58,6 +57,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btnDone" />
+        
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="@string/author"
+            android:textSize="10sp" />
+                
     </LinearLayout>
 
 </LinearLayout>

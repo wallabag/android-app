@@ -3,7 +3,7 @@
     <string name="hello">In the poche !</string>
     <string name="app_name">In the poche</string>
     <string name="label_name">Add in the poche</string>
-    <string name="author">By GAULUPEAU Jonathan</string>
+    <string name="author">GAULUPEAU Jonathan - 2013</string>
     <string name="instructions">To save a web page to poche, open the page in a browser then tap <i>Share</i> and tap on <i>In the poche</i>. \nYou could then see your Poche login page. \nAnd it\'s done ! \nMore infos about poche at http://www.inthepoche.com</string>
     <string name="btnDone">Save</string>
     <string name="which_browser">Which browser would you like to use?</string>
@@ -11,7 +11,7 @@
     <string name="url_label"><b><u>Your poche URL :</u></b></string>
     <string name="url_help">Examples:\n<i>http://poche.example.fr</i>\n<i>http://www.example.fr/poche</i></string>
     <string name="btnGetPost">List articles</string>
-    <string name="btnSync">Syncronise</string>
+    <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="menuSettings">Settings</string>
 </resources>

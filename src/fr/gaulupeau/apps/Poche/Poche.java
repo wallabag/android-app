@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.text.Html;
+import android.text.InputFilter.LengthFilter;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
@@ -54,7 +55,6 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
  * Main activity class
  */
 @TargetApi(Build.VERSION_CODES.FROYO) public class Poche extends Activity {
-	TextView authorSite;
 	private SQLiteDatabase database;
 	Button btnDone;
 	Button btnGetPost;
@@ -107,7 +107,7 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         	// app has been launched from menu - show information window
         	setContentView(R.layout.main);
             // handle done/close button
-
+        	
 
             btnSync = (Button)findViewById(R.id.btnSync);
             btnSync.setOnClickListener(new OnClickListener() {
@@ -152,7 +152,12 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 				}
 			});
             
+            ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+            database = helper.getReadableDatabase();
+            int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+            
             btnGetPost = (Button)findViewById(R.id.btnGetPost);
+            btnGetPost.append(" - " + news + " unread");
 			btnGetPost.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -162,6 +167,14 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 			
         }
     }
+    
+@Override
+protected void onResume() {
+	super.onResume();
+    ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+	database = helper.getReadableDatabase();
+    int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
