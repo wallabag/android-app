@@ -11,9 +11,6 @@ package fr.gaulupeau.apps.Poche;
 import fr.gaulupeau.apps.InThePoche.R;
 import java.io.UnsupportedEncodingException;
 
-import org.alexd.jsonrpc.JSONRPCClient;
-import org.alexd.jsonrpc.JSONRPCException;
-import org.alexd.jsonrpc.JSONRPCParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,10 +18,13 @@ import org.json.JSONObject;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +38,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
@@ -86,7 +87,6 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
 			pocheSaveUrl.appendQueryParameter("url", base64);
 			
-			
 			// Load the constructed URL in the browser
 			Intent i = new Intent(Intent.ACTION_VIEW);
 			i.setData(pocheSaveUrl.build());
@@ -116,31 +116,44 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 //						// TODO Auto-generated catch block
 //						e.printStackTrace();
 //					}
-					
-					String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
-					ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-					database = helper.getWritableDatabase();
-					try {
-						JSONArray rootobj = new JSONArray(ret);
-						for (int i=0; i<rootobj.length(); i++) {
-							JSONObject article = rootobj.getJSONObject(i);
-							ContentValues values = new ContentValues();
-							values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("titre")).toString());
-							values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
-							values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
-							values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
-							values.put(ARCHIVE, 0);
-							try {
-								database.insertOrThrow(ARTICLE_TABLE, null, values);
-							} catch (SQLiteConstraintException e) {
-								continue;
+					// Vérification de la connectivité Internet
+					final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+					final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+					if (activeNetwork != null && activeNetwork.isConnected()) {
+						// Exécution de la synchro en arrière-plan
+						new Thread(new Runnable() {
+							public void run() {
+								String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
+								ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+								database = helper.getWritableDatabase();
+								try {
+									JSONArray rootobj = new JSONArray(ret);
+									for (int i=0; i<rootobj.length(); i++) {
+										JSONObject article = rootobj.getJSONObject(i);
+										ContentValues values = new ContentValues();
+										values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("titre")).toString());
+										values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
+										values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
+										values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
+										values.put(ARCHIVE, 0);
+										try {
+											database.insertOrThrow(ARTICLE_TABLE, null, values);
+										} catch (SQLiteConstraintException e) {
+											continue;
+										}
+									}
+									showToast(getString(R.string.txtSyncDone));
+									updateUnread();
+								} catch (JSONException e) {
+									e.printStackTrace();
+									showToast(getString(R.string.txtSyncFailed));
+								}
 							}
-						}
-						
-					} catch (JSONException e) {
-						e.printStackTrace();
+						}).start();
+					} else {
+						// Afficher alerte connectivité
+						showToast(getString(R.string.txtNetOffline));
 					}
-					updateUnread();
 				}
 			});
             
@@ -181,10 +194,25 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
     }
     
     private void updateUnread(){
-    	ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-    	database = helper.getReadableDatabase();
-    	int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-    	btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " unread");
+    	runOnUiThread(new Runnable() {
+    		public void run()
+    		{
+    			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+    			database = helper.getReadableDatabase();
+    			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " unread");
+    		}
+    	});
     }
     
+    public void showToast(final String toast)
+    {
+    	runOnUiThread(new Runnable() {
+    		public void run()
+    		{
+    			Toast.makeText(Poche.this, toast, Toast.LENGTH_SHORT).show();
+    		}
+    	});
+    }
+
 }

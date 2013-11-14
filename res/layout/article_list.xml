@@ -7,7 +7,6 @@
             android:id="@+id/listitem_titre"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="titre"
             android:textSize="20sp"
             android:typeface="serif" />
 

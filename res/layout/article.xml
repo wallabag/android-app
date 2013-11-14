@@ -6,7 +6,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="15sp"
+        android:paddingRight="15sp"
+        android:paddingTop="15dp" >
 
         <TextView
             android:id="@+id/txtTitre"
@@ -23,14 +26,24 @@
         <View
             android:id="@+id/viewLine"
             android:layout_width="fill_parent"
-			android:layout_height="2dip"
-			android:background="#000000" />
+            android:layout_height="1dip"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="5sp"
+            android:background="#000000" />
 
         <TextView
             android:id="@+id/txtContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="5sp"
+            android:background="#000000" />
 
         <Button
             android:id="@+id/btnMarkRead"
