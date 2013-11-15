@@ -14,6 +14,8 @@ import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -39,7 +41,6 @@ import android.os.Bundle;
 import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -55,7 +56,6 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 
 /**
  * Main activity class
@@ -66,6 +66,12 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 	Button btnGetPost;
 	Button btnSync;
 	EditText editPocheUrl;
+	SharedPreferences settings;
+	String globalToken;
+	String apiUsername;
+	String apiToken;
+	String pocheUrl;
+	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
      * displaying information page. */
@@ -75,11 +81,11 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         String action = intent.getAction();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        final String pocheUrl = settings.getString("pocheUrl", "http://");
-        final String globalToken = settings.getString("globalToken", "");
-        final String apiUsername = settings.getString("APIUsername", "");
-        final String apiToken = settings.getString("APIToken", "");
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        pocheUrl = settings.getString("pocheUrl", "http://");
+        globalToken = settings.getString("globalToken", "");
+        apiUsername = settings.getString("APIUsername", "");
+        apiToken = settings.getString("APIToken", "");
         
         // Find out if Sharing or if app has been launched from icon
         if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
@@ -123,64 +129,7 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
 						 // Exécution de la synchro en arrière-plan
 						 new Thread(new Runnable() {
 							 public void run() {
-								 String id = "req-001";
-								 JSONRPC2Request reqOut = null;
-								 try {
-									 // POCHE A LINK
-									 //reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.add\",\"id\":\"req-001\",\"params\":[{\"username\":\"poche\",\"api_token\":\"cPG2urVgA+ToMXY\"},\"http://cdetc.fr\",true]}");
-									 // GET A LINK
-									 reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.info\",\"id\":\"" + id + "\",\"params\":[{\"username\":\""+ apiUsername + "\",\"api_token\":\""+ apiToken +"\"}, 1]}");
-								 } catch (JSONRPC2ParseException e2) {
-									 e2.printStackTrace();
-								 }
-								 System.out.println(reqOut.toString());
-								 URL url = null;
-								 try {
-									 final String rpcuser ="api_user";
-									 final String rpcpassword = globalToken;
-
-									 Authenticator.setDefault(new Authenticator() {
-										 protected PasswordAuthentication getPasswordAuthentication() {
-											 return new PasswordAuthentication (rpcuser, rpcpassword.toCharArray());
-										 }});
-									 url = new URL(pocheUrl + "/jsonrpc.php");
-								 } catch (MalformedURLException e1) {
-									 e1.printStackTrace();
-								 }
-								 JSONRPC2Session session = new JSONRPC2Session(url);
-								 JSONRPC2Response response = null;
-								 try{
-									 response = session.send(reqOut);
-								 } catch (JSONRPC2SessionException e) {
-
-									 System.err.println(e.getMessage());
-								 }
-								 if (response.indicatesSuccess()){
-									 JSONObject article = null;
-									 ContentValues values = new ContentValues();
-									 try {
-										 article = new JSONObject(response.getResult().toString());
-										 values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("title")).toString());
-										 values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
-										 values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
-										 values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
-										 values.put(ARCHIVE, 0);
-									 } catch (JSONException e) {
-										 e.printStackTrace();
-										 showToast(getString(R.string.txtSyncFailed));
-									 }
-									 try {
-										 database.insertOrThrow(ARTICLE_TABLE, null, values);
-									 } catch (SQLiteConstraintException e) {
-										 e.printStackTrace();
-										 showToast(getString(R.string.txtSyncFailed));
-									 }
-									 showToast(getString(R.string.txtSyncDone));
-									 updateUnread();
-								 }else{
-									 System.out.println(response.getError().getMessage( ));
-									 showToast(getString(R.string.txtSyncFailed));
-								 }
+								 fetchUnread();
 							 }
 						 }).start();
 					 } else {
@@ -227,6 +176,12 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
     	}
     }
     
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	database.close();
+    }
+    
     private void updateUnread(){
     	runOnUiThread(new Runnable() {
     		public void run()
@@ -247,6 +202,73 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
     			Toast.makeText(Poche.this, toast, Toast.LENGTH_SHORT).show();
     		}
     	});
+    }
+    
+    public void fetchUnread(){
+    	String id = "req-001";
+		 JSONRPC2Request reqOut = null;
+		 try {
+			 // POCHE A LINK
+			 //reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.add\",\"id\":\"req-001\",\"params\":[{\"username\":\"poche\",\"api_token\":\"cPG2urVgA+ToMXY\"},\"http://cdetc.fr\",true]}");
+			 // GET A LINK
+			 //reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.info\",\"id\":\"" + id + "\",\"params\":[{\"username\":\""+ apiUsername + "\",\"api_token\":\""+ apiToken +"\"}, 1]}");
+			 // GET ALL UNREAD
+			 reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.list_unread\",\"id\":\"" + id + "\",\"params\":[{\"username\":\""+ apiUsername + "\",\"api_token\":\""+ apiToken +"\"}, null, null]}");
+			 System.err.println(reqOut.toString());
+		 } catch (JSONRPC2ParseException e2) {
+			 e2.printStackTrace();
+		 }
+		 System.out.println(reqOut.toString());
+		 URL url = null;
+		 try {
+			 final String rpcuser ="api_user";
+			 final String rpcpassword = globalToken;
+
+			 Authenticator.setDefault(new Authenticator() {
+				 protected PasswordAuthentication getPasswordAuthentication() {
+					 return new PasswordAuthentication (rpcuser, rpcpassword.toCharArray());
+				 }});
+			 url = new URL(pocheUrl + "/jsonrpc.php");
+		 } catch (MalformedURLException e1) {
+			 e1.printStackTrace();
+		 }
+		 JSONRPC2Session session = new JSONRPC2Session(url);
+		 JSONRPC2Response response = null;
+		 try{
+			 response = session.send(reqOut);
+		 } catch (JSONRPC2SessionException e) {
+
+			 System.err.println(e.getMessage());
+		 }
+		 if (response.indicatesSuccess()){
+			 JSONObject article = null;
+			 ContentValues values = new ContentValues();
+			 try {
+				 JSONArray ret = new JSONArray(response.getResult().toString());
+				 for (int i = 0; i < ret.length(); i++) {
+					 article = ret.getJSONObject(i);
+					 values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("title")).toString());
+					 values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
+					 values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
+					 values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
+					 values.put(ARCHIVE, 0);
+					 try {
+						 database.insertOrThrow(ARTICLE_TABLE, null, values);
+					 } catch (SQLiteConstraintException e) {
+						 continue;
+					 }
+				}
+			 } catch (JSONException e) {
+				 e.printStackTrace();
+				 showToast(getString(R.string.txtSyncFailed));
+			 }
+			 
+			 showToast(getString(R.string.txtSyncDone));
+			 updateUnread();
+		 }else{
+			 System.out.println(response.getError().getMessage( ));
+			 showToast(getString(R.string.txtSyncFailed));
+		 }
     }
 
 }
