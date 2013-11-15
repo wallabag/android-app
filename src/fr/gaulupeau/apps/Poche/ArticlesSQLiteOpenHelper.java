@@ -56,17 +56,6 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             "UNIQUE (" + ARTICLE_ID + ")" +
                             ");"
             );
-            db.execSQL(
-            				"INSERT INTO " + ARTICLE_TABLE +
-            				" (" +
-            				ARTICLE_TITLE + ", " +
-            				ARTICLE_CONTENT + ", " +
-            				ARTICLE_ID + ", " +
-            				ARTICLE_URL + ", " +
-            				ARCHIVE +
-            				") VALUES (" +
-            				"'Ceci est un test', 'coucou', 1, 'toto', 0);"
-            );
     }
 
 

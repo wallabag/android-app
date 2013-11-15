@@ -10,10 +10,18 @@ package fr.gaulupeau.apps.Poche;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import java.io.UnsupportedEncodingException;
-
-import org.json.JSONArray;
+import java.net.Authenticator;
+import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
+import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.thetransactioncompany.jsonrpc2.JSONRPC2ParseException;
+import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
+import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -31,6 +39,7 @@ import android.os.Bundle;
 import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -67,7 +76,10 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
         Bundle extras = intent.getExtras();
         String action = intent.getAction();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        String pocheUrl = settings.getString("pocheUrl", "http://");
+        final String pocheUrl = settings.getString("pocheUrl", "http://");
+        final String globalToken = settings.getString("globalToken", "");
+        final String apiUsername = settings.getString("APIUsername", "");
+        final String apiToken = settings.getString("APIToken", "");
         
         // Find out if Sharing or if app has been launched from icon
         if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
@@ -104,56 +116,78 @@ import static fr.gaulupeau.apps.Poche.Helpers.getInputStreamFromUrl;
             btnSync.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-//					JSONRPCClient client = JSONRPCClient.create("http://v2.inthepoche.com/jsonrpc.php", JSONRPCParams.Versions.VERSION_2);
-//					client.setConnectionTimeout(8000);
-//					client.setSoTimeout(8000);
-//					JSONObject params = new JSONObject();
-//					try {
-//						params.put("admin", "PYBRAYc4ebUuRoa");
-//						String ret = client.callString("authentication");
-//						Log.e("API", ret);
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-					// Vérification de la connectivité Internet
-					final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-					final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-					if (activeNetwork != null && activeNetwork.isConnected()) {
-						// Exécution de la synchro en arrière-plan
-						new Thread(new Runnable() {
-							public void run() {
-								String ret = getInputStreamFromUrl("http://poche.gaulupeau.fr/toto.php");
-								ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-								database = helper.getWritableDatabase();
-								try {
-									JSONArray rootobj = new JSONArray(ret);
-									for (int i=0; i<rootobj.length(); i++) {
-										JSONObject article = rootobj.getJSONObject(i);
-										ContentValues values = new ContentValues();
-										values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("titre")).toString());
-										values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
-										values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
-										values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
-										values.put(ARCHIVE, 0);
-										try {
-											database.insertOrThrow(ARTICLE_TABLE, null, values);
-										} catch (SQLiteConstraintException e) {
-											continue;
-										}
-									}
-									showToast(getString(R.string.txtSyncDone));
-									updateUnread();
-								} catch (JSONException e) {
-									e.printStackTrace();
-									showToast(getString(R.string.txtSyncFailed));
-								}
-							}
-						}).start();
-					} else {
-						// Afficher alerte connectivité
-						showToast(getString(R.string.txtNetOffline));
-					}
+					 // Vérification de la connectivité Internet
+					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+					 if (activeNetwork != null && activeNetwork.isConnected()) {
+						 // Exécution de la synchro en arrière-plan
+						 new Thread(new Runnable() {
+							 public void run() {
+								 String id = "req-001";
+								 JSONRPC2Request reqOut = null;
+								 try {
+									 // POCHE A LINK
+									 //reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.add\",\"id\":\"req-001\",\"params\":[{\"username\":\"poche\",\"api_token\":\"cPG2urVgA+ToMXY\"},\"http://cdetc.fr\",true]}");
+									 // GET A LINK
+									 reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.info\",\"id\":\"" + id + "\",\"params\":[{\"username\":\""+ apiUsername + "\",\"api_token\":\""+ apiToken +"\"}, 1]}");
+								 } catch (JSONRPC2ParseException e2) {
+									 e2.printStackTrace();
+								 }
+								 System.out.println(reqOut.toString());
+								 URL url = null;
+								 try {
+									 final String rpcuser ="api_user";
+									 final String rpcpassword = globalToken;
+
+									 Authenticator.setDefault(new Authenticator() {
+										 protected PasswordAuthentication getPasswordAuthentication() {
+											 return new PasswordAuthentication (rpcuser, rpcpassword.toCharArray());
+										 }});
+									 url = new URL(pocheUrl + "/jsonrpc.php");
+								 } catch (MalformedURLException e1) {
+									 e1.printStackTrace();
+								 }
+								 JSONRPC2Session session = new JSONRPC2Session(url);
+								 JSONRPC2Response response = null;
+								 try{
+									 response = session.send(reqOut);
+								 } catch (JSONRPC2SessionException e) {
+
+									 System.err.println(e.getMessage());
+								 }
+								 if (response.indicatesSuccess()){
+									 JSONObject article = null;
+									 ContentValues values = new ContentValues();
+									 try {
+										 article = new JSONObject(response.getResult().toString());
+										 values.put(ARTICLE_TITLE, Html.fromHtml(article.getString("title")).toString());
+										 values.put(ARTICLE_CONTENT, Html.fromHtml(article.getString("content")).toString());
+										 values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
+										 values.put(ARTICLE_URL, Html.fromHtml(article.getString("url")).toString());
+										 values.put(ARCHIVE, 0);
+									 } catch (JSONException e) {
+										 e.printStackTrace();
+										 showToast(getString(R.string.txtSyncFailed));
+									 }
+									 try {
+										 database.insertOrThrow(ARTICLE_TABLE, null, values);
+									 } catch (SQLiteConstraintException e) {
+										 e.printStackTrace();
+										 showToast(getString(R.string.txtSyncFailed));
+									 }
+									 showToast(getString(R.string.txtSyncDone));
+									 updateUnread();
+								 }else{
+									 System.out.println(response.getError().getMessage( ));
+									 showToast(getString(R.string.txtSyncFailed));
+								 }
+							 }
+						 }).start();
+					 } else {
+						 // Afficher alerte connectivité
+						 showToast(getString(R.string.txtNetOffline));
+					 }
+					
 				}
 			});
             

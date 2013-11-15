@@ -13,6 +13,9 @@ import android.widget.EditText;
 public class Settings extends Activity {
 	Button btnDone;
 	EditText editPocheUrl;
+	EditText editAPIUsername;
+	EditText editAPIToken;
+	EditText editGlobalToken;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,15 +23,26 @@ public class Settings extends Activity {
 		setContentView(R.layout.settings);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "http://");
+        String apiUsername = settings.getString("APIUsername", "");
+        String apiToken = settings.getString("APIToken", "");
+        String globalToken = settings.getString("globalToken", "");
     	editPocheUrl = (EditText)findViewById(R.id.pocheUrl);
     	editPocheUrl.setText(pocheUrl);
-    	
+    	editAPIUsername = (EditText)findViewById(R.id.APIUsername);
+    	editAPIUsername.setText(apiUsername);
+    	editAPIToken = (EditText)findViewById(R.id.APIToken);
+    	editAPIToken.setText(apiToken);
+    	editGlobalToken = (EditText)findViewById(R.id.globalToken);
+    	editGlobalToken.setText(globalToken);
         btnDone = (Button)findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 	        	SharedPreferences.Editor editor = settings.edit();
 	        	editor.putString("pocheUrl", editPocheUrl.getText().toString());
+	        	editor.putString("APIUsername", editAPIUsername.getText().toString());
+	        	editor.putString("APIToken", editAPIToken.getText().toString());
+	        	editor.putString("globalToken", editGlobalToken.getText().toString());
 				editor.commit();
 				finish();
 			}
