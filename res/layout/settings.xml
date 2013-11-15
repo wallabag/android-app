@@ -15,10 +15,10 @@
         <TextView
             android:id="@+id/pageUrl_label"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/url_label"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/txtTitre"
@@ -30,7 +30,7 @@
         <EditText
             android:id="@+id/pocheUrl"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="2"
             android:ems="10"
             android:inputType="textUri"
@@ -46,7 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txtGlobalToken" />
+            android:text="@string/txtGlobalToken"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/globalToken"
@@ -61,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txtAPIUsername" />
+            android:text="@string/txtAPIUsername"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/APIUsername"
@@ -76,7 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txtAPIToken" />
+            android:text="@string/txtAPIToken"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/APIToken"

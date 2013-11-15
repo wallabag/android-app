@@ -18,7 +18,7 @@
     <string name="txtSyncDone">Synchronize done !</string>
     <string name="txtSyncFailed">Synchronize failed !</string>
     <string name="txtNetOffline">Check Internet Connectivity !</string>
-    <string name="txtGlobalToken">API global token :</string>
-    <string name="txtAPIUsername">Your API username :</string>
-    <string name="txtAPIToken">Your API token :</string>
+    <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
+    <string name="txtAPIUsername"><b><u>Your API username :</u></b></string>
+    <string name="txtAPIToken"><b><u>Your API token :</u></b></string>
 </resources>

@@ -21,6 +21,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static String ARTICLE_TITLE = "title";
     public static String ARTICLE_URL = "url";
     public static String ARCHIVE = "archive";
+    public static String ARTICLE_SYNC = "sync";
     Context c;
     
     public ArticlesSQLiteOpenHelper(Context context) {
@@ -53,6 +54,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             ARTICLE_URL + " text, " +
                             ARTICLE_ID + " integer, " +
                             ARCHIVE + " integer," +
+                            ARTICLE_SYNC + " integer," +
                             "UNIQUE (" + ARTICLE_ID + ")" +
                             ");"
             );
