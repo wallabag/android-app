@@ -10,12 +10,16 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import fr.gaulupeau.apps.InThePoche.R;
 
@@ -26,10 +30,12 @@ public class ReadArticle extends Activity {
 	Button btnMarkRead;
     SQLiteDatabase database;
     String id = "";
+    ScrollView view;
     
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
+		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 		database = helper.getWritableDatabase();
 		String[] getStrColumns = new String[] {ARTICLE_URL, ARTICLE_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
@@ -56,6 +62,18 @@ public class ReadArticle extends Activity {
 			}
 		});
 		
+		
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		
+		ContentValues values = new ContentValues();
+		values.put("read_at", view.getScrollY());
+		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
+		System.out.println(view.getScrollY());
+		super.onStop();
 	}
 	
 	@Override

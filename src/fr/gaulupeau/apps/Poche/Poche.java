@@ -9,7 +9,6 @@
 package fr.gaulupeau.apps.Poche;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
@@ -36,12 +35,9 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.text.Html;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -73,6 +69,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 	String apiUsername;
 	String apiToken;
 	String pocheUrl;
+	String action;
 	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
@@ -82,36 +79,30 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
        
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
-        String action = intent.getAction();
+        action = intent.getAction();
 
         getSettings();
         // Find out if Sharing or if app has been launched from icon
         if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
-        	// ACTION_SEND is called when sharing, get the title and URL from 
-        	// the call
-        	String pageUrl = extras.getString("android.intent.extra.TEXT");
-            // Start to build the poche URL
-			Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
-			// Add the parameters from the call
-			pocheSaveUrl.appendQueryParameter("action", "add");
-			byte[] data = null;
-			try {
-				data = pageUrl.getBytes("UTF-8");
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
-			String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-			pocheSaveUrl.appendQueryParameter("url", base64);
-			
-			// Load the constructed URL in the browser
-			Intent i = new Intent(Intent.ACTION_VIEW);
-			i.setData(pocheSaveUrl.build());
-			i.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
-			// If user has more then one browser installed give them a chance to
-			// select which one they want to use 
-			
-			startActivity(i);
-			this.finish();
+        	setContentView(R.layout.main);
+        	findViewById(R.id.btnSync).setVisibility(View.GONE);
+        	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
+        	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
+        	final String pageUrl = extras.getString("android.intent.extra.TEXT");
+        	// Vérification de la connectivité Internet
+			 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+			 if (activeNetwork != null && activeNetwork.isConnected()) {
+				 // Exécution de la synchro en arrière-plan
+				 new Thread(new Runnable() {
+					 public void run() {
+						 pocheIt(pageUrl);
+					 }
+				 }).start();
+			 } else {
+				 // Afficher alerte connectivité
+				 showToast(getString(R.string.txtNetOffline));
+			 }
         }
         else {
         	setContentView(R.layout.main);
@@ -164,7 +155,9 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     protected void onResume() {
     	super.onResume();
     	getSettings();
-    	updateUnread();
+    	if (! action.equals(Intent.ACTION_SEND)){
+    		updateUnread();
+    	}
     }
 
     @Override
@@ -187,7 +180,9 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     @Override
     protected void onDestroy() {
     	super.onDestroy();
-    	database.close();
+    	if (database != null) {
+    		database.close();
+		}
     }
     
     private void updateUnread(){
@@ -211,6 +206,25 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     		}
     	});
     }
+    
+    
+    public void pocheIt(String url){
+    	String id ="req-001";
+    	JSONRPC2Request reqOut = null;
+    	try{
+    		reqOut = JSONRPC2Request.parse("{\"jsonrpc\":\"2.0\",\"method\":\"item.add\",\"id\":\"" + id + "\",\"params\":[{\"username\":\""+ apiUsername + "\",\"api_token\":\""+ apiToken +"\"}, \"" + url + "\", true]}");
+    		System.err.println(reqOut.toString());
+    		JSONRPC2Response response = sendRequest(reqOut);
+    		if (response.indicatesSuccess()) {
+    			showToast(getString(R.string.txtSyncDone));
+    		}
+    	} catch (JSONRPC2ParseException e2) {
+    		e2.printStackTrace();
+    		showToast(getString(R.string.txtSyncFailed));
+    	}
+    	finish();
+    }
+    
     
     public void pushRead(){
     	JSONRPC2Request reqOut = null;
@@ -241,6 +255,14 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 		}
 		ac.close();
     	
+    }
+
+    
+    public void updateReads(){
+    	String lastUpdate = settings.getString("lastUpdate", "");
+    	SharedPreferences.Editor editor = settings.edit();
+    	editor.putString("lastUpdate", "");
+    	//TODO Continuer la fonction en se basant sur le timestamp "update" de Poche
     }
     
     

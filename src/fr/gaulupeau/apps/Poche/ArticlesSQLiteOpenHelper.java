@@ -22,6 +22,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static String ARTICLE_URL = "url";
     public static String ARCHIVE = "archive";
     public static String ARTICLE_SYNC = "sync";
+    public static String ARTICLE_READAT = "read_at";
     Context c;
     
     public ArticlesSQLiteOpenHelper(Context context) {
@@ -34,7 +35,14 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
             createTables(db);
     }
 
-
+    
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+    	// TODO Auto-generated method stub
+    	super.onOpen(db);
+    }
+    
+    
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.delete(ARTICLE_TABLE, null, null);
@@ -55,6 +63,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             ARTICLE_ID + " integer, " +
                             ARCHIVE + " integer," +
                             ARTICLE_SYNC + " integer," +
+                            ARTICLE_READAT + " integer," +
                             "UNIQUE (" + ARTICLE_ID + ")" +
                             ");"
             );
