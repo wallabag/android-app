@@ -150,7 +150,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 					 // Vérification de la connectivité Internet
 					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-					 if (pocheUrl != "http://") {
+					 if (pocheUrl == "http://") {
 						 showToast(getString(R.string.txtConfigNotSet));
 					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
 						 // Exécution de la synchro en arrière-plan

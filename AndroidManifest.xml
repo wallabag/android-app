@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="fr.gaulupeau.apps.InThePoche"
       android:versionCode="4"
-      android:versionName="1.5" xmlns:android="http://schemas.android.com/apk/res/android">
+      android:versionName="1.5.1" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="8"
               android:targetSdkVersion="8" />
     <uses-permission android:name="android.permission.INTERNET"/>
