@@ -25,15 +25,12 @@ public class Settings extends Activity {
         String pocheUrl = settings.getString("pocheUrl", "http://");
         String apiUsername = settings.getString("APIUsername", "");
         String apiToken = settings.getString("APIToken", "");
-        String globalToken = settings.getString("globalToken", "");
     	editPocheUrl = (EditText)findViewById(R.id.pocheUrl);
     	editPocheUrl.setText(pocheUrl);
     	editAPIUsername = (EditText)findViewById(R.id.APIUsername);
     	editAPIUsername.setText(apiUsername);
     	editAPIToken = (EditText)findViewById(R.id.APIToken);
     	editAPIToken.setText(apiToken);
-    	editGlobalToken = (EditText)findViewById(R.id.globalToken);
-    	editGlobalToken.setText(globalToken);
         btnDone = (Button)findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -42,7 +39,6 @@ public class Settings extends Activity {
 	        	editor.putString("pocheUrl", editPocheUrl.getText().toString());
 	        	editor.putString("APIUsername", editAPIUsername.getText().toString());
 	        	editor.putString("APIToken", editAPIToken.getText().toString());
-	        	editor.putString("globalToken", editGlobalToken.getText().toString());
 				editor.commit();
 				finish();
 			}

@@ -42,22 +42,6 @@
         </EditText>
 
         <TextView
-            android:id="@+id/txtGlobalToken"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/txtGlobalToken"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/globalToken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="text" />
-
-        <TextView
             android:id="@+id/txtAPIUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -64,7 +64,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             ARCHIVE + " integer," +
                             ARTICLE_SYNC + " integer," +
                             ARTICLE_READAT + " integer," +
-                            "UNIQUE (" + ARTICLE_ID + ")" +
+                            "UNIQUE (" + ARTICLE_URL + ")" +
                             ");"
             );
     }

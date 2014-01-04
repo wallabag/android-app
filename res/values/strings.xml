@@ -18,7 +18,8 @@
     <string name="txtSyncDone">Synchronize done !</string>
     <string name="txtSyncFailed">Synchronize failed !</string>
     <string name="txtNetOffline">Check Internet Connectivity !</string>
+    <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
     <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
-    <string name="txtAPIUsername"><b><u>Your API username :</u></b></string>
-    <string name="txtAPIToken"><b><u>Your API token :</u></b></string>
+    <string name="txtAPIUsername"><b><u>Your username ID (user_id in Feed URL):</u></b></string>
+    <string name="txtAPIToken"><b><u>Your token (token in Feed URL):</u></b></string>
 </resources>

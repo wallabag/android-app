@@ -7,6 +7,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -38,12 +39,12 @@ public class ReadArticle extends Activity {
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 		database = helper.getWritableDatabase();
-		String[] getStrColumns = new String[] {ARTICLE_URL, ARTICLE_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
+		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
 		Bundle data = getIntent().getExtras();
 		if(data != null) {
 			id = data.getString("id");
 		}
-		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, ARTICLE_ID + "=" + id, null, null, null, null);
+		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
 		txtTitre = (TextView)findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
@@ -58,7 +59,7 @@ public class ReadArticle extends Activity {
 			public void onClick(View v) {
 				ContentValues values = new ContentValues();
 				values.put(ARCHIVE, 1);
-				database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
+				database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 			}
 		});
 		
