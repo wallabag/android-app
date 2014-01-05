@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -50,8 +51,9 @@ public class ReadArticle extends Activity {
 		txtTitre.setText(ac.getString(2));
 		txtContent = (TextView)findViewById(R.id.txtContent);
 		txtContent.setText(ac.getString(3));
+		
 		txtAuthor = (TextView)findViewById(R.id.txtAuthor);
-		txtAuthor.setText(ac.getString(5));
+		txtAuthor.setText(ac.getString(0));
 		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
 			

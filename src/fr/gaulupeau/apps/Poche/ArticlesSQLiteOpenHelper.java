@@ -69,6 +69,8 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
             );
     }
 
-
+    public void truncateTables(SQLiteDatabase db) {
+    	db.execSQL("DELETE FROM " + ARTICLE_TABLE + ";");
+    }
 
 }

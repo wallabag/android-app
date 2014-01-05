@@ -15,6 +15,7 @@
     <string name="btnMarkRead">Mark as Read</string>
     <string name="menuSettings">Settings</string>
     <string name="menuShowAll">Show All</string>
+    <string name="menuWipeDb">Wipe Database</string>
     <string name="txtSyncDone">Synchronize done !</string>
     <string name="txtSyncFailed">Synchronize failed !</string>
     <string name="txtNetOffline">Check Internet Connectivity !</string>

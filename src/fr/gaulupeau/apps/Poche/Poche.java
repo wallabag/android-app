@@ -11,6 +11,7 @@ package fr.gaulupeau.apps.Poche;
 import fr.gaulupeau.apps.InThePoche.R;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
@@ -30,6 +31,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.thetransactioncompany.jsonrpc2.JSONRPC2ParseException;
@@ -71,6 +73,8 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+
+
 
 /**
  * Main activity class
@@ -295,6 +299,26 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 //    }
 
     
+    public String cleanString(String s){
+    	
+    	s = s.replace("&Atilde;&copy;", "&eacute;");
+    	s = s.replace("&Atilde;&uml;", "&egrave;");
+    	s = s.replace("&Atilde;&ordf;", "&ecirc;");
+    	s = s.replace("&Atilde;&laquo;", "&euml;");
+    	s = s.replace("&Atilde;&nbsp;", "&agrave;");
+    	s = s.replace("&Atilde;&curren;", "&auml;");
+    	s = s.replace("&Atilde;&cent;", "&acirc;");
+    	s = s.replace("&Atilde;&sup1;", "&ugrave;");
+    	s = s.replace("&Atilde;&raquo;", "&ucirc;");
+    	s = s.replace("&Atilde;&frac14;", "&uuml;");
+    	s = s.replace("&Atilde;&acute;", "&ocirc;");
+    	s = s.replace("&Atilde;&para;", "&ouml;");
+    	s = s.replace("&Atilde;&reg;", "&icirc;");
+    	s = s.replace("&Atilde;&macr;", "&iuml;");
+    	s = s.replace("&Atilde;&sect;", "&ccedil;");
+    	s = s.replace("&amp;", "&amp;");	
+    	return s;
+    }
     
     
     public void parseRSS(){
@@ -318,8 +342,13 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     			DocumentBuilder db = dbf.newDocumentBuilder();
     			Document doc;
     			doc = db.parse(url.openStream());
+//    			doc = db.parse(
+//    				    new InputSource(
+//    				        new InputStreamReader(
+//    				                url.openStream(),
+//    				                "latin-1")));
     			doc.getDocumentElement().normalize();
-
+    			
     			// This is the root node of each section you want to parse
     			NodeList itemLst = doc.getElementsByTagName("item");
 
@@ -359,8 +388,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					// exist
     					try
     					{
-    						arrays.PodcastTitle[i] = title.item(0)
-    								.getChildNodes().item(0).getNodeValue();
+    						arrays.PodcastTitle[i] = cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
     					} catch (NullPointerException e)
     					{
     						e.printStackTrace();

@@ -50,6 +50,12 @@ public class ListArticles extends Activity {
         switch (item.getItemId()) {
         	case R.id.menuShowAll:
         		setupList(true);
+        		return super.onOptionsItemSelected(item);
+        	case R.id.menuWipeDb:
+        		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+        		helper.truncateTables(database);
+        		setupList(false);
+        		super.onOptionsItemSelected(item);
     		default:
     			return super.onOptionsItemSelected(item);
         }
