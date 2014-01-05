@@ -13,19 +13,22 @@ import fr.gaulupeau.apps.InThePoche.R;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,19 +37,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.thetransactioncompany.jsonrpc2.JSONRPC2ParseException;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -67,7 +63,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
@@ -90,6 +85,11 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 	static String apiToken;
 	static String pocheUrl;
 	String action;
+	  
+	  
+	  
+	  
+	  
 	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
@@ -321,6 +321,29 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     }
     
     
+    private void trustEveryone() {
+    	try {
+    		HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier(){
+        			public boolean verify(String hostname, SSLSession session) {
+        				return true;
+        			}});
+    		SSLContext context = SSLContext.getInstance("TLS");
+    		context.init(null, new X509TrustManager[]{new X509TrustManager(){
+    			public void checkClientTrusted(X509Certificate[] chain,
+    					String authType) throws CertificateException {}
+    			public void checkServerTrusted(X509Certificate[] chain,
+    					String authType) throws CertificateException {}
+    			public X509Certificate[] getAcceptedIssuers() {
+    				return new X509Certificate[0];
+    			}}}, new SecureRandom());
+    		HttpsURLConnection.setDefaultSSLSocketFactory(
+    				context.getSocketFactory());
+    	} catch (Exception e) { // should never happen
+    		e.printStackTrace();
+    	}
+    }
+    
+    
     public void parseRSS(){
 
     	URL url;
@@ -328,11 +351,9 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     	{
     		// Set the url (you will need to change this to your RSS URL
     		url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername + "&token=" + apiToken );
-
     		// Setup the connection
-    		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-    		// Connect
+    		trustEveryone();
+    		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
     		if (conn.getResponseCode() == HttpURLConnection.HTTP_OK)
     		{
 
@@ -341,7 +362,11 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					.newInstance();
     			DocumentBuilder db = dbf.newDocumentBuilder();
     			Document doc;
-    			doc = db.parse(url.openStream());
+//    			doc = db.parse(url.openStream());
+    			InputSource is = new InputSource(
+				        new InputStreamReader(
+				                url.openStream()));
+    			doc = db.parse(is);
 //    			doc = db.parse(
 //    				    new InputSource(
 //    				        new InputStreamReader(
@@ -392,6 +417,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					} catch (NullPointerException e)
     					{
     						e.printStackTrace();
+    						arrays.PodcastTitle[i] = "Echec";
     					}
 
     					try
@@ -401,6 +427,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					} catch (NullPointerException e)
     					{
     						e.printStackTrace();
+    						arrays.PodcastURL[i] = "Echec";
     					}
     					try
     					{
@@ -409,14 +436,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					} catch (NullPointerException e)
     					{
     						e.printStackTrace();
-    					}
-
-    					try
-    					{
-    					//	arrays.PodcastMedia[i] = mediaurl;
-    					} catch (NullPointerException e)
-    					{
-    						e.printStackTrace();
+    						arrays.PodcastContent[i] = "Echec";
     					}
     					
     					ContentValues values = new ContentValues();
