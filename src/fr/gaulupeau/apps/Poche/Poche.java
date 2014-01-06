@@ -352,9 +352,19 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     		// Set the url (you will need to change this to your RSS URL
     		url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername + "&token=" + apiToken );
     		// Setup the connection
-    		trustEveryone();
-    		HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-    		if (conn.getResponseCode() == HttpURLConnection.HTTP_OK)
+    		HttpsURLConnection conn_s = null;
+    		HttpURLConnection conn = null;
+    		if (pocheUrl.startsWith("https") ) {
+    			trustEveryone();
+    			conn_s = (HttpsURLConnection) url.openConnection();
+    		}else{
+    			conn = (HttpURLConnection) url.openConnection();
+    		}
+    		
+    		if (
+    				((conn != null) && (conn.getResponseCode() == HttpURLConnection.HTTP_OK)) 
+    			|| ((conn_s != null) && (conn_s.getResponseCode() == HttpURLConnection.HTTP_OK))
+    			)
     		{
 
     			// Retreive the XML from the URL

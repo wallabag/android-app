@@ -89,6 +89,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btnDone" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/version"
+            android:textSize="12sp" />
         
         <TextView
             android:id="@+id/author"
