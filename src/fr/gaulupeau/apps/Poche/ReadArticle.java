@@ -62,6 +62,7 @@ public class ReadArticle extends Activity {
 				ContentValues values = new ContentValues();
 				values.put(ARCHIVE, 1);
 				database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+				finish();
 			}
 		});
 		

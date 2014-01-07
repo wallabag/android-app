@@ -5,4 +5,5 @@ public class arrays {
     public static String[] PodcastURL;
     public static String[] PodcastContent;
     public static String[] PodcastMedia;
+    public static String[] PodcastDate;
 }

@@ -94,7 +94,7 @@ public class ListArticles extends Activity {
 		Cursor ac = database.query(
 				ARTICLE_TABLE,
 				getStrColumns,
-				filter, null, null, null, null);
+				filter, null, null, null, ARTICLE_DATE + " DESC");
 		ac.moveToFirst();
 		if(!ac.isAfterLast()) {
 			do {

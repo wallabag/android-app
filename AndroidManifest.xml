@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="fr.gaulupeau.apps.InThePoche"
-      android:versionCode="7"
+      android:versionCode="8"
       android:versionName="@string/version" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="8"
               android:targetSdkVersion="8" />

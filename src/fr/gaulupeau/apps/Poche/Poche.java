@@ -19,6 +19,8 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.text.DateFormat;
+import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -45,6 +47,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -68,6 +71,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 
 
 
@@ -392,6 +396,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     			arrays.PodcastURL = new String[itemLst.getLength()];
     			arrays.PodcastContent = new String[itemLst.getLength()];
     			arrays.PodcastMedia = new String[itemLst.getLength()];
+    			arrays.PodcastDate = new String[itemLst.getLength()];
 
     			// Loop through the XML passing the data to the arrays
     			for (int i = 0; i < itemLst.getLength(); i++)
@@ -407,6 +412,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     					// and remove elements that you want / don't want
     					NodeList title = ielem.getElementsByTagName("title");
     					NodeList link = ielem.getElementsByTagName("link");
+    					NodeList date = ielem.getElementsByTagName("pubDate");
     					NodeList content = ielem
     							.getElementsByTagName("description");
     					//NodeList media = ielem
@@ -429,7 +435,12 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
     						e.printStackTrace();
     						arrays.PodcastTitle[i] = "Echec";
     					}
-
+    					try {
+							arrays.PodcastDate[i] = date.item(0).getChildNodes().item(0).getNodeValue();
+						} catch (NullPointerException e) {
+							e.printStackTrace();
+    						arrays.PodcastDate[i] = null;
+						}
     					try
     					{
     						arrays.PodcastURL[i] = link.item(0).getChildNodes()
@@ -454,13 +465,17 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
         				values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
         				//values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
         				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
+        				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
         				values.put(ARCHIVE, 0);
         				values.put(ARTICLE_SYNC, 0);
         				try {
         					database.insertOrThrow(ARTICLE_TABLE, null, values);
         				} catch (SQLiteConstraintException e) {
         					continue;
-        				}
+        				} catch (SQLiteException e) {
+        				database.execSQL("ALTER TABLE " + ARTICLE_TABLE + " ADD COLUMN " + ARTICLE_DATE + " datetime;");
+        				database.insertOrThrow(ARTICLE_TABLE, null, values);
+    					}
     				}
     			}
     			

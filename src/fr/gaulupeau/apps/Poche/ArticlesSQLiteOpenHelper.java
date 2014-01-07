@@ -15,6 +15,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "article_db.sqlite";
     public static String MY_ID = "my_id";
     public static String ARTICLE_TABLE = "article";
+    public static String ARTICLE_DATE = "update_date";
     public static String ARTICLE_ID = "article_id";
     public static String ARTICLE_AUTHOR = "author";
     public static String ARTICLE_CONTENT = "content";
@@ -57,6 +58,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
                             "create table " + ARTICLE_TABLE + " (" +
                             MY_ID + " integer primary key autoincrement not null, " +
                             ARTICLE_AUTHOR + " text, " +
+                            ARTICLE_DATE + " datetime, " +
                             ARTICLE_CONTENT + " text, " +
                             ARTICLE_TITLE + " text, " +
                             ARTICLE_URL + " text, " +
