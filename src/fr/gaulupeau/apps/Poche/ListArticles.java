@@ -18,6 +18,7 @@ import android.widget.ListView;
 public class ListArticles extends Activity {
 
     private ArrayList<Article> readArticlesInfo;
+    private int listIndex = 0;
 	private ListView readList;
 	private SQLiteDatabase database;
 	
@@ -31,6 +32,12 @@ public class ListArticles extends Activity {
     public void onResume() {
         super.onResume();
         setupList(false);
+    	readList.setSelectionFromTop(listIndex, 0);
+    }
+   
+    public void onPause() {
+    	super.onPause();
+    	listIndex = readList.getFirstVisiblePosition();
     }
     
     public void onDestroy() {
