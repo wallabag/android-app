@@ -8,6 +8,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -40,23 +41,23 @@ public class ReadArticle extends Activity {
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 		database = helper.getWritableDatabase();
-		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
+		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR, ARTICLE_READAT};
 		Bundle data = getIntent().getExtras();
 		if(data != null) {
 			id = data.getString("id");
 		}
-		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
+		final Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
 		txtTitre = (TextView)findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
 		txtContent = (TextView)findViewById(R.id.txtContent);
 		txtContent.setText(ac.getString(3));
-		
+
 		txtAuthor = (TextView)findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
 		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				ContentValues values = new ContentValues();
@@ -64,6 +65,14 @@ public class ReadArticle extends Activity {
 				database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 				finish();
 			}
+		});
+	
+		// restore scroll position from last view
+		view.post(new Runnable() {
+		    @Override
+		    public void run() {
+		        view.scrollTo(0, ac.getInt(6));
+		    } 
 		});
 		
 		
@@ -75,8 +84,7 @@ public class ReadArticle extends Activity {
 		
 		ContentValues values = new ContentValues();
 		values.put("read_at", view.getScrollY());
-		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
-		System.out.println(view.getScrollY());
+		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 		super.onStop();
 	}
 	
