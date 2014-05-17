@@ -113,6 +113,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
         	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
         	final String pageUrl = extras.getString("android.intent.extra.TEXT");
+		final String sPageUrl = pageUrl.replaceFirst("^.*\\s+http", "http");
         	// Vérification de la connectivité Internet
 			 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
@@ -123,7 +124,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 					pocheSaveUrl.appendQueryParameter("action", "add");
 					byte[] data = null;
 					try {
-						data = pageUrl.getBytes("UTF-8");
+						data = sPageUrl.getBytes("UTF-8");
 					} catch (UnsupportedEncodingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -131,7 +132,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 					String base64 = Base64.encodeToString(data, Base64.DEFAULT);
 					pocheSaveUrl.appendQueryParameter("url", base64);
 					System.out.println("base64 : " + base64);
-					System.out.println("pageurl : " + pageUrl);
+					System.out.println("pageurl : " + sPageUrl);
 					
 					// Load the constructed URL in the browser
 					Intent i = new Intent(Intent.ACTION_VIEW);
