@@ -4,12 +4,12 @@
     <string name="app_name">In the poche</string>
     <string name="label_name">Add in the poche</string>
     <string name="author">GAULUPEAU Jonathan - 2013</string>
-    <string name="instructions">To save a web page to poche, open the page in a browser then tap <i>Share</i> and tap on <i>In the poche</i>. \nYou could then see your Poche login page. \nAnd it\'s done ! \nMore infos about poche at http://www.inthepoche.com</string>
+    <string name="instructions">To save a link, tap <i>Share</i> and tap on <i>In the poche</i>.\nThat\'s it!</string>
     <string name="btnDone">Save</string>
     <string name="which_browser">Which browser would you like to use?</string>
     <string name="authorSite">http://cv.gaulupeau.fr</string>
     <string name="url_label"><b><u>Your poche URL :</u></b></string>
-    <string name="url_help">Examples:\n<i>http://poche.example.fr</i>\n<i>http://www.example.fr/poche</i></string>
+    <string name="url_help">Examples: <i>http://poche.example.fr</i>, <i>http://www.example.fr/poche</i></string>
     <string name="btnGetPost">List articles</string>
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
@@ -21,7 +21,17 @@
     <string name="txtNetOffline">Check Internet Connectivity !</string>
     <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
     <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
-    <string name="txtAPIUsername"><b><u>Your username ID (user_id in Feed URL):</u></b></string>
+    <string name="txtAPIUsername"><b><u>Your user ID (user_id in Feed URL):</u></b></string>
     <string name="txtAPIToken"><b><u>Your token (token in Feed URL):</u></b></string>
-    <string name="version">1.5.3.2</string>
+    <string name="txtAPIRealUsername"><b><u>Your username</u></b></string>
+    <string name="txtAPIPassword"><b><u>Your password</u></b></string>
+    <string name="txtAddPageFailedStatus"><b><u>Web service error </u></b></string>
+    <string name="txtAddPageFailedProto"><b><u>Protocol error. </u></b></string>
+    <string name="txtAddPageFailedIO"><b><u>General error.</u></b></string>
+    <string name="txtAddPageFailedJSON"><b><u>Invalid server response.</u></b></string>
+    <string name="txtAddPageDone"><b><u>Page add</u></b></string>
+    <string name="txtAddPageFailed"><b><u>Page add failed</u></b></string>
+    <string name="version">1.5.3.2-xppppp</string>
+    
+    
 </resources>

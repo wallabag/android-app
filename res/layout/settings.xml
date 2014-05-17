@@ -72,7 +72,43 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="text" />
+        
+        <TextView
+            android:id="@+id/txtAPIRealUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txtAPIRealUsername"
+            android:textSize="18sp" 
+            />
 
+        <EditText
+            android:id="@+id/APIRealUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            />
+        
+        <TextView
+            android:id="@+id/txtAPIPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txtAPIPassword"
+            android:textSize="18sp" 
+            />
+
+        <EditText
+            android:id="@+id/APIPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            />
+        
         <TextView
             android:id="@+id/instructions"
             android:layout_width="wrap_content"
