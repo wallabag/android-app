@@ -1,10 +1,8 @@
 package fr.gaulupeau.apps.Poche;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import static fr.gaulupeau.apps.Poche.Helpers.zeroUpdate;
 
 
@@ -25,7 +23,7 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     public static String ARTICLE_SYNC = "sync";
     public static String ARTICLE_READAT = "read_at";
     Context c;
-    
+
     public ArticlesSQLiteOpenHelper(Context context) {
             super(context, DB_NAME, null, VERSION);
             c = context;
@@ -47,10 +45,10 @@ public class ArticlesSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.delete(ARTICLE_TABLE, null, null);
-            SharedPreferences preferences = c.getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("previous_update", zeroUpdate);
-            editor.commit();
+
+            Preference preference = new Preference(c);
+            preference.setPreviousUpdate(zeroUpdate);
+            preference.save();
     }
 
     protected void createTables(SQLiteDatabase db) {

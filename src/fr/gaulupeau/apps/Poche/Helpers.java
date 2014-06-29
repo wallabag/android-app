@@ -12,7 +12,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class Helpers {
 	
-	public static final String PREFS_NAME = "InThePoche";
     public final static String zeroUpdate = "2011-01-01 00:00:00";
 
 	public static String InputStreamtoString(InputStream is)

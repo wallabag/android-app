@@ -19,8 +19,6 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.text.DateFormat;
-import java.util.Date;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -44,7 +42,6 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -64,7 +61,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
@@ -84,18 +80,10 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 	Button btnGetPost;
 	Button btnSync;
 	EditText editPocheUrl;
-	SharedPreferences settings;
-	static String apiUsername;
-	static String apiToken;
-	static String pocheUrl;
 	String action;
-	  
-	  
-	  
-	  
-	  
-	
-    /** Called when the activity is first created. 
+    private Preference preference;
+
+    /** Called when the activity is first created.
      * Will act differently depending on whether sharing or
      * displaying information page. */
     public void onCreate(Bundle savedInstanceState) {
@@ -105,9 +93,9 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         Bundle extras = intent.getExtras();
         action = intent.getAction();
 
-        getSettings();
+        preference = new Preference(this);
         // Find out if Sharing or if app has been launched from icon
-        if (action.equals(Intent.ACTION_SEND) && pocheUrl != "http://") {
+        if (action.equals(Intent.ACTION_SEND) && preference.getPocheUrl().equals("http://")) {
         	setContentView(R.layout.main);
         	findViewById(R.id.btnSync).setVisibility(View.GONE);
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
@@ -118,7 +106,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 			 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 			 if (activeNetwork != null && activeNetwork.isConnected()) {
 		            // Start to build the poche URL
-					Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
+					Uri.Builder pocheSaveUrl = Uri.parse(preference.getPocheUrl()).buildUpon();
 					// Add the parameters from the call
 					pocheSaveUrl.appendQueryParameter("action", "add");
 					byte[] data = null;
@@ -158,7 +146,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 					 // Vérification de la connectivité Internet
 					 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 					 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-					 if (pocheUrl == "http://") {
+					 if (preference.getPocheUrl().equals("http://")) {
 						 showToast(getString(R.string.txtConfigNotSet));
 					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
 						 // Exécution de la synchro en arrière-plan
@@ -189,17 +177,10 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         }
     }
     
-    private void getSettings(){
-        settings = getSharedPreferences(PREFS_NAME, 0);
-        pocheUrl = settings.getString("pocheUrl", "http://");
-        apiUsername = settings.getString("APIUsername", "");
-        apiToken = settings.getString("APIToken", "");
-    }
-    
+
     @Override
     protected void onResume() {
     	super.onResume();
-    	getSettings();
     	if (! action.equals(Intent.ACTION_SEND)){
     		updateUnread();
     	}
@@ -354,11 +335,11 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     	try
     	{
     		// Set the url (you will need to change this to your RSS URL
-    		url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername + "&token=" + apiToken );
+    		url = new URL(preference.getPocheUrl() + "/?feed&type=home&user_id=" + preference.getApiUsername() + "&token=" + preference.getApiToken());
     		// Setup the connection
     		HttpsURLConnection conn_s = null;
     		HttpURLConnection conn = null;
-    		if (pocheUrl.startsWith("https") ) {
+    		if (preference.getPocheUrl().startsWith("https")) {
     			trustEveryone();
     			conn_s = (HttpsURLConnection) url.openConnection();
     		}else{
