@@ -171,7 +171,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 								 runOnUiThread(new Runnable() {
 									 @Override
 									 public void run() {
-										 findViewById(R.id.progressBar1).setVisibility(View.INVISIBLE);
+										 findViewById(R.id.progressBar1).setVisibility(View.GONE);
 									 }
 								 });
 							 }
