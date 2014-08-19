@@ -23,12 +23,13 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
+import java.net.URL;
+
 import fr.gaulupeau.apps.InThePoche.R;
 
 public class ReadArticle extends Activity {
-	TextView txtTitre;
 	WebView webViewContent;
-	TextView txtAuthor;
 	Button btnMarkRead;
     SQLiteDatabase database;
     String id = "";
@@ -47,18 +48,35 @@ public class ReadArticle extends Activity {
 		}
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
-		txtTitre = (TextView)findViewById(R.id.txtTitre);
-		txtTitre.setText(ac.getString(2));
+
+		String titleText = ac.getString(2);
+		String originalUrlText = ac.getString(0);
+		String originalUrlDesc = originalUrlText;
+		String htmlContent = ac.getString(3);
+
+		try {
+			URL originalUrl = new URL(originalUrlText);
+			originalUrlDesc = originalUrl.getHost();
+		}
+		catch (Exception e) {
+			//
+		}
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
 				"\t\t<meta charset=\"utf-8\">\n" +
+				"\t\t<link rel=\"stylesheet\" href=\"main.css\" media=\"all\" id=\"main-theme\">\n" +
+				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
 				"\t\t\t<body>\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
+				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
+				"\t\t\t\t\t\t\t<h1>"+ titleText +"</h1>\n" +
+				"\t\t\t\t\t\t\t<p>Open Original: <a href=\""+ originalUrlText +"\">"+ originalUrlDesc +"</a></p>\n" +
+				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 		String htmlFooter = "</article>\n" +
 				"\t\t\t\t\t</div>\n" +
@@ -66,15 +84,12 @@ public class ReadArticle extends Activity {
 				"\t\t\t</body>\n" +
 				"\t\t</div>\n" +
 				"</html>";
-		String htmlContent = ac.getString(3);
 
 
 		webViewContent = (WebView)findViewById(R.id.webViewContent);
-		webViewContent.loadData(htmlHeader + htmlContent + htmlFooter, "text/html; charset=utf-8", null);
+		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
 
-		txtAuthor = (TextView)findViewById(R.id.txtAuthor);
-		txtAuthor.setText(ac.getString(0));
 		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
 			
