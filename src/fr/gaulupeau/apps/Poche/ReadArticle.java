@@ -19,7 +19,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.Window;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -37,6 +40,8 @@ public class ReadArticle extends Activity {
     
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		requestWindowFeature(Window.FEATURE_PROGRESS);
 		setContentView(R.layout.article);
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
@@ -86,9 +91,20 @@ public class ReadArticle extends Activity {
 				"</html>";
 
 
-		webViewContent = (WebView)findViewById(R.id.webViewContent);
-		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+		setProgressBarIndeterminateVisibility(true);
+		setProgressBarVisibility(true);
 
+		webViewContent = (WebView)findViewById(R.id.webViewContent);
+		webViewContent.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView view, int progress) {
+				setProgress(progress * 100);
+				if(progress == 100) {
+					setProgressBarIndeterminateVisibility(false);
+					setProgressBarVisibility(false);
+				}
+			}
+		});
+		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
 		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
