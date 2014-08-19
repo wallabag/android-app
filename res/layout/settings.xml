@@ -102,7 +102,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginTop="10dp"
-            android:text="@string/version"
             android:textSize="12sp" />
         
         <TextView

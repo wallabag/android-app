@@ -23,5 +23,4 @@
     <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
     <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
-    <string name="version">1.5.3.2</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class Settings extends Activity {
 	Button btnDone;
@@ -16,6 +17,7 @@ public class Settings extends Activity {
 	EditText editAPIUsername;
 	EditText editAPIToken;
 	EditText editGlobalToken;
+	TextView textViewVersion;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,5 +45,11 @@ public class Settings extends Activity {
 				finish();
 			}
         });
+		try {
+			textViewVersion = (TextView) findViewById(R.id.version);
+			textViewVersion.setText(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName);
+		} catch (Exception e) {
+			//
+		}
 	}
 }
