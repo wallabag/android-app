@@ -162,10 +162,18 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 						 showToast(getString(R.string.txtConfigNotSet));
 					 } else if (activeNetwork != null && activeNetwork.isConnected()) {
 						 // Exécution de la synchro en arrière-plan
+						 findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
 						 new Thread(new Runnable() {
+							 @Override
 							 public void run() {
 								 //pushRead();
 								 parseRSS();
+								 runOnUiThread(new Runnable() {
+									 @Override
+									 public void run() {
+										 findViewById(R.id.progressBar1).setVisibility(View.INVISIBLE);
+									 }
+								 });
 							 }
 						 }).start();
 					 } else {
