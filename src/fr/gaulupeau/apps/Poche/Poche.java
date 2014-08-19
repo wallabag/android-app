@@ -53,6 +53,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
@@ -150,6 +151,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         }
         else {
         	setContentView(R.layout.main);
+			checkAndHandleAfterUpdate();
 
             btnSync = (Button)findViewById(R.id.btnSync);
             btnSync.setOnClickListener(new OnClickListener() {
@@ -196,7 +198,28 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 			
         }
     }
-    
+
+	private void checkAndHandleAfterUpdate() {
+		SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+
+		if (pref.getInt("update_checker",0) < 9) {
+			// Wipe Database, because we now save HTML content instead of plain text
+			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+			database = helper.getReadableDatabase();
+			helper.truncateTables(database);
+			showToast("Update: Wiped Database. Please synchronize.");
+		}
+
+		int versionCode;
+		try {
+			versionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+		} catch (Exception e) {
+			versionCode = 0;
+		}
+
+		pref.edit().putInt("update_checker", versionCode).commit();
+	}
+
     private void getSettings(){
         settings = getSharedPreferences(PREFS_NAME, 0);
         pocheUrl = settings.getString("pocheUrl", "http://");
