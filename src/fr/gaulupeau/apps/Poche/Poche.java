@@ -461,10 +461,10 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     					}
     					
     					ContentValues values = new ContentValues();
-    					values.put(ARTICLE_TITLE, Html.fromHtml(arrays.PodcastTitle[i]).toString());
-        				values.put(ARTICLE_CONTENT, Html.fromHtml(arrays.PodcastContent[i]).toString());
+    					values.put(ARTICLE_TITLE, arrays.PodcastTitle[i]);
+        				values.put(ARTICLE_CONTENT, arrays.PodcastContent[i]);
         				//values.put(ARTICLE_ID, Html.fromHtml(article.getString("id")).toString());
-        				values.put(ARTICLE_URL, Html.fromHtml(arrays.PodcastURL[i]).toString());
+        				values.put(ARTICLE_URL, arrays.PodcastURL[i]);
         				values.put(ARTICLE_DATE, arrays.PodcastDate[i]);
         				values.put(ARCHIVE, 0);
         				values.put(ARTICLE_SYNC, 0);

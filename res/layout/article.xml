@@ -32,11 +32,10 @@
             android:layout_marginTop="5sp"
             android:background="#000000" />
 
-        <TextView
-            android:id="@+id/txtContent"
+        <WebView
+            android:id="@+id/webViewContent"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content" />
 
         <View
             android:id="@+id/view1"

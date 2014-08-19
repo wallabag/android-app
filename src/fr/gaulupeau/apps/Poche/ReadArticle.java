@@ -27,7 +27,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 
 public class ReadArticle extends Activity {
 	TextView txtTitre;
-	TextView txtContent;
+	WebView webViewContent;
 	TextView txtAuthor;
 	Button btnMarkRead;
     SQLiteDatabase database;
@@ -49,9 +49,30 @@ public class ReadArticle extends Activity {
 		ac.moveToFirst();
 		txtTitre = (TextView)findViewById(R.id.txtTitre);
 		txtTitre.setText(ac.getString(2));
-		txtContent = (TextView)findViewById(R.id.txtContent);
-		txtContent.setText(ac.getString(3));
-		
+
+		String htmlHeader = "<html>\n" +
+				"\t<head>\n" +
+				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
+				"\t\t<meta charset=\"utf-8\">\n" +
+				"\t</head>\n" +
+				"\t\t<div id=\"main\">\n" +
+				"\t\t\t<body>\n" +
+				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
+				"\t\t\t\t\t<div id=\"article\">\n" +
+				"\t\t\t\t\t\t<article>";
+		String htmlFooter = "</article>\n" +
+				"\t\t\t\t\t</div>\n" +
+				"\t\t\t\t</div>\n" +
+				"\t\t\t</body>\n" +
+				"\t\t</div>\n" +
+				"</html>";
+		String htmlContent = ac.getString(3);
+
+
+		webViewContent = (WebView)findViewById(R.id.webViewContent);
+		webViewContent.loadData(htmlHeader + htmlContent + htmlFooter, "text/html; charset=utf-8", null);
+
+
 		txtAuthor = (TextView)findViewById(R.id.txtAuthor);
 		txtAuthor.setText(ac.getString(0));
 		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
