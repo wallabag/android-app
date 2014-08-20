@@ -39,7 +39,7 @@ public class ReadingListAdapter extends BaseAdapter {
             if (convertView == null) {
                     LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    convertView = inflater.inflate(R.layout.article_list, null);
+                    convertView = inflater.inflate(R.layout.article_list, parent, false);
             }
             TextView tvTitle = (TextView) convertView.findViewById(R.id.listitem_titre);
             //Log.e("title", entry.title);
