@@ -30,7 +30,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="@string/hello"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            android:visibility="gone" />
 
         <View
             android:id="@+id/view1"
@@ -54,6 +55,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btnSync" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/btnSettings"/>
 
         <ProgressBar
             android:id="@+id/progressBar1"

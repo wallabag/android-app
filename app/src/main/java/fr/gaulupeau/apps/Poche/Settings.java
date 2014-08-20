@@ -4,7 +4,9 @@ import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import fr.gaulupeau.apps.InThePoche.R;
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,6 +25,15 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			try {
+				getActionBar().setDisplayHomeAsUpEnabled(true);
+			} catch (Exception e) {
+				//
+			}
+		}
+
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "http://");
         String apiUsername = settings.getString("APIUsername", "");
@@ -50,6 +61,17 @@ public class Settings extends Activity {
 			textViewVersion.setText(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName);
 		} catch (Exception e) {
 			//
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				this.finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 }
