@@ -84,6 +84,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 	Button btnDone;
 	Button btnGetPost;
 	Button btnSync;
+	Button btnSettings;
 	EditText editPocheUrl;
 	SharedPreferences settings;
 	static String apiUsername;
@@ -91,9 +92,8 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 	static String pocheUrl;
 	String action;
 	  
-	  
-	  
-	  
+
+
 	  
 	
     /** Called when the activity is first created. 
@@ -195,7 +195,14 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 					startActivity(new Intent(getBaseContext(), ListArticles.class));
 				}
 			});
-			
+
+			btnSettings = (Button)findViewById(R.id.btnSettings);
+			btnSettings.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					startActivity(new Intent(getBaseContext(), Settings.class));
+				}
+			});
         }
     }
 
@@ -237,23 +244,6 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	MenuInflater inflater = getMenuInflater();
-    	inflater.inflate(R.menu.option, menu);
-    	return true;
-    } 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch (item.getItemId()) {
-    	case R.id.menuSettings:
-    		startActivity(new Intent(getBaseContext(), Settings.class));
-    	default:
-    		return super.onOptionsItemSelected(item);
-    	}
-    }
-    
-    @Override
     protected void onDestroy() {
     	super.onDestroy();
     	if (database != null) {
@@ -268,7 +258,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     			ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
     			database = helper.getReadableDatabase();
     			int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-    			btnGetPost.setText(getString(R.string.btnGetPost) + " - " + news + " unread");
+    			btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
     		}
     	});
     }
