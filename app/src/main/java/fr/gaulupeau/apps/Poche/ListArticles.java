@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ListArticles extends Activity {
+public class ListArticles extends BaseActionBarActivity {
 
     private ArrayList<Article> readArticlesInfo;
 	private ListView readList;
@@ -25,15 +25,6 @@ public class ListArticles extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			try {
-				getActionBar().setDisplayHomeAsUpEnabled(true);
-			} catch (Exception e) {
-				//
-			}
-		}
-
 		setupDB();
 		setupList(false);
 	}
@@ -60,15 +51,12 @@ public class ListArticles extends Activity {
         switch (item.getItemId()) {
         	case R.id.menuShowAll:
         		setupList(true);
-        		return super.onOptionsItemSelected(item);
+        		return true;
         	case R.id.menuWipeDb:
         		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
         		helper.truncateTables(database);
         		setupList(false);
-        		return super.onOptionsItemSelected(item);
-			case android.R.id.home:
-				this.finish();
-				return super.onOptionsItemSelected(item);
+        		return true;
     		default:
     			return super.onOptionsItemSelected(item);
         }

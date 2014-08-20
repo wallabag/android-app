@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class Settings extends Activity {
+public class Settings extends BaseActionBarActivity {
 	Button btnDone;
 	EditText editPocheUrl;
 	EditText editAPIUsername;
@@ -25,14 +25,6 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			try {
-				getActionBar().setDisplayHomeAsUpEnabled(true);
-			} catch (Exception e) {
-				//
-			}
-		}
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String pocheUrl = settings.getString("pocheUrl", "http://");
@@ -61,17 +53,6 @@ public class Settings extends Activity {
 			textViewVersion.setText(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName);
 		} catch (Exception e) {
 			//
-		}
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				this.finish();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
 		}
 	}
 }

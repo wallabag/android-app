@@ -34,7 +34,7 @@ import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
-public class ReadArticle extends Activity {
+public class ReadArticle extends BaseActionBarActivity {
 	WebView webViewContent;
 	Button btnMarkRead;
     SQLiteDatabase database;
@@ -42,18 +42,10 @@ public class ReadArticle extends Activity {
     ScrollView view;
     
 	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		requestWindowFeature(Window.FEATURE_PROGRESS);
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			try {
-				getActionBar().setDisplayHomeAsUpEnabled(true);
-			} catch (Exception e) {
-				//
-			}
-		}
 
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
@@ -148,16 +140,5 @@ public class ReadArticle extends Activity {
 	protected void onDestroy() {
 		super.onDestroy();
 		database.close();
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				this.finish();
-				return super.onOptionsItemSelected(item);
-			default:
-				return super.onOptionsItemSelected(item);
-		}
 	}
 }
