@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +25,15 @@ public class ListArticles extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			try {
+				getActionBar().setDisplayHomeAsUpEnabled(true);
+			} catch (Exception e) {
+				//
+			}
+		}
+
 		setupDB();
 		setupList(false);
 	}
@@ -55,7 +65,10 @@ public class ListArticles extends Activity {
         		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
         		helper.truncateTables(database);
         		setupList(false);
-        		super.onOptionsItemSelected(item);
+        		return super.onOptionsItemSelected(item);
+			case android.R.id.home:
+				this.finish();
+				return super.onOptionsItemSelected(item);
     		default:
     			return super.onOptionsItemSelected(item);
         }
