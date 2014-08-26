@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Welcome to wallabag</string>
+    <string name="app_name">wallabag</string>
+    <string name="label_name">Bag it!</string>
+    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="instructions">To save a link, tap <i>Share</i> and tap on <i>In the poche</i>.\nThat\'s it!</string>
+    <string name="btnDone">Save</string>
+    <string name="which_browser">Which browser would you like to use?</string>
+    <string name="authorSite">http://cv.gaulupeau.fr</string>
+    <string name="url_label"><b><u>Your wallabag URL :</u></b></string>
+    <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
+    <string name="btnGetPost">List articles - %1$d unread</string>
+    <string name="btnSync">Synchronize</string>
+    <string name="btnMarkRead">Mark as Read</string>
+    <string name="btnSettings">Settings</string>
+    <string name="menuShowAll">Show All</string>
+    <string name="menuWipeDb">Wipe Database</string>
+    <string name="txtSyncDone">Synchronize done !</string>
+    <string name="txtSyncFailed">Synchronize failed !</string>
+    <string name="txtNetOffline">Check Internet Connectivity !</string>
+    <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
+    <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
+    <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
+    <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
+    <string name="txtAPIRealUsername"><b><u>Your username</u></b></string>
+    <string name="txtAPIPassword"><b><u>Your password</u></b></string>
+    <string name="txtAddPageFailedStatus"><b><u>Web service error </u></b></string>
+    <string name="txtAddPageFailedProto"><b><u>Protocol error. </u></b></string>
+    <string name="txtAddPageFailedIO"><b><u>General error.</u></b></string>
+    <string name="txtAddPageFailedJSON"><b><u>Invalid server response.</u></b></string>
+    <string name="txtAddPageDone"><b><u>Page add</u></b></string>
+    <string name="txtAddPageFailed"><b><u>Page add failed</u></b></string>
+</resources>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="fr.gaulupeau.apps.Poche.Settings" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30sp"
+        android:paddingRight="30sp"
+        android:paddingTop="15dp"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/pageUrl_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/url_label"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txtTitre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/url_help" />
+
+        <EditText
+            android:id="@+id/pocheUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:ems="10"
+            android:inputType="textUri"
+            android:linksClickable="false"
+            android:maxLines="1"
+            android:scrollHorizontally="false" >
+
+            <requestFocus />
+        </EditText>
+
+        <TextView
+            android:id="@+id/txtAPIUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:text="@string/txtAPIUsername"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/APIUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/txtAPIToken"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:text="@string/txtAPIToken"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/APIToken"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text" />
+        
+        <TextView
+            android:id="@+id/txtAPIRealUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txtAPIRealUsername"
+            android:textSize="18sp" 
+            />
+
+        <EditText
+            android:id="@+id/APIRealUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            />
+        
+        <TextView
+            android:id="@+id/txtAPIPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txtAPIPassword"
+            android:textSize="18sp" 
+            />
+
+        <EditText
+            android:id="@+id/APIPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="text"
+            />
+        
+        <TextView
+            android:id="@+id/instructions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:layout_weight="1"
+            android:autoLink="web"
+            android:paddingTop="5sp"
+            android:text="@string/instructions" />
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:text="@string/btnDone" />
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp" />
+        
+        <TextView
+            android:id="@+id/author"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:text="@string/author"
+            android:textSize="12sp" />
+                
+    </LinearLayout>
+
+</ScrollView>
