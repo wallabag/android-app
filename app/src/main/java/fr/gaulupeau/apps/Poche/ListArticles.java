@@ -28,12 +28,7 @@ public class ListArticles extends BaseActionBarActivity {
 		setupDB();
 		setupList(false);
 	}
-	
-    public void onResume() {
-        super.onResume();
-        setupList(false);
-    }
-    
+
     public void onDestroy() {
         super.onDestroy();
         database.close();
