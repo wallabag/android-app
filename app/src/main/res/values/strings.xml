@@ -19,4 +19,5 @@
     <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
     <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
+    <string name="error">Error</string>
 </resources>

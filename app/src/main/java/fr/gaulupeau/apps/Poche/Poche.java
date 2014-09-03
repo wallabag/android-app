@@ -11,6 +11,7 @@ package fr.gaulupeau.apps.Poche;
 import fr.gaulupeau.apps.InThePoche.R;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -41,6 +42,7 @@ import org.xml.sax.SAXException;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -57,6 +59,7 @@ import android.preference.PreferenceManager;
 import android.provider.Browser;
 import android.text.Html;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -272,8 +275,23 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     		}
     	});
     }
-    
-    
+
+	private void showErrorMessage(final String message)
+	{
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				AlertDialog.Builder messageBox = new AlertDialog.Builder(Poche.this);
+				messageBox.setMessage(message);
+				messageBox.setTitle(getString(R.string.error));
+//				messageBox.setIconAttribute(android.R.attr.alertDialogIcon);
+				messageBox.setPositiveButton("OK",null);
+				messageBox.setCancelable(false);
+				messageBox.create().show();
+			}
+		});
+	}
+
 //    public void pocheIt(String url){
 //    	String id ="req-001";
 //    	JSONRPC2Request reqOut = null;
@@ -375,40 +393,42 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     	try
     	{
     		// Set the url (you will need to change this to your RSS URL
-    		url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername + "&token=" + apiToken );
-    		// Setup the connection
-    		HttpsURLConnection conn_s = null;
-    		HttpURLConnection conn = null;
-    		if (pocheUrl.startsWith("https") ) {
-    			trustEveryone();
-    			conn_s = (HttpsURLConnection) url.openConnection();
-    		}else{
-    			conn = (HttpURLConnection) url.openConnection();
-    		}
-    		
-    		if (
-    				((conn != null) && (conn.getResponseCode() == HttpURLConnection.HTTP_OK)) 
-    			|| ((conn_s != null) && (conn_s.getResponseCode() == HttpURLConnection.HTTP_OK))
-    			)
-    		{
+    		url = new URL(pocheUrl + "/?feed&type=home&user_id=" + apiUsername + "&token=" + apiToken);
+			if (pocheUrl.startsWith("https")) {
+				trustEveryone();
+			}
+
+			// Setup the connection
+    		HttpURLConnection urlConnection = null;
+			urlConnection = (HttpURLConnection) url.openConnection();
+
+    		if ((urlConnection != null) && (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK)) {
 
     			// Retreive the XML from the URL
-    			DocumentBuilderFactory dbf = DocumentBuilderFactory
-    					.newInstance();
+    			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     			DocumentBuilder db = dbf.newDocumentBuilder();
-    			Document doc;
-//    			doc = db.parse(url.openStream());
-    			InputSource is = new InputSource(
-				        new InputStreamReader(
-				                url.openStream()));
-    			doc = db.parse(is);
-//    			doc = db.parse(
-//    				    new InputSource(
-//    				        new InputStreamReader(
-//    				                url.openStream(),
-//    				                "latin-1")));
-    			doc.getDocumentElement().normalize();
-    			
+    			Document doc = null;
+
+				InputSource is = null;
+
+				try {
+					is = new InputSource(
+							new InputStreamReader(
+									urlConnection.getInputStream()));
+					doc = db.parse(is);
+					doc.getDocumentElement().normalize();
+				} catch (SAXException e) {
+					e.printStackTrace();
+
+					InputStream inputStream = url.openStream();
+					int ch;
+					StringBuffer stringBuffer = new StringBuffer();
+					while ((ch = inputStream.read()) != -1) {
+						stringBuffer.append((char) ch);
+					}
+					showErrorMessage("Got invalid response:\n\"" + stringBuffer.toString() + "\"");
+				}
+
     			// This is the root node of each section you want to parse
     			NodeList itemLst = doc.getElementsByTagName("item");
 
@@ -503,21 +523,6 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
     		}
 			showToast(getString(R.string.txtSyncDone));
     		updateUnread();
-    	} catch (MalformedURLException e)
-    	{
-    		e.printStackTrace();
-    	} catch (DOMException e)
-    	{
-    		e.printStackTrace();
-    	} catch (IOException e)
-    	{
-    		e.printStackTrace();
-    	} catch (ParserConfigurationException e)
-    	{
-    		e.printStackTrace();
-    	} catch (SAXException e)
-    	{
-    		e.printStackTrace();
     	} catch (Exception e) {
 			e.printStackTrace();
 		}

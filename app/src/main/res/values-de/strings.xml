@@ -19,4 +19,5 @@
     <string name="txtConfigNotSet">Bitte konfiguriere die App zunächst!</string>
     <string name="txtAPIUsername"><b><u>Deine User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
+    <string name="error">Fehler</string>
 </resources>
