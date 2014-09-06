@@ -92,10 +92,9 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 	static String pocheUrl;
 	String action;
 	  
+	final Pattern pattern = Pattern
+			.compile("(.*)(http://[a-z0-9-/\\.]+)(\\s+.*)");
 
-
-	  
-	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
      * displaying information page. */
@@ -114,6 +113,13 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
         	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
         	final String pageUrl = extras.getString("android.intent.extra.TEXT");
+        	// Some apps will send a string with an URL in the middle of it
+            // and when adding to Wallabag the link is not parsed correctly.
+            // Duckduckgo is an example.
+            Matcher matcher = pattern.matcher(pageUrl);
+            while (matcher.find()) {
+                pageUrl = matcher.group(2).toString();
+            }
         	// Vérification de la connectivité Internet
 			 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
