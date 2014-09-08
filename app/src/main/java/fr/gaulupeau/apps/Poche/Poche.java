@@ -8,6 +8,15 @@
 
 package fr.gaulupeau.apps.Poche;
 
+
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 import fr.gaulupeau.apps.InThePoche.R;
 
 import java.io.IOException;
@@ -19,18 +28,39 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.X509TrustManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.scheme.SocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SingleClientConnManager;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -38,6 +68,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import org.json.JSONObject;
+import org.json.JSONException;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -65,14 +98,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
+import fr.gaulupeau.apps.InThePoche.R;
 
 
 
@@ -89,18 +115,21 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 	SharedPreferences settings;
 	static String apiUsername;
 	static String apiToken;
+	static String apiRealUsername;
+	static String apiPassword;
 	static String pocheUrl;
 	String action;
-	  
-
-
-	  
+	private BasicCookieStore cookieStore;
+	private BasicHttpContext httpContext;
 	
     /** Called when the activity is first created. 
      * Will act differently depending on whether sharing or
      * displaying information page. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        this.cookieStore = new BasicCookieStore();
+        this.httpContext = new BasicHttpContext();
        
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
@@ -114,36 +143,17 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
         	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
         	final String pageUrl = extras.getString("android.intent.extra.TEXT");
+        	final String sPageUrl = pageUrl.replaceFirst("^.*\\s+http", "http");
         	// Vérification de la connectivité Internet
-			 final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-			 final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-			 if (activeNetwork != null && activeNetwork.isConnected()) {
-		            // Start to build the poche URL
-					Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
-					// Add the parameters from the call
-					pocheSaveUrl.appendQueryParameter("action", "add");
-					byte[] data = null;
-					try {
-						data = pageUrl.getBytes("UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+			final ConnectivityManager conMgr =  (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+			final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+			if (activeNetwork != null && activeNetwork.isConnected()) {
+				new Thread(new Runnable() {
+					public void run() {
+						addPageToPoche(sPageUrl);
 					}
-					String base64 = Base64.encodeToString(data, Base64.DEFAULT);
-					pocheSaveUrl.appendQueryParameter("url", base64);
-					System.out.println("base64 : " + base64);
-					System.out.println("pageurl : " + pageUrl);
-					
-					// Load the constructed URL in the browser
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setData(pocheSaveUrl.build());
-					i.putExtra(Browser.EXTRA_APPLICATION_ID, getPackageName());
-					// If user has more then one browser installed give them a chance to
-					// select which one they want to use 
-					
-					startActivity(i);
-					// That is all this app needs to do, so call finish()
-					this.finish();
+				}).start();
+				this.finish();
 			 } else {
 				 // Afficher alerte connectivité
 				 showToast(getString(R.string.txtNetOffline));
@@ -232,6 +242,8 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         pocheUrl = settings.getString("pocheUrl", "http://");
         apiUsername = settings.getString("APIUsername", "");
         apiToken = settings.getString("APIToken", "");
+	apiRealUsername = settings.getString("APIRealUsername", "");
+	apiPassword = settings.getString("APIPassword", "");
     }
     
     @Override
@@ -251,6 +263,66 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
 		}
     }
     
+    
+    private void addPageToPoche(final String pageUrl) {
+		byte[] data = null;
+		try {
+			data = pageUrl.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		HttpPost httppost = new HttpPost(pocheUrl+"/api.php");
+		
+		if (pocheUrl.startsWith("https") ) {
+			System.out.println("Trust everyone");
+			trustEveryone();
+		}
+		
+		try {
+		    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+		    nameValuePairs.add(new BasicNameValuePair("action", "add"));
+		    nameValuePairs.add(new BasicNameValuePair("login", apiRealUsername));
+		    nameValuePairs.add(new BasicNameValuePair("password", apiPassword));
+		    nameValuePairs.add(new BasicNameValuePair("url", base64));
+		    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		    HttpResponse response = httpclient.execute(httppost);
+		    int statusCode = response.getStatusLine().getStatusCode();
+		    
+		    if (statusCode == HttpStatus.SC_NOT_MODIFIED ||
+		    	statusCode == HttpStatus.SC_OK) {
+		    	String result = EntityUtils.toString(response.getEntity());
+		    	try {
+		    		JSONObject resObject = new JSONObject(result);
+		    		if (resObject.optInt("status") == 0) {
+		    			showToast(getString(R.string.txtAddPageDone) + ": " +
+		    					resObject.optString("message"));
+		    		} else {
+		    			showToast(getString(R.string.txtAddPageFailed) + ": " + resObject.optString("message"));
+		    		}
+				} catch (JSONException jse) {
+					httpclient.getConnectionManager().shutdown();
+				    jse.printStackTrace();
+				    showToast(getString(R.string.txtAddPageFailedJSON));
+				}
+		    } else {
+		    	showToast(getString(R.string.txtAddPageFailedStatus) + statusCode);
+			}
+			        
+		} catch (ClientProtocolException e) {
+		    httpclient.getConnectionManager().shutdown();
+		    e.printStackTrace();
+		    showToast(getString(R.string.txtAddPageFailedProto));
+		} catch (IOException e) {
+			httpclient.getConnectionManager().shutdown();
+		    e.printStackTrace();
+		    showToast(getString(R.string.txtAddPageFailedIO));
+		} finally {
+		    httpclient.getConnectionManager().shutdown();
+		}
+    }
+
     private void updateUnread(){
     	runOnUiThread(new Runnable() {
     		public void run()
