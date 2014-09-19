@@ -21,6 +21,8 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -112,7 +114,7 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
         	findViewById(R.id.btnSync).setVisibility(View.GONE);
         	findViewById(R.id.btnGetPost).setVisibility(View.GONE);
         	findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
-        	final String pageUrl = extras.getString("android.intent.extra.TEXT");
+        	String pageUrl = extras.getString("android.intent.extra.TEXT");
         	// Some apps will send a string with an URL in the middle of it
             // and when adding to Wallabag the link is not parsed correctly.
             // Duckduckgo is an example.
