@@ -5,9 +5,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 
-public class BaseActionBarActivity extends Activity {
+public class BaseActionBarActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,7 @@ public class BaseActionBarActivity extends Activity {
 	protected void addBackButtonToActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			try {
-				getActionBar().setDisplayHomeAsUpEnabled(true);
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			} catch (Exception e) {
 				//
 			}
