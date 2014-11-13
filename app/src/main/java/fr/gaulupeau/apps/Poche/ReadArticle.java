@@ -1,58 +1,45 @@
 package fr.gaulupeau.apps.Poche;
 
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
-
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.Window;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
+
 public class ReadArticle extends BaseActionBarActivity {
 	WebView webViewContent;
 	Button btnMarkRead;
-    SQLiteDatabase database;
-    String id = "";
-    ScrollView view;
-    
+	SQLiteDatabase database;
+	String id = "";
+	ScrollView view;
+
 	public void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_PROGRESS);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 		database = helper.getWritableDatabase();
-		String[] getStrColumns = new String[] {ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
+		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
 		Bundle data = getIntent().getExtras();
-		if(data != null) {
+		if (data != null) {
 			id = data.getString("id");
 		}
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
@@ -66,8 +53,7 @@ public class ReadArticle extends BaseActionBarActivity {
 		try {
 			URL originalUrl = new URL(originalUrlText);
 			originalUrlDesc = originalUrl.getHost();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			//
 		}
 
@@ -83,8 +69,8 @@ public class ReadArticle extends BaseActionBarActivity {
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
-				"\t\t\t\t\t\t\t<h1>"+ titleText +"</h1>\n" +
-				"\t\t\t\t\t\t\t<p>Open Original: <a href=\""+ originalUrlText +"\">"+ originalUrlDesc +"</a></p>\n" +
+				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
+				"\t\t\t\t\t\t\t<p>Open Original: <a href=\"" + originalUrlText + "\">" + originalUrlDesc + "</a></p>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 		String htmlFooter = "</article>\n" +
@@ -95,24 +81,12 @@ public class ReadArticle extends BaseActionBarActivity {
 				"</html>";
 
 
-		setProgressBarIndeterminateVisibility(true);
-		setProgressBarVisibility(true);
-
-		webViewContent = (WebView)findViewById(R.id.webViewContent);
-		webViewContent.setWebChromeClient(new WebChromeClient() {
-			public void onProgressChanged(WebView view, int progress) {
-				setProgress(progress * 100);
-				if(progress == 100) {
-					setProgressBarIndeterminateVisibility(false);
-					setProgressBarVisibility(false);
-				}
-			}
-		});
+		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
-		btnMarkRead = (Button)findViewById(R.id.btnMarkRead);
+		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				ContentValues values = new ContentValues();
@@ -121,21 +95,21 @@ public class ReadArticle extends BaseActionBarActivity {
 				finish();
 			}
 		});
-		
-		
+
+
 	}
 
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
-		
+
 		ContentValues values = new ContentValues();
 		values.put("read_at", view.getScrollY());
 		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
 		System.out.println(view.getScrollY());
 		super.onStop();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

@@ -1,19 +1,17 @@
 package fr.gaulupeau.apps.Poche;
 
-import android.util.Log;
-
 import java.net.URL;
 
 public class Article {
-    public String url;
-    public String id;
-    public String title;
-    public String content;
-    public String archive;
+	public String url;
+	public String id;
+	public String title;
+	public String content;
+	public String archive;
 
 	private URL m_url = null;
-    
-    public Article(String url, String id, String title, String content, String archive) {
+
+	public Article(String url, String id, String title, String content, String archive) {
 		super();
 		this.url = url;
 		this.id = id;
@@ -26,7 +24,7 @@ public class Article {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+	}
 
 	public String getHostOfUrl() {
 		if (this.m_url != null) {
