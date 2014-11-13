@@ -20,4 +20,5 @@
     <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
     <string name="error">Error</string>
+    <string name="error_feed">Error loading feed</string>
 </resources>

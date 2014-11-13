@@ -497,8 +497,15 @@ public class Poche extends Activity {
 					}
 				}
 
+				showToast(getString(R.string.txtSyncDone));
+			} else {
+				// HTTP Connection not successful
+				if (urlConnection == null) {
+					showErrorMessage(getString(R.string.error_feed));
+				} else {
+					showErrorMessage(getString(R.string.error_feed) + ":\n" + urlConnection.getResponseCode() + " " + urlConnection.getResponseMessage());
+				}
 			}
-			showToast(getString(R.string.txtSyncDone));
 			updateUnread();
 		} catch (Exception e) {
 			e.printStackTrace();
