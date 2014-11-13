@@ -340,6 +340,11 @@ public class Poche extends Activity {
 		s = s.replace("&Atilde;&macr;", "&iuml;");
 		s = s.replace("&Atilde;&sect;", "&ccedil;");
 		s = s.replace("&amp;", "&amp;");
+
+		// Replace multiple whitespaces with single space
+		s = s.replaceAll("\\s+", " ");
+		s = s.trim();
+
 		return s;
 	}
 
