@@ -25,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Browser;
 import android.util.Base64;
+import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,6 +46,8 @@ import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -101,7 +104,22 @@ public class Poche extends Activity {
 			findViewById(R.id.btnSync).setVisibility(View.GONE);
 			findViewById(R.id.btnGetPost).setVisibility(View.GONE);
 			findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
-			final String pageUrl = extras.getString("android.intent.extra.TEXT");
+
+
+
+			final String extraText = extras.getString("android.intent.extra.TEXT");
+			final String pageUrl;
+
+			// Parsing string for urls.
+			Matcher matcher = Patterns.WEB_URL.matcher(extraText);
+			if (matcher.find()) {
+				pageUrl = matcher.group();
+			} else {
+				showErrorMessage("Couldn't find a URL in share string:\n"+extraText);
+				return;
+			}
+
+
 			// Vérification de la connectivité Internet
 			final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
