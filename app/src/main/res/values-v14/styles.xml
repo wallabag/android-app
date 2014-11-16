@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="app_theme" parent="android:Theme.DeviceDefault.Light.DarkActionBar"/>
-    <style name="mainActivity_theme" parent="android:Theme.DeviceDefault.Light.NoActionBar" />
-</resources>

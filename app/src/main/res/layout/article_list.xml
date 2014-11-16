@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="10sp"
+    android:orientation="vertical" android:padding="8sp"
     android:layout_width="fill_parent" android:layout_height="fill_parent" >
 
-        <TextView
-            android:id="@+id/listitem_titre"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:typeface="serif" />
+    <TextView
+        android:id="@+id/listitem_titre"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:paddingBottom="4sp"/>
+
+    <TextView
+        android:id="@+id/listitem_textview_url"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:singleLine="true" />
 
 </LinearLayout>

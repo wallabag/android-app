@@ -6,8 +6,6 @@
     <string name="author">GAULUPEAU Jonathan - 2013</string>
     <string name="instructions">Um eine Website zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke dann auf <i>Bag it!</i>.\nDann wirst du zur Login-Seite deiner wallabag weitergeleitet. \nFertig!\nErfahre mehr über wallabag auf:\n http://www.wallabag.org</string>
     <string name="btnDone">Speichern</string>
-    <string name="which_browser">Welchen Browser möchtest du benutzen?</string>
-    <string name="authorSite">http://cv.gaulupeau.fr</string>
     <string name="url_label"><b><u>Deine wallabag URL:</u></b></string>
     <string name="url_help">Beispiele:\n<i>http://wallabag.example.com</i>\n<i>http://www.example.com/wallabag</i></string>
     <string name="btnGetPost">Artikelliste - %1$d ungelesene</string>
@@ -17,10 +15,10 @@
     <string name="menuShowAll">Alle anzeigen</string>
     <string name="menuWipeDb">Datenbank leeren</string>
     <string name="txtSyncDone">Synchronisieren erfolgreich!</string>
-    <string name="txtSyncFailed">Synchronisieren fehlgeschlagen!</string>
     <string name="txtNetOffline">Internetverbindung prüfen!</string>
     <string name="txtConfigNotSet">Bitte konfiguriere die App zunächst!</string>
-    <string name="txtGlobalToken"><b><u>Globales API Token:</u></b></string>
     <string name="txtAPIUsername"><b><u>Deine User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
+    <string name="error">Fehler</string>
+    <string name="error_feed">Fehler beim laden des Feeds</string>
 </resources>

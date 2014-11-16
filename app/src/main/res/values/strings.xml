@@ -6,8 +6,6 @@
     <string name="author">GAULUPEAU Jonathan - 2013</string>
     <string name="instructions">To save a web page to wallabag, open the page in a browser then tap <i>Share</i> and tap on <i>Bag it!</i>. \nYou could then see your wallabag login page. \nAnd it\'s done ! \nMore infos about wallabag at:\n http://www.wallabag.org</string>
     <string name="btnDone">Save</string>
-    <string name="which_browser">Which browser would you like to use?</string>
-    <string name="authorSite">http://cv.gaulupeau.fr</string>
     <string name="url_label"><b><u>Your wallabag URL :</u></b></string>
     <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
     <string name="btnGetPost">List articles - %1$d unread</string>
@@ -17,10 +15,10 @@
     <string name="menuShowAll">Show All</string>
     <string name="menuWipeDb">Wipe Database</string>
     <string name="txtSyncDone">Synchronize done !</string>
-    <string name="txtSyncFailed">Synchronize failed !</string>
     <string name="txtNetOffline">Check Internet Connectivity !</string>
     <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
-    <string name="txtGlobalToken"><b><u>API global token :</u></b></string>
     <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
+    <string name="error">Error</string>
+    <string name="error_feed">Error loading feed</string>
 </resources>

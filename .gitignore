@@ -10,5 +10,4 @@ gen/
 .idea/
 .gradle/
 build/
-gradle/
 local.properties
