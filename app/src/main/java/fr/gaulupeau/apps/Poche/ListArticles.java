@@ -59,7 +59,13 @@ public class ListArticles extends BaseActionBarActivity {
 		return true;
 	}
 
-	@Override
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menuShowAll).setTitle(getString(showAll ? R.string.menuShowUnread : R.string.menuShowAll));
+        return true;
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.menuShowAll:
@@ -83,7 +89,7 @@ public class ListArticles extends BaseActionBarActivity {
         } else {
             setupListAdapter();
         }
-        setTitle("wallabag | " + readList.getCount() + " Articles");
+        setTitle(getString(R.string.app_name) + " | " + getResources().getQuantityString(R.plurals.numberOfArticles, readList.getCount(), readList.getCount()));
     }
 
 	private void setupListAdapter() {
