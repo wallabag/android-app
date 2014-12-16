@@ -40,7 +40,7 @@ public class ReadArticle extends BaseActionBarActivity {
 		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
-			id = data.getString("id");
+			id = String.valueOf(data.getLong("id"));
 		}
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
