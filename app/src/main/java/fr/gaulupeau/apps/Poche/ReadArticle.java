@@ -88,7 +88,22 @@ public class ReadArticle extends BaseActionBarActivity {
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
+		Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+		btnMarkRead.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				markAsReadAndClose();
+			}
+		});
 	}
+
+    private void markAsReadAndClose() {
+        ContentValues values = new ContentValues();
+        values.put(ARCHIVE, 1);
+        database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+        finish();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,10 +116,7 @@ public class ReadArticle extends BaseActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
-                ContentValues values = new ContentValues();
-                values.put(ARCHIVE, 1);
-                database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-                finish();
+                markAsReadAndClose();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
