@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -25,7 +28,6 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
 
 public class ReadArticle extends BaseActionBarActivity {
 	WebView webViewContent;
-	Button btnMarkRead;
 	SQLiteDatabase database;
 	String id = "";
 	ScrollView view;
@@ -86,22 +88,30 @@ public class ReadArticle extends BaseActionBarActivity {
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
-		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
-		btnMarkRead.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				ContentValues values = new ContentValues();
-				values.put(ARCHIVE, 1);
-				database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-				finish();
-			}
-		});
-
-
 	}
 
-	@Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_article, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuArticleMarkAsRead:
+                ContentValues values = new ContentValues();
+                values.put(ARCHIVE, 1);
+                database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 

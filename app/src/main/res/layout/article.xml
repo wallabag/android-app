@@ -7,43 +7,9 @@
     android:id="@+id/scroll"
     tools:context="fr.gaulupeau.apps.Poche.ReadArticle" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="WebViewLayout" >
-
-        <WebView
-            android:id="@+id/webViewContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="15sp"
-            android:paddingRight="15sp" >
-
-            <View
-                android:id="@+id/view1"
-                android:layout_width="fill_parent"
-                android:layout_height="1dip"
-                android:layout_marginBottom="5sp"
-                android:layout_marginTop="5sp"
-                android:background="#000000" />
-
-            <Button
-                android:id="@+id/btnMarkRead"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/btnMarkRead" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-    
+    <WebView
+        android:id="@+id/webViewContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </ScrollView>
