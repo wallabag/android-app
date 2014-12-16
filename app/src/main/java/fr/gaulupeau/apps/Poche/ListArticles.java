@@ -87,6 +87,8 @@ public class ListArticles extends BaseActionBarActivity {
 			}
 
 		});
+
+        setTitle("wallabag | " + readArticlesInfo.size() + " Articles");
 	}
 
 	public ReadingListAdapter getAdapterQuery(String filter, ArrayList<Article> articleInfo) {

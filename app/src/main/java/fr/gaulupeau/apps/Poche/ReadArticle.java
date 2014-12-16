@@ -50,6 +50,8 @@ public class ReadArticle extends BaseActionBarActivity {
 		String originalUrlDesc = originalUrlText;
 		String htmlContent = ac.getString(3);
 
+        setTitle(titleText);
+
 		try {
 			URL originalUrl = new URL(originalUrlText);
 			originalUrlDesc = originalUrl.getHost();
