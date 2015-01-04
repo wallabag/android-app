@@ -18,6 +18,11 @@ body {
   background: #EEE;
 }
 
+.hicontrast {
+  background: #FFF;
+  font-weight: 600;
+}
+
 /* ==========================================================================
    1 = Style Guide
    ========================================================================== */
@@ -34,6 +39,12 @@ h2, h3, h4 {
 
 p, li {
   color: #666;
+}
+
+.hicontrast p,
+.hicontrast li {
+  color: #000;
+  background: #FFF;
 }
 
 a {
