@@ -12,6 +12,7 @@
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnSettings">Settings</string>
+    <string name="menuShare">Share</string>
     <string name="menuShowAll">Show All</string>
     <string name="menuWipeDb">Wipe Database</string>
     <string name="txtSyncDone">Synchronize done !</string>

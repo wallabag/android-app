@@ -12,6 +12,7 @@
     <string name="btnSync">Synchronisieren</string>
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnSettings">Einstellungen</string>
+    <string name="menuShare">Teilen</string>
     <string name="menuShowAll">Alle anzeigen</string>
     <string name="menuWipeDb">Datenbank leeren</string>
     <string name="txtSyncDone">Synchronisieren erfolgreich!</string>
