@@ -1,9 +1,11 @@
 package fr.gaulupeau.apps.Poche;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +43,7 @@ public class ReadArticle extends BaseActionBarActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//addShareButtonToActionBar();
 		setContentView(R.layout.article);
 
 		view = (ScrollView) findViewById(R.id.scroll);
@@ -106,6 +109,17 @@ public class ReadArticle extends BaseActionBarActivity {
 		});
 
 
+	}
+
+	@TargetApi(11)
+	protected void addShareButtonToActionBar() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			try {
+				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			} catch (Exception e) {
+				//
+			}
+		}
 	}
 
 	@Override
