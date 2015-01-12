@@ -73,7 +73,6 @@ import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
  * Main activity class
  */
 @TargetApi(Build.VERSION_CODES.FROYO)
-<<<<<<< HEAD
 public class Poche extends Activity implements FeedUpdaterInterface {
     private static SQLiteDatabase database;
     Button btnGetPost;
