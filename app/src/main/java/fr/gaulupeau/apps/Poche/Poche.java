@@ -207,7 +207,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         if (pref.getInt("update_checker", 0) < 9) {
             // Wipe Database, because we now save HTML content instead of plain text
             ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-            database = helper.getReadableDatabase();
+	    getDatabase();
             helper.truncateTables(database);
             showToast("Update: Wiped Database. Please synchronize.");
         }
@@ -227,6 +227,13 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         pocheUrl = settings.getString("pocheUrl", "http://");
         apiUsername = settings.getString("APIUsername", "");
         apiToken = settings.getString("APIToken", "");
+    }
+
+    private void getDatabase() {
+	    if (database == null) {
+		    ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+		    database = helper.getReadableDatabase();
+	    }
     }
 
     @Override
@@ -258,7 +265,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         runOnUiThread(new Runnable() {
             public void run() {
                 ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-                database = helper.getReadableDatabase();
+		getDatabase();
                 int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
                 btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
             }
