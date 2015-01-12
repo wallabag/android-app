@@ -18,7 +18,9 @@
     <string name="txtNetOffline">Check Internet Connectivity !</string>
     <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
     <string name="txtAPIUsername"><b><u>Your User ID:</u></b></string>
+    <string name="txtAPIPassword"><b><u>Your Http Auth password, leave blank for none:</u></b></string>
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
     <string name="error">Error</string>
+    <string name="success">Success</string>
     <string name="error_feed">Error loading feed</string>
 </resources>

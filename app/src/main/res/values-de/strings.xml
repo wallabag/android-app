@@ -18,7 +18,9 @@
     <string name="txtNetOffline">Internetverbindung prüfen!</string>
     <string name="txtConfigNotSet">Bitte konfiguriere die App zunächst!</string>
     <string name="txtAPIUsername"><b><u>Deine User ID:</u></b></string>
+    <string name="txtAPIPassword"><b><u>Your Http Auth password, leave blank for none:</u></b></string>
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
     <string name="error">Fehler</string>
+    <string name="success">Erfolg</string>
     <string name="error_feed">Fehler beim laden des Feeds</string>
 </resources>
