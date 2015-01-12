@@ -20,17 +20,18 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Browser;
 import android.util.Base64;
 import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
+import android.util.Log;
 
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -47,7 +48,6 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -82,8 +82,11 @@ public class Poche extends Activity {
 	static String apiUsername;
 	static String apiToken;
 	static String pocheUrl;
+	static String base64login;
 	String action;
 
+	private static final String TAG = "fr.gaulupeau.apps.InThePoche";
+	private static final String USER_AGENT = "Mozilla/5.0 Wallabag/1.7";
 
 	/**
 	 * Called when the activity is first created.
@@ -124,10 +127,6 @@ public class Poche extends Activity {
 			final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 			final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
 			if (activeNetwork != null && activeNetwork.isConnected()) {
-				// Start to build the poche URL
-				Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
-				// Add the parameters from the call
-				pocheSaveUrl.appendQueryParameter("action", "add");
 				byte[] data = null;
 				try {
 					data = pageUrl.getBytes("UTF-8");
@@ -135,10 +134,17 @@ public class Poche extends Activity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+				final String base64 = Base64.encodeToString(data, Base64.DEFAULT);
+				Log.d(TAG, "mylogpoche: base64 : " + base64);
+				Log.d(TAG, "mylogpoche: pageurl : " + pageUrl);
+
+
+                /*
+				// Start to build the poche URL
+                final Uri.Builder pocheSaveUrl = Uri.parse(pocheUrl).buildUpon();
+                // Add the parameters from the call
+                pocheSaveUrl.appendQueryParameter("action", "add");
 				pocheSaveUrl.appendQueryParameter("url", base64);
-				System.out.println("base64 : " + base64);
-				System.out.println("pageurl : " + pageUrl);
 
 				// Load the constructed URL in the browser
 				Intent i = new Intent(Intent.ACTION_VIEW);
@@ -148,6 +154,35 @@ public class Poche extends Activity {
 				// select which one they want to use
 
 				startActivity(i);
+                */
+
+				// Create Request to server and get response
+				new Thread(new Runnable() {
+
+					// After call for background.start this run method call
+					public void run() {
+						try {
+							Connection.Response res = getJsoup()
+									.followRedirects(false)
+									.execute();
+
+							res = getJsoup()
+									.cookies(res.cookies())
+									.data("action", "add", "url", base64)
+									.execute();
+
+							showToast(getString(R.string.success));
+						} catch (org.jsoup.HttpStatusException e) {
+							showToast(getString(R.string.error) + " " + e.getStatusCode());
+							Log.d(TAG, "Error", e);
+						} catch (Throwable e) {
+							showToast(getString(R.string.error));
+							Log.d(TAG, "Error", e);
+						}
+					}
+				}).start();
+
+
 				// That is all this app needs to do, so call finish()
 				this.finish();
 			} else {
@@ -211,6 +246,13 @@ public class Poche extends Activity {
 		}
 	}
 
+	private static Connection getJsoup() {
+		final Connection conn = Jsoup.connect(pocheUrl)
+				.userAgent(USER_AGENT)
+				.method(Connection.Method.GET).timeout(10 * 1000);
+		return base64login == null ? conn : conn.header("Authorization", "Basic " + base64login);
+	}
+
 	private void checkAndHandleAfterUpdate() {
 		SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
 
@@ -237,6 +279,15 @@ public class Poche extends Activity {
 		pocheUrl = settings.getString("pocheUrl", "http://");
 		apiUsername = settings.getString("APIUsername", "");
 		apiToken = settings.getString("APIToken", "");
+		base64login = null;
+
+		final String password = settings.getString("APIPassword", "");
+
+		if (!password.isEmpty() && !apiUsername.isEmpty()) {
+			final String login = apiUsername + ":" + password;
+			base64login = Base64.encodeToString(login.getBytes(), Base64.DEFAULT);
+		}
+		//Log.d(TAG, String.format("username: '%s', password: '%s', base64login: '%s'%n", apiUsername, password, base64login));
 	}
 
 	@Override
@@ -336,7 +387,7 @@ public class Poche extends Activity {
 //			} while (ac.moveToNext());
 //		}
 //		ac.close();
-//    	
+//
 //    }
 
 

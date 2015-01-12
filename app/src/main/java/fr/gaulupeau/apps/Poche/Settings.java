@@ -16,6 +16,7 @@ public class Settings extends BaseActionBarActivity {
 	Button btnDone;
 	EditText editPocheUrl;
 	EditText editAPIUsername;
+	EditText editAPIPassword;
 	EditText editAPIToken;
 	TextView textViewVersion;
 
@@ -28,10 +29,13 @@ public class Settings extends BaseActionBarActivity {
 		String pocheUrl = settings.getString("pocheUrl", "http://");
 		String apiUsername = settings.getString("APIUsername", "");
 		String apiToken = settings.getString("APIToken", "");
+		String password = settings.getString("APIPassword", "");
 		editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
 		editPocheUrl.setText(pocheUrl);
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
 		editAPIUsername.setText(apiUsername);
+		editAPIPassword = (EditText) findViewById(R.id.APIPassword);
+		editAPIPassword.setText(password);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		editAPIToken.setText(apiToken);
 		btnDone = (Button) findViewById(R.id.btnDone);
@@ -41,6 +45,7 @@ public class Settings extends BaseActionBarActivity {
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putString("pocheUrl", editPocheUrl.getText().toString());
 				editor.putString("APIUsername", editAPIUsername.getText().toString());
+				editor.putString("APIPassword", editAPIPassword.getText().toString());
 				editor.putString("APIToken", editAPIToken.getText().toString());
 				editor.commit();
 				finish();
