@@ -27,7 +27,9 @@
         </activity>
         <activity android:name="fr.gaulupeau.apps.Poche.ReadArticle" />
         <activity android:name="fr.gaulupeau.apps.Poche.ListArticles" />
-        <activity android:name="fr.gaulupeau.apps.Poche.Settings" />
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.Settings"
+            android:label="@string/btnSettings" />
 
     </application>
 </manifest>
