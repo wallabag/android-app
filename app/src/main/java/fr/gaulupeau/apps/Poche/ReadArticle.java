@@ -43,7 +43,6 @@ public class ReadArticle extends BaseActionBarActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//addShareButtonToActionBar();
 		setContentView(R.layout.article);
 
 		view = (ScrollView) findViewById(R.id.scroll);
@@ -111,17 +110,6 @@ public class ReadArticle extends BaseActionBarActivity {
 
 	}
 
-	@TargetApi(11)
-	protected void addShareButtonToActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			try {
-				getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			} catch (Exception e) {
-				//
-			}
-		}
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -143,7 +131,7 @@ public class ReadArticle extends BaseActionBarActivity {
 		Intent send = new Intent(Intent.ACTION_SEND);
 		send.setType("text/plain");
 		send.putExtra(Intent.EXTRA_SUBJECT, titleText);
-		send.putExtra(Intent.EXTRA_TEXT, originalUrlText + " via @wallabagap");
+		send.putExtra(Intent.EXTRA_TEXT, originalUrlText + " via @wallabagapp");
 		startActivity(Intent.createChooser(send, "Share article"));
 		return true;
 	}

@@ -3,7 +3,7 @@
   xmlns:support="http://schemas.android.com/apk/res-auto" >
   <item android:id="@+id/menuShare"
     android:title="@string/menuShare"
-    android:icon="@drawable/ic_action_share"
+    android:icon="@android:drawable/ic_menu_share"
     support:showAsAction="ifRoom" />
 
 </menu>
