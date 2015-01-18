@@ -31,7 +31,6 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
 
 public class ReadArticle extends BaseActionBarActivity {
 	WebView webViewContent;
-	Button btnMarkRead;
 	SQLiteDatabase database;
 	String id = "";
 	ScrollView view;
@@ -51,7 +50,7 @@ public class ReadArticle extends BaseActionBarActivity {
 		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
-			id = data.getString("id");
+			id = String.valueOf(data.getLong("id"));
 		}
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
@@ -60,6 +59,8 @@ public class ReadArticle extends BaseActionBarActivity {
 		originalUrlText = ac.getString(0);
 		originalUrlDesc = originalUrlText;
 		htmlContent = ac.getString(3);
+
+        setTitle(titleText);
 
 		try {
 			URL originalUrl = new URL(originalUrlText);
@@ -95,36 +96,14 @@ public class ReadArticle extends BaseActionBarActivity {
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
-		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+		Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				ContentValues values = new ContentValues();
-				values.put(ARCHIVE, 1);
-				database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
-				finish();
+				markAsReadAndClose();
 			}
 		});
-
-
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.option_list_article, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case R.id.menuShare:
-				return shareArticle();
-			default:
-				return super.onOptionsItemSelected(item);
-		}
 	}
 
 	private boolean shareArticle() {
@@ -136,7 +115,34 @@ public class ReadArticle extends BaseActionBarActivity {
 		return true;
 	}
 
-	@Override
+    private void markAsReadAndClose() {
+        ContentValues values = new ContentValues();
+        values.put(ARCHIVE, 1);
+        database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_article, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuArticleMarkAsRead:
+                markAsReadAndClose();
+                return true;
+	    case R.id.menuShare:
+		return shareArticle();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 

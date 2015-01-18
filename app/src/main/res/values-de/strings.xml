@@ -22,4 +22,9 @@
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
     <string name="error">Fehler</string>
     <string name="error_feed">Fehler beim laden des Feeds</string>
+    <string name="menuShowUnread">Ungelesene anzeigen</string>
+    <plurals name="numberOfArticles">
+        <item quantity="one">%d Artikel</item>
+        <item quantity="other">%d Artikel</item>
+    </plurals>
 </resources>
