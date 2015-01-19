@@ -248,6 +248,7 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            errorMessage = e.getLocalizedMessage();
         }
     }
 

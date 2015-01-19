@@ -153,6 +153,7 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
     @Override
     public void feedUpdatedFinishedSuccessfully() {
         updateList();
+        showToast("Updated Feed");
     }
 
     @Override
