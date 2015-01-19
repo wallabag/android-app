@@ -43,6 +43,8 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
     private ListView readList;
     private boolean showAll = false;
 
+    private boolean updatedInitially = false;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
@@ -61,8 +63,11 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
 
         settings = WallabagSettings.settingsFromDisk(this);
         if (settings.isValid()) {
-            //TODO Shouldn't be updated every time. Only if data is too old.
-            updateFeed();
+            //TODO Maybe should update once in a while, if data is getting old.
+            if (!updatedInitially) {
+                updatedInitially = true;
+                updateFeed();
+            }
         } else {
             AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticles.this);
             messageBox.setTitle("Welcome to wallabag");
