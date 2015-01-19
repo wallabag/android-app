@@ -1,11 +1,17 @@
 package fr.gaulupeau.apps.Poche;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
@@ -23,31 +30,53 @@ import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.MY_ID;
+import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 
-public class ListArticles extends BaseActionBarActivity {
+public class ListArticles extends ActionBarActivity implements FeedUpdaterInterface {
 
-	private SQLiteDatabase database;
+    private SQLiteDatabase database;
+    private FeedUpdater feedUpdater;
+
+    private WallabagSettings settings;
+
     private ListView readList;
     private boolean showAll = false;
 
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.list);
         readList = (ListView) findViewById(R.id.liste_articles);
 
         ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
         database = helper.getWritableDatabase();
 
-		updateList();
-	}
+        checkAndHandleAfterUpdate();
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         updateList();
+
+        settings = WallabagSettings.settingsFromDisk(this);
+        if (settings.isValid()) {
+            //TODO Shouldn't be updated every time. Only if data is too old.
+            updateFeed();
+        } else {
+            //TODO Show Info Message and open Settings for initial configuration.
+        }
     }
 
-    public void onDestroy() {
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (feedUpdater != null) {
+            feedUpdater.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
 		super.onDestroy();
 		database.close();
 	}
@@ -68,6 +97,12 @@ public class ListArticles extends BaseActionBarActivity {
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+            case R.id.menuSync:
+                updateFeed();
+                return true;
+            case R.id.menuSettings:
+                startActivity(new Intent(getBaseContext(), Settings.class));
+                return true;
 			case R.id.menuShowAll:
                 showAll = !showAll;
 				updateList();
@@ -81,6 +116,33 @@ public class ListArticles extends BaseActionBarActivity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
+
+    private void updateFeed() {
+        // Ensure Internet connectivity
+        final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        if (!settings.isValid()) {
+            showToast(getString(R.string.txtConfigNotSet));
+        } else if (activeNetwork != null && activeNetwork.isConnected()) {
+            // Run update task
+            ArticlesSQLiteOpenHelper sqLiteOpenHelper = new ArticlesSQLiteOpenHelper(this);
+            feedUpdater = new FeedUpdater(settings.wallabagURL, settings.userID, settings.userToken, sqLiteOpenHelper.getWritableDatabase(), this);
+            feedUpdater.execute();
+        } else {
+            // Show message if not connected
+            showToast(getString(R.string.txtNetOffline));
+        }
+    }
+
+    @Override
+    public void feedUpdatedFinishedSuccessfully() {
+        updateList();
+    }
+
+    @Override
+    public void feedUpdaterFinishedWithError(String errorMessage) {
+        showErrorMessage(errorMessage);
+    }
 
     private void updateList() {
         CursorAdapter adapter = (CursorAdapter) readList.getAdapter();
@@ -135,5 +197,47 @@ public class ListArticles extends BaseActionBarActivity {
     @TargetApi(8)
     private CursorAdapter getCursorAdapterPreHoneycomb(int layout, String[] from, int[] to) {
         return new SimpleCursorAdapter(this, layout, getCursor(), from, to);
+    }
+
+    private void showToast(final String toast) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(ListArticles.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showErrorMessage(final String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticles.this);
+                messageBox.setMessage(message);
+                messageBox.setTitle(getString(R.string.error));
+                messageBox.setPositiveButton("OK", null);
+                messageBox.setCancelable(false);
+                messageBox.create().show();
+            }
+        });
+    }
+
+    private void checkAndHandleAfterUpdate() {
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME, 0);
+
+        if (pref.getInt("update_checker", 0) < 9) {
+            // Wipe Database, because we now save HTML content instead of plain text
+            ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+            helper.truncateTables(database);
+            showToast("Update: Wiped Database. Please synchronize.");
+        }
+
+        int versionCode;
+        try {
+            versionCode = getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionCode;
+        } catch (Exception e) {
+            versionCode = 0;
+        }
+
+        pref.edit().putInt("update_checker", versionCode).commit();
     }
 }

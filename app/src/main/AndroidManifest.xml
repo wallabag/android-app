@@ -14,10 +14,6 @@
         <activity
             android:name="fr.gaulupeau.apps.Poche.Poche"
             android:theme="@style/mainActivity_theme" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter
                 android:label="@string/label_name" >
                 <action android:name="android.intent.action.SEND" />
@@ -25,8 +21,13 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <activity android:name="fr.gaulupeau.apps.Poche.ListArticles">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name="fr.gaulupeau.apps.Poche.ReadArticle" />
-        <activity android:name="fr.gaulupeau.apps.Poche.ListArticles" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.Settings"
             android:label="@string/btnSettings" />
