@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -63,7 +64,17 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
             //TODO Shouldn't be updated every time. Only if data is too old.
             updateFeed();
         } else {
-            //TODO Show Info Message and open Settings for initial configuration.
+            AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticles.this);
+            messageBox.setTitle("Welcome to wallabag");
+            messageBox.setMessage("Please configure this app with your hosted wallabag to get started.");
+            messageBox.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(getBaseContext(), Settings.class));
+                }
+            });
+            messageBox.setCancelable(false);
+            messageBox.create().show();
         }
     }
 
