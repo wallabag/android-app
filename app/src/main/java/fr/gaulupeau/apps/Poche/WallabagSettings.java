@@ -30,6 +30,7 @@ public class WallabagSettings {
     }
 
     public boolean isValid() {
+        //TODO Should also check for valid URL and valid userID
         return !(wallabagURL.equals("http://")) && !(userID.equals("")) && !(userToken.equals(""));
     }
 
