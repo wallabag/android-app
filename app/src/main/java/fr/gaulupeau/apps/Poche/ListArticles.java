@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +41,7 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
 
     private WallabagSettings settings;
 
+    private SwipeRefreshLayout refreshLayout;
     private ListView readList;
     private boolean showAll = false;
 
@@ -49,6 +51,13 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
         readList = (ListView) findViewById(R.id.liste_articles);
+        refreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateFeed();
+            }
+        });
 
         ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
         database = helper.getWritableDatabase();
@@ -139,13 +148,19 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
         final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
         if (!settings.isValid()) {
             showToast(getString(R.string.txtConfigNotSet));
+            refreshLayout.setRefreshing(false);
         } else if (activeNetwork != null && activeNetwork.isConnected()) {
+            if (!refreshLayout.isRefreshing()) {
+                refreshLayout.setRefreshing(true);
+            }
+
             // Run update task
             ArticlesSQLiteOpenHelper sqLiteOpenHelper = new ArticlesSQLiteOpenHelper(this);
             feedUpdater = new FeedUpdater(settings.wallabagURL, settings.userID, settings.userToken, sqLiteOpenHelper.getWritableDatabase(), this);
             feedUpdater.execute();
         } else {
             // Show message if not connected
+            refreshLayout.setRefreshing(false);
             showToast(getString(R.string.txtNetOffline));
         }
     }
@@ -153,11 +168,13 @@ public class ListArticles extends ActionBarActivity implements FeedUpdaterInterf
     @Override
     public void feedUpdatedFinishedSuccessfully() {
         updateList();
+        refreshLayout.setRefreshing(false);
         showToast("Updated Feed");
     }
 
     @Override
     public void feedUpdaterFinishedWithError(String errorMessage) {
+        refreshLayout.setRefreshing(false);
         showErrorMessage(errorMessage);
     }
 
