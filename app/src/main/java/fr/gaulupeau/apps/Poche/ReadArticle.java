@@ -1,8 +1,11 @@
 package fr.gaulupeau.apps.Poche;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,11 @@ public class ReadArticle extends BaseActionBarActivity {
 	String id = "";
 	ScrollView view;
 
+	String titleText;
+	String originalUrlText;
+	String originalUrlDesc;
+	String htmlContent;
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
@@ -47,10 +55,10 @@ public class ReadArticle extends BaseActionBarActivity {
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
 
-		String titleText = ac.getString(2);
-		String originalUrlText = ac.getString(0);
-		String originalUrlDesc = originalUrlText;
-		String htmlContent = ac.getString(3);
+		titleText = ac.getString(2);
+		originalUrlText = ac.getString(0);
+		originalUrlDesc = originalUrlText;
+		htmlContent = ac.getString(3);
 
         setTitle(titleText);
 
@@ -98,6 +106,15 @@ public class ReadArticle extends BaseActionBarActivity {
 		});
 	}
 
+	private boolean shareArticle() {
+		Intent send = new Intent(Intent.ACTION_SEND);
+		send.setType("text/plain");
+		send.putExtra(Intent.EXTRA_SUBJECT, titleText);
+		send.putExtra(Intent.EXTRA_TEXT, originalUrlText + " via @wallabagapp");
+		startActivity(Intent.createChooser(send, "Share article"));
+		return true;
+	}
+
     private void markAsReadAndClose() {
         ContentValues values = new ContentValues();
         values.put(ARCHIVE, 1);
@@ -118,6 +135,8 @@ public class ReadArticle extends BaseActionBarActivity {
             case R.id.menuArticleMarkAsRead:
                 markAsReadAndClose();
                 return true;
+	    case R.id.menuShare:
+		return shareArticle();
             default:
                 return super.onOptionsItemSelected(item);
         }

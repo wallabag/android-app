@@ -2,6 +2,9 @@ package fr.gaulupeau.apps.Poche;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -19,31 +22,55 @@ public class Settings extends BaseActionBarActivity {
 	EditText editAPIToken;
 	TextView textViewVersion;
 
+    WallabagSettings settings;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		String pocheUrl = settings.getString("pocheUrl", "http://");
-		String apiUsername = settings.getString("APIUsername", "");
-		String apiToken = settings.getString("APIToken", "");
+        settings = WallabagSettings.settingsFromDisk(this);
+        if (!settings.isValid()) {
+            hideBackButtonToActionBar();
+        }
+
 		editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
-		editPocheUrl.setText(pocheUrl);
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
-		editAPIUsername.setText(apiUsername);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
-		editAPIToken.setText(apiToken);
 		btnDone = (Button) findViewById(R.id.btnDone);
+
+		editPocheUrl.setText(settings.wallabagURL);
+		editAPIUsername.setText(settings.userID);
+		editAPIToken.setText(settings.userToken);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                updateButton();
+            }
+        };
+
+        editPocheUrl.addTextChangedListener(textWatcher);
+        editAPIUsername.addTextChangedListener(textWatcher);
+        editAPIToken.addTextChangedListener(textWatcher);
+        updateButton();
+
 		btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-				SharedPreferences.Editor editor = settings.edit();
-				editor.putString("pocheUrl", editPocheUrl.getText().toString());
-				editor.putString("APIUsername", editAPIUsername.getText().toString());
-				editor.putString("APIToken", editAPIToken.getText().toString());
-				editor.commit();
-				finish();
+                settings.wallabagURL = editPocheUrl.getText().toString();
+                settings.userID = editAPIUsername.getText().toString();
+                settings.userToken = editAPIToken.getText().toString();
+
+                if (settings.isValid()) {
+                    settings.save();
+                    finish();
+                }
 			}
 		});
 		try {
@@ -53,4 +80,12 @@ public class Settings extends BaseActionBarActivity {
 			//
 		}
 	}
+
+    private void updateButton() {
+        settings.wallabagURL = editPocheUrl.getText().toString();
+        settings.userID = editAPIUsername.getText().toString();
+        settings.userToken = editAPIToken.getText().toString();
+
+        btnDone.setEnabled(settings.isValid());
+    }
 }
