@@ -4,7 +4,7 @@
     <string name="app_name">wallabag</string>
     <string name="label_name">Sauvegarder</string>
     <string name="author">GAULUPEAU Jonathan - 2013</string>
-    <string name="instructions">Pous sauvegarder une page web dans Wallabag, ouvrez cette page dans un navigateur, puis sélectionnez <i>Partager</i> puis <i>Dans la poche!</i>. \nVous devriez voir alors votre page de login Wallabag. \nEt c\'est fait! \nPlus d\'infos sur Wallabag sur:\n http://www.wallabag.org</string>
+    <string name="instructions">Pous sauvegarder une page web dans Wallabag, ouvrez cette page dans un navigateur, puis sélectionnez <i>Partager</i> puis <i>Sauvegarder</i>. \nVous devriez voir alors votre page de login Wallabag. \nEt c\'est fait! \nPlus d\'infos sur Wallabag sur:\n http://www.wallabag.org</string>
     <string name="btnDone">Sauvegarder</string>
     <string name="url_label"><b><u>Votre URL Wallabag:</u></b></string>
     <string name="url_help">Exemples:\n<i>http://wallabag.example.com</i>\n<i>http://www.example.com/wallabag</i></string>
