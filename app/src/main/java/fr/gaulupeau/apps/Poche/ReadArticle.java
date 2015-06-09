@@ -69,6 +69,11 @@ public class ReadArticle extends BaseActionBarActivity {
 			//
 		}
 
+		Boolean hicontrast = false;
+		if (android.os.Build.MODEL.equals("NOOK")) {
+			hicontrast = true;
+		}
+
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
@@ -77,7 +82,7 @@ public class ReadArticle extends BaseActionBarActivity {
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body>\n" +
+				"\t\t\t<body" + (hicontrast?" class=\"hicontrast\"":"") + ">\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
