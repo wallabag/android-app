@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">wallabag</string>
+    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="btnDone">Guardar</string>
+    <string name="btnGetPost">Lista de articulos - %1$d sin leer</string>
+    <string name="btnMarkRead">Marcar como leido</string>
+    <string name="btnSettings">Ajustes</string>
+    <string name="btnSync">Sincronizar</string>
+    <string name="error">Error</string>
+    <string name="error_feed">Error cargando novedades</string>
+    <string name="hello">Bienvenido a wallabag</string>
+    <string name="label_name">A la bolsa!</string>
+    <string name="menuShowAll">Mostrar todo</string>
+    <string name="menuShowUnread">Mostrar no leidos</string>
+    <string name="menuWipeDb">Borrar base de datos</string>
+    <string name="txtAPIToken"><b><u>Tu Token:</u></b></string>
+    <string name="txtAPIUsername"><b><u>Tu ID de usuario:</u></b></string>
+    <string name="txtConfigNotSet">Por favor configura la app antes de sincronizar!</string>
+    <string name="txtNetOffline">Comprueba la conexion a internet!</string>
+    <string name="txtSyncDone">Sincronizacion realizada!</string>
+    <string name="url_help">Ejemplos:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
+    <string name="instructions">Para guardar una pagina web en wallabag, abre la pagina en un navegador y pulsa <i>Compartir</i> y luego <i>A la bolsa!</i>. \nEntonces veras tu pagina de acceso en wallabag. \nY ya esta! \nMas informacion sobre wallabag en:\n http://www.wallabag.org</string>
+</resources>
