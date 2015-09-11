@@ -254,8 +254,11 @@ public class Poche extends Activity implements FeedUpdaterInterface {
             public void run() {
                 ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
                 getDatabase();
-                int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-                btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
+                if (database.isOpen()) { //Avoid attempt to re-open an already-closed object: SQLiteDatabase
+                    //there should be a better way to make sure, that the unread post count lookup waits until the database is available again
+                    int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+                    btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
+                }
             }
         });
     }
