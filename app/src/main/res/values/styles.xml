@@ -2,4 +2,6 @@
 <resources>
     <style name="app_theme" parent="Theme.AppCompat.Light.DarkActionBar"/>
     <style name="mainActivity_theme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="app_theme_dark" parent="Base.V7.Theme.AppCompat.Dialog" />
 </resources>

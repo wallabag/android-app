@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="false"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="fr.gaulupeau.apps.Poche.Settings" >
+    tools:context="fr.gaulupeau.apps.Poche.Settings">
 
     <LinearLayout
+        android:id="@+id/settingsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="30sp"
         android:paddingRight="30sp"
-        android:paddingTop="15dp"
-        android:orientation="vertical" >
+        android:paddingTop="15dp">
 
         <TextView
             android:id="@+id/pageUrl_label"
@@ -48,8 +51,8 @@
             android:id="@+id/txtAPIUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:text="@string/txtAPIUsername"
             android:textSize="18sp" />
 
@@ -65,8 +68,8 @@
             android:id="@+id/txtAPIToken"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:text="@string/txtAPIToken"
             android:textSize="18sp" />
 
@@ -88,28 +91,38 @@
             android:paddingTop="5sp"
             android:text="@string/instructions" />
 
+        <CheckBox
+            android:id="@+id/nightmode_cb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:checked="false"
+            android:text="@string/nightmode"
+            android:textSize="18sp" />
+
         <Button
             android:id="@+id/btnDone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:text="@string/btnDone" />
 
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:textSize="12sp" />
         
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:text="@string/author"
             android:textSize="12sp" />
                 

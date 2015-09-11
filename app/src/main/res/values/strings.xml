@@ -22,6 +22,7 @@
     <string name="txtAPIToken"><b><u>Your Token:</u></b></string>
     <string name="error">Error</string>
     <string name="error_feed">Error loading feed</string>
+    <string name="nightmode">Nightmode (Restart required)</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

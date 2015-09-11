@@ -4,16 +4,16 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
@@ -29,15 +29,17 @@ public class ListArticles extends BaseActionBarActivity {
 	private SQLiteDatabase database;
     private ListView readList;
     private boolean showAll = false;
+    private boolean nightmode;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.list);
+        //11.09.2015 Nightmode
+        nightmode = getIntent().getBooleanExtra("NIGHTMODE", false);
+        setNightViewTheme();
+        setContentView(R.layout.list);
         readList = (ListView) findViewById(R.id.liste_articles);
-
         ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
         database = helper.getWritableDatabase();
-
 		updateList();
 	}
 
@@ -83,7 +85,7 @@ public class ListArticles extends BaseActionBarActivity {
 	}
 
     private void updateList() {
-        CursorAdapter adapter = (CursorAdapter) readList.getAdapter();
+        MyCursorAdapter adapter = (MyCursorAdapter) readList.getAdapter();
         if (adapter != null) {
             adapter.changeCursor(getCursor());
         } else {
@@ -93,18 +95,19 @@ public class ListArticles extends BaseActionBarActivity {
     }
 
 	private void setupListAdapter() {
-        CursorAdapter adapter = getCursorAdapter();
+        MyCursorAdapter adapter = getCursorAdapter();
         readList.setAdapter(adapter);
 
 		readList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(getBaseContext(), ReadArticle.class);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getBaseContext(), ReadArticle.class);
                 // As we use a CursorAdapter the id's are the same as in our SQLite Database.
-				i.putExtra("id", id);
-				startActivity(i);
-			}
-		});
-	}
+                i.putExtra("id", id);
+                i.putExtra("NIGHTMODE", nightmode);
+                startActivity(i);
+            }
+        });
+    }
 
     private Cursor getCursor() {
         String filter = null;
@@ -120,20 +123,49 @@ public class ListArticles extends BaseActionBarActivity {
                 filter, null, null, null, ARTICLE_DATE + " DESC");
     }
 
-    @TargetApi(11)
-    private CursorAdapter getCursorAdapter() {
+    // @TargetApi(11)
+    private MyCursorAdapter getCursorAdapter() {
         int layout = R.layout.article_list;
         String[] columns = new String[]{ARTICLE_TITLE, ARTICLE_URL};
         int[] toIds = new int[]{R.id.listitem_titre, R.id.listitem_textview_url};
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return getCursorAdapterPreHoneycomb(layout, columns, toIds);
-        }
-        return new SimpleCursorAdapter(this, layout, getCursor(), columns, toIds, 0);
+        return new MyCursorAdapter(this, layout, getCursor(), columns, toIds, 0);
     }
 
-    @TargetApi(8)
+    /**
+     * Should not be needed with android.support.v4.widget.SimpleCursorAdapter;
+     * @TargetApi(8)
     private CursorAdapter getCursorAdapterPreHoneycomb(int layout, String[] from, int[] to) {
         return new SimpleCursorAdapter(this, layout, getCursor(), from, to);
+    }
+     */
+
+    private void setNightViewTheme() {
+        if (nightmode) {
+            this.setTheme(R.style.app_theme_dark);
+        }
+    }
+
+    //extend the SimpleCursorAdapter to create a custom class where we
+    //can override the getView to change the row colors
+    @TargetApi(11)
+    private class MyCursorAdapter extends SimpleCursorAdapter {
+
+        public MyCursorAdapter(android.content.Context context, int layout, Cursor c,
+                               String[] from, int[] to, int flags) {
+            super(context, layout, c, from, to, flags);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = super.getView(position, convertView, parent);
+            //check for odd or even to set alternate colors to the row background
+            if (nightmode) {
+                view.setBackgroundColor(Color.rgb(0, 0, 0));
+            }
+
+            return view;
+        }
+
+
     }
 }

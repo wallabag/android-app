@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,19 +32,26 @@ public class ReadArticle extends BaseActionBarActivity {
 	SQLiteDatabase database;
 	String id = "";
 	ScrollView view;
+	boolean nightmode;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.article);
-
-		view = (ScrollView) findViewById(R.id.scroll);
-		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-		database = helper.getWritableDatabase();
-		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
 			id = String.valueOf(data.getLong("id"));
+			nightmode = data.getBoolean("NIGHTMODE", false);
 		}
+		setNightViewTheme();
+
+		setContentView(R.layout.article);
+		view = (ScrollView) findViewById(R.id.scroll);
+		if (nightmode) {
+			view.setBackgroundColor(Color.BLACK); //darkens the scrollview to avoid white flashing
+		}
+		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
+		database = helper.getWritableDatabase();
+		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
+
 		Cursor ac = database.query(ARTICLE_TABLE, getStrColumns, MY_ID + "=" + id, null, null, null, null);
 		ac.moveToFirst();
 
@@ -60,12 +68,16 @@ public class ReadArticle extends BaseActionBarActivity {
 		} catch (Exception e) {
 			//
 		}
-
+		String usedCSS = "main";
+		//load nightmode css file
+		if (nightmode) {
+			usedCSS = "nightview";
+		}
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
 				"\t\t<meta charset=\"utf-8\">\n" +
-				"\t\t<link rel=\"stylesheet\" href=\"main.css\" media=\"all\" id=\"main-theme\">\n" +
+				"\t\t<link rel=\"stylesheet\" href=\"" + usedCSS + ".css\" media=\"all\" id=\"main-theme\">\n" +
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
@@ -138,5 +150,11 @@ public class ReadArticle extends BaseActionBarActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		database.close();
+	}
+
+	private void setNightViewTheme() {
+		if (nightmode) {
+			this.setTheme(R.style.app_theme_dark);
+		}
 	}
 }
