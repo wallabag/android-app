@@ -129,9 +129,11 @@ public class Poche extends Activity implements FeedUpdaterInterface {
                 showToast(getString(R.string.txtNetOffline));
             }
         } else {
-            setNightViewTheme();
+            Helpers myHelper = new Helpers();
+            myHelper.setNightViewTheme(nightmode, this);
             setContentView(R.layout.main);
-            setNightViewIcon();
+            ImageView imageView = (ImageView) findViewById(R.id.imageView1);
+            myHelper.setNightViewIcon(nightmode, imageView);
 
             checkAndHandleAfterUpdate();
 
@@ -217,8 +219,8 @@ public class Poche extends Activity implements FeedUpdaterInterface {
     }
 
     private void getDatabase() {
-	    if (database == null) {
-		    ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+        if (database == null || !database.isOpen()) {
+            ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
 		    database = helper.getReadableDatabase();
 	    }
     }
@@ -231,6 +233,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         if (!action.equals(Intent.ACTION_SEND)) {
             updateUnread();
         }
+
     }
 
     @Override
@@ -244,9 +247,11 @@ public class Poche extends Activity implements FeedUpdaterInterface {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (database != null) {
+        if (database.isOpen()) {
             database.close();
         }
+
+
     }
 
     private void updateUnread() {
@@ -254,11 +259,13 @@ public class Poche extends Activity implements FeedUpdaterInterface {
             public void run() {
                 ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
                 getDatabase();
-                if (database.isOpen()) { //Avoid attempt to re-open an already-closed object: SQLiteDatabase
-                    //there should be a better way to make sure, that the unread post count lookup waits until the database is available again
+                if (database.isOpen()) {
                     int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
                     btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
+                } else {
+                    btnGetPost.setText(R.string.btnGetPost + "?");
                 }
+
             }
         });
     }
@@ -300,26 +307,4 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         findViewById(R.id.progressBar1).setVisibility(View.GONE);
     }
 
-    private void setNightViewIcon() {
-        ImageView imageView = (ImageView) findViewById(R.id.imageView1);
-        if (nightmode) {
-            //invert colors
-            imageView.setImageResource(R.drawable.welcome_night);
-            this.setTheme(R.style.app_theme_dark);
-        } else {
-            //reset to original
-            imageView.setImageResource(R.drawable.welcome);
-        }
-    }
-
-    private void setNightViewTheme() {
-        if (nightmode) {
-            this.setTheme(R.style.app_theme_dark);
-        }
-    }
-
-    public void setBackgroundColor(int color) {
-        View view = this.getWindow().getDecorView();
-        view.setBackgroundColor(color);
-    }
 }

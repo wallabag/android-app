@@ -41,8 +41,10 @@ public class ReadArticle extends BaseActionBarActivity {
 			id = String.valueOf(data.getLong("id"));
 			nightmode = data.getBoolean("NIGHTMODE", false);
 		}
-		setNightViewTheme();
-
+		if (nightmode) {
+			Helpers myHelper = new Helpers();
+			myHelper.setNightViewTheme(nightmode, this);
+		}
 		setContentView(R.layout.article);
 		view = (ScrollView) findViewById(R.id.scroll);
 		if (nightmode) {
@@ -150,11 +152,5 @@ public class ReadArticle extends BaseActionBarActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 		database.close();
-	}
-
-	private void setNightViewTheme() {
-		if (nightmode) {
-			this.setTheme(R.style.app_theme_dark);
-		}
 	}
 }

@@ -1,5 +1,8 @@
 package fr.gaulupeau.apps.Poche;
 
+import android.app.Activity;
+import android.widget.ImageView;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import fr.gaulupeau.apps.InThePoche.R;
 
 public class Helpers {
 
@@ -49,4 +54,17 @@ public class Helpers {
 
 		return res;
 	}
+
+    public void setNightViewTheme(boolean nightmode, Activity a) {
+        if (nightmode) {
+            a.setTheme(R.style.app_theme_dark);
+        }
+    }
+
+    public void setNightViewIcon(boolean nightmode, ImageView imageView) {
+        if (nightmode) {
+            //invert colors
+            imageView.setImageResource(R.drawable.welcome_night);
+        }
+    }
 }

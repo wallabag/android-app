@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,7 +34,11 @@ public class ListArticles extends BaseActionBarActivity {
 		super.onCreate(savedInstanceState);
         //11.09.2015 Nightmode
         nightmode = getIntent().getBooleanExtra("NIGHTMODE", false);
-        setNightViewTheme();
+        if (nightmode) {
+            Helpers myHelper = new Helpers();
+            myHelper.setNightViewTheme(nightmode, this);
+        }
+
         setContentView(R.layout.list);
         readList = (ListView) findViewById(R.id.liste_articles);
         ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
@@ -57,8 +60,8 @@ public class ListArticles extends BaseActionBarActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.option_list, menu);
-		return true;
+        inflater.inflate(R.menu.option_list, menu);
+        return true;
 	}
 
     @Override
@@ -123,7 +126,6 @@ public class ListArticles extends BaseActionBarActivity {
                 filter, null, null, null, ARTICLE_DATE + " DESC");
     }
 
-    // @TargetApi(11)
     private MyCursorAdapter getCursorAdapter() {
         int layout = R.layout.article_list;
         String[] columns = new String[]{ARTICLE_TITLE, ARTICLE_URL};
@@ -139,20 +141,12 @@ public class ListArticles extends BaseActionBarActivity {
     }
      */
 
-    private void setNightViewTheme() {
-        if (nightmode) {
-            this.setTheme(R.style.app_theme_dark);
-        }
-    }
 
-    //extend the SimpleCursorAdapter to create a custom class where we
-    //can override the getView to change the row colors
-    @TargetApi(11)
     private class MyCursorAdapter extends SimpleCursorAdapter {
 
         public MyCursorAdapter(android.content.Context context, int layout, Cursor c,
-                               String[] from, int[] to, int flags) {
-            super(context, layout, c, from, to, flags);
+                               String[] a, int[] b, int flags) {
+            super(context, layout, c, a, b, flags);
         }
 
         @Override

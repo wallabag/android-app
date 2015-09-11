@@ -29,7 +29,10 @@ public class Settings extends BaseActionBarActivity {
 		super.onCreate(savedInstanceState);
         //11.09.2015 Nightmode
         nightmode = getIntent().getBooleanExtra("NIGHTMODE", false);
-        setNightViewTheme();
+        if (nightmode) {
+            Helpers myHelper = new Helpers();
+            myHelper.setNightViewTheme(nightmode, this);
+        }
         setContentView(R.layout.settings);
         //need to set the background to black separatley from setting the dark theme - why?
         if (nightmode) {
@@ -70,9 +73,4 @@ public class Settings extends BaseActionBarActivity {
 		}
 	}
 
-    private void setNightViewTheme() {
-        if (nightmode) {
-            this.setTheme(R.style.app_theme_dark);
-        }
-    }
 }
