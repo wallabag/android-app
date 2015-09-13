@@ -2,16 +2,17 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/scroll"
     tools:context="fr.gaulupeau.apps.Poche.ReadArticle" >
 
     <LinearLayout
+        android:id="@+id/article_container_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:ignore="WebViewLayout" >
+        tools:ignore="WebViewLayout">
 
         <WebView
             android:id="@+id/webViewContent"
@@ -19,19 +20,19 @@
             android:layout_height="wrap_content" />
 
         <LinearLayout
+            android:id="@+id/article_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="15sp"
-            android:paddingRight="15sp" >
+            android:paddingRight="15sp">
 
             <View
                 android:id="@+id/view1"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
                 android:layout_marginBottom="5sp"
-                android:layout_marginTop="5sp"
-                android:background="#000000" />
+                android:layout_marginTop="5sp" />
 
             <Button
                 android:id="@+id/btnMarkRead"

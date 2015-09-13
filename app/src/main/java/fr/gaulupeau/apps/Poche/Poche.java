@@ -11,13 +11,10 @@ package fr.gaulupeau.apps.Poche;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -29,43 +26,16 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.X509TrustManager;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_DATE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_SYNC;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
 
 
@@ -74,15 +44,17 @@ import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
  */
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class Poche extends Activity implements FeedUpdaterInterface {
+    static String apiUsername;
+    static String apiToken;
+    static String pocheUrl;
     private static SQLiteDatabase database;
     Button btnGetPost;
     Button btnSync;
     Button btnSettings;
     SharedPreferences settings;
-    static String apiUsername;
-    static String apiToken;
-    static String pocheUrl;
+    boolean nightmode;
     String action;
+    Intent myIntent;
 
     private FeedUpdater feedUpdater;
 
@@ -93,13 +65,16 @@ public class Poche extends Activity implements FeedUpdaterInterface {
      */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         action = intent.getAction();
+        if (action == null) {
+            action = Intent.ACTION_MAIN;
+        }
 
         getSettings();
         // Find out if Sharing or if app has been launched from icon
+
         if (action.equals(Intent.ACTION_SEND) && !pocheUrl.equals("http://")) {
             setContentView(R.layout.main);
             findViewById(R.id.btnSync).setVisibility(View.GONE);
@@ -154,7 +129,12 @@ public class Poche extends Activity implements FeedUpdaterInterface {
                 showToast(getString(R.string.txtNetOffline));
             }
         } else {
+            Helpers myHelper = new Helpers();
+            myHelper.setNightViewTheme(nightmode, this);
             setContentView(R.layout.main);
+            ImageView imageView = (ImageView) findViewById(R.id.imageView1);
+            myHelper.setNightViewIcon(nightmode, imageView);
+
             checkAndHandleAfterUpdate();
 
             btnSync = (Button) findViewById(R.id.btnSync);
@@ -165,19 +145,26 @@ public class Poche extends Activity implements FeedUpdaterInterface {
                 }
             });
 
+            //11.09.2015 pass nightview variable
+            final Intent listArticlesIntent = new Intent(getBaseContext(), ListArticles.class);
+            listArticlesIntent.putExtra("NIGHTMODE", nightmode);
             btnGetPost = (Button) findViewById(R.id.btnGetPost);
             btnGetPost.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getBaseContext(), ListArticles.class));
+                    startActivity(listArticlesIntent);
                 }
             });
+
+            //11.09.2015 pass nightview variable
+            final Intent settingsIntent = new Intent(getBaseContext(), Settings.class);
+            settingsIntent.putExtra("NIGHTMODE", nightmode);
 
             btnSettings = (Button) findViewById(R.id.btnSettings);
             btnSettings.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(getBaseContext(), Settings.class));
+                    startActivity(settingsIntent);
                 }
             });
         }
@@ -207,7 +194,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         if (pref.getInt("update_checker", 0) < 9) {
             // Wipe Database, because we now save HTML content instead of plain text
             ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-	    getDatabase();
+            getDatabase();
             helper.truncateTables(database);
             showToast("Update: Wiped Database. Please synchronize.");
         }
@@ -227,11 +214,13 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         pocheUrl = settings.getString("pocheUrl", "http://");
         apiUsername = settings.getString("APIUsername", "");
         apiToken = settings.getString("APIToken", "");
+        nightmode = settings.getBoolean("Nightmode", false);
+
     }
 
     private void getDatabase() {
-	    if (database == null) {
-		    ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
+        if (database == null || !database.isOpen()) {
+            ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
 		    database = helper.getReadableDatabase();
 	    }
     }
@@ -240,9 +229,11 @@ public class Poche extends Activity implements FeedUpdaterInterface {
     protected void onResume() {
         super.onResume();
         getSettings();
+        getDatabase();
         if (!action.equals(Intent.ACTION_SEND)) {
             updateUnread();
         }
+
     }
 
     @Override
@@ -256,18 +247,25 @@ public class Poche extends Activity implements FeedUpdaterInterface {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (database != null) {
+        if (database.isOpen()) {
             database.close();
         }
+
+
     }
 
     private void updateUnread() {
         runOnUiThread(new Runnable() {
             public void run() {
                 ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-		getDatabase();
-                int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
-                btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
+                getDatabase();
+                if (database.isOpen()) {
+                    int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
+                    btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
+                } else {
+                    btnGetPost.setText(R.string.btnGetPost + "?");
+                }
+
             }
         });
     }
@@ -308,4 +306,5 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         updateUnread();
         findViewById(R.id.progressBar1).setVisibility(View.GONE);
     }
+
 }

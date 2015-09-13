@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:padding="8sp"
-    android:layout_width="fill_parent" android:layout_height="fill_parent" >
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:padding="8sp">
 
     <TextView
         android:id="@+id/listitem_titre"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:paddingBottom="4sp"/>
+        android:paddingBottom="4sp"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/listitem_textview_url"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:textSize="12sp" />
 
 </LinearLayout>

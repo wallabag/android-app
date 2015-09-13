@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    tools:context="fr.gaulupeau.apps.Poche.Poche" >
+    android:layout_height="match_parent"
+    tools:context="fr.gaulupeau.apps.Poche.Poche">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -13,7 +13,7 @@
         android:orientation="vertical"
         android:paddingLeft="30sp"
         android:paddingRight="30sp"
-        android:paddingTop="15dp" >
+        android:paddingTop="15dp">
 
         <ImageView
             android:id="@+id/imageView1"
