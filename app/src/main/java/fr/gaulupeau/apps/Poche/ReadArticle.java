@@ -1,18 +1,18 @@
 package fr.gaulupeau.apps.Poche;
 
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ScrollView;
 
@@ -23,7 +23,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARCHIVE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_AUTHOR;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_CONTENT;
-import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_ID;
+import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_READAT;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TABLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_TITLE;
 import static fr.gaulupeau.apps.Poche.ArticlesSQLiteOpenHelper.ARTICLE_URL;
@@ -39,6 +39,7 @@ public class ReadArticle extends BaseActionBarActivity {
 	String originalUrlText;
 	String originalUrlDesc;
 	String htmlContent;
+	int positionToRestore = -1;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -47,7 +48,7 @@ public class ReadArticle extends BaseActionBarActivity {
 		view = (ScrollView) findViewById(R.id.scroll);
 		ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
 		database = helper.getWritableDatabase();
-		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR};
+		String[] getStrColumns = new String[]{ARTICLE_URL, MY_ID, ARTICLE_TITLE, ARTICLE_CONTENT, ARCHIVE, ARTICLE_AUTHOR, ARTICLE_READAT};
 		Bundle data = getIntent().getExtras();
 		if (data != null) {
 			id = String.valueOf(data.getLong("id"));
@@ -59,6 +60,9 @@ public class ReadArticle extends BaseActionBarActivity {
 		originalUrlText = ac.getString(0);
 		originalUrlDesc = originalUrlText;
 		htmlContent = ac.getString(3);
+		positionToRestore = ac.isNull(6) ? 0 : ac.getInt(6);
+
+		ac.close();
 
         setTitle(titleText);
 
@@ -100,6 +104,27 @@ public class ReadArticle extends BaseActionBarActivity {
 
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+
+		if(positionToRestore > 0) {
+			// dirty. Looks like there is no good solution
+			webViewContent.setWebViewClient(new WebViewClient() {
+				@Override
+				public void onPageFinished(WebView view, String url) {
+					view.postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							if(webViewContent.getHeight() == 0) {
+								webViewContent.postDelayed(this, 10);
+							} else {
+								restoreReadingPosition();
+							}
+						}
+					}, 10);
+
+					super.onPageFinished(view, url);
+				}
+			});
+		}
 
 		Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
@@ -149,12 +174,9 @@ public class ReadArticle extends BaseActionBarActivity {
 
     @Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
-
 		ContentValues values = new ContentValues();
-		values.put("read_at", view.getScrollY());
-		database.update(ARTICLE_TABLE, values, ARTICLE_ID + "=" + id, null);
-		System.out.println(view.getScrollY());
+		values.put(ARTICLE_READAT, getReadingPosition());
+		database.update(ARTICLE_TABLE, values, MY_ID + "=" + id, null);
 		super.onStop();
 	}
 
@@ -163,4 +185,45 @@ public class ReadArticle extends BaseActionBarActivity {
 		super.onDestroy();
 		database.close();
 	}
+
+	private int getReadingPosition() {
+		String t = "ReadArticle.getPos";
+
+		int yOffset = view.getScrollY();
+		int viewHeight = view.getHeight();
+		int totalHeight = view.getChildAt(0).getHeight();
+		// id/btnMarkRead height; not necessary; insignificantly increases accuracy
+//		int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
+		Log.d(t, "yOffset: " + yOffset + ", viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
+
+//		totalHeight -= appendixHeight;
+		totalHeight -= viewHeight;
+
+		// since "integer" type is used in DB, multiplying by 10000 to keep hundredth of percent
+		int percent = totalHeight >= 0 ? yOffset * 10000 / totalHeight : 0;
+		Log.d(t, "percent: " + (float)percent / 100);
+
+		return percent;
+	}
+
+	private void restoreReadingPosition() {
+		String t = "ReadArticle.restorePos";
+
+		Log.d(t, "positionToRestore: " + (float)positionToRestore / 100);
+		if(positionToRestore > 0) {
+			int viewHeight = view.getHeight();
+//			int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
+			int totalHeight = view.getChildAt(0).getHeight();
+			Log.d(t, "viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
+
+//			totalHeight -= appendixHeight;
+			totalHeight -= viewHeight;
+
+			int yOffset = totalHeight > 0 ? positionToRestore * totalHeight / 10000 : 0;
+			Log.d(t, "yOffset: " + yOffset);
+
+			view.scrollTo(view.getScrollX(), yOffset);
+		}
+	}
+
 }
