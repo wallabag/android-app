@@ -74,7 +74,7 @@ import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
  */
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class Poche extends Activity implements FeedUpdaterInterface {
-    private static SQLiteDatabase database;
+    private SQLiteDatabase database;
     Button btnGetPost;
     Button btnSync;
     Button btnSettings;
@@ -207,7 +207,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
         if (pref.getInt("update_checker", 0) < 9) {
             // Wipe Database, because we now save HTML content instead of plain text
             ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(this);
-	    getDatabase();
+            getDatabase();
             helper.truncateTables(database);
             showToast("Update: Wiped Database. Please synchronize.");
         }
@@ -264,8 +264,7 @@ public class Poche extends Activity implements FeedUpdaterInterface {
     private void updateUnread() {
         runOnUiThread(new Runnable() {
             public void run() {
-                ArticlesSQLiteOpenHelper helper = new ArticlesSQLiteOpenHelper(getApplicationContext());
-		getDatabase();
+                getDatabase();
                 int news = database.query(ARTICLE_TABLE, null, ARCHIVE + "=0", null, null, null, null).getCount();
                 btnGetPost.setText(String.format(getString(R.string.btnGetPost), news));
             }
