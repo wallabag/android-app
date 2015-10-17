@@ -113,9 +113,13 @@ public class ReadArticle extends BaseActionBarActivity {
 					view.postDelayed(new Runnable() {
 						@Override
 						public void run() {
-							restoreReadingPosition();
+							if(webViewContent.getHeight() == 0) {
+								webViewContent.postDelayed(this, 10);
+							} else {
+								restoreReadingPosition();
+							}
 						}
-					}, 300);
+					}, 10);
 
 					super.onPageFinished(view, url);
 				}
