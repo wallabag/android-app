@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 
 import static fr.gaulupeau.apps.Poche.Helpers.PREFS_NAME;
@@ -48,7 +49,7 @@ public class Settings extends BaseActionBarActivity {
 		});
 		try {
 			textViewVersion = (TextView) findViewById(R.id.version);
-			textViewVersion.setText(getApplicationContext().getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0).versionName);
+			textViewVersion.setText(BuildConfig.VERSION_NAME);
 		} catch (Exception e) {
 			//
 		}
