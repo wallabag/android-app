@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche;
+package fr.gaulupeau.apps.Poche.ui;
 
 
 import android.annotation.TargetApi;

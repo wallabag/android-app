@@ -5,7 +5,7 @@
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    tools:context="fr.gaulupeau.apps.Poche.Poche" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.PocheActivity" >
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -43,7 +43,7 @@
             android:background="#000000" />
 
         <Button
-            android:id="@+id/btnGetPost"
+            android:id="@+id/btnArticles"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

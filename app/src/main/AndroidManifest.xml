@@ -6,28 +6,44 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="fr.gaulupeau.apps.Poche.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/app_theme">
         <activity
-            android:name="fr.gaulupeau.apps.Poche.Poche"
+            android:name="fr.gaulupeau.apps.Poche.ui.PocheActivity"
             android:theme="@style/mainActivity_theme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!--<intent-filter android:label="@string/label_name">-->
+            <!--<action android:name="android.intent.action.SEND" />-->
+
+            <!--<category android:name="android.intent.category.DEFAULT" />-->
+
+            <!--<data android:mimeType="text/plain" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity" />
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.ListArticlesActivity" />
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.SettingsActivity"
+            android:label="@string/btnSettings" />
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.BagItProxyActivity"
+            android:theme="@style/ProxyTheme">
             <intent-filter android:label="@string/label_name">
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
-        <activity android:name="fr.gaulupeau.apps.Poche.ReadArticle" />
-        <activity android:name="fr.gaulupeau.apps.Poche.ListArticles" />
-        <activity
-            android:name="fr.gaulupeau.apps.Poche.Settings"
-            android:label="@string/btnSettings" />
-
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.AddActivity"></activity>
     </application>
+
 </manifest>

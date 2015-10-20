@@ -11,15 +11,30 @@ android {
         versionCode 11
         versionName "1.8"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    sourceSets {
+        main {
+            java {
+                srcDir 'src/main/java'
+                srcDir 'src-gen'
+            }
+        }
+    }
 }
 
 dependencies {
     compile 'com.android.support:appcompat-v7:22.+'
+    compile 'com.android.support:recyclerview-v7:22.+'
     compile 'com.android.support:design:22.+'
+    compile 'de.greenrobot:greendao:2.0.0'
+    compile 'com.facebook.stetho:stetho:1.2.0'
+    compile 'com.squareup.okhttp:okhttp:2.5.0'
+    compile 'com.facebook.stetho:stetho-okhttp:1.2.0'
 }
