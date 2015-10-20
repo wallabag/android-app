@@ -86,6 +86,13 @@ public class PocheActivity extends Activity implements FeedUpdaterInterface {
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
             }
         });
+
+        findViewById(R.id.add).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PocheActivity.this, AddActivity.class));
+            }
+        });
     }
 
     private void updateFeed() {

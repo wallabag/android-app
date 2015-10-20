@@ -22,6 +22,10 @@
     <string name="txtAPIToken">Feed Token</string>
     <string name="error">Error</string>
     <string name="error_feed">Error loading feed</string>
+    <string name="bag_page">Bag Page</string>
+    <string name="activity_add_label">Bag Page</string>
+    <string name="page_url">Page URL</string>
+    <string name="bag_it">Bag It</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

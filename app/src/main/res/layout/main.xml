@@ -50,6 +50,14 @@
             android:text="@string/btnGetPost" />
 
         <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bag_page"
+            android:id="@+id/add"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="0" />
+
+        <Button
             android:id="@+id/btnSync"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
