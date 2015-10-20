@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,6 +38,7 @@ import fr.gaulupeau.apps.Poche.entity.DaoSession;
 @TargetApi(Build.VERSION_CODES.FROYO)
 public class PocheActivity extends Activity implements FeedUpdaterInterface {
 
+    private static final String TAG = PocheActivity.class.getSimpleName();
     Button btnGetPost;
     Button btnSync;
     Button btnSettings;
@@ -108,13 +110,15 @@ public class PocheActivity extends Activity implements FeedUpdaterInterface {
     }
 
     private void checkAndHandleAfterUpdate() {
-        if (settings.hasUpdateChecher()) {
+        if (settings.hasUpdateChecher() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
             new AlertDialog.Builder(this)
                     .setTitle("App update")
-                    .setMessage("Some app update message")
+                    .setMessage("This a breaking update.\n\nMake sure you fill in your Username and Password in settings, otherwise things will be broken.")
                     .setPositiveButton("OK", null)
                     .setCancelable(false)
                     .create().show();
+        } else if (settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
+            Log.d(TAG, "Do upgrade stuff if needed");
         }
 
         settings.setAppVersion(BuildConfig.VERSION_CODE);

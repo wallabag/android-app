@@ -3,6 +3,8 @@ package fr.gaulupeau.apps.Poche.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
+
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
@@ -38,6 +40,10 @@ public class Settings {
 
     public void setAppVersion(int versionCode) {
         pref.edit().putInt(VERSION_CODE, versionCode).commit();
+    }
+
+    public int getPrevAppVersion() {
+        return pref.getInt(VERSION_CODE, BuildConfig.VERSION_CODE);
     }
 
     public boolean hasUpdateChecher() {
