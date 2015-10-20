@@ -3,7 +3,10 @@
     <string name="hello">Welcome to wallabag</string>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
-    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="author">
+GAULUPEAU Jonathan - 2013
+\nVictor Häggqvist - 2015
+</string>
     <string name="instructions">To save a web page to wallabag, open the page in a browser then tap <i>Share</i> and tap on <i>Bag it!</i>. \nYou could then see your wallabag login page. \nAnd it\'s done ! \nMore infos about wallabag at:\n http://www.wallabag.org</string>
     <string name="btnDone">Save</string>
     <string name="url_label">Wallabag URL</string>
