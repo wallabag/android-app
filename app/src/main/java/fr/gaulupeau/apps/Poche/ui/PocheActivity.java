@@ -106,6 +106,7 @@ public class PocheActivity extends Activity implements FeedUpdaterInterface {
         // Run update task
         findViewById(R.id.progressBar1).setVisibility(View.VISIBLE);
         feedUpdater = new FeedUpdater(mUrl, mUserId, mToken, this);
+//        feedUpdater = new FeedUpdater(mUrl, mUserId, mToken, this, FeedUpdater.FeedType.Main, FeedUpdater.UpdateType.Fast); // load new articles from the Main feed
         feedUpdater.execute();
     }
 
@@ -162,7 +163,7 @@ public class PocheActivity extends Activity implements FeedUpdaterInterface {
     @Override
     public void feedUpdaterFinishedWithError(String errorMessage) {
         new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.error_feed) + errorMessage)
+                .setMessage(getString(R.string.error_feed) + ": "+ errorMessage)
                 .setTitle(getString(R.string.error))
                 .setPositiveButton("OK", null)
                 .setCancelable(false)

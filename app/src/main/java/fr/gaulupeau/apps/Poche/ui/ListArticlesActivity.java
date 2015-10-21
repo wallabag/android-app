@@ -86,7 +86,7 @@ public class ListArticlesActivity extends BaseActionBarActivity implements ListA
     private void updateList() {
         LazyList<Article> articles = mArticleDao.queryBuilder()
                 .where(ArticleDao.Properties.Archive.notEq(true))
-                .orderDesc(ArticleDao.Properties.UpdateDate)
+                .orderDesc(ArticleDao.Properties.ArticleId)
                 .limit(50)
                 .listLazy();
         mArticles.clear();

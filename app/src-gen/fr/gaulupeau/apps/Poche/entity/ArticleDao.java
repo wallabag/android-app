@@ -29,9 +29,10 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Author = new Property(3, String.class, "author", false, "author");
         public final static Property Title = new Property(4, String.class, "title", false, "title");
         public final static Property Url = new Property(5, String.class, "url", false, "url");
-        public final static Property Archive = new Property(6, Boolean.class, "archive", false, "archive");
-        public final static Property Sync = new Property(7, Boolean.class, "sync", false, "sync");
-        public final static Property UpdateDate = new Property(8, java.util.Date.class, "updateDate", false, "update_date");
+        public final static Property Favorite = new Property(6, Boolean.class, "favorite", false, "favorite");
+        public final static Property Archive = new Property(7, Boolean.class, "archive", false, "archive");
+        public final static Property Sync = new Property(8, Boolean.class, "sync", false, "sync");
+        public final static Property UpdateDate = new Property(9, java.util.Date.class, "updateDate", false, "update_date");
     };
 
 
@@ -53,9 +54,10 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "\"author\" TEXT," + // 3: author
                 "\"title\" TEXT," + // 4: title
                 "\"url\" TEXT," + // 5: url
-                "\"archive\" INTEGER," + // 6: archive
-                "\"sync\" INTEGER," + // 7: sync
-                "\"update_date\" INTEGER);"); // 8: updateDate
+                "\"favorite\" INTEGER," + // 6: favorite
+                "\"archive\" INTEGER," + // 7: archive
+                "\"sync\" INTEGER," + // 8: sync
+                "\"update_date\" INTEGER);"); // 9: updateDate
     }
 
     /** Drops the underlying database table. */
@@ -99,19 +101,24 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             stmt.bindString(6, url);
         }
  
+        Boolean favorite = entity.getFavorite();
+        if (favorite != null) {
+            stmt.bindLong(7, favorite ? 1L: 0L);
+        }
+ 
         Boolean archive = entity.getArchive();
         if (archive != null) {
-            stmt.bindLong(7, archive ? 1L: 0L);
+            stmt.bindLong(8, archive ? 1L: 0L);
         }
  
         Boolean sync = entity.getSync();
         if (sync != null) {
-            stmt.bindLong(8, sync ? 1L: 0L);
+            stmt.bindLong(9, sync ? 1L: 0L);
         }
  
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(9, updateDate.getTime());
+            stmt.bindLong(10, updateDate.getTime());
         }
     }
 
@@ -131,9 +138,10 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // author
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // title
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // url
-            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // archive
-            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // sync
-            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)) // updateDate
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // favorite
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // archive
+            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // sync
+            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)) // updateDate
         );
         return entity;
     }
@@ -147,9 +155,10 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setAuthor(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setTitle(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setArchive(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
-        entity.setSync(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
-        entity.setUpdateDate(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setFavorite(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
+        entity.setArchive(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setSync(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
+        entity.setUpdateDate(cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)));
      }
     
     /** @inheritdoc */

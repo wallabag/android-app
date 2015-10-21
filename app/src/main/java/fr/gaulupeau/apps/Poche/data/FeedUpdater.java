@@ -1,62 +1,81 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.Xml;
 
-import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Locale;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import de.greenrobot.dao.DaoException;
+import de.greenrobot.dao.query.WhereCondition;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
-import fr.gaulupeau.apps.Poche.entity.DaoSession;
-import fr.gaulupeau.apps.Poche.util.arrays;
 
 public class FeedUpdater extends AsyncTask<Void, Void, Void> {
 
-    private String wallabagUrl;
+    public enum UpdateType { Full, Fast }
+
+    public enum FeedType {
+        Main("home"), Favorite("fav"), Archive("archive");
+
+        String urlPart;
+
+        FeedType(String urlPart) {
+            this.urlPart = urlPart;
+        }
+    }
+
+    private String baseURL;
     private String apiUserId;
     private String apiToken;
     private FeedUpdaterInterface callback;
-    private String errorMessage;
+    private FeedType feedType;
+    private UpdateType updateType;
 
-    public FeedUpdater(String wallabagUrl, String apiUserId, String apiToken, FeedUpdaterInterface callback) {
-        this.wallabagUrl = wallabagUrl;
+    private String errorMessage; // TODO: l10n
+
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       FeedUpdaterInterface callback) {
+        this(baseURL, apiUserId, apiToken, callback, null, null);
+    }
+
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       FeedUpdaterInterface callback, FeedType feedType, UpdateType updateType) {
+        this.baseURL = baseURL;
         this.apiUserId = apiUserId;
         this.apiToken = apiToken;
         this.callback = callback;
+        this.feedType = feedType;
+        this.updateType = updateType;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
-        parseRSS();
+        if(feedType == null && updateType == null) {
+            updateAllFeeds();
+        } else {
+            if(feedType == null) {
+                throw new IllegalArgumentException("If updateType is set, feedType must be set too");
+            }
+            if(updateType == null) {
+                updateType = UpdateType.Full;
+            }
+
+            update(feedType, updateType);
+        }
+
         return null;
     }
 
@@ -73,167 +92,298 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    public void parseRSS() {
-        URL url;
-        // Set the url (you will need to change this to your RSS URL
+    private void updateAllFeeds() {
+        ArticleDao articleDao = DbConnection.getSession().getArticleDao();
+        SQLiteDatabase db = articleDao.getDatabase();
+
+        db.beginTransaction();
         try {
-            url = new URL(wallabagUrl + "/?feed&type=home&user_id=" + apiUserId + "&token=" + apiToken);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            articleDao.deleteAll();
+
+            if(!updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0)) {
+                return;
+            }
+
+            if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
+                return;
+            }
+
+            if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
+                return;
+            }
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
-
-        OkHttpClient client = WallabagConnection.getClient();
-
-        String requestUrl = wallabagUrl + "/?feed&type=home&user_id=" + apiUserId + "&token=" + apiToken;
-
-        Request request = new Request.Builder()
-                .url(requestUrl)
-                .build();
-
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-        Document document = null;
-        try {
-            document = createDocument(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }
-
-        parseFeed(document);
     }
 
-    private void parseFeed(Document document) {
-        DaoSession session = DbConnection.getSession();
-        ArticleDao articleDao = session.getArticleDao();
+    private void update(FeedType feedType, UpdateType updateType) {
+        ArticleDao articleDao = DbConnection.getSession().getArticleDao();
+        SQLiteDatabase db = articleDao.getDatabase();
 
-        // This is the root node of each section you want to parse
-        NodeList itemLst = document.getElementsByTagName("item");
+        db.beginTransaction();
+        try {
 
-        // This sets up some arrays to hold the data parsed
-        arrays.PodcastTitle = new String[itemLst.getLength()];
-        arrays.PodcastURL = new String[itemLst.getLength()];
-        arrays.PodcastContent = new String[itemLst.getLength()];
-        arrays.PodcastMedia = new String[itemLst.getLength()];
-        arrays.PodcastDate = new String[itemLst.getLength()];
-        arrays.PodcastId = new String[itemLst.getLength()];
+            Integer latestID = null;
+            if(feedType == FeedType.Main || feedType == FeedType.Archive) {
+                WhereCondition cond = feedType == FeedType.Main
+                        ? ArticleDao.Properties.Archive.notEq(true)
+                        : ArticleDao.Properties.Archive.eq(true);
+                List<Article> l = articleDao.queryBuilder().where(cond)
+                        .orderDesc(ArticleDao.Properties.ArticleId).limit(1).list();
 
-        // Loop through the XML passing the data to the arrays
-        for (int i = 0; i < itemLst.getLength(); i++) {
-
-            Node item = itemLst.item(i);
-            if (item.getNodeType() == Node.ELEMENT_NODE) {
-                Element ielem = (Element) item;
-
-                // This section gets the elements from the XML
-                // that we want to use you will need to add
-                // and remove elements that you want / don't want
-                NodeList title = ielem.getElementsByTagName("title");
-                NodeList link = ielem.getElementsByTagName("link");
-                NodeList date = ielem.getElementsByTagName("pubDate");
-                NodeList content = ielem
-                        .getElementsByTagName("description");
-                NodeList source = ielem.getElementsByTagName("source");
-
-                //NodeList media = ielem
-                //		.getElementsByTagName("media:content");
-
-                // This is an attribute of an element so I create
-                // a string to make it easier to use
-                //String mediaurl = media.item(0).getAttributes()
-                //		.getNamedItem("url").getNodeValue();
-
-                // This section adds an entry to the arrays with the
-                // data retrieved from above. I have surrounded each
-                // with try/catch just incase the element does not
-                // exist
-                try {
-                    arrays.PodcastTitle[i] = cleanString(title.item(0).getChildNodes().item(0).getNodeValue());
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    arrays.PodcastTitle[i] = "Echec";
+                if(!l.isEmpty()) {
+                    latestID = l.get(0).getArticleId();
                 }
-                try {
-                    arrays.PodcastDate[i] = date.item(0).getChildNodes().item(0).getNodeValue();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    arrays.PodcastDate[i] = null;
-                }
-                try {
-                    arrays.PodcastURL[i] = link.item(0).getChildNodes()
-                            .item(0).getNodeValue();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    arrays.PodcastURL[i] = "Echec";
-                }
-                try {
-                    arrays.PodcastContent[i] = content.item(0)
-                            .getChildNodes().item(0).getNodeValue();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                    arrays.PodcastContent[i] = "Echec";
-                }
+            }
 
-                NamedNodeMap sourceAttrs = source.item(0).getAttributes();
-                Node item1 = sourceAttrs.item(0);
-                String sourceUrl = item1.getNodeValue();
-                Map<String, String> urlQueryParams = getUrlQueryParams(sourceUrl);
-                String id = urlQueryParams.get("id");
-                arrays.PodcastId[i] = id;
+            if(!updateByFeed(articleDao, feedType, updateType, latestID)) {
+                return;
+            }
 
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
 
-                fr.gaulupeau.apps.Poche.entity.Article article = new Article(null);
-                article.setTitle(arrays.PodcastTitle[i]);
-                article.setContent(arrays.PodcastContent[i]);
-                article.setUrl(arrays.PodcastURL[i]);
-                article.setArticleId(Integer.parseInt(arrays.PodcastId[i]));
-                DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
-                Date date1 = null;
+    private boolean updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
+                                 Integer id) {
+        InputStream is = null;
+        try {
+            // TODO: rewrite?
+            try {
+                is = getInputStream(getFeedUrl(feedType));
+            } catch (IOException e) {
+                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
+                errorMessage = "IO Exception on connect";
+                return false;
+            } catch (RuntimeException e) {
+                Log.e("FeedUpdater.updateByF", "RuntimeException on " + feedType, e);
+                errorMessage = e.getMessage();
+                return false;
+            }
+
+            try {
+                processFeed(articleDao, is, feedType, updateType, id);
+            } catch (IOException e) {
+                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
+                errorMessage = "IO exception on processing feed";
+                return false;
+            } catch (XmlPullParserException e) {
+                Log.e("FeedUpdater.updateByF", "XmlPullParserException on " + feedType, e);
+                errorMessage = "Feed processing error";
+                return false;
+            }
+
+            return true;
+        } finally {
+            if(is != null) {
                 try {
-                    date1 = dateFormat.parse(arrays.PodcastDate[i]);
-                    article.setUpdateDate(date1);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                article.setArchive(false);
-                article.setSync(false);
-
-                try {
-                    Article existing = articleDao.queryBuilder()
-                            .where(ArticleDao.Properties.ArticleId.eq(article.getArticleId()))
-                            .build().uniqueOrThrow();
-                    if (existing == null) {
-                        articleDao.insert(article);
-                    }
-                } catch (DaoException e) {
-                    articleDao.insert(article);
-                }
-//                Log.d("foo", "insert " + article.getArticleId());
+                    is.close();
+                } catch (IOException ignored) {}
             }
         }
-        Log.d("foo", "articles "+ articleDao.count());
     }
 
-    private Document createDocument(Response response) throws IOException, ParserConfigurationException, SAXException {
-        InputStream inputStream = response.body().byteStream();
-
-        // Retreive the XML from the URL
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
-        return documentBuilder.parse(inputStream);
+    private String getFeedUrl(FeedType feedType) {
+        return baseURL + "/?feed"
+                + "&type=" + feedType.urlPart
+                + "&user_id=" + apiUserId
+                + "&token=" + apiToken;
     }
 
-    public String cleanString(String s) {
+    private InputStream getInputStream(String urlStr) throws IOException {
+        Request request = new Request.Builder().url(urlStr).build();
+
+        Response response = WallabagConnection.getClient().newCall(request).execute();
+
+        if(response.isSuccessful()) {
+            return response.body().byteStream();
+        } else {
+            // TODO: fix
+            throw new RuntimeException("Request was unsuccessful. Response: " + response.code()
+                    + " " + response.message());
+        }
+    }
+
+    private void processFeed(ArticleDao articleDao, InputStream is,
+                             FeedType feedType, UpdateType updateType, Integer latestID)
+            throws XmlPullParserException, IOException {
+        XmlPullParser parser = Xml.newPullParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        parser.setInput(is, null);
+
+        parser.nextTag();
+        parser.require(XmlPullParser.START_TAG, null, "rss");
+
+        goToElement(parser, "channel", true);
+        parser.next();
+
+        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.US);
+
+        while (parser.next() != XmlPullParser.END_DOCUMENT) {
+            if (parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            if ("item".equals(parser.getName())) {
+                if(feedType == FeedType.Main || feedType == FeedType.Archive
+                        || (feedType == FeedType.Favorite && updateType == UpdateType.Full)) {
+                    // Main: Full, Fast
+                    // Archive: Full, Fast
+                    // Favorite: Full
+
+                    Item item = parseItem(parser);
+                    Integer id = getIDFromURL(item.sourceUrl);
+
+                    if(updateType == UpdateType.Fast && latestID != null && id != null
+                            && latestID >= id) break;
+
+                    Article article = articleDao.queryBuilder()
+                            .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
+
+                    if(article == null) article = new Article(null);
+
+                    article.setTitle(item.title);
+                    article.setContent(item.description);
+                    article.setUrl(item.link);
+                    article.setArticleId(id);
+                    try {
+                        article.setUpdateDate(dateFormat.parse(item.pubDate));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    article.setArchive(feedType == FeedType.Archive);
+                    article.setFavorite(feedType == FeedType.Favorite);
+
+                    articleDao.insertOrReplace(article);
+                } else if(feedType == FeedType.Favorite) {
+                    // Favorite: Fast (ONLY applicable if Main is up to date)
+                    // probably a bit faster then the code above
+
+                    Integer id = parseItemID(parser);
+                    if(id == null) continue;
+
+                    Article article = articleDao.queryBuilder()
+                            .where(ArticleDao.Properties.ArticleId.eq(id))
+                            .build().unique();
+
+                    if(article.getFavorite() != null && article.getFavorite()) continue;
+
+                    article.setFavorite(true);
+
+                    articleDao.update(article);
+                }
+            } else {
+                skipElement(parser);
+            }
+        }
+    }
+
+    private static void goToElement(XmlPullParser parser, String elementName, boolean hierarchically)
+            throws XmlPullParserException, IOException {
+        do {
+            if(parser.getEventType() == XmlPullParser.START_TAG) {
+                if(elementName.equals(parser.getName())) return;
+                else if(!hierarchically) skipElement(parser);
+            }
+        } while(parser.next() != XmlPullParser.END_DOCUMENT);
+    }
+
+    private static void skipElement(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        if(parser.getEventType() != XmlPullParser.START_TAG) {
+            throw new IllegalStateException();
+        }
+
+        int depth = 1;
+        while(depth != 0) {
+            switch (parser.next()) {
+                case XmlPullParser.END_TAG:
+                    depth--;
+                    break;
+                case XmlPullParser.START_TAG:
+                    depth++;
+                    break;
+            }
+        }
+    }
+
+    private static Item parseItem(XmlPullParser parser) throws XmlPullParserException, IOException {
+        Item item = new Item();
+
+        while(parser.next() != XmlPullParser.END_TAG) {
+            if(parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            switch (parser.getName()) {
+                case "title":
+                    item.title = cleanString(parser.nextText());
+                    break;
+                case "source":
+                    String sourceUrl = parser.getAttributeValue(null, "url");
+                    parser.nextText(); // ignore "empty" element
+                    item.sourceUrl = sourceUrl;
+                    break;
+                case "link":
+                    item.link = parser.nextText();
+                    break;
+                case "pubDate":
+                    item.pubDate = parser.nextText();
+                    break;
+                case "description":
+                    item.description = parser.nextText();
+                    break;
+
+                default:
+                    skipElement(parser);
+                    break;
+            }
+        }
+
+        return item;
+    }
+
+    private static Integer parseItemID(XmlPullParser parser) throws XmlPullParserException, IOException {
+        while(parser.next() != XmlPullParser.END_TAG) {
+            if(parser.getEventType() != XmlPullParser.START_TAG) {
+                continue;
+            }
+
+            switch (parser.getName()) {
+                case "source":
+                    return getIDFromURL(parser.getAttributeValue(null, "url"));
+
+                default:
+                    skipElement(parser);
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+    private static Integer getIDFromURL(String url) {
+        if(url != null) {
+            String marker = "id=";
+            int index = url.indexOf(marker);
+            if(index >= 0) {
+                String idStr = url.substring(index + marker.length());
+                try {
+                    return Integer.parseInt(idStr);
+                } catch (NumberFormatException ignored) {}
+            }
+        }
+
+        return null;
+    }
+
+    private static String cleanString(String s) {
+        if(s == null || s.length() == 0) return s;
+
         s = s.replace("&Atilde;&copy;", "&eacute;");
         s = s.replace("&Atilde;&uml;", "&egrave;");
         s = s.replace("&Atilde;&ordf;", "&ecirc;");
@@ -249,39 +399,21 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
         s = s.replace("&Atilde;&reg;", "&icirc;");
         s = s.replace("&Atilde;&macr;", "&iuml;");
         s = s.replace("&Atilde;&sect;", "&ccedil;");
-        s = s.replace("&amp;", "&amp;");
+
+        s = s.trim();
 
         // Replace multiple whitespaces with single space
         s = s.replaceAll("\\s+", " ");
-        s = s.trim();
 
         return s;
     }
 
-    /**
-     * Split up URL params a la http://stackoverflow.com/a/13592567/1592572
-     */
-    private Map<String, String> getUrlQueryParams(String surl) {
-        URL url = null;
-        try {
-            url = (new URI(surl)).toURL();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        Map<String, String> query_pairs = new LinkedHashMap<String, String>();
-        String query = url.getQuery();
-        String[] pairs = query.split("&");
-        for (String pair : pairs) {
-            int idx = pair.indexOf("=");
-            try {
-                query_pairs.put(URLDecoder.decode(pair.substring(0, idx), "UTF-8"), URLDecoder.decode(pair.substring(idx + 1), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return query_pairs;
+    private static class Item {
+        String title;
+        String sourceUrl;
+        String link;
+        String pubDate;
+        String description;
     }
 
 }
