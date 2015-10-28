@@ -67,6 +67,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 			//
 		}
 
+        // TODO: move to settings
         boolean highContrast = android.os.Build.MODEL.equals("NOOK");
 
 		String htmlHeader = "<html>\n" +
@@ -138,8 +139,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
         send.putExtra(Intent.EXTRA_SUBJECT, titleText);
-        send.putExtra(Intent.EXTRA_TEXT, originalUrlText + " via @wallabagapp");
-        startActivity(Intent.createChooser(send, "Share article"));
+        send.putExtra(Intent.EXTRA_TEXT, originalUrlText + getString(R.string.share_text_extra));
+        startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
         return true;
     }
 
