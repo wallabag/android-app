@@ -19,6 +19,7 @@ public class GenerateDao {
         article.addBooleanProperty("archive").columnName("archive");
         article.addBooleanProperty("sync").columnName("sync");
         article.addDateProperty("updateDate").columnName("update_date");
+        article.addDoubleProperty("articleProgress").columnName("article_progress");
 
         new DaoGenerator().generateAll(schema, "../app/src-gen");
     }

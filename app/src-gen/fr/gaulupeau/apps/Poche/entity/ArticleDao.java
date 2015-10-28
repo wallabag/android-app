@@ -33,6 +33,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Archive = new Property(7, Boolean.class, "archive", false, "archive");
         public final static Property Sync = new Property(8, Boolean.class, "sync", false, "sync");
         public final static Property UpdateDate = new Property(9, java.util.Date.class, "updateDate", false, "update_date");
+        public final static Property ArticleProgress = new Property(10, Double.class, "articleProgress", false, "article_progress");
     };
 
 
@@ -57,7 +58,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "\"favorite\" INTEGER," + // 6: favorite
                 "\"archive\" INTEGER," + // 7: archive
                 "\"sync\" INTEGER," + // 8: sync
-                "\"update_date\" INTEGER);"); // 9: updateDate
+                "\"update_date\" INTEGER," + // 9: updateDate
+                "\"article_progress\" REAL);"); // 10: articleProgress
     }
 
     /** Drops the underlying database table. */
@@ -120,6 +122,11 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         if (updateDate != null) {
             stmt.bindLong(10, updateDate.getTime());
         }
+ 
+        Double articleProgress = entity.getArticleProgress();
+        if (articleProgress != null) {
+            stmt.bindDouble(11, articleProgress);
+        }
     }
 
     /** @inheritdoc */
@@ -141,7 +148,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // favorite
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // archive
             cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // sync
-            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)) // updateDate
+            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)), // updateDate
+            cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10) // articleProgress
         );
         return entity;
     }
@@ -159,6 +167,7 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setArchive(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
         entity.setSync(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
         entity.setUpdateDate(cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)));
+        entity.setArticleProgress(cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10));
      }
     
     /** @inheritdoc */

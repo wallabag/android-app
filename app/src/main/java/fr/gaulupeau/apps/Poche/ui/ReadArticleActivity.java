@@ -3,13 +3,16 @@ package fr.gaulupeau.apps.Poche.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -28,10 +31,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
 	public static final String EXTRA_ID = "ReadArticleActivity.id";
 
-	WebView webViewContent;
+    private ScrollView scrollView;
+	private WebView webViewContent;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
+
+    private Double positionToRestore;
 
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,6 +54,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 		String originalUrlText = mArticle.getUrl();
 		String originalUrlDesc = originalUrlText;
 		String htmlContent = mArticle.getContent();
+        positionToRestore = mArticle.getArticleProgress();
 
         setTitle(titleText);
 
@@ -82,9 +89,31 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t</div>\n" +
 				"</html>";
 
+        scrollView = (ScrollView) findViewById(R.id.scroll);
 
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+
+        if(positionToRestore != null) {
+            // dirty. Looks like there is no good solution
+            webViewContent.setWebViewClient(new WebViewClient() {
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    view.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(webViewContent.getHeight() == 0) {
+                                webViewContent.postDelayed(this, 10);
+                            } else {
+                                restoreReadingPosition();
+                            }
+                        }
+                    }, 10);
+
+                    super.onPageFinished(view, url);
+                }
+            });
+        }
 
 		Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
@@ -116,6 +145,55 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if(mArticle != null) {
+            mArticle.setArticleProgress(getReadingPosition());
+            mArticleDao.update(mArticle);
+        }
+
+        super.onStop();
+    }
+
+    private double getReadingPosition() {
+        String t = "ReadArticle.getPos";
+
+        int yOffset = scrollView.getScrollY();
+        int viewHeight = scrollView.getHeight();
+        int totalHeight = scrollView.getChildAt(0).getHeight();
+        // id/btnMarkRead height; not necessary; insignificantly increases accuracy
+//        int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
+        Log.d(t, "yOffset: " + yOffset + ", viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
+
+//        totalHeight -= appendixHeight;
+        totalHeight -= viewHeight;
+
+        double progress = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
+        Log.d(t, "progress: " + progress);
+
+        return progress;
+    }
+
+    private void restoreReadingPosition() {
+        String t = "ReadArticle.restorePos";
+
+        Log.d(t, "positionToRestore: " + positionToRestore);
+        if(positionToRestore != null) {
+            int viewHeight = scrollView.getHeight();
+//            int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
+            int totalHeight = scrollView.getChildAt(0).getHeight();
+            Log.d(t, "viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
+
+//            totalHeight -= appendixHeight;
+            totalHeight -= viewHeight;
+
+            int yOffset = totalHeight > 0 ? ((int)Math.round(positionToRestore * totalHeight)) : 0;
+            Log.d(t, "yOffset: " + yOffset);
+
+            scrollView.scrollTo(scrollView.getScrollX(), yOffset);
         }
     }
 
