@@ -104,11 +104,11 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                 return;
             }
 
-            if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
+            if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
                 return;
             }
 
-            if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
+            if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
                 return;
             }
 
@@ -260,8 +260,8 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
 
                     articleDao.insertOrReplace(article);
                 } else if(feedType == FeedType.Favorite) {
-                    // Favorite: Fast (ONLY applicable if Main is up to date)
-                    // probably a bit faster then the code above
+                    // Favorite: Fast (ONLY applicable if Main and Archive feeds are up to date)
+                    // probably a bit faster then "Favorite: Full"
 
                     Integer id = parseItemID(parser);
                     if(id == null) continue;
