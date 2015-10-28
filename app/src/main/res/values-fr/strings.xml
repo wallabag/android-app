@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Bienvenue</string>
+    <string name="app_name">wallabag</string>
+    <string name="label_name">Sauvegarder</string>
+    <string name="author">GAULUPEAU Jonathan - 2013</string>
+    <string name="instructions">Pous sauvegarder une page web dans Wallabag, ouvrez cette page dans un navigateur, puis sélectionnez <i>Partager</i> puis <i>Sauvegarder</i>. \nVous devriez voir alors votre page de login Wallabag. \nEt c\'est fait! \nPlus d\'infos sur Wallabag sur:\n http://www.wallabag.org</string>
+    <string name="btnDone">Sauvegarder</string>
+    <string name="url_label"><b><u>Votre URL Wallabag:</u></b></string>
+    <string name="url_help">Exemples:\n<i>http://wallabag.example.com</i>\n<i>http://www.example.com/wallabag</i></string>
+    <string name="btnGetPost">Liste des articles - %1$d non-lus</string>
+    <string name="btnSync">Synchroniser</string>
+    <string name="btnMarkRead">Marquer comme lu</string>
+    <string name="btnSettings">Paramètres</string>
+    <string name="menuShowAll">Tout voir</string>
+    <string name="menuWipeDb">Effacer la base</string>
+    <string name="txtSyncDone">Synchronisation terminée!</string>
+    <string name="txtNetOffline">Vérifiez la connection Internet!</string>
+    <string name="txtConfigNotSet">Veuillez configurer l\'application avant de synchroniser!!</string>
+    <string name="txtAPIUsername"><b><u>Votre ID d\'utilisateur:</u></b></string>
+    <string name="txtAPIToken"><b><u>Votre Token:</u></b></string>
+    <string name="error">Erreur</string>
+    <string name="error_feed">Erreur de chargement des flux</string>
+    <string name="menuShowUnread">Montrer les articles non-lus</string>
+    <plurals name="numberOfArticles">
+        <item quantity="one">%d Article</item>
+        <item quantity="other">%d Articles</item>
+    </plurals>
+</resources>

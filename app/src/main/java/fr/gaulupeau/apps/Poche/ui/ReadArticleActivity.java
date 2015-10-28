@@ -37,6 +37,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Article mArticle;
     private ArticleDao mArticleDao;
 
+    private String titleText;
+    private String originalUrlText;
     private Double positionToRestore;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         mArticleDao = session.getArticleDao();
         mArticle = mArticleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
 
-        String titleText = mArticle.getTitle();
-		String originalUrlText = mArticle.getUrl();
+        titleText = mArticle.getTitle();
+        originalUrlText = mArticle.getUrl();
 		String originalUrlDesc = originalUrlText;
 		String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
@@ -65,6 +67,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 			//
 		}
 
+        boolean highContrast = android.os.Build.MODEL.equals("NOOK");
+
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
@@ -73,7 +77,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body>\n" +
+				"\t\t\t<body" + (highContrast ? " class=\"hicontrast\"" : "") + ">\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
@@ -130,6 +134,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         finish();
     }
 
+    private boolean shareArticle() {
+        Intent send = new Intent(Intent.ACTION_SEND);
+        send.setType("text/plain");
+        send.putExtra(Intent.EXTRA_SUBJECT, titleText);
+        send.putExtra(Intent.EXTRA_TEXT, originalUrlText + " via @wallabagapp");
+        startActivity(Intent.createChooser(send, "Share article"));
+        return true;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -143,6 +156,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuArticleMarkAsRead:
                 markAsReadAndClose();
                 return true;
+            case R.id.menuShare:
+                return shareArticle();
             default:
                 return super.onOptionsItemSelected(item);
         }

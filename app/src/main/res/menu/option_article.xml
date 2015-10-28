@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
         android:icon="@drawable/ic_done_24dp"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuShare"
+        android:title="@string/menuShare"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="ifRoom" />
 </menu>

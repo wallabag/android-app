@@ -4,10 +4,10 @@
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
     <string name="author">
-GAULUPEAU Jonathan - 2013
-\nVictor Häggqvist - 2015
+GAULUPEAU Jonathan — 2013-2015
+\nVictor Häggqvist — 2015
 </string>
-    <string name="instructions">To save a web page to wallabag, open the page in a browser then tap <i>Share</i> and tap on <i>Bag it!</i>. \nYou could then see your wallabag login page. \nAnd it\'s done ! \nMore infos about wallabag at:\n http://www.wallabag.org</string>
+    <string name="instructions">With wallabag, you can save web pages to read them later. To do so, first open the page in a web browser, as you normally would. Then tap <i>Share</i> and then <i>Bag it!</i>. \nYou will then see your wallabag login page. \nAnd you\'re done ! \nYou can find more info about wallabag at:\n http://www.wallabag.org</string>
     <string name="btnDone">Save</string>
     <string name="url_label">Wallabag URL</string>
     <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
@@ -15,12 +15,13 @@ GAULUPEAU Jonathan - 2013
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnSettings">Settings</string>
+    <string name="menuShare">Share</string>
     <string name="menuShowAll">Show All</string>
     <string name="menuShowUnread">Show Unread</string>
     <string name="menuWipeDb">Wipe Database</string>
-    <string name="txtSyncDone">Synchronize done !</string>
-    <string name="txtNetOffline">Check Internet Connectivity !</string>
-    <string name="txtConfigNotSet">Please configure the app before Syncing !</string>
+    <string name="txtSyncDone">Done synchronizing!</string>
+    <string name="txtNetOffline">Please check Internet connectivity!</string>
+    <string name="txtConfigNotSet">Please configure the app before syncing!</string>
     <string name="txtAPIUsername">User ID</string>
     <string name="txtAPIToken">Feed Token</string>
     <string name="error">Error</string>
