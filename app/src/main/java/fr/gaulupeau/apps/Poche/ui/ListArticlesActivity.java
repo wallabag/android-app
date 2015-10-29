@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.LazyList;
+import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -195,11 +196,14 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     }
 
     private void updateList() {
-        LazyList<Article> articles = mArticleDao.queryBuilder()
-                .where(ArticleDao.Properties.Archive.notEq(true))
+        QueryBuilder<Article> qb = mArticleDao.queryBuilder()
                 .orderDesc(ArticleDao.Properties.ArticleId)
-                .limit(50)
-                .listLazy();
+                .limit(50); // TODO: remove limit
+
+        if(!showAll) qb.where(ArticleDao.Properties.Archive.notEq(true));
+
+        LazyList<Article> articles = qb.listLazy();
+
         mArticles.clear();
         mArticles.addAll(articles);
         mAdapter.notifyDataSetChanged();
