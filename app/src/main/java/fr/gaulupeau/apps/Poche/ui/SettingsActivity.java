@@ -1,6 +1,8 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 
 public class SettingsActivity extends BaseActionBarActivity {
 	Button btnDone;
@@ -22,6 +25,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText password;
 
     private Settings settings;
+	private WallabagSettings wallabagSettings;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,37 +33,70 @@ public class SettingsActivity extends BaseActionBarActivity {
 		setContentView(R.layout.settings);
 
         settings = ((App) getApplication()).getSettings();
+		wallabagSettings = WallabagSettings.settingsFromDisk(settings);
 
-		String pocheUrl = settings.getKey(Settings.URL);
-		String apiUsername = settings.getKey(Settings.USER_ID);
-		String apiToken = settings.getKey(Settings.TOKEN);
+		if (!wallabagSettings.isValid()) {
+			hideBackButtonToActionBar();
+		}
 
 		editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
-		editPocheUrl.setText(pocheUrl == null ? "http://" : pocheUrl);
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
-		editAPIUsername.setText(apiUsername);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
-		editAPIToken.setText(apiToken);
+
+		editPocheUrl.setText(wallabagSettings.wallabagURL);
+		editAPIUsername.setText(wallabagSettings.userID);
+		editAPIToken.setText(wallabagSettings.userToken);
 
 		username = (EditText) findViewById(R.id.username);
 		username.setText(settings.getKey(Settings.USERNAME));
 		password = (EditText) findViewById(R.id.password);
 		password.setText(settings.getKey(Settings.PASSWORD));
 
+		TextWatcher textWatcher = new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				updateButton();
+			}
+		};
+
+		editPocheUrl.addTextChangedListener(textWatcher);
+		editAPIUsername.addTextChangedListener(textWatcher);
+		editAPIToken.addTextChangedListener(textWatcher);
+		updateButton();
+
 		btnDone = (Button) findViewById(R.id.btnDone);
 		btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-                settings.setString(Settings.URL, editPocheUrl.getText().toString());
-                settings.setString(Settings.USER_ID, editAPIUsername.getText().toString());
-                settings.setString(Settings.TOKEN, editAPIToken.getText().toString());
+				wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
+				wallabagSettings.userID = editAPIUsername.getText().toString();
+				wallabagSettings.userToken = editAPIToken.getText().toString();
+
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());
-				finish();
+
+				if (wallabagSettings.isValid()) {
+					wallabagSettings.save();
+					finish();
+				}
 			}
 		});
 
 		textViewVersion = (TextView) findViewById(R.id.version);
 		textViewVersion.setText(BuildConfig.VERSION_NAME);
 
+	}
+
+	private void updateButton() {
+		wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
+		wallabagSettings.userID = editAPIUsername.getText().toString();
+		wallabagSettings.userToken = editAPIToken.getText().toString();
+
+		btnDone.setEnabled(wallabagSettings.isValid());
 	}
 }

@@ -111,7 +111,7 @@ public class PocheActivity extends Activity implements FeedUpdaterInterface {
     }
 
     private void checkAndHandleAfterUpdate() {
-        if (settings.hasUpdateChecher() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
+        if (settings.hasUpdateChecker() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
             new AlertDialog.Builder(this)
                     .setTitle("App update")
                     .setMessage("This a breaking update.\n\nMake sure you fill in your Username and Password in settings, otherwise things will be broken.")

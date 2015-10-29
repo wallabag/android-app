@@ -38,6 +38,10 @@ public class Settings {
         return pref.getString(key, null);
     }
 
+    public String getString(String key, String defValue) {
+        return pref.getString(key, defValue);
+    }
+
     public void setAppVersion(int versionCode) {
         pref.edit().putInt(VERSION_CODE, versionCode).commit();
     }
@@ -46,7 +50,7 @@ public class Settings {
         return pref.getInt(VERSION_CODE, BuildConfig.VERSION_CODE);
     }
 
-    public boolean hasUpdateChecher() {
+    public boolean hasUpdateChecker() {
         return pref.getInt("update_checker", -1) != -1;
     }
 }

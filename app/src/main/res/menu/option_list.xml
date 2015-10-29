@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuSync" android:title="@string/btnSync" android:icon="@drawable/ic_action_refresh" />
+    <item android:id="@+id/menuBagPage" android:title="@string/bag_page" />
     <item android:id="@+id/menuShowAll" android:title="@string/menuShowAll" />
     <item android:id="@+id/menuWipeDb" android:title="@string/menuWipeDb" />
+    <item android:id="@+id/menuSettings" android:title="@string/btnSettings" />
 </menu>

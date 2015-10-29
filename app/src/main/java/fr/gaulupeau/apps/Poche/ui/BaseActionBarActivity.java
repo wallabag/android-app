@@ -26,7 +26,18 @@ public class BaseActionBarActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
+    @TargetApi(11)
+    protected void hideBackButtonToActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            try {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            } catch (Exception e) {
+                //
+            }
+        }
+    }
+
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
 			this.finish();
