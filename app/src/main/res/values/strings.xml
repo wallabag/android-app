@@ -17,8 +17,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnSettings">Settings</string>
     <string name="menuShare">Share</string>
-    <string name="menuShowAll">Show All</string>
-    <string name="menuShowUnread">Show Unread</string>
+    <string name="menu_show_archived">Show Archived</string>
+    <string name="menu_show_unread">Show Unread</string>
+    <string name="menu_prioritize_favorites">Prioritize Favorites</string>
+    <string name="menu_dont_prioritize_favorites">Don\'t prioritize Favorites</string>
     <string name="menuWipeDb">Wipe Database</string>
     <string name="wipe_db_dialog_title">Wipe Database?</string>
     <string name="wipe_db_dialog_message">"Are you sure you want to wipe database"</string>

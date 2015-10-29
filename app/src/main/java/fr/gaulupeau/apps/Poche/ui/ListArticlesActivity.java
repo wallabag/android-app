@@ -43,7 +43,8 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView readList;
-    private boolean showAll = false;
+    private boolean showArchived = false;
+    private boolean prioritizeFavorites = false;
 
 	private DaoSession mSession;
     private List<Article> mArticles;
@@ -118,7 +119,15 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menuShowAll).setTitle(getString(showAll ? R.string.menuShowUnread : R.string.menuShowAll));
+        menu.findItem(R.id.menuShowArchived).setTitle(
+                getString(showArchived ? R.string.menu_show_unread : R.string.menu_show_archived)
+        );
+        menu.findItem(R.id.menuPrioritizeFavorites).setTitle(
+                getString(prioritizeFavorites
+                        ? R.string.menu_dont_prioritize_favorites
+                        : R.string.menu_prioritize_favorites)
+        );
+
         return true;
     }
 
@@ -137,8 +146,12 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));
                 return true;
-			case R.id.menuShowAll:
-                showAll = !showAll;
+			case R.id.menuShowArchived:
+                showArchived = !showArchived;
+				updateList();
+				return true;
+			case R.id.menuPrioritizeFavorites:
+                prioritizeFavorites = !prioritizeFavorites;
 				updateList();
 				return true;
 			case R.id.menuWipeDb: {
@@ -222,10 +235,11 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
     private void updateList() {
         QueryBuilder<Article> qb = mArticleDao.queryBuilder()
-                .orderDesc(ArticleDao.Properties.ArticleId)
-                .limit(50); // TODO: remove limit
+                .where(ArticleDao.Properties.Archive.eq(showArchived));
 
-        if(!showAll) qb.where(ArticleDao.Properties.Archive.notEq(true));
+        if(prioritizeFavorites) qb.orderDesc(ArticleDao.Properties.Favorite);
+
+        qb.orderDesc(ArticleDao.Properties.ArticleId).limit(50); // TODO: remove limit
 
         LazyList<Article> articles = qb.listLazy();
 

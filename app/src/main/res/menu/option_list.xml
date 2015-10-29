@@ -3,7 +3,8 @@
     <item android:id="@+id/menuFastSync" android:title="@string/btnFastSync" android:icon="@drawable/ic_action_refresh" />
     <item android:id="@+id/menuSync" android:title="@string/btnSync" android:icon="@drawable/ic_action_refresh" />
     <item android:id="@+id/menuBagPage" android:title="@string/bag_page" />
-    <item android:id="@+id/menuShowAll" android:title="@string/menuShowAll" />
+    <item android:id="@+id/menuShowArchived" android:title="@string/menu_show_archived" />
+    <item android:id="@+id/menuPrioritizeFavorites" android:title="@string/menu_prioritize_favorites" />
     <item android:id="@+id/menuWipeDb" android:title="@string/menuWipeDb" />
     <item android:id="@+id/menuSettings" android:title="@string/btnSettings" />
 </menu>
