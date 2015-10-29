@@ -7,15 +7,15 @@ android:
     - tools
 
     # The BuildTools version used by your project
-    - build-tools-21.1.2
+    - build-tools-23.0.1
 
     # The SDK version used to compile your project
-    - android-21
+    - android-22
 
     # Additional components
     # - extra-google-google_play_services
-    # - extra-google-m2repository
-    # - extra-android-m2repository
+    - extra-google-m2repository
+    - extra-android-m2repository
     # - addon-google_apis-google-19
 
     # Specify at least one system image,

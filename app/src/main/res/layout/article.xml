@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/scroll"
-    tools:context="fr.gaulupeau.apps.Poche.ReadArticle" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity" >
 
     <LinearLayout
         android:layout_width="match_parent"

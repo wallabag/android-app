@@ -3,7 +3,6 @@
     <string name="hello">Wilkommen!</string>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
-    <string name="author">GAULUPEAU Jonathan - 2013</string>
     <string name="instructions">Um eine Website zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke dann auf <i>Bag it!</i>.\nDann wirst du zur Login-Seite deiner wallabag weitergeleitet. \nFertig!\nErfahre mehr über wallabag auf:\n http://www.wallabag.org</string>
     <string name="btnDone">Speichern</string>
     <string name="url_label"><b><u>Deine wallabag URL:</u></b></string>
