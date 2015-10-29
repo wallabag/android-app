@@ -41,6 +41,7 @@ public class WallabagConnection {
             client.setCookieHandler(cookieManager);
         }
 
+        // TODO: make optional; disable by default
         try {
             final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {

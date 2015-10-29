@@ -1,7 +1,5 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import android.content.Context;
-
 import static fr.gaulupeau.apps.Poche.data.Settings.URL;
 import static fr.gaulupeau.apps.Poche.data.Settings.USER_ID;
 import static fr.gaulupeau.apps.Poche.data.Settings.TOKEN;
@@ -15,10 +13,6 @@ public class WallabagSettings {
     public String userToken;
 
     private Settings settings;
-
-    public WallabagSettings(Context context) {
-        this(new Settings(context));
-    }
 
     public WallabagSettings(Settings settings) {
         this.settings = settings;
