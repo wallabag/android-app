@@ -68,7 +68,6 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editPocheUrl.addTextChangedListener(textWatcher);
 		editAPIUsername.addTextChangedListener(textWatcher);
 		editAPIToken.addTextChangedListener(textWatcher);
-		updateButton();
 
 		btnDone = (Button) findViewById(R.id.btnDone);
 		btnDone.setOnClickListener(new OnClickListener() {
@@ -90,6 +89,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		textViewVersion = (TextView) findViewById(R.id.version);
 		textViewVersion.setText(BuildConfig.VERSION_NAME);
 
+		updateButton();
 	}
 
 	private void updateButton() {
