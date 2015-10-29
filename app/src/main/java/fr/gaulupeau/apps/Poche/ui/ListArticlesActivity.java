@@ -141,13 +141,24 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
                 showAll = !showAll;
 				updateList();
 				return true;
-			case R.id.menuWipeDb:
-                mSession.getArticleDao().deleteAll();
-				updateList();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+			case R.id.menuWipeDb: {
+                AlertDialog.Builder b = new AlertDialog.Builder(ListArticlesActivity.this);
+                b.setTitle(R.string.wipe_db_dialog_title);
+                b.setMessage(R.string.wipe_db_dialog_message);
+                b.setPositiveButton(R.string.position_answer, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mSession.getArticleDao().deleteAll();
+                        updateList();
+                    }
+                });
+                b.setNegativeButton(R.string.negative_answer, null);
+                b.create().show();
+                return true;
+            }
 		}
+
+        return super.onOptionsItemSelected(item);
 	}
 
     private void updateFeed(boolean showErrors) {

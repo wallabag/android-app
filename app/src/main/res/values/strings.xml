@@ -20,6 +20,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuShowAll">Show All</string>
     <string name="menuShowUnread">Show Unread</string>
     <string name="menuWipeDb">Wipe Database</string>
+    <string name="wipe_db_dialog_title">Wipe Database?</string>
+    <string name="wipe_db_dialog_message">"Are you sure you want to wipe database"</string>
     <string name="txtSyncDone">Done synchronizing!</string>
     <string name="txtNetOffline">Please check Internet connectivity!</string>
     <string name="txtConfigNotSet">Please configure the app before syncing!</string>
@@ -33,6 +35,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="bag_it">Bag It</string>
     <string name="share_article_title">Share article</string>
     <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="position_answer">Yes</string>
+    <string name="negative_answer">No</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>
