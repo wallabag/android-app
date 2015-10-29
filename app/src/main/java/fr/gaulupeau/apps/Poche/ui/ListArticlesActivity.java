@@ -50,8 +50,6 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     private ArticleDao mArticleDao;
     private ListAdapter mAdapter;
 
-    private boolean updatedInitially = false;
-
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
@@ -68,7 +66,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateFeed();
+                updateFeed(true, true);
             }
         });
 
@@ -88,13 +86,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         super.onResume();
         updateList();
 
-        if (wallabagSettings.isValid()) {
-            //TODO Maybe should update once in a while, if data is getting old.
-            if (!updatedInitially) {
-                updatedInitially = true;
-                updateFeed();
-            }
-        } else {
+        if (!wallabagSettings.isValid()) {
             AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticlesActivity.this);
             messageBox.setTitle("Welcome to wallabag");
             messageBox.setMessage("Please configure this app with your hosted wallabag to get started.");
@@ -133,8 +125,11 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+            case R.id.menuFastSync:
+                updateFeed(true, true);
+                return true;
             case R.id.menuSync:
-                updateFeed();
+                updateFeed(true);
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
@@ -155,26 +150,45 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 		}
 	}
 
-    private void updateFeed() {
-        // Ensure Internet connectivity
-        final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+    private void updateFeed(boolean showErrors) {
+        updateFeed(showErrors, false);
+    }
+
+    private void updateFeed(boolean showErrors, boolean fast) {
         if (!wallabagSettings.isValid()) {
-            Toast.makeText(ListArticlesActivity.this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             refreshLayout.setRefreshing(false);
-        } else if (activeNetwork != null && activeNetwork.isConnected()) {
+            if(showErrors) {
+                Toast.makeText(ListArticlesActivity.this,
+                        getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
+            }
+        } else if (isConnected()) {
             if (!refreshLayout.isRefreshing()) {
                 refreshLayout.setRefreshing(true);
             }
 
-            // Run update task
-            feedUpdater = new FeedUpdater(wallabagSettings.wallabagURL, wallabagSettings.userID, wallabagSettings.userToken, this);
+            FeedUpdater.FeedType feedType = null;
+            FeedUpdater.UpdateType updateType = null;
+            if(fast) {
+                feedType = FeedUpdater.FeedType.Main;
+                updateType = FeedUpdater.UpdateType.Fast;
+            }
+            feedUpdater = new FeedUpdater(wallabagSettings.wallabagURL,
+                    wallabagSettings.userID, wallabagSettings.userToken, this, feedType, updateType);
             feedUpdater.execute();
         } else {
-            // Show message if not connected
             refreshLayout.setRefreshing(false);
-            Toast.makeText(ListArticlesActivity.this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            if(showErrors) {
+                Toast.makeText(ListArticlesActivity.this,
+                        getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            }
         }
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     @Override

@@ -12,6 +12,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="url_label">Wallabag URL</string>
     <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
     <string name="btnGetPost">List articles - %1$d unread</string>
+    <string name="btnFastSync">Fast sync</string>
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnSettings">Settings</string>
