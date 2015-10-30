@@ -12,7 +12,6 @@
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnSettings">Einstellungen</string>
     <string name="menuShare">Teilen</string>
-    <string name="menuShowAll">Alle anzeigen</string>
     <string name="menuWipeDb">Datenbank leeren</string>
     <string name="txtSyncDone">Synchronisieren erfolgreich!</string>
     <string name="txtNetOffline">Internetverbindung prüfen!</string>
@@ -21,7 +20,7 @@
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
     <string name="error">Fehler</string>
     <string name="error_feed">Fehler beim laden des Feeds</string>
-    <string name="menuShowUnread">Ungelesene anzeigen</string>
+    <string name="menu_show_unread">Ungelesene anzeigen</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>

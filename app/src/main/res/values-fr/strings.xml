@@ -12,7 +12,6 @@
     <string name="btnSync">Synchroniser</string>
     <string name="btnMarkRead">Marquer comme lu</string>
     <string name="btnSettings">Paramètres</string>
-    <string name="menuShowAll">Tout voir</string>
     <string name="menuWipeDb">Effacer la base</string>
     <string name="txtSyncDone">Synchronisation terminée!</string>
     <string name="txtNetOffline">Vérifiez la connection Internet!</string>
@@ -21,7 +20,7 @@
     <string name="txtAPIToken"><b><u>Votre Token:</u></b></string>
     <string name="error">Erreur</string>
     <string name="error_feed">Erreur de chargement des flux</string>
-    <string name="menuShowUnread">Montrer les articles non-lus</string>
+    <string name="menu_show_unread">Montrer les articles non-lus</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>
