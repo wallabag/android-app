@@ -22,6 +22,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIUsername;
 	EditText editAPIToken;
 	CheckBox allCerts;
+	CheckBox highContrast;
 	TextView textViewVersion;
 	EditText username;
 	EditText password;
@@ -45,11 +46,14 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
+		highContrast = (CheckBox) findViewById(R.id.high_contrast_cb);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
 		editAPIUsername.setText(wallabagSettings.userID);
 		editAPIToken.setText(wallabagSettings.userToken);
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
+		highContrast.setChecked(settings.getBoolean(Settings.HIGH_CONTRAST,
+				android.os.Build.MODEL.equals("NOOK")));
 
 		username = (EditText) findViewById(R.id.username);
 		username.setText(settings.getKey(Settings.USERNAME));
@@ -81,6 +85,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 				wallabagSettings.userToken = editAPIToken.getText().toString();
 
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
+                settings.setBoolean(Settings.HIGH_CONTRAST, highContrast.isChecked());
 
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());

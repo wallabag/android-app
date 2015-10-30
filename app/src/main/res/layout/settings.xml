@@ -82,6 +82,13 @@
             android:paddingBottom="5sp"
             android:text="@string/accept_all_certs_desc" />
 
+        <CheckBox
+            android:id="@+id/high_contrast_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/high_contrast_text" />
+
 
         <TextView
             android:id="@+id/instructions"

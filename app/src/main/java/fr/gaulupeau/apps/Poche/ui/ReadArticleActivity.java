@@ -20,7 +20,9 @@ import android.widget.ScrollView;
 import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.ToggleArchiveTask;
 import fr.gaulupeau.apps.Poche.data.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
@@ -67,8 +69,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 			//
 		}
 
-        // TODO: move to settings
-        boolean highContrast = android.os.Build.MODEL.equals("NOOK");
+        boolean highContrast = App.getInstance().getSettings().getBoolean(Settings.HIGH_CONTRAST, false);
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
