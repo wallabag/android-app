@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editPocheUrl;
 	EditText editAPIUsername;
 	EditText editAPIToken;
+	CheckBox allCerts;
 	TextView textViewVersion;
 	EditText username;
 	EditText password;
@@ -42,10 +44,12 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
+		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
 		editAPIUsername.setText(wallabagSettings.userID);
 		editAPIToken.setText(wallabagSettings.userToken);
+		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
 
 		username = (EditText) findViewById(R.id.username);
 		username.setText(settings.getKey(Settings.USERNAME));
@@ -75,6 +79,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 				wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
 				wallabagSettings.userID = editAPIUsername.getText().toString();
 				wallabagSettings.userToken = editAPIToken.getText().toString();
+
+                settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
 
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());
