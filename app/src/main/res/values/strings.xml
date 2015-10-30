@@ -15,7 +15,14 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="btnFastSync">Fast sync</string>
     <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
+    <string name="btnMarkUnread">Mark as Unread</string>
+    <string name="moved_to_archive_message">Archived</string>
+    <string name="marked_as_unread_message">Marked as Unread</string>
     <string name="btnSettings">Settings</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="added_to_favorites_message">Added to Favorites</string>
+    <string name="removed_from_favorites_message">Removed from Favorites</string>
     <string name="menuShare">Share</string>
     <string name="menu_show_archived">Show Archived</string>
     <string name="menu_show_unread">Show Unread</string>

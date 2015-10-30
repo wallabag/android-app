@@ -13,6 +13,9 @@ import fr.gaulupeau.apps.Poche.data.Settings;
  * @since 10/19/15
  */
 public class App extends Application {
+
+    private static App instance;
+
     private Settings settings;
 
     @Override
@@ -23,9 +26,16 @@ public class App extends Application {
 
         DbConnection.setContext(this);
         settings = new Settings(this);
+
+        instance = this;
     }
 
     public Settings getSettings() {
         return settings;
     }
+
+    public static App getInstance() {
+        return instance;
+    }
+
 }

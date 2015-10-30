@@ -10,13 +10,14 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.net.URL;
 
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
  */
 public class WallabagService {
+
+    private static String TAG = WallabagService.class.getSimpleName();
 
     private String endpoint;
     private final String username;
@@ -60,10 +61,10 @@ public class WallabagService {
 
         Response response = client.newCall(request).execute();
 
-        return response.code() == 200;
+        return response.code() == 200; // TODO: detect unsuccessful login
     }
 
-    public boolean toogleArchive(int articleId) throws IOException {
+    public boolean toggleArchive(int articleId) throws IOException {
         doLogin();
 
         HttpUrl url = HttpUrl.parse(endpoint)
@@ -78,8 +79,29 @@ public class WallabagService {
 
         Response response = client.newCall(request).execute();
 
-        Log.d("foo", String.valueOf(response.code()));
-        return response.code() == 200;
+        Log.d(TAG, String.valueOf(response.code()));
 
+        return response.code() == 200;
     }
+
+    public boolean toggleFavorite(int articleId) throws IOException {
+        doLogin();
+
+        HttpUrl url = HttpUrl.parse(endpoint)
+                .newBuilder()
+                .setQueryParameter("action", "toggle_fav")
+                .setQueryParameter("id", Integer.toString(articleId))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        Log.d(TAG, String.valueOf(response.code()));
+
+        return response.code() == 200;
+    }
+
 }

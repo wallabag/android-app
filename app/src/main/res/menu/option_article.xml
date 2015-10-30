@@ -7,6 +7,11 @@
         android:icon="@drawable/ic_done_24dp"
         app:showAsAction="always" />
     <item
+        android:id="@+id/menuArticleToggleFavorite"
+        android:title="@string/add_to_favorites"
+        android:icon="@drawable/abc_btn_rating_star_off_mtrl_alpha"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/menuShare"
         android:title="@string/menuShare"
         android:icon="@android:drawable/ic_menu_share"

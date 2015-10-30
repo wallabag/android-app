@@ -1,7 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,16 +16,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.WallabagService;
+import fr.gaulupeau.apps.Poche.data.ToggleArchiveTask;
+import fr.gaulupeau.apps.Poche.data.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
@@ -131,8 +131,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 	}
 
     private void markAsReadAndClose() {
-        new ToggleArchiveTask(mArticle.getArticleId()).execute();
+        new ToggleArchiveTask(this, mArticle.getArticleId(), mArticleDao, mArticle).execute();
+
         finish();
+    }
+
+    private boolean toggleFavorite() {
+        new ToggleFavoriteTask(this, mArticle.getArticleId(), mArticleDao, mArticle).execute();
+
+        return true;
     }
 
     private boolean shareArticle() {
@@ -146,8 +153,26 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_article, menu);
+
+        boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
+
+        MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
+        markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
+
+        boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
+
+        MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
+        toggleFavoriteItem.setTitle(
+                favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
+        toggleFavoriteItem.setIcon(getIcon(favorite
+                        ? R.drawable.abc_btn_rating_star_on_mtrl_alpha
+                        : R.drawable.abc_btn_rating_star_off_mtrl_alpha, null)
+        );
+
         return true;
     }
 
@@ -156,6 +181,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
                 markAsReadAndClose();
+                return true;
+            case R.id.menuArticleToggleFavorite:
+                toggleFavorite();
+                invalidateOptionsMenu();
                 return true;
             case R.id.menuShare:
                 return shareArticle();
@@ -213,47 +242,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    private class ToggleArchiveTask extends AsyncTask<Void, Void, Boolean> {
-        private int articleId;
-        private WallabagService service;
-        private String errorMessage;
-
-        public ToggleArchiveTask(int articleId) {
-            this.articleId = articleId;
+    private Drawable getIcon(int id, Resources.Theme theme) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return getIconNew(id, theme);
         }
 
-        @Override
-        protected void onPreExecute() {
-            mArticle.setArchive(!mArticle.getArchive());
-            mArticleDao.update(mArticle);
-            Settings settings = ((App) getApplication()).getSettings();
-            service = new WallabagService(
-                    settings.getUrl(),
-                    settings.getKey(Settings.USERNAME),
-                    settings.getKey(Settings.PASSWORD));
-        }
+        return getIconOld(id);
+    }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                return service.toogleArchive(articleId);
-            } catch (IOException e) {
-                errorMessage = e.getMessage();
-                e.printStackTrace();
-                return false;
-            }
-        }
+    @TargetApi(Build.VERSION_CODES.FROYO)
+    private Drawable getIconOld(int id) {
+        return getResources().getDrawable(id);
+    }
 
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                mArticle.setSync(true);
-                mArticleDao.update(mArticle);
-            } else {
-                ConnectionFailAlert.getDialog(ReadArticleActivity.this, errorMessage).show();
-            }
-            Toast.makeText(ReadArticleActivity.this, "Archived", Toast.LENGTH_SHORT).show();
-        }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private Drawable getIconNew(int id, Resources.Theme theme) {
+        return getResources().getDrawable(id, theme);
     }
 
 }
