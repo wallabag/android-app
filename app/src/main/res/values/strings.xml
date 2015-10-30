@@ -28,6 +28,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menu_show_unread">Show Unread</string>
     <string name="menu_prioritize_favorites">Prioritize Favorites</string>
     <string name="menu_dont_prioritize_favorites">Don\'t prioritize Favorites</string>
+    <string name="menu_open_random_article">Open random article</string>
     <string name="menuWipeDb">Wipe Database</string>
     <string name="wipe_db_dialog_title">Wipe Database?</string>
     <string name="wipe_db_dialog_message">"Are you sure you want to wipe database"</string>
@@ -46,6 +47,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="share_text_extra">" via @wallabagapp"</string>
     <string name="position_answer">Yes</string>
     <string name="negative_answer">No</string>
+    <string name="no_articles">No articles</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

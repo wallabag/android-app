@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import de.greenrobot.dao.query.LazyList;
 import de.greenrobot.dao.query.QueryBuilder;
@@ -154,6 +155,9 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
                 prioritizeFavorites = !prioritizeFavorites;
 				updateList();
 				return true;
+            case R.id.menuOpenRandomArticle:
+                openRandomArticle();
+                return true;
 			case R.id.menuWipeDb: {
                 AlertDialog.Builder b = new AlertDialog.Builder(ListArticlesActivity.this);
                 b.setTitle(R.string.wipe_db_dialog_title);
@@ -251,8 +255,29 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     @Override
     public void onItemClick(int position) {
         Article article = mArticles.get(position);
+        openArticle(article.getId());
+    }
+
+    private void openRandomArticle() {
+        QueryBuilder<Article> qb = mArticleDao.queryBuilder()
+                .where(ArticleDao.Properties.Archive.eq(showArchived))
+                .orderDesc(ArticleDao.Properties.ArticleId);
+
+        LazyList<Article> articles = qb.listLazyUncached();
+
+        if(!articles.isEmpty()) {
+            long id = articles.get(new Random().nextInt(articles.size())).getId();
+            articles.close();
+
+            openArticle(id);
+        } else {
+            Toast.makeText(ListArticlesActivity.this, R.string.no_articles, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void openArticle(long id) {
         Intent intent = new Intent(this, ReadArticleActivity.class);
-        intent.putExtra(ReadArticleActivity.EXTRA_ID, article.getId());
+        intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
         startActivity(intent);
     }
 
