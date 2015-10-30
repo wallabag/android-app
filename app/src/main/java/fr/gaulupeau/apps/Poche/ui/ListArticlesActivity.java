@@ -243,7 +243,10 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
         if(prioritizeFavorites) qb.orderDesc(ArticleDao.Properties.Favorite);
 
-        qb.orderDesc(ArticleDao.Properties.ArticleId).limit(50); // TODO: remove limit
+        qb.orderDesc(ArticleDao.Properties.ArticleId);
+
+        int limit = settings.getInt(Settings.LIST_LIMIT, -1);
+        if(limit > 0) qb.limit(limit);
 
         LazyList<Article> articles = qb.listLazy();
 

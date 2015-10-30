@@ -23,6 +23,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIToken;
 	CheckBox allCerts;
 	CheckBox highContrast;
+	EditText listLimit;
 	TextView textViewVersion;
 	EditText username;
 	EditText password;
@@ -47,6 +48,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
 		highContrast = (CheckBox) findViewById(R.id.high_contrast_cb);
+		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
 		editAPIUsername.setText(wallabagSettings.userID);
@@ -54,6 +56,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
 		highContrast.setChecked(settings.getBoolean(Settings.HIGH_CONTRAST,
 				android.os.Build.MODEL.equals("NOOK")));
+		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
 
 		username = (EditText) findViewById(R.id.username);
 		username.setText(settings.getKey(Settings.USERNAME));
@@ -86,6 +89,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
                 settings.setBoolean(Settings.HIGH_CONTRAST, highContrast.isChecked());
+                try {
+                    settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
+                } catch (NumberFormatException ignored) {}
 
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());

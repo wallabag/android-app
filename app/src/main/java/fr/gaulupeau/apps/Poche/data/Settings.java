@@ -18,6 +18,7 @@ public class Settings {
     public static final String TOKEN = "APIToken";
     public static final String ALL_CERTS = "all_certs";
     public static final String HIGH_CONTRAST = "high_contrast";
+    public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String VERSION_CODE = "version_code";
@@ -30,6 +31,10 @@ public class Settings {
 
     public void setString(String key, String value) {
         pref.edit().putString(key, value).commit();
+    }
+
+    public void setInt(String key, int value) {
+        pref.edit().putInt(key, value).commit();
     }
 
     public void setBoolean(String key, boolean value) {
@@ -46,6 +51,10 @@ public class Settings {
 
     public String getString(String key, String defValue) {
         return pref.getString(key, defValue);
+    }
+
+    public int getInt(String key, int defValue) {
+        return pref.getInt(key, defValue);
     }
 
     public boolean getBoolean(String key, boolean defValue) {

@@ -89,6 +89,24 @@
             android:layout_marginTop="@dimen/toppadding"
             android:text="@string/high_contrast_text" />
 
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/list_limit_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/list_limit_number_text"
+                android:inputType="number"
+                android:linksClickable="false"
+                android:maxLines="1"
+                android:scrollHorizontally="false" />
+
+        </android.support.design.widget.TextInputLayout>
+
 
         <TextView
             android:id="@+id/instructions"
