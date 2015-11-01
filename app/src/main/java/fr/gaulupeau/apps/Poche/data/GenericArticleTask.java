@@ -37,8 +37,13 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> 
     }
 
     @Override
+    protected void onPreExecute() {
+        preparePre();
+    }
+
+    @Override
     protected Boolean doInBackground(Void... params) {
-        prepare();
+        prepareBG();
 
         try {
             return doInBackgroundSimple(params);
@@ -53,7 +58,7 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> 
         return false;
     }
 
-    protected void prepare() {
+    protected void preparePre() {
         if(articleDao == null) {
             if(daoSession == null) daoSession = DbConnection.getSession();
             articleDao = daoSession.getArticleDao();
@@ -63,7 +68,9 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> 
                     .where(ArticleDao.Properties.Id.eq(articleId))
                     .build().unique();
         }
+    }
 
+    protected void prepareBG() {
         Settings settings = App.getInstance().getSettings();
         service = new WallabagService(
                 settings.getUrl(),

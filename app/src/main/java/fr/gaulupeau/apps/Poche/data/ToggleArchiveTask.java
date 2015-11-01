@@ -17,6 +17,13 @@ public class ToggleArchiveTask extends GenericArticleTask {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        article.setArchive(!article.getArchive());
+    }
+
+    @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
         if(service.toggleArchive(articleId)) return true;
 
@@ -28,7 +35,6 @@ public class ToggleArchiveTask extends GenericArticleTask {
     protected void onPostExecute(Boolean success) {
         super.onPostExecute(success);
 
-        article.setArchive(!article.getArchive());
         article.setSync(success); // ?
         articleDao.update(article);
 

@@ -17,6 +17,13 @@ public class ToggleFavoriteTask extends GenericArticleTask {
     }
 
     @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        article.setFavorite(!article.getFavorite());
+    }
+
+    @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
         if(service.toggleFavorite(articleId)) return true;
 
@@ -28,7 +35,6 @@ public class ToggleFavoriteTask extends GenericArticleTask {
     protected void onPostExecute(Boolean success) {
         super.onPostExecute(success);
 
-        article.setFavorite(!article.getFavorite());
         article.setSync(success); //?
         articleDao.update(article);
 
