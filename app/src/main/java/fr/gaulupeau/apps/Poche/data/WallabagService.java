@@ -14,12 +14,19 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
  */
 public class WallabagService {
+
+    public static class FeedsCredentials {
+        String userID;
+        String token;
+    }
 
     private static String TAG = WallabagService.class.getSimpleName();
 
@@ -33,6 +40,48 @@ public class WallabagService {
         this.username = username;
         this.password = password;
         client = WallabagConnection.getClient();
+    }
+
+    public String getPage(String fullUrl) throws IOException {
+        return getPage(HttpUrl.parse(fullUrl));
+    }
+
+    public String getPage(HttpUrl url) throws IOException {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        return executeRequestForResult(request);
+    }
+
+    public FeedsCredentials getCredentials() throws IOException {
+        Request configRequest = getConfigRequest();
+
+        String response = executeRequestForResult(configRequest);
+        if(response == null) return null;
+
+        Pattern pattern = Pattern.compile(
+                "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"",
+                Pattern.DOTALL
+        );
+
+        Matcher matcher = pattern.matcher(response);
+        if(!matcher.find()) {
+            Request generateTokenRequest = getGenerateTokenRequest();
+            executeRequest(generateTokenRequest);
+
+            response = executeRequestForResult(configRequest);
+            if(response == null) return null;
+
+            matcher = pattern.matcher(response);
+            if(!matcher.find()) return null;
+        }
+
+        FeedsCredentials credentials = new FeedsCredentials();
+        credentials.userID = matcher.group(1);
+        credentials.token = matcher.group(2);
+
+        return credentials;
     }
 
     public boolean addLink(String link) throws IOException {
@@ -91,37 +140,69 @@ public class WallabagService {
                 .build();
     }
 
-    private boolean executeRequest(Request request) throws IOException {
-        return executeRequest(request, true);
+    private Request getConfigRequest() {
+        HttpUrl url = HttpUrl.parse(endpoint)
+                .newBuilder()
+                .setQueryParameter("view", "config")
+                .build();
+
+        return new Request.Builder()
+                .url(url)
+                .build();
     }
 
-    private boolean executeRequest(Request request, boolean autoRelogin) throws IOException {
-        Log.d(TAG, "executeRequest() start; autoRelogin: " + autoRelogin);
+    private Request getGenerateTokenRequest() {
+        HttpUrl url = HttpUrl.parse(endpoint)
+                .newBuilder()
+                .setQueryParameter("feed", null)
+                .setQueryParameter("action", "generate")
+                .build();
 
-//        printLoginCookie();
+        Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
+
+        return new Request.Builder()
+                .url(url)
+                .build();
+    }
+
+    private boolean executeRequest(Request request) throws IOException {
+        return executeRequest(request, true, true);
+    }
+
+    private boolean executeRequest(Request request, boolean checkResponse, boolean autoRelogin) throws IOException {
+        return executeRequestForResult(request, checkResponse, autoRelogin) != null;
+    }
+
+    private String executeRequestForResult(Request request) throws IOException {
+        return executeRequestForResult(request, true, true);
+    }
+
+    private String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin)
+            throws IOException {
+        Log.d(TAG, "executeRequest() start; autoRelogin: " + autoRelogin);
 
         Response response = exec(request);
         Log.d(TAG, "executeRequest() got response");
 
-        checkResponse(response);
-        if(!isLoginPage(response)) return true;
+        if(checkResponse) checkResponse(response);
+        String body = response.body().string();
+        if(!isLoginPage(body)) return body;
         Log.d(TAG, "executeRequest() response is login page");
-        if(!autoRelogin) return false;
+        if(!autoRelogin) return null;
 
         Log.d(TAG, "executeRequest() trying to re-login");
         Response loginResponse = exec(getLoginRequest());
-        checkResponse(response);
-        if(isLoginPage(loginResponse)) {
+        if(checkResponse) checkResponse(response);
+        if(isLoginPage(loginResponse.body().string())) {
             throw new IOException("Couldn't login: probably wrong username or password");
         }
-
-//        printLoginCookie();
 
         Log.d(TAG, "executeRequest() re-login response is OK; re-executing request");
         response = exec(request);
 
-        checkResponse(response);
-        return !isLoginPage(response);
+        if(checkResponse) checkResponse(response);
+        body = response.body().string();
+        return !isLoginPage(body) ? body : null;
     }
 
     private Response exec(Request request) throws IOException {
@@ -146,11 +227,11 @@ public class WallabagService {
         return true;
     }
 
-    private boolean isLoginPage(Response response) throws IOException {
-        if(response == null) return false;
+    private boolean isLoginPage(String body) throws IOException {
+        if(body == null || body.length() == 0) return false;
 
-        String body = response.body().string();
-        return body.contains("name=\"loginform\""); // any way to improve?
+//        "<body class=\"login\">"
+        return body.contains("<form method=\"post\" action=\"?login\" name=\"loginform\">"); // any way to improve?
     }
 
     // TODO: do not print actual value

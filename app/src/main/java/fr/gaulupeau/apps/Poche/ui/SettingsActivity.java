@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,10 +14,14 @@ import android.widget.TextView;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.TestConnectionTask;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 
 public class SettingsActivity extends BaseActionBarActivity {
+	Button btnTestConnection;
+	Button btnGetCredentials;
 	Button btnDone;
 	EditText editPocheUrl;
 	EditText editAPIUsername;
@@ -30,6 +35,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
     private Settings settings;
 	private WallabagSettings wallabagSettings;
+
+	private TestConnectionTask testConnectionTask;
+	private GetCredentialsTask getCredentialsTask;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,33 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIUsername.addTextChangedListener(textWatcher);
 		editAPIToken.addTextChangedListener(textWatcher);
 
+		btnTestConnection = (Button) findViewById(R.id.btnTestConnection);
+		btnTestConnection.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				cancelTask(testConnectionTask);
+
+				testConnectionTask = new TestConnectionTask(
+						SettingsActivity.this, editPocheUrl.getText().toString(),
+						username.getText().toString(), password.getText().toString());
+
+				testConnectionTask.execute();
+			}
+		});
+
+		btnGetCredentials = (Button) findViewById(R.id.btnGetFeedsCredentials);
+		btnGetCredentials.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				cancelTask(getCredentialsTask);
+
+				getCredentialsTask = new GetCredentialsTask(
+						SettingsActivity.this, editPocheUrl.getText().toString(),
+						username.getText().toString(), password.getText().toString(),
+						editAPIUsername, editAPIToken);
+
+				getCredentialsTask.execute();
+			}
+		});
+
 		btnDone = (Button) findViewById(R.id.btnDone);
 		btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -107,6 +142,20 @@ public class SettingsActivity extends BaseActionBarActivity {
 		textViewVersion.setText(BuildConfig.VERSION_NAME);
 
 		updateButton();
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+
+		cancelTask(testConnectionTask);
+		cancelTask(getCredentialsTask);
+	}
+
+	private void cancelTask(AsyncTask task) {
+		if(task != null) {
+			task.cancel(true);
+		}
 	}
 
 	private void updateButton() {
