@@ -105,26 +105,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
 		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
-        if(positionToRestore != null) {
-            // dirty. Looks like there is no good solution
-            webViewContent.setWebViewClient(new WebViewClient() {
-                @Override
-                public void onPageFinished(WebView view, String url) {
-                    view.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(webViewContent.getHeight() == 0) {
-                                webViewContent.postDelayed(this, 10);
-                            } else {
-                                loadingFinished();
-                            }
+        webViewContent.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // dirty. Looks like there is no good solution
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(webViewContent.getHeight() == 0) {
+                            webViewContent.postDelayed(this, 10);
+                        } else {
+                            loadingFinished();
                         }
-                    }, 10);
+                    }
+                }, 10);
 
-                    super.onPageFinished(view, url);
-                }
-            });
-        }
+                super.onPageFinished(view, url);
+            }
+        });
 
         loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
 
