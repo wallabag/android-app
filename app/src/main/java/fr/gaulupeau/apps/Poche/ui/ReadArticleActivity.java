@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -122,6 +123,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
                 super.onPageFinished(view, url);
             }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
+                return openUrl(url);
+            }
         });
 
         loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
@@ -143,6 +149,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         btnMarkRead.setVisibility(View.VISIBLE);
 
         restoreReadingPosition();
+    }
+
+    private boolean openUrl(String url) {
+        if(url == null) return true;
+
+        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(launchBrowserIntent);
+
+        return true;
     }
 
     private void markAsReadAndClose() {
