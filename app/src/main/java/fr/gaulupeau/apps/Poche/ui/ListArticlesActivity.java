@@ -40,7 +40,6 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     private FeedUpdater feedUpdater;
 
     private Settings settings;
-    private WallabagSettings wallabagSettings;
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView readList;
@@ -52,12 +51,13 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     private ArticleDao mArticleDao;
     private ListAdapter mAdapter;
 
+    private boolean firstTimeShown = true;
+
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.list);
 
         settings = new Settings(this);
-        wallabagSettings = WallabagSettings.settingsFromDisk(settings);
 
         readList = (RecyclerView) findViewById(R.id.article_list);
 
@@ -88,18 +88,23 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         super.onResume();
         updateList();
 
-        if (!wallabagSettings.isValid()) {
-            AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticlesActivity.this);
-            messageBox.setTitle("Welcome to wallabag");
-            messageBox.setMessage("Please configure this app with your hosted wallabag to get started.");
-            messageBox.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    startActivity(new Intent(getBaseContext(), SettingsActivity.class));
-                }
-            });
-            messageBox.setCancelable(false);
-            messageBox.create().show();
+        if(firstTimeShown) {
+            firstTimeShown = false;
+
+            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
+            if (!wallabagSettings.isValid()) {
+                AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticlesActivity.this);
+                messageBox.setTitle("Welcome to wallabag");
+                messageBox.setMessage("Please configure this app with your hosted wallabag to get started.");
+                messageBox.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                    }
+                });
+                messageBox.setCancelable(false);
+                messageBox.create().show();
+            }
         }
     }
 
@@ -183,6 +188,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     }
 
     private void updateFeed(boolean showErrors, boolean fast) {
+        WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
         if (!wallabagSettings.isValid()) {
             refreshLayout.setRefreshing(false);
             if(showErrors) {
