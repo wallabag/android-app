@@ -10,9 +10,7 @@ import android.util.Patterns;
 
 import java.util.regex.Matcher;
 
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.AddLinkTask;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 public class BagItProxyActivity extends AppCompatActivity {
 
@@ -42,8 +40,6 @@ public class BagItProxyActivity extends AppCompatActivity {
             return;
         }
 
-        Settings settings = ((App) getApplication()).getSettings();
-
         Log.d(TAG, "Baging " + pageUrl);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
@@ -51,9 +47,7 @@ public class BagItProxyActivity extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 
-        new AddLinkTask(settings.getUrl(), settings.getKey(Settings.USERNAME),
-                settings.getKey(Settings.PASSWORD), pageUrl, this, null, progressDialog, true)
-                .execute();
+        new AddLinkTask(pageUrl, this, null, progressDialog, true).execute();
     }
 
 }

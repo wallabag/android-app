@@ -1,12 +1,14 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +25,7 @@ import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.AddLinkTask;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.ToggleArchiveTask;
@@ -151,11 +154,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         restoreReadingPosition();
     }
 
-    private boolean openUrl(String url) {
+    private boolean openUrl(final String url) {
         if(url == null) return true;
 
-        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(launchBrowserIntent);
+        // TODO: fancy dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
+        TextView tv = (TextView) v.findViewById(R.id.tv_dialog_title_url);
+        tv.setText(url);
+        builder.setCustomTitle(v);
+
+        builder.setItems(
+                new CharSequence[] {
+                        getString(R.string.d_urlAction_openInBrowser),
+                        getString(R.string.d_urlAction_addToWallabag)
+                }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(launchBrowserIntent);
+                        break;
+                    case 1:
+                        new AddLinkTask(url, ReadArticleActivity.this).execute();
+                        break;
+                }
+            }
+        });
+        builder.show();
 
         return true;
     }

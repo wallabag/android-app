@@ -10,11 +10,10 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import fr.gaulupeau.apps.Poche.App;
+
 public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
-    private final String endpoint;
-    private final String username;
-    private final String password;
     private final String url;
     private String errorMessage;
     private Activity activity;
@@ -22,12 +21,12 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     private ProgressDialog progressDialog;
     private boolean finishActivity;
 
-    public AddLinkTask(String endpoint, String username, String password, String url,
-                       Activity activity, ProgressBar progressBar, ProgressDialog progressDialog,
-                       boolean finishActivity) {
-        this.endpoint = endpoint;
-        this.username = username;
-        this.password = password;
+    public AddLinkTask(String url, Activity activity) {
+        this(url, activity, null, null, false);
+    }
+
+    public AddLinkTask(String url, Activity activity, ProgressBar progressBar,
+                       ProgressDialog progressDialog, boolean finishActivity) {
         this.url = url;
         this.activity = activity;
         this.progressBar = progressBar;
@@ -42,7 +41,11 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        WallabagService service = new WallabagService(endpoint, username, password);
+        Settings settings = App.getInstance().getSettings();
+        WallabagService service = new WallabagService(
+                settings.getUrl(),
+                settings.getKey(Settings.USERNAME),
+                settings.getKey(Settings.PASSWORD));
         try {
             if(service.addLink(url)) return true;
 
