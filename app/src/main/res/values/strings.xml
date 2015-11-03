@@ -52,6 +52,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="accept_all_certs_desc">May require restart; insecure; consider importing self-signed certificates into system.</string>
     <string name="high_contrast_text">High contrast text</string>
     <string name="list_limit_number_text">Articles list limit</string>
+    <string name="loading_article_text">Loading...</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

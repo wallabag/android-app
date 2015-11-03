@@ -33,12 +33,21 @@
                 android:layout_marginTop="5sp"
                 android:background="#000000" />
 
+            <TextView
+                android:id="@+id/tv_loading_article"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/loading_article_text" />
+
             <Button
                 android:id="@+id/btnMarkRead"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="@string/btnMarkRead" />
+                android:text="@string/btnMarkRead"
+                android:visibility="gone" />
 
         </LinearLayout>
 

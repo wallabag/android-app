@@ -16,6 +16,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import java.net.URL;
 
@@ -35,6 +36,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private ScrollView scrollView;
 	private WebView webViewContent;
+    private Button btnMarkRead;
+    private TextView loadingPlaceholder;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
@@ -111,7 +114,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                             if(webViewContent.getHeight() == 0) {
                                 webViewContent.postDelayed(this, 10);
                             } else {
-                                restoreReadingPosition();
+                                loadingFinished();
                             }
                         }
                     }, 10);
@@ -121,7 +124,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             });
         }
 
-		Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+        loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
+
+		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -130,6 +135,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 			}
 		});
 	}
+
+    private void loadingFinished() {
+        loadingPlaceholder.setVisibility(View.GONE);
+        btnMarkRead.setVisibility(View.VISIBLE);
+
+        restoreReadingPosition();
+    }
 
     private void markAsReadAndClose() {
         new ToggleArchiveTask(this, mArticle.getArticleId(), mArticleDao, mArticle).execute();
