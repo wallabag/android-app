@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -32,6 +34,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	TextView textViewVersion;
 	EditText username;
 	EditText password;
+	ProgressDialog progressDialog;
 
     private Settings settings;
 	private WallabagSettings wallabagSettings;
@@ -88,14 +91,27 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIUsername.addTextChangedListener(textWatcher);
 		editAPIToken.addTextChangedListener(textWatcher);
 
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setCanceledOnTouchOutside(true);
+		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				cancelTasks();
+			}
+		});
+
 		btnTestConnection = (Button) findViewById(R.id.btnTestConnection);
 		btnTestConnection.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				cancelTask(testConnectionTask);
 
+				progressDialog.setMessage("Testing connection");
+				progressDialog.show();
+
 				testConnectionTask = new TestConnectionTask(
 						SettingsActivity.this, editPocheUrl.getText().toString(),
-						username.getText().toString(), password.getText().toString());
+						username.getText().toString(), password.getText().toString(),
+						progressDialog);
 
 				testConnectionTask.execute();
 			}
@@ -106,10 +122,13 @@ public class SettingsActivity extends BaseActionBarActivity {
 			public void onClick(View v) {
 				cancelTask(getCredentialsTask);
 
+				progressDialog.setMessage("Getting credentials");
+				progressDialog.show();
+
 				getCredentialsTask = new GetCredentialsTask(
 						SettingsActivity.this, editPocheUrl.getText().toString(),
 						username.getText().toString(), password.getText().toString(),
-						editAPIUsername, editAPIToken);
+						editAPIUsername, editAPIToken, progressDialog);
 
 				getCredentialsTask.execute();
 			}
@@ -148,6 +167,10 @@ public class SettingsActivity extends BaseActionBarActivity {
 	protected void onStop() {
 		super.onStop();
 
+		cancelTasks();
+	}
+
+	private void cancelTasks() {
 		cancelTask(testConnectionTask);
 		cancelTask(getCredentialsTask);
 	}

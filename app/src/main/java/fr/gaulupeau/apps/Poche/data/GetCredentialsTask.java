@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.EditText;
@@ -15,16 +16,18 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     private final String password;
     private EditText userId;
     private EditText token;
+    private ProgressDialog progressDialog;
     private WallabagService.FeedsCredentials credentials;
 
     public GetCredentialsTask(Context context, String endpoint, String username, String password,
-                              EditText userId, EditText token) {
+                              EditText userId, EditText token, ProgressDialog progressDialog) {
         this.context = context;
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
         this.userId = userId;
         this.token = token;
+        this.progressDialog = progressDialog;
     }
 
     @Override
@@ -42,6 +45,8 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean success) {
+        if(progressDialog != null) progressDialog.dismiss();
+
         if (success) {
             userId.setText(credentials.userID);
             token.setText(credentials.token);

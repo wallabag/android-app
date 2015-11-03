@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
@@ -12,13 +13,16 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
     private final String endpoint;
     private final String username;
     private final String password;
+    private ProgressDialog progressDialog;
     private String errorMessage;
 
-    public TestConnectionTask(Context context, String endpoint, String username, String password) {
+    public TestConnectionTask(Context context, String endpoint, String username, String password,
+                              ProgressDialog progressDialog) {
         this.context = context;
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.progressDialog = progressDialog;
     }
 
     @Override
@@ -39,6 +43,8 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(Boolean success) {
+        if(progressDialog != null) progressDialog.dismiss();
+
         if (success) {
             if(context != null)
                 new AlertDialog.Builder(context)
