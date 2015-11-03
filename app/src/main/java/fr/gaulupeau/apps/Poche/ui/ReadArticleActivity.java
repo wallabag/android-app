@@ -46,6 +46,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String originalUrlText;
     private Double positionToRestore;
 
+    private boolean loadingFinished;
+
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
@@ -137,6 +139,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 	}
 
     private void loadingFinished() {
+        loadingFinished = true;
+
         loadingPlaceholder.setVisibility(View.GONE);
         btnMarkRead.setVisibility(View.VISIBLE);
 
@@ -208,7 +212,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onStop() {
-        if(mArticle != null) {
+        if(loadingFinished && mArticle != null) {
             mArticle.setArticleProgress(getReadingPosition());
             mArticleDao.update(mArticle);
         }
