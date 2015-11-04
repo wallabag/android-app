@@ -21,6 +21,7 @@ public class ToggleFavoriteTask extends GenericArticleTask {
         super.onPreExecute();
 
         article.setFavorite(!article.getFavorite());
+        articleDao.update(article);
     }
 
     @Override

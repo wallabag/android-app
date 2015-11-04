@@ -21,6 +21,7 @@ public class ToggleArchiveTask extends GenericArticleTask {
         super.onPreExecute();
 
         article.setArchive(!article.getArchive());
+        articleDao.update(article);
     }
 
     @Override
