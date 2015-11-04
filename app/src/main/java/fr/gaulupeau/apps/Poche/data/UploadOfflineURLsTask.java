@@ -32,7 +32,7 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
     }
 
     @Override
-    protected Boolean doInBackground(Void... params) { // TODO: report progress
+    protected Boolean doInBackground(Void... params) {
         Settings settings = App.getInstance().getSettings();
         WallabagService service = new WallabagService(
                 settings.getUrl(),

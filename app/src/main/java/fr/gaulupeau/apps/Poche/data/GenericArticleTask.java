@@ -22,6 +22,7 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> 
     protected Article article;
     protected WallabagService service;
     protected String errorMessage;
+    protected boolean isOffline;
 
     public GenericArticleTask(Context context, int articleId, DaoSession daoSession) {
         this.context = context;
@@ -71,11 +72,15 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> 
     }
 
     protected void prepareBG() {
-        Settings settings = App.getInstance().getSettings();
-        service = new WallabagService(
-                settings.getUrl(),
-                settings.getKey(Settings.USERNAME),
-                settings.getKey(Settings.PASSWORD));
+        if(WallabagConnection.isNetworkOnline()) {
+            Settings settings = App.getInstance().getSettings();
+            service = new WallabagService(
+                    settings.getUrl(),
+                    settings.getKey(Settings.USERNAME),
+                    settings.getKey(Settings.PASSWORD));
+        } else {
+            isOffline = true;
+        }
     }
 
 }

@@ -2,11 +2,8 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -32,6 +29,7 @@ import fr.gaulupeau.apps.Poche.data.FeedUpdaterInterface;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.UploadOfflineURLsTask;
+import fr.gaulupeau.apps.Poche.data.WallabagConnection;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
@@ -200,7 +198,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
                 Toast.makeText(ListArticlesActivity.this,
                         getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
-        } else if (isConnected()) {
+        } else if (WallabagConnection.isNetworkOnline()) {
             if (!refreshLayout.isRefreshing()) {
                 refreshLayout.setRefreshing(true);
             }
@@ -221,13 +219,6 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
                         getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             }
         }
-    }
-
-    private boolean isConnected() {
-        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-
-        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     @Override

@@ -1,5 +1,8 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
@@ -28,6 +31,14 @@ import fr.gaulupeau.apps.Poche.App;
  * @since 10/20/15
  */
 public class WallabagConnection {
+
+    public static boolean isNetworkOnline() {
+        ConnectivityManager cm = (ConnectivityManager) App.getInstance()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
 
     public static OkHttpClient getClient() {
         if (Holder.client != null)

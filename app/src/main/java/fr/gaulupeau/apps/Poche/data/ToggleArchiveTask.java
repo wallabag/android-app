@@ -25,6 +25,8 @@ public class ToggleArchiveTask extends GenericArticleTask {
 
     @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+        if(isOffline) return false;
+
         if(service.toggleArchive(articleId)) return true;
 
         errorMessage = "Couldn't sync to server";
@@ -38,15 +40,22 @@ public class ToggleArchiveTask extends GenericArticleTask {
         article.setSync(success); // ?
         articleDao.update(article);
 
-        if (success) {
+        if(success || isOffline) {
             if(context != null) {
                 Toast.makeText(context, article.getArchive()
                                 ? R.string.moved_to_archive_message
                                 : R.string.marked_as_unread_message,
                         Toast.LENGTH_SHORT).show();
+
+                if(isOffline) {
+                    Toast.makeText(context, "Couldn't sync to server: no internet connection",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            if(context != null) ConnectionFailAlert.getDialog(context, errorMessage).show();
+            if(context != null) {
+                ConnectionFailAlert.getDialog(context, errorMessage).show();
+            }
         }
     }
 

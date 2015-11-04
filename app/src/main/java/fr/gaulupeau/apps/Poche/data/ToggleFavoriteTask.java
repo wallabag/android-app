@@ -25,6 +25,8 @@ public class ToggleFavoriteTask extends GenericArticleTask {
 
     @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+        if(isOffline) return false;
+
         if(service.toggleFavorite(articleId)) return true;
 
         errorMessage = "Couldn't sync to server";
@@ -35,18 +37,25 @@ public class ToggleFavoriteTask extends GenericArticleTask {
     protected void onPostExecute(Boolean success) {
         super.onPostExecute(success);
 
-        article.setSync(success); //?
+        article.setSync(success); // ?
         articleDao.update(article);
 
-        if (success) {
+        if(success || isOffline) {
             if(context != null) {
                 Toast.makeText(context, article.getFavorite()
                                 ? R.string.added_to_favorites_message
                                 : R.string.removed_from_favorites_message,
                         Toast.LENGTH_SHORT).show();
+
+                if(isOffline) {
+                    Toast.makeText(context, "Couldn't sync to server: no internet connection",
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
-            if(context != null) ConnectionFailAlert.getDialog(context, errorMessage).show();
+            if(context != null) {
+                ConnectionFailAlert.getDialog(context, errorMessage).show();
+            }
         }
     }
 

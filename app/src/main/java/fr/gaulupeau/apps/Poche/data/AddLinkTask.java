@@ -23,6 +23,7 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     private ProgressDialog progressDialog;
     private boolean finishActivity;
 
+    private boolean isOffline;
     private boolean savedOffline;
 
     public AddLinkTask(String url, Activity activity) {
@@ -45,23 +46,30 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        Settings settings = App.getInstance().getSettings();
-        WallabagService service = new WallabagService(
-                settings.getUrl(),
-                settings.getKey(Settings.USERNAME),
-                settings.getKey(Settings.PASSWORD));
-
         boolean result = false;
-        try {
-            if(service.addLink(url)) result = true;
 
-            errorMessage = "Couldn't add link";
-        } catch (IOException e) {
-            errorMessage = e.getMessage();
-            e.printStackTrace();
+        if(WallabagConnection.isNetworkOnline()) {
+            Settings settings = App.getInstance().getSettings();
+            WallabagService service = new WallabagService(
+                    settings.getUrl(),
+                    settings.getKey(Settings.USERNAME),
+                    settings.getKey(Settings.PASSWORD));
+
+            try {
+                if(service.addLink(url)) {
+                    result = true;
+                } else {
+                    errorMessage = "Couldn't add link";
+                }
+            } catch (IOException e) {
+                errorMessage = e.getMessage();
+                e.printStackTrace();
+            }
+
+            if(result) return true;
+        } else {
+            isOffline = true;
         }
-
-        if(result) return true;
 
         OfflineURLDao urlDao = DbConnection.getSession().getOfflineURLDao();
         OfflineURL offlineURL = new OfflineURL();
@@ -79,13 +87,23 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
             if(activity != null) Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
         } else {
             if(activity != null) {
-                new AlertDialog.Builder(activity)
-                        .setTitle("Fail")
-                        .setMessage(errorMessage)
-                        .setPositiveButton("OK", null)
-                        .show();
+                if(!isOffline) {
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Failed to save online")
+                            .setMessage(errorMessage)
+                            .setPositiveButton("OK", null)
+                            .show();
+                } else if(!savedOffline) {
+                    new AlertDialog.Builder(activity)
+                            .setTitle("Failed to save URL")
+                            .setMessage(errorMessage)
+                            .setPositiveButton("OK", null)
+                            .show();
+                }
 
-                if(savedOffline) Toast.makeText(activity, "Saved offline", Toast.LENGTH_SHORT).show();
+                if(savedOffline) {
+                    Toast.makeText(activity, "Saved offline", Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
