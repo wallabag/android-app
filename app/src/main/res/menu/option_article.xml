@@ -16,4 +16,7 @@
         android:title="@string/menuShare"
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuOpenOriginal"
+        android:title="@string/menuOpenOriginal" />
 </menu>

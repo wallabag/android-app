@@ -208,6 +208,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private boolean openOriginal() {
+        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(originalUrlText));
+        startActivity(launchBrowserIntent);
+
+        return true;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -245,6 +252,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuShare:
                 return shareArticle();
+            case R.id.menuOpenOriginal:
+                return openOriginal();
             default:
                 return super.onOptionsItemSelected(item);
         }
