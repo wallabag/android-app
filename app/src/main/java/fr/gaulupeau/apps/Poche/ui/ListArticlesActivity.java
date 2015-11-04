@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import fr.gaulupeau.apps.Poche.data.FeedUpdater;
 import fr.gaulupeau.apps.Poche.data.FeedUpdaterInterface;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.UploadOfflineURLsTask;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
@@ -163,6 +165,9 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
             case R.id.menuOpenRandomArticle:
                 openRandomArticle();
                 return true;
+            case R.id.menuUploadOfflineURLs:
+                uploadOfflineURLs();
+                return true;
 			case R.id.menuWipeDb: {
                 AlertDialog.Builder b = new AlertDialog.Builder(ListArticlesActivity.this);
                 b.setTitle(R.string.wipe_db_dialog_title);
@@ -282,6 +287,26 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         } else {
             Toast.makeText(ListArticlesActivity.this, R.string.no_articles, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void uploadOfflineURLs() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Uploading offline URLs");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(true);
+
+        final UploadOfflineURLsTask uploadOfflineURLsTask
+                = new UploadOfflineURLsTask(this, progressDialog);
+
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                uploadOfflineURLsTask.cancel(false);
+            }
+        });
+
+        progressDialog.show();
+        uploadOfflineURLsTask.execute();
     }
 
     private void openArticle(long id) {

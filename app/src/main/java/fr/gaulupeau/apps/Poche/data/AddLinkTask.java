@@ -11,6 +11,8 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.entity.OfflineURL;
+import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
 
 public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -20,6 +22,8 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
     private boolean finishActivity;
+
+    private boolean savedOffline;
 
     public AddLinkTask(String url, Activity activity) {
         this(url, activity, null, null, false);
@@ -46,16 +50,27 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
                 settings.getUrl(),
                 settings.getKey(Settings.USERNAME),
                 settings.getKey(Settings.PASSWORD));
+
+        boolean result = false;
         try {
-            if(service.addLink(url)) return true;
+            if(service.addLink(url)) result = true;
 
             errorMessage = "Couldn't add link";
-            return true;
         } catch (IOException e) {
             errorMessage = e.getMessage();
             e.printStackTrace();
-            return false;
         }
+
+        if(result) return true;
+
+        OfflineURLDao urlDao = DbConnection.getSession().getOfflineURLDao();
+        OfflineURL offlineURL = new OfflineURL();
+        offlineURL.setUrl(url);
+        urlDao.insert(offlineURL);
+
+        savedOffline = true;
+
+        return false;
     }
 
     @Override
@@ -63,12 +78,15 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
         if (success) {
             if(activity != null) Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
         } else {
-            if(activity != null)
+            if(activity != null) {
                 new AlertDialog.Builder(activity)
                         .setTitle("Fail")
                         .setMessage(errorMessage)
                         .setPositiveButton("OK", null)
                         .show();
+
+                if(savedOffline) Toast.makeText(activity, "Saved offline", Toast.LENGTH_SHORT).show();
+            }
         }
 
         if(progressBar != null) progressBar.setVisibility(View.GONE);

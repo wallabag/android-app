@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class GenerateDao {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(1, "fr.gaulupeau.apps.Poche.entity");
+        Schema schema = new Schema(2, "fr.gaulupeau.apps.Poche.entity");
 
         Entity article = schema.addEntity("Article");
         article.addIdProperty();
@@ -20,6 +20,10 @@ public class GenerateDao {
         article.addBooleanProperty("sync").columnName("sync");
         article.addDateProperty("updateDate").columnName("update_date");
         article.addDoubleProperty("articleProgress").columnName("article_progress");
+
+        Entity offlineURL = schema.addEntity("OfflineURL");
+        offlineURL.addIdProperty();
+        offlineURL.addStringProperty("url").columnName("url").unique();
 
         new DaoGenerator().generateAll(schema, "../app/src-gen");
     }
