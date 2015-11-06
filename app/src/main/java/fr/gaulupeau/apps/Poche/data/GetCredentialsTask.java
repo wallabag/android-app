@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import fr.gaulupeau.apps.InThePoche.R;
+
 public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
@@ -52,10 +54,10 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
             token.setText(credentials.token);
 
             if(context != null)
-                Toast.makeText(context, "Credentials filled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.getCredentials_success, Toast.LENGTH_SHORT).show();
         } else {
             if(context != null)
-                Toast.makeText(context, "Couldn't get credentials", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, R.string.getCredentials_fail, Toast.LENGTH_SHORT).show();
         }
     }
 

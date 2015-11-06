@@ -10,6 +10,7 @@ import android.util.Patterns;
 
 import java.util.regex.Matcher;
 
+import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.AddLinkTask;
 
 public class BagItProxyActivity extends AppCompatActivity {
@@ -33,9 +34,9 @@ public class BagItProxyActivity extends AppCompatActivity {
             pageUrl = matcher.group();
         } else {
             new AlertDialog.Builder(this)
-                    .setTitle("Fail")
-                    .setMessage("Couldn't find a URL in share string:\n" + extraText)
-                    .setPositiveButton("OK", null)
+                    .setTitle(R.string.d_bag_fail_title)
+                    .setMessage(getString(R.string.d_bag_fail_text) + extraText)
+                    .setPositiveButton(R.string.ok, null)
                     .create();
             return;
         }
@@ -43,7 +44,7 @@ public class BagItProxyActivity extends AppCompatActivity {
         Log.d(TAG, "Baging " + pageUrl);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Baging page");
+        progressDialog.setMessage(getString(R.string.d_addingToWallabag_text));
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
 

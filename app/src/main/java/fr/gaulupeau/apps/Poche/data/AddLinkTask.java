@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
@@ -58,8 +59,8 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
             try {
                 if(service.addLink(url)) {
                     result = true;
-                } else {
-                    errorMessage = "Couldn't add link";
+                } else if(activity != null) {
+                    errorMessage = activity.getString(R.string.addLink_errorMessage);
                 }
             } catch (IOException e) {
                 errorMessage = e.getMessage();
@@ -84,25 +85,27 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if (success) {
-            if(activity != null) Toast.makeText(activity, "Added", Toast.LENGTH_SHORT).show();
+            if(activity != null) {
+                Toast.makeText(activity, R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
+            }
         } else {
             if(activity != null) {
                 if(!isOffline) {
                     new AlertDialog.Builder(activity)
-                            .setTitle("Failed to save online")
+                            .setTitle(R.string.d_addLink_failedOnline_title)
                             .setMessage(errorMessage)
-                            .setPositiveButton("OK", null)
+                            .setPositiveButton(R.string.ok, null)
                             .show();
                 } else if(!savedOffline) {
                     new AlertDialog.Builder(activity)
-                            .setTitle("Failed to save URL")
+                            .setTitle(R.string.d_addLink_failed_title)
                             .setMessage(errorMessage)
-                            .setPositiveButton("OK", null)
+                            .setPositiveButton(R.string.ok, null)
                             .show();
                 }
 
                 if(savedOffline) {
-                    Toast.makeText(activity, "Saved offline", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.addLink_savedOffline, Toast.LENGTH_SHORT).show();
                 }
             }
         }

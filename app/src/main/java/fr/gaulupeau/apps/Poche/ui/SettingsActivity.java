@@ -105,7 +105,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 			public void onClick(View v) {
 				cancelTask(testConnectionTask);
 
-				progressDialog.setMessage("Testing connection");
+				progressDialog.setMessage(getString(R.string.settings_testingConnection));
 				progressDialog.show();
 
 				testConnectionTask = new TestConnectionTask(
@@ -122,7 +122,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 			public void onClick(View v) {
 				cancelTask(getCredentialsTask);
 
-				progressDialog.setMessage("Getting credentials");
+				progressDialog.setMessage(getString(R.string.settings_gettingCredentials));
 				progressDialog.show();
 
 				getCredentialsTask = new GetCredentialsTask(

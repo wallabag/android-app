@@ -7,6 +7,8 @@ import android.support.v7.app.AlertDialog;
 
 import java.io.IOException;
 
+import fr.gaulupeau.apps.InThePoche.R;
+
 public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
 
     private Context context;
@@ -32,7 +34,9 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
             String page = service.getPage(endpoint + "/?view=about");
             if(page != null) return true;
 
-            errorMessage = "Couldn't access wallabag";
+            if(context != null) {
+                errorMessage = context.getString(R.string.testConnection_errorMessage);
+            }
             return true;
         } catch (IOException e) {
             errorMessage = e.getMessage();
@@ -48,16 +52,16 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
         if (success) {
             if(context != null)
                 new AlertDialog.Builder(context)
-                        .setTitle("Success")
-                        .setMessage("Connection test was successful")
-                        .setPositiveButton("OK", null)
+                        .setTitle(R.string.d_testConnection_success_title)
+                        .setMessage(R.string.d_connectionTest_success_text)
+                        .setPositiveButton(R.string.ok, null)
                         .show();
         } else {
             if(context != null)
                 new AlertDialog.Builder(context)
-                        .setTitle("Fail")
+                        .setTitle(R.string.d_testConnection_fail_title)
                         .setMessage(errorMessage)
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton(R.string.ok, null)
                         .show();
         }
     }

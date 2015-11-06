@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
@@ -61,7 +62,9 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
             for(OfflineURL url: urls) {
                 if(isCancelled()) break;
                 if(!service.addLink(url.getUrl())) {
-                    errorMessage = "Couldn't upload URL";
+                    if(activity != null) {
+                        errorMessage = activity.getString(R.string.couldntUploadURL_errorMessage);
+                    }
                     break;
                 }
 
@@ -106,21 +109,22 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
         if (success) {
             if(activity != null) {
                 if(totalCount == 0) {
-                    Toast.makeText(activity, "Nothing to upload", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.uploadURLs_nothingToUpload, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(activity, "Uploading finished", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, R.string.uploadURLs_finished, Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
             if(activity != null) {
                 new AlertDialog.Builder(activity)
-                        .setTitle("Fail")
+                        .setTitle(R.string.d_uploadURLs_title)
                         .setMessage(errorMessage)
-                        .setPositiveButton("OK", null)
+                        .setPositiveButton(R.string.ok, null)
                         .show();
 
-                Toast.makeText(activity,
-                        "Uploaded " + totalUploaded + " out of " + totalCount + " URLs",
+                Toast.makeText(activity, String.format(
+                                activity.getString(R.string.uploadURLs_result_text),
+                                totalUploaded, totalCount),
                         Toast.LENGTH_SHORT).show();
             }
         }

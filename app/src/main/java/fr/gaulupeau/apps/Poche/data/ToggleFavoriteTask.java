@@ -30,7 +30,7 @@ public class ToggleFavoriteTask extends GenericArticleTask {
 
         if(service.toggleFavorite(articleId)) return true;
 
-        errorMessage = "Couldn't sync to server";
+        if(context != null) errorMessage = context.getString(R.string.toggleFavorite_errorMessage);
         return false;
     }
 
@@ -49,7 +49,7 @@ public class ToggleFavoriteTask extends GenericArticleTask {
                         Toast.LENGTH_SHORT).show();
 
                 if(isOffline) {
-                    Toast.makeText(context, "Couldn't sync to server: no internet connection",
+                    Toast.makeText(context, R.string.toggleFavorite_noInternetConnection,
                             Toast.LENGTH_SHORT).show();
                 }
             }

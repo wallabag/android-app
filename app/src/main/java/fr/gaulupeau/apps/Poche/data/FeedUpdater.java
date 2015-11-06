@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Locale;
 
 import de.greenrobot.dao.query.WhereCondition;
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 
@@ -44,7 +46,7 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
     private FeedType feedType;
     private UpdateType updateType;
 
-    private String errorMessage; // TODO: l10n
+    private String errorMessage;
 
     public FeedUpdater(String baseURL, String apiUserId, String apiToken,
                        FeedUpdaterInterface callback) {
@@ -157,7 +159,7 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                 is = getInputStream(getFeedUrl(feedType));
             } catch (IOException e) {
                 Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
-                errorMessage = "IO Exception on connect";
+                errorMessage = App.getInstance().getString(R.string.feedUpdater_IOException);
                 return false;
             } catch (RuntimeException e) {
                 Log.e("FeedUpdater.updateByF", "RuntimeException on " + feedType, e);
@@ -169,11 +171,12 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                 processFeed(articleDao, is, feedType, updateType, id);
             } catch (IOException e) {
                 Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
-                errorMessage = "IO exception on processing feed";
+                errorMessage = App.getInstance()
+                        .getString(R.string.feedUpdater_IOExceptionOnProcessingFeed);
                 return false;
             } catch (XmlPullParserException e) {
                 Log.e("FeedUpdater.updateByF", "XmlPullParserException on " + feedType, e);
-                errorMessage = "Feed processing error";
+                errorMessage = App.getInstance().getString(R.string.feedUpdater_feedProcessingError);
                 return false;
             }
 
@@ -203,8 +206,10 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
             return response.body().byteStream();
         } else {
             // TODO: fix
-            throw new RuntimeException("Request was unsuccessful. Response: " + response.code()
-                    + " " + response.message());
+            throw new RuntimeException(String.format(
+                    App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
+                    response.code(), response.message()
+            ));
         }
     }
 

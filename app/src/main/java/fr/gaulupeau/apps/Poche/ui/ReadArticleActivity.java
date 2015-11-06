@@ -93,7 +93,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
-				"\t\t\t\t\t\t\t<p>Open Original: <a href=\"" + originalUrlText + "\">" + originalUrlDesc + "</a></p>\n" +
+				"\t\t\t\t\t\t\t<p>" + getString(R.string.open_original) + "<a href=\"" + originalUrlText + "\">" + originalUrlDesc + "</a></p>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 

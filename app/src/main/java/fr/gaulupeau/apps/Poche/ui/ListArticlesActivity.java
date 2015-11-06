@@ -42,7 +42,6 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     private Settings settings;
 
     private SwipeRefreshLayout refreshLayout;
-    private RecyclerView readList;
     private boolean showArchived = false;
     private boolean prioritizeFavorites = false;
 
@@ -59,7 +58,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
         settings = new Settings(this);
 
-        readList = (RecyclerView) findViewById(R.id.article_list);
+        RecyclerView readList = (RecyclerView) findViewById(R.id.article_list);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         readList.setLayoutManager(layoutManager);
@@ -94,9 +93,9 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
             WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
             if (!wallabagSettings.isValid()) {
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(ListArticlesActivity.this);
-                messageBox.setTitle("Welcome to wallabag");
-                messageBox.setMessage("Please configure this app with your hosted wallabag to get started.");
-                messageBox.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+                messageBox.setTitle(R.string.firstRun_d_welcome);
+                messageBox.setMessage(R.string.firstRun_d_configure);
+                messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(new Intent(getBaseContext(), SettingsActivity.class));
@@ -232,9 +231,9 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
     public void feedUpdaterFinishedWithError(String errorMessage) {
         refreshLayout.setRefreshing(false);
         new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.error_feed) + ": " + errorMessage)
-                .setTitle(getString(R.string.error))
-                .setPositiveButton("OK", null)
+                .setMessage(getString(R.string.error_feed) + errorMessage)
+                .setTitle(R.string.error)
+                .setPositiveButton(R.string.ok, null)
                 .setCancelable(false)
                 .create().show();
     }
@@ -282,7 +281,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
 
     private void uploadOfflineURLs() {
         ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Uploading offline URLs");
+        progressDialog.setMessage(getString(R.string.d_uploadingOfflineURLs));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.setCancelable(true);
 
@@ -306,6 +305,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         startActivity(intent);
     }
 
+    // TODO: rewrite or get rid of it
     private void checkAndHandleAfterUpdate() {
         if (settings.hasUpdateChecker() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
             new AlertDialog.Builder(this)

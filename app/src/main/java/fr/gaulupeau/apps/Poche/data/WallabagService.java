@@ -17,6 +17,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
@@ -194,7 +197,8 @@ public class WallabagService {
         Response loginResponse = exec(getLoginRequest());
         if(checkResponse) checkResponse(response);
         if(isLoginPage(loginResponse.body().string())) {
-            throw new IOException("Couldn't login: probably wrong username or password");
+            throw new IOException(App.getInstance()
+                    .getString(R.string.wrongUsernameOrPassword_errorMessage));
         }
 
         Log.d(TAG, "executeRequest() re-login response is OK; re-executing request");
@@ -218,8 +222,10 @@ public class WallabagService {
             Log.w(TAG, "checkResponse() response is not OK; response code: " + response.code()
                     + ", response message: " + response.message());
             if(throwException)
-                throw new IOException("Request unsuccessful; response code: " + response.code()
-                        + ", response message: " + response.message());
+                throw new IOException(String.format(
+                        App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
+                        response.code(), response.message()
+                ));
 
             return false;
         }

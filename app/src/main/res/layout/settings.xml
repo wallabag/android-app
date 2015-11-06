@@ -33,7 +33,7 @@
         </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/txtTitre"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/url_help" />
@@ -43,14 +43,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Optional credentials" />
+            android:text="@string/settings_optionalCredentials" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1sp"
             android:layout_weight="1"
-            android:text="Used mostly to be able to sync back to server" />
+            android:text="@string/settings_optionalCredentialsDesc" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Username"
+                android:hint="@string/settings_username"
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:hint="Password"
+                android:hint="@string/settings_password"
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="Test connection" />
+            android:text="@string/settings_b_testConnection_text" />
 
         <Button
             android:id="@+id/btnGetFeedsCredentials"
@@ -94,21 +94,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:text="Get feeds credentials" />
+            android:text="@string/settings_b_getFeedCredentials_text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Feeds credentials (required)" />
+            android:text="@string/settings_feedsCredentials" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1sp"
             android:layout_weight="1"
-            android:text="Used to get articles from server" />
+            android:text="@string/settings_feedsCredentialsDesc" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
