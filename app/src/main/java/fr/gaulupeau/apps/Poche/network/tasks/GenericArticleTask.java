@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +7,10 @@ import android.util.Log;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;

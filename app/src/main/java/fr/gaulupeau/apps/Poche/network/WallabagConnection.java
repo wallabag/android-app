@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -25,6 +25,7 @@ import javax.net.ssl.X509TrustManager;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.Settings;
 
 /**
  * @author Victor Häggqvist

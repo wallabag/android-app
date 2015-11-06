@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
@@ -27,8 +27,8 @@ import fr.gaulupeau.apps.Poche.App;
 public class WallabagService {
 
     public static class FeedsCredentials {
-        String userID;
-        String token;
+        public String userID;
+        public String token;
     }
 
     private static String TAG = WallabagService.class.getSimpleName();

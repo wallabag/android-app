@@ -16,9 +16,9 @@ import android.widget.TextView;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.GetCredentialsTask;
+import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 
 public class SettingsActivity extends BaseActionBarActivity {

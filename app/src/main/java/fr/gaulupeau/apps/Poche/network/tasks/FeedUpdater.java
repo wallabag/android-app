@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -22,6 +22,8 @@ import java.util.Locale;
 import de.greenrobot.dao.query.WhereCondition;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 

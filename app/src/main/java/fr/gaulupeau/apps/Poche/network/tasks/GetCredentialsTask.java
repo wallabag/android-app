@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
 
 public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 

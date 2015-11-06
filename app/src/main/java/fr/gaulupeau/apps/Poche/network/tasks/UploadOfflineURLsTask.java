@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,6 +12,9 @@ import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
 

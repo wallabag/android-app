@@ -25,12 +25,12 @@ import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.AddLinkTask;
+import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.DeleteArticleTask;
+import fr.gaulupeau.apps.Poche.network.tasks.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.ToggleArchiveTask;
-import fr.gaulupeau.apps.Poche.data.ToggleFavoriteTask;
+import fr.gaulupeau.apps.Poche.network.tasks.ToggleArchiveTask;
+import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;

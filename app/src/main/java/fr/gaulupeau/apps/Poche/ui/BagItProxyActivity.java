@@ -11,7 +11,7 @@ import android.util.Patterns;
 import java.util.regex.Matcher;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.data.AddLinkTask;
+import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 
 public class BagItProxyActivity extends AppCompatActivity {
 

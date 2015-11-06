@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, Boolean> {
 
