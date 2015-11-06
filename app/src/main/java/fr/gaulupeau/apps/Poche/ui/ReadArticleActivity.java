@@ -27,6 +27,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.AddLinkTask;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.ToggleArchiveTask;
 import fr.gaulupeau.apps.Poche.data.ToggleFavoriteTask;
@@ -208,6 +209,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private boolean deleteArticle() {
+        AlertDialog.Builder b = new AlertDialog.Builder(this);
+        b.setTitle(R.string.d_deleteArticle_title);
+        b.setMessage(R.string.d_deleteArticle_message);
+        b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                new DeleteArticleTask(ReadArticleActivity.this,
+                        mArticle.getArticleId(), mArticleDao, mArticle).execute();
+
+                finish();
+            }
+        });
+        b.setNegativeButton(R.string.negative_answer, null);
+        b.create().show();
+
+        return true;
+    }
+
     private boolean openOriginal() {
         Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(originalUrlText));
         startActivity(launchBrowserIntent);
@@ -252,6 +272,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuShare:
                 return shareArticle();
+            case R.id.menuDelete:
+                return deleteArticle();
             case R.id.menuOpenOriginal:
                 return openOriginal();
             default:

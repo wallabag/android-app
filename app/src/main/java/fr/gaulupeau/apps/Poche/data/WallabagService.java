@@ -128,6 +128,20 @@ public class WallabagService {
         return executeRequest(request);
     }
 
+    public boolean deleteArticle(int articleId) throws IOException {
+        HttpUrl url = HttpUrl.parse(endpoint)
+                .newBuilder()
+                .setQueryParameter("action", "delete")
+                .setQueryParameter("id", Integer.toString(articleId))
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        return executeRequest(request);
+    }
+
     private Request getLoginRequest() {
         String url = endpoint + "/?login";
 

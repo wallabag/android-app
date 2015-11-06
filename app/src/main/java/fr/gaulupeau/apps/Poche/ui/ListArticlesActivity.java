@@ -169,7 +169,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
                 AlertDialog.Builder b = new AlertDialog.Builder(ListArticlesActivity.this);
                 b.setTitle(R.string.wipe_db_dialog_title);
                 b.setMessage(R.string.wipe_db_dialog_message);
-                b.setPositiveButton(R.string.position_answer, new DialogInterface.OnClickListener() {
+                b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mSession.getArticleDao().deleteAll();

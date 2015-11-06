@@ -24,6 +24,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="added_to_favorites_message">Added to Favorites</string>
     <string name="removed_from_favorites_message">Removed from Favorites</string>
     <string name="menuShare">Share</string>
+    <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
     <string name="menu_show_archived">Show Archived</string>
     <string name="menu_show_unread">Show Unread</string>
@@ -34,6 +35,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuWipeDb">Wipe Database</string>
     <string name="wipe_db_dialog_title">Wipe Database?</string>
     <string name="wipe_db_dialog_message">"Are you sure you want to wipe database"</string>
+    <string name="d_deleteArticle_title">Delete article?</string>
+    <string name="d_deleteArticle_message">Are you sure you want to delete the article?</string>
     <string name="txtSyncDone">Done synchronizing!</string>
     <string name="txtNetOffline">Please check Internet connectivity!</string>
     <string name="txtConfigNotSet">Please configure the app before syncing!</string>
@@ -47,7 +50,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="bag_it">Bag It</string>
     <string name="share_article_title">Share article</string>
     <string name="share_text_extra">" via @wallabagapp"</string>
-    <string name="position_answer">Yes</string>
+    <string name="positive_answer">Yes</string>
     <string name="negative_answer">No</string>
     <string name="no_articles">No articles</string>
     <string name="accept_all_certs_txt">Accept all SSL certificates</string>
@@ -95,6 +98,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="toggleArchive_noInternetConnection">Couldn\'t sync to server: no internet connection</string>
     <string name="toggleFavorite_errorMessage">Couldn\'t sync to server</string>
     <string name="toggleFavorite_noInternetConnection">Couldn\'t sync to server: no internet connection</string>
+    <string name="deleteArticle_errorMessage">Couldn\'t sync to server</string>
+    <string name="deleteArticle_noInternetConnection">Couldn\'t sync to server: no internet connection</string>
+    <string name="deleteArticle_deleted">Article deleted</string>
     <string name="couldntUploadURL_errorMessage">Couldn\'t upload URL</string>
     <string name="uploadURLs_nothingToUpload">Nothing to upload</string>
     <string name="uploadURLs_finished">Uploading finished</string>
