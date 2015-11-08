@@ -1,82 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="fr.gaulupeau.apps.Poche.Settings" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.SettingsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="30sp"
         android:paddingRight="30sp"
-        android:paddingTop="15dp"
-        android:orientation="vertical" >
+        android:paddingTop="15dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/pocheUrl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ems="10"
+                android:hint="@string/url_label"
+                android:inputType="textUri"
+                android:linksClickable="false"
+                android:maxLines="1"
+                android:scrollHorizontally="false" />
+
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
-            android:id="@+id/pageUrl_label"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/url_label"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/txtTitre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="@string/url_help" />
 
-        <EditText
-            android:id="@+id/pocheUrl"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:ems="10"
-            android:inputType="textUri"
-            android:linksClickable="false"
-            android:maxLines="1"
-            android:scrollHorizontally="false" >
-
-            <requestFocus />
-        </EditText>
+            android:layout_marginTop="10sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_optionalCredentials" />
 
         <TextView
-            android:id="@+id/txtAPIUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1sp"
+            android:layout_weight="1"
+            android:text="@string/settings_optionalCredentialsDesc" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/settings_username"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/settings_password"
+                android:inputType="textPassword" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnTestConnection"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="@string/settings_b_testConnection_text" />
+
+        <Button
+            android:id="@+id/btnGetFeedsCredentials"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:text="@string/settings_b_getFeedCredentials_text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_feedsCredentials" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1sp"
+            android:layout_weight="1"
+            android:text="@string/settings_feedsCredentialsDesc" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/APIUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txtAPIUsername"
+                android:inputType="textVisiblePassword" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/APIToken"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/txtAPIToken"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
+            android:id="@+id/accept_all_certs_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/accept_all_certs_txt" />
+
+        <TextView
+            android:id="@+id/accept_all_certs_txt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:text="@string/txtAPIUsername"
-            android:textSize="18sp" />
+            android:paddingBottom="5sp"
+            android:text="@string/accept_all_certs_desc" />
 
-        <EditText
-            android:id="@+id/APIUsername"
+        <CheckBox
+            android:id="@+id/high_contrast_cb"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="text" />
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/high_contrast_text" />
 
-        <TextView
-            android:id="@+id/txtAPIToken"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:text="@string/txtAPIToken"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/APIToken"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/list_limit_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/list_limit_number_text"
+                android:inputType="number"
+                android:linksClickable="false"
+                android:maxLines="1"
+                android:scrollHorizontally="false" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
-            android:ems="10"
-            android:inputType="text" />
+            android:text="@string/btnDone" />
+
 
         <TextView
             android:id="@+id/instructions"
@@ -88,31 +199,24 @@
             android:paddingTop="5sp"
             android:text="@string/instructions" />
 
-        <Button
-            android:id="@+id/btnDone"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="10dp"
-            android:text="@string/btnDone" />
 
         <TextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginTop="10dp"
+            android:layout_weight="1"
             android:textSize="12sp" />
-        
+
         <TextView
             android:id="@+id/author"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:text="@string/author"
             android:textSize="12sp" />
-                
+
     </LinearLayout>
 
 </ScrollView>

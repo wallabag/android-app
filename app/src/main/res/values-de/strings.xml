@@ -3,7 +3,6 @@
     <string name="hello">Wilkommen!</string>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
-    <string name="author">GAULUPEAU Jonathan - 2013</string>
     <string name="instructions">Um eine Website zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke dann auf <i>Bag it!</i>.\nDann wirst du zur Login-Seite deiner wallabag weitergeleitet. \nFertig!\nErfahre mehr über wallabag auf:\n http://www.wallabag.org</string>
     <string name="btnDone">Speichern</string>
     <string name="url_label"><b><u>Deine wallabag URL:</u></b></string>
@@ -13,7 +12,6 @@
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnSettings">Einstellungen</string>
     <string name="menuShare">Teilen</string>
-    <string name="menuShowAll">Alle anzeigen</string>
     <string name="menuWipeDb">Datenbank leeren</string>
     <string name="txtSyncDone">Synchronisieren erfolgreich!</string>
     <string name="txtNetOffline">Internetverbindung prüfen!</string>
@@ -22,7 +20,7 @@
     <string name="txtAPIToken"><b><u>Dein Token:</u></b></string>
     <string name="error">Fehler</string>
     <string name="error_feed">Fehler beim laden des Feeds</string>
-    <string name="menuShowUnread">Ungelesene anzeigen</string>
+    <string name="menu_show_unread">Ungelesene anzeigen</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>
