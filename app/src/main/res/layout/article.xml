@@ -31,7 +31,8 @@
                 android:layout_height="1dip"
                 android:layout_marginBottom="5sp"
                 android:layout_marginTop="5sp"
-                android:background="#000000" />
+                android:background="#000000"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_loading_article"
@@ -41,13 +42,34 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="@string/loading_article_text" />
 
-            <Button
-                android:id="@+id/btnMarkRead"
+            <LinearLayout
+                android:id="@+id/bottomTools"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="@string/btnMarkRead"
-                android:visibility="gone" />
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <ImageButton
+                    android:id="@+id/btnGoPrevious"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Previous"
+                    android:src="@drawable/ic_action_previous_item"
+                    android:layout_weight="1" />
+                <Button
+                    android:id="@+id/btnMarkRead"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="@string/btnMarkRead"
+                    android:layout_weight="6" />
+                <ImageButton
+                    android:id="@+id/btnGoNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Next"
+                    android:src="@drawable/ic_action_next_item"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
         </LinearLayout>
 

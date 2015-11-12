@@ -24,7 +24,8 @@ GAULUPEAU Jonathan — 2013
 <string name="added_to_favorites_message">Ajouté aux favoris</string>
 <string name="removed_from_favorites_message">Supprimé des favoris</string>
 <string name="menuShare">Partager</string>
-<string name="menuDelete">Supprimer</string>
+<string name="menuNext">Article suivant</string>
+<string name="menuPrevious">Article précédent</string><string name="menuDelete">Supprimer</string>
 <string name="menuOpenOriginal">Ouvrir l\'original</string>
 <string name="menu_show_archived">Voir les articles archivés</string>
 <string name="menu_show_unread">Voir les articles non lus</string>

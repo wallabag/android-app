@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -80,6 +82,7 @@ public class ListArticlesActivity extends AppCompatActivity implements ListAdapt
         readList.setAdapter(mAdapter);
 
         checkAndHandleAfterUpdate();
+        
 	}
 
     @Override

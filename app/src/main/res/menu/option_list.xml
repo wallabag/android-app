@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menuFastSync" android:title="@string/btnFastSync" android:icon="@drawable/ic_action_refresh" />
-    <item android:id="@+id/menuSync" android:title="@string/btnSync" android:icon="@drawable/ic_action_refresh" />
-    <item android:id="@+id/menuBagPage" android:title="@string/bag_page" />
-    <item android:id="@+id/menuShowArchived" android:title="@string/menu_show_archived" />
-    <item android:id="@+id/menuPrioritizeFavorites" android:title="@string/menu_prioritize_favorites" />
-    <item android:id="@+id/menuOpenRandomArticle" android:title="@string/menu_open_random_article" />
-    <item android:id="@+id/menuUploadOfflineURLs" android:title="@string/menuUploadOfflineURLs" />
-    <item android:id="@+id/menuWipeDb" android:title="@string/menuWipeDb" />
-    <item android:id="@+id/menuSettings" android:title="@string/btnSettings" />
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuFastSync"
+        android:title="@string/btnFastSync"
+        android:icon="@drawable/ic_action_refresh" />
+    <item
+        android:id="@+id/menuBagPage"
+        android:title="@string/bag_page"
+        android:icon="@drawable/ic_action_new"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuSync"
+        android:title="@string/btnSync"
+        android:icon="@drawable/ic_action_refresh"
+        app:showAsAction="ifRoom" />
+    <item android:id="@+id/menuShowArchived"
+        android:title="@string/menu_show_archived" />
+    <item android:id="@+id/menuPrioritizeFavorites"
+        android:title="@string/menu_prioritize_favorites" />
+    <item android:id="@+id/menuOpenRandomArticle"
+        android:title="@string/menu_open_random_article" />
+    <item android:id="@+id/menuUploadOfflineURLs"
+        android:title="@string/menuUploadOfflineURLs" />
+    <item android:id="@+id/menuWipeDb"
+        android:title="@string/menuWipeDb" />
+    <item android:id="@+id/menuSettings"
+        android:title="@string/btnSettings" />
 </menu>
