@@ -15,13 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -41,8 +42,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private ScrollView scrollView;
 	private WebView webViewContent;
-    private Button btnMarkRead;
     private TextView loadingPlaceholder;
+    private Button btnMarkRead;
+    private LinearLayout bottomTools;
+    private View hrBar;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
@@ -66,18 +69,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
-		String originalUrlDesc = originalUrlText;
 		String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
 
         setTitle(titleText);
-
-		try {
-			URL originalUrl = new URL(originalUrlText);
-			originalUrlDesc = originalUrl.getHost();
-		} catch (Exception e) {
-			//
-		}
 
         boolean highContrast = App.getInstance().getSettings().getBoolean(Settings.HIGH_CONTRAST, false);
 
@@ -94,7 +89,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
-				"\t\t\t\t\t\t\t<p>" + getString(R.string.open_original) + "<a href=\"" + originalUrlText + "\">" + originalUrlDesc + "</a></p>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 
@@ -106,9 +100,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"</html>";
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
-
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
-		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+        webViewContent.getSettings().setJavaScriptEnabled(true);
+        webViewContent.setWebChromeClient(new WebChromeClient() {
+        });
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
@@ -117,7 +113,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 view.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(webViewContent.getHeight() == 0) {
+                        if (webViewContent.getHeight() == 0) {
                             webViewContent.postDelayed(this, 10);
                         } else {
                             loadingFinished();
@@ -135,6 +131,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         });
 
         loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
+        MenuItem menuNext;
+        MenuItem menuPrevious;
+        ImageButton btnGoPrevious;
+        ImageButton btnGoNext;
 
 		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
 		btnMarkRead.setOnClickListener(new OnClickListener() {
@@ -144,13 +144,39 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				markAsReadAndClose();
 			}
 		});
+        btnGoPrevious = (ImageButton) findViewById(R.id.btnGoPrevious);
+        if (mArticle.getId()-1 == 0) {
+            btnGoPrevious.setVisibility(View.GONE);
+        }
+        btnGoNext = (ImageButton) findViewById(R.id.btnGoNext);
+        btnGoPrevious.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),ReadArticleActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(ReadArticleActivity.EXTRA_ID, mArticle.getId()-1);
+                startActivity(intent);
+            }
+        });
+        btnGoNext.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(),ReadArticleActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra(ReadArticleActivity.EXTRA_ID, mArticle.getId()+1);
+                startActivity(intent);
+            }
+        });
 	}
 
     private void loadingFinished() {
         loadingFinished = true;
+        bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
+        hrBar = (View) findViewById(R.id.view1);
 
         loadingPlaceholder.setVisibility(View.GONE);
-        btnMarkRead.setVisibility(View.VISIBLE);
+        bottomTools.setVisibility(View.VISIBLE);
+        hrBar.setVisibility(View.VISIBLE);
 
         restoreReadingPosition();
     }

@@ -24,6 +24,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="added_to_favorites_message">Added to Favorites</string>
     <string name="removed_from_favorites_message">Removed from Favorites</string>
     <string name="menuShare">Share</string>
+    <string name="menuNext">Next article</string>
+    <string name="menuPrevious">Previous article</string>
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
     <string name="menu_show_archived">Show Archived</string>
