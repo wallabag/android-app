@@ -7,7 +7,7 @@
 GAULUPEAU Jonathan — 2013
 \nVictor Häggqvist — 2015
 </string>
-<string name="instructions">Pous sauvegarder une page web dans Wallabag, ouvrez cette page dans un navigateur, puis sélectionnez <i>Partager</i> puis <i>Sauvegarder</i>.\nPlus d\'infos sur Wallabag sur:\n http://www.wallabag.org</string>
+<string name="instructions">Pous sauvegarder une page web dans Wallabag, ouvrez une page dans un navigateur, puis sélectionnez <i>Partager</i> puis <i>Sauvegarder</i>.\nPlus d\'infos sur wallabag sur:\nhttp://www.wallabag.org</string>
 <string name="btnDone">Sauvegarder</string>
 <string name="url_label"><b><u>Votre URL wallabag:</u></b></string>
 <string name="url_help">Exemples:\n<i>http://wallabag.example.com</i>\n<i>http://www.example.com/wallabag</i></string>
@@ -32,18 +32,18 @@ GAULUPEAU Jonathan — 2013
 <string name="menu_dont_prioritize_favorites">Ne pas mettre en priorité les favoris</string>
 <string name="menu_open_random_article">Ouvrir un article au hasard</string>
 <string name="menuUploadOfflineURLs">Envoyer les URL ajoutées hors-ligne</string>
-<string name="menuWipeDb">Nettoyer la base de données</string>
-<string name="wipe_db_dialog_title">Nettoyer la base de données ?</string>
-<string name="wipe_db_dialog_message">"Etes vous certain de vouloir nettoyer la base de données ?"</string>
+<string name="menuWipeDb">Purger la base de données</string>
+<string name="wipe_db_dialog_title">Purger la base de données ?</string>
+<string name="wipe_db_dialog_message">"Êtes vous certain de vouloir purger la base de données ?"</string>
 <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
-<string name="d_deleteArticle_message">Etes vous certain de vouloir supprimer l\'article ?</string>
+<string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
 <string name="txtSyncDone">Synchronisation effectuée !</string>
 <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
 <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
 <string name="txtAPIUsername">ID Utilisateur</string>
 <string name="txtAPIToken">Jeton (token) de Flux RSS</string>
 <string name="error">Erreur</string>
-<string name="error_feed">"Erreur lors du chargement du flux :"</string>
+<string name="error_feed">"Erreur lors du chargement du flux : "</string>
 <string name="bag_page">Sauvegarder la page</string>
 <string name="activity_add_label">Sauvegarder</string>
 <string name="page_url">URL de la page</string>
@@ -64,9 +64,9 @@ GAULUPEAU Jonathan — 2013
 <string name="ok">OK</string>
 <string name="d_uploadingOfflineURLs">Ajout des URL hors-lignes</string>
 <string name="d_connectionFail_title">Erreur de connexion</string>
-<string name="d_bag_fail_title">Echec</string>
+<string name="d_bag_fail_title">Échec</string>
 <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
-<string name="d_addingToWallabag_text">Sauvegarde de page</string>
+<string name="d_addingToWallabag_text">Sauvegarde de la page</string>
 <string name="firstRun_d_welcome">Bienvenue sur wallabag</string>
 <string name="firstRun_d_configure">Merci de configurer cette application avec votre instance de wallabag pour commencer.</string>
 <string name="open_original">"Ouvrir l\'original : "</string>
@@ -83,7 +83,7 @@ GAULUPEAU Jonathan — 2013
 <string name="addLink_errorMessage">Impossible d\'ajouter la page</string>
 <string name="addLink_success_text">Ajouté</string>
 <string name="d_addLink_failedOnline_title">Impossible de sauvegarder la page sur le serveur</string>
-<string name="d_addLink_failed_title">Echec de la sauvegarde</string>
+<string name="d_addLink_failed_title">Échec de la sauvegarde</string>
 <string name="addLink_savedOffline">Sauvegardé hors-ligne</string>
 <string name="feedUpdater_IOException">Exception IO lors de la connexion</string>
 <string name="feedUpdater_IOExceptionOnProcessingFeed">Exception IO lors du traitement du flux</string>
@@ -93,7 +93,7 @@ GAULUPEAU Jonathan — 2013
 <string name="testConnection_errorMessage">Impossible d\'accéder à wallabag</string>
 <string name="d_testConnection_success_title">Succès</string>
 <string name="d_connectionTest_success_text">Le test de connexion a été réussi</string>
-<string name="d_testConnection_fail_title">Echec</string>
+<string name="d_testConnection_fail_title">Échec</string>
 <string name="toggleArchive_errorMessage">Impossible de se connecter au serveur</string>
 <string name="toggleArchive_noInternetConnection">Impossible de synchroniser avec le serveur : pas de connexion internet</string>
 <string name="toggleFavorite_errorMessage">Impossible de synchroniser avec le serveur</string>
@@ -107,7 +107,7 @@ GAULUPEAU Jonathan — 2013
 <string name="d_uploadURLs_title">Echec</string>
 <string name="uploadURLs_result_text">Mise en ligne n°%1$d sur %2$d adresses</string>
 <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
-<string name="unsuccessfulRequest_errorMessage">"Echec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
+<string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
 <plurals name="numberOfArticles">
     <item quantity="one">%d Article</item>
     <item quantity="other">%d Articles</item>
