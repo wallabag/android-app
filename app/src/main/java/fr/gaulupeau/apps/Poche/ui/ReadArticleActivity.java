@@ -66,18 +66,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
-		String originalUrlDesc = originalUrlText;
 		String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
 
         setTitle(titleText);
-
-		try {
-			URL originalUrl = new URL(originalUrlText);
-			originalUrlDesc = originalUrl.getHost();
-		} catch (Exception e) {
-			//
-		}
 
         boolean highContrast = App.getInstance().getSettings().getBoolean(Settings.HIGH_CONTRAST, false);
 
@@ -94,7 +86,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
-				"\t\t\t\t\t\t\t<p>" + getString(R.string.open_original) + "<a href=\"" + originalUrlText + "\">" + originalUrlDesc + "</a></p>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 
