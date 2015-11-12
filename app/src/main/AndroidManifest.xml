@@ -18,7 +18,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity" />
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
+            android:hardwareAccelerated="true" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.PocheActivity"
             android:theme="@style/mainActivity_theme" />
