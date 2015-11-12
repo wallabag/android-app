@@ -47,12 +47,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         OnItemClickListener listener;
         TextView title;
         TextView url;
+        TextView favourite;
+        TextView read;
 
         public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
             title = (TextView) itemView.findViewById(R.id.title);
             url = (TextView) itemView.findViewById(R.id.url);
+            favourite = (TextView) itemView.findViewById(R.id.favourite);
+            read = (TextView) itemView.findViewById(R.id.read);
             itemView.setOnClickListener(this);
         }
 
@@ -66,6 +70,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
             title.setText(article.getTitle());
             url.setText(originalUrlHost);
+            if (article.getFavorite()){
+                favourite.setText("★");
+            }
+            if (article.getArchive()){
+                read.setText("☑");
+            }
         }
 
         @Override
