@@ -68,7 +68,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_connectionFail_title">Connection Failure</string>
     <string name="d_bag_fail_title">Fail</string>
     <string name="d_bag_fail_text">Couldn\'t find a URL in share string:\n</string>
-    <string name="d_addingToWallabag_text">Baging page</string>
+    <string name="d_addingToWallabag_text">Bagging page</string>
     <string name="firstRun_d_welcome">Welcome to wallabag</string>
     <string name="firstRun_d_configure">Please configure this app with your hosted wallabag to get started.</string>
     <string name="open_original">"Open original: "</string>
