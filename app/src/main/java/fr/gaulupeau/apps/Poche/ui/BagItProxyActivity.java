@@ -41,7 +41,7 @@ public class BagItProxyActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d(TAG, "Baging " + pageUrl);
+        Log.d(TAG, "Bagging " + pageUrl);
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.d_addingToWallabag_text));
