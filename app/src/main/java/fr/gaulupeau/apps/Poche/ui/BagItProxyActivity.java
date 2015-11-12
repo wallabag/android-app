@@ -52,10 +52,10 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         Settings settings = ((App) getApplication()).getSettings();
 
-        Log.d(TAG, "Baging " + pageUrl);
+        Log.d(TAG, "Bagging " + pageUrl);
 
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Baging page");
+        mProgressDialog.setMessage("Bagging page");
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
 
@@ -107,7 +107,7 @@ public class BagItProxyActivity extends AppCompatActivity {
                         });
             }
 
-            Log.d(TAG, "Baging done");
+            Log.d(TAG, "Bagging done");
             mProgressDialog.dismiss();
             BagItProxyActivity.this.finish();
         }
