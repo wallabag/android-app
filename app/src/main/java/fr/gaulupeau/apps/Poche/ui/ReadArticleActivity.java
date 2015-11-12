@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -97,9 +98,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"</html>";
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
-
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
-		webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+        webViewContent.getSettings().setJavaScriptEnabled(true);
+        webViewContent.setWebChromeClient(new WebChromeClient() {
+        });
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
