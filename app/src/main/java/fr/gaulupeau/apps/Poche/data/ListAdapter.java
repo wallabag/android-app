@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.net.URL;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -19,6 +20,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Article> articles;
     private OnItemClickListener listener;
+    private String originalUrlHost;
 
     public ListAdapter(List<Article> articles, OnItemClickListener listener) {
         this.articles = articles;
@@ -55,8 +57,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         public void bind(Article article) {
+            String originalUrlText = new String(article.getUrl());
+            try {
+                URL originalUrl = new URL(originalUrlText);
+                originalUrlHost = originalUrl.getHost();
+            } catch (Exception e) {
+                //
+            }
             title.setText(article.getTitle());
-            url.setText(article.getUrl());
+            url.setText(originalUrlHost);
         }
 
         @Override
