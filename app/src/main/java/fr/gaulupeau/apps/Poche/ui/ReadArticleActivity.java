@@ -152,22 +152,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
         hrBar = findViewById(R.id.view1);
 
-        QueryBuilder<Article> qb = mArticleDao.queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.lt(mArticle.getArticleId()));
-        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
-        List<Article> l = qb.orderDesc(ArticleDao.Properties.ArticleId).limit(1).list();
-        if(!l.isEmpty()) {
-            previousArticleID = l.get(0).getId();
-        }
-        qb = mArticleDao.queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.gt(mArticle.getArticleId()));
-        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
-        l = qb.orderAsc(ArticleDao.Properties.ArticleId).limit(1).list();
-        if(!l.isEmpty()) {
-            nextArticleID = l.get(0).getId();
-        }
+        previousArticleID = getAdjacentArticle(true);
+        nextArticleID = getAdjacentArticle(false);
 
         Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
         if(mArticle.getArchive()) {
@@ -398,6 +384,26 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             scrollView.scrollTo(scrollView.getScrollX(), yOffset);
         }
+    }
+
+    private Long getAdjacentArticle(boolean previous) {
+        QueryBuilder<Article> qb = mArticleDao.queryBuilder();
+
+        if(previous) qb.where(ArticleDao.Properties.ArticleId.gt(mArticle.getArticleId()));
+        else qb.where(ArticleDao.Properties.ArticleId.lt(mArticle.getArticleId()));
+
+        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+
+        if(previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
+        else qb.orderDesc(ArticleDao.Properties.ArticleId);
+
+        List<Article> l = qb.limit(1).list();
+        if(!l.isEmpty()) {
+            return l.get(0).getId();
+        }
+
+        return null;
     }
 
     private Drawable getIcon(int id, Resources.Theme theme) {
