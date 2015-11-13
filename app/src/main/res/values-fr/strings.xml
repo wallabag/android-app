@@ -113,4 +113,12 @@ GAULUPEAU Jonathan — 2013
     <item quantity="one">%d Article</item>
     <item quantity="other">%d Articles</item>
 </plurals>
+    <string name="d_emptyDB_answer_updateAll">Oui (recommandé)</string>
+    <string name="d_emptyDB_text">Il semble qu\'il n\'y ait pas d\'articles dans la base de données. Voulez-vous mettre à jour tous les flux ?</string>
+    <string name="d_emptyDB_title">Pas d\'articles</string>
+    <string name="feedName_archived">Archivés</string>
+    <string name="feedName_unread">Non lus</string>
+    <string name="feedName_favorites">Favoris</string>
+    <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
+    <string name="update_allFeeds">Mettre à jour tous les flux</string>
 </resources>
