@@ -20,7 +20,6 @@ import android.widget.Toast;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -42,7 +41,8 @@ public class ArticlesListActivity extends AppCompatActivity
     private ViewPager viewPager;
 
     private boolean firstTimeShown = true;
-    private boolean checkedEmptyDB;
+    private boolean showEmptyDbDialogOnResume;
+    private boolean dbIsEmpty;
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
@@ -73,7 +73,16 @@ public class ArticlesListActivity extends AppCompatActivity
             }
         });
 
-        checkAndHandleAfterUpdate();
+        dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(dbIsEmpty) {
+            showEmptyDbDialogOnResume = true;
+        }
     }
 
     @Override
@@ -97,6 +106,25 @@ public class ArticlesListActivity extends AppCompatActivity
                     }
                 });
                 messageBox.setCancelable(false);
+                messageBox.create().show();
+            }
+        }
+
+        if(showEmptyDbDialogOnResume) {
+            showEmptyDbDialogOnResume = false;
+
+            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
+            if(wallabagSettings.isValid()) {
+                AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
+                messageBox.setTitle(R.string.d_emptyDB_title);
+                messageBox.setMessage(R.string.d_emptyDB_text);
+                messageBox.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fullUpdate();
+                    }
+                });
+                messageBox.setNegativeButton(R.string.negative_answer, null);
                 messageBox.create().show();
             }
         }
@@ -158,6 +186,9 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void updateFinished() {
+        dbIsEmpty = false;
+        showEmptyDbDialogOnResume = false;
+
         if(fullUpdateRunning) {
             fullUpdateRunning = false;
             updateLists();
@@ -184,36 +215,6 @@ public class ArticlesListActivity extends AppCompatActivity
 
     @Override
     public void updateFeed() {
-        if(!checkedEmptyDB && !fullUpdateRunning && refreshingFragment == -1) {
-            checkedEmptyDB = true;
-
-            if(DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0) {
-                AlertDialog.Builder b = new AlertDialog.Builder(this);
-                b.setTitle(R.string.d_emptyDB_title);
-                b.setMessage(R.string.d_emptyDB_text);
-                b.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fullUpdate();
-                    }
-                });
-                b.setNegativeButton(R.string.d_emptyDB_answer_updateCurrent, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateFeedInternal();
-                    }
-                });
-                b.create().show();
-
-                setRefreshingUI(false);
-                return;
-            }
-        }
-
-        updateFeedInternal();
-    }
-
-    private void updateFeedInternal() {
         int position = viewPager.getCurrentItem();
         UpdateFeedTask.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         UpdateFeedTask.UpdateType updateType = feedType == UpdateFeedTask.FeedType.Main
@@ -333,22 +334,6 @@ public class ArticlesListActivity extends AppCompatActivity
 
         progressDialog.show();
         uploadOfflineURLsTask.execute();
-    }
-
-    // TODO: rewrite or get rid of it
-    private void checkAndHandleAfterUpdate() {
-        if (settings.hasUpdateChecker() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
-            new AlertDialog.Builder(this)
-                    .setTitle("App update")
-                    .setMessage("This a breaking update.\n\nMake sure you fill in your Username and Password in settings, otherwise things will be broken.")
-                    .setPositiveButton("OK", null)
-                    .setCancelable(false)
-                    .create().show();
-
-            Log.d("Poche", "Do upgrade stuff if needed");
-        }
-
-        settings.setAppVersion(BuildConfig.VERSION_CODE);
     }
 
     public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {
