@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +23,7 @@ import java.util.WeakHashMap;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
@@ -41,6 +42,7 @@ public class ArticlesListActivity extends AppCompatActivity
     private ViewPager viewPager;
 
     private boolean firstTimeShown = true;
+    private boolean checkedEmptyDB;
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
@@ -182,6 +184,36 @@ public class ArticlesListActivity extends AppCompatActivity
 
     @Override
     public void updateFeed() {
+        if(!checkedEmptyDB && !fullUpdateRunning && refreshingFragment == -1) {
+            checkedEmptyDB = true;
+
+            if(DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0) {
+                AlertDialog.Builder b = new AlertDialog.Builder(this);
+                b.setTitle(R.string.d_emptyDB_title);
+                b.setMessage(R.string.d_emptyDB_text);
+                b.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fullUpdate();
+                    }
+                });
+                b.setNegativeButton(R.string.d_emptyDB_answer_updateCurrent, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        updateFeedInternal();
+                    }
+                });
+                b.create().show();
+
+                setRefreshingUI(false);
+                return;
+            }
+        }
+
+        updateFeedInternal();
+    }
+
+    private void updateFeedInternal() {
         int position = viewPager.getCurrentItem();
         UpdateFeedTask.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         UpdateFeedTask.UpdateType updateType = feedType == UpdateFeedTask.FeedType.Main
