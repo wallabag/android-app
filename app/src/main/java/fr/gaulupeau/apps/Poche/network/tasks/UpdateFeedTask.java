@@ -27,7 +27,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 
-public class FeedUpdater extends AsyncTask<Void, Void, Void> {
+public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
     public enum UpdateType { Full, Fast }
 
@@ -44,19 +44,15 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
     private String baseURL;
     private String apiUserId;
     private String apiToken;
-    private FeedUpdaterInterface callback;
+    private CallbackInterface callback;
     private FeedType feedType;
     private UpdateType updateType;
 
     private String errorMessage;
 
-    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
-                       FeedUpdaterInterface callback) {
-        this(baseURL, apiUserId, apiToken, callback, null, null);
-    }
-
-    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
-                       FeedUpdaterInterface callback, FeedType feedType, UpdateType updateType) {
+    public UpdateFeedTask(String baseURL, String apiUserId, String apiToken,
+                          CallbackInterface callback,
+                          FeedType feedType, UpdateType updateType) {
         this.baseURL = baseURL;
         this.apiUserId = apiUserId;
         this.apiToken = apiToken;
@@ -90,9 +86,9 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
             return;
 
         if (errorMessage == null) {
-            callback.feedUpdatedFinishedSuccessfully();
+            callback.feedUpdateFinishedSuccessfully();
         } else {
-            callback.feedUpdaterFinishedWithError(errorMessage);
+            callback.feedUpdateFinishedWithError(errorMessage);
         }
     }
 
@@ -251,7 +247,11 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
 
-                    if(article == null) article = new Article(null);
+                    boolean existing = true;
+                    if(article == null) {
+                        article = new Article(null);
+                        existing = false;
+                    }
 
                     article.setTitle(item.title);
                     article.setContent(item.description);
@@ -262,8 +262,16 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    article.setArchive(feedType == FeedType.Archive);
-                    article.setFavorite(feedType == FeedType.Favorite);
+                    if(existing) {
+                        if(feedType == FeedType.Archive) {
+                            article.setArchive(true);
+                        } else if(feedType == FeedType.Favorite) {
+                            article.setFavorite(true);
+                        }
+                    } else {
+                        article.setArchive(feedType == FeedType.Archive);
+                        article.setFavorite(feedType == FeedType.Favorite);
+                    }
 
                     articleDao.insertOrReplace(article);
                 } else if(feedType == FeedType.Favorite) {
@@ -421,6 +429,11 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
         String link;
         String pubDate;
         String description;
+    }
+
+    public interface CallbackInterface {
+        void feedUpdateFinishedWithError(String errorMessage);
+        void feedUpdateFinishedSuccessfully();
     }
 
 }

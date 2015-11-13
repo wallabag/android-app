@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="fr.gaulupeau.apps.Poche.ui.ListArticlesActivity" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.ArticlesListFragment" >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/article_list"

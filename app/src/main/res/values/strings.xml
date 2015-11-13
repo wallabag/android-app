@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Welcome to wallabag</string>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
     <string name="author">
@@ -11,9 +10,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="btnDone">Save</string>
     <string name="url_label">Wallabag URL</string>
     <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
-    <string name="btnGetPost">List articles - %1$d unread</string>
-    <string name="btnFastSync">Fast sync</string>
-    <string name="btnSync">Synchronize</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnMarkUnread">Mark as Unread</string>
     <string name="moved_to_archive_message">Archived</string>
@@ -28,10 +24,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuPrevious">Previous article</string>
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
-    <string name="menu_show_archived">Show Archived</string>
-    <string name="menu_show_unread">Show Unread</string>
-    <string name="menu_prioritize_favorites">Prioritize Favorites</string>
-    <string name="menu_dont_prioritize_favorites">Don\'t prioritize Favorites</string>
     <string name="menu_open_random_article">Open random article</string>
     <string name="menuUploadOfflineURLs">Upload offline URLs</string>
     <string name="menuWipeDb">Wipe Database</string>
@@ -110,6 +102,14 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="uploadURLs_result_text">Uploaded %1$d out of %2$d URLs</string>
     <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t login: probably wrong username or password</string>
     <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
+    <string name="update_allFeeds">Update all feeds</string>
+    <string name="updateFeed_previousUpdateNotFinished">Previous update operation not finished yet</string>
+    <string name="feedName_favorites">Favorites</string>
+    <string name="feedName_archived">Archived</string>
+    <string name="feedName_unread">Unread</string>
+    <string name="d_emptyDB_title">No articles</string>
+    <string name="d_emptyDB_text">It looks like there are no articles in DB. Would you like to update all feeds?</string>
+    <string name="d_emptyDB_answer_updateAll">Yes (recommended)</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

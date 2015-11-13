@@ -4,8 +4,12 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
@@ -168,6 +173,35 @@ public class SettingsActivity extends BaseActionBarActivity {
 		super.onStop();
 
 		cancelTasks();
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.option_settings, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.menuWipeDb: {
+				AlertDialog.Builder b = new AlertDialog.Builder(this);
+				b.setTitle(R.string.wipe_db_dialog_title);
+				b.setMessage(R.string.wipe_db_dialog_message);
+				b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DbConnection.getSession().getArticleDao().deleteAll();
+					}
+				});
+				b.setNegativeButton(R.string.negative_answer, null);
+				b.create().show();
+				return true;
+			}
+		}
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	private void cancelTasks() {
