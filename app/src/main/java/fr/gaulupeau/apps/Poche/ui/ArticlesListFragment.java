@@ -1,6 +1,8 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -231,13 +233,28 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     }
 
     private void openArticle(long id) {
-        if(host != null) {
-            host.openArticle(id);
+        Activity activity = getActivity();
+        if(activity != null) {
+            Intent intent = new Intent(activity, ReadArticleActivity.class);
+            intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
+
+            switch(listType) {
+                case LIST_TYPE_FAVORITES:
+                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_FAVORITES, true);
+                    break;
+                case LIST_TYPE_ARCHIVED:
+                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, true);
+                    break;
+                default:
+                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, false);
+                    break;
+            }
+
+            startActivity(intent);
         }
     }
 
     public interface OnFragmentInteractionListener {
-        void openArticle(long id);
         void updateFeed();
         boolean isFullUpdateRunning();
         boolean isCurrentFeedUpdating();

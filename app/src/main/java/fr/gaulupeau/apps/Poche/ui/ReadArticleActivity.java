@@ -24,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.List;
+
+import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
@@ -39,20 +42,27 @@ import fr.gaulupeau.apps.Poche.entity.DaoSession;
 public class ReadArticleActivity extends BaseActionBarActivity {
 
 	public static final String EXTRA_ID = "ReadArticleActivity.id";
+	public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
+	public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private ScrollView scrollView;
 	private WebView webViewContent;
     private TextView loadingPlaceholder;
-    private Button btnMarkRead;
     private LinearLayout bottomTools;
     private View hrBar;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
 
+    private Boolean contextFavorites;
+    private Boolean contextArchived;
+
     private String titleText;
     private String originalUrlText;
     private Double positionToRestore;
+
+    private Long previousArticleID;
+    private Long nextArticleID;
 
     private boolean loadingFinished;
 
@@ -62,10 +72,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
 		Intent intent = getIntent();
         long articleId = intent.getLongExtra(EXTRA_ID, -1);
+        if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
+            contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
+        }
+        if(intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
+            contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
+        }
 
         DaoSession session = DbConnection.getSession();
         mArticleDao = session.getArticleDao();
-        mArticle = mArticleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
+        mArticle = mArticleDao.queryBuilder()
+                .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
@@ -74,7 +91,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
-        boolean highContrast = App.getInstance().getSettings().getBoolean(Settings.HIGH_CONTRAST, false);
+        boolean highContrast = App.getInstance().getSettings()
+                .getBoolean(Settings.HIGH_CONTRAST, false);
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
@@ -101,10 +119,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
-        webViewContent.getSettings().setJavaScriptEnabled(true);
-        webViewContent.setWebChromeClient(new WebChromeClient() {
-        });
-        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+        webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
+        webViewContent.setWebChromeClient(new WebChromeClient() {}); // TODO: check
+        webViewContent.loadDataWithBaseURL("file:///android_asset/",
+                htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
 
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
@@ -131,12 +149,30 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         });
 
         loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
-        MenuItem menuNext;
-        MenuItem menuPrevious;
-        ImageButton btnGoPrevious;
-        ImageButton btnGoNext;
+        bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
+        hrBar = findViewById(R.id.view1);
 
-		btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+        QueryBuilder<Article> qb = mArticleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.lt(mArticle.getArticleId()));
+        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        List<Article> l = qb.orderDesc(ArticleDao.Properties.ArticleId).limit(1).list();
+        if(!l.isEmpty()) {
+            previousArticleID = l.get(0).getId();
+        }
+        qb = mArticleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.gt(mArticle.getArticleId()));
+        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        l = qb.orderAsc(ArticleDao.Properties.ArticleId).limit(1).list();
+        if(!l.isEmpty()) {
+            nextArticleID = l.get(0).getId();
+        }
+
+        Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
+        if(mArticle.getArchive()) {
+            btnMarkRead.setText(R.string.btnMarkUnread);
+        }
 		btnMarkRead.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -144,35 +180,33 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				markAsReadAndClose();
 			}
 		});
+
+        ImageButton btnGoPrevious;
+        ImageButton btnGoNext;
         btnGoPrevious = (ImageButton) findViewById(R.id.btnGoPrevious);
-        if (mArticle.getId()-1 == 0) {
+        if(previousArticleID == null) {
             btnGoPrevious.setVisibility(View.GONE);
         }
         btnGoNext = (ImageButton) findViewById(R.id.btnGoNext);
+        if(nextArticleID == null) {
+            btnGoNext.setVisibility(View.GONE);
+        }
         btnGoPrevious.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),ReadArticleActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(ReadArticleActivity.EXTRA_ID, mArticle.getId()-1);
-                startActivity(intent);
+                openArticle(previousArticleID);
             }
         });
         btnGoNext.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(),ReadArticleActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra(ReadArticleActivity.EXTRA_ID, mArticle.getId()+1);
-                startActivity(intent);
+                openArticle(nextArticleID);
             }
         });
 	}
 
     private void loadingFinished() {
         loadingFinished = true;
-        bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
-        hrBar = (View) findViewById(R.id.view1);
 
         loadingPlaceholder.setVisibility(View.GONE);
         bottomTools.setVisibility(View.VISIBLE);
@@ -261,6 +295,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private void openArticle(Long id) {
+        Intent intent = new Intent(this, ReadArticleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
+        if(contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
+        if(contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -278,6 +321,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
         toggleFavoriteItem.setTitle(
                 favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
+        // TODO: replace star icon
         toggleFavoriteItem.setIcon(getIcon(favorite
                         ? R.drawable.abc_btn_rating_star_on_mtrl_alpha
                         : R.drawable.abc_btn_rating_star_off_mtrl_alpha, null)

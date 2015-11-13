@@ -171,13 +171,6 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
-    public void openArticle(long id) {
-        Intent intent = new Intent(this, ReadArticleActivity.class);
-        intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-        startActivity(intent);
-    }
-
-    @Override
     public boolean isFullUpdateRunning() {
         return fullUpdateRunning;
     }
