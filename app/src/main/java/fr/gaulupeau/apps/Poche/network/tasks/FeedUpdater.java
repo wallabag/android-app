@@ -251,7 +251,11 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
 
-                    if(article == null) article = new Article(null);
+                    boolean existing = true;
+                    if(article == null) {
+                        article = new Article(null);
+                        existing = false;
+                    }
 
                     article.setTitle(item.title);
                     article.setContent(item.description);
@@ -262,8 +266,16 @@ public class FeedUpdater extends AsyncTask<Void, Void, Void> {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    article.setArchive(feedType == FeedType.Archive);
-                    article.setFavorite(feedType == FeedType.Favorite);
+                    if(existing) {
+                        if(feedType == FeedType.Archive) {
+                            article.setArchive(true);
+                        } else if(feedType == FeedType.Favorite) {
+                            article.setFavorite(true);
+                        }
+                    } else {
+                        article.setArchive(feedType == FeedType.Archive);
+                        article.setFavorite(feedType == FeedType.Favorite);
+                    }
 
                     articleDao.insertOrReplace(article);
                 } else if(feedType == FeedType.Favorite) {
