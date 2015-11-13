@@ -58,7 +58,6 @@ public class ArticlesListActivity extends AppCompatActivity
 
         viewPager = (ViewPager) findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(1);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
 
@@ -72,6 +71,8 @@ public class ArticlesListActivity extends AppCompatActivity
                 fragmentOnShow();
             }
         });
+
+        viewPager.setCurrentItem(1);
 
         dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0;
     }
