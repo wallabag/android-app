@@ -26,14 +26,14 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.tasks.FeedUpdater;
-import fr.gaulupeau.apps.Poche.network.tasks.FeedUpdaterInterface;
+import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
 
-public class ArticlesListActivity extends AppCompatActivity implements FeedUpdaterInterface,
+public class ArticlesListActivity extends AppCompatActivity
+        implements UpdateFeedTask.CallbackInterface,
         ArticlesListFragment.OnFragmentInteractionListener {
 
-    private FeedUpdater feedUpdater;
+    private UpdateFeedTask feedUpdater;
 
     private Settings settings;
 
@@ -139,13 +139,13 @@ public class ArticlesListActivity extends AppCompatActivity implements FeedUpdat
     }
 
     @Override
-    public void feedUpdatedFinishedSuccessfully() {
+    public void feedUpdateFinishedSuccessfully() {
         updateFinished();
         Toast.makeText(this, R.string.txtSyncDone, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void feedUpdaterFinishedWithError(String errorMessage) {
+    public void feedUpdateFinishedWithError(String errorMessage) {
         updateFinished();
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.error_feed) + errorMessage)
@@ -190,9 +190,9 @@ public class ArticlesListActivity extends AppCompatActivity implements FeedUpdat
     @Override
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
-        FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
-                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+        UpdateFeedTask.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
+        UpdateFeedTask.UpdateType updateType = feedType == UpdateFeedTask.FeedType.Main
+                ? UpdateFeedTask.UpdateType.Fast : UpdateFeedTask.UpdateType.Full;
         if(updateFeed(true, feedType, updateType)) {
             refreshingFragment = position;
             setRefreshingUI(true);
@@ -209,8 +209,8 @@ public class ArticlesListActivity extends AppCompatActivity implements FeedUpdat
     }
 
     private boolean updateFeed(boolean showErrors,
-                               FeedUpdater.FeedType feedType,
-                               FeedUpdater.UpdateType updateType) {
+                               UpdateFeedTask.FeedType feedType,
+                               UpdateFeedTask.UpdateType updateType) {
         boolean result = false;
 
         WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
@@ -222,7 +222,7 @@ public class ArticlesListActivity extends AppCompatActivity implements FeedUpdat
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkOnline()) {
-            feedUpdater = new FeedUpdater(wallabagSettings.wallabagURL,
+            feedUpdater = new UpdateFeedTask(wallabagSettings.wallabagURL,
                     wallabagSettings.userID, wallabagSettings.userToken, this, feedType, updateType);
             feedUpdater.execute();
             result = true;
@@ -365,14 +365,14 @@ public class ArticlesListActivity extends AppCompatActivity implements FeedUpdat
             }
         }
 
-        public static FeedUpdater.FeedType getFeedType(int position) {
+        public static UpdateFeedTask.FeedType getFeedType(int position) {
             switch(ArticlesListPagerAdapter.PAGES[position]) {
                 case ArticlesListFragment.LIST_TYPE_FAVORITES:
-                    return FeedUpdater.FeedType.Favorite;
+                    return UpdateFeedTask.FeedType.Favorite;
                 case ArticlesListFragment.LIST_TYPE_ARCHIVED:
-                    return FeedUpdater.FeedType.Archive;
+                    return UpdateFeedTask.FeedType.Archive;
                 default:
-                    return FeedUpdater.FeedType.Main;
+                    return UpdateFeedTask.FeedType.Main;
             }
         }
 
