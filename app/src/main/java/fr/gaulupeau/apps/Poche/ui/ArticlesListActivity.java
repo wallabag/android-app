@@ -1,0 +1,397 @@
+package fr.gaulupeau.apps.Poche.ui;
+
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.Map;
+import java.util.WeakHashMap;
+
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.WallabagSettings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.tasks.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.tasks.FeedUpdaterInterface;
+import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
+
+public class ArticlesListActivity extends AppCompatActivity implements FeedUpdaterInterface,
+        ArticlesListFragment.OnFragmentInteractionListener {
+
+    private FeedUpdater feedUpdater;
+
+    private Settings settings;
+
+    private ArticlesListPagerAdapter adapter;
+    private ViewPager viewPager;
+
+    private boolean firstTimeShown = true;
+
+    private boolean fullUpdateRunning;
+    private int refreshingFragment = -1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_articles_list);
+
+        settings = new Settings(this);
+
+        adapter = new ArticlesListPagerAdapter(getSupportFragmentManager());
+
+        viewPager = (ViewPager) findViewById(R.id.articles_list_pager);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(1);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
+
+        tabLayout.setTabsFromPagerAdapter(adapter);
+        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                fragmentOnShow();
+            }
+        });
+
+        checkAndHandleAfterUpdate();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateLists();
+
+        if(firstTimeShown) {
+            firstTimeShown = false;
+
+            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
+            if (!wallabagSettings.isValid()) {
+                AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
+                messageBox.setTitle(R.string.firstRun_d_welcome);
+                messageBox.setMessage(R.string.firstRun_d_configure);
+                messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                    }
+                });
+                messageBox.setCancelable(false);
+                messageBox.create().show();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (feedUpdater != null) {
+            feedUpdater.cancel(true);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.option_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuFullUpdate:
+                fullUpdate();
+                return true;
+            case R.id.menuSettings:
+                startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                return true;
+            case R.id.menuBagPage:
+                startActivity(new Intent(getBaseContext(), AddActivity.class));
+                return true;
+            case R.id.menuOpenRandomArticle:
+                openRandomArticle();
+                return true;
+            case R.id.menuUploadOfflineURLs:
+                uploadOfflineURLs();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void feedUpdatedFinishedSuccessfully() {
+        updateFinished();
+        Toast.makeText(this, R.string.txtSyncDone, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void feedUpdaterFinishedWithError(String errorMessage) {
+        updateFinished();
+        new AlertDialog.Builder(this)
+                .setMessage(getString(R.string.error_feed) + errorMessage)
+                .setTitle(R.string.error)
+                .setPositiveButton(R.string.ok, null)
+                .setCancelable(false)
+                .create().show();
+    }
+
+    private void updateFinished() {
+        if(fullUpdateRunning) {
+            fullUpdateRunning = false;
+            updateLists();
+            setRefreshingUI(false);
+        }
+        if(refreshingFragment != -1) {
+            if(viewPager.getCurrentItem() == refreshingFragment) {
+                updateList(refreshingFragment);
+                setRefreshingUI(false, refreshingFragment);
+            }
+            refreshingFragment = -1;
+        }
+    }
+
+    @Override
+    public void openArticle(long id) {
+        Intent intent = new Intent(this, ReadArticleActivity.class);
+        intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
+        startActivity(intent);
+    }
+
+    @Override
+    public boolean isFullUpdateRunning() {
+        return fullUpdateRunning;
+    }
+
+    @Override
+    public boolean isCurrentFeedUpdating() {
+        return refreshingFragment != -1 && refreshingFragment == viewPager.getCurrentItem();
+    }
+
+    @Override
+    public void updateFeed() {
+        int position = viewPager.getCurrentItem();
+        FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
+        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
+                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+        if(updateFeed(true, feedType, updateType)) {
+            refreshingFragment = position;
+            setRefreshingUI(true);
+        } else {
+            setRefreshingUI(false);
+        }
+    }
+
+    private void fullUpdate() {
+        if(updateFeed(true, null, null)) {
+            fullUpdateRunning = true;
+            setRefreshingUI(true);
+        }
+    }
+
+    private boolean updateFeed(boolean showErrors,
+                               FeedUpdater.FeedType feedType,
+                               FeedUpdater.UpdateType updateType) {
+        boolean result = false;
+
+        WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
+        if(fullUpdateRunning || refreshingFragment != -1) {
+            Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
+                    .show();
+        } else if(!wallabagSettings.isValid()) {
+            if(showErrors) {
+                Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
+            }
+        } else if(WallabagConnection.isNetworkOnline()) {
+            feedUpdater = new FeedUpdater(wallabagSettings.wallabagURL,
+                    wallabagSettings.userID, wallabagSettings.userToken, this, feedType, updateType);
+            feedUpdater.execute();
+            result = true;
+        } else {
+            if(showErrors) {
+                Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return result;
+    }
+
+    private void updateLists() {
+        if(adapter != null) {
+            for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
+                ArticlesListFragment f = adapter.getCachedFragment(i);
+                if(f != null) {
+                    f.updateList();
+                }
+            }
+        }
+    }
+
+    private void updateList(int position) {
+        ArticlesListFragment f = getFragment(position);
+        if(f != null) {
+            f.updateList();
+        }
+    }
+
+    private void setRefreshingUI(boolean refreshing) {
+        ArticlesListFragment f = getCurrentFragment();
+        if(f != null) {
+            f.setRefreshingUI(refreshing);
+        }
+    }
+
+    private void setRefreshingUI(boolean refreshing, int position) {
+        ArticlesListFragment f = getFragment(position);
+        if(f != null) {
+            f.setRefreshingUI(refreshing);
+        }
+    }
+
+    private void openRandomArticle() {
+        ArticlesListFragment f = getCurrentFragment();
+        if(f != null) {
+            f.openRandomArticle();
+        }
+    }
+
+    private void fragmentOnShow() {
+        ArticlesListFragment f = getCurrentFragment();
+        if(f != null) {
+            f.onShow();
+        }
+    }
+
+    private ArticlesListFragment getCurrentFragment() {
+        return adapter == null || viewPager == null ? null
+                : adapter.getCachedFragment(viewPager.getCurrentItem());
+    }
+
+    private ArticlesListFragment getFragment(int position) {
+        return adapter != null ? adapter.getCachedFragment(position) : null;
+    }
+
+    private void uploadOfflineURLs() {
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.d_uploadingOfflineURLs));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setCancelable(true);
+
+        final UploadOfflineURLsTask uploadOfflineURLsTask
+                = new UploadOfflineURLsTask(this, progressDialog);
+
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                uploadOfflineURLsTask.cancel(false);
+            }
+        });
+
+        progressDialog.show();
+        uploadOfflineURLsTask.execute();
+    }
+
+    // TODO: rewrite or get rid of it
+    private void checkAndHandleAfterUpdate() {
+        if (settings.hasUpdateChecker() && settings.getPrevAppVersion() < BuildConfig.VERSION_CODE) {
+            new AlertDialog.Builder(this)
+                    .setTitle("App update")
+                    .setMessage("This a breaking update.\n\nMake sure you fill in your Username and Password in settings, otherwise things will be broken.")
+                    .setPositiveButton("OK", null)
+                    .setCancelable(false)
+                    .create().show();
+
+            Log.d("Poche", "Do upgrade stuff if needed");
+        }
+
+        settings.setAppVersion(BuildConfig.VERSION_CODE);
+    }
+
+    public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {
+
+        private static final String TAG = "ArtListPagerAdapter";
+
+        private static int[] PAGES = {
+                ArticlesListFragment.LIST_TYPE_FAVORITES,
+                ArticlesListFragment.LIST_TYPE_MAIN,
+                ArticlesListFragment.LIST_TYPE_ARCHIVED
+        };
+
+        private Map<Integer, ArticlesListFragment> fragments = new WeakHashMap<>(3);
+
+        public ArticlesListPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(TAG, "getItem " + position);
+            return getFragment(position);
+        }
+
+        @Override
+        public int getCount() {
+            return PAGES.length;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch(PAGES[position]) {
+                case ArticlesListFragment.LIST_TYPE_FAVORITES:
+                    return App.getInstance().getString(R.string.feedName_favorites);
+                case ArticlesListFragment.LIST_TYPE_ARCHIVED:
+                    return App.getInstance().getString(R.string.feedName_archived);
+                default:
+                    return App.getInstance().getString(R.string.feedName_unread);
+            }
+        }
+
+        public static FeedUpdater.FeedType getFeedType(int position) {
+            switch(ArticlesListPagerAdapter.PAGES[position]) {
+                case ArticlesListFragment.LIST_TYPE_FAVORITES:
+                    return FeedUpdater.FeedType.Favorite;
+                case ArticlesListFragment.LIST_TYPE_ARCHIVED:
+                    return FeedUpdater.FeedType.Archive;
+                default:
+                    return FeedUpdater.FeedType.Main;
+            }
+        }
+
+        public ArticlesListFragment getCachedFragment(int position) {
+            return fragments.get(position);
+        }
+
+        private ArticlesListFragment getFragment(int position) {
+            Log.d(TAG, "getFragment " + position);
+            ArticlesListFragment f = fragments.get(position);
+            if(f == null) {
+                Log.d(TAG, "creating new instance");
+                f = ArticlesListFragment.newInstance(PAGES[position]);
+                fragments.put(position, f);
+            }
+
+            return f;
+        }
+
+    }
+
+}
