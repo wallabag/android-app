@@ -20,7 +20,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Article> articles;
     private OnItemClickListener listener;
-    private String originalUrlHost;
 
     public ListAdapter(List<Article> articles, OnItemClickListener listener) {
         this.articles = articles;
@@ -61,21 +60,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         public void bind(Article article) {
-            String originalUrlText = new String(article.getUrl());
+            String urlText = article.getUrl();
             try {
-                URL originalUrl = new URL(originalUrlText);
-                originalUrlHost = originalUrl.getHost();
-            } catch (Exception e) {
-                //
-            }
+                URL url = new URL(urlText);
+                urlText = url.getHost();
+            } catch (Exception ignored) {}
+
             title.setText(article.getTitle());
-            url.setText(originalUrlHost);
-            if (article.getFavorite()){
-                favourite.setText("★");
-            }
-            if (article.getArchive()){
-                read.setText("☑");
-            }
+            url.setText(urlText);
+
+            favourite.setText(article.getFavorite() ? "★" : "☆");
+            read.setText(article.getArchive() ? "☑" : "☐");
         }
 
         @Override
