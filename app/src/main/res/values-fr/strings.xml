@@ -121,4 +121,8 @@ GAULUPEAU Jonathan — 2013
     <string name="feedName_favorites">Favoris</string>
     <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
     <string name="update_allFeeds">Mettre à jour tous les flux</string>
+    <string name="testConnection_errorMessage1">wallabag non trouvé à cette adresse. Vérifiez l\'URL. Code d\'erreur : %d</string>
+    <string name="testConnection_errorMessage2">Impossible de se connecter. Vérifiez votre identifiant et votre mot de passe. Code d\'erreur : %d</string>
+    <string name="testConnection_errorMessage3">Problèmes relatifs aux autorisations. Code d\'erreur : %d</string>
+    <string name="testConnection_errorMessage_unknown">Erreur inconnue. Code d\'erreur : %d</string>
 </resources>
