@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.net.URL;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -38,6 +39,7 @@ import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.utils.Utilities;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
@@ -86,8 +88,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
+        String originalUrlHost = "";
+
+        try {
+            URL originalUrl = new URL(originalUrlText);
+            originalUrlHost = originalUrl.getHost();
+        } catch (Exception e) {
+            //
+        }
+
 		String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
+        Integer estimatedTimeNumber = Utilities.estimatedTime(mArticle.getContent()).intValue();
 
         setTitle(titleText);
 
@@ -107,6 +119,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
+                "\t\t\t\t\t\t\t<span class=\"urlhost\"><a href=\"" + originalUrlText + "\">" + originalUrlHost + "</a></span><br>\n" +
+                "\t\t\t\t\t\t\t<span class=\"estimatedtime\">" + getString(R.string.estimated_time) + " " + estimatedTimeNumber.toString() + " " + getString(R.string.minutes) + "</span>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 
@@ -212,23 +226,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         builder.setCustomTitle(v);
 
         builder.setItems(
-                new CharSequence[] {
+                new CharSequence[]{
                         getString(R.string.d_urlAction_openInBrowser),
                         getString(R.string.d_urlAction_addToWallabag)
                 }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(launchBrowserIntent);
-                        break;
-                    case 1:
-                        new AddLinkTask(url, ReadArticleActivity.this).execute();
-                        break;
-                }
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(launchBrowserIntent);
+                                break;
+                            case 1:
+                                new AddLinkTask(url, ReadArticleActivity.this).execute();
+                                break;
+                        }
+                    }
+                });
         builder.show();
 
         return true;

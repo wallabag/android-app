@@ -110,6 +110,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_emptyDB_title">No articles</string>
     <string name="d_emptyDB_text">It looks like there are no articles in DB. Would you like to update all feeds?</string>
     <string name="d_emptyDB_answer_updateAll">Yes (recommended)</string>
+    <string name="estimated_time">Estimated time to read:</string>
+    <string name="minutes">min</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

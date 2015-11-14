@@ -176,6 +176,26 @@ footer a {
 
 header.mbm {
 	text-align: left;
+	border-bottom: thin solid  #000;
+	margin-bottom: 10px;
+}
+
+.urlhost:before {
+    background:url("file:///android_asset/ic_action_web_site.png") center center no-repeat;
+    content:url("file:///android_asset/25blank.png");
+    width:25px;
+    height:25px;
+}
+
+.estimatedtime:before {
+    background:url("file:///android_asset/ic_action_time.png") center center no-repeat;
+    content:url("file:///android_asset/25blank.png");
+    width:25px;
+    height:25px;
+}
+
+header > h1 {
+  border-bottom: 0px;
 }
 
 #article {
@@ -221,6 +241,7 @@ blockquote {
     width: 100%;
     height: 3em;
     z-index: 11;
+
   }
   #links li:last-child {
     position: static;
