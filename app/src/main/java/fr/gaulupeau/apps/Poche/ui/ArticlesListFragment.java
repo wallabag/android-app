@@ -28,14 +28,12 @@ import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 
+import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
+
 public class ArticlesListFragment extends Fragment implements ListAdapter.OnItemClickListener {
 
     // TODO: remove logging
     private static final String TAG = ArticlesListFragment.class.getSimpleName();
-
-    public static final int LIST_TYPE_MAIN = 0;
-    public static final int LIST_TYPE_FAVORITES = 1;
-    public static final int LIST_TYPE_ARCHIVED = 2;
 
     private static final String LIST_TYPE_PARAM = "list_type";
 
@@ -69,7 +67,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            listType = getArguments().getInt(LIST_TYPE_PARAM, LIST_TYPE_MAIN);
+            listType = getArguments().getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
         }
 
         settings = new Settings(getActivity());
@@ -79,7 +77,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
         mArticles = new ArrayList<>();
 
-        mAdapter = new ListAdapter(mArticles, this);
+        mAdapter = new ListAdapter(mArticles, this, listType);
     }
 
     @Override

@@ -12,6 +12,8 @@ import java.util.List;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.entity.Article;
 
+import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
+
 /**
  * @author Victor Häggqvist
  * @since 10/19/15
@@ -20,10 +22,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Article> articles;
     private OnItemClickListener listener;
+    private int listType = -1;
 
     public ListAdapter(List<Article> articles, OnItemClickListener listener) {
         this.articles = articles;
         this.listener = listener;
+    }
+
+    public ListAdapter(List<Article> articles, OnItemClickListener listener, int listType) {
+        this.articles = articles;
+        this.listener = listener;
+        this.listType = listType;
     }
 
     @Override
@@ -69,8 +78,35 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             title.setText(article.getTitle());
             url.setText(urlText);
 
-            favourite.setText(article.getFavorite() ? "★" : "☆");
-            read.setText(article.getArchive() ? "☑" : "☐");
+            switch(listType) {
+                case LIST_TYPE_UNREAD:
+                case LIST_TYPE_ARCHIVED:
+                    if(article.getFavorite()) {
+                        favourite.setText("★");
+                        favourite.setVisibility(View.VISIBLE);
+                    } else {
+                        favourite.setVisibility(View.GONE);
+                    }
+                    read.setVisibility(View.GONE);
+                    break;
+
+                case LIST_TYPE_FAVORITES:
+                    favourite.setVisibility(View.GONE);
+                    if(article.getArchive()) {
+                        read.setText("☑");
+                        read.setVisibility(View.VISIBLE);
+                    } else {
+                        read.setVisibility(View.GONE);
+                    }
+                    break;
+
+                default:
+                    favourite.setText(article.getFavorite() ? "★" : "☆");
+                    favourite.setVisibility(View.VISIBLE);
+                    read.setText(article.getArchive() ? "☑" : "☐");
+                    read.setVisibility(View.VISIBLE);
+                    break;
+            }
         }
 
         @Override

@@ -29,6 +29,8 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
 
+import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
+
 public class ArticlesListActivity extends AppCompatActivity
         implements UpdateFeedTask.CallbackInterface,
         ArticlesListFragment.OnFragmentInteractionListener {
@@ -342,9 +344,9 @@ public class ArticlesListActivity extends AppCompatActivity
         private static final String TAG = "ArtListPagerAdapter";
 
         private static int[] PAGES = {
-                ArticlesListFragment.LIST_TYPE_FAVORITES,
-                ArticlesListFragment.LIST_TYPE_MAIN,
-                ArticlesListFragment.LIST_TYPE_ARCHIVED
+                LIST_TYPE_FAVORITES,
+                LIST_TYPE_UNREAD,
+                LIST_TYPE_ARCHIVED
         };
 
         private Map<Integer, ArticlesListFragment> fragments = new WeakHashMap<>(3);
@@ -367,9 +369,9 @@ public class ArticlesListActivity extends AppCompatActivity
         @Override
         public CharSequence getPageTitle(int position) {
             switch(PAGES[position]) {
-                case ArticlesListFragment.LIST_TYPE_FAVORITES:
+                case LIST_TYPE_FAVORITES:
                     return App.getInstance().getString(R.string.feedName_favorites);
-                case ArticlesListFragment.LIST_TYPE_ARCHIVED:
+                case LIST_TYPE_ARCHIVED:
                     return App.getInstance().getString(R.string.feedName_archived);
                 default:
                     return App.getInstance().getString(R.string.feedName_unread);
@@ -378,9 +380,9 @@ public class ArticlesListActivity extends AppCompatActivity
 
         public static UpdateFeedTask.FeedType getFeedType(int position) {
             switch(ArticlesListPagerAdapter.PAGES[position]) {
-                case ArticlesListFragment.LIST_TYPE_FAVORITES:
+                case LIST_TYPE_FAVORITES:
                     return UpdateFeedTask.FeedType.Favorite;
-                case ArticlesListFragment.LIST_TYPE_ARCHIVED:
+                case LIST_TYPE_ARCHIVED:
                     return UpdateFeedTask.FeedType.Archive;
                 default:
                     return UpdateFeedTask.FeedType.Main;
