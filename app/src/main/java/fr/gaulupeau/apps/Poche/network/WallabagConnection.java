@@ -45,8 +45,14 @@ public class WallabagConnection {
         if (Holder.client != null)
             return Holder.client;
 
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = createClient();
 
+        Holder.client = client;
+        return client;
+    }
+
+    public static OkHttpClient createClient() {
+        OkHttpClient client = new OkHttpClient();
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
             CookieManager cookieManager = new CookieManager();
@@ -94,7 +100,6 @@ public class WallabagConnection {
             client.networkInterceptors().add(new StethoInterceptor());
         }
 
-        Holder.client = client;
         return client;
     }
 
@@ -120,8 +125,6 @@ public class WallabagConnection {
             long t2 = System.nanoTime();
             Log.d("OkHttp", String.format("Received response for %s in %.1fms, status %d%n%s",
                     response.request().url(), (t2 - t1) / 1e6d, response.code(), response.headers()));
-
-
 
             return response;
         }
