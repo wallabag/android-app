@@ -121,6 +121,5 @@ GAULUPEAU Jonathan — 2013
     <string name="feedName_favorites">Favoris</string>
     <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
     <string name="update_allFeeds">Mettre à jour tous les flux</string>
-    <string name="estimated_time">Temps de lecture estimé :</string>
-    <string name="minutes">min</string>
+    <string name="estimated_time">Temps de lecture estimé : %d min</string>
 </resources>

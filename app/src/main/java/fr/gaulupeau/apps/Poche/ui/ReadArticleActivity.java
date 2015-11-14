@@ -120,7 +120,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
                 "\t\t\t\t\t\t\t<span class=\"urlhost\"><a href=\"" + originalUrlText + "\">" + originalUrlHost + "</a></span><br>\n" +
-                "\t\t\t\t\t\t\t<span class=\"estimatedtime\">" + getString(R.string.estimated_time) + " " + estimatedTimeNumber.toString() + " " + getString(R.string.minutes) + "</span>\n" +
+                "\t\t\t\t\t\t\t<span class=\"estimatedtime\">" + getString(R.string.estimated_time, estimatedTimeNumber) + "</span>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 
