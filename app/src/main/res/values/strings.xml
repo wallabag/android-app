@@ -84,7 +84,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="feedUpdater_feedProcessingError">Feed processing error</string>
     <string name="getCredentials_success">Credentials filled</string>
     <string name="getCredentials_fail">Couldn\'t get credentials</string>
-    <string name="testConnection_errorMessage">Couldn\'t access wallabag</string>
+    <string name="testConnection_errorMessage1">Wallabag service not found; check URL. Error code: %d</string>
+    <string name="testConnection_errorMessage2">Can\'t login; check username and password. Error code: %d</string>
+    <string name="testConnection_errorMessage3">Authorization-related problems. Error code: %d</string>
+    <string name="testConnection_errorMessage_unknown">Unknown error. Error code: %d</string>
     <string name="d_testConnection_success_title">Success</string>
     <string name="d_connectionTest_success_text">Connection test was successful</string>
     <string name="d_testConnection_fail_title">Fail</string>

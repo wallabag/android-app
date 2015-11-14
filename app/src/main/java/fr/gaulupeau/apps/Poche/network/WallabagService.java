@@ -39,22 +39,14 @@ public class WallabagService {
     private OkHttpClient client;
 
     public WallabagService(String endpoint, String username, String password) {
+        this(endpoint, username, password, WallabagConnection.getClient());
+    }
+
+    public WallabagService(String endpoint, String username, String password, OkHttpClient client) {
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
-        client = WallabagConnection.getClient();
-    }
-
-    public String getPage(String fullUrl) throws IOException {
-        return getPage(HttpUrl.parse(fullUrl));
-    }
-
-    public String getPage(HttpUrl url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        return executeRequestForResult(request);
+        this.client = client;
     }
 
     public FeedsCredentials getCredentials() throws IOException {
@@ -140,6 +132,42 @@ public class WallabagService {
                 .build();
 
         return executeRequest(request);
+    }
+
+    public int testConnection() throws IOException {
+        // TODO: detect redirects
+
+        String url = endpoint + "/?view=about";
+        Request testRequest = new Request.Builder().url(url).build();
+
+        Response response = exec(testRequest);
+        String body = response.body().string();
+        if(!isLoginPage(body)) {
+            return 1; // it's not even wallabag login page: probably something wrong with the URL
+        }
+
+        Request loginRequest = getLoginRequest();
+
+        response = exec(loginRequest);
+        body = response.body().string();
+
+        if(isLoginPage(body)) {
+//            if(body.contains("div class='messages error'"))
+            return 2; // still login page: probably wrong username or password
+        }
+
+        response = exec(testRequest);
+        body = response.body().string();
+
+        if(isLoginPage(body)) {
+            return 3; // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+        }
+
+        if(!body.contains("href=\"./?logout\"")) {
+            return 4; // unexpected content: expected to find "log out" button
+        }
+
+        return 0;
     }
 
     private Request getLoginRequest() {
