@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.net.URL;
@@ -55,16 +56,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         OnItemClickListener listener;
         TextView title;
         TextView url;
-        TextView favourite;
-        TextView read;
+        ImageView favourite;
+        ImageView read;
 
         public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
             title = (TextView) itemView.findViewById(R.id.title);
             url = (TextView) itemView.findViewById(R.id.url);
-            favourite = (TextView) itemView.findViewById(R.id.favourite);
-            read = (TextView) itemView.findViewById(R.id.read);
+            favourite = (ImageView) itemView.findViewById(R.id.favourite);
+            read = (ImageView) itemView.findViewById(R.id.read);
             itemView.setOnClickListener(this);
         }
 
@@ -78,35 +79,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             title.setText(article.getTitle());
             url.setText(urlText);
 
+            boolean showFavourite = false;
+            boolean showRead = false;
             switch(listType) {
                 case LIST_TYPE_UNREAD:
                 case LIST_TYPE_ARCHIVED:
-                    if(article.getFavorite()) {
-                        favourite.setText("★");
-                        favourite.setVisibility(View.VISIBLE);
-                    } else {
-                        favourite.setVisibility(View.GONE);
-                    }
-                    read.setVisibility(View.GONE);
+                    showFavourite = article.getFavorite();
                     break;
 
                 case LIST_TYPE_FAVORITES:
-                    favourite.setVisibility(View.GONE);
-                    if(article.getArchive()) {
-                        read.setText("☑");
-                        read.setVisibility(View.VISIBLE);
-                    } else {
-                        read.setVisibility(View.GONE);
-                    }
+                    showRead = article.getArchive();
                     break;
 
-                default:
-                    favourite.setText(article.getFavorite() ? "★" : "☆");
-                    favourite.setVisibility(View.VISIBLE);
-                    read.setText(article.getArchive() ? "☑" : "☐");
-                    read.setVisibility(View.VISIBLE);
+                default: // we don't actually use it right now
+                    showFavourite = article.getFavorite();
+                    showRead = article.getArchive();
                     break;
             }
+            favourite.setVisibility(showFavourite ? View.VISIBLE : View.GONE);
+            read.setVisibility(showRead ? View.VISIBLE : View.GONE);
         }
 
         @Override
