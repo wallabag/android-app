@@ -27,10 +27,6 @@ GAULUPEAU Jonathan — 2013
 <string name="menuNext">Article suivant</string>
 <string name="menuPrevious">Article précédent</string><string name="menuDelete">Supprimer</string>
 <string name="menuOpenOriginal">Ouvrir l\'original</string>
-<string name="menu_show_archived">Voir les articles archivés</string>
-<string name="menu_show_unread">Voir les articles non lus</string>
-<string name="menu_prioritize_favorites">Mettre en priorité les favoris</string>
-<string name="menu_dont_prioritize_favorites">Ne pas mettre en priorité les favoris</string>
 <string name="menu_open_random_article">Ouvrir un article au hasard</string>
 <string name="menuUploadOfflineURLs">Envoyer les URL ajoutées hors-ligne</string>
 <string name="menuWipeDb">Purger la base de données</string>
@@ -91,7 +87,6 @@ GAULUPEAU Jonathan — 2013
 <string name="feedUpdater_feedProcessingError">Erreur de traitement du flux</string>
 <string name="getCredentials_success">Identifiants trouvés</string>
 <string name="getCredentials_fail">Impossible de trouver les identifiants</string>
-<string name="testConnection_errorMessage">Impossible d\'accéder à wallabag</string>
 <string name="d_testConnection_success_title">Succès</string>
 <string name="d_connectionTest_success_text">Le test de connexion a été réussi</string>
 <string name="d_testConnection_fail_title">Échec</string>

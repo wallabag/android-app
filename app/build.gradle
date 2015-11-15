@@ -8,7 +8,7 @@ android {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 8
         targetSdkVersion 23
-        versionCode 14
+        versionCode 15
         versionName "1.9"
     }
 
