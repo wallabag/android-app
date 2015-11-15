@@ -9,7 +9,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="instructions">With wallabag, you can save web pages to read them later. To do so, first open the page in a web browser, as you normally would. Then tap <i>Share</i> and then <i>Bag it!</i>. \nYou will then see your wallabag login page. \nAnd you\'re done ! \nYou can find more info about wallabag at:\n http://www.wallabag.org</string>
     <string name="btnDone">Save</string>
     <string name="url_label">Wallabag URL</string>
-    <string name="url_help">Examples:\n<i>http://wallabag.example.fr</i>\n<i>http://www.example.fr/wallabag</i></string>
+    <string name="url_help">Examples:\n<i>https://wallabag.example.com</i>\n<i>https://www.example.com/wallabag</i>\n<i>https://framabag.org/u/your-username</i></string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnMarkUnread">Mark as Unread</string>
     <string name="moved_to_archive_message">Archived</string>
