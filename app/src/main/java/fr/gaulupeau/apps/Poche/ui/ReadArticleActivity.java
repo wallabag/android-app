@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -44,6 +45,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 	public static final String EXTRA_ID = "ReadArticleActivity.id";
 	public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
 	public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
+
+    private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private ScrollView scrollView;
 	private WebView webViewContent;
@@ -91,8 +94,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
-        boolean highContrast = App.getInstance().getSettings()
-                .getBoolean(Settings.HIGH_CONTRAST, false);
+        Settings settings = App.getInstance().getSettings();
+
+        boolean highContrast = settings.getBoolean(Settings.HIGH_CONTRAST, false);
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
@@ -116,6 +120,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t</body>\n" +
 				"\t\t</div>\n" +
 				"</html>";
+
+        final String httpAuthHost = settings.getUrl();
+        final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
+        final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
 		webViewContent = (WebView) findViewById(R.id.webViewContent);
@@ -145,6 +153,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 return openUrl(url);
+            }
+
+            public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
+                                                  String host, String realm) {
+                Log.d(TAG, "onReceivedHttpAuthRequest() host: " + host + ", realm: " + realm);
+                if(httpAuthHost != null && httpAuthHost.contains(host)) { // TODO: check
+                    Log.d(TAG, "onReceivedHttpAuthRequest() host match");
+                    handler.proceed(httpAuthUsername, httpAuthPassword);
+                } else {
+                    Log.d(TAG, "onReceivedHttpAuthRequest() host mismatch");
+                    super.onReceivedHttpAuthRequest(view, handler, host, realm);
+                }
             }
         });
 
