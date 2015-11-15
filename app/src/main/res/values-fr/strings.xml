@@ -125,4 +125,11 @@ GAULUPEAU Jonathan — 2013
     <string name="testConnection_errorMessage2">Impossible de se connecter. Vérifiez votre identifiant et votre mot de passe. Code d\'erreur : %d</string>
     <string name="testConnection_errorMessage3">Problèmes relatifs aux autorisations. Code d\'erreur : %d</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue. Code d\'erreur : %d</string>
+    <string name="articleList_ArchivedMark">Marqué comme lu</string>
+    <string name="articleList_favoriteMark">Marqué comme favori</string>
+    <string name="settings_UI">Paramètres visuels</string>
+    <string name="settings_httpAuth">Authentification HTTP Basique (optionnel)</string>
+    <string name="settings_httpAuth_desc">Si vous ne savez pas ce que c'est, laissez-le vide</string>
+    <string name="settings_httpAuth_password">Mot de passe Authentification HTTP</string>
+    <string name="settings_httpAuth_username">Identifiant Authentification HTTP</string>
 </resources>
