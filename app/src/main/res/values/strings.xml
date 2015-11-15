@@ -115,6 +115,11 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_emptyDB_answer_updateAll">Yes (recommended)</string>
     <string name="articleList_favoriteMark">Favorite mark</string>
     <string name="articleList_ArchivedMark">Archived mark</string>
+    <string name="settings_httpAuth">Basic HTTP Authorization (optional)</string>
+    <string name="settings_httpAuth_desc">If you don\'t know what it is, leave it empty</string>
+    <string name="settings_httpAuth_username">HTTP Auth username</string>
+    <string name="settings_httpAuth_password">HTTP Auth password</string>
+    <string name="settings_UI">UI settings</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

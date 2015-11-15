@@ -7,6 +7,7 @@ import com.facebook.stetho.Stetho;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 
 /**
  * @author Victor Häggqvist
@@ -26,6 +27,8 @@ public class App extends Application {
 
         DbConnection.setContext(this);
         settings = new Settings(this);
+
+        WallabagConnection.init(this);
 
         instance = this;
     }

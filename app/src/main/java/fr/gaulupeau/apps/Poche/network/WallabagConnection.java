@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -32,6 +33,36 @@ import fr.gaulupeau.apps.Poche.data.Settings;
  * @since 10/20/15
  */
 public class WallabagConnection {
+
+    private static String basicAuthCredentials;
+
+    public static void init(App app) {
+        Settings settings = app.getSettings();
+
+        setBasicAuthCredentials(
+                settings.getString(Settings.HTTP_AUTH_USERNAME, null),
+                settings.getString(Settings.HTTP_AUTH_PASSWORD, null)
+        );
+    }
+
+    public static void setBasicAuthCredentials(String username, String password) {
+        if((username == null || username.length() == 0)
+                && (password == null || password.length() == 0)) {
+            basicAuthCredentials = null;
+        } else {
+            basicAuthCredentials = Credentials.basic(username, password);
+        }
+    }
+
+    public static Request.Builder getRequestBuilder() {
+        Request.Builder b = new Request.Builder();
+
+        // we use this method instead of OkHttpClient.setAuthenticator()
+        // to save time on 401 responses
+        if(basicAuthCredentials != null) b.header("Authorization", basicAuthCredentials);
+
+        return b;
+    }
 
     public static boolean isNetworkOnline() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
@@ -102,7 +133,6 @@ public class WallabagConnection {
 
         return client;
     }
-
 
     private static class Holder {
         private static OkHttpClient client = getClient();

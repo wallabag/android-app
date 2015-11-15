@@ -10,15 +10,13 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+
+import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 
 /**
  * @author Victor Häggqvist
@@ -31,7 +29,7 @@ public class WallabagService {
         public String token;
     }
 
-    private static String TAG = WallabagService.class.getSimpleName();
+    private static final String TAG = WallabagService.class.getSimpleName();
 
     private String endpoint;
     private final String username;
@@ -85,7 +83,7 @@ public class WallabagService {
                 .setQueryParameter("plainurl", link)
                 .build();
 
-        Request request = new Request.Builder()
+        Request request = getRequestBuilder()
                 .url(url)
                 .build();
 
@@ -99,7 +97,7 @@ public class WallabagService {
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = new Request.Builder()
+        Request request = getRequestBuilder()
                 .url(url)
                 .build();
 
@@ -113,7 +111,7 @@ public class WallabagService {
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = new Request.Builder()
+        Request request = getRequestBuilder()
                 .url(url)
                 .build();
 
@@ -127,7 +125,7 @@ public class WallabagService {
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = new Request.Builder()
+        Request request = getRequestBuilder()
                 .url(url)
                 .build();
 
@@ -136,9 +134,10 @@ public class WallabagService {
 
     public int testConnection() throws IOException {
         // TODO: detect redirects
+        // TODO: check response codes prior to getting body
 
         String url = endpoint + "/?view=about";
-        Request testRequest = new Request.Builder().url(url).build();
+        Request testRequest = getRequestBuilder().url(url).build();
 
         Response response = exec(testRequest);
         String body = response.body().string();
@@ -179,7 +178,7 @@ public class WallabagService {
 //                .add("longlastingsession", "on")
                 .build();
 
-        return new Request.Builder()
+        return getRequestBuilder()
                 .url(url)
                 .post(formBody)
                 .build();
@@ -191,7 +190,7 @@ public class WallabagService {
                 .setQueryParameter("view", "config")
                 .build();
 
-        return new Request.Builder()
+        return getRequestBuilder()
                 .url(url)
                 .build();
     }
@@ -205,7 +204,7 @@ public class WallabagService {
 
         Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
 
-        return new Request.Builder()
+        return getRequestBuilder()
                 .url(url)
                 .build();
     }
@@ -280,17 +279,6 @@ public class WallabagService {
 
 //        "<body class=\"login\">"
         return body.contains("<form method=\"post\" action=\"?login\" name=\"loginform\">"); // any way to improve?
-    }
-
-    // TODO: do not print actual value
-    private void printLoginCookie() throws IOException {
-        Map<String, List<String>> cookies = client.getCookieHandler()
-                .get(URI.create(endpoint), new HashMap<String, List<String>>(0));
-        List<String> l = cookies.get("Cookie");
-        if(l != null && !l.isEmpty()) {
-            String loginCookie = l.get(0);
-            Log.d(TAG, "cookie: " + loginCookie);
-        }
     }
 
 }

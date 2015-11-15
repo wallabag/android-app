@@ -21,6 +21,8 @@ public class Settings {
     public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
+    public static final String HTTP_AUTH_USERNAME = "http_auth_username";
+    public static final String HTTP_AUTH_PASSWORD = "http_auth_password";
     public static final String VERSION_CODE = "version_code";
 
     private SharedPreferences pref;

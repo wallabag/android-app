@@ -21,6 +21,7 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
@@ -39,6 +40,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 	TextView textViewVersion;
 	EditText username;
 	EditText password;
+	EditText httpAuthUsername;
+	EditText httpAuthPassword;
 	ProgressDialog progressDialog;
 
     private Settings settings;
@@ -79,6 +82,11 @@ public class SettingsActivity extends BaseActionBarActivity {
 		password = (EditText) findViewById(R.id.password);
 		password.setText(settings.getKey(Settings.PASSWORD));
 
+		httpAuthUsername = (EditText) findViewById(R.id.http_auth_username);
+		httpAuthUsername.setText(settings.getKey(Settings.HTTP_AUTH_USERNAME));
+		httpAuthPassword = (EditText) findViewById(R.id.http_auth_password);
+		httpAuthPassword.setText(settings.getKey(Settings.HTTP_AUTH_PASSWORD));
+
 		TextWatcher textWatcher = new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -113,6 +121,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 				progressDialog.setMessage(getString(R.string.settings_testingConnection));
 				progressDialog.show();
 
+				applyHttpAuth();
+
 				testConnectionTask = new TestConnectionTask(
 						SettingsActivity.this, editPocheUrl.getText().toString(),
 						username.getText().toString(), password.getText().toString(),
@@ -129,6 +139,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 
 				progressDialog.setMessage(getString(R.string.settings_gettingCredentials));
 				progressDialog.show();
+
+				applyHttpAuth();
 
 				getCredentialsTask = new GetCredentialsTask(
 						SettingsActivity.this, editPocheUrl.getText().toString(),
@@ -154,6 +166,11 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());
+
+				applyHttpAuth();
+
+				settings.setString(Settings.HTTP_AUTH_USERNAME, httpAuthUsername.getText().toString());
+				settings.setString(Settings.HTTP_AUTH_PASSWORD, httpAuthPassword.getText().toString());
 
 				if (wallabagSettings.isValid()) {
 					wallabagSettings.save();
@@ -215,6 +232,14 @@ public class SettingsActivity extends BaseActionBarActivity {
 		}
 	}
 
+	private void applyHttpAuth() {
+		String username = httpAuthUsername.getText().toString();
+		String password = httpAuthPassword.getText().toString();
+
+		WallabagConnection.setBasicAuthCredentials(username, password);
+	}
+
+	// TODO: remove?
 	private void updateButton() {
 		wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
 		wallabagSettings.userID = editAPIUsername.getText().toString();
