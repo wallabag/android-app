@@ -10,9 +10,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.HttpAuthHandler;
@@ -168,6 +170,59 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
         });
 
+        // TODO: remove logging after calibrated
+        GestureDetector.SimpleOnGestureListener gestureListener
+                = new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                // note: e1 - previous event, e2 - current event
+                // velocity* - velocity in pixels per second
+
+                if(e1 == null || e2 == null) return false;
+                if(e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
+
+//                if(Math.abs(e1.getY() - e2.getY()) > 150) {
+//                    Log.d("FLING", "not a horizontal fling (distance)");
+//                    return false; // not a horizontal move (distance)
+//                }
+
+                if(Math.abs(velocityX) < 100) {
+                    Log.d("FLING", "too slow");
+                    return false; // too slow
+                }
+
+                if(Math.abs(velocityX / velocityY) < 2) {
+                    Log.d("FLING", "not a horizontal fling");
+                    return false; // not a horizontal fling
+                }
+
+                float diff = e1.getX() - e2.getX();
+
+                if(Math.abs(diff) < 100) { // configurable
+                    Log.d("FLING", "too small distance");
+                    return false; // too small distance
+                }
+
+                if(diff > 0) { // right-to-left: next
+                    Log.d("FLING", "right-to-left: next");
+                    openNextArticle();
+                } else { // left-to-right: prev
+                    Log.d("FLING", "left-to-right: prev");
+                    openPreviousArticle();
+                }
+                return true;
+            }
+        };
+
+        final GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
+
+        webViewContent.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        });
+
         loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
         bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
         hrBar = findViewById(R.id.view1);
@@ -200,13 +255,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         btnGoPrevious.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                openArticle(previousArticleID);
+                openPreviousArticle();
             }
         });
         btnGoNext.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                openArticle(nextArticleID);
+                openNextArticle();
             }
         });
 	}
@@ -232,23 +287,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         builder.setCustomTitle(v);
 
         builder.setItems(
-                new CharSequence[] {
+                new CharSequence[]{
                         getString(R.string.d_urlAction_openInBrowser),
                         getString(R.string.d_urlAction_addToWallabag)
                 }, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(launchBrowserIntent);
-                        break;
-                    case 1:
-                        new AddLinkTask(url, ReadArticleActivity.this).execute();
-                        break;
-                }
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(launchBrowserIntent);
+                                break;
+                            case 1:
+                                new AddLinkTask(url, ReadArticleActivity.this).execute();
+                                break;
+                        }
+                    }
+                });
         builder.show();
 
         return true;
@@ -308,6 +363,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
         if(contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
         startActivity(intent);
+    }
+
+    private boolean openPreviousArticle() {
+        if(previousArticleID != null) {
+            openArticle(previousArticleID);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean openNextArticle() {
+        if(nextArticleID != null) {
+            openArticle(nextArticleID);
+            return true;
+        }
+
+        return false;
     }
 
     @Override
