@@ -129,7 +129,7 @@ GAULUPEAU Jonathan — 2013
     <string name="articleList_favoriteMark">Marqué comme favori</string>
     <string name="settings_UI">Paramètres visuels</string>
     <string name="settings_httpAuth">Authentification HTTP Basique (optionnel)</string>
-    <string name="settings_httpAuth_desc">Si vous ne savez pas ce que c'est, laissez-le vide</string>
+    <string name="settings_httpAuth_desc">Si vous ne savez pas ce que c\'est, laissez-le vide</string>
     <string name="settings_httpAuth_password">Mot de passe Authentification HTTP</string>
     <string name="settings_httpAuth_username">Identifiant Authentification HTTP</string>
 </resources>
