@@ -186,19 +186,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 //                    return false; // not a horizontal move (distance)
 //                }
 
-                if(Math.abs(velocityX) < 100) {
+                if(Math.abs(velocityX) < 80) {
                     Log.d("FLING", "too slow");
                     return false; // too slow
                 }
 
-                if(Math.abs(velocityX / velocityY) < 2) {
+                if(Math.abs(velocityX / velocityY) < 3) {
                     Log.d("FLING", "not a horizontal fling");
                     return false; // not a horizontal fling
                 }
 
                 float diff = e1.getX() - e2.getX();
 
-                if(Math.abs(diff) < 100) { // configurable
+                if(Math.abs(diff) < 80) { // configurable
                     Log.d("FLING", "too small distance");
                     return false; // too small distance
                 }
