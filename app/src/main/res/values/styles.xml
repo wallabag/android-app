@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="app_theme" parent="Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="app_theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:textColor">#000000</item>
+    </style>
     <style name="mainActivity_theme" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="app_theme_dark" parent="Theme.AppCompat">
+        <item name="android:background">#000000</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 
     <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>

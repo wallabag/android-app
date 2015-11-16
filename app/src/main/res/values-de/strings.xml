@@ -115,6 +115,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_emptyDB_answer_updateAll">Ja (empfohlen)</string>
     <string name="articleList_favoriteMark">Favorit Markierung</string>
     <string name="articleList_ArchivedMark">Archiv Markierung</string>
+    <string name="nightmode">Nachtmodus</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>

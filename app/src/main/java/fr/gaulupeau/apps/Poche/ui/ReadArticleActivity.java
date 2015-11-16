@@ -71,7 +71,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private boolean loadingFinished;
 
+    private Settings settings;
+    private boolean nightmode;
+
     public void onCreate(Bundle savedInstanceState) {
+        settings = ((App) getApplication()).getSettings();
+        nightmode=settings.getBoolean(Settings.NIGHTMODE, false);
+        setTheme(nightmode ? R.style.app_theme_dark : R.style.app_theme);
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 
@@ -96,15 +103,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
-        Settings settings = App.getInstance().getSettings();
-
         boolean highContrast = settings.getBoolean(Settings.HIGH_CONTRAST, false);
+
+        String usedCSS = "main"; //use nightmode.css for the dark theme
+        if (nightmode) {
+            usedCSS = "nightmode";
+        }
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
 				"\t\t<meta charset=\"utf-8\">\n" +
-				"\t\t<link rel=\"stylesheet\" href=\"main.css\" media=\"all\" id=\"main-theme\">\n" +
+                "\t\t<link rel=\"stylesheet\" href=\"" + usedCSS + ".css\" media=\"all\" id=\"main-theme\">\n" +
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
