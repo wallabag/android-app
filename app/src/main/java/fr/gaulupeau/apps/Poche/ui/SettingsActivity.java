@@ -36,6 +36,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIToken;
 	CheckBox allCerts;
 	CheckBox highContrast;
+	CheckBox nightmode;
 	EditText listLimit;
 	TextView textViewVersion;
 	EditText username;
@@ -52,10 +53,12 @@ public class SettingsActivity extends BaseActionBarActivity {
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
+		settings = ((App) getApplication()).getSettings();
+		setTheme(settings.getBoolean(Settings.NIGHTMODE, false) ? R.style.app_theme_dark : R.style.app_theme);
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
-        settings = ((App) getApplication()).getSettings();
 		wallabagSettings = WallabagSettings.settingsFromDisk(settings);
 
 		if (!wallabagSettings.isValid()) {
@@ -67,6 +70,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
 		highContrast = (CheckBox) findViewById(R.id.high_contrast_cb);
+        nightmode = (CheckBox) findViewById(R.id.nightmode);
 		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
@@ -75,6 +79,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
 		highContrast.setChecked(settings.getBoolean(Settings.HIGH_CONTRAST,
 				android.os.Build.MODEL.equals("NOOK")));
+        nightmode.setChecked(settings.getBoolean(Settings.NIGHTMODE,false));
 		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
 
 		username = (EditText) findViewById(R.id.username);
@@ -160,6 +165,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
                 settings.setBoolean(Settings.HIGH_CONTRAST, highContrast.isChecked());
+				settings.setBoolean(Settings.NIGHTMODE,nightmode.isChecked());
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
                 } catch (NumberFormatException ignored) {}

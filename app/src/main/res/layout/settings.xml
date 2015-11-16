@@ -211,6 +211,14 @@
             android:layout_marginTop="@dimen/toppadding"
             android:text="@string/high_contrast_text" />
 
+        <CheckBox
+            android:id="@+id/nightmode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/nightmode"
+            android:checked="false" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
