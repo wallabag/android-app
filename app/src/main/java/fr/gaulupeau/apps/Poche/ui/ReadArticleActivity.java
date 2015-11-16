@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -299,7 +300,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 startActivity(launchBrowserIntent);
                                 break;
                             case 1:
-                                new AddLinkTask(url, ReadArticleActivity.this).execute();
+                                new AddLinkTask(url, getApplicationContext()).execute();
                                 break;
                         }
                     }
@@ -310,13 +311,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void markAsReadAndClose() {
-        new ToggleArchiveTask(this, mArticle.getArticleId(), mArticleDao, mArticle).execute();
+        new ToggleArchiveTask(getApplicationContext(),
+                mArticle.getArticleId(), mArticleDao, mArticle).execute();
 
         finish();
     }
 
     private boolean toggleFavorite() {
-        new ToggleFavoriteTask(this, mArticle.getArticleId(), mArticleDao, mArticle).execute();
+        new ToggleFavoriteTask(getApplicationContext(),
+                mArticle.getArticleId(), mArticleDao, mArticle).execute();
 
         return true;
     }
@@ -337,7 +340,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new DeleteArticleTask(ReadArticleActivity.this,
+                new DeleteArticleTask(getApplicationContext(),
                         mArticle.getArticleId(), mArticleDao, mArticle).execute();
 
                 finish();
@@ -371,6 +374,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return true;
         }
 
+        Toast.makeText(this, R.string.noPreviousArticle, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -380,6 +384,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return true;
         }
 
+        Toast.makeText(this, R.string.noNextArticle, Toast.LENGTH_SHORT).show();
         return false;
     }
 

@@ -326,7 +326,7 @@ public class ArticlesListActivity extends AppCompatActivity
         progressDialog.setCancelable(true);
 
         final UploadOfflineURLsTask uploadOfflineURLsTask
-                = new UploadOfflineURLsTask(this, progressDialog);
+                = new UploadOfflineURLsTask(getApplicationContext(), progressDialog);
 
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override

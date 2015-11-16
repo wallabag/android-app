@@ -1,9 +1,8 @@
 package fr.gaulupeau.apps.Poche.network.tasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -18,30 +17,29 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
+import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
     private final String url;
     private String errorMessage;
-    private Activity activity;
+    private Context context;
     private ProgressBar progressBar;
     private ProgressDialog progressDialog;
-    private boolean finishActivity;
 
     private boolean isOffline;
     private boolean savedOffline;
 
-    public AddLinkTask(String url, Activity activity) {
-        this(url, activity, null, null, false);
+    public AddLinkTask(String url, Context context) {
+        this(url, context, null, null);
     }
 
-    public AddLinkTask(String url, Activity activity, ProgressBar progressBar,
-                       ProgressDialog progressDialog, boolean finishActivity) {
+    public AddLinkTask(String url, Context context, ProgressBar progressBar,
+                       ProgressDialog progressDialog) {
         this.url = url;
-        this.activity = activity;
+        this.context = context;
         this.progressBar = progressBar;
         this.progressDialog = progressDialog;
-        this.finishActivity = finishActivity;
     }
 
     @Override
@@ -63,8 +61,8 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
             try {
                 if(service.addLink(url)) {
                     result = true;
-                } else if(activity != null) {
-                    errorMessage = activity.getString(R.string.addLink_errorMessage);
+                } else if(context != null) {
+                    errorMessage = context.getString(R.string.addLink_errorMessage);
                 }
             } catch (IOException e) {
                 errorMessage = e.getMessage();
@@ -89,34 +87,29 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if (success) {
-            if(activity != null) {
-                Toast.makeText(activity, R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
+            if(context != null) {
+                Toast.makeText(context, R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
             }
         } else {
-            if(activity != null) {
+            if(context != null) {
                 if(!isOffline) {
-                    new AlertDialog.Builder(activity)
-                            .setTitle(R.string.d_addLink_failedOnline_title)
-                            .setMessage(errorMessage)
-                            .setPositiveButton(R.string.ok, null)
-                            .show();
+                    showDialog(context, R.string.d_addLink_failedOnline_title, errorMessage, R.string.ok);
                 } else if(!savedOffline) {
-                    new AlertDialog.Builder(activity)
-                            .setTitle(R.string.d_addLink_failed_title)
-                            .setMessage(errorMessage)
-                            .setPositiveButton(R.string.ok, null)
-                            .show();
+                    showDialog(context, R.string.d_addLink_failed_title, errorMessage, R.string.ok);
                 }
 
                 if(savedOffline) {
-                    Toast.makeText(activity, R.string.addLink_savedOffline, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.addLink_savedOffline, Toast.LENGTH_SHORT).show();
                 }
             }
         }
 
         if(progressBar != null) progressBar.setVisibility(View.GONE);
         if(progressDialog != null) progressDialog.dismiss();
-        if(activity != null && finishActivity) activity.finish();
+    }
+
+    private void showDialog(Context c, int titleId, String message, int buttonId) {
+        DialogHelperActivity.showAlertDialog(c, c.getString(titleId), message, c.getString(buttonId));
     }
 
 }

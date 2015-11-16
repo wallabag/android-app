@@ -8,7 +8,7 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
-import fr.gaulupeau.apps.Poche.ui.ConnectionFailAlert;
+import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class DeleteArticleTask extends GenericArticleTask {
 
@@ -48,7 +48,7 @@ public class DeleteArticleTask extends GenericArticleTask {
             }
         } else {
             if(context != null) {
-                ConnectionFailAlert.getDialog(context, errorMessage).show();
+                DialogHelperActivity.showConnectionFailureDialog(context, errorMessage);
             }
         }
     }

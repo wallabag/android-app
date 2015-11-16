@@ -1,9 +1,8 @@
 package fr.gaulupeau.apps.Poche.network.tasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -17,21 +16,18 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
+import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
 
     private String errorMessage;
-    private Activity activity;
+    private Context context;
     private ProgressDialog progressDialog;
 
     private int totalUploaded, totalCount;
 
-    public UploadOfflineURLsTask(Activity activity) {
-        this(activity, null);
-    }
-
-    public UploadOfflineURLsTask(Activity activity, ProgressDialog progressDialog) {
-        this.activity = activity;
+    public UploadOfflineURLsTask(Context context, ProgressDialog progressDialog) {
+        this.context = context;
         this.progressDialog = progressDialog;
     }
 
@@ -65,8 +61,8 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
             for(OfflineURL url: urls) {
                 if(isCancelled()) break;
                 if(!service.addLink(url.getUrl())) {
-                    if(activity != null) {
-                        errorMessage = activity.getString(R.string.couldntUploadURL_errorMessage);
+                    if(context != null) {
+                        errorMessage = context.getString(R.string.couldntUploadURL_errorMessage);
                     }
                     break;
                 }
@@ -110,23 +106,21 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if (success) {
-            if(activity != null) {
+            if(context != null) {
                 if(totalCount == 0) {
-                    Toast.makeText(activity, R.string.uploadURLs_nothingToUpload, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.uploadURLs_nothingToUpload, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(activity, R.string.uploadURLs_finished, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, R.string.uploadURLs_finished, Toast.LENGTH_SHORT).show();
                 }
             }
         } else {
-            if(activity != null) {
-                new AlertDialog.Builder(activity)
-                        .setTitle(R.string.d_uploadURLs_title)
-                        .setMessage(errorMessage)
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
+            if(context != null) {
+                DialogHelperActivity.showAlertDialog(context,
+                        context.getString(R.string.d_uploadURLs_title), errorMessage,
+                        context.getString(R.string.ok));
 
-                Toast.makeText(activity, String.format(
-                                activity.getString(R.string.uploadURLs_result_text),
+                Toast.makeText(context, String.format(
+                                context.getString(R.string.uploadURLs_result_text),
                                 totalUploaded, totalCount),
                         Toast.LENGTH_SHORT).show();
             }

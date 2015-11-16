@@ -120,6 +120,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="settings_httpAuth_username">HTTP Auth username</string>
     <string name="settings_httpAuth_password">HTTP Auth password</string>
     <string name="settings_UI">UI settings</string>
+    <string name="noPreviousArticle">There is no previous article in current list</string>
+    <string name="noNextArticle">There is no next article in current list</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>
