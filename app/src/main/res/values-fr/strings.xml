@@ -11,9 +11,6 @@ GAULUPEAU Jonathan — 2013
 <string name="btnDone">Sauvegarder</string>
 <string name="url_label"><b><u>Votre URL wallabag:</u></b></string>
 <string name="url_help">Exemples:\n<i>http://wallabag.example.com</i>\n<i>http://www.example.com/wallabag</i></string>
-<string name="btnGetPost">Liste des articles - %1$d non-lus</string>
-<string name="btnFastSync">Synchronisation rapide</string>
-<string name="btnSync">Synchronisation</string>
 <string name="btnMarkRead">Marquer comme lu</string>
 <string name="btnMarkUnread">Marquer comme non lu</string>
 <string name="moved_to_archive_message">Archivé</string>
@@ -128,4 +125,6 @@ GAULUPEAU Jonathan — 2013
     <string name="settings_httpAuth_password">Mot de passe Authentification HTTP</string>
     <string name="settings_httpAuth_username">Identifiant Authentification HTTP</string>
     <string name="nightmode">Mode nuit</string>
+    <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
+    <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
 </resources>

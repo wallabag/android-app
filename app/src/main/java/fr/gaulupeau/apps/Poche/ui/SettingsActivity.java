@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -44,6 +45,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText httpAuthUsername;
 	EditText httpAuthPassword;
 	ProgressDialog progressDialog;
+	Intent starterIntent;
 
     private Settings settings;
 	private WallabagSettings wallabagSettings;
@@ -79,7 +81,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
 		highContrast.setChecked(settings.getBoolean(Settings.HIGH_CONTRAST,
 				android.os.Build.MODEL.equals("NOOK")));
-        nightmode.setChecked(settings.getBoolean(Settings.NIGHTMODE,false));
+        nightmode.setChecked(settings.getBoolean(Settings.NIGHTMODE, false));
 		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
 
 		username = (EditText) findViewById(R.id.username);
@@ -157,6 +159,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		});
 
 		btnDone = (Button) findViewById(R.id.btnDone);
+		starterIntent = new Intent(this,ArticlesListActivity.class);
 		btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
@@ -181,6 +184,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 				if (wallabagSettings.isValid()) {
 					wallabagSettings.save();
 					finish();
+					startActivity(starterIntent);
 				}
 			}
 		});
