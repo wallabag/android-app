@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +38,13 @@ public class BagItProxyActivity extends AppCompatActivity {
                     .setTitle(R.string.d_bag_fail_title)
                     .setMessage(getString(R.string.d_bag_fail_text) + extraText)
                     .setPositiveButton(R.string.ok, null)
-                    .create();
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    })
+                    .show();
             return;
         }
 
@@ -46,9 +53,15 @@ public class BagItProxyActivity extends AppCompatActivity {
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.d_addingToWallabag_text));
         progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
         progressDialog.show();
 
-        new AddLinkTask(pageUrl, this, null, progressDialog, true).execute();
+        new AddLinkTask(pageUrl, this, null, progressDialog).execute();
     }
 
 }

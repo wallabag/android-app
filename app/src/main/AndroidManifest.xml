@@ -38,6 +38,10 @@
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddActivity"
             android:label="@string/activity_add_label"/>
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.DialogHelperActivity"
+            android:theme="@style/ProxyTheme"
+            android:excludeFromRecents="true" />
     </application>
 
 </manifest>

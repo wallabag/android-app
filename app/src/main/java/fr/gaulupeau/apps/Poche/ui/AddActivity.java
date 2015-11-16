@@ -23,17 +23,15 @@ public class AddActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setIndeterminate(true);
 
+        // TODO: lock button while operation is running
+        // TODO: cancel operation if activity is hiding
         findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                new AddLinkTask(pageUrl.getText().toString(), AddActivity.this,
-                        progressBar, null, true).execute();
-
+                new AddLinkTask(pageUrl.getText().toString(), getApplicationContext(),
+                        progressBar, null).execute();
             }
         });
-
-
     }
 
 }
