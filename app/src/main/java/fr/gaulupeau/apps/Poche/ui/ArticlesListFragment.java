@@ -212,7 +212,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
             case LIST_TYPE_FAVORITES:
                 qb.where(ArticleDao.Properties.Favorite.eq(true));
-                qb.orderAsc(ArticleDao.Properties.Archive);
                 break;
 
             default:

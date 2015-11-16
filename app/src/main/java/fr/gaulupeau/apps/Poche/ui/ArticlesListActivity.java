@@ -52,7 +52,8 @@ public class ArticlesListActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         settings = new Settings(this);
-        setTheme(settings.getBoolean(Settings.NIGHTMODE, false) ? R.style.app_theme_dark : R.style.app_theme);
+        Boolean nightmode=settings.getBoolean(Settings.NIGHTMODE, false);
+        setTheme(nightmode ? R.style.app_theme_dark : R.style.app_theme);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_articles_list);
@@ -327,7 +328,7 @@ public class ArticlesListActivity extends AppCompatActivity
         progressDialog.setCancelable(true);
 
         final UploadOfflineURLsTask uploadOfflineURLsTask
-                = new UploadOfflineURLsTask(this, progressDialog);
+                = new UploadOfflineURLsTask(getApplicationContext(), progressDialog);
 
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
