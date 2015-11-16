@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -371,6 +372,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return true;
         }
 
+        Toast.makeText(this, R.string.noPreviousArticle, Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -380,6 +382,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return true;
         }
 
+        Toast.makeText(this, R.string.noNextArticle, Toast.LENGTH_SHORT).show();
         return false;
     }
 
