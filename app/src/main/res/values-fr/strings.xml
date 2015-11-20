@@ -127,4 +127,11 @@ GAULUPEAU Jonathan — 2013
     <string name="nightmode">Mode nuit</string>
     <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
+    <string name="settings_appTheme">Thème de l\'application</string>
+    <string name="settings_ui_fontSize">Taille de la police</string>
+    <string name="settings_ui_serif">Police avec empattement (serif)</string>
+    <string name="themeName_dark">Sombre</string>
+    <string name="themeName_dark_contrast">Sombre (contraste élevé)</string>
+    <string name="themeName_light">Clair</string>
+    <string name="themeName_light_contrast">Clair (contraste élevé)</string>
 </resources>
