@@ -18,11 +18,14 @@ html {
 
 body {
   background: #333;
-  font-family: serif;
 }
 
 .high-contrast {
   background: #000;
+}
+
+.serif-font {
+  font-family: serif;
 }
 
 /* ==========================================================================

@@ -15,6 +15,7 @@ public class Settings {
     public static final String USER_ID = "APIUsername";
     public static final String TOKEN = "APIToken";
     public static final String ALL_CERTS = "all_certs";
+    public static final String SERIF_FONT = "serif_font";
     public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";

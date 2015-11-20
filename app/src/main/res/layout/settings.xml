@@ -221,9 +221,17 @@
             android:layout_height="wrap_content"
             android:paddingBottom="5sp" />
 
+        <CheckBox
+            android:id="@+id/ui_font_serif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_ui_serif" />
+
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding" >
 
             <EditText
                 android:id="@+id/list_limit_number"

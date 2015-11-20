@@ -39,6 +39,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIToken;
 	CheckBox allCerts;
 	AppCompatSpinner themeChooser;
+	CheckBox serifFont;
 	EditText listLimit;
 	TextView textViewVersion;
 	EditText username;
@@ -71,6 +72,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
 		themeChooser = (AppCompatSpinner) findViewById(R.id.themeChooser);
+		serifFont = (CheckBox) findViewById(R.id.ui_font_serif);
 		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
@@ -90,6 +92,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 				this, android.R.layout.simple_spinner_item, themeOptions));
 		themeChooser.setSelection(currentThemeIndex);
 
+		serifFont.setChecked(settings.getBoolean(Settings.SERIF_FONT, false));
 		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
 
 		username = (EditText) findViewById(R.id.username);
@@ -176,6 +179,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
 				Themes.Theme selectedTheme = Themes.Theme.values()[themeChooser.getSelectedItemPosition()];
 				settings.setString(Settings.THEME, selectedTheme.toString());
+				settings.setBoolean(Settings.SERIF_FONT, serifFont.isChecked());
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
                 } catch (NumberFormatException ignored) {}

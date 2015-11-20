@@ -16,12 +16,15 @@ html {
 
 body {
   background: #EEE;
-  font-family: serif;
 }
 
 .high-contrast {
   background: #FFF;
   font-weight: 600;
+}
+
+.serif-font {
+  font-family: serif;
 }
 
 /* ==========================================================================

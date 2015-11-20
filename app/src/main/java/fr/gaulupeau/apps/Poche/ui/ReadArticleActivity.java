@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -100,6 +101,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
+        settings = App.getInstance().getSettings();
+
         String cssName;
         boolean highContrast = false;
         switch(Themes.getCurrentTheme()) {
@@ -117,6 +120,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
         }
 
+        List<String> additionalClasses = new ArrayList<>(2);
+        if(highContrast) additionalClasses.add("high-contrast");
+        if(settings.getBoolean(Settings.SERIF_FONT, false)) additionalClasses.add("serif-font");
+
+        String classAttr;
+        if(!additionalClasses.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(" class=\"");
+            for(String cl: additionalClasses) {
+                sb.append(cl).append(' ');
+            }
+            sb.append('"');
+
+            classAttr = sb.toString();
+        } else {
+            classAttr = "";
+        }
+
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
@@ -125,7 +147,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body" + (highContrast ? " class=\"high-contrast\"" : "") + ">\n" +
+				"\t\t\t<body" + classAttr + ">\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
@@ -139,8 +161,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t</body>\n" +
 				"\t\t</div>\n" +
 				"</html>";
-
-        settings = App.getInstance().getSettings();
 
         final String httpAuthHost = settings.getUrl();
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
