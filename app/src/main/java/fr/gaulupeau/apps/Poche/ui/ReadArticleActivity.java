@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private String titleText;
     private String originalUrlText;
+    private String domainText;
     private Double positionToRestore;
 
     private Long previousArticleID;
@@ -141,6 +143,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             classAttr = "";
         }
 
+        try {
+            URL url = new URL(originalUrlText);
+            domainText = url.getHost();
+        } catch (Exception ignored) {}
+
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
@@ -154,6 +161,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
 				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
+                "\t\t\t\t\t\t\t<img id=\"domainimg\" src=\"file:///android_asset/ic_action_web_site.png\" />\n" +
+                "\t\t\t\t\t\t\t<em class=\"domain\"><a href=\"" + originalUrlText + "\">" + domainText + "</a></em>\n" +
 				"\t\t\t\t\t\t</header>\n" +
 				"\t\t\t\t\t\t<article>";
 
@@ -195,7 +204,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                return openUrl(url);
+                if (!url.equals(originalUrlText)) {
+                    return openUrl(url);
+                } else { // If we try to open current URL, do not propose to save it, directly open browser
+                    Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(launchBrowserIntent);
+                    return true;
+                }
             }
 
             public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
