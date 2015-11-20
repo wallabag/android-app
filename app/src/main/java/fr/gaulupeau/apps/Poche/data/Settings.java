@@ -15,6 +15,7 @@ public class Settings {
     public static final String USER_ID = "APIUsername";
     public static final String TOKEN = "APIToken";
     public static final String ALL_CERTS = "all_certs";
+    public static final String FONT_SIZE = "font_size";
     public static final String SERIF_FONT = "serif_font";
     public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
@@ -59,6 +60,18 @@ public class Settings {
 
     public boolean getBoolean(String key, boolean defValue) {
         return pref.getBoolean(key, defValue);
+    }
+
+    // well, that's embarrassingly blunt, but I'm too lazy to make it any better right now
+    // TODO: rewrite whole font size thing
+    public String getFontSizeCssClass() {
+        switch(getInt(FONT_SIZE, -1)) {
+            case 0: return "font-size-75";
+            case 2: return "font-size-125";
+            case 3: return "font-size-150";
+            case 4: return "font-size-175";
+            default: return null;
+        }
     }
 
 }

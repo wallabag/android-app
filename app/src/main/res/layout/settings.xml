@@ -221,6 +221,19 @@
             android:layout_height="wrap_content"
             android:paddingBottom="5sp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_ui_fontSize" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/fontSizeChooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp" />
+
         <CheckBox
             android:id="@+id/ui_font_serif"
             android:layout_width="match_parent"

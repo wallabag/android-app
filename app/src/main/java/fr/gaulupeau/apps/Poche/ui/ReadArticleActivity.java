@@ -123,6 +123,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         List<String> additionalClasses = new ArrayList<>(2);
         if(highContrast) additionalClasses.add("high-contrast");
         if(settings.getBoolean(Settings.SERIF_FONT, false)) additionalClasses.add("serif-font");
+        String fontSizeCssClass = settings.getFontSizeCssClass();
+        if(fontSizeCssClass != null) additionalClasses.add(fontSizeCssClass);
 
         String classAttr;
         if(!additionalClasses.isEmpty()) {

@@ -39,6 +39,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIToken;
 	CheckBox allCerts;
 	AppCompatSpinner themeChooser;
+	AppCompatSpinner fontSizeChooser;
 	CheckBox serifFont;
 	EditText listLimit;
 	TextView textViewVersion;
@@ -72,6 +73,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
 		themeChooser = (AppCompatSpinner) findViewById(R.id.themeChooser);
+		fontSizeChooser = (AppCompatSpinner) findViewById(R.id.fontSizeChooser);
 		serifFont = (CheckBox) findViewById(R.id.ui_font_serif);
 		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
@@ -91,6 +93,10 @@ public class SettingsActivity extends BaseActionBarActivity {
 		themeChooser.setAdapter(new ArrayAdapter<>(
 				this, android.R.layout.simple_spinner_item, themeOptions));
 		themeChooser.setSelection(currentThemeIndex);
+
+		fontSizeChooser.setAdapter(ArrayAdapter.createFromResource(this,
+				R.array.settings_ui_fontSizeOptions, android.R.layout.simple_spinner_item));
+		fontSizeChooser.setSelection(settings.getInt(Settings.FONT_SIZE, 1)); // TODO: fix default value
 
 		serifFont.setChecked(settings.getBoolean(Settings.SERIF_FONT, false));
 		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
@@ -179,6 +185,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
 				Themes.Theme selectedTheme = Themes.Theme.values()[themeChooser.getSelectedItemPosition()];
 				settings.setString(Settings.THEME, selectedTheme.toString());
+				settings.setInt(Settings.FONT_SIZE, fontSizeChooser.getSelectedItemPosition());
 				settings.setBoolean(Settings.SERIF_FONT, serifFont.isChecked());
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));

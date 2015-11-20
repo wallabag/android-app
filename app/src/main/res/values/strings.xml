@@ -126,9 +126,17 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_light_contrast">Light (high contrast)</string>
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
+    <string name="settings_ui_fontSize">Article font size</string>
     <string name="settings_ui_serif">Serif typeface for article fonts</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>
     </plurals>
+    <string-array name="settings_ui_fontSizeOptions">
+        <item>75%</item>
+        <item>100%</item>
+        <item>125%</item>
+        <item>150%</item>
+        <item>175%</item>
+    </string-array>
 </resources>
