@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -217,6 +218,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 
 		textViewVersion = (TextView) findViewById(R.id.version);
 		textViewVersion.setText(BuildConfig.VERSION_NAME);
+
+		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 		updateButton();
 	}
