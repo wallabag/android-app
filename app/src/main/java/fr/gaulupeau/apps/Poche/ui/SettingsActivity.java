@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -22,11 +24,11 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
-import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 
 public class SettingsActivity extends BaseActionBarActivity {
 	Button btnTestConnection;
@@ -36,8 +38,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText editAPIUsername;
 	EditText editAPIToken;
 	CheckBox allCerts;
-	CheckBox highContrast;
-	CheckBox nightmode;
+	AppCompatSpinner themeChooser;
 	EditText listLimit;
 	TextView textViewVersion;
 	EditText username;
@@ -45,7 +46,6 @@ public class SettingsActivity extends BaseActionBarActivity {
 	EditText httpAuthUsername;
 	EditText httpAuthPassword;
 	ProgressDialog progressDialog;
-	Intent starterIntent;
 
     private Settings settings;
 	private WallabagSettings wallabagSettings;
@@ -55,12 +55,11 @@ public class SettingsActivity extends BaseActionBarActivity {
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
-		settings = ((App) getApplication()).getSettings();
-		setTheme(settings.getBoolean(Settings.NIGHTMODE, false) ? R.style.app_theme_dark : R.style.app_theme);
-
+		Themes.applyTheme(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 
+		settings = App.getInstance().getSettings();
 		wallabagSettings = WallabagSettings.settingsFromDisk(settings);
 
 		if (!wallabagSettings.isValid()) {
@@ -71,17 +70,26 @@ public class SettingsActivity extends BaseActionBarActivity {
 		editAPIUsername = (EditText) findViewById(R.id.APIUsername);
 		editAPIToken = (EditText) findViewById(R.id.APIToken);
 		allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
-		highContrast = (CheckBox) findViewById(R.id.high_contrast_cb);
-        nightmode = (CheckBox) findViewById(R.id.nightmode);
+		themeChooser = (AppCompatSpinner) findViewById(R.id.themeChooser);
 		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
 		editAPIUsername.setText(wallabagSettings.userID);
 		editAPIToken.setText(wallabagSettings.userToken);
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
-		highContrast.setChecked(settings.getBoolean(Settings.HIGH_CONTRAST,
-				android.os.Build.MODEL.equals("NOOK")));
-        nightmode.setChecked(settings.getBoolean(Settings.NIGHTMODE, false));
+
+		Themes.Theme[] themes = Themes.Theme.values();
+		String[] themeOptions = new String[themes.length];
+		Themes.Theme currentThemeName = Themes.getCurrentTheme();
+		int currentThemeIndex = 0;
+		for(int i = 0; i < themes.length; i++) {
+			if(themes[i] == currentThemeName) currentThemeIndex = i;
+			themeOptions[i] = getString(themes[i].getNameId());
+		}
+		themeChooser.setAdapter(new ArrayAdapter<>(
+				this, android.R.layout.simple_spinner_item, themeOptions));
+		themeChooser.setSelection(currentThemeIndex);
+
 		listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
 
 		username = (EditText) findViewById(R.id.username);
@@ -159,7 +167,6 @@ public class SettingsActivity extends BaseActionBarActivity {
 		});
 
 		btnDone = (Button) findViewById(R.id.btnDone);
-		starterIntent = new Intent(this,ArticlesListActivity.class);
 		btnDone.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
@@ -167,8 +174,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 				wallabagSettings.userToken = editAPIToken.getText().toString();
 
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
-                settings.setBoolean(Settings.HIGH_CONTRAST, highContrast.isChecked());
-				settings.setBoolean(Settings.NIGHTMODE,nightmode.isChecked());
+				Themes.Theme selectedTheme = Themes.Theme.values()[themeChooser.getSelectedItemPosition()];
+				settings.setString(Settings.THEME, selectedTheme.toString());
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
                 } catch (NumberFormatException ignored) {}
@@ -184,7 +191,14 @@ public class SettingsActivity extends BaseActionBarActivity {
 				if (wallabagSettings.isValid()) {
 					wallabagSettings.save();
 					finish();
-					startActivity(starterIntent);
+
+					if(selectedTheme != Themes.getCurrentTheme()) {
+						Themes.init();
+
+						Intent intent = new Intent(SettingsActivity.this, ArticlesListActivity.class);
+						intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+					}
 				}
 			}
 		});

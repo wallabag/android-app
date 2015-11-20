@@ -73,13 +73,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     private Settings settings;
-    private boolean nightmode;
 
     public void onCreate(Bundle savedInstanceState) {
-        settings = ((App) getApplication()).getSettings();
-        nightmode=settings.getBoolean(Settings.NIGHTMODE, false);
-        setTheme(nightmode ? R.style.app_theme_dark : R.style.app_theme);
-
+        Themes.applyTheme(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 
@@ -104,22 +100,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
-        boolean highContrast = settings.getBoolean(Settings.HIGH_CONTRAST, false);
+        String cssName;
+        boolean highContrast = false;
+        switch(Themes.getCurrentTheme()) {
+            case LightContrast:
+                highContrast = true;
+            case Light:
+            default:
+                cssName = "main";
+                break;
 
-        String usedCSS = "main"; //use nightmode.css for the dark theme
-        if (nightmode) {
-            usedCSS = "nightmode";
+            case DarkContrast:
+                highContrast = true;
+            case Dark:
+                cssName = "dark";
+                break;
         }
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
 				"\t\t<meta charset=\"utf-8\">\n" +
-                "\t\t<link rel=\"stylesheet\" href=\"" + usedCSS + ".css\" media=\"all\" id=\"main-theme\">\n" +
+                "\t\t<link rel=\"stylesheet\" href=\"" + cssName + ".css\" media=\"all\" id=\"main-theme\">\n" +
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body" + (highContrast ? " class=\"hicontrast\"" : "") + ">\n" +
+				"\t\t\t<body" + (highContrast ? " class=\"high-contrast\"" : "") + ">\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
@@ -133,6 +139,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 				"\t\t\t</body>\n" +
 				"\t\t</div>\n" +
 				"</html>";
+
+        settings = App.getInstance().getSettings();
 
         final String httpAuthHost = settings.getUrl();
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);

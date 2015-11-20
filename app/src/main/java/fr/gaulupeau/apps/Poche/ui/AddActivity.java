@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -9,12 +8,13 @@ import android.widget.ProgressBar;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends BaseActionBarActivity {
 
     ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 

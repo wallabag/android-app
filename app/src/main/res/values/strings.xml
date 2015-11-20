@@ -49,7 +49,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="no_articles">No articles</string>
     <string name="accept_all_certs_txt">Accept all SSL certificates</string>
     <string name="accept_all_certs_desc">May require restart; insecure; consider importing self-signed certificates into system.</string>
-    <string name="high_contrast_text">High contrast text</string>
     <string name="list_limit_number_text">Articles list limit</string>
     <string name="loading_article_text">Loading…</string>
     <string name="d_urlAction_title">Select an action for URL</string>
@@ -122,7 +121,11 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="settings_UI">UI settings</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
     <string name="noNextArticle">There is no next article in current list</string>
-    <string name="nightmode">Dark theme</string>
+    <string name="settings_appTheme">Application theme:</string>
+    <string name="themeName_light">Light</string>
+    <string name="themeName_light_contrast">Light (high contrast)</string>
+    <string name="themeName_dark">Dark</string>
+    <string name="themeName_dark_contrast">Dark (high contrast)</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>

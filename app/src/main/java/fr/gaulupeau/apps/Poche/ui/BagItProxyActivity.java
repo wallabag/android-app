@@ -20,6 +20,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Themes.applyProxyTheme(this);
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();

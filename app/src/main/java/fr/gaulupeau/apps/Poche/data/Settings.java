@@ -3,8 +3,6 @@ package fr.gaulupeau.apps.Poche.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
-
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
@@ -17,14 +15,12 @@ public class Settings {
     public static final String USER_ID = "APIUsername";
     public static final String TOKEN = "APIToken";
     public static final String ALL_CERTS = "all_certs";
-    public static final String HIGH_CONTRAST = "high_contrast";
-    public static final String NIGHTMODE = "nightmode";
     public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String HTTP_AUTH_USERNAME = "http_auth_username";
     public static final String HTTP_AUTH_PASSWORD = "http_auth_password";
-    public static final String VERSION_CODE = "version_code";
+    public static final String THEME = "theme";
 
     private SharedPreferences pref;
 
@@ -64,15 +60,4 @@ public class Settings {
         return pref.getBoolean(key, defValue);
     }
 
-    public void setAppVersion(int versionCode) {
-        pref.edit().putInt(VERSION_CODE, versionCode).commit();
-    }
-
-    public int getPrevAppVersion() {
-        return pref.getInt(VERSION_CODE, BuildConfig.VERSION_CODE);
-    }
-
-    public boolean hasUpdateChecker() {
-        return pref.getInt("update_checker", -1) != -1;
-    }
 }

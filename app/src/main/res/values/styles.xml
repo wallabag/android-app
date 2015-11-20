@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="app_theme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar"/>
+    <style name="LightThemeContrast" parent="LightTheme">
         <item name="android:textColor">#000000</item>
     </style>
-    <style name="mainActivity_theme" parent="Theme.AppCompat.Light.NoActionBar" />
-    <style name="app_theme_dark" parent="Theme.AppCompat">
+    <style name="DarkTheme" parent="Theme.AppCompat"/>
+    <style name="DarkThemeContrast" parent="DarkTheme">
         <item name="android:background">#000000</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
 
     <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    </style>
+    <style name="ProxyThemeDark" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

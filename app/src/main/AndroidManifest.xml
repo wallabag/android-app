@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
-        android:theme="@style/app_theme">
+        android:theme="@style/LightTheme">
         <activity android:name="fr.gaulupeau.apps.Poche.ui.ArticlesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

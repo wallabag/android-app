@@ -17,6 +17,11 @@ html {
 }
 
 body {
+  background: #333;
+  font-family: serif;
+}
+
+.high-contrast {
   background: #000;
 }
 
@@ -37,6 +42,12 @@ h1, h2, h3, h4 {
 
 p, li {
   color: #FFF;
+}
+
+.high-contrast p,
+.high-contrast li {
+  color: #FFF;
+  background: #000;
 }
 
 a {
