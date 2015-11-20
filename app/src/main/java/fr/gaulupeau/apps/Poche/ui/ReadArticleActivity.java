@@ -28,6 +28,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.dao.query.QueryBuilder;
@@ -73,13 +74,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     private Settings settings;
-    private boolean nightmode;
 
     public void onCreate(Bundle savedInstanceState) {
-        settings = ((App) getApplication()).getSettings();
-        nightmode=settings.getBoolean(Settings.NIGHTMODE, false);
-        setTheme(nightmode ? R.style.app_theme_dark : R.style.app_theme);
-
+        Themes.applyTheme(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.article);
 
@@ -104,22 +101,55 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setTitle(titleText);
 
-        boolean highContrast = settings.getBoolean(Settings.HIGH_CONTRAST, false);
+        settings = App.getInstance().getSettings();
 
-        String usedCSS = "main"; //use nightmode.css for the dark theme
-        if (nightmode) {
-            usedCSS = "nightmode";
+        String cssName;
+        boolean highContrast = false;
+        switch(Themes.getCurrentTheme()) {
+            case LightContrast:
+                highContrast = true;
+            case Light:
+            default:
+                cssName = "main";
+                break;
+
+            case DarkContrast:
+                highContrast = true;
+            case Dark:
+                cssName = "dark";
+                break;
+        }
+
+        List<String> additionalClasses = new ArrayList<>(2);
+        if(highContrast) additionalClasses.add("high-contrast");
+        if(settings.getBoolean(Settings.SERIF_FONT, false)) additionalClasses.add("serif-font");
+        String fontSizeCssClass = settings.getFontSizeCssClass();
+        if(fontSizeCssClass != null) additionalClasses.add(fontSizeCssClass);
+
+        String classAttr;
+        if(!additionalClasses.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(" class=\"");
+            for(String cl: additionalClasses) {
+                sb.append(cl).append(' ');
+            }
+            sb.append('"');
+
+            classAttr = sb.toString();
+        } else {
+            classAttr = "";
         }
 
 		String htmlHeader = "<html>\n" +
 				"\t<head>\n" +
 				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
 				"\t\t<meta charset=\"utf-8\">\n" +
-                "\t\t<link rel=\"stylesheet\" href=\"" + usedCSS + ".css\" media=\"all\" id=\"main-theme\">\n" +
+                "\t\t<link rel=\"stylesheet\" href=\"" + cssName + ".css\" media=\"all\" id=\"main-theme\">\n" +
 				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
 				"\t</head>\n" +
 				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body" + (highContrast ? " class=\"hicontrast\"" : "") + ">\n" +
+				"\t\t\t<body" + classAttr + ">\n" +
 				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
 				"\t\t\t\t\t<div id=\"article\">\n" +
 				"\t\t\t\t\t\t<header class=\"mbm\">\n" +

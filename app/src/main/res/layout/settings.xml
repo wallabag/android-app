@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
             android:text="@string/settings_optionalCredentials" />
 
         <TextView
@@ -101,6 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
             android:text="@string/settings_feedsCredentials" />
 
         <TextView
@@ -159,6 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
             android:text="@string/settings_httpAuth" />
 
         <TextView
@@ -202,26 +205,46 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
             android:text="@string/settings_UI" />
 
-        <CheckBox
-            android:id="@+id/high_contrast_cb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/toppadding"
-            android:text="@string/high_contrast_text" />
-
-        <CheckBox
-            android:id="@+id/nightmode"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/toppadding"
-            android:text="@string/nightmode"
-            android:checked="false" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_appTheme" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/themeChooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_ui_fontSize" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/fontSizeChooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp" />
+
+        <CheckBox
+            android:id="@+id/ui_font_serif"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_ui_serif" />
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding" >
 
             <EditText
                 android:id="@+id/list_limit_number"
