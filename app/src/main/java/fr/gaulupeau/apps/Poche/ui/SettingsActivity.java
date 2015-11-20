@@ -78,6 +78,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 		listLimit = (EditText) findViewById(R.id.list_limit_number);
 
 		editPocheUrl.setText(wallabagSettings.wallabagURL);
+		editPocheUrl.setSelection(editPocheUrl.getText().length());
 		editAPIUsername.setText(wallabagSettings.userID);
 		editAPIToken.setText(wallabagSettings.userToken);
 		allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
