@@ -47,14 +47,14 @@ import fr.gaulupeau.apps.Poche.entity.DaoSession;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
-	public static final String EXTRA_ID = "ReadArticleActivity.id";
-	public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
-	public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
+    public static final String EXTRA_ID = "ReadArticleActivity.id";
+    public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
+    public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private ScrollView scrollView;
-	private WebView webViewContent;
+    private WebView webViewContent;
     private TextView loadingPlaceholder;
     private LinearLayout bottomTools;
     private View hrBar;
@@ -79,10 +79,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.article);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.article);
 
-		Intent intent = getIntent();
+        Intent intent = getIntent();
         long articleId = intent.getLongExtra(EXTRA_ID, -1);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
@@ -98,7 +98,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
-		String htmlContent = mArticle.getContent();
+        String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
 
         setTitle(titleText);
@@ -148,37 +148,37 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             domainText = url.getHost();
         } catch (Exception ignored) {}
 
-		String htmlHeader = "<html>\n" +
-				"\t<head>\n" +
-				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
-				"\t\t<meta charset=\"utf-8\">\n" +
+        String htmlHeader = "<html>\n" +
+                "\t<head>\n" +
+                "\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
+                "\t\t<meta charset=\"utf-8\">\n" +
                 "\t\t<link rel=\"stylesheet\" href=\"" + cssName + ".css\" media=\"all\" id=\"main-theme\">\n" +
-				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
-				"\t</head>\n" +
-				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body" + classAttr + ">\n" +
-				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
-				"\t\t\t\t\t<div id=\"article\">\n" +
-				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
-				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
+                "\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
+                "\t</head>\n" +
+                "\t\t<div id=\"main\">\n" +
+                "\t\t\t<body" + classAttr + ">\n" +
+                "\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
+                "\t\t\t\t\t<div id=\"article\">\n" +
+                "\t\t\t\t\t\t<header class=\"mbm\">\n" +
+                "\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
                 "\t\t\t\t\t\t\t<img id=\"domainimg\" src=\"file:///android_asset/ic_action_web_site.png\" />\n" +
                 "\t\t\t\t\t\t\t<em class=\"domain\"><a href=\"" + originalUrlText + "\">" + domainText + "</a></em>\n" +
-				"\t\t\t\t\t\t</header>\n" +
-				"\t\t\t\t\t\t<article>";
+                "\t\t\t\t\t\t</header>\n" +
+                "\t\t\t\t\t\t<article>";
 
-		String htmlFooter = "</article>\n" +
-				"\t\t\t\t\t</div>\n" +
-				"\t\t\t\t</div>\n" +
-				"\t\t\t</body>\n" +
-				"\t\t</div>\n" +
-				"</html>";
+        String htmlFooter = "</article>\n" +
+                "\t\t\t\t\t</div>\n" +
+                "\t\t\t\t</div>\n" +
+                "\t\t\t</body>\n" +
+                "\t\t</div>\n" +
+                "</html>";
 
         final String httpAuthHost = settings.getUrl();
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
         final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
-		webViewContent = (WebView) findViewById(R.id.webViewContent);
+        webViewContent = (WebView) findViewById(R.id.webViewContent);
         webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
         webViewContent.setWebChromeClient(new WebChromeClient() {}); // TODO: check
         webViewContent.loadDataWithBaseURL("file:///android_asset/",
@@ -290,13 +290,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(mArticle.getArchive()) {
             btnMarkRead.setText(R.string.btnMarkUnread);
         }
-		btnMarkRead.setOnClickListener(new OnClickListener() {
+        btnMarkRead.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				markAsReadAndClose();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                markAsReadAndClose();
+            }
+        });
 
         ImageButton btnGoPrevious;
         ImageButton btnGoNext;
@@ -320,7 +320,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 openNextArticle();
             }
         });
-	}
+    }
 
     private void loadingFinished() {
         loadingFinished = true;
