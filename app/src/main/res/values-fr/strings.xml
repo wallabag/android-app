@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="hello">Bienvenue sur wallabag</string>
-<string name="app_name">wallabag</string>
+    <string name="app_name">wallabag</string>
 <string name="label_name">Sauvegarder</string>
 <string name="author">
 GAULUPEAU Jonathan — 2013
@@ -49,8 +48,7 @@ GAULUPEAU Jonathan — 2013
 <string name="no_articles">Aucun article</string>
 <string name="accept_all_certs_txt">Accepter tous les certificats SSL</string>
 <string name="accept_all_certs_desc">Peut nécessiter un redémarrage. Non sécurisé. Vous devriez plutôt ajouter vos certificats personnels au système.</string>
-<string name="high_contrast_text">Texte en contraste élevé</string>
-<string name="list_limit_number_text">Limitation du nombre d\'articles dans la liste</string>
+    <string name="list_limit_number_text">Limitation du nombre d\'articles dans la liste</string>
 <string name="loading_article_text">Chargement…</string>
 <string name="d_urlAction_title">Choisissez une action pour l\'URL</string>
 <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
@@ -134,4 +132,7 @@ GAULUPEAU Jonathan — 2013
     <string name="themeName_dark_contrast">Sombre (contraste élevé)</string>
     <string name="themeName_light">Clair</string>
     <string name="themeName_light_contrast">Clair (contraste élevé)</string>
+    <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
+    <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
+    <string name="menu_readArticle_switchFontFamily">Famille de police (sans/avec serif)</string>
 </resources>

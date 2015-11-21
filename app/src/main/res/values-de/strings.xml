@@ -49,7 +49,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="no_articles">Keine Artikel</string>
     <string name="accept_all_certs_txt">Akzeptiere alle SSL Zertifikate</string>
     <string name="accept_all_certs_desc">Erfordert vielleicht Neustart; unsicher; Beachte, dass selbst-signierte Zertifikate in Android importiert werden müssen.</string>
-    <string name="high_contrast_text">Hoher Kontrast für Text</string>
     <string name="list_limit_number_text">Limit für Artikel-Liste</string>
     <string name="loading_article_text">Laden…</string>
     <string name="d_urlAction_title">Wähle eine Aktion für die URL</string>
