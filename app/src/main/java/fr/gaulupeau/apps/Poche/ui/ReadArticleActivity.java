@@ -28,6 +28,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -148,30 +151,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             domainText = url.getHost();
         } catch (Exception ignored) {}
 
-        String htmlHeader = "<html>\n" +
-                "\t<head>\n" +
-                "\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
-                "\t\t<meta charset=\"utf-8\">\n" +
-                "\t\t<link rel=\"stylesheet\" href=\"" + cssName + ".css\" media=\"all\" id=\"main-theme\">\n" +
-                "\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
-                "\t</head>\n" +
-                "\t\t<div id=\"main\">\n" +
-                "\t\t\t<body" + classAttr + ">\n" +
-                "\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
-                "\t\t\t\t\t<div id=\"article\">\n" +
-                "\t\t\t\t\t\t<header class=\"mbm\">\n" +
-                "\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
-                "\t\t\t\t\t\t\t<img id=\"domainimg\" src=\"file:///android_asset/ic_action_web_site.png\" />\n" +
-                "\t\t\t\t\t\t\t<em class=\"domain\"><a href=\"" + originalUrlText + "\">" + domainText + "</a></em>\n" +
-                "\t\t\t\t\t\t</header>\n" +
-                "\t\t\t\t\t\t<article>";
+        String htmlBase;
+        try {
+            htmlBase = readRawString(R.raw.webview_htmlbase);
+        } catch(Exception ignored) {
+            // TODO: show error message
+            finish();
+            return;
+        }
 
-        String htmlFooter = "</article>\n" +
-                "\t\t\t\t\t</div>\n" +
-                "\t\t\t\t</div>\n" +
-                "\t\t\t</body>\n" +
-                "\t\t</div>\n" +
-                "</html>";
+        String htmlPage = String.format(htmlBase, cssName, classAttr, titleText,
+                originalUrlText, domainText, htmlContent);
 
         final String httpAuthHost = settings.getUrl();
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
@@ -181,8 +171,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent = (WebView) findViewById(R.id.webViewContent);
         webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
         webViewContent.setWebChromeClient(new WebChromeClient() {}); // TODO: check
-        webViewContent.loadDataWithBaseURL("file:///android_asset/",
-                htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
+                "text/html", "utf-8", null);
 
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
@@ -557,6 +547,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         return null;
+    }
+
+    private String readRawString(int id) throws IOException {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)));
+
+            StringBuilder sb = new StringBuilder();
+            String s;
+            while((s = reader.readLine()) != null) {
+                sb.append(s).append('\n');
+            }
+
+            return sb.toString();
+        } finally {
+            if(reader != null) {
+                reader.close();
+            }
+        }
     }
 
     private Drawable getIcon(int id, Resources.Theme theme) {
