@@ -349,7 +349,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if(fontSize != 100) {
             result = true;
-            setFontSize(webViewContent, fontSize);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                setFontSizeNew(webViewContent, fontSize);
+            } else {
+                setFontSizeOld(webViewContent, fontSize);
+            }
         }
         if(serifFont) {
             result = true;
@@ -658,7 +662,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         int step = 5;
         fontSize += step * (increase ? 1 : -1);
 
-        setFontSize(webViewContent, fontSize);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setFontSizeNew(webViewContent, fontSize);
+        } else {
+            setFontSizeOld(webViewContent, fontSize);
+        }
 
         settings.setInt(Settings.FONT_SIZE, fontSize);
 
@@ -681,8 +689,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         restorePositionAfterUpdate();
     }
 
-    private static void setFontSize(WebView view, int size) {
-        callJavaScript(view, "setFontSize", size + "%");
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void setFontSizeNew(WebView view, int size) {
+        webViewContent.getSettings().setTextZoom(size);
+    }
+    @TargetApi(Build.VERSION_CODES.FROYO)
+    private void setFontSizeOld(WebView view, int size) {
+        webViewContent.getSettings().setDefaultFontSize(size);
     }
 
     private static void setSerifFont(WebView view, boolean flag) {
