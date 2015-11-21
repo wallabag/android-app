@@ -62,16 +62,4 @@ public class Settings {
         return pref.getBoolean(key, defValue);
     }
 
-    // well, that's embarrassingly blunt, but I'm too lazy to make it any better right now
-    // TODO: rewrite whole font size thing
-    public String getFontSizeCssClass() {
-        switch(getInt(FONT_SIZE, -1)) {
-            case 0: return "font-size-75";
-            case 2: return "font-size-125";
-            case 3: return "font-size-150";
-            case 4: return "font-size-175";
-            default: return null;
-        }
-    }
-
 }

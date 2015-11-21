@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -72,6 +73,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String originalUrlText;
     private String domainText;
     private Double positionToRestore;
+    private int webViewHeightBeforeUpdate;
+    private Runnable positionRestorationRunnable;
 
     private Long previousArticleID;
     private Long nextArticleID;
@@ -79,6 +82,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     private Settings settings;
+
+    private int fontSize = 100;
+    private boolean serifFont;
 
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
@@ -125,12 +131,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
         }
 
-        List<String> additionalClasses = new ArrayList<>(2);
-        if(highContrast) additionalClasses.add("high-contrast");
-        if(settings.getBoolean(Settings.SERIF_FONT, false)) additionalClasses.add("serif-font");
-        String fontSizeCssClass = settings.getFontSizeCssClass();
-        if(fontSizeCssClass != null) additionalClasses.add(fontSizeCssClass);
+        fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);
+        serifFont = settings.getBoolean(Settings.SERIF_FONT, serifFont);
 
+        if(fontSize < 5) fontSize = 100; // TODO: remove: temp hack for compatibility
+
+        List<String> additionalClasses = new ArrayList<>(1);
+        if(highContrast) additionalClasses.add("high-contrast");
+
+        // TODO: remove?
         String classAttr;
         if(!additionalClasses.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -170,10 +179,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         scrollView = (ScrollView) findViewById(R.id.scroll);
         webViewContent = (WebView) findViewById(R.id.webViewContent);
         webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
-        webViewContent.setWebChromeClient(new WebChromeClient() {}); // TODO: check
-        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
-                "text/html", "utf-8", null);
-
+        webViewContent.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage cm) {
+                Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
+                        cm.lineNumber(), cm.sourceId()));
+                return true;
+            }
+        });
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -215,6 +228,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 }
             }
         });
+
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
+                "text/html", "utf-8", null);
 
         // TODO: remove logging after calibrated
         GestureDetector.SimpleOnGestureListener gestureListener
@@ -319,7 +335,28 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         bottomTools.setVisibility(View.VISIBLE);
         hrBar.setVisibility(View.VISIBLE);
 
-        restoreReadingPosition();
+        if(applyDisplaySettings()) {
+            restorePositionAfterUpdate();
+        } else {
+            restoreReadingPosition();
+        }
+    }
+
+    private boolean applyDisplaySettings() {
+        prepareToRestorePosition(false);
+
+        boolean result = false;
+
+        if(fontSize != 100) {
+            result = true;
+            setFontSize(webViewContent, fontSize);
+        }
+        if(serifFont) {
+            result = true;
+            setSerifFont(webViewContent, serifFont);
+        }
+
+        return result;
     }
 
     private boolean openUrl(final String url) {
@@ -475,6 +512,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return deleteArticle();
             case R.id.menuOpenOriginal:
                 return openOriginal();
+            case R.id.menuIncreaseFontSize:
+                changeFontSize(true);
+                return true;
+            case R.id.menuDecreaseFontSize:
+                changeFontSize(false);
+                return true;
+            case R.id.menuSwitchFontFamily:
+                changeFontFamily();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -565,6 +611,106 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             if(reader != null) {
                 reader.close();
             }
+        }
+    }
+
+    private void prepareToRestorePosition(boolean savePosition) {
+        if(savePosition) positionToRestore = getReadingPosition();
+
+        webViewHeightBeforeUpdate = webViewContent.getHeight();
+    }
+
+    private void restorePositionAfterUpdate() {
+        cancelPositionRestoration();
+
+        webViewContent.postDelayed(positionRestorationRunnable = new Runnable() {
+            int counter;
+
+            @Override
+            public void run() {
+                if(webViewContent.getHeight() == webViewHeightBeforeUpdate) {
+                    if(++counter > 1000) {
+                        Log.d(TAG, "restorePositionAfterUpdate() giving up");
+                        return;
+                    }
+
+                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay");
+                    webViewContent.postDelayed(this, 10);
+                } else {
+                    Log.d(TAG, "restorePositionAfterUpdate() restoring position");
+                    restoreReadingPosition();
+                }
+            }
+        }, 10);
+    }
+
+    private void cancelPositionRestoration() {
+        if(positionRestorationRunnable != null) {
+            Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
+            webViewContent.removeCallbacks(positionRestorationRunnable);
+            positionRestorationRunnable = null;
+        }
+    }
+
+    private void changeFontSize(boolean increase) {
+        prepareToRestorePosition(true);
+
+        int step = 5;
+        fontSize += step * (increase ? 1 : -1);
+
+        setFontSize(webViewContent, fontSize);
+
+        settings.setInt(Settings.FONT_SIZE, fontSize);
+
+        restorePositionAfterUpdate();
+    }
+
+    private void changeFontFamily() {
+        setFontFamily(!serifFont);
+    }
+
+    private void setFontFamily(boolean serif) {
+        prepareToRestorePosition(true);
+
+        serifFont = serif;
+
+        setSerifFont(webViewContent, serifFont);
+
+        settings.setBoolean(Settings.SERIF_FONT, serifFont);
+
+        restorePositionAfterUpdate();
+    }
+
+    private static void setFontSize(WebView view, int size) {
+        callJavaScript(view, "setFontSize", size + "%");
+    }
+
+    private static void setSerifFont(WebView view, boolean flag) {
+        callJavaScript(view, "setSerifFontFamily", flag);
+    }
+
+    private static void callJavaScript(WebView webView, String methodName, Object... params) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("try{").append(methodName).append("(");
+        boolean first = true;
+        for(Object param: params) {
+            if(first) first = false;
+            else sb.append(", ");
+
+            if(param instanceof String) {
+                sb.append("'").append(param).append("'");
+            } else {
+                sb.append(param);
+            }
+        }
+        sb.append(")}catch(error){console.error(error.message);}");
+        String call = sb.toString();
+        Log.v(TAG, "callJavaScript: call=" + call);
+
+        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            webView.evaluateJavascript(call, null);
+        } else {
+            webView.loadUrl("javascript:" + call);
         }
     }
 

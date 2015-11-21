@@ -221,18 +221,19 @@
             android:layout_height="wrap_content"
             android:paddingBottom="5sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/toppadding"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/settings_ui_fontSize" />
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/fontSizeChooser"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5sp" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/fontSizeET"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/settings_ui_fontSize"
+                android:inputType="numberDecimal" />
+        </android.support.design.widget.TextInputLayout>
 
         <CheckBox
             android:id="@+id/ui_font_serif"
