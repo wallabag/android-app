@@ -14,3 +14,16 @@ This application is released under GPL. wallabag is released under the MIT licen
   <img alt="Get it on F-Droid"
        src="https://cloud.githubusercontent.com/assets/12447257/8024903/ce8dca32-0d44-11e5-95b0-e97d1d027351.png" />
 </a>
+
+
+## First setup
+
+Say you have an account named "gdr" on "framabag.org" instance. The steps are as following:
+
+* In a web browser, log in
+* Go to the Config tab
+* Under "Feeds", click "Generate token"
+* On your phone, open Wallabag and go to Settings
+* URL: https://www.framabag.org/u/gdr
+* User ID: 1 (you will find this in the generated feed URL)
+* Token: you will find the token under Feeds in Config.
