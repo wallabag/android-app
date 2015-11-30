@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -28,6 +29,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,14 +51,14 @@ import fr.gaulupeau.apps.Poche.entity.DaoSession;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
-	public static final String EXTRA_ID = "ReadArticleActivity.id";
-	public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
-	public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
+    public static final String EXTRA_ID = "ReadArticleActivity.id";
+    public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
+    public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private ScrollView scrollView;
-	private WebView webViewContent;
+    private WebView webViewContent;
     private TextView loadingPlaceholder;
     private LinearLayout bottomTools;
     private View hrBar;
@@ -69,6 +73,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String originalUrlText;
     private String domainText;
     private Double positionToRestore;
+    private int webViewHeightBeforeUpdate;
+    private Runnable positionRestorationRunnable;
 
     private Long previousArticleID;
     private Long nextArticleID;
@@ -77,12 +83,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private Settings settings;
 
+    private int fontSize = 100;
+
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.article);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.article);
 
-		Intent intent = getIntent();
+        Intent intent = getIntent();
         long articleId = intent.getLongExtra(EXTRA_ID, -1);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
@@ -98,7 +106,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         titleText = mArticle.getTitle();
         originalUrlText = mArticle.getUrl();
-		String htmlContent = mArticle.getContent();
+        String htmlContent = mArticle.getContent();
         positionToRestore = mArticle.getArticleProgress();
 
         setTitle(titleText);
@@ -122,11 +130,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
         }
 
-        List<String> additionalClasses = new ArrayList<>(2);
+        fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);
+        boolean serifFont = settings.getBoolean(Settings.SERIF_FONT, false);
+
+        if(fontSize < 5) fontSize = 100; // TODO: remove: temp hack for compatibility
+
+        List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
-        if(settings.getBoolean(Settings.SERIF_FONT, false)) additionalClasses.add("serif-font");
-        String fontSizeCssClass = settings.getFontSizeCssClass();
-        if(fontSizeCssClass != null) additionalClasses.add(fontSizeCssClass);
+        if(serifFont) additionalClasses.add("serif-font");
 
         String classAttr;
         if(!additionalClasses.isEmpty()) {
@@ -148,42 +159,33 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             domainText = url.getHost();
         } catch (Exception ignored) {}
 
-		String htmlHeader = "<html>\n" +
-				"\t<head>\n" +
-				"\t\t<meta name=\"viewport\" content=\"initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />\n" +
-				"\t\t<meta charset=\"utf-8\">\n" +
-                "\t\t<link rel=\"stylesheet\" href=\"" + cssName + ".css\" media=\"all\" id=\"main-theme\">\n" +
-				"\t\t<link rel=\"stylesheet\" href=\"ratatouille.css\" media=\"all\" id=\"extra-theme\">\n" +
-				"\t</head>\n" +
-				"\t\t<div id=\"main\">\n" +
-				"\t\t\t<body" + classAttr + ">\n" +
-				"\t\t\t\t<div id=\"content\" class=\"w600p center\">\n" +
-				"\t\t\t\t\t<div id=\"article\">\n" +
-				"\t\t\t\t\t\t<header class=\"mbm\">\n" +
-				"\t\t\t\t\t\t\t<h1>" + titleText + "</h1>\n" +
-                "\t\t\t\t\t\t\t<img id=\"domainimg\" src=\"file:///android_asset/ic_action_web_site.png\" />\n" +
-                "\t\t\t\t\t\t\t<em class=\"domain\"><a href=\"" + originalUrlText + "\">" + domainText + "</a></em>\n" +
-				"\t\t\t\t\t\t</header>\n" +
-				"\t\t\t\t\t\t<article>";
+        String htmlBase;
+        try {
+            htmlBase = readRawString(R.raw.webview_htmlbase);
+        } catch(Exception ignored) {
+            // TODO: show error message
+            finish();
+            return;
+        }
 
-		String htmlFooter = "</article>\n" +
-				"\t\t\t\t\t</div>\n" +
-				"\t\t\t\t</div>\n" +
-				"\t\t\t</body>\n" +
-				"\t\t</div>\n" +
-				"</html>";
+        String htmlPage = String.format(htmlBase, cssName, classAttr, titleText,
+                originalUrlText, domainText, htmlContent);
 
         final String httpAuthHost = settings.getUrl();
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
         final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
-		webViewContent = (WebView) findViewById(R.id.webViewContent);
+        webViewContent = (WebView) findViewById(R.id.webViewContent);
         webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
-        webViewContent.setWebChromeClient(new WebChromeClient() {}); // TODO: check
-        webViewContent.loadDataWithBaseURL("file:///android_asset/",
-                htmlHeader + htmlContent + htmlFooter, "text/html", "utf-8", null);
-
+        webViewContent.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onConsoleMessage(ConsoleMessage cm) {
+                Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
+                        cm.lineNumber(), cm.sourceId()));
+                return true;
+            }
+        });
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -225,6 +227,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 }
             }
         });
+
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
+                "text/html", "utf-8", null);
 
         // TODO: remove logging after calibrated
         GestureDetector.SimpleOnGestureListener gestureListener
@@ -290,13 +295,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(mArticle.getArchive()) {
             btnMarkRead.setText(R.string.btnMarkUnread);
         }
-		btnMarkRead.setOnClickListener(new OnClickListener() {
+        btnMarkRead.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				markAsReadAndClose();
-			}
-		});
+            @Override
+            public void onClick(View v) {
+                markAsReadAndClose();
+            }
+        });
 
         ImageButton btnGoPrevious;
         ImageButton btnGoNext;
@@ -320,7 +325,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 openNextArticle();
             }
         });
-	}
+    }
 
     private void loadingFinished() {
         loadingFinished = true;
@@ -329,7 +334,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         bottomTools.setVisibility(View.VISIBLE);
         hrBar.setVisibility(View.VISIBLE);
 
-        restoreReadingPosition();
+        if(applyDisplaySettings()) {
+            restorePositionAfterUpdate();
+        } else {
+            restoreReadingPosition();
+        }
+    }
+
+    private boolean applyDisplaySettings() {
+        prepareToRestorePosition(false);
+
+        boolean changed = false;
+
+        if(fontSize != 100) {
+            changed = true;
+            setFontSize(webViewContent, fontSize);
+        }
+
+        return changed;
     }
 
     private boolean openUrl(final String url) {
@@ -485,6 +507,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return deleteArticle();
             case R.id.menuOpenOriginal:
                 return openOriginal();
+            case R.id.menuIncreaseFontSize:
+                changeFontSize(true);
+                return true;
+            case R.id.menuDecreaseFontSize:
+                changeFontSize(false);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -557,6 +585,95 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         return null;
+    }
+
+    private String readRawString(int id) throws IOException {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)));
+
+            StringBuilder sb = new StringBuilder();
+            String s;
+            while((s = reader.readLine()) != null) {
+                sb.append(s).append('\n');
+            }
+
+            return sb.toString();
+        } finally {
+            if(reader != null) {
+                reader.close();
+            }
+        }
+    }
+
+    private void prepareToRestorePosition(boolean savePosition) {
+        if(savePosition) positionToRestore = getReadingPosition();
+
+        webViewHeightBeforeUpdate = webViewContent.getHeight();
+    }
+
+    private void restorePositionAfterUpdate() {
+        cancelPositionRestoration();
+
+        webViewContent.postDelayed(positionRestorationRunnable = new Runnable() {
+            int counter;
+
+            @Override
+            public void run() {
+                if(webViewContent.getHeight() == webViewHeightBeforeUpdate) {
+                    if(++counter > 1000) {
+                        Log.d(TAG, "restorePositionAfterUpdate() giving up");
+                        return;
+                    }
+
+                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay");
+                    webViewContent.postDelayed(this, 10);
+                } else {
+                    Log.d(TAG, "restorePositionAfterUpdate() restoring position");
+                    restoreReadingPosition();
+                }
+            }
+        }, 10);
+    }
+
+    private void cancelPositionRestoration() {
+        if(positionRestorationRunnable != null) {
+            Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
+            webViewContent.removeCallbacks(positionRestorationRunnable);
+            positionRestorationRunnable = null;
+        }
+    }
+
+    private void changeFontSize(boolean increase) {
+        prepareToRestorePosition(true);
+
+        int step = 5;
+        fontSize += step * (increase ? 1 : -1);
+        if(!increase && fontSize < 5) fontSize = 5;
+
+        setFontSize(webViewContent, fontSize);
+
+        settings.setInt(Settings.FONT_SIZE, fontSize);
+
+        restorePositionAfterUpdate();
+    }
+
+    private void setFontSize(WebView view, int size) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setFontSizeNew(view, size);
+        } else {
+            setFontSizeOld(view, size);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    private void setFontSizeNew(WebView view, int size) {
+        view.getSettings().setTextZoom(size);
+    }
+
+    @TargetApi(Build.VERSION_CODES.FROYO)
+    private void setFontSizeOld(WebView view, int size) {
+        view.getSettings().setDefaultFontSize(size);
     }
 
     private Drawable getIcon(int id, Resources.Theme theme) {
