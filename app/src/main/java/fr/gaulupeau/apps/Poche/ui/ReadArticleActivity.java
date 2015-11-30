@@ -84,7 +84,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Settings settings;
 
     private int fontSize = 100;
-    private boolean serifFont;
 
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
@@ -132,14 +131,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);
-        serifFont = settings.getBoolean(Settings.SERIF_FONT, serifFont);
+        boolean serifFont = settings.getBoolean(Settings.SERIF_FONT, false);
 
         if(fontSize < 5) fontSize = 100; // TODO: remove: temp hack for compatibility
 
         List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
+        if(serifFont) additionalClasses.add("serif-font");
 
-        // TODO: remove?
         String classAttr;
         if(!additionalClasses.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -345,22 +344,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean applyDisplaySettings() {
         prepareToRestorePosition(false);
 
-        boolean result = false;
+        boolean changed = false;
 
         if(fontSize != 100) {
-            result = true;
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                setFontSizeNew(webViewContent, fontSize);
-            } else {
-                setFontSizeOld(webViewContent, fontSize);
-            }
-        }
-        if(serifFont) {
-            result = true;
-            setSerifFont(webViewContent, serifFont);
+            changed = true;
+            setFontSize(webViewContent, fontSize);
         }
 
-        return result;
+        return changed;
     }
 
     private boolean openUrl(final String url) {
@@ -522,9 +513,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuDecreaseFontSize:
                 changeFontSize(false);
                 return true;
-            case R.id.menuSwitchFontFamily:
-                changeFontFamily();
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -661,70 +649,31 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         int step = 5;
         fontSize += step * (increase ? 1 : -1);
+        if(!increase && fontSize < 5) fontSize = 5;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setFontSizeNew(webViewContent, fontSize);
-        } else {
-            setFontSizeOld(webViewContent, fontSize);
-        }
+        setFontSize(webViewContent, fontSize);
 
         settings.setInt(Settings.FONT_SIZE, fontSize);
 
         restorePositionAfterUpdate();
     }
 
-    private void changeFontFamily() {
-        setFontFamily(!serifFont);
-    }
-
-    private void setFontFamily(boolean serif) {
-        prepareToRestorePosition(true);
-
-        serifFont = serif;
-
-        setSerifFont(webViewContent, serifFont);
-
-        settings.setBoolean(Settings.SERIF_FONT, serifFont);
-
-        restorePositionAfterUpdate();
+    private void setFontSize(WebView view, int size) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            setFontSizeNew(view, size);
+        } else {
+            setFontSizeOld(view, size);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setFontSizeNew(WebView view, int size) {
-        webViewContent.getSettings().setTextZoom(size);
+        view.getSettings().setTextZoom(size);
     }
+
     @TargetApi(Build.VERSION_CODES.FROYO)
     private void setFontSizeOld(WebView view, int size) {
-        webViewContent.getSettings().setDefaultFontSize(size);
-    }
-
-    private static void setSerifFont(WebView view, boolean flag) {
-        callJavaScript(view, "setSerifFontFamily", flag);
-    }
-
-    private static void callJavaScript(WebView webView, String methodName, Object... params) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("try{").append(methodName).append("(");
-        boolean first = true;
-        for(Object param: params) {
-            if(first) first = false;
-            else sb.append(", ");
-
-            if(param instanceof String) {
-                sb.append("'").append(param).append("'");
-            } else {
-                sb.append(param);
-            }
-        }
-        sb.append(")}catch(error){console.error(error.message);}");
-        String call = sb.toString();
-        Log.v(TAG, "callJavaScript: call=" + call);
-
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-            webView.evaluateJavascript(call, null);
-        } else {
-            webView.loadUrl("javascript:" + call);
-        }
+        view.getSettings().setDefaultFontSize(size);
     }
 
     private Drawable getIcon(int id, Resources.Theme theme) {
