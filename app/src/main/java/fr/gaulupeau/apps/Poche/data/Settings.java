@@ -3,8 +3,6 @@ package fr.gaulupeau.apps.Poche.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
-
 /**
  * @author Victor Häggqvist
  * @since 10/20/15
@@ -16,9 +14,15 @@ public class Settings {
     public static final String URL = "pocheUrl";
     public static final String USER_ID = "APIUsername";
     public static final String TOKEN = "APIToken";
+    public static final String ALL_CERTS = "all_certs";
+    public static final String FONT_SIZE = "font_size";
+    public static final String SERIF_FONT = "serif_font";
+    public static final String LIST_LIMIT = "list_limit";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
-    public static final String VERSION_CODE = "version_code";
+    public static final String HTTP_AUTH_USERNAME = "http_auth_username";
+    public static final String HTTP_AUTH_PASSWORD = "http_auth_password";
+    public static final String THEME = "theme";
 
     private SharedPreferences pref;
 
@@ -30,6 +34,14 @@ public class Settings {
         pref.edit().putString(key, value).commit();
     }
 
+    public void setInt(String key, int value) {
+        pref.edit().putInt(key, value).commit();
+    }
+
+    public void setBoolean(String key, boolean value) {
+        pref.edit().putBoolean(key, value).commit();
+    }
+
     public String getUrl() {
         return pref.getString(URL, null);
     }
@@ -38,15 +50,16 @@ public class Settings {
         return pref.getString(key, null);
     }
 
-    public void setAppVersion(int versionCode) {
-        pref.edit().putInt(VERSION_CODE, versionCode).commit();
+    public String getString(String key, String defValue) {
+        return pref.getString(key, defValue);
     }
 
-    public int getPrevAppVersion() {
-        return pref.getInt(VERSION_CODE, BuildConfig.VERSION_CODE);
+    public int getInt(String key, int defValue) {
+        return pref.getInt(key, defValue);
     }
 
-    public boolean hasUpdateChecher() {
-        return pref.getInt("update_checker", -1) != -1;
+    public boolean getBoolean(String key, boolean defValue) {
+        return pref.getBoolean(key, defValue);
     }
+
 }

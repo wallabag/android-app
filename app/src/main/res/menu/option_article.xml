@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
         android:icon="@drawable/ic_done_24dp"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menuArticleToggleFavorite"
+        android:title="@string/add_to_favorites"
+        android:icon="@drawable/abc_btn_rating_star_off_mtrl_alpha"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuShare"
+        android:title="@string/menuShare"
+        android:icon="@android:drawable/ic_menu_share"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuDelete"
+        android:title="@string/menuDelete" />
+    <item
+        android:id="@+id/menuOpenOriginal"
+        android:title="@string/menuOpenOriginal" />
+    <item
+        android:id="@+id/menuIncreaseFontSize"
+        android:title="@string/menu_readArticle_increaseFontSize" />
+    <item
+        android:id="@+id/menuDecreaseFontSize"
+        android:title="@string/menu_readArticle_decreaseFontSize" />
 </menu>

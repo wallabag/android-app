@@ -18,6 +18,15 @@ body {
   background: #EEE;
 }
 
+.high-contrast {
+  background: #FFF;
+  font-weight: 600;
+}
+
+.serif-font {
+  font-family: serif;
+}
+
 /* ==========================================================================
    1 = Style Guide
    ========================================================================== */
@@ -34,6 +43,12 @@ h2, h3, h4 {
 
 p, li {
   color: #666;
+}
+
+.high-contrast p,
+.high-contrast li {
+  color: #000;
+  background: #FFF;
 }
 
 a {
@@ -239,5 +254,15 @@ blockquote {
 
   #article h1 {
     font-size: 1.2em;
+    margin-bottom:0px;
   }
+
+  .mbm .domain {
+    margin-top:0px;
+    margin-left:0px;
+   }
+
+   #domainimg {
+    vertical-align:top;
+   }
 }

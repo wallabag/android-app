@@ -12,9 +12,11 @@ public class Article {
     private String author;
     private String title;
     private String url;
+    private Boolean favorite;
     private Boolean archive;
     private Boolean sync;
     private java.util.Date updateDate;
+    private Double articleProgress;
 
     public Article() {
     }
@@ -23,16 +25,18 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, Integer articleId, String content, String author, String title, String url, Boolean archive, Boolean sync, java.util.Date updateDate) {
+    public Article(Long id, Integer articleId, String content, String author, String title, String url, Boolean favorite, Boolean archive, Boolean sync, java.util.Date updateDate, Double articleProgress) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
         this.author = author;
         this.title = title;
         this.url = url;
+        this.favorite = favorite;
         this.archive = archive;
         this.sync = sync;
         this.updateDate = updateDate;
+        this.articleProgress = articleProgress;
     }
 
     public Long getId() {
@@ -83,6 +87,14 @@ public class Article {
         this.url = url;
     }
 
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public Boolean getArchive() {
         return archive;
     }
@@ -107,17 +119,12 @@ public class Article {
         this.updateDate = updateDate;
     }
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", articleId=" + articleId +
-                ", author='" + author + '\'' +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", archive=" + archive +
-                ", sync=" + sync +
-                ", updateDate=" + updateDate +
-                '}';
+    public Double getArticleProgress() {
+        return articleProgress;
     }
+
+    public void setArticleProgress(Double articleProgress) {
+        this.articleProgress = articleProgress;
+    }
+
 }
