@@ -172,9 +172,10 @@ public class WallabagService {
     private Request getLoginRequest() {
         String url = endpoint + "/?login";
 
+        // TODO: maybe move null checks somewhere else
         RequestBody formBody = new FormEncodingBuilder()
-                .add("login", username)
-                .add("password", password)
+                .add("login", username != null ? username : "")
+                .add("password", password != null ? password : "")
 //                .add("longlastingsession", "on")
                 .build();
 
