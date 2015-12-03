@@ -6,7 +6,7 @@
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
 </string>
-    <string name="instructions">Mit wallabag kannst du Artikel speichern, um sie später zu lesen. Um einen Artikel zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke danach auf <i>Bag it!</i>. \nDu wirst nun auf deine wallabag Anmeldeseite geleitet (außer deine Zugangsdaten sind oben hinterlegt). \nDas wars! \nErfahre mehr über wallabag unter:\nhttps://www.wallabag.org</string>
+    <string name="instructions">Mit wallabag kannst du Artikel speichern, um sie später zu lesen. Um einen Artikel zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke danach auf <i>Bag it!</i>. \nDas wars! \nErfahre mehr über wallabag unter:\nhttps://www.wallabag.org</string>
     <string name="btnDone">Speichern</string>
     <string name="url_label">wallabag URL</string>
     <string name="url_help">Beispiele:\n<i>https://wallabag.example.de</i>\n<i>https://www.example.de/wallabag</i></string>
@@ -48,7 +48,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="negative_answer">Nein</string>
     <string name="no_articles">Keine Artikel</string>
     <string name="accept_all_certs_txt">Akzeptiere alle SSL Zertifikate</string>
-    <string name="accept_all_certs_desc">Erfordert vielleicht Neustart; unsicher; Beachte, dass selbst-signierte Zertifikate in Android importiert werden müssen.</string>
+    <string name="accept_all_certs_desc">Erfordert vielleicht Neustart. Unsicher. \nBeachte, dass selbst-signierte Zertifikate in Android importiert werden müssen.</string>
     <string name="list_limit_number_text">Limit für Artikel-Liste</string>
     <string name="loading_article_text">Laden…</string>
     <string name="d_urlAction_title">Wähle eine Aktion für die URL</string>
@@ -85,9 +85,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="getCredentials_fail">Konnte Zugangsdaten nicht abrufen</string>
     <string name="testConnection_errorMessage1">wallabag Dienst nicht gefunden; überprüfe bitte die URL. Fehlercode: %d</string>
     <string name="testConnection_errorMessage2">Anmeldung fehlgeschlagen; überprüfe bitte Benutzername und Passwort. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage3">Autorisierung-bezogene Probleme. Fehlercode: %d</string>
+    <string name="testConnection_errorMessage3">Autorisierungs-bezogene Probleme. Fehlercode: %d</string>
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler. Fehlercode: %d</string>
-    <string name="d_testConnection_success_title">Erfolgtŕeich</string>
+    <string name="d_testConnection_success_title">Erfolgreich</string>
     <string name="d_connectionTest_success_text">Verbindungstest war erfolgreich</string>
     <string name="d_testConnection_fail_title">Fehlgeschlagen</string>
     <string name="toggleArchive_errorMessage">Konnte nicht zum Server synchronisieren</string>
@@ -114,7 +114,23 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_emptyDB_answer_updateAll">Ja (empfohlen)</string>
     <string name="articleList_favoriteMark">Favorit Markierung</string>
     <string name="articleList_ArchivedMark">Archiv Markierung</string>
-    <string name="nightmode">Nachtmodus</string>
+    <string name="settings_httpAuth">Basic HTTP Autorisierung (optional)</string>
+    <string name="settings_httpAuth_desc">Leer lassen, wenn du nicht weist was das ist</string>
+    <string name="settings_httpAuth_username">HTTP Auth Benutzername</string>
+    <string name="settings_httpAuth_password">HTTP Auth Passwort</string>
+    <string name="settings_UI">UI Einstellungen</string>
+    <string name="noPreviousArticle">Es gibt keinen vorherigen Artikel in der aktuellen Liste</string>
+    <string name="noNextArticle">Es gibt keinen nächsten Artikel in der aktuellen Liste</string>
+    <string name="settings_appTheme">Themen:</string>
+    <string name="themeName_light">Hell</string>
+    <string name="themeName_light_contrast">Hell (hoher Kontrast)</string>
+    <string name="themeName_dark">Dunkel</string>
+    <string name="themeName_dark_contrast">Dunkel (hoher Kontrast)</string>
+    <string name="settings_ui_fontSize">Artikel Schriftgröße (%)</string>
+    <string name="settings_ui_serif">Serife Schriftart für Artikel</string>
+    <string name="menu_readArticle_increaseFontSize">Schriftgröße erhöhen</string>
+    <string name="menu_readArticle_decreaseFontSize">Schriftgröße reduzieren</string>
+    <string name="menu_readArticle_switchFontFamily">Schriftfamilie ändern</string>
     <plurals name="numberOfArticles">
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>
