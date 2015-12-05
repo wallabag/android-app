@@ -171,7 +171,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String htmlPage = String.format(htmlBase, cssName, classAttr, titleText,
                 originalUrlText, domainText, htmlContent);
 
-        final String httpAuthHost = settings.getUrl();
+        String httpAuthHostTemp = settings.getUrl();
+        try {
+            httpAuthHostTemp = new URL(httpAuthHostTemp).getHost();
+        } catch (Exception ignored) {}
+        final String httpAuthHost = httpAuthHostTemp;
         final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
         final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
 
@@ -215,10 +219,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 }
             }
 
+            @Override
             public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
                                                   String host, String realm) {
                 Log.d(TAG, "onReceivedHttpAuthRequest() host: " + host + ", realm: " + realm);
-                if(httpAuthHost != null && httpAuthHost.contains(host)) { // TODO: check
+                if(host != null && host.contains(httpAuthHost)) {
                     Log.d(TAG, "onReceivedHttpAuthRequest() host match");
                     handler.proceed(httpAuthUsername, httpAuthPassword);
                 } else {
