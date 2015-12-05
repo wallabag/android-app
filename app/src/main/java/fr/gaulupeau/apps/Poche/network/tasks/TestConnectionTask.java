@@ -79,6 +79,11 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
                                 result);
                         break;
 
+                    case 5:
+                        errorMessage = context.getString(R.string.testConnection_errorMessage5,
+                                result);
+                        break;
+
                     default:
                         errorMessage = context.getString(R.string.testConnection_errorMessage_unknown,
                                 result);
