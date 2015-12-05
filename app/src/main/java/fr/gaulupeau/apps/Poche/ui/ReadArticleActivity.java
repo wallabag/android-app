@@ -526,6 +526,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @Override
     public void onStop() {
         if(loadingFinished && mArticle != null) {
+            cancelPositionRestoration();
+
             mArticle.setArticleProgress(getReadingPosition());
             mArticleDao.update(mArticle);
         }
@@ -644,7 +646,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void cancelPositionRestoration() {
         if(positionRestorationRunnable != null) {
             Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
-            webViewContent.removeCallbacks(positionRestorationRunnable);
+            if(webViewContent != null) webViewContent.removeCallbacks(positionRestorationRunnable);
             positionRestorationRunnable = null;
         }
     }
