@@ -140,7 +140,15 @@ public class WallabagService {
         Request testRequest = getRequestBuilder().url(url).build();
 
         Response response = exec(testRequest);
+        if(response.code() == 401) {
+            return 5; // fail because of HTTP Auth
+        }
+
         String body = response.body().string();
+        if(isRegularPage(body)) {
+            return 0; // if HTTP-auth-only access control used, we should be already logged in
+        }
+
         if(!isLoginPage(body)) {
             return 1; // it's not even wallabag login page: probably something wrong with the URL
         }
@@ -162,7 +170,7 @@ public class WallabagService {
             return 3; // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
         }
 
-        if(!body.contains("href=\"./?logout\"")) {
+        if(!isRegularPage(body)) {
             return 4; // unexpected content: expected to find "log out" button
         }
 
@@ -280,6 +288,12 @@ public class WallabagService {
 
 //        "<body class=\"login\">"
         return body.contains("<form method=\"post\" action=\"?login\" name=\"loginform\">"); // any way to improve?
+    }
+
+    private boolean isRegularPage(String body) throws IOException {
+        if(body == null || body.length() == 0) return false;
+
+        return body.contains("href=\"./?logout\"");
     }
 
 }
