@@ -122,7 +122,6 @@ GAULUPEAU Jonathan — 2013
     <string name="settings_httpAuth_desc">Si vous ne savez pas ce que c\'est, laissez-le vide</string>
     <string name="settings_httpAuth_password">Mot de passe Authentification HTTP</string>
     <string name="settings_httpAuth_username">Identifiant Authentification HTTP</string>
-    <string name="nightmode">Mode nuit</string>
     <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
     <string name="settings_appTheme">Thème de l\'application</string>
@@ -135,4 +134,5 @@ GAULUPEAU Jonathan — 2013
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_switchFontFamily">Famille de police (sans/avec serif)</string>
+    <string name="testConnection_errorMessage5">Impossible de se connecter; Verifiez les paramètres d\'authentification HTTP. Code d\'erreur : %d</string>
 </resources>
