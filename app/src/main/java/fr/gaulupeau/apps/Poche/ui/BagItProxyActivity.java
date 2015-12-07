@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +11,7 @@ import android.util.Patterns;
 import java.util.regex.Matcher;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 
 public class BagItProxyActivity extends AppCompatActivity {
@@ -49,20 +49,14 @@ public class BagItProxyActivity extends AppCompatActivity {
             return;
         }
 
+        Settings settings = new Settings(this);
+        if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
+            startActivity(new Intent(this, ArticlesListActivity.class)); // FLAG_ACTIVITY_CLEAR_TOP and/or FLAG_ACTIVITY_NEW_TASK maybe?
+        }
+
         Log.d(TAG, "Bagging " + pageUrl);
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.d_addingToWallabag_text));
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                finish();
-            }
-        });
-        progressDialog.show();
-
-        new AddLinkTask(pageUrl, this, null, progressDialog).execute();
+        new AddLinkTask(pageUrl, this, null, null).execute();
     }
 
 }

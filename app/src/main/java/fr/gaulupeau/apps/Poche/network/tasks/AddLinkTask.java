@@ -25,7 +25,7 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     private String errorMessage;
     private Context context;
     private ProgressBar progressBar;
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog; // TODO: remove
 
     private boolean isOffline;
     private boolean savedOffline;

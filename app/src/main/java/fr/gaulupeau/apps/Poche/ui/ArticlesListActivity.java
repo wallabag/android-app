@@ -99,18 +99,35 @@ public class ArticlesListActivity extends AppCompatActivity
             firstTimeShown = false;
 
             WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-            if (!wallabagSettings.isValid()) {
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
+            if(!wallabagSettings.isValid()) {
+                AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                 messageBox.setTitle(R.string.firstRun_d_welcome);
                 messageBox.setMessage(R.string.firstRun_d_configure);
                 messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                        startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
                     }
                 });
                 messageBox.setCancelable(false);
                 messageBox.create().show();
+            } else if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
+                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
+
+                String username = settings.getString(Settings.USERNAME, null);
+                if(username == null || username.length() == 0) {
+                    AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
+                    messageBox.setTitle(R.string.firstRun_d_optionalSettings_title);
+                    messageBox.setMessage(R.string.firstRun_d_optionalSettings_message);
+                    messageBox.setPositiveButton(R.string.go_to_settings, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
+                        }
+                    });
+                    messageBox.setNegativeButton(R.string.dismiss, null);
+                    messageBox.create().show();
+                }
             }
         }
 
