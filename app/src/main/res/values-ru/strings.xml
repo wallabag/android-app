@@ -5,7 +5,6 @@
     <string name="author">
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
-\nРусская локализация: Alexander Inglessi
 </string>
     <string name="instructions">С помощью wallabag вы можете сохранять веб-страницы для отложенного чтения. Для этого сначала откройте страницу в браузере, как обычно. Затем нажмите <i>Поделиться</i> и выберите <i>В бэг!</i>. \nВы увидите страницу входа в wallabag. \nГотово! \nБольше информации про wallabag здесь:\n http://www.wallabag.org</string>
     <string name="btnDone">Сохранить</string>
