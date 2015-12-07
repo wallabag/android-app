@@ -23,6 +23,7 @@ public class Settings {
     public static final String HTTP_AUTH_USERNAME = "http_auth_username";
     public static final String HTTP_AUTH_PASSWORD = "http_auth_password";
     public static final String THEME = "theme";
+    public static final String CONFIGURE_OPTIONAL_DIALOG_SHOWN = "configure_optional_dialog_shown";
 
     private SharedPreferences pref;
 

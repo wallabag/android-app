@@ -26,7 +26,7 @@ public class ToggleFavoriteTask extends GenericArticleTask {
 
     @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
-        if(isOffline) return false;
+        if(isOffline || noCredentials) return false;
 
         if(service.toggleFavorite(articleId)) return true;
 
@@ -41,14 +41,14 @@ public class ToggleFavoriteTask extends GenericArticleTask {
         article.setSync(success); // ?
         articleDao.update(article);
 
-        if(success || isOffline) {
+        if(success || isOffline || noCredentials) {
             if(context != null) {
                 Toast.makeText(context, article.getFavorite()
                                 ? R.string.added_to_favorites_message
                                 : R.string.removed_from_favorites_message,
                         Toast.LENGTH_SHORT).show();
 
-                if(isOffline) {
+                if(isOffline && !noCredentials) {
                     Toast.makeText(context, R.string.toggleFavorite_noInternetConnection,
                             Toast.LENGTH_SHORT).show();
                 }

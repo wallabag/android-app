@@ -26,7 +26,7 @@ public class ToggleArchiveTask extends GenericArticleTask {
 
     @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
-        if(isOffline) return false;
+        if(isOffline || noCredentials) return false;
 
         if(service.toggleArchive(articleId)) return true;
 
@@ -41,14 +41,14 @@ public class ToggleArchiveTask extends GenericArticleTask {
         article.setSync(success); // ?
         articleDao.update(article);
 
-        if(success || isOffline) {
+        if(success || isOffline || noCredentials) {
             if(context != null) {
                 Toast.makeText(context, article.getArchive()
                                 ? R.string.moved_to_archive_message
                                 : R.string.marked_as_unread_message,
                         Toast.LENGTH_SHORT).show();
 
-                if(isOffline) {
+                if(isOffline && !noCredentials) {
                     Toast.makeText(context, R.string.toggleArchive_noInternetConnection,
                             Toast.LENGTH_SHORT).show();
                 }

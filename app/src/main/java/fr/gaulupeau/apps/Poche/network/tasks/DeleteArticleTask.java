@@ -25,7 +25,7 @@ public class DeleteArticleTask extends GenericArticleTask {
 
     @Override
     protected Boolean doInBackgroundSimple(Void... params) throws IOException {
-        if(isOffline) return false;
+        if(isOffline || noCredentials) return false;
 
         if(service.deleteArticle(articleId)) return true;
 
@@ -37,11 +37,11 @@ public class DeleteArticleTask extends GenericArticleTask {
     protected void onPostExecute(Boolean success) {
         super.onPostExecute(success);
 
-        if(success || isOffline) {
+        if(success || isOffline || noCredentials) {
             if(context != null) {
                 Toast.makeText(context, R.string.deleteArticle_deleted, Toast.LENGTH_SHORT).show();
 
-                if(isOffline) {
+                if(isOffline && !noCredentials) {
                     Toast.makeText(context, R.string.deleteArticle_noInternetConnection,
                             Toast.LENGTH_SHORT).show();
                 }
