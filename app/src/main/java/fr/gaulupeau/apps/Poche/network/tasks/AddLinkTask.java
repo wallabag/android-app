@@ -51,27 +51,33 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     protected Boolean doInBackground(Void... params) {
         boolean result = false;
 
+        isOffline = true;
+
         if(WallabagConnection.isNetworkOnline()) {
             Settings settings = App.getInstance().getSettings();
-            WallabagService service = new WallabagService(
-                    settings.getUrl(),
-                    settings.getKey(Settings.USERNAME),
-                    settings.getKey(Settings.PASSWORD));
 
-            try {
-                if(service.addLink(url)) {
-                    result = true;
-                } else if(context != null) {
-                    errorMessage = context.getString(R.string.addLink_errorMessage);
+            String username = settings.getKey(Settings.USERNAME);
+            if(username != null && username.length() > 0) {
+                isOffline = false;
+
+                WallabagService service = new WallabagService(
+                        settings.getUrl(),
+                        username,
+                        settings.getKey(Settings.PASSWORD));
+
+                try {
+                    if(service.addLink(url)) {
+                        result = true;
+                    } else if(context != null) {
+                        errorMessage = context.getString(R.string.addLink_errorMessage);
+                    }
+                } catch (IOException e) {
+                    errorMessage = e.getMessage();
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                errorMessage = e.getMessage();
-                e.printStackTrace();
-            }
 
-            if(result) return true;
-        } else {
-            isOffline = true;
+                if(result) return true;
+            }
         }
 
         OfflineURLDao urlDao = DbConnection.getSession().getOfflineURLDao();
