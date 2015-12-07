@@ -77,7 +77,7 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
         OfflineURLDao urlDao = DbConnection.getSession().getOfflineURLDao();
         OfflineURL offlineURL = new OfflineURL();
         offlineURL.setUrl(url);
-        urlDao.insert(offlineURL);
+        urlDao.insertOrReplace(offlineURL);
 
         savedOffline = true;
 
