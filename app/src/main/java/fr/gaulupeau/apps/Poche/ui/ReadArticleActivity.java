@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -69,6 +71,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Boolean contextFavorites;
     private Boolean contextArchived;
 
+    private boolean acceptAllSSLCerts;
+
     private String titleText;
     private String originalUrlText;
     private String domainText;
@@ -112,6 +116,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setTitle(titleText);
 
         settings = App.getInstance().getSettings();
+
+        acceptAllSSLCerts = settings.getBoolean(Settings.ALL_CERTS, false);
 
         String cssName;
         boolean highContrast = false;
@@ -229,6 +235,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 } else {
                     Log.d(TAG, "onReceivedHttpAuthRequest() host mismatch");
                     super.onReceivedHttpAuthRequest(view, handler, host, realm);
+                }
+            }
+
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                if(acceptAllSSLCerts) {
+                    handler.proceed();
+                } else {
+                    super.onReceivedSslError(view, handler, error);
                 }
             }
         });
