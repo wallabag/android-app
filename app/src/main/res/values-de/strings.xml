@@ -59,7 +59,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_connectionFail_title">Verbindung fehlgeschlagen</string>
     <string name="d_bag_fail_title">Fehlgeschlagen</string>
     <string name="d_bag_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>
-    <string name="d_addingToWallabag_text">Seite baggen</string>
     <string name="firstRun_d_welcome">Willkommen bei wallabag</string>
     <string name="firstRun_d_configure">Um anzufangen, richte die App mit deiner wallabag Installation ein.</string>
     <string name="open_original">"Öffne Original: "</string>
@@ -135,4 +134,5 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>
     </plurals>
+    <string name="dismiss"></string>
 </resources>

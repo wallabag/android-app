@@ -58,8 +58,7 @@ GAULUPEAU Jonathan — 2013
 <string name="d_connectionFail_title">Erreur de connexion</string>
 <string name="d_bag_fail_title">Échec</string>
 <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
-<string name="d_addingToWallabag_text">Sauvegarde de la page</string>
-<string name="firstRun_d_welcome">Bienvenue sur wallabag</string>
+    <string name="firstRun_d_welcome">Bienvenue sur wallabag</string>
 <string name="firstRun_d_configure">Merci de configurer cette application avec votre instance de wallabag pour commencer.</string>
 <string name="open_original">"Ouvrir l\'original : "</string>
 <string name="settings_optionalCredentials">Champs facultatifs</string>
@@ -135,4 +134,8 @@ GAULUPEAU Jonathan — 2013
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_switchFontFamily">Famille de police (sans/avec serif)</string>
     <string name="testConnection_errorMessage5">Impossible de se connecter; Verifiez les paramètres d\'authentification HTTP. Code d\'erreur : %d</string>
+    <string name="dismiss">Ignorer</string>
+    <string name="firstRun_d_optionalSettings_message">Afin de sauvegarder des pages depuis l\'application (et envoyer les changements locaux au serveur), il nécéssite d\'entrer votre nom d\'utilisateur et votre mot de passe dans les paramètres</string>
+    <string name="firstRun_d_optionalSettings_title">Mettre à jour les paramètres</string>
+    <string name="go_to_settings">Aller aux paramètres</string>
 </resources>
