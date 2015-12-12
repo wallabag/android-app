@@ -100,6 +100,8 @@ public class ArticlesListActivity extends AppCompatActivity
 
             WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
             if(!wallabagSettings.isValid()) {
+                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
+
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                 messageBox.setTitle(R.string.firstRun_d_welcome);
                 messageBox.setMessage(R.string.firstRun_d_configure);
