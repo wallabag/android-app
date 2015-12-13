@@ -138,4 +138,5 @@ GAULUPEAU Jonathan — 2013
     <string name="firstRun_d_optionalSettings_message">Afin de sauvegarder des pages depuis l\'application (et envoyer les changements locaux au serveur), il nécéssite d\'entrer votre nom d\'utilisateur et votre mot de passe dans les paramètres</string>
     <string name="firstRun_d_optionalSettings_title">Mettre à jour les paramètres</string>
     <string name="go_to_settings">Aller aux paramètres</string>
+    <string name="testConnection_errorMessage6">URL Incorrecte. Code d\'erreur : %d</string>
 </resources>
