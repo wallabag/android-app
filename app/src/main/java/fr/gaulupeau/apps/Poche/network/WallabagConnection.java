@@ -72,7 +72,7 @@ public class WallabagConnection {
     public static HttpUrl getHttpURL(String url) throws IOException {
         HttpUrl httpUrl = HttpUrl.parse(url);
 
-        if(httpUrl == null) throw new IOException("Illegal URL");
+        if(httpUrl == null) throw new IOException("Incorrect URL");
 
         return httpUrl;
     }
