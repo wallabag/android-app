@@ -90,6 +90,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="testConnection_errorMessage2">Can\'t login; check username and password. Error code: %d</string>
     <string name="testConnection_errorMessage3">Authorization-related problems. Error code: %d</string>
     <string name="testConnection_errorMessage5">Can\'t login; check HTTP Auth parameters. Error code: %d</string>
+    <string name="testConnection_errorMessage6">Incorrect URL. Error code: %d</string>
     <string name="testConnection_errorMessage_unknown">Unknown error. Error code: %d</string>
     <string name="d_testConnection_success_title">Success</string>
     <string name="d_connectionTest_success_text">Connection test was successful</string>
