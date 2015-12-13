@@ -17,6 +17,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
+import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 
 /**
  * @author Victor Häggqvist
@@ -78,66 +79,53 @@ public class WallabagService {
     }
 
     public boolean addLink(String link) throws IOException {
-        HttpUrl url = HttpUrl.parse(endpoint)
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("plainurl", link)
                 .build();
 
-        Request request = getRequestBuilder()
-                .url(url)
-                .build();
-
-        return executeRequest(request);
+        return executeRequest(getRequest(url));
     }
 
     public boolean toggleArchive(int articleId) throws IOException {
-        HttpUrl url = HttpUrl.parse(endpoint)
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("action", "toggle_archive")
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = getRequestBuilder()
-                .url(url)
-                .build();
-
-        return executeRequest(request);
+        return executeRequest(getRequest(url));
     }
 
     public boolean toggleFavorite(int articleId) throws IOException {
-        HttpUrl url = HttpUrl.parse(endpoint)
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("action", "toggle_fav")
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = getRequestBuilder()
-                .url(url)
-                .build();
-
-        return executeRequest(request);
+        return executeRequest(getRequest(url));
     }
 
     public boolean deleteArticle(int articleId) throws IOException {
-        HttpUrl url = HttpUrl.parse(endpoint)
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("action", "delete")
                 .setQueryParameter("id", Integer.toString(articleId))
                 .build();
 
-        Request request = getRequestBuilder()
-                .url(url)
-                .build();
-
-        return executeRequest(request);
+        return executeRequest(getRequest(url));
     }
 
     public int testConnection() throws IOException {
         // TODO: detect redirects
         // TODO: check response codes prior to getting body
 
-        String url = endpoint + "/?view=about";
-        Request testRequest = getRequestBuilder().url(url).build();
+        HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
+        if(httpUrl == null) {
+            return 6;
+        }
+        Request testRequest = getRequest(httpUrl);
 
         Response response = exec(testRequest);
         if(response.code() == 401) {
@@ -177,8 +165,8 @@ public class WallabagService {
         return 0;
     }
 
-    private Request getLoginRequest() {
-        String url = endpoint + "/?login";
+    private Request getLoginRequest() throws IOException {
+        HttpUrl url = getHttpURL(endpoint + "/?login");
 
         // TODO: maybe move null checks somewhere else
         RequestBody formBody = new FormEncodingBuilder()
@@ -193,19 +181,17 @@ public class WallabagService {
                 .build();
     }
 
-    private Request getConfigRequest() {
-        HttpUrl url = HttpUrl.parse(endpoint)
+    private Request getConfigRequest() throws IOException {
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("view", "config")
                 .build();
 
-        return getRequestBuilder()
-                .url(url)
-                .build();
+        return getRequest(url);
     }
 
-    private Request getGenerateTokenRequest() {
-        HttpUrl url = HttpUrl.parse(endpoint)
+    private Request getGenerateTokenRequest() throws IOException {
+        HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("feed", null)
                 .setQueryParameter("action", "generate")
@@ -213,9 +199,15 @@ public class WallabagService {
 
         Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
 
-        return getRequestBuilder()
-                .url(url)
-                .build();
+        return getRequest(url);
+    }
+
+    private HttpUrl getHttpURL(String url) throws IOException {
+        HttpUrl httpUrl = HttpUrl.parse(url);
+
+        if(httpUrl == null) throw new IOException("Illegal URL");
+
+        return httpUrl;
     }
 
     private boolean executeRequest(Request request) throws IOException {

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.Credentials;
+import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -62,6 +63,10 @@ public class WallabagConnection {
         if(basicAuthCredentials != null) b.header("Authorization", basicAuthCredentials);
 
         return b;
+    }
+
+    public static Request getRequest(HttpUrl url) {
+        return getRequestBuilder().url(url).build();
     }
 
     public static boolean isNetworkOnline() {
