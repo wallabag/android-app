@@ -69,6 +69,14 @@ public class WallabagConnection {
         return getRequestBuilder().url(url).build();
     }
 
+    public static HttpUrl getHttpURL(String url) throws IOException {
+        HttpUrl httpUrl = HttpUrl.parse(url);
+
+        if(httpUrl == null) throw new IOException("Illegal URL");
+
+        return httpUrl;
+    }
+
     public static boolean isNetworkOnline() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);

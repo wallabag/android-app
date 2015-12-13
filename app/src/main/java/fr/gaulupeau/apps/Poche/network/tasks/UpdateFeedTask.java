@@ -196,7 +196,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     }
 
     private InputStream getInputStream(String urlStr) throws IOException {
-        Request request = WallabagConnection.getRequestBuilder().url(urlStr).build();
+        Request request = WallabagConnection.getRequest(WallabagConnection.getHttpURL(urlStr));
 
         Response response = WallabagConnection.getClient().newCall(request).execute();
 

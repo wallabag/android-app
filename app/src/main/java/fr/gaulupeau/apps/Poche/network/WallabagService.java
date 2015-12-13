@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 
+import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 
@@ -200,14 +201,6 @@ public class WallabagService {
         Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
 
         return getRequest(url);
-    }
-
-    private HttpUrl getHttpURL(String url) throws IOException {
-        HttpUrl httpUrl = HttpUrl.parse(url);
-
-        if(httpUrl == null) throw new IOException("Illegal URL");
-
-        return httpUrl;
     }
 
     private boolean executeRequest(Request request) throws IOException {
