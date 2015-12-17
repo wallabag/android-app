@@ -41,6 +41,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    private static final String TAG = UpdateFeedTask.class.getSimpleName();
+
     private String baseURL;
     private String apiUserId;
     private String apiToken;
@@ -93,29 +95,43 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     }
 
     private void updateAllFeeds() {
+        Log.i(TAG, "updateAllFeeds() started");
+
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
         SQLiteDatabase db = articleDao.getDatabase();
 
+        Log.d(TAG, "updateAllFeeds() beginning transaction");
         db.beginTransaction();
         try {
+            Log.d(TAG, "updateAllFeeds() deleting old articles");
             articleDao.deleteAll();
 
+            Log.d(TAG, "updateAllFeeds() updating Main feed");
             if(!updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0)) {
+                Log.w(TAG, "updateAllFeeds() Main feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() updating Archive feed");
             if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
+                Log.w(TAG, "updateAllFeeds() Archive feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() updating Favorite feed");
             if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
+                Log.w(TAG, "updateAllFeeds() Favorite feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() setting transaction successful");
             db.setTransactionSuccessful();
         } finally {
+            Log.d(TAG, "updateAllFeeds() ending transaction");
             db.endTransaction();
         }
+
+        Log.d(TAG, "updateAllFeeds() finished");
     }
 
     private void update(FeedType feedType, UpdateType updateType) {
@@ -150,6 +166,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
     private boolean updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
                                  Integer id) {
+        Log.d(TAG, "updateByFeed() started");
+
         InputStream is = null;
         try {
             // TODO: rewrite?
@@ -165,6 +183,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 return false;
             }
 
+            Log.d(TAG, "updateByFeed() got input stream; processing feed");
             try {
                 processFeed(articleDao, is, feedType, updateType, id);
             } catch (IOException e) {
@@ -177,6 +196,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 errorMessage = App.getInstance().getString(R.string.feedUpdater_feedProcessingError);
                 return false;
             }
+
+            Log.d(TAG, "updateByFeed() finished successfully");
 
             return true;
         } finally {
@@ -214,6 +235,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     private void processFeed(ArticleDao articleDao, InputStream is,
                              FeedType feedType, UpdateType updateType, Integer latestID)
             throws XmlPullParserException, IOException {
+        // TODO: use parser.require() all over the place?
+
         XmlPullParser parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(is, null);
@@ -239,6 +262,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     // Favorite: Full
 
                     Item item = parseItem(parser);
+
                     Integer id = getIDFromURL(item.sourceUrl);
 
                     if(updateType == UpdateType.Fast && latestID != null && id != null
@@ -336,21 +360,21 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
             switch (parser.getName()) {
                 case "title":
-                    item.title = cleanString(parser.nextText());
+                    item.title = cleanString(parseNextText(parser));
                     break;
                 case "source":
                     String sourceUrl = parser.getAttributeValue(null, "url");
-                    parser.nextText(); // ignore "empty" element
+                    parseNextText(parser); // ignore "empty" element
                     item.sourceUrl = sourceUrl;
                     break;
                 case "link":
-                    item.link = parser.nextText();
+                    item.link = parseNextText(parser);
                     break;
                 case "pubDate":
-                    item.pubDate = parser.nextText();
+                    item.pubDate = parseNextText(parser);
                     break;
                 case "description":
-                    item.description = parser.nextText();
+                    item.description = parseNextText(parser);
                     break;
 
                 default:
@@ -360,6 +384,16 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         }
 
         return item;
+    }
+
+    private static String parseNextText(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        String result = parser.nextText();
+
+        // workaround for Android 2.3.3 XmlPullParser.nextText() bug
+        if(parser.getEventType() != XmlPullParser.END_TAG) parser.next();
+
+        return result;
     }
 
     private static Integer parseItemID(XmlPullParser parser) throws XmlPullParserException, IOException {
