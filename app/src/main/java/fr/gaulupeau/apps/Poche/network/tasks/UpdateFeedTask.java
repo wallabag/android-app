@@ -214,6 +214,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     private void processFeed(ArticleDao articleDao, InputStream is,
                              FeedType feedType, UpdateType updateType, Integer latestID)
             throws XmlPullParserException, IOException {
+        // TODO: use parser.require() all over the place?
+
         XmlPullParser parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(is, null);
@@ -239,6 +241,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     // Favorite: Full
 
                     Item item = parseItem(parser);
+
                     Integer id = getIDFromURL(item.sourceUrl);
 
                     if(updateType == UpdateType.Fast && latestID != null && id != null
@@ -336,21 +339,21 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
             switch (parser.getName()) {
                 case "title":
-                    item.title = cleanString(parser.nextText());
+                    item.title = cleanString(parseNextText(parser));
                     break;
                 case "source":
                     String sourceUrl = parser.getAttributeValue(null, "url");
-                    parser.nextText(); // ignore "empty" element
+                    parseNextText(parser); // ignore "empty" element
                     item.sourceUrl = sourceUrl;
                     break;
                 case "link":
-                    item.link = parser.nextText();
+                    item.link = parseNextText(parser);
                     break;
                 case "pubDate":
-                    item.pubDate = parser.nextText();
+                    item.pubDate = parseNextText(parser);
                     break;
                 case "description":
-                    item.description = parser.nextText();
+                    item.description = parseNextText(parser);
                     break;
 
                 default:
@@ -360,6 +363,16 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         }
 
         return item;
+    }
+
+    private static String parseNextText(XmlPullParser parser)
+            throws XmlPullParserException, IOException {
+        String result = parser.nextText();
+
+        // workaround for Android 2.3.3 XmlPullParser.nextText() bug
+        if(parser.getEventType() != XmlPullParser.END_TAG) parser.next();
+
+        return result;
     }
 
     private static Integer parseItemID(XmlPullParser parser) throws XmlPullParserException, IOException {
