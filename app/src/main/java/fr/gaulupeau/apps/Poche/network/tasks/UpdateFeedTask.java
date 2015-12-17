@@ -41,6 +41,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
+    private static final String TAG = UpdateFeedTask.class.getSimpleName();
+
     private String baseURL;
     private String apiUserId;
     private String apiToken;
@@ -93,29 +95,43 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     }
 
     private void updateAllFeeds() {
+        Log.i(TAG, "updateAllFeeds() started");
+
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
         SQLiteDatabase db = articleDao.getDatabase();
 
+        Log.d(TAG, "updateAllFeeds() beginning transaction");
         db.beginTransaction();
         try {
+            Log.d(TAG, "updateAllFeeds() deleting old articles");
             articleDao.deleteAll();
 
+            Log.d(TAG, "updateAllFeeds() updating Main feed");
             if(!updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0)) {
+                Log.w(TAG, "updateAllFeeds() Main feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() updating Archive feed");
             if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
+                Log.w(TAG, "updateAllFeeds() Archive feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() updating Favorite feed");
             if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
+                Log.w(TAG, "updateAllFeeds() Favorite feed update failed; exiting");
                 return;
             }
 
+            Log.d(TAG, "updateAllFeeds() setting transaction successful");
             db.setTransactionSuccessful();
         } finally {
+            Log.d(TAG, "updateAllFeeds() ending transaction");
             db.endTransaction();
         }
+
+        Log.d(TAG, "updateAllFeeds() finished");
     }
 
     private void update(FeedType feedType, UpdateType updateType) {
@@ -150,6 +166,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
     private boolean updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
                                  Integer id) {
+        Log.d(TAG, "updateByFeed() started");
+
         InputStream is = null;
         try {
             // TODO: rewrite?
@@ -165,6 +183,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 return false;
             }
 
+            Log.d(TAG, "updateByFeed() got input stream; processing feed");
             try {
                 processFeed(articleDao, is, feedType, updateType, id);
             } catch (IOException e) {
@@ -177,6 +196,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 errorMessage = App.getInstance().getString(R.string.feedUpdater_feedProcessingError);
                 return false;
             }
+
+            Log.d(TAG, "updateByFeed() finished successfully");
 
             return true;
         } finally {
