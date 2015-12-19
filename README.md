@@ -8,7 +8,7 @@ This application is released under GPL. wallabag is released under the MIT licen
 
 <a href="https://play.google.com/store/apps/details?id=fr.gaulupeau.apps.InThePoche">
   <img alt="Get it on Google Play"
-       src="https://cloud.githubusercontent.com/assets/12447257/8147861/0b474efe-1280-11e5-9f09-d6fb1ebaf954.png" />
+       src="https://cloud.githubusercontent.com/assets/16354543/11904684/0667026e-a5c2-11e5-9f53-4614cc53e01f.png" />
 </a>
 <a href="https://f-droid.org/repository/browse/?fdid=fr.gaulupeau.apps.InThePoche">
   <img alt="Get it on F-Droid"
