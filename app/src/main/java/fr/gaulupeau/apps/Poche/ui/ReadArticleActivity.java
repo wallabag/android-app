@@ -199,17 +199,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                // dirty. Looks like there is no good solution
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (webViewContent.getHeight() == 0) {
-                            webViewContent.postDelayed(this, 10);
-                        } else {
-                            loadingFinished();
-                        }
-                    }
-                }, 10);
+                ReadArticleActivity.this.onPageFinished();
 
                 super.onPageFinished(view, url);
             }
@@ -247,6 +237,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 }
             }
         });
+
+        if(fontSize != 100) setFontSize(webViewContent, fontSize);
 
         webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
                 "text/html", "utf-8", null);
@@ -354,24 +346,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         bottomTools.setVisibility(View.VISIBLE);
         hrBar.setVisibility(View.VISIBLE);
 
-        if(applyDisplaySettings()) {
-            restorePositionAfterUpdate();
-        } else {
-            restoreReadingPosition();
-        }
-    }
+        // should there be a pause between visibility change and position restoration?
 
-    private boolean applyDisplaySettings() {
-        prepareToRestorePosition(false);
-
-        boolean changed = false;
-
-        if(fontSize != 100) {
-            changed = true;
-            setFontSize(webViewContent, fontSize);
-        }
-
-        return changed;
+        restoreReadingPosition();
     }
 
     private boolean openUrl(final String url) {
@@ -628,6 +605,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    private void onPageFinished() {
+        // dirty. Looks like there is no good solution
+        webViewContent.postDelayed(new Runnable() {
+            int counter;
+
+            @Override
+            public void run() {
+                // "< 50" is workaround for https://github.com/wallabag/android-app/issues/178
+                if(webViewContent.getHeight() < 50) {
+                    if(++counter > 1000) {
+                        Log.d(TAG, "onPageFinished() exiting by counter" +
+                                "; calling loadingFinished() anyway");
+                        loadingFinished();
+                        return;
+                    }
+
+                    Log.v(TAG, "onPageFinished() scheduling another postDelay; counter: " + counter);
+                    webViewContent.postDelayed(this, 10);
+                } else {
+                    Log.d(TAG, "onPageFinished() calling loadingFinished()");
+                    loadingFinished();
+                }
+            }
+        }, 10);
+    }
+
     private void prepareToRestorePosition(boolean savePosition) {
         if(savePosition) positionToRestore = getReadingPosition();
 
@@ -648,7 +651,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         return;
                     }
 
-                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay");
+                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay" +
+                            "; counter: " + counter);
                     webViewContent.postDelayed(this, 10);
                 } else {
                     Log.d(TAG, "restorePositionAfterUpdate() restoring position");
