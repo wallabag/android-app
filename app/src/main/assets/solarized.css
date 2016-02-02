@@ -8,6 +8,23 @@
    5 = Article
    6 = Media queries
 
+   *solarized colors*
+$base03:    #002b36;
+$base02:    #073642;
+$base01:    #586e75;
+$base00:    #657b83;
+$base0:     #839496;
+$base1:     #93a1a1;
+$base2:     #eee8d5;
+$base3:     #fdf6e3;
+$yellow:    #b58900;
+$orange:    #cb4b16;
+$red:       #dc322f;
+$magenta:   #d33682;
+$violet:    #6c71c4;
+$blue:      #268bd2;
+$cyan:      #2aa198;
+$green:     #859900;
    ========================================================================== */
 
 html {
@@ -15,7 +32,7 @@ html {
 }
 
 body {
-  background: #FDF6E3;
+  background: #fdf6e3; /* $base3 */
 }
 
 .high-contrast {
@@ -33,7 +50,7 @@ body {
 
 ::selection {
   color: #FFF;
-  background: #000;
+  /*background: #000*/;
 }
 
 h2, h3, h4 {
@@ -42,7 +59,7 @@ h2, h3, h4 {
 }
 
 p, li {
-  color: #337f9b;
+  color: #657B83; /* $base00 */
 }
 
 .high-contrast p,
@@ -52,7 +69,7 @@ p, li {
 }
 
 a {
-  color: #DC322F;
+  color: #b58900; /* $yellow; */
   font-weight: bold;
 }
 
@@ -103,7 +120,7 @@ h2:after {
   #links a {
     display: block;
     padding: 0.5em 2em 0.5em 1em;
-    color: #FFF;
+    color:  #b58900; /* $yellow; */
     position: relative;
     text-transform: uppercase;
     text-decoration: none;
@@ -162,14 +179,14 @@ footer {
   position: relative;
   bottom: 0;
   right: 5em;
-  color: #999;
+  color: #657B83; /* $base00 */
   font-size: 0.8em;
   font-style: italic;
   z-index: 20;
 }
 
 footer a {
-  color: #999;
+  color:  #b58900; /* $yellow; */
   font-weight: normal;
 }
 
@@ -179,7 +196,7 @@ footer a {
 
 header.mbm {
   text-align: left;
-  color: #337f9b;
+  color: #657B83; /* $base00 */
 }
 
 #article {
@@ -199,14 +216,14 @@ header.mbm {
 
 blockquote {
   border:1px solid #999;
-  background: #ffcc66;
+  background: #ffcc66; /* $base01*/
   padding: 1em;
   margin: 0;
 }
 
 #article h2, #article h3, #article h4 {
   text-transform: none;
-  color: #337f9b;
+  color: #657B83; /* $base00 */
 }
 
 #article h2:after {
@@ -220,7 +237,7 @@ blockquote {
 
 @media screen {
   body > header {
-    background: #ffcc66;
+    background: #fdf6e3; /* $base0 */
     position: fixed;
     top: 0;
     width: 100%;
