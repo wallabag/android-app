@@ -66,6 +66,12 @@ public class Themes {
                 R.string.themeName_dark_contrast,
                 R.style.DarkThemeContrast,
                 R.style.ProxyThemeDark
+        ),
+
+        Solarized(
+                R.string.themeName_solarized,
+                R.style.SolarizedTheme,
+                R.style.ProxyTheme
         );
 
         private int nameId;

@@ -131,6 +131,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_light_contrast">Light (high contrast)</string>
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
+    <string name="themeName_solarized">Solarized</string>
     <string name="settings_ui_fontSize">Article font size (%)</string>
     <string name="settings_ui_serif">Serif typeface for article fonts</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>

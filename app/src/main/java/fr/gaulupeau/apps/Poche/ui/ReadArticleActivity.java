@@ -134,6 +134,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case Dark:
                 cssName = "dark";
                 break;
+
+            case Solarized:
+                cssName = "solarized";
+                highContrast = false;
+                break;
         }
 
         fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);

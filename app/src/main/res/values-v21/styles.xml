@@ -12,13 +12,12 @@
     <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
         <item name="android:colorBackground">#fdf6e3</item>
         <item name="android:colorForeground">#b03e00</item>
-        <!-- colored statusbar and navigation bar requires api level 21
         <item name="android:colorPrimaryDark">#ffc21e</item>
         <item name="android:colorPrimary">#ffc21e</item>
         <item name="android:statusBarColor">#ffc21e</item>
-        <item name="android:windowBackground">#fdf6e3</item>-->
+        <item name="android:windowBackground">@color/solarizedWindowBackground</item><!--#fdf6e3</item>-->
         <item name="android:textColorPrimary">#337f9b</item>
-        <item name="android:windowBackground">@color/solarizedWindowBackground</item>
+        <item name="colorPrimary">@color/solarizedPrimary</item>
     </style>
     <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
