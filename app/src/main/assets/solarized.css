@@ -1,0 +1,287 @@
+/* ==========================================================================
+   Sommaire
+
+   1 = Style Guide
+   2 = Layout
+   3 = Pictos
+   4 = Messages
+   5 = Article
+   6 = Media queries
+
+   *solarized colors*
+$base03:    #002b36;
+$base02:    #073642;
+$base01:    #586e75;
+$base00:    #657b83;
+$base0:     #839496;
+$base1:     #93a1a1;
+$base2:     #eee8d5;
+$base3:     #fdf6e3;
+$yellow:    #b58900;
+$orange:    #cb4b16;
+$red:       #dc322f;
+$magenta:   #d33682;
+$violet:    #6c71c4;
+$blue:      #268bd2;
+$cyan:      #2aa198;
+$green:     #859900;
+   ========================================================================== */
+
+html {
+  min-height: 100%;
+}
+
+body {
+  background: #fdf6e3; /* $base3 */
+}
+
+.high-contrast {
+  background: #FFF;
+  font-weight: 600;
+}
+
+.serif-font {
+  font-family: serif;
+}
+
+/* ==========================================================================
+   1 = Style Guide
+   ========================================================================== */
+
+::selection {
+  color: #FFF;
+  /*background: #000*/;
+}
+
+h2, h3, h4 {
+  font-family: 'PT Sans', sans-serif;
+  text-transform: uppercase;
+}
+
+p, li {
+  color: #657B83; /* $base00 */
+}
+
+.high-contrast p,
+.high-contrast li {
+  color: #000;
+  background: #FFF;
+}
+
+a {
+  color: #b58900; /* $yellow; */
+  font-weight: bold;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+h2:after {
+  content: "";
+  height: 4px;
+  width: 70px;
+  background: #000;
+  display: block;
+}
+
+.links {
+  padding: 0;
+  margin: 0;
+}
+  .links li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+
+#links {
+  position: fixed;
+  top: 0;
+  width: 10em;
+  left: 0;
+  text-align: right;
+  background: #333;
+  padding-top: 9.5em;
+  height: 100%;
+  box-shadow:inset -4px 0 20px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+#main {
+  margin-left: 13em;
+  position: relative;
+  z-index: 10;
+  padding-right: 5%;
+  padding-bottom: 1em;
+}
+
+  #links a {
+    display: block;
+    padding: 0.5em 2em 0.5em 1em;
+    color:  #b58900; /* $yellow; */
+    position: relative;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: normal;
+    font-family: 'PT Sans', sans-serif;
+    -webkit-transition: all 0.5s ease;
+     -moz-transition: all 0.5s ease;
+      -ms-transition: all 0.5s ease;
+       -o-transition: all 0.5s ease;
+          transition: all 0.5s ease;
+  }
+
+  #links a:hover, #links a:focus {
+    background: #999;
+    color: #000;
+  }
+
+  #links .current:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-style: solid;
+    border-width: 10px;
+    border-color:  transparent #EEE transparent transparent;
+    right: 0;
+    top: 50%;
+    margin-top: -10px;
+  }
+
+  #links li:last-child {
+    position: fixed;
+    bottom: 1em;
+    width: 10em;
+  }
+
+  #links li:last-child a:before {
+    font-size: 1.2em;
+    position: relative;
+    top: 2px;
+  }
+
+
+
+/* ==========================================================================
+   2 = Layout
+   ========================================================================== */
+
+#content {
+  margin-top: 1em;
+  min-height: 30em;
+}
+
+footer {
+  text-align: right;
+  position: relative;
+  bottom: 0;
+  right: 5em;
+  color: #657B83; /* $base00 */
+  font-size: 0.8em;
+  font-style: italic;
+  z-index: 20;
+}
+
+footer a {
+  color:  #b58900; /* $yellow; */
+  font-weight: normal;
+}
+
+/* ==========================================================================
+   5 = Article
+   ========================================================================== */
+
+header.mbm {
+  text-align: left;
+  color: #657B83; /* $base00 */
+}
+
+#article {
+  width: 70%;
+/*  margin-bottom: 3em; */
+  text-align: justify;
+  word-wrap: break-word;
+}
+
+#article .tags {
+  margin-bottom: 1em;
+}
+
+#article i {
+  font-style: normal;
+}
+
+blockquote {
+  border:1px solid #999;
+  background: #eee8d5; /* $base2*/
+  padding: 1em;
+  margin: 0;
+}
+
+#article h2, #article h3, #article h4 {
+  text-transform: none;
+  color: #657B83; /* $base00 */
+}
+
+#article h2:after {
+  content: none;
+}
+
+/* ==========================================================================
+   6 = Media Queries
+   ========================================================================== */
+
+
+@media screen {
+  body > header {
+    background: #fdf6e3; /* $base0 */
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 3em;
+    z-index: 11;
+  }
+  #links li:last-child {
+    position: static;
+    width: auto;
+  }
+  #links li:last-child a:before {
+    content: none;
+  }
+  #links {
+    display: none;
+    width: 100%;
+    height: auto;
+    padding-top: 3em;
+  }
+  footer  {
+    position: static;
+    margin-right: 3em;
+  }
+  #main {
+    margin-left: 1.5em;
+    padding-right: 1.5em;
+    position: static;
+  }
+
+  #article {
+    width: 100%;
+  }
+
+  #article h1 {
+    font-size: 1.2em;
+    margin-bottom:0px;
+  }
+
+  .mbm .domain {
+    margin-top:0px;
+    margin-left:0px;
+   }
+
+   #domainimg {
+    vertical-align:top;
+   }
+}

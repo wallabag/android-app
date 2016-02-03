@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="solarizedBase03">#002b36</color>
+    <color name="solarizedBase02">#073642</color>
+    <color name="solarizedBase01">#586e75</color>
+    <color name="solarizedBase00">#657b83</color>
+    <color name="solarizedBase0">#839496</color>
+    <color name="solarizedBase1">#93a1a1</color>
+    <color name="solarizedBase2">#eee8d5</color>
+    <color name="solarizedBase3">#fdf6e3</color>
+    <color name="solarizedYellow">#b58900</color>
+    <color name="solarizedOrange">#cb4b16</color>
+    <color name="solarizedRed">#dc322f</color>
+    <color name="solarizedMagenta">#d33682</color>
+    <color name="solarizedViolet">#6c71c4</color>
+    <color name="solarizedBlue">#268bd2</color>
+    <color name="solarizedCyan">#2aa198</color>
+    <color name="solarizedGreen">#859900</color>
+</resources>
