@@ -24,6 +24,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuPrevious">Previous article</string>
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
+    <string name="menuTTS">Text To Speech</string>
     <string name="menu_open_random_article">Open random article</string>
     <string name="menuUploadOfflineURLs">Upload offline URLs</string>
     <string name="menuWipeDb">Wipe Database</string>

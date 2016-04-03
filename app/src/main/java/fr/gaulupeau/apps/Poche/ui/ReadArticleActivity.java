@@ -50,6 +50,7 @@ import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
@@ -64,6 +65,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private TextView loadingPlaceholder;
     private LinearLayout bottomTools;
     private View hrBar;
+    private TtsFragment ttsFragment;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
@@ -198,6 +200,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
                         cm.lineNumber(), cm.sourceId()));
+                if (ttsFragment != null) {
+                    ttsFragment.onWebviewConsoleMessage(cm);
+                }
                 return true;
             }
         });
@@ -241,9 +246,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     super.onReceivedSslError(view, handler, error);
                 }
             }
+
         });
 
         if(fontSize != 100) setFontSize(webViewContent, fontSize);
+
+
+        if (ttsFragment != null) {
+                ttsFragment.setWebView(webViewContent);
+                ttsFragment.setScrollView(scrollView);
+                ttsFragment.onDocumentLoadStart();
+        }
 
         webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
                 "text/html", "utf-8", null);
@@ -342,6 +355,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 openNextArticle();
             }
         });
+
+        if (settings.getBoolean(Settings.TTS_VISIBLE, false) && (ttsFragment == null)) {
+            toggleTTS(false);
+        }
     }
 
     private void loadingFinished() {
@@ -354,6 +371,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         // should there be a pause between visibility change and position restoration?
 
         restoreReadingPosition();
+        if (ttsFragment != null) {
+            ttsFragment.onDocumentLoadFinished();
+        }
     }
 
     private boolean openUrl(final String url) {
@@ -467,6 +487,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return false;
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -514,6 +535,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuDecreaseFontSize:
                 changeFontSize(false);
+                return true;
+            case R.id.menuTTS:
+                toggleTTS(true);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -570,6 +594,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             scrollView.scrollTo(scrollView.getScrollX(), yOffset);
         }
     }
+
+    public boolean toggleTTS(boolean autoPlay) {
+        boolean result;
+        if (ttsFragment == null) {
+            ttsFragment = TtsFragment.newInstance(autoPlay);
+            getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.viewMain, ttsFragment)
+                .commit();
+            settings.setBoolean(Settings.TTS_VISIBLE, true);
+            ttsFragment.setWebView(webViewContent);
+            ttsFragment.setScrollView(scrollView);
+            ttsFragment.onDocumentLoadStart();
+            if (loadingFinished) {
+                ttsFragment.onDocumentLoadFinished();
+            }
+            result = true;
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(ttsFragment)
+                    .commit();
+            ttsFragment = null;
+            settings.setBoolean(Settings.TTS_VISIBLE, false);
+            result = false;
+        }
+        return result;
+    }
+
 
     private Long getAdjacentArticle(boolean previous) {
         QueryBuilder<Article> qb = mArticleDao.queryBuilder();

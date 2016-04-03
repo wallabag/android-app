@@ -30,6 +30,12 @@ public class Settings {
     public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
     public static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
     public static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
+    public static final String TTS_VISIBLE = "tts.visible";
+    public static final String TTS_OPTIONS_VISIBLE = "tts.options.visible";
+    public static final String TTS_SPEED = "tts.speed";
+    public static final String TTS_PITCH = "tts.pitch";
+    public static final String TTS_ENGINE = "tts.engine";
+    public static final String TTS_VOICE = "tts.voice";
 
     private SharedPreferences pref;
 
@@ -43,6 +49,10 @@ public class Settings {
 
     public void setInt(String key, int value) {
         pref.edit().putInt(key, value).commit();
+    }
+
+    public void setFloat(String key, float value) {
+        pref.edit().putFloat(key, value).commit();
     }
 
     public void setBoolean(String key, boolean value) {
@@ -64,6 +74,11 @@ public class Settings {
     public int getInt(String key, int defValue) {
         return pref.getInt(key, defValue);
     }
+
+    public float getFloat(String key, float defValue) {
+        return pref.getFloat(key, defValue);
+    }
+
 
     public boolean getBoolean(String key, boolean defValue) {
         return pref.getBoolean(key, defValue);
