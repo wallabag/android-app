@@ -66,6 +66,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private LinearLayout bottomTools;
     private View hrBar;
     private TtsFragment ttsFragment;
+    private MenuItem menuTTS;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
@@ -357,7 +358,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         });
 
         if (settings.getBoolean(Settings.TTS_VISIBLE, false) && (ttsFragment == null)) {
-            toggleTTS(false);
+            ttsFragment = (TtsFragment)getSupportFragmentManager().findFragmentByTag("ttsFragment");
+            if (ttsFragment == null) {
+                toggleTTS(false);
+            }
         }
     }
 
@@ -511,6 +515,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         : R.drawable.abc_btn_rating_star_off_mtrl_alpha, null)
         );
 
+        menuTTS = menu.findItem(R.id.menuTTS);
+        menuTTS.setChecked(ttsFragment != null);
+
         return true;
     }
 
@@ -601,7 +608,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ttsFragment = TtsFragment.newInstance(autoPlay);
             getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.viewMain, ttsFragment)
+                .add(R.id.viewMain, ttsFragment, "ttsFragment")
                 .commit();
             settings.setBoolean(Settings.TTS_VISIBLE, true);
             ttsFragment.setWebView(webViewContent);
@@ -619,6 +626,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ttsFragment = null;
             settings.setBoolean(Settings.TTS_VISIBLE, false);
             result = false;
+        }
+        if (menuTTS != null) {
+            menuTTS.setChecked(ttsFragment != null);
         }
         return result;
     }
