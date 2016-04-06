@@ -22,7 +22,8 @@
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_marginLeft="2dp">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -34,8 +35,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView"
                     android:src="@drawable/ic_running_24dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="2dp" />
+                    android:layout_gravity="center" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
@@ -64,8 +64,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_musical_notes_24dp"
-                    android:layout_marginLeft="2dp" />
+                    android:src="@drawable/ic_musical_notes_24dp" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
@@ -88,13 +87,13 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
-                android:id="@+id/notImplemented">
+                android:visibility="visible">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Volume"
+                    android:id="@+id/imageView3"
+                    android:src="@drawable/ic_volume_up_24dp"
                     android:layout_gravity="center" />
 
                 <SeekBar
@@ -119,11 +118,12 @@
                 android:visibility="gone"
                 android:id="@+id/notImplemented2">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sleep"
-                    android:layout_gravity="center" />
+                    android:id="@+id/imageView4"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_snooze_24dp" />
 
                 <SeekBar
                     android:layout_width="wrap_content"

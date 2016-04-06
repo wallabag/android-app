@@ -1,7 +1,13 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.Notification;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,8 +43,11 @@ import java.util.Vector;
  */
 public class TtsFragment
     extends Fragment
-    implements TextToSpeech.OnInitListener
+    implements TextToSpeech.OnInitListener,
+        AudioManager.OnAudioFocusChangeListener
 {
+    private TextToSpeech tts;
+    private AudioManager audioManager;
     private ReadArticleActivity readArticleActivity;
     private Settings settings;
     private WebView webView;
@@ -47,7 +56,6 @@ public class TtsFragment
     private ImageButton btnTTSPlayStop;
     private Button btnTTSLanguage;
     private Button btnTTSVoice;
-    private TextToSpeech tts;
     private SeekBar seekBarTTSSpeed;
     private SeekBar seekBarTTSPitch;
     private SeekBar seekBarTTSVolume;
@@ -57,15 +65,23 @@ public class TtsFragment
     private TextView textViewTTSVolume;
     private TextView textViewTTSSleep;
     private MediaPlayer mediaPlayerPageFlip;
+    private BroadcastReceiver broadcastReceiver;
+
     private boolean isTTSInitialized;
-    private boolean isPlaying;
     private boolean isDocumentParsed;
-    private boolean autoplay;
+    private boolean isAudioFocusLost;
+    private volatile State state = State.STOPED;
+    static enum State {
+        STOPED,
+        WANT_TO_PLAY, // tts not initialized, document not parsed yet, or lost audio focus
+        PLAYING,
+    }
     private Vector<TextRange> textList;
     private volatile int textListSize;
     private volatile int textListCurrentIndex;
+
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
-    private NumberFormat percentFormat;
+    private static NumberFormat percentFormat;
     private static final String PLAY_TEXT = "▶";
     private static final String PAUSE_TEXT = " ▎▎";
     private static final String LOG_TAG = "TtsFragment";
@@ -144,7 +160,6 @@ public class TtsFragment
         // Should use getArguments() to get Fragment instance arguments.
         this.settings = App.getInstance().getSettings();
         textList = new Vector<>();
-        this.autoplay = getArguments().getBoolean("autoplay");
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
@@ -170,11 +185,6 @@ public class TtsFragment
                 onTTSPlayStopClicked();
             }
         });
-        if (autoplay) {
-            btnTTSPlayStop.setImageResource(R.drawable.ic_stop_24dp);
-            isPlaying = true;
-        }
-
 
         //Button btnTTSUnload = (Button)view.findViewById(R.id.btnTTSUnload);
         //btnTTSUnload.setOnClickListener(new View.OnClickListener() {
@@ -280,26 +290,7 @@ public class TtsFragment
         });
         
         this.seekBarTTSPitch.setProgress((int) (this.settings.getFloat(Settings.TTS_PITCH, 1.0F) * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
-        
-        this.seekBarTTSVolume = ((SeekBar)view.findViewById(R.id.seekBarTTSVolume));
-        this.seekBarTTSVolume.setMax(Integer.MAX_VALUE);
-        this.seekBarTTSVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                showToastMessage("Not implemented");
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-        
         this.seekBarTTSSleep = ((SeekBar)view.findViewById(R.id.seekBarTTSSleep));
         this.seekBarTTSSleep.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSleep.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -353,6 +344,30 @@ public class TtsFragment
         if (this.mediaPlayerPageFlip == null) {
             this.mediaPlayerPageFlip = MediaPlayer.create(getActivity(), R.raw.page_flip);
         }
+
+        audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        this.seekBarTTSVolume = ((SeekBar)view.findViewById(R.id.seekBarTTSVolume));
+        this.seekBarTTSVolume.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        updateVolumeDisplay();
+
+        this.seekBarTTSVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, progress, 0);
+                    textViewTTSVolume.setText(percentFormat.format((1.0 * progress) / seekBar.getMax()));
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
         return view;
     }
 
@@ -367,6 +382,17 @@ public class TtsFragment
     {
         super.onAttach(context);
         this.readArticleActivity = ((ReadArticleActivity)context);
+        if (broadcastReceiver == null) {
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    if (intent.getAction().equals("android.media.VOLUME_CHANGED_ACTION")) {
+                        updateVolumeDisplay();
+                    }
+                }
+            };
+            context.registerReceiver(broadcastReceiver, new IntentFilter("android.media.VOLUME_CHANGED_ACTION"));
+        }
     }
 
     @Override
@@ -399,6 +425,7 @@ public class TtsFragment
         super.onDestroy();
         if (this.tts != null)
         {
+            isTTSInitialized = false;
             this.tts.stop();
             this.tts.shutdown();
             this.tts = null;
@@ -414,22 +441,16 @@ public class TtsFragment
     public void onDetach()
     {
         super.onDetach();
+        readArticleActivity.unregisterReceiver(broadcastReceiver);
         readArticleActivity = null;
     }
     
     public synchronized void onTTSPlayStopClicked()
     {
-        if (this.isPlaying)
-        {
-                ttsStop();
-        }
-        else
-        {
-            btnTTSPlayStop.setImageResource(R.drawable.ic_stop_24dp);
-            isPlaying = true;
-            if (isTTSInitialized && isDocumentParsed) {
-                ttsPlay();
-            }
+        if (state == State.STOPED) {
+            ttsTryToPlay();
+        } else {
+            ttsStop();
         }
     }
     
@@ -440,45 +461,93 @@ public class TtsFragment
 //            this.readArticleActivity.toggleTTS(false);
 //        }
 //    }
-    
-    public synchronized void ttsStop()
+
+    private void ttsTryToPlay() {
+        audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,  AudioManager.AUDIOFOCUS_GAIN);
+        if (isTTSInitialized && isDocumentParsed && !isAudioFocusLost) {
+            if (textListSize == 0) {
+                showToastMessage("text parsing EMTPY !");
+            }
+            btnTTSPlayStop.setImageResource(R.drawable.ic_stop_24dp);
+            state = State.PLAYING;
+            ttsPlay();
+        } else {
+            state = State.WANT_TO_PLAY;
+            btnTTSPlayStop.setImageResource(R.drawable.ic_more_horiz_24dp);
+            if (!isDocumentParsed) {
+                showToastMessage("Document not parsed");
+            } else if (!isTTSInitialized) {
+                showToastMessage("TTS not initialized");
+            } else if (!isAudioFocusLost) {
+                showToastMessage("Audio focus lost");
+            }
+        }
+    }
+
+    private void ttsSuspend()
     {
-        if (isPlaying)
+        if (state == State.PLAYING)
         {
-            btnTTSPlayStop.setImageResource(R.drawable.ic_play_arrow_24dp);
-            isPlaying = false;
+            state = State.WANT_TO_PLAY;
+            btnTTSPlayStop.setImageResource(R.drawable.ic_more_horiz_24dp);
             if(isTTSInitialized) {
                 if (tts.stop() != TextToSpeech.SUCCESS) {}
+            }
+        }
+    }
+
+    public synchronized void ttsStop()
+    {
+        if (state != State.STOPED)
+        {
+            state = State.STOPED;
+            if (btnTTSPlayStop != null) {
+                btnTTSPlayStop.setImageResource(R.drawable.ic_play_arrow_24dp);
+            }
+            if(isTTSInitialized) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        if (tts.stop() != TextToSpeech.SUCCESS) {}
+                        if (audioManager != null) {
+                            audioManager.abandonAudioFocus(TtsFragment.this);
+                        }
+                    }
+                }.start();
             }
         }
     }
     
     public void onTTSPreviousClicked()
     {
-        if (textListCurrentIndex > 0) {
-            if (isPlaying && isTTSInitialized && isDocumentParsed) {
-                    ttsPause();
-                    ttsPlay(Math.max(0, textListCurrentIndex - 1));
+        int newIndex = textListCurrentIndex - 1;
+        if ((newIndex >= 0) && (newIndex < textListSize)) {
+            float originalTop = textList.get(newIndex+1).top;
+            while((newIndex > 0) && (textList.get(newIndex).top+4 >= originalTop)) {
+                newIndex = newIndex - 1;
+            }
+            ensureTextRangeVisibleOnScreen(newIndex, true);
+            if (state == State.PLAYING) {
+                ttsPlay(newIndex);
             } else {
-                textListCurrentIndex = Math.max(0, textListCurrentIndex - 1);
-                if (isDocumentParsed) {
-                    ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
-                }
+                textListCurrentIndex = newIndex;
             }
         }
     }
     
     public void onTTSNextClicked()
     {
-        if (textListCurrentIndex < textListSize - 1) {
-            if (isPlaying && isTTSInitialized && isDocumentParsed) {
-                ttsPause();
-                ttsPlay(Math.min(textListCurrentIndex + 1, textListSize - 1));
+        int newIndex = textListCurrentIndex + 1;
+        if ((newIndex >= 0) && (newIndex < textListSize)) {
+            float originalTop = textList.get(newIndex-1).top;
+            while((newIndex < (textListSize-1)) && (textList.get(newIndex).top-4 <= originalTop)) {
+                newIndex = newIndex + 1;
+            }
+            ensureTextRangeVisibleOnScreen(newIndex, true);
+            if (state == State.PLAYING) {
+                ttsPlay(newIndex);
             } else {
-                textListCurrentIndex = Math.min(textListCurrentIndex + 1, textListSize - 1);
-                if (isDocumentParsed) {
-                    ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
-                }
+                textListCurrentIndex = newIndex;
             }
         }
     }
@@ -508,8 +577,8 @@ public class TtsFragment
             isTTSInitialized = true;
             ttsSetSpeedFromSeekBar();
             ttsSetPitchFromSeekBar();
-            if ((isPlaying) && (this.isDocumentParsed)) {
-                ttsPlay();
+            if (state != State.STOPED) {
+                ttsTryToPlay();
             }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             {
@@ -524,9 +593,7 @@ public class TtsFragment
                 btnTTSLanguage.setText(locale.getLanguage());
                 btnTTSVoice.setText(voice.getName() + "," + locale.getCountry());
             }
-        }
-        else
-        {
+        } else {
             this.isTTSInitialized = false;
             showToastMessage("TTS initialization Failed!");
         }
@@ -554,10 +621,44 @@ public class TtsFragment
         ttsPlay(getFirstPlayIndex());
     }
 
+    @Override
+    public void onAudioFocusChange(final int focusChange) {
+        if ((focusChange == AudioManager.AUDIOFOCUS_LOSS)
+                || (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT))
+        {
+            isAudioFocusLost = true;
+            if (state == State.PLAYING) {
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ttsSuspend();
+                        }
+                    });
+                }
+            }
+        } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+            isAudioFocusLost = false;
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ttsTryToPlay();
+                    }
+                });
+            }
+        }
+    }
+
     private synchronized void ttsPlay(int index) {
         Log.d(LOG_TAG, "ttsPlay " + index);
         textListCurrentIndex = index;
+        state = State.WANT_TO_PLAY;
+        tts.stop();
         ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
+        state = State.PLAYING;
         ttsSpeak(textList.get(textListCurrentIndex).text, TextToSpeech.QUEUE_FLUSH, Integer.toString(textListCurrentIndex));
         for(int i=1; i<= TTS_SPEAK_QUEUE_SIZE; i++) {
             ttsSpeakQueueAddTextIndex(textListCurrentIndex + i);
@@ -569,15 +670,9 @@ public class TtsFragment
         TextRange textRange = textList.get(index);
         if ((scrollView != null) &&
                         ((textRange.bottom > scrollView.getScrollY() + scrollView.getHeight())
-                                        || (canMoveBackward && (textRange.top < scrollView.getScrollY())))) {
+                                || (canMoveBackward && (textRange.top < scrollView.getScrollY())))) {
             scrollView.smoothScrollTo(0, (int) textRange.top);
         }
-    }
-    
-    private void ttsPause()
-    {
-        tts.speak("", TextToSpeech.QUEUE_FLUSH, null);
-        if (tts.stop() == TextToSpeech.SUCCESS) {}
     }
     
     private void ttsSetSpeedFromSeekBar()
@@ -585,8 +680,7 @@ public class TtsFragment
         float value = ttsGetSpeed();
         if (isTTSInitialized) {
             tts.setSpeechRate(value);
-            if (isPlaying && isTTSInitialized && isDocumentParsed) {
-                ttsPause();
+            if (state == State.PLAYING) {
                 ttsPlay();
             }
         }
@@ -598,8 +692,7 @@ public class TtsFragment
         float value = ttsGetPitch();
         if (isTTSInitialized) {
             tts.setPitch(value);
-            if (isPlaying && isTTSInitialized && isDocumentParsed) {
-                ttsPause();
+            if (state == State.PLAYING) {
                 ttsPlay();
             }
         }
@@ -644,7 +737,7 @@ public class TtsFragment
 
     public void onSpeakDone(final String utteranceId)
     {
-        if (isPlaying) {
+        if (state == State.PLAYING) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -654,7 +747,7 @@ public class TtsFragment
                         ttsStop();
                         playPageFlipSound();
                     } else {
-                            ttsSpeakQueueAddTextIndex(index + 1 + TTS_SPEAK_QUEUE_SIZE);
+                        ttsSpeakQueueAddTextIndex(index + 1 + TTS_SPEAK_QUEUE_SIZE);
                     }
                 }
             });
@@ -678,7 +771,7 @@ public class TtsFragment
     {
         this.mediaPlayerPageFlip.start();
     }
-    
+
 
     public synchronized void onDocumentLoadStart()
     {
@@ -689,7 +782,7 @@ public class TtsFragment
     
     public synchronized void onDocumentLoadFinished() {
         Log.d(LOG_TAG, "onDocumentLoadFinished");
-        this.ttsParse();
+        this.parseWebviewDocument();
     }
     
     public void setWebView(WebView webView)
@@ -703,9 +796,9 @@ public class TtsFragment
     }
 
 
-    private void ttsParse()
+    private void parseWebviewDocument()
     {
-        Log.d(LOG_TAG, "ttsParse");
+        Log.d(LOG_TAG, "parseWebviewDocument");
         if (webView != null)
         {
             //new Thread() {
@@ -723,24 +816,30 @@ public class TtsFragment
         }
     }
 
-    private void onTtsParseStart() {
-        Log.d(LOG_TAG, "onTtsParseStart");
+    private void onDocumentParseStart() {
+        Log.d(LOG_TAG, "onDocumentParseStart");
         textListSize = 0;
     }
-    private void onTtsParseEnd() {
-        Log.d(LOG_TAG, "onTtsParseEnd");
+    private void onDocumentParseEnd() {
+        Log.d(LOG_TAG, "onDocumentParseEnd");
         while(textList.size() > textListSize) {
             textList.remove(textList.size() - 1);
         }
         this.isDocumentParsed= true;
-        if (isPlaying && isTTSInitialized) {
-            ttsPlay();
+        if ((state != State.STOPED) || getArguments().getBoolean("autoplay")) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ttsTryToPlay();
+                }
+            });
         }
     }
-    private void onTtsParseText(String text, float top, float bottom) {
+
+    private void onDocumentParseItem(String text, float top, float bottom) {
         top = convertWebviewToScreenY(top);
         bottom = convertWebviewToScreenY(bottom);
-        Log.d(LOG_TAG, "onTtsParseText " + top + " " + bottom + " " + text);
+        Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
         TextRange textRange;
         if (textList.size() > textListSize) {
             textRange = textList.get(textListSize);
@@ -767,32 +866,41 @@ public class TtsFragment
             {
                 String content = message.substring(TTS_WEBVIEW_LOG_CMD_HEADER.length());
                 if (content.equals("start")) {
-                    onTtsParseStart();
+                    onDocumentParseStart();
                 } else if (content.equals("end")) {
-                    onTtsParseEnd();
+                    onDocumentParseEnd();
                 } else {
                     int separator1 = content.indexOf(':');
                     int separator2 = content.indexOf(':', separator1 + 1);
                     float top = Float.parseFloat(content.substring(0, separator1));
                     float bottom = Float.parseFloat(content.substring(separator1 + 1, separator2));
                     String text= content.substring(separator2 + 1);
-                    onTtsParseText(text, top, bottom);
+                    onDocumentParseItem(text, top, bottom);
                 }
             }
         }
     }
 
-    private StringBuilder getRandomText(int length) {
+    private void updateVolumeDisplay() {
+        if (seekBarTTSVolume != null && textViewTTSVolume != null && audioManager != null) {
+            int progress = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            seekBarTTSVolume.setProgress(progress);
+            textViewTTSVolume.setText(percentFormat.format((1.0 * progress) / seekBarTTSVolume.getMax()));
+        }
+    }
+
+
+    private void showToastMessage(String text)
+    {
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    private static StringBuilder getRandomText(int length) {
         StringBuilder result = new StringBuilder(length);
         for(int i=0;i<length;i++) {
             result.append((char)(32 + Math.random() * (127-32)));
         }
         return result;
-    }
-
-    private void showToastMessage(String text)
-    {
-        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
 }
