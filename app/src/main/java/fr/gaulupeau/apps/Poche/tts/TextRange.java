@@ -1,8 +1,5 @@
 package fr.gaulupeau.apps.Poche.tts;
 
-/**
- * Created by android on 03/04/16.
- */
 public class TextRange {
     float top;
     float bottom;

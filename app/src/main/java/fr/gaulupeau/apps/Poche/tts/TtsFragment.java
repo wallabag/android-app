@@ -2,7 +2,6 @@ package fr.gaulupeau.apps.Poche.tts;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -39,7 +37,7 @@ import java.util.Locale;
 import java.util.Vector;
 
 /**
- * TTS User Interface.
+ * Text To Speech (TTS) User Interface.
  */
 public class TtsFragment
     extends Fragment
@@ -79,6 +77,7 @@ public class TtsFragment
     private Vector<TextRange> textList;
     private volatile int textListSize;
     private volatile int textListCurrentIndex;
+    private volatile char utteranceSequenceId;
 
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
     private static NumberFormat percentFormat;
@@ -170,9 +169,7 @@ public class TtsFragment
         if (this.percentFormat == null)
         {
             this.percentFormat = NumberFormat.getPercentInstance();
-            this.percentFormat.setMinimumFractionDigits(0);
             this.percentFormat.setMaximumFractionDigits(0);
-            this.percentFormat.setMinimumIntegerDigits(3);
         }
         this.viewTTSOption = view.findViewById(R.id.viewTTSOptions);
         if (!this.settings.getBoolean(Settings.TTS_OPTIONS_VISIBLE, false)) {
@@ -186,14 +183,6 @@ public class TtsFragment
             }
         });
 
-        //Button btnTTSUnload = (Button)view.findViewById(R.id.btnTTSUnload);
-        //btnTTSUnload.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        onTTSUnloadClicked();
-        //    }
-        //});
-        
         ImageButton btnTTSPrevious = (ImageButton)view.findViewById(R.id.btnTTSPrevious);
         btnTTSPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,21 +239,14 @@ public class TtsFragment
         this.seekBarTTSSpeed = ((SeekBar)view.findViewById(R.id.seekBarTTSSpeed));
         this.seekBarTTSSpeed.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ttsSetSpeedFromSeekBar();
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
         
         this.seekBarTTSSpeed.setProgress((int) (this.settings.getFloat(Settings.TTS_SPEED, 1.0F) * this.seekBarTTSSpeed.getMax() / MAX_TTS_SPEED));
@@ -272,21 +254,14 @@ public class TtsFragment
         this.seekBarTTSPitch = ((SeekBar)view.findViewById(R.id.seekBarTTSPitch));
         this.seekBarTTSPitch.setMax(Integer.MAX_VALUE);
         this.seekBarTTSPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ttsSetPitchFromSeekBar();
             }
-
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
+            public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
         
         this.seekBarTTSPitch.setProgress((int) (this.settings.getFloat(Settings.TTS_PITCH, 1.0F) * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
@@ -294,52 +269,29 @@ public class TtsFragment
         this.seekBarTTSSleep = ((SeekBar)view.findViewById(R.id.seekBarTTSSleep));
         this.seekBarTTSSleep.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSleep.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
-
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 showToastMessage("Not implemented");
             }
-
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
             }
         });
-        synchronized (this) {
-            if (this.tts != null) {
-                this.tts.stop();
-                this.tts.shutdown();
-            }
-            this.isTTSInitialized = false;
-            String engineName = this.settings.getString(Settings.TTS_ENGINE, "");
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                this.tts = new TextToSpeech(view.getContext(), this);
-            } else {
-                this.tts = new TextToSpeech(view.getContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
-                this.tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
 
-                    @Override
-                    public void onStart(String utteranceId) {
-                        onSpeakStart(utteranceId);
-                    }
-
-                    @Override
-                    public void onDone(String utteranceId) {
-                        onSpeakDone(utteranceId);
-                    }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                        onSpeakError(utteranceId);
-                    }
-                });
-            }
+        if (this.tts != null) {
+            this.tts.stop();
+            this.tts.shutdown();
+        }
+        this.isTTSInitialized = false;
+        String engineName = this.settings.getString(Settings.TTS_ENGINE, "");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            this.tts = new TextToSpeech(view.getContext(), this);
+        } else {
+            this.tts = new TextToSpeech(view.getContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
         }
         if (this.mediaPlayerPageFlip == null) {
             this.mediaPlayerPageFlip = MediaPlayer.create(getActivity(), R.raw.page_flip);
@@ -420,7 +372,7 @@ public class TtsFragment
     }
 
     @Override
-    public synchronized void onDestroy()
+    public void onDestroy()
     {
         super.onDestroy();
         if (this.tts != null)
@@ -445,7 +397,7 @@ public class TtsFragment
         readArticleActivity = null;
     }
     
-    public synchronized void onTTSPlayStopClicked()
+    public void onTTSPlayStopClicked()
     {
         if (state == State.STOPED) {
             ttsTryToPlay();
@@ -454,14 +406,6 @@ public class TtsFragment
         }
     }
     
-//    public synchronized void onTTSUnloadClicked()
-//    {
-//        ttsStop();
-//        if (this.readArticleActivity != null) {
-//            this.readArticleActivity.toggleTTS(false);
-//        }
-//    }
-
     private void ttsTryToPlay() {
         audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC,  AudioManager.AUDIOFOCUS_GAIN);
         if (isTTSInitialized && isDocumentParsed && !isAudioFocusLost) {
@@ -496,7 +440,7 @@ public class TtsFragment
         }
     }
 
-    public synchronized void ttsStop()
+    public void ttsStop()
     {
         if (state != State.STOPED)
         {
@@ -520,35 +464,72 @@ public class TtsFragment
     
     public void onTTSPreviousClicked()
     {
+        Log.d(LOG_TAG, "onTTSPreviousClicked, textListCurrentIndex=" + textListCurrentIndex);
+        //for(int i=textListCurrentIndex; (i>=0) && i>(textListCurrentIndex-8); i--) {
+        //    TextRange t = textList.get(i);
+        //    Log.d(LOG_TAG, " - " + i + " top=" + t.top + " bottom=" + t.bottom + "  " + t.text);
+        //}
         int newIndex = textListCurrentIndex - 1;
         if ((newIndex >= 0) && (newIndex < textListSize)) {
             float originalTop = textList.get(newIndex+1).top;
-            while((newIndex > 0) && (textList.get(newIndex).top+4 >= originalTop)) {
+            // Look for text's index that start on the previous line (its bottom < current top)
+            while((newIndex > 0)
+                    && (textList.get(newIndex).bottom >= originalTop))
+            {
                 newIndex = newIndex - 1;
             }
-            ensureTextRangeVisibleOnScreen(newIndex, true);
+            Log.d(LOG_TAG, " => " + newIndex);
+            if (newIndex > 0) {
+                // If there is many text on the previous line, we want
+                // the first on the line, so we look again for the text's index
+                // on the previous of the previous line and select the following index.
+                // This way clicking "Next" and "Previous" will be coherent.
+                int prevPrevIndex = newIndex;
+                float newTop = textList.get(prevPrevIndex).top;
+                while((prevPrevIndex > 0)
+                        && (textList.get(prevPrevIndex).bottom >= newTop))
+                {
+                    prevPrevIndex = prevPrevIndex - 1;
+                    newIndex = prevPrevIndex + 1;
+                    Log.d(LOG_TAG, " => " + newIndex);
+                }
+            }
             if (state == State.PLAYING) {
                 ttsPlay(newIndex);
             } else {
                 textListCurrentIndex = newIndex;
+                ensureTextRangeVisibleOnScreen(newIndex, true);
             }
+        } else {
+            ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
         }
     }
     
     public void onTTSNextClicked()
     {
+        Log.d(LOG_TAG, "onTTSNextClicked, textListCurrentIndex=" + textListCurrentIndex);
+        //for(int i=textListCurrentIndex; i<(textListSize-1) && i<(textListCurrentIndex+6); i++) {
+        //    TextRange t = textList.get(i);
+        //    Log.d(LOG_TAG, " - " + i + " top=" + t.top + " bottom=" + t.bottom + "  " + t.text);
+        //}
         int newIndex = textListCurrentIndex + 1;
         if ((newIndex >= 0) && (newIndex < textListSize)) {
-            float originalTop = textList.get(newIndex-1).top;
-            while((newIndex < (textListSize-1)) && (textList.get(newIndex).top-4 <= originalTop)) {
+            float originalBottom = textList.get(newIndex-1).bottom;
+            // Look for text's index that start on the next line (its top >= current bottom)
+            while((newIndex < (textListSize-1))
+                    && (textList.get(newIndex).top < originalBottom))
+            {
                 newIndex = newIndex + 1;
             }
-            ensureTextRangeVisibleOnScreen(newIndex, true);
+            Log.d(LOG_TAG, " => " + newIndex);
             if (state == State.PLAYING) {
                 ttsPlay(newIndex);
             } else {
+                ensureTextRangeVisibleOnScreen(newIndex, true);
                 textListCurrentIndex = newIndex;
             }
+        } else {
+            ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
         }
     }
     
@@ -570,10 +551,16 @@ public class TtsFragment
      * TextToSpeech.OnInitListener.
      */
     @Override
-    public synchronized void onInit(int status)
+    public void onInit(int status)
     {
         if (status == TextToSpeech.SUCCESS)
         {
+            this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                @Override
+                public void onUtteranceCompleted(String utteranceId) {
+                    onSpeakDone(utteranceId);
+                }
+            });
             isTTSInitialized = true;
             ttsSetSpeedFromSeekBar();
             ttsSetPitchFromSeekBar();
@@ -617,7 +604,7 @@ public class TtsFragment
         return result;
     }
 
-    private synchronized void ttsPlay() {
+    private void ttsPlay() {
         ttsPlay(getFirstPlayIndex());
     }
 
@@ -652,15 +639,16 @@ public class TtsFragment
         }
     }
 
-    private synchronized void ttsPlay(int index) {
+    private void ttsPlay(int index) {
         Log.d(LOG_TAG, "ttsPlay " + index);
+        // Increment the utteranceSequenceId so that call to onSpeakDone
+        // of the previous play sequence will not interfere with the following one
+        utteranceSequenceId = (char)((utteranceSequenceId + 1) % 256);
         textListCurrentIndex = index;
-        state = State.WANT_TO_PLAY;
-        tts.stop();
         ensureTextRangeVisibleOnScreen(textListCurrentIndex, true);
         state = State.PLAYING;
-        ttsSpeak(textList.get(textListCurrentIndex).text, TextToSpeech.QUEUE_FLUSH, Integer.toString(textListCurrentIndex));
-        for(int i=1; i<= TTS_SPEAK_QUEUE_SIZE; i++) {
+        ttsSpeak(textList.get(textListCurrentIndex).text, TextToSpeech.QUEUE_FLUSH, utteranceSequenceId + Integer.toString(textListCurrentIndex));
+        for(int i = 1; i<= TTS_SPEAK_QUEUE_SIZE; i++) {
             ttsSpeakQueueAddTextIndex(textListCurrentIndex + i);
         }
     }
@@ -699,58 +687,54 @@ public class TtsFragment
         this.textViewTTSPitch.setText(this.percentFormat.format(value));
     }
 
-    private void ttsSpeakQueueAddTextIndex(int index) {
+    private void ttsSpeakQueueAddTextIndex(final int index) {
         if (index < textListSize) {
-            ttsSpeak(textList.get(index).text, TextToSpeech.QUEUE_ADD, Integer.toString(index));
+            ttsSpeak(textList.get(index).text, TextToSpeech.QUEUE_ADD, utteranceSequenceId + Integer.toString(index));
         }
     }
 
-    private synchronized void ttsSpeak(String text, int queue, String uteranceId)
+    private void ttsSpeak(String text, int queue, String utteranceId)
     {
         if (this.isTTSInitialized)
         {
             HashMap<String, String> params = null;
-            if (uteranceId != null)
+            if (utteranceId != null)
             {
                 params = new HashMap();
-                params.put("utteranceId", uteranceId);
+                params.put("utteranceId", utteranceId);
             }
+            Log.d("TtsFragment.ttsSpeak", utteranceId + ":" + text);
             this.tts.speak(text, queue, params);
-            Log.d("TtsFragment.ttsSpeak", text);
         }
     }
     
-    public void onSpeakStart(final String utteranceId)
+    public void onSpeakDone(String utteranceId)
     {
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                textListCurrentIndex = Integer.parseInt(utteranceId);
-                ensureTextRangeVisibleOnScreen(textListCurrentIndex, false);
-            }
-        });
-    }
-
-    public void onSpeakError(String utteranceId) {}
-
-
-
-    public void onSpeakDone(final String utteranceId)
-    {
-        if (state == State.PLAYING) {
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d(LOG_TAG, "onSpeakDone " + utteranceId);
-                    int index = Integer.parseInt(utteranceId);
-                    if (index == textListSize - 1) {
+        Log.d(LOG_TAG, "onSpeakDone " + utteranceId);
+        if ((state == State.PLAYING)
+                && (utteranceId.length() > 0)
+                && (utteranceId.charAt(0) == utteranceSequenceId))
+        {
+            final int index = Integer.parseInt(utteranceId.substring(1));
+            textListCurrentIndex = index + 1;
+            if (index == textListSize - 1) {
+                // this is the end
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         ttsStop();
-                        playPageFlipSound();
-                    } else {
-                        ttsSpeakQueueAddTextIndex(index + 1 + TTS_SPEAK_QUEUE_SIZE);
                     }
-                }
-            });
+                });
+                playPageFlipSound();
+            } else {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ensureTextRangeVisibleOnScreen(index + 1, false);
+                    }
+                });
+                ttsSpeakQueueAddTextIndex(index + 1 + TTS_SPEAK_QUEUE_SIZE);
+            }
         }
     }
 
@@ -773,14 +757,14 @@ public class TtsFragment
     }
 
 
-    public synchronized void onDocumentLoadStart()
+    public void onDocumentLoadStart()
     {
         ttsStop();
         this.isDocumentParsed= false;
         Log.d(LOG_TAG, "onDocumentLoadStart");
     }
     
-    public synchronized void onDocumentLoadFinished() {
+    public void onDocumentLoadFinished() {
         Log.d(LOG_TAG, "onDocumentLoadFinished");
         this.parseWebviewDocument();
     }
