@@ -9,6 +9,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 
 public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
@@ -20,7 +21,7 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     private EditText userId;
     private EditText token;
     private ProgressDialog progressDialog;
-    private WallabagService.FeedsCredentials credentials;
+    private FeedsCredentials credentials;
 
     public GetCredentialsTask(Context context, String endpoint, String username, String password,
                               EditText userId, EditText token, ProgressDialog progressDialog) {
