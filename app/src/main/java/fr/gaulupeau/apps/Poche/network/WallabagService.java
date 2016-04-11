@@ -122,7 +122,7 @@ public class WallabagService {
         // TODO: detect redirects
         // TODO: check response codes prior to getting body
 
-        HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
+        HttpUrl httpUrl = HttpUrl.parse(endpoint + "/");
         if(httpUrl == null) {
             return 6;
         }
@@ -142,7 +142,12 @@ public class WallabagService {
             return 1; // it's not even wallabag login page: probably something wrong with the URL
         }
 
-        Request loginRequest = getLoginRequest();
+        String csrfToken = getCsrfToken(body);
+        if(csrfToken == null){
+            return 7; // cannot find csrf string in the login page
+        }
+
+        Request loginRequest = getLoginRequest(csrfToken);
 
         response = exec(loginRequest);
         body = response.body().string();
@@ -166,14 +171,15 @@ public class WallabagService {
         return 0;
     }
 
-    private Request getLoginRequest() throws IOException {
-        HttpUrl url = getHttpURL(endpoint + "/?login");
+    private Request getLoginRequest(String csrfToken) throws IOException {
+        HttpUrl url = getHttpURL(endpoint + "/login_check");
 
         // TODO: maybe move null checks somewhere else
         RequestBody formBody = new FormEncodingBuilder()
-                .add("login", username != null ? username : "")
-                .add("password", password != null ? password : "")
-//                .add("longlastingsession", "on")
+                .add("_username", username != null ? username : "")
+                .add("_password", password != null ? password : "")
+                .add("_csrf_token", csrfToken != null ? csrfToken : "")
+//                .add("_remember_me", "on")
                 .build();
 
         return getRequestBuilder()
@@ -228,8 +234,12 @@ public class WallabagService {
         Log.d(TAG, "executeRequest() response is login page");
         if(!autoRelogin) return null;
 
+        String csrfToken = getCsrfToken(body);
+        if(csrfToken == null) return null;
+        Log.d(TAG, "executeRequest() csrfToken=" + csrfToken);
+
         Log.d(TAG, "executeRequest() trying to re-login");
-        Response loginResponse = exec(getLoginRequest());
+        Response loginResponse = exec(getLoginRequest(csrfToken));
         if(checkResponse) checkResponse(response);
         if(isLoginPage(loginResponse.body().string())) {
             throw new IOException(App.getInstance()
@@ -272,13 +282,25 @@ public class WallabagService {
         if(body == null || body.length() == 0) return false;
 
 //        "<body class=\"login\">"
-        return body.contains("<form method=\"post\" action=\"?login\" name=\"loginform\">"); // any way to improve?
+        return body.contains("<form action=\"/login_check\" method=\"post\" name=\"loginform\">"); // any way to improve?
     }
 
     private boolean isRegularPage(String body) throws IOException {
         if(body == null || body.length() == 0) return false;
 
-        return body.contains("href=\"./?logout\"");
+        return body.contains("href=\"/logout\"");
     }
 
+    private String getCsrfToken(String body) {
+        String startCsrfTokenString = "<input type=\"hidden\" name=\"_csrf_token\" value=\"";
+        int csrfTokenStartIndex = body.indexOf(startCsrfTokenString) + startCsrfTokenString.length();
+        int csrfTokenEndIndex = body.indexOf("\" />", csrfTokenStartIndex);
+        Log.d(TAG, "csrfTokenStartIndex=" + csrfTokenStartIndex + " and csrfTokenEndIndex=" + csrfTokenEndIndex + ", so csrfTokenLength=" + (csrfTokenEndIndex-csrfTokenStartIndex));
+        if(csrfTokenStartIndex==-1 || csrfTokenEndIndex==-1){
+            return null; // cannot find csrf string in the login page
+        }
+        String csrfToken = body.substring(csrfTokenStartIndex, csrfTokenEndIndex);
+        Log.d(TAG, "csrfToken=" + csrfToken);
+        return csrfToken;
+    }
 }
