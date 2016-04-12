@@ -6,4 +6,12 @@ package fr.gaulupeau.apps.Poche.data;
 public class FeedsCredentials {
     public String userID;
     public String token;
+
+    @Override
+    public String toString() {
+        return "FeedsCredentials{" +
+                "userID='" + userID + '\'' +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }
