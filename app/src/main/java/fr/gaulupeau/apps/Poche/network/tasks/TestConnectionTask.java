@@ -34,8 +34,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected Integer doInBackground(Void... params) {
-        WallabagService service = new WallabagService(endpoint, username, password,
-                WallabagConnection.createClient());
+        WallabagService service = new WallabagService(endpoint, username, password);
         try {
             int result = service.testConnection();
 
