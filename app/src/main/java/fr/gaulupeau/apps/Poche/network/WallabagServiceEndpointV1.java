@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
@@ -78,6 +79,10 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return 0;
     }
 
+    public FeedsCredentials getCredentials() throws IOException {
+        return getCredentials("/?view=config", "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"");
+    }
+
     protected boolean isLoginPage(String body) throws IOException {
         if(body == null || body.length() == 0) return false;
 
@@ -85,9 +90,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        if(body == null || body.length() == 0) return false;
-
-        return body.contains("href=\"./?logout\"");
+        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V1);
     }
 
     private Request getLoginRequest() throws IOException {

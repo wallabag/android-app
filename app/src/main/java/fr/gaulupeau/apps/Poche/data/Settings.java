@@ -25,7 +25,9 @@ public class Settings {
     public static final String THEME = "theme";
     public static final String CONFIGURE_OPTIONAL_DIALOG_SHOWN = "configure_optional_dialog_shown";
     public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
+    public static final String WALLABAG_LOGOUT_LINK_V1 = "href=\"./?logout\"";
     public static final String WALLABAG_LOGIN_FORM_V2 = "<form action=\"/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String WALLABAG_LOGOUT_LINK_V2 = "href=\"/logout\"";
 
     private SharedPreferences pref;
 

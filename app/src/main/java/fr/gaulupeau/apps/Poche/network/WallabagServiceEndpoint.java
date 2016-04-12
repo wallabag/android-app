@@ -2,11 +2,9 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
@@ -19,7 +17,6 @@ import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 
 /**
  * Created by strubbl on 11.04.16.
@@ -41,32 +38,46 @@ public abstract class WallabagServiceEndpoint {
 
     public abstract int testConnection() throws IOException;
 
-        public FeedsCredentials getCredentials() throws IOException {
-        Request configRequest = getConfigRequest();
+    public abstract FeedsCredentials getCredentials() throws IOException;
+
+    protected FeedsCredentials getCredentials(String configPath, String credentialsPattern) throws IOException {
+        Log.d(TAG, "getCredentials(): configPath=" + configPath + " credentialsPattern=" + credentialsPattern);
+        Request configRequest = getConfigRequest(configPath);
 
         String response = executeRequestForResult(configRequest);
-        if(response == null) return null;
+        if(response == null) {
+            Log.d(TAG, "getCredentials(): configRequest response is null");
+            return null;
+        }
 
         Pattern pattern = Pattern.compile(
-                "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"",
+                credentialsPattern,
                 Pattern.DOTALL
         );
 
         Matcher matcher = pattern.matcher(response);
         if(!matcher.find()) {
+            Log.d(TAG, "getCredentials(): matcher did not find a result, therefore trying to generate new token");
             Request generateTokenRequest = getGenerateTokenRequest();
             executeRequest(generateTokenRequest);
 
             response = executeRequestForResult(configRequest);
-            if(response == null) return null;
+            if(response == null) {
+                Log.d(TAG, "getCredentials(): configRequest response is null after token generation");
+                return null;
+            }
 
             matcher = pattern.matcher(response);
-            if(!matcher.find()) return null;
+            if(!matcher.find()) {
+                Log.w(TAG, "getCredentials(): still did not find a match for the feed");
+                return null;
+            }
         }
 
         FeedsCredentials credentials = new FeedsCredentials();
         credentials.userID = matcher.group(1);
         credentials.token = matcher.group(2);
+        Log.d(TAG, "credentials=" + credentials);
 
         return credentials;
     }
@@ -138,20 +149,24 @@ public abstract class WallabagServiceEndpoint {
 
     protected abstract boolean isRegularPage(String body) throws IOException;
 
+    protected boolean isRegularPage(String body, String logoutLink) throws IOException {
+        if(body == null || body.length() == 0) return false;
+        return body.contains(logoutLink);
+    }
+
     protected abstract Request getLoginRequest(String csrfToken) throws IOException;
 
     protected abstract String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin) throws IOException;
 
-    private Request getConfigRequest() throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
+    protected Request getConfigRequest(String path) throws IOException {
+        HttpUrl url = getHttpURL(endpoint + path)
                 .newBuilder()
-                .setQueryParameter("view", "config")
                 .build();
-
+        Log.d(TAG, "getConfigRequest() url: " + url.toString());
         return getRequest(url);
     }
 
-    private Request getGenerateTokenRequest() throws IOException {
+    protected Request getGenerateTokenRequest() throws IOException {
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("feed", null)

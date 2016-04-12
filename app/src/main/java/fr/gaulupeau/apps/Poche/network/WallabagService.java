@@ -2,24 +2,16 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
 
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 
 /**
@@ -102,10 +94,12 @@ public class WallabagService {
         try {
             response = client.newCall(guessRequest).execute();
         } catch (IOException e) {
+            Log.d(TAG, "guessWallabagVersion() IOException");
             e.printStackTrace();
             return -1;
         }
         if(response.code() != 200) {
+            Log.d(TAG, "guessWallabagVersion() response.code not 200");
             return -1;
         }
 
@@ -113,17 +107,31 @@ public class WallabagService {
         try {
             body = response.body().string();
         } catch (NullPointerException e) {
+            Log.d(TAG, "guessWallabagVersion() NullPointerException");
             e.printStackTrace();
             return -1;
         }
         catch (IOException e) {
+            Log.d(TAG, "guessWallabagVersion() IOException");
             e.printStackTrace();
             return -1;
         }
+
+        if (body.contains(Settings.WALLABAG_LOGOUT_LINK_V2)) {
+            Log.d(TAG, "guessWallabagVersion() already logged in, found Wallabag v2");
+            wallabagVersion = 2;
+        }
+        else if(body.contains(Settings.WALLABAG_LOGOUT_LINK_V1)) {
+            Log.d(TAG, "guessWallabagVersion() already logged in, found Wallabag v1");
+            wallabagVersion = 1;
+        }
+
         if (body.contains(Settings.WALLABAG_LOGIN_FORM_V2)) {
+            Log.d(TAG, "guessWallabagVersion() found Wallabag v2");
             wallabagVersion = 2;
         }
         else if(body.contains(Settings.WALLABAG_LOGIN_FORM_V1)) {
+            Log.d(TAG, "guessWallabagVersion() found Wallabag v1");
             wallabagVersion = 1;
         }
         return wallabagVersion;
