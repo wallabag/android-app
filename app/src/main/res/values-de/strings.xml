@@ -134,5 +134,11 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="one">%d Artikel</item>
         <item quantity="other">%d Artikel</item>
     </plurals>
-    <string name="dismiss"></string>
+    <string name="dismiss">Verwerfen</string>
+    <string name="go_to_settings">Gehe zu Einstellungen</string>
+    <string name="themeName_solarized">Solarized</string>
+    <string name="testConnection_errorMessage6">Falsche URL. Fehlercode: %d</string>
+    <string name="firstRun_d_optionalSettings_title">Aktualisiere Einstellungen</string>
+    <string name="testConnection_errorMessage5">Login fehlgeschlagen; prüfe die HTTP Auth Parameter. Fehlercode: %d</string>
+    <string name="firstRun_d_optionalSettings_message">Um Seiten mit der App zu speichern (und um lokale Änderungen zum Server zu senden), musst du Wallabag Nutzername und Passwort in den Einstellungen eintragen.</string>
 </resources>
