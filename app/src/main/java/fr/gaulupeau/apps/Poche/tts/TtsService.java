@@ -11,7 +11,9 @@ import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
@@ -29,6 +31,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -36,6 +40,8 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 
 /**
  * Text To Speech (TTS) Service.
+ *
+ * Need a {@link TextInterface} to access the text to speech.
  *
  * Tried to follow the recommendations from this video:
  *      Media playback the right way (Big Android BBQ 2015)
@@ -96,6 +102,7 @@ public class TtsService
     private volatile State state;
     private volatile boolean isTTSInitialized;
     private volatile boolean isAudioFocusGranted;
+    private volatile boolean isVisible;
     private volatile TextInterface textInterface;
     private volatile String utteranceId = "1";
     private HashMap  utteranceParams = new HashMap();
@@ -105,12 +112,23 @@ public class TtsService
     private AudioManager audioManager;
     private MediaSessionCompat mediaSession;
     private MediaPlayer mediaPlayerPageFlip;
-    //private MediaControllerCompat mediaController;
     private BroadcastReceiver noisyReceiver;
     private Settings settings;
     private float speed = 1.0f;
     private float pitch = 1.0f;
-    //private ExecutorService executor;
+    private ExecutorService executor;
+    private final Runnable ttsStop = new Runnable() {
+        @Override
+        public void run() {
+            tts.stop();
+        }
+    };
+    private final Runnable speak = new Runnable() {
+        @Override
+        public void run() {
+            speak();
+        }
+    };
 
     private static final String LOG_TAG="TtsService";
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
@@ -125,7 +143,7 @@ public class TtsService
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         TtsService.instance = this;
-        //executor = Executors.newSingleThreadExecutor();
+        executor = Executors.newSingleThreadExecutor();
         settings = App.getInstance().getSettings();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
@@ -181,8 +199,8 @@ public class TtsService
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy");
-        //executor.shutdown();
-        //executor = null;
+        executor.shutdown();
+        executor = null;
         mediaSession.release();
         mediaSession = null;
         mediaPlayerPageFlip.release();
@@ -200,23 +218,39 @@ public class TtsService
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
         MediaButtonReceiver.handleIntent( mediaSession, intent);
+        String action = intent.getAction();
+        if ("PLAY".equals(action)) {
+            playCmd();
+        } else if ("PAUSE".equals(action)) {
+            pauseCmd();
+        } else if ("PLAY_PAUSE".equals(action)) {
+            playPauseCmd();
+        } else if ("REWIND".equals(action)) {
+            rewindCmd();
+        } else if ("FAST_FORWARD".equals(action)) {
+            fastForwardCmd();
+        }
         return super.onStartCommand(intent, flags, startId);
     }
-
 
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(LOG_TAG, "onBind");
-        //for communication
-        return null;
+        return new LocalBinder();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.d(LOG_TAG, "onUnbind");
         return super.onUnbind(intent);
+    }
+
+    public class LocalBinder extends Binder {
+        public TtsService getService() {
+            return TtsService.this;
+        }
     }
 
 
@@ -244,7 +278,7 @@ public class TtsService
                     setMediaSessionPlaybackState();
                     setForegroundAndNotification();
                     registerReceiver(noisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
-                    speak();
+                    executor.execute(speak); // speak();
                 } else {
                     state = State.WANT_TO_PLAY;
                     setMediaSessionPlaybackState();
@@ -268,7 +302,7 @@ public class TtsService
         switch (state) {
             case PLAYING:
                 state = newState; // needed before tts.stop() because of the onSpeakDone callback.
-                tts.stop();
+                executor.execute(ttsStop); // tts.stop();
                 unregisterReceiver(noisyReceiver);
                 //NO BREAK, continue to next statements to set state and notification
             case WANT_TO_PLAY:
@@ -309,7 +343,7 @@ public class TtsService
         Log.d(LOG_TAG, "rewindCmd");
         if (textInterface != null) {
             if (textInterface.rewind() && (state == State.PLAYING)) {
-                speak();
+                executor.execute(speak); // speak();
             }
         }
     }
@@ -318,23 +352,21 @@ public class TtsService
         Log.d(LOG_TAG, "fastForwardCmd");
         if (textInterface != null) {
             if (textInterface.fastForward() && (state == State.PLAYING)) {
-                speak();
+                executor.execute(speak); // speak();
             }
         }
     }
 
     public void stopCmd() {
         Log.d(LOG_TAG, "stopCmd");
-        tts.stop();
-        state = State.STOPPED;
+        state = State.STOPPED; // needed before tts.stop() because of the onSpeakDone callback.
+        executor.execute(ttsStop); // tts.stop();
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
         mediaSession.setActive(false);
         audioManager.abandonAudioFocus(this);
-        Intent intent = new Intent( getApplicationContext(), TtsService.class );
-        stopService( intent );
+        stopSelf();
     }
-
 
     private void speak() {
         Log.d(LOG_TAG, "speak");
@@ -393,11 +425,13 @@ public class TtsService
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 isAudioFocusGranted = true;
-                playCmd();
+                if (state == State.WANT_TO_PLAY) {
+                    playCmd();
+                }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 isAudioFocusGranted = false;
-                stopCmd();
+                pauseCmd();
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
@@ -437,11 +471,13 @@ public class TtsService
 
 
     public void setSpeed(float speed) {
-        this.speed = speed;
-        if (isTTSInitialized) {
-            this.tts.setSpeechRate(speed);
-            if (state == State.PLAYING) {
-                speak();
+        if (speed != this.speed) {
+            this.speed = speed;
+            if (isTTSInitialized) {
+                this.tts.setSpeechRate(speed);
+                if (state == State.PLAYING) {
+                    executor.execute(speak); // speak();
+                }
             }
         }
     }
@@ -450,17 +486,24 @@ public class TtsService
     }
 
     public void setPitch(float pitch) {
-        this.pitch = pitch;
-        if (isTTSInitialized) {
-            this.tts.setPitch(pitch);
-            if (state == State.PLAYING) {
-                speak();
+        if (pitch != this.pitch) {
+            this.pitch = pitch;
+            if (isTTSInitialized) {
+                this.tts.setPitch(pitch);
+                if (state == State.PLAYING) {
+                    executor.execute(speak); // speak();
+                }
             }
         }
     }
 
     public float getPitch() {
         return pitch;
+    }
+
+    public void setVisible(boolean visible) {
+        this.isVisible = visible;
+        setForegroundAndNotification();
     }
 
     public void setTextInterface(TextInterface textInterface) {
@@ -470,6 +513,12 @@ public class TtsService
         }
     }
 
+    public void registerCallback(MediaControllerCompat.Callback callback, Handler handler) {
+        this.mediaSession.getController().registerCallback(callback, handler);
+    }
+    public void unregisterCallback(MediaControllerCompat.Callback callback) {
+        this.mediaSession.getController().unregisterCallback(callback);
+    }
 
     private void setMediaSessionMetaData() {
         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
@@ -506,22 +555,25 @@ public class TtsService
 
     private void setForegroundAndNotification() {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        switch (state) {
-            case CREATED:
-                break;
-            case WANT_TO_PLAY:
-            case PLAYING:
-                startForeground(1, generateNotification());
-                break;
-            case PAUSED:
-            case ERROR:
-                stopForeground(false);
-                notificationManager.notify( 1, generateNotification() );
-                break;
-            case STOPPED:
-                stopForeground(true);
-                notificationManager.cancel(1);
-                break;
+        if (isVisible) {
+            switch (state) {
+                case CREATED:
+                    break;
+                case WANT_TO_PLAY:
+                case PLAYING:
+                    startForeground(1, generateNotification());
+                    break;
+                case PAUSED:
+                case ERROR:
+                    stopForeground(false);
+                    notificationManager.notify(1, generateNotification());
+                    break;
+                case STOPPED:
+                    stopForeground(true);
+                    break;
+            }
+        } else {
+            stopForeground(true);
         }
     }
 
