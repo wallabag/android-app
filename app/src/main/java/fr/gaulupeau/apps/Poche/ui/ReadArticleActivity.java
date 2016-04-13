@@ -254,9 +254,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
 
         if (ttsFragment != null) {
-                ttsFragment.setWebView(webViewContent);
-                ttsFragment.setScrollView(scrollView);
-                ttsFragment.onDocumentLoadStart();
+                ttsFragment.onDocumentLoadStart(domainText, titleText);
         }
 
         webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
@@ -376,7 +374,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         restoreReadingPosition();
         if (ttsFragment != null) {
-            ttsFragment.onDocumentLoadFinished();
+            ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
         }
     }
 
@@ -611,11 +609,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 .add(R.id.viewMain, ttsFragment, "ttsFragment")
                 .commit();
             settings.setBoolean(Settings.TTS_VISIBLE, true);
-            ttsFragment.setWebView(webViewContent);
-            ttsFragment.setScrollView(scrollView);
-            ttsFragment.onDocumentLoadStart();
+            ttsFragment.onDocumentLoadStart(domainText, titleText);
             if (loadingFinished) {
-                ttsFragment.onDocumentLoadFinished();
+                ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
             result = true;
         } else {
