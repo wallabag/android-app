@@ -9,6 +9,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
 
@@ -26,6 +27,7 @@ public class WallabagService {
     private OkHttpClient client;
     private int wallabagMajorVersion;
     private WallabagServiceEndpoint serviceEndpoint;
+    private Settings settings;
 
     public WallabagService(String endpoint, String username, String password) {
         this(endpoint, username, password, WallabagConnection.getClient(), -1);
@@ -35,6 +37,7 @@ public class WallabagService {
         this.endpoint = endpoint;
         this.client = client;
         this.wallabagMajorVersion = wallabagMajorVersion;
+        this.settings = App.getInstance().getSettings();
 
         if(this.wallabagMajorVersion == -1) {
             this.wallabagMajorVersion = guessWallabagVersion();
@@ -133,6 +136,15 @@ public class WallabagService {
         else if(body.contains(Settings.WALLABAG_LOGIN_FORM_V1)) {
             Log.d(TAG, "guessWallabagVersion() found Wallabag v1");
             wallabagVersion = 1;
+        }
+
+        // save version as setting if valid version found
+        if(wallabagVersion > 0) {
+            Log.d(TAG, "guessWallabagVersion() saving Settings.WALLABAG_VERSION=" + wallabagVersion);
+            settings.setInt(Settings.WALLABAG_VERSION, wallabagVersion);
+        }
+        else {
+            Log.w(TAG,"guessWallabagVersion() couldn't guess Wallabag version");
         }
         return wallabagVersion;
     }
