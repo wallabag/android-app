@@ -162,4 +162,36 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         return csrfToken;
     }
 
+    public boolean addLink(String link) throws IOException {
+        Log.d(TAG, "addLink() link=" + link);
+        HttpUrl url = getHttpURL(endpoint + "/bookmarklet")
+                .newBuilder()
+                .setQueryParameter("url", link)
+                .build();
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean toggleArchive(int articleId) throws IOException {
+        Log.d(TAG, "toggleArchive() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint + "/archive/" + Integer.toString(articleId))
+                .newBuilder()
+                .build();
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean toggleFavorite(int articleId) throws IOException {
+        Log.d(TAG, "toggleFavorite() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint + "/star/" + Integer.toString(articleId))
+                .newBuilder()
+                .build();
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean deleteArticle(int articleId) throws IOException {
+        Log.d(TAG, "deleteArticle() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint + "/delete/" + Integer.toString(articleId))
+                .newBuilder()
+                .build();
+        return executeRequest(getRequest(url));
+    }
 }

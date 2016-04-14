@@ -141,4 +141,47 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         body = response.body().string();
         return !isLoginPage(body) ? body : null;
     }
+
+    public boolean addLink(String link) throws IOException {
+        Log.d(TAG, "addLink() link=" + link);
+        HttpUrl url = getHttpURL(endpoint)
+                .newBuilder()
+                .setQueryParameter("plainurl", link)
+                .build();
+
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean toggleArchive(int articleId) throws IOException {
+        Log.d(TAG, "toggleArchive() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint)
+                .newBuilder()
+                .setQueryParameter("action", "toggle_archive")
+                .setQueryParameter("id", Integer.toString(articleId))
+                .build();
+
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean toggleFavorite(int articleId) throws IOException {
+        Log.d(TAG, "toggleFavorite() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint)
+                .newBuilder()
+                .setQueryParameter("action", "toggle_fav")
+                .setQueryParameter("id", Integer.toString(articleId))
+                .build();
+
+        return executeRequest(getRequest(url));
+    }
+
+    public boolean deleteArticle(int articleId) throws IOException {
+        Log.d(TAG, "deleteArticle() articleId=" + articleId);
+        HttpUrl url = getHttpURL(endpoint)
+                .newBuilder()
+                .setQueryParameter("action", "delete")
+                .setQueryParameter("id", Integer.toString(articleId))
+                .build();
+
+        return executeRequest(getRequest(url));
+    }
 }

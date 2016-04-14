@@ -82,44 +82,13 @@ public abstract class WallabagServiceEndpoint {
         return credentials;
     }
 
-    public boolean addLink(String link) throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
-                .newBuilder()
-                .setQueryParameter("plainurl", link)
-                .build();
+    public abstract boolean addLink(String link) throws IOException;
 
-        return executeRequest(getRequest(url));
-    }
+    public abstract boolean toggleArchive(int articleId) throws IOException;
 
-    public boolean toggleArchive(int articleId) throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
-                .newBuilder()
-                .setQueryParameter("action", "toggle_archive")
-                .setQueryParameter("id", Integer.toString(articleId))
-                .build();
+    public abstract boolean toggleFavorite(int articleId) throws IOException;
 
-        return executeRequest(getRequest(url));
-    }
-
-    public boolean toggleFavorite(int articleId) throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
-                .newBuilder()
-                .setQueryParameter("action", "toggle_fav")
-                .setQueryParameter("id", Integer.toString(articleId))
-                .build();
-
-        return executeRequest(getRequest(url));
-    }
-
-    public boolean deleteArticle(int articleId) throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
-                .newBuilder()
-                .setQueryParameter("action", "delete")
-                .setQueryParameter("id", Integer.toString(articleId))
-                .build();
-
-        return executeRequest(getRequest(url));
-    }
+    public abstract boolean deleteArticle(int articleId) throws IOException;
 
     protected Response exec(Request request) throws IOException {
         return client.newCall(request).execute();
@@ -178,7 +147,7 @@ public abstract class WallabagServiceEndpoint {
         return getRequest(url);
     }
 
-    private boolean executeRequest(Request request) throws IOException {
+    protected boolean executeRequest(Request request) throws IOException {
         return executeRequest(request, true, true);
     }
 
