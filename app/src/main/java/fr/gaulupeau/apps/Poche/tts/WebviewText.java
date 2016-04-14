@@ -9,7 +9,7 @@ import android.widget.ScrollView;
 import java.util.Vector;
 
 /**
- * Parsing and navigation into text sections of Webview.
+ * TextInterface to navigate in a Webview.
  */
 public class WebviewText implements TextInterface {
 
@@ -86,8 +86,7 @@ public class WebviewText implements TextInterface {
         Log.d(LOG_TAG, "parseWebviewDocument");
         this.textList.clear();
         this.callback = callback;
-        webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT);
-        webView.loadUrl("javascript:parseDocumentText();");
+        webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
     }
 
     private void onDocumentParseStart() {

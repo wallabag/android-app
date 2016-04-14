@@ -129,6 +129,7 @@ public class TtsService
             speak();
         }
     };
+    private PendingIntent notificationPendingIntent;
 
     private static final String LOG_TAG="TtsService";
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
@@ -162,7 +163,7 @@ public class TtsService
 
         ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
                 MediaButtonReceiver.class.getName());
-        mediaSession = new MediaSessionCompat(getApplicationContext(), "Wallabag TTS", mediaButtonReceiverComponentName, null);
+        mediaSession = new MediaSessionCompat(this, "Wallabag TTS", mediaButtonReceiverComponentName, null);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
@@ -199,8 +200,29 @@ public class TtsService
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy");
+        switch (state) {
+            case CREATED:
+            case PAUSED:
+                // Do nothing
+                break;
+            case PLAYING:
+                unregisterReceiver(noisyReceiver);
+                break;
+            case WANT_TO_PLAY:
+            case STOPPED:
+            case ERROR:
+                // Do nothing
+                break;
+        }
+        state = State.STOPPED; // needed before tts.stop() because of the onSpeakDone callback.
+        isVisible = false;
+        setMediaSessionPlaybackState();
+        setForegroundAndNotification();
+        mediaSession.setActive(false);
+        audioManager.abandonAudioFocus(this);
         executor.shutdown();
         executor = null;
+        tts.stop();
         mediaSession.release();
         mediaSession = null;
         mediaPlayerPageFlip.release();
@@ -359,12 +381,6 @@ public class TtsService
 
     public void stopCmd() {
         Log.d(LOG_TAG, "stopCmd");
-        state = State.STOPPED; // needed before tts.stop() because of the onSpeakDone callback.
-        executor.execute(ttsStop); // tts.stop();
-        setMediaSessionPlaybackState();
-        setForegroundAndNotification();
-        mediaSession.setActive(false);
-        audioManager.abandonAudioFocus(this);
         stopSelf();
     }
 
@@ -431,12 +447,16 @@ public class TtsService
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
                 isAudioFocusGranted = false;
-                pauseCmd();
+                if (state == State.PLAYING || state == State.WANT_TO_PLAY) {
+                    pauseCmd();
+                }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 isAudioFocusGranted = false;
-                pauseCmd(State.WANT_TO_PLAY);
+                if (state == State.PLAYING) {
+                    pauseCmd(State.WANT_TO_PLAY);
+                }
                 break;
         }
     }
@@ -501,7 +521,9 @@ public class TtsService
         return pitch;
     }
 
-    public void setVisible(boolean visible) {
+
+    public void setVisible(boolean visible, PendingIntent pendingIntent) {
+        this.notificationPendingIntent = pendingIntent;
         this.isVisible = visible;
         setForegroundAndNotification();
     }
@@ -516,6 +538,7 @@ public class TtsService
     public void registerCallback(MediaControllerCompat.Callback callback, Handler handler) {
         this.mediaSession.getController().registerCallback(callback, handler);
     }
+
     public void unregisterCallback(MediaControllerCompat.Callback callback) {
         this.mediaSession.getController().unregisterCallback(callback);
     }
@@ -570,15 +593,19 @@ public class TtsService
                     break;
                 case STOPPED:
                     stopForeground(true);
+                    notificationManager.cancel(1);
                     break;
             }
         } else {
             stopForeground(true);
+            notificationManager.cancel(1);
         }
     }
 
     private Notification generateNotification() {
         NotificationCompat.Builder builder = generateNotificationBuilderFrom(getApplicationContext(), mediaSession);
+        builder.setContentIntent(notificationPendingIntent);
+        builder.setWhen(0);
         builder.setSmallIcon(R.drawable.icon);
         if (state != State.ERROR) {
             //builder.addAction( generateAction( android.R.drawable.ic_media_previous, "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS ) );
@@ -610,7 +637,7 @@ public class TtsService
                 .setContentText(description.getSubtitle())
                 .setSubText(description.getDescription())
                 .setLargeIcon(description.getIconBitmap())
-                .setContentIntent(controller.getSessionActivity())
+                .setContentIntent(controller.getSessionActivity()) // always null...
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setDeleteIntent(generateActionIntent(context, KeyEvent.KEYCODE_MEDIA_STOP));
         return builder;

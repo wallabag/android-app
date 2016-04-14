@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.annotation.TargetApi;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,6 +33,7 @@ import android.widget.Toast;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.ui.ArticlesListActivity;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 import java.text.NumberFormat;
 
@@ -62,7 +64,7 @@ public class TtsFragment
     private AudioManager audioManager;
     private BroadcastReceiver volumeChangeReceiver;
     private MediaControllerCompat.Callback mediaCallback;
-
+    private PendingIntent notificationPendingIntent;
 
 
     private static NumberFormat percentFormat;
@@ -94,6 +96,7 @@ public class TtsFragment
     @Override
     public void onAttach(Context context)
     {
+        Log.d(LOG_TAG, "onAttach");
         super.onAttach(context);
         this.readArticleActivity = ((ReadArticleActivity)getActivity());
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -113,6 +116,7 @@ public class TtsFragment
     @Override
     public void onDetach()
     {
+        Log.d(LOG_TAG, "onDetach");
         super.onDetach();
         readArticleActivity.unregisterReceiver(volumeChangeReceiver);
         readArticleActivity = null;
@@ -121,14 +125,19 @@ public class TtsFragment
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Log.d(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
-        // Should use getArguments() to get Fragment instance arguments.
         this.settings = App.getInstance().getSettings();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClass(getActivity(), ArticlesListActivity.class);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        notificationPendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
     }
 
     @Override
     public void onDestroy()
     {
+        Log.d(LOG_TAG, "onDestroy");
         super.onDestroy();
     }
 
@@ -137,6 +146,7 @@ public class TtsFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        Log.d(LOG_TAG, "onCreateView");
         this.instance = this;
         View view = inflater.inflate(R.layout.fragment_tts, container, false);
         if (this.percentFormat == null)
@@ -313,8 +323,10 @@ public class TtsFragment
                         btnTTSPlayStop.setImageResource(R.drawable.ic_play_arrow_24dp);
                         break;
                     case PlaybackStateCompat.STATE_STOPPED:
+                        Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_STOPPED");
                         break;
                     case PlaybackStateCompat.STATE_ERROR:
+                        Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_ERROR");
                         showToastMessage("Text To Speech Error");
                         break;
                 }
@@ -354,6 +366,7 @@ public class TtsFragment
 
     @Override
     public void onDestroyView() {
+        Log.d(LOG_TAG, "onDestroyView");
         super.onDestroyView();
         Intent intent = new Intent( getContext(), TtsService.class );
         getActivity().stopService(intent);
@@ -363,13 +376,16 @@ public class TtsFragment
 
     @Override
     public void onStart() {
+        Log.d(LOG_TAG, "onStart");
         Intent intent = new Intent( getActivity(), TtsService.class );
         getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
+        getActivity().startService(intent);
         super.onStart();
     }
 
     @Override
     public void onStop() {
+        Log.d(LOG_TAG, "onStop");
         getActivity().unbindService(serviceConnection);
         super.onStop();
     }
@@ -377,18 +393,22 @@ public class TtsFragment
     @Override
     public void onResume()
     {
+        Log.d(LOG_TAG, "onResume");
         super.onResume();
         if (ttsService != null) {
-            ttsService.setVisible(false);
+            ttsService.setVisible(false, notificationPendingIntent);
         }
     }
 
     @Override
     public void onPause()
     {
+        Log.d(LOG_TAG, "onPause");
         super.onPause();
         saveSettings();
-        ttsService.setVisible(true);
+        if (ttsService != null) {
+            ttsService.setVisible(true, notificationPendingIntent);
+        }
     }
 
 

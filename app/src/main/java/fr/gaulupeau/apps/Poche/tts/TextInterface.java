@@ -1,7 +1,7 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 /**
- * Text To Speech (TTS) Interface.
+ * Text To Speech (TTS) Text Interface.
  */
 public interface TextInterface {
     void    restoreCurrent();
