@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -85,5 +86,16 @@ public class IconUnreadWidget extends AppWidgetProvider {
 
         super.onReceive(context, intent);
     }
-}
 
+    public static void triggerWidgetUpdate(Context context) {
+        Log.d(TAG, "static triggerWidgetUpdate()");
+        Context appContext = context.getApplicationContext();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(appContext);
+        ComponentName thisWidget = new ComponentName(appContext, IconUnreadWidget.class);
+        int[] widgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
+        Intent intent = new Intent(context, IconUnreadWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        context.sendBroadcast(intent);
+    }
+}

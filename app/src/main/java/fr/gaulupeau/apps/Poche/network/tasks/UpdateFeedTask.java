@@ -27,6 +27,7 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 
 public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
@@ -210,6 +211,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 errorMessage = App.getInstance().getString(R.string.feedUpdater_feedProcessingError);
                 return false;
             }
+
+            IconUnreadWidget.triggerWidgetUpdate(App.getInstance().getApplicationContext());
 
             Log.d(TAG, "updateByFeed() finished successfully");
 
