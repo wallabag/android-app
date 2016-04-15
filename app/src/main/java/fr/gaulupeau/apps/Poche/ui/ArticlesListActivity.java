@@ -272,7 +272,7 @@ public class ArticlesListActivity extends AppCompatActivity
             }
         } else if(WallabagConnection.isNetworkOnline()) {
             feedUpdater = new UpdateFeedTask(wallabagSettings.wallabagURL,
-                    wallabagSettings.userID, wallabagSettings.userToken, this, feedType, updateType);
+                    wallabagSettings.userID, wallabagSettings.userToken, settings.getInt(Settings.WALLABAG_VERSION, -1), this, feedType, updateType);
             feedUpdater.execute();
             result = true;
         } else {
