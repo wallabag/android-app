@@ -27,8 +27,9 @@ public class Settings {
     public static final String WALLABAG_VERSION = "wallabag_version";
     public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
     public static final String WALLABAG_LOGOUT_LINK_V1 = "href=\"./?logout\"";
-    public static final String WALLABAG_LOGIN_FORM_V2 = "<form action=\"/login_check\" method=\"post\" name=\"loginform\">";
-    public static final String WALLABAG_LOGOUT_LINK_V2 = "href=\"/logout\"";
+    public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
+    public static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
 
     private SharedPreferences pref;
 

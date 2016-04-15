@@ -90,13 +90,11 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     protected boolean isLoginPage(String body) throws IOException {
         if(body == null || body.length() == 0) return false;
-
-//        "<body class=\"login\">"
-        return body.contains(Settings.WALLABAG_LOGIN_FORM_V2); // any way to improve?
+        return body.contains(Settings.WALLABAG_LOGIN_FORM_V2) && body.contains(Settings.WALLABAG_LOGO_V2);
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V2);
+        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V2) && isRegularPage(body, Settings.WALLABAG_LOGO_V2);
     }
 
     protected Request getLoginRequest(String csrfToken) throws IOException {
