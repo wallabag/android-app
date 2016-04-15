@@ -135,17 +135,7 @@ public abstract class WallabagServiceEndpoint {
         return getRequest(url);
     }
 
-    protected Request getGenerateTokenRequest() throws IOException {
-        HttpUrl url = getHttpURL(endpoint)
-                .newBuilder()
-                .setQueryParameter("feed", null)
-                .setQueryParameter("action", "generate")
-                .build();
-
-        Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
-
-        return getRequest(url);
-    }
+    protected abstract Request getGenerateTokenRequest() throws IOException;
 
     protected boolean executeRequest(Request request) throws IOException {
         return executeRequest(request, true, true);

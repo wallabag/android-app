@@ -184,4 +184,16 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         return executeRequest(getRequest(url));
     }
+
+    protected Request getGenerateTokenRequest() throws IOException {
+        HttpUrl url = getHttpURL(endpoint)
+                .newBuilder()
+                .setQueryParameter("feed", null)
+                .setQueryParameter("action", "generate")
+                .build();
+
+        Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
+
+        return getRequest(url);
+    }
 }
