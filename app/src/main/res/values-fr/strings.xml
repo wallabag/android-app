@@ -130,6 +130,7 @@ GAULUPEAU Jonathan — 2013
     <string name="themeName_dark_contrast">Sombre (contraste élevé)</string>
     <string name="themeName_light">Clair</string>
     <string name="themeName_light_contrast">Clair (contraste élevé)</string>
+    <string name="themeName_solarized">Solarisé</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_switchFontFamily">Famille de police (sans/avec serif)</string>

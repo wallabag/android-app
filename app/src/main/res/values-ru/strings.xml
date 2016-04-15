@@ -131,6 +131,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_light_contrast">Светлая (контрастная)</string>
     <string name="themeName_dark">Тёмная</string>
     <string name="themeName_dark_contrast">Тёмная (контрастная)</string>
+    <string name="themeName_solarized">соляризации</string>
     <string name="settings_ui_fontSize">Размер шрифта статей (%)</string>
     <string name="settings_ui_serif">Шрифт с засечками для статей</string>
     <string name="menu_readArticle_increaseFontSize">Увеличить размер шрифта</string>
