@@ -120,7 +120,7 @@ public class WallabagService {
             return -1;
         }
 
-        if (body.contains(Settings.WALLABAG_LOGOUT_LINK_V2)) {
+        if (body.contains(Settings.WALLABAG_LOGOUT_LINK_V2) && body.contains(Settings.WALLABAG_LOGO_V2)) {
             Log.d(TAG, "guessWallabagVersion() already logged in, found Wallabag v2");
             wallabagVersion = 2;
         }
@@ -129,7 +129,7 @@ public class WallabagService {
             wallabagVersion = 1;
         }
 
-        if (body.contains(Settings.WALLABAG_LOGIN_FORM_V2)) {
+        if (body.contains(Settings.WALLABAG_LOGIN_FORM_V2) && body.contains(Settings.WALLABAG_LOGO_V2)) {
             Log.d(TAG, "guessWallabagVersion() found Wallabag v2");
             wallabagVersion = 2;
         }
