@@ -80,7 +80,11 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     }
 
     public FeedsCredentials getCredentials() throws IOException {
-        return getCredentials("/config", "\"/(\\S+)/([a-zA-Z0-9]+)/unread.xml\"");
+        FeedsCredentials fc = getCredentials("/config", "\"/(\\S+)/([a-zA-Z0-9]+)/unread.xml\"");
+        // overwrite userID with username because first matcher group of previous regex, which
+        // should return the user name, might include the subdirectory in which wallabag is installed
+        fc.userID = username;
+        return fc;
     }
 
 
