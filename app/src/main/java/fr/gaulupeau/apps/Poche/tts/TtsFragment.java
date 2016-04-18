@@ -74,12 +74,6 @@ public class TtsFragment
 
     protected ServiceConnection serviceConnection;
 
-
-    private static volatile TtsFragment instance;
-    static TtsFragment getInstance() {
-        return instance;
-    }
-
     public static TtsFragment newInstance(boolean autoplay)
     {
         TtsFragment fragment = new TtsFragment();
@@ -147,7 +141,6 @@ public class TtsFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Log.d(LOG_TAG, "onCreateView");
-        this.instance = this;
         View view = inflater.inflate(R.layout.fragment_tts, container, false);
         if (this.percentFormat == null)
         {
@@ -229,14 +222,27 @@ public class TtsFragment
         this.seekBarTTSSpeed = ((SeekBar)view.findViewById(R.id.seekBarTTSSpeed));
         this.seekBarTTSSpeed.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            boolean isTouchTracking;
+            int initialProgress;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ttsSetSpeedFromSeekBar();
+                textViewTTSSpeed.setText(percentFormat.format(getSpeedBarValue()));
+                if ( ! isTouchTracking) {
+                    ttsSetSpeedFromSeekBar();
+                }
             }
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                initialProgress = seekBarTTSSpeed.getProgress();
+                isTouchTracking = true;
+            }
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isTouchTracking = false;
+                if (seekBarTTSSpeed.getProgress() != initialProgress) {
+                    ttsSetSpeedFromSeekBar();
+                }
+            }
         });
         
         this.seekBarTTSSpeed.setProgress((int) (this.settings.getFloat(Settings.TTS_SPEED, 1.0F) * this.seekBarTTSSpeed.getMax() / MAX_TTS_SPEED));
@@ -244,14 +250,27 @@ public class TtsFragment
         this.seekBarTTSPitch = ((SeekBar)view.findViewById(R.id.seekBarTTSPitch));
         this.seekBarTTSPitch.setMax(Integer.MAX_VALUE);
         this.seekBarTTSPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            boolean isTouchTracking;
+            int initialProgress;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ttsSetPitchFromSeekBar();
+                textViewTTSPitch.setText(percentFormat.format(getPitchBarValue()));
+                if ( ! isTouchTracking) {
+                    ttsSetPitchFromSeekBar();
+                }
             }
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                initialProgress = seekBarTTSPitch.getProgress();
+                isTouchTracking = true;
+            }
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isTouchTracking = false;
+                if (seekBarTTSPitch.getProgress() != initialProgress) {
+                    ttsSetPitchFromSeekBar();
+                }
+            }
         });
         
         this.seekBarTTSPitch.setProgress((int) (this.settings.getFloat(Settings.TTS_PITCH, 1.0F) * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
@@ -339,6 +358,7 @@ public class TtsFragment
                 Log.d(LOG_TAG, "onServiceConnected");
                 ttsService = ((TtsService.LocalBinder)binder).getService();
                 ttsService.registerCallback(mediaCallback, new Handler());
+                ttsService.setVisible( ! TtsFragment.this.isResumed(), notificationPendingIntent);
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
                 if (documentParsed) {
@@ -368,10 +388,11 @@ public class TtsFragment
     public void onDestroyView() {
         Log.d(LOG_TAG, "onDestroyView");
         super.onDestroyView();
-        Intent intent = new Intent( getContext(), TtsService.class );
-        getActivity().stopService(intent);
+        if ((ttsService != null) && (ttsService.getTextInterface() == this.webviewText)) {
+            Intent intent = new Intent(getContext(), TtsService.class);
+            getActivity().stopService(intent);
+        }
         serviceConnection = null;
-        this.instance = null;
     }
 
     @Override
@@ -414,12 +435,12 @@ public class TtsFragment
 
     private void saveSettings()
     {
-        this.settings.setFloat(Settings.TTS_SPEED, getSeedBarValue());
+        this.settings.setFloat(Settings.TTS_SPEED, getSpeedBarValue());
         this.settings.setFloat(Settings.TTS_PITCH, getPitchBarValue());
         this.settings.setBoolean(Settings.TTS_OPTIONS_VISIBLE, this.viewTTSOption.getVisibility() == View.VISIBLE);
     }
     
-    private float getSeedBarValue()
+    private float getSpeedBarValue()
     {
         return MAX_TTS_SPEED * this.seekBarTTSSpeed.getProgress() / this.seekBarTTSSpeed.getMax();
     }
@@ -444,21 +465,16 @@ public class TtsFragment
     public void onTTSVoiceClicked(Button btn) {}
     
     private void ttsSetSpeedFromSeekBar()
-    {
-        float value = getSeedBarValue();
-        if (ttsService != null) {
-            ttsService.setSpeed(value);
+    {if (ttsService != null) {
+            ttsService.setSpeed(getSpeedBarValue());
         }
-        this.textViewTTSSpeed.setText(this.percentFormat.format(value));
     }
     
     private void ttsSetPitchFromSeekBar()
     {
-        float value = getPitchBarValue();
         if (ttsService != null) {
-            ttsService.setPitch(value);
+            ttsService.setPitch(getPitchBarValue());
         }
-        this.textViewTTSPitch.setText(this.percentFormat.format(value));
     }
 
     public void onDocumentLoadStart(String domain, String title)

@@ -528,10 +528,26 @@ public class TtsService
         setForegroundAndNotification();
     }
 
+    public TextInterface getTextInterface() {
+        return textInterface;
+    }
+
     public void setTextInterface(TextInterface textInterface) {
-        this.textInterface = textInterface;
-        if ((textInterface != null) && (state == State.WANT_TO_PLAY)) {
-            playCmd();
+        if (textInterface != this.textInterface) {
+            switch (state) {
+                case CREATED:
+                case PAUSED:
+                case ERROR:
+                case STOPPED:
+                    this.textInterface = textInterface;
+                    break;
+                case WANT_TO_PLAY:
+                case PLAYING:
+                    pauseCmd();
+                    this.textInterface = textInterface;
+                    playCmd();
+                    break;
+            }
         }
     }
 
