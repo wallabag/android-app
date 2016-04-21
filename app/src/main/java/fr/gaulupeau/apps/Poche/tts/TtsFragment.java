@@ -8,11 +8,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.speech.tts.TextToSpeech;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -22,11 +25,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,20 +44,22 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.ui.ArticlesListActivity;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Text To Speech (TTS) User Interface.
  */
 public class TtsFragment
-    extends Fragment
-{
+    extends Fragment {
     private ReadArticleActivity readArticleActivity;
     private WebviewText webviewText;
     private Settings settings;
     private View viewTTSOption;
     private ImageButton btnTTSPlayStop;
-    private Button btnTTSLanguage;
-    private Button btnTTSVoice;
     private SeekBar seekBarTTSSpeed;
     private SeekBar seekBarTTSPitch;
     private SeekBar seekBarTTSVolume;
@@ -58,6 +68,10 @@ public class TtsFragment
     private TextView textViewTTSPitch;
     private TextView textViewTTSVolume;
     private TextView textViewTTSSleep;
+    private Spinner spinnerLanguage;
+    private Spinner spinnerVoice;
+    private ArrayAdapter<String> spinnerLanguageAdapter;
+    private ArrayAdapter<String> spinnerVoiceAdapter;
 
     private volatile TtsService ttsService;
     private volatile boolean documentParsed;
@@ -65,8 +79,13 @@ public class TtsFragment
     private BroadcastReceiver volumeChangeReceiver;
     private MediaControllerCompat.Callback mediaCallback;
     private PendingIntent notificationPendingIntent;
+    private boolean isOpeningNewArticle;
+    private int activityResultNumber;
+    private int ttsEnginesNumber;
 
-
+    private static ArrayList<EngineInfo> ttsEngines = null;
+    private static ArrayList<String> ttsLanguages = new ArrayList();
+    private static HashMap<String, List<VoiceInfo>> ttsVoiceByLanguage = new HashMap();
     private static NumberFormat percentFormat;
     private static final String LOG_TAG = "TtsFragment";
     private static final float MAX_TTS_SPEED = 4.0F;
@@ -74,8 +93,7 @@ public class TtsFragment
 
     protected ServiceConnection serviceConnection;
 
-    public static TtsFragment newInstance(boolean autoplay)
-    {
+    public static TtsFragment newInstance(boolean autoplay) {
         TtsFragment fragment = new TtsFragment();
         Bundle args = new Bundle();
         args.putBoolean("autoplay", autoplay);
@@ -87,12 +105,12 @@ public class TtsFragment
         //required no arg default constructor
     }
 
+
     @Override
-    public void onAttach(Context context)
-    {
+    public void onAttach(Context context) {
         Log.d(LOG_TAG, "onAttach");
         super.onAttach(context);
-        this.readArticleActivity = ((ReadArticleActivity)getActivity());
+        this.readArticleActivity = ((ReadArticleActivity) getActivity());
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         if (volumeChangeReceiver == null) {
             volumeChangeReceiver = new BroadcastReceiver() {
@@ -108,8 +126,7 @@ public class TtsFragment
     }
 
     @Override
-    public void onDetach()
-    {
+    public void onDetach() {
         Log.d(LOG_TAG, "onDetach");
         super.onDetach();
         readArticleActivity.unregisterReceiver(volumeChangeReceiver);
@@ -117,20 +134,21 @@ public class TtsFragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         this.settings = App.getInstance().getSettings();
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setClass(getActivity(), ArticlesListActivity.class);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        notificationPendingIntent = PendingIntent.getActivity(getActivity(), 0, intent, 0);
+        Intent mainFocusIntent = new Intent(Intent.ACTION_MAIN);
+        mainFocusIntent.setClass(getActivity(), ArticlesListActivity.class);
+        mainFocusIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        notificationPendingIntent = PendingIntent.getActivity(getActivity(), 0, mainFocusIntent, 0);
+        if (ttsEngines == null) {
+            getTtsEngines();
+        }
     }
 
     @Override
-    public void onDestroy()
-    {
+    public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy");
         super.onDestroy();
     }
@@ -138,12 +156,10 @@ public class TtsFragment
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_tts, container, false);
-        if (this.percentFormat == null)
-        {
+        if (this.percentFormat == null) {
             this.percentFormat = NumberFormat.getPercentInstance();
             this.percentFormat.setMaximumFractionDigits(0);
         }
@@ -151,7 +167,7 @@ public class TtsFragment
         if (!this.settings.getBoolean(Settings.TTS_OPTIONS_VISIBLE, false)) {
             this.viewTTSOption.setVisibility(View.GONE);
         }
-        this.btnTTSPlayStop = ((ImageButton)view.findViewById(R.id.btnTTSPlayPause));
+        this.btnTTSPlayStop = ((ImageButton) view.findViewById(R.id.btnTTSPlayPause));
         this.btnTTSPlayStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +177,7 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSPrevious = (ImageButton)view.findViewById(R.id.btnTTSPrevious);
+        ImageButton btnTTSPrevious = (ImageButton) view.findViewById(R.id.btnTTSPrevious);
         btnTTSPrevious.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,7 +187,7 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSNext = (ImageButton)view.findViewById(R.id.btnTTSNext);
+        ImageButton btnTTSNext = (ImageButton) view.findViewById(R.id.btnTTSNext);
         btnTTSNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,60 +198,67 @@ public class TtsFragment
 
         });
 
-        ImageButton btnTTSOptions = (ImageButton)view.findViewById(R.id.btnTTSOptions);
+        ImageButton btnTTSOptions = (ImageButton) view.findViewById(R.id.btnTTSOptions);
         btnTTSOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onTTSOptionsClicked((ImageButton) v);
             }
         });
-        
-        this.btnTTSLanguage = ((Button)view.findViewById(R.id.btnTTSLanguage));
-        this.btnTTSLanguage.setOnClickListener(new View.OnClickListener() {
+
+        final CheckBox chkbxTTSContinue = (CheckBox) view.findViewById(R.id.chkbxTTSContinue);
+        final ImageView imgviewTTSContinue = (ImageView) view.findViewById(R.id.imgviewTTSContinue);
+        chkbxTTSContinue.setChecked(settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false));
+        View.OnClickListener ttsContinueClickListner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onTTSLanguageClicked((Button) v);
+                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, chkbxTTSContinue.isChecked());
+                if (chkbxTTSContinue.isChecked()) {
+                    showToastMessage("Autoplay next article");
+                }
+            }
+        };
+        chkbxTTSContinue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, isChecked);
+                if (isChecked) {
+                    showToastMessage("Autoplay next article");
+                }
             }
         });
-        
-        this.btnTTSVoice = ((Button)view.findViewById(R.id.btnTTSVoice));
-        this.btnTTSVoice.setOnClickListener(new View.OnClickListener() {
+        imgviewTTSContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onTTSVoiceClicked((Button) v);
+                chkbxTTSContinue.toggle();
             }
         });
 
-        CheckBox chkbxTTSContinue = (CheckBox)view.findViewById(R.id.chkbxTTSContinue);
-        chkbxTTSContinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showToastMessage("Not implemented");
-            }
-        });
+        this.textViewTTSSpeed = ((TextView) view.findViewById(R.id.textViewTTSSpeed));
+        this.textViewTTSPitch = ((TextView) view.findViewById(R.id.textViewTTSPitch));
+        this.textViewTTSVolume = ((TextView) view.findViewById(R.id.textViewTTSVolume));
+        this.textViewTTSSleep = ((TextView) view.findViewById(R.id.textViewTTSSleep));
 
-        this.textViewTTSSpeed = ((TextView)view.findViewById(R.id.textViewTTSSpeed));
-        this.textViewTTSPitch = ((TextView)view.findViewById(R.id.textViewTTSPitch));
-        this.textViewTTSVolume = ((TextView)view.findViewById(R.id.textViewTTSVolume));
-        this.textViewTTSSleep = ((TextView)view.findViewById(R.id.textViewTTSSleep));
-
-        this.seekBarTTSSpeed = ((SeekBar)view.findViewById(R.id.seekBarTTSSpeed));
+        this.seekBarTTSSpeed = ((SeekBar) view.findViewById(R.id.seekBarTTSSpeed));
         this.seekBarTTSSpeed.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSpeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             boolean isTouchTracking;
             int initialProgress;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textViewTTSSpeed.setText(percentFormat.format(getSpeedBarValue()));
-                if ( ! isTouchTracking) {
+                if (!isTouchTracking) {
                     ttsSetSpeedFromSeekBar();
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 initialProgress = seekBarTTSSpeed.getProgress();
                 isTouchTracking = true;
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 isTouchTracking = false;
@@ -244,26 +267,29 @@ public class TtsFragment
                 }
             }
         });
-        
+
         this.seekBarTTSSpeed.setProgress((int) (this.settings.getFloat(Settings.TTS_SPEED, 1.0F) * this.seekBarTTSSpeed.getMax() / MAX_TTS_SPEED));
-        
-        this.seekBarTTSPitch = ((SeekBar)view.findViewById(R.id.seekBarTTSPitch));
+
+        this.seekBarTTSPitch = ((SeekBar) view.findViewById(R.id.seekBarTTSPitch));
         this.seekBarTTSPitch.setMax(Integer.MAX_VALUE);
         this.seekBarTTSPitch.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             boolean isTouchTracking;
             int initialProgress;
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textViewTTSPitch.setText(percentFormat.format(getPitchBarValue()));
-                if ( ! isTouchTracking) {
+                if (!isTouchTracking) {
                     ttsSetPitchFromSeekBar();
                 }
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 initialProgress = seekBarTTSPitch.getProgress();
                 isTouchTracking = true;
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 isTouchTracking = false;
@@ -272,19 +298,21 @@ public class TtsFragment
                 }
             }
         });
-        
+
         this.seekBarTTSPitch.setProgress((int) (this.settings.getFloat(Settings.TTS_PITCH, 1.0F) * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
 
-        this.seekBarTTSSleep = ((SeekBar)view.findViewById(R.id.seekBarTTSSleep));
+        this.seekBarTTSSleep = ((SeekBar) view.findViewById(R.id.seekBarTTSSleep));
         this.seekBarTTSSleep.setMax(Integer.MAX_VALUE);
         this.seekBarTTSSleep.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             }
+
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 showToastMessage("Not implemented");
             }
+
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
@@ -292,7 +320,7 @@ public class TtsFragment
         });
 
         audioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        this.seekBarTTSVolume = ((SeekBar)view.findViewById(R.id.seekBarTTSVolume));
+        this.seekBarTTSVolume = (SeekBar) view.findViewById(R.id.seekBarTTSVolume);
         this.seekBarTTSVolume.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
         updateVolumeDisplay();
 
@@ -315,19 +343,36 @@ public class TtsFragment
             }
         });
 
-        //if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-        //{
-        //    Locale locale = this.tts.getLanguage();
-        //    btnTTSLanguage.setText(locale.getLanguage());
-        //    btnTTSVoice.setText(locale.getCountry());
-        //}
-        //else
-        //{
-        //    Voice voice = tts.getVoice();
-        //    Locale locale = voice.getLocale();
-        //    btnTTSLanguage.setText(locale.getLanguage());
-        //    btnTTSVoice.setText(voice.getName() + "," + locale.getCountry());
-        //}
+        spinnerLanguage = (Spinner) view.findViewById(R.id.spinnerLanguage);
+        spinnerLanguageAdapter = new ArrayAdapter(this.getContext(),
+                android.R.layout.simple_spinner_item, new ArrayList<String>());
+        spinnerLanguageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerLanguage.setAdapter(spinnerLanguageAdapter);
+
+        spinnerVoice = (Spinner) view.findViewById(R.id.spinnerVoice);
+        spinnerVoiceAdapter = new ArrayAdapter(this.getContext(),
+                android.R.layout.simple_spinner_item, new ArrayList<String>());
+        spinnerVoiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerVoice.setAdapter(spinnerVoiceAdapter);
+        updateLanguageSpinnerData();
+
+        spinnerLanguage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                onLanguageSelectionChanged();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+        });
+
+        spinnerVoice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                onVoiceSelectionChanged();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {}
+        });
 
         mediaCallback = new MediaControllerCompat.Callback() {
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
@@ -356,9 +401,9 @@ public class TtsFragment
             @Override
             public void onServiceConnected(ComponentName name, IBinder binder) {
                 Log.d(LOG_TAG, "onServiceConnected");
-                ttsService = ((TtsService.LocalBinder)binder).getService();
+                ttsService = ((TtsService.LocalBinder) binder).getService();
                 ttsService.registerCallback(mediaCallback, new Handler());
-                ttsService.setVisible( ! TtsFragment.this.isResumed(), notificationPendingIntent);
+                ttsService.setVisible(!TtsFragment.this.isResumed(), notificationPendingIntent);
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
                 if (documentParsed) {
@@ -375,7 +420,7 @@ public class TtsFragment
         };
         documentParsed = false;
 
-        Intent intent = new Intent( getActivity(), TtsService.class );
+        Intent intent = new Intent(getActivity(), TtsService.class);
         if (getArguments().getBoolean("autoplay")) {
             intent.setAction("PLAY");
         }
@@ -388,7 +433,7 @@ public class TtsFragment
     public void onDestroyView() {
         Log.d(LOG_TAG, "onDestroyView");
         super.onDestroyView();
-        if ((ttsService != null) && (ttsService.getTextInterface() == this.webviewText)) {
+        if ((ttsService != null) && (!isOpeningNewArticle)) {
             Intent intent = new Intent(getContext(), TtsService.class);
             getActivity().stopService(intent);
         }
@@ -398,7 +443,7 @@ public class TtsFragment
     @Override
     public void onStart() {
         Log.d(LOG_TAG, "onStart");
-        Intent intent = new Intent( getActivity(), TtsService.class );
+        Intent intent = new Intent(getActivity(), TtsService.class);
         getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         getActivity().startService(intent);
         super.onStart();
@@ -412,8 +457,7 @@ public class TtsFragment
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         Log.d(LOG_TAG, "onResume");
         super.onResume();
         if (ttsService != null) {
@@ -422,8 +466,7 @@ public class TtsFragment
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         Log.d(LOG_TAG, "onPause");
         super.onPause();
         saveSettings();
@@ -433,52 +476,42 @@ public class TtsFragment
     }
 
 
-    private void saveSettings()
-    {
+    private void saveSettings() {
         this.settings.setFloat(Settings.TTS_SPEED, getSpeedBarValue());
         this.settings.setFloat(Settings.TTS_PITCH, getPitchBarValue());
         this.settings.setBoolean(Settings.TTS_OPTIONS_VISIBLE, this.viewTTSOption.getVisibility() == View.VISIBLE);
     }
-    
-    private float getSpeedBarValue()
-    {
+
+    private float getSpeedBarValue() {
         return MAX_TTS_SPEED * this.seekBarTTSSpeed.getProgress() / this.seekBarTTSSpeed.getMax();
     }
-    
-    private float getPitchBarValue()
-    {
+
+    private float getPitchBarValue() {
         return MAX_TTS_PITCH * this.seekBarTTSPitch.getProgress() / this.seekBarTTSPitch.getMax();
     }
 
 
-    public void onTTSOptionsClicked(ImageButton btn)
-    {
+    public void onTTSOptionsClicked(ImageButton btn) {
         if (viewTTSOption.getVisibility() == View.VISIBLE) {
             viewTTSOption.setVisibility(View.GONE);
         } else {
             viewTTSOption.setVisibility(View.VISIBLE);
         }
     }
-    
-    public void onTTSLanguageClicked(Button btn) {}
-    
-    public void onTTSVoiceClicked(Button btn) {}
-    
-    private void ttsSetSpeedFromSeekBar()
-    {if (ttsService != null) {
+
+    private void ttsSetSpeedFromSeekBar() {
+        if (ttsService != null) {
             ttsService.setSpeed(getSpeedBarValue());
         }
     }
-    
-    private void ttsSetPitchFromSeekBar()
-    {
+
+    private void ttsSetPitchFromSeekBar() {
         if (ttsService != null) {
             ttsService.setPitch(getPitchBarValue());
         }
     }
 
-    public void onDocumentLoadStart(String domain, String title)
-    {
+    public void onDocumentLoadStart(String domain, String title) {
         Log.d(LOG_TAG, "onDocumentLoadStart");
         TtsService.metaDataArtist = domain;
         TtsService.metaDataTitle = title;
@@ -487,28 +520,53 @@ public class TtsFragment
             ttsService.pauseCmd();
         }
     }
-    
+
     public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
         Log.d(LOG_TAG, "onDocumentLoadFinished");
-        webviewText = new WebviewText(webView, scrollView);
+        webviewText = new WebviewText(webView, scrollView, readArticleActivity);
+        webviewText.setOnReadFinishedCallback(new Runnable() {
+            @Override
+            public void run() {
+                onReadFinished();
+            }
+        });
         webviewText.parseWebviewDocument(new Runnable() {
             public void run() {
                 documentParsed = true;
-                if(ttsService!=null)
-                {
+                if (ttsService != null) {
                     ttsService.setTextInterface(webviewText);
                 }
             }
         });
     }
 
+    public void onReadFinished() {
+        if (settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false)) {
+            if (readArticleActivity.openNextArticle()) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (ttsService != null) {
+                            ttsService.playCmd();
+                        }
+                    }
+                }, 1500);
+            }
+        }
+    }
+
+    public void onOpenNewArticle() {
+        this.isOpeningNewArticle = true;
+        if ((ttsService != null)) {
+            ttsService.setTextInterface(null);
+        }
+    }
 
     public void onWebviewConsoleMessage(ConsoleMessage cm) {
         if (webviewText != null) {
             webviewText.onWebviewConsoleMessage(cm);
         }
     }
-
 
 
     private void updateVolumeDisplay() {
@@ -520,9 +578,154 @@ public class TtsFragment
     }
 
 
-    private void showToastMessage(String text)
-    {
+    private void showToastMessage(String text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+
+    static class EngineInfo {
+        String label;
+        String packageName;
+    }
+    
+    static class VoiceInfo {
+        String name;
+        String lang;
+        String countryDetails;
+        String displayName;
+        EngineInfo engine;
+    }
+
+    private void getTtsEngines() {
+        Log.d(LOG_TAG, "getTtsEngines");
+        if (ttsEngines == null) {
+            final Intent ttsIntent = new Intent();
+            ttsIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+            final PackageManager pm = getActivity().getPackageManager();
+            List<ResolveInfo> resolveInfoList = pm.queryIntentActivities(ttsIntent, PackageManager.GET_META_DATA);
+            ttsEnginesNumber = resolveInfoList.size();
+            ttsEngines = new ArrayList();
+            for (ResolveInfo resolveInfo : resolveInfoList) {
+                EngineInfo engineInfo = new EngineInfo();
+                engineInfo.label = resolveInfo.loadLabel(pm).toString();
+                engineInfo.packageName = resolveInfo.activityInfo.applicationInfo.packageName;
+                Log.d(LOG_TAG, "getTtsEngines: " + engineInfo.packageName + ": " + engineInfo.label);
+                ttsEngines.add(engineInfo);
+                Intent getVoicesIntent = new Intent();
+                getVoicesIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+                getVoicesIntent.setPackage(engineInfo.packageName);
+                getVoicesIntent.getStringArrayListExtra(TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES);
+                startActivityForResult(getVoicesIntent, ttsEngines.size() - 1);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        Log.d(LOG_TAG, "onActivityResult: requestCode: " + requestCode + ", resultCode: " + resultCode);
+        if ((resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
+                && (data != null) && data.hasExtra("availableVoices")
+                && (requestCode >= 0) && (requestCode < ttsEngines.size()))
+        {
+            ArrayList<String> availableVoices = data.getStringArrayListExtra("availableVoices");
+            EngineInfo engineInfo = ttsEngines.get(requestCode);
+            Log.d(LOG_TAG, "onActivityResult: " + engineInfo.label + " voices = " + availableVoices.toString());
+            for(String voiceName: availableVoices) {
+                VoiceInfo voiceInfo = new VoiceInfo();
+                voiceInfo.name = voiceName;
+                voiceInfo.engine = engineInfo;
+                int separatorIndex = voiceName.indexOf("-");
+                if (separatorIndex >= 0) {
+                    voiceInfo.lang = voiceName.substring(0, separatorIndex);
+                    voiceInfo.countryDetails = voiceName.substring(separatorIndex + 1);
+                    voiceInfo.displayName = engineInfo.label + ":" + voiceInfo.countryDetails;
+                } else {
+                    voiceInfo.lang = voiceName;
+                    voiceInfo.countryDetails = "";
+                    voiceInfo.displayName = engineInfo.label;
+                }
+                synchronized (ttsVoiceByLanguage) {
+                    if ( ! ttsVoiceByLanguage.containsKey(voiceInfo.lang)) {
+                        ttsVoiceByLanguage.put(voiceInfo.lang, new ArrayList());
+                    }
+                    ttsVoiceByLanguage.get(voiceInfo.lang).add(voiceInfo);
+                }
+            }
+        }
+        activityResultNumber++;
+        if (activityResultNumber == ttsEnginesNumber) {
+            // Sort language list:
+            ttsLanguages = new ArrayList(ttsVoiceByLanguage.keySet());
+            Collections.sort(ttsLanguages, String.CASE_INSENSITIVE_ORDER);
+            // sort voice lists by displayName:
+            for(List<VoiceInfo> voices: ttsVoiceByLanguage.values()) {
+                Collections.sort(voices, new Comparator<VoiceInfo>() {
+                    @Override
+                    public int compare(VoiceInfo lhs, VoiceInfo rhs) {
+                        return lhs.displayName.compareTo(rhs.displayName);
+                    }
+                });
+            }
+            updateLanguageSpinnerData();
+        }
+    }
+
+    private synchronized void updateLanguageSpinnerData() {
+        Log.d(LOG_TAG, "updateLanguageSpinnerData");
+        if ((ttsEngines != null)
+                && (activityResultNumber == ttsEnginesNumber)
+                && (spinnerLanguageAdapter != null))
+        {
+            spinnerLanguageAdapter.setNotifyOnChange(false);
+            spinnerLanguageAdapter.clear();
+            for(String lang: ttsLanguages) {
+                spinnerLanguageAdapter.add(lang);
+            }
+            String voice = settings.getString(Settings.TTS_VOICE, "");
+            String language = voice.indexOf("-") >= 0 ?
+                    voice.substring(0, voice.indexOf("-")) : voice;
+            spinnerLanguage.setSelection(ttsLanguages.indexOf(language));
+            spinnerLanguageAdapter.notifyDataSetChanged();
+            spinnerLanguageAdapter.setNotifyOnChange(true);
+        }
+    }
+
+    private void onLanguageSelectionChanged() {
+        Log.d(LOG_TAG, "onLanguageSelectionChanged");
+        spinnerVoiceAdapter.setNotifyOnChange(false);
+        spinnerVoiceAdapter.clear();
+        int languagePosition = spinnerLanguage.getSelectedItemPosition();
+        String language = ttsLanguages.get(languagePosition);
+        String languageVoicePreference = settings.getString(Settings.TTS_LANGUAGE_VOICE + language, "");
+        int voicePositionToSelect = 0;
+        for (VoiceInfo voiceInfo : ttsVoiceByLanguage.get(language)) {
+            spinnerVoiceAdapter.add(voiceInfo.displayName);
+            if (voiceInfo.displayName.equals(languageVoicePreference)) {
+                voicePositionToSelect = spinnerVoiceAdapter.getCount() - 1;
+            }
+        }
+        spinnerVoice.setSelection(voicePositionToSelect);
+        spinnerVoiceAdapter.setNotifyOnChange(true);
+        spinnerVoiceAdapter.notifyDataSetChanged();
+        onVoiceSelectionChanged();
+    }
+
+    private void onVoiceSelectionChanged() {
+        Log.d(LOG_TAG, "onVoiceSelectionChanged");
+        int voicePosition = spinnerVoice.getSelectedItemPosition();
+        int languagePosition = spinnerLanguage.getSelectedItemPosition();
+        if ((voicePosition >=0) && (languagePosition >=0)) {
+            String language = ttsLanguages.get(languagePosition);
+            VoiceInfo voiceInfo = ttsVoiceByLanguage.get(language).get(voicePosition);
+            if (voiceInfo != null) {
+                if (ttsService != null) {
+                    ttsService.setEngineAndVoice(voiceInfo.engine.packageName, voiceInfo.name);
+                }
+                settings.setString(Settings.TTS_ENGINE, voiceInfo.engine.packageName);
+                settings.setString(Settings.TTS_VOICE, voiceInfo.name);
+                settings.setString(Settings.TTS_LANGUAGE_VOICE + voiceInfo.lang, voiceInfo.displayName);
+            }
+        }
     }
 
 }

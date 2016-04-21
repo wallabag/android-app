@@ -146,35 +146,49 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:visibility="gone"
-            android:id="@+id/notImplemented3"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Language"
-                android:id="@+id/btnTTSLanguage"
-                android:layout_weight="1" />
+                android:id="@+id/spinnerLanguage"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.3"
+                android:textAlignment="center"
+                android:layout_gravity="center" />
 
-            <Button
-                style="?android:attr/buttonStyleSmall"
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerVoice"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.5"
+                android:layout_gravity="center" />
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Voice"
-                android:id="@+id/btnTTSVoice"
-                android:layout_weight="1" />
+                android:id="@+id/imgviewTTSContinue"
+                android:src="@drawable/ic_redo_24dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="10dp"
+                android:clickable="true"
+                android:visibility="gone" />
 
             <CheckBox
                 android:id="@+id/chkbxTTSContinue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
-                android:layout_weight="0" />
+                android:checked="false"
+                android:layout_gravity="center_vertical|right"
+                android:visibility="gone" />
 
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout

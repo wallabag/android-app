@@ -461,6 +461,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openArticle(Long id) {
+        if (ttsFragment != null) {
+            ttsFragment.onOpenNewArticle();
+        }
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
@@ -469,7 +472,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
 
-    private boolean openPreviousArticle() {
+    public boolean openPreviousArticle() {
         if(previousArticleID != null) {
             openArticle(previousArticleID);
             return true;
@@ -479,7 +482,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return false;
     }
 
-    private boolean openNextArticle() {
+    public boolean openNextArticle() {
         if(nextArticleID != null) {
             openArticle(nextArticleID);
             return true;

@@ -31,6 +31,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -109,6 +110,8 @@ public class TtsService
 
 
     private TextToSpeech tts;
+    private String ttsEngine;
+    private String ttsVoice;
     private AudioManager audioManager;
     private MediaSessionCompat mediaSession;
     private MediaPlayer mediaPlayerPageFlip;
@@ -149,10 +152,16 @@ public class TtsService
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
         isTTSInitialized = false;
+        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             this.tts = new TextToSpeech(getApplicationContext(), this);
+            this.ttsEngine = tts.getDefaultEngine();
         } else {
+            this.ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
             this.tts = new TextToSpeech(getApplicationContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
+            if (ttsEngine.equals("")) {
+                this.ttsEngine = tts.getDefaultEngine();
+            }
         }
         noisyReceiver = new BroadcastReceiver() {
             @Override
@@ -186,6 +195,14 @@ public class TtsService
             @Override
             public void onFastForward() {
                 fastForwardCmd();
+            }
+            @Override
+            public void onSkipToNext() {
+                skipToNextCmd();
+            }
+            @Override
+            public void onSkipToPrevious() {
+                skipToPreviousCmd();
             }
             @Override
             public void onStop() {
@@ -384,6 +401,18 @@ public class TtsService
         stopSelf();
     }
 
+    public void skipToNextCmd() {
+        if (this.textInterface != null) {
+            this.textInterface.skipToNext();
+        }
+    }
+
+    public void skipToPreviousCmd() {
+        if (this.textInterface != null) {
+            this.textInterface.skipToPrevious();
+        }
+    }
+
     private void speak() {
         Log.d(LOG_TAG, "speak");
         assert(state == State.PLAYING);
@@ -476,6 +505,7 @@ public class TtsService
                     onSpeakDone(utteranceId);
                 }
             });
+            tts.setLanguage(convertVoiceNameToLocale(ttsVoice));
             isTTSInitialized = true;
             tts.setSpeechRate(speed);
             tts.setPitch(pitch);
@@ -519,6 +549,67 @@ public class TtsService
 
     public float getPitch() {
         return pitch;
+    }
+
+    public void setEngineAndVoice(String engine, String voice) {
+        Log.d(LOG_TAG, "setEngineAndVoice " + engine + " " + voice);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            if ( ! engine.equals(this.ttsEngine)) {
+                this.ttsEngine = engine;
+                if (tts != null) {
+                    if (state == State.PLAYING) {
+                        pauseCmd(State.WANT_TO_PLAY);
+                    }
+                    isTTSInitialized = false;
+                    final TextToSpeech ttsToShutdown = tts;
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            ttsToShutdown.setOnUtteranceCompletedListener(null);
+                            ttsToShutdown.stop();
+                            ttsToShutdown.shutdown();
+                        }
+                    }.start();
+                    tts = new TextToSpeech(getApplicationContext(), this, engine);
+                }
+            }
+        }
+        if ( ! voice.equals(this.ttsVoice)) {
+            this.ttsVoice = voice;
+            if (isTTSInitialized) {
+                tts.setLanguage(convertVoiceNameToLocale(voice));
+                if (state == State.PLAYING) {
+                    speak();
+                }
+            }
+        }
+    }
+
+    public String getEngine() {
+        return this.ttsEngine;
+    }
+
+    public String getVoice() {
+        return this.ttsVoice;
+    }
+
+    private Locale convertVoiceNameToLocale(String voiceName) {
+        String language;
+        String country = "";
+        String variant = "";
+        int separatorIndex = voiceName.indexOf("-");
+        if (separatorIndex >= 0) {
+            language = voiceName.substring(0, separatorIndex);
+            country = voiceName.substring(separatorIndex + 1);
+            separatorIndex = country.indexOf("-");
+            if (separatorIndex >= 0) {
+                variant = country.substring(separatorIndex + 1);
+                country = country.substring(0, separatorIndex);
+            }
+        } else {
+            language = voiceName;
+        }
+        return new Locale(language, country, variant);
     }
 
 
@@ -579,8 +670,8 @@ public class TtsService
                         | PlaybackStateCompat.ACTION_PLAY_PAUSE
                         | PlaybackStateCompat.ACTION_REWIND
                         | PlaybackStateCompat.ACTION_FAST_FORWARD
-                        // | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                        // | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
                         | PlaybackStateCompat.ACTION_STOP
                 )
                 .setState(this.state.playbackState,
@@ -632,10 +723,10 @@ public class TtsService
                 builder.addAction(generateAction(android.R.drawable.ic_media_play, "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
             }
             builder.addAction(generateAction(android.R.drawable.ic_media_ff, "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-            //builder.addAction( generateAction( android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT ) );
+            builder.addAction( generateAction( android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT ) );
         }
         builder.setStyle(new NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0,1,2)
+                .setShowActionsInCompactView(0,1,2, 3)
                 //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
                 .setMediaSession(mediaSession.getSessionToken())
                 .setShowCancelButton(true)

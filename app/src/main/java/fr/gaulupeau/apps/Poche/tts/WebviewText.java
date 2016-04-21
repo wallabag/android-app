@@ -8,18 +8,23 @@ import android.widget.ScrollView;
 
 import java.util.Vector;
 
+import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
+
 /**
  * TextInterface to navigate in a Webview.
  */
 public class WebviewText implements TextInterface {
 
+    private final ReadArticleActivity readArticleActivity;
     private final WebView webView;
     private final ScrollView scrollView;
     private final Handler handler;
 
     private final Vector<TextItem> textList = new Vector<>();
     private volatile int current;
-    private Runnable callback;
+    private Runnable parsedCallback;
+    private Runnable onReadFinishedCallback;
+
 
 
     private final String WEBVIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
@@ -75,17 +80,22 @@ public class WebviewText implements TextInterface {
     private static final String LOG_TAG = "WebviewText";
 
 
-    public WebviewText(WebView webView, ScrollView scrollView) {
+    public WebviewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
         this.webView = webView;
         this.scrollView = scrollView;
+        this.readArticleActivity = readArticleActivity;
         this.handler = new Handler();
+    }
+
+    public void setOnReadFinishedCallback(Runnable onReadFinishedCallback) {
+        this.onReadFinishedCallback = onReadFinishedCallback;
     }
 
     public void parseWebviewDocument(Runnable callback)
     {
         Log.d(LOG_TAG, "parseWebviewDocument");
         this.textList.clear();
-        this.callback = callback;
+        this.parsedCallback = callback;
         webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
     }
 
@@ -95,8 +105,8 @@ public class WebviewText implements TextInterface {
 
     private void onDocumentParseEnd() {
         Log.d(LOG_TAG, "onDocumentParseEnd");
-        if (callback != null) {
-            callback.run();
+        if (parsedCallback != null) {
+            parsedCallback.run();
         }
     }
 
@@ -157,6 +167,7 @@ public class WebviewText implements TextInterface {
             current = current + 1;
             result = true;
         } else {
+            handler.post(onReadFinishedCallback);
             result = false;
         }
         ensureTextRangeVisibleOnScreen(false);
@@ -243,7 +254,15 @@ public class WebviewText implements TextInterface {
         return result;
     }
 
+    @Override
+    public boolean skipToNext() {
+        return readArticleActivity.openNextArticle();
+    }
 
+    @Override
+    public boolean skipToPrevious() {
+        return readArticleActivity.openPreviousArticle();
+    }
 
     @Override
     public void restoreCurrent() {

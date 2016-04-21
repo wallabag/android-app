@@ -9,6 +9,8 @@ public interface TextInterface {
     boolean next();
     boolean fastForward();
     boolean rewind();
+    boolean skipToNext();
+    boolean skipToPrevious();
     float   getTime();
     float   getTotalDuration();
 }

@@ -36,6 +36,8 @@ public class Settings {
     public static final String TTS_PITCH = "tts.pitch";
     public static final String TTS_ENGINE = "tts.engine";
     public static final String TTS_VOICE = "tts.voice";
+    public static final String TTS_LANGUAGE_VOICE = "tts.language_voice:";
+    public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
 
     private SharedPreferences pref;
 
