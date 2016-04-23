@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +28,6 @@ import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -46,9 +46,9 @@ import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Text To Speech (TTS) User Interface.
@@ -79,17 +79,18 @@ public class TtsFragment
     private BroadcastReceiver volumeChangeReceiver;
     private MediaControllerCompat.Callback mediaCallback;
     private PendingIntent notificationPendingIntent;
-    private boolean isOpeningNewArticle;
+    private boolean dontStopTtsService;
     private int activityResultNumber;
     private int ttsEnginesNumber;
 
-    private static ArrayList<EngineInfo> ttsEngines = null;
-    private static ArrayList<String> ttsLanguages = new ArrayList();
+    private static ArrayList<DisplayName> ttsEngines = null;
+    private static ArrayList<DisplayName> ttsLanguages = new ArrayList();
     private static HashMap<String, List<VoiceInfo>> ttsVoiceByLanguage = new HashMap();
     private static NumberFormat percentFormat;
     private static final String LOG_TAG = "TtsFragment";
     private static final float MAX_TTS_SPEED = 4.0F;
     private static final float MAX_TTS_PITCH = 2.0F;
+    private static final int REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS = 60000;
 
     protected ServiceConnection serviceConnection;
 
@@ -424,8 +425,8 @@ public class TtsFragment
         if (getArguments().getBoolean("autoplay")) {
             intent.setAction("PLAY");
         }
+        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         getActivity().startService(intent);
-
         return view;
     }
 
@@ -433,9 +434,12 @@ public class TtsFragment
     public void onDestroyView() {
         Log.d(LOG_TAG, "onDestroyView");
         super.onDestroyView();
-        if ((ttsService != null) && (!isOpeningNewArticle)) {
-            Intent intent = new Intent(getContext(), TtsService.class);
-            getActivity().stopService(intent);
+        if (ttsService != null) {
+            getActivity().unbindService(serviceConnection);
+            if (!dontStopTtsService) {
+                Intent intent = new Intent(getContext(), TtsService.class);
+                getActivity().stopService(intent);
+            }
         }
         serviceConnection = null;
     }
@@ -443,16 +447,12 @@ public class TtsFragment
     @Override
     public void onStart() {
         Log.d(LOG_TAG, "onStart");
-        Intent intent = new Intent(getActivity(), TtsService.class);
-        getActivity().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-        getActivity().startService(intent);
         super.onStart();
     }
 
     @Override
     public void onStop() {
         Log.d(LOG_TAG, "onStop");
-        getActivity().unbindService(serviceConnection);
         super.onStop();
     }
 
@@ -473,6 +473,13 @@ public class TtsFragment
         if (ttsService != null) {
             ttsService.setVisible(true, notificationPendingIntent);
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        //dontStopTtsService = true;
+        //FIXME: do what is necessary to continue or restart TTS
+        super.onConfigurationChanged(newConfig);
     }
 
 
@@ -523,13 +530,15 @@ public class TtsFragment
 
     public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
         Log.d(LOG_TAG, "onDocumentLoadFinished");
-        webviewText = new WebviewText(webView, scrollView, readArticleActivity);
-        webviewText.setOnReadFinishedCallback(new Runnable() {
-            @Override
-            public void run() {
-                onReadFinished();
-            }
-        });
+        if (webviewText == null) {
+            webviewText = new WebviewText(webView, scrollView, readArticleActivity);
+            webviewText.setOnReadFinishedCallback(new Runnable() {
+                @Override
+                public void run() {
+                    onReadFinished();
+                }
+            });
+        }
         webviewText.parseWebviewDocument(new Runnable() {
             public void run() {
                 documentParsed = true;
@@ -547,7 +556,7 @@ public class TtsFragment
                     @Override
                     public void run() {
                         if (ttsService != null) {
-                            ttsService.playCmd();
+                            ttsService.playFromStartCmd();
                         }
                     }
                 }, 1500);
@@ -556,16 +565,18 @@ public class TtsFragment
     }
 
     public void onOpenNewArticle() {
-        this.isOpeningNewArticle = true;
+        this.dontStopTtsService = true;
         if ((ttsService != null)) {
             ttsService.setTextInterface(null);
         }
     }
 
-    public void onWebviewConsoleMessage(ConsoleMessage cm) {
+    public boolean onWebviewConsoleMessage(ConsoleMessage cm) {
+        boolean result = false;
         if (webviewText != null) {
-            webviewText.onWebviewConsoleMessage(cm);
+            result = webviewText.onWebviewConsoleMessage(cm);
         }
+        return result;
     }
 
 
@@ -583,17 +594,24 @@ public class TtsFragment
     }
 
 
-    static class EngineInfo {
-        String label;
-        String packageName;
-    }
-    
-    static class VoiceInfo {
+    static class DisplayName implements Comparable<DisplayName> {
         String name;
-        String lang;
-        String countryDetails;
         String displayName;
-        EngineInfo engine;
+        DisplayName() {}
+        DisplayName(String name, String displayName) {
+            this.name = name;
+            this.displayName = displayName;
+        }
+        @Override
+        public int compareTo(DisplayName another) {
+            return this.displayName.compareTo(another.displayName);
+        }
+    }
+
+    static class VoiceInfo extends DisplayName {
+        String language;
+        String countryDetails;
+        DisplayName engineInfo;
     }
 
     private void getTtsEngines() {
@@ -606,14 +624,14 @@ public class TtsFragment
             ttsEnginesNumber = resolveInfoList.size();
             ttsEngines = new ArrayList();
             for (ResolveInfo resolveInfo : resolveInfoList) {
-                EngineInfo engineInfo = new EngineInfo();
-                engineInfo.label = resolveInfo.loadLabel(pm).toString();
-                engineInfo.packageName = resolveInfo.activityInfo.applicationInfo.packageName;
-                Log.d(LOG_TAG, "getTtsEngines: " + engineInfo.packageName + ": " + engineInfo.label);
+                DisplayName engineInfo = new DisplayName(
+                    resolveInfo.activityInfo.applicationInfo.packageName,
+                    resolveInfo.loadLabel(pm).toString());
+                Log.d(LOG_TAG, "getTtsEngines: " + engineInfo.name + ": " + engineInfo.displayName);
                 ttsEngines.add(engineInfo);
                 Intent getVoicesIntent = new Intent();
                 getVoicesIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-                getVoicesIntent.setPackage(engineInfo.packageName);
+                getVoicesIntent.setPackage(engineInfo.name);
                 getVoicesIntent.getStringArrayListExtra(TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES);
                 startActivityForResult(getVoicesIntent, ttsEngines.size() - 1);
             }
@@ -623,50 +641,54 @@ public class TtsFragment
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         Log.d(LOG_TAG, "onActivityResult: requestCode: " + requestCode + ", resultCode: " + resultCode);
-        if ((resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
-                && (data != null) && data.hasExtra("availableVoices")
-                && (requestCode >= 0) && (requestCode < ttsEngines.size()))
-        {
-            ArrayList<String> availableVoices = data.getStringArrayListExtra("availableVoices");
-            EngineInfo engineInfo = ttsEngines.get(requestCode);
-            Log.d(LOG_TAG, "onActivityResult: " + engineInfo.label + " voices = " + availableVoices.toString());
-            for(String voiceName: availableVoices) {
-                VoiceInfo voiceInfo = new VoiceInfo();
-                voiceInfo.name = voiceName;
-                voiceInfo.engine = engineInfo;
-                int separatorIndex = voiceName.indexOf("-");
-                if (separatorIndex >= 0) {
-                    voiceInfo.lang = voiceName.substring(0, separatorIndex);
-                    voiceInfo.countryDetails = voiceName.substring(separatorIndex + 1);
-                    voiceInfo.displayName = engineInfo.label + ":" + voiceInfo.countryDetails;
-                } else {
-                    voiceInfo.lang = voiceName;
-                    voiceInfo.countryDetails = "";
-                    voiceInfo.displayName = engineInfo.label;
-                }
-                synchronized (ttsVoiceByLanguage) {
-                    if ( ! ttsVoiceByLanguage.containsKey(voiceInfo.lang)) {
-                        ttsVoiceByLanguage.put(voiceInfo.lang, new ArrayList());
+        if (requestCode == REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS) {
+            if (ttsService != null) {
+                ttsService.setEngineAndVoice(ttsService.getEngine(), ttsService.getVoice());
+            }
+        } else if ((requestCode >= 0) && (requestCode < ttsEngines.size())) {
+            if ((resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS)
+                    && (data != null) && data.hasExtra("availableVoices")) {
+                ArrayList<String> availableVoices = data.getStringArrayListExtra("availableVoices");
+                DisplayName engineInfo = ttsEngines.get(requestCode);
+                Log.d(LOG_TAG, "onActivityResult: " + engineInfo.displayName + " voices = " + availableVoices.toString());
+                for (String voiceName : availableVoices) {
+                    VoiceInfo voiceInfo = new VoiceInfo();
+                    voiceInfo.name = voiceName;
+                    voiceInfo.engineInfo = engineInfo;
+                    int separatorIndex = voiceName.indexOf("-");
+                    if (separatorIndex >= 0) {
+                        voiceInfo.language = voiceName.substring(0, separatorIndex);
+                        voiceInfo.countryDetails = voiceName.substring(separatorIndex + 1);
+                        voiceInfo.displayName = engineInfo.displayName + ":" + voiceInfo.countryDetails;
+                    } else {
+                        voiceInfo.language = voiceName;
+                        voiceInfo.countryDetails = "";
+                        voiceInfo.displayName = engineInfo.displayName;
                     }
-                    ttsVoiceByLanguage.get(voiceInfo.lang).add(voiceInfo);
+                    synchronized (ttsVoiceByLanguage) {
+                        if (!ttsVoiceByLanguage.containsKey(voiceInfo.language)) {
+                            ttsVoiceByLanguage.put(voiceInfo.language, new ArrayList());
+                        }
+                        ttsVoiceByLanguage.get(voiceInfo.language).add(voiceInfo);
+                    }
                 }
             }
-        }
-        activityResultNumber++;
-        if (activityResultNumber == ttsEnginesNumber) {
-            // Sort language list:
-            ttsLanguages = new ArrayList(ttsVoiceByLanguage.keySet());
-            Collections.sort(ttsLanguages, String.CASE_INSENSITIVE_ORDER);
-            // sort voice lists by displayName:
-            for(List<VoiceInfo> voices: ttsVoiceByLanguage.values()) {
-                Collections.sort(voices, new Comparator<VoiceInfo>() {
-                    @Override
-                    public int compare(VoiceInfo lhs, VoiceInfo rhs) {
-                        return lhs.displayName.compareTo(rhs.displayName);
-                    }
-                });
+            activityResultNumber++;
+            if (activityResultNumber == ttsEnginesNumber) {
+                // Sort languages by displayName:
+                ttsLanguages = new ArrayList(ttsVoiceByLanguage.size());
+                for (String language : ttsVoiceByLanguage.keySet()) {
+                    ttsLanguages.add(new DisplayName(
+                            language,
+                            new Locale(language).getDisplayLanguage()));
+                }
+                Collections.sort(ttsLanguages);
+                // sort voice lists by displayName:
+                for (List<VoiceInfo> voices : ttsVoiceByLanguage.values()) {
+                    Collections.sort(voices);
+                }
+                updateLanguageSpinnerData();
             }
-            updateLanguageSpinnerData();
         }
     }
 
@@ -676,15 +698,19 @@ public class TtsFragment
                 && (activityResultNumber == ttsEnginesNumber)
                 && (spinnerLanguageAdapter != null))
         {
-            spinnerLanguageAdapter.setNotifyOnChange(false);
-            spinnerLanguageAdapter.clear();
-            for(String lang: ttsLanguages) {
-                spinnerLanguageAdapter.add(lang);
-            }
             String voice = settings.getString(Settings.TTS_VOICE, "");
             String language = voice.indexOf("-") >= 0 ?
                     voice.substring(0, voice.indexOf("-")) : voice;
-            spinnerLanguage.setSelection(ttsLanguages.indexOf(language));
+            spinnerLanguageAdapter.setNotifyOnChange(false);
+            spinnerLanguageAdapter.clear();
+            int langugagePositionToSelec = 0;
+            for(DisplayName lang: ttsLanguages) {
+                spinnerLanguageAdapter.add(lang.displayName);
+                if (lang.name.equals(language)) {
+                    langugagePositionToSelec = spinnerLanguageAdapter.getCount() - 1;
+                }
+            }
+            spinnerLanguage.setSelection(langugagePositionToSelec);
             spinnerLanguageAdapter.notifyDataSetChanged();
             spinnerLanguageAdapter.setNotifyOnChange(true);
         }
@@ -695,7 +721,7 @@ public class TtsFragment
         spinnerVoiceAdapter.setNotifyOnChange(false);
         spinnerVoiceAdapter.clear();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
-        String language = ttsLanguages.get(languagePosition);
+        String language = ttsLanguages.get(languagePosition).name;
         String languageVoicePreference = settings.getString(Settings.TTS_LANGUAGE_VOICE + language, "");
         int voicePositionToSelect = 0;
         for (VoiceInfo voiceInfo : ttsVoiceByLanguage.get(language)) {
@@ -715,15 +741,33 @@ public class TtsFragment
         int voicePosition = spinnerVoice.getSelectedItemPosition();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
         if ((voicePosition >=0) && (languagePosition >=0)) {
-            String language = ttsLanguages.get(languagePosition);
+            String language = ttsLanguages.get(languagePosition).name;
             VoiceInfo voiceInfo = ttsVoiceByLanguage.get(language).get(voicePosition);
             if (voiceInfo != null) {
                 if (ttsService != null) {
-                    ttsService.setEngineAndVoice(voiceInfo.engine.packageName, voiceInfo.name);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                        // Cannot programatically change TTS Engine with older Android,
+                        // We redirect the user to TTS Settings:
+                        String curTtsEngine = ttsService.getEngine();
+                        if ( ! ((curTtsEngine == null)
+                                ||"".equals(curTtsEngine)
+                                || voiceInfo.engineInfo.name.equals(curTtsEngine)))
+                        {
+                            Intent intent = new Intent();
+                            intent.setAction("com.android.settings.TTS_SETTINGS");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            this.startActivity(intent);
+                            startActivityForResult(intent, REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS);
+                        } else {
+                            ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
+                        }
+                    } else {
+                        ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
+                    }
                 }
-                settings.setString(Settings.TTS_ENGINE, voiceInfo.engine.packageName);
+                settings.setString(Settings.TTS_ENGINE, voiceInfo.engineInfo.name);
                 settings.setString(Settings.TTS_VOICE, voiceInfo.name);
-                settings.setString(Settings.TTS_LANGUAGE_VOICE + voiceInfo.lang, voiceInfo.displayName);
+                settings.setString(Settings.TTS_LANGUAGE_VOICE + voiceInfo.language, voiceInfo.displayName);
             }
         }
     }

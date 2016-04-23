@@ -21,6 +21,7 @@ public class WebviewText implements TextInterface {
     private final Handler handler;
 
     private final Vector<TextItem> textList = new Vector<>();
+    private volatile int parsedSize;
     private volatile int current;
     private Runnable parsedCallback;
     private Runnable onReadFinishedCallback;
@@ -29,53 +30,53 @@ public class WebviewText implements TextInterface {
 
     private final String WEBVIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
     private final String JAVASCRIPT_PARSE_DOCUMENT_TEXT = "" +
-            "function nextDomElem(elem) {" +
-            "    var result;" +
-            "    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT') {" +
-            "        result = elem.firstChild;" +
-            "    } else {" +
-            "        result = elem.nextSibling;" +
-            "        while((result == null) && (elem != null)) {" +
-            "            elem = elem.parentNode;" +
-            "            if (elem != null) {" +
-            "                result = elem.nextSibling;" +
-            "            }" +
-            "        }" +
-            "    }" +
-            "    return result;" +
-            "}" +
-            "" +
-            "function nextTextElem(elem) {" +
-            "    while(elem = nextDomElem(elem)) {" +
-            "        if ((elem.nodeType == 3) && (elem.textContent.trim().length > 0)) {" +
-            "            break;" +
-            "        }" +
-            "    }" +
-            "    return elem;" +
-            "}" +
-            "" +
-            "function cmdStart() {" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "start');" +
-            "}" +
-            "function cmdEnd() {" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "end');" +
-            "}" +
-            "function cmdText(text, top, bottom) {" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);" +
-            "}" +
-            "" +
-            "function parseDocumentText() {" +
-            "    var elem = document.getElementsByTagName('body')[0];" +
-            "    var range = document.createRange();" +
-            "    cmdStart();" +
-            "    while(elem = nextTextElem(elem)) {" +
-            "        range.selectNode(elem);" +
-            "        var rect = range.getBoundingClientRect();" +
-            "        var text = elem.textContent.trim();" +
-            "        cmdText(text, rect.top, rect.bottom);" +
-            "    }" +
-            "    cmdEnd();" +
-            "}";
+            "function nextDomElem(elem) {\n" +
+            "    var result;\n" +
+            "    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT') {\n" +
+            "        result = elem.firstChild;\n" +
+            "    } else {\n" +
+            "        result = elem.nextSibling;\n" +
+            "        while((result == null) && (elem != null)) {\n" +
+            "            elem = elem.parentNode;\n" +
+            "            if (elem != null) {\n" +
+            "                result = elem.nextSibling;\n" +
+            "            }\n" +
+            "        }\n" +
+            "    }\n" +
+            "    return result;\n" +
+            "}\n" +
+            "\n" +
+            "function nextTextElem(elem) {\n" +
+            "    while(elem = nextDomElem(elem)) {\n" +
+            "        if ((elem.nodeType == 3) && (elem.textContent.trim().length > 0)) {\n" +
+            "            break;\n" +
+            "        }\n" +
+            "    }\n" +
+            "    return elem;\n" +
+            "}\n" +
+            "\n" +
+            "function cmdStart() {\n" +
+            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "start');\n" +
+            "}\n" +
+            "function cmdEnd() {\n" +
+            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "end');\n" +
+            "}\n" +
+            "function cmdText(text, top, bottom) {\n" +
+            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);\n" +
+            "}\n" +
+            "\n" +
+            "function parseDocumentText() {\n" +
+            "    var elem = document.getElementsByTagName('body')[0];\n" +
+            "    var range = document.createRange();\n" +
+            "    cmdStart();\n" +
+            "    while(elem = nextTextElem(elem)) {\n" +
+            "        range.selectNode(elem);\n" +
+            "        var rect = range.getBoundingClientRect();\n" +
+            "        var text = elem.textContent.trim();\n" +
+            "        cmdText(text, rect.top, rect.bottom);\n" +
+            "    }\n" +
+            "    cmdEnd();\n" +
+            "}\n";
 
     private static final String LOG_TAG = "WebviewText";
 
@@ -94,7 +95,7 @@ public class WebviewText implements TextInterface {
     public void parseWebviewDocument(Runnable callback)
     {
         Log.d(LOG_TAG, "parseWebviewDocument");
-        this.textList.clear();
+        this.parsedSize = 0;
         this.parsedCallback = callback;
         webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
     }
@@ -105,6 +106,7 @@ public class WebviewText implements TextInterface {
 
     private void onDocumentParseEnd() {
         Log.d(LOG_TAG, "onDocumentParseEnd");
+        this.textList.setSize(this.parsedSize);
         if (parsedCallback != null) {
             parsedCallback.run();
         }
@@ -113,12 +115,21 @@ public class WebviewText implements TextInterface {
     private void onDocumentParseItem(String text, float top, float bottom) {
         top = convertWebviewToScreenY(top);
         bottom = convertWebviewToScreenY(bottom);
-        Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
-        textList.add(new TextItem(text, top, bottom));
+        //Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
+        parsedSize = parsedSize + 1;
+        if (parsedSize > this.textList.size()) {
+            textList.add(new TextItem(text, top, bottom));
+        } else {
+            TextItem item = textList.get(parsedSize - 1);
+            item.text = text;
+            item.top = top;
+            item.bottom = bottom;
+        }
     }
 
-    public void onWebviewConsoleMessage(ConsoleMessage cm)
+    public boolean onWebviewConsoleMessage(ConsoleMessage cm)
     {
+        boolean result = false;
         // It is insecure to use WebView.addJavascriptInterface with older
         // version of Android, so we use console.log() instead.
         // We catch the command send through the log done by the code
@@ -141,12 +152,15 @@ public class WebviewText implements TextInterface {
                     String text= content.substring(separator2 + 1);
                     onDocumentParseItem(text, top, bottom);
                 }
+                result = true;
             }
         }
+        return result;
     }
 
     @Override
     public String getText(int relativeIndex) {
+        //Log.d(LOG_TAG, "getText(" + relativeIndex + "), current=" + current);
         int i = current + relativeIndex;
         if ( (i >= 0) && (i < textList.size())) {
             return textList.get(i).text;
@@ -161,7 +175,7 @@ public class WebviewText implements TextInterface {
      */
     @Override
     public boolean next() {
-        Log.d(LOG_TAG, "next, current=" + current);
+        //Log.d(LOG_TAG, "next, current=" + current);
         boolean result;
         if (current < (textList.size() - 1)) {
             current = current + 1;
@@ -265,6 +279,12 @@ public class WebviewText implements TextInterface {
     }
 
     @Override
+    public   void restoreFromStart() {
+        Log.d(LOG_TAG, "restoreFromStart -> current = 0");
+        current = 0;
+    }
+
+    @Override
     public void restoreCurrent() {
         float currentTop = scrollView.getScrollY();
         float currentBottom = currentTop + scrollView.getHeight();
@@ -281,6 +301,7 @@ public class WebviewText implements TextInterface {
             }
         }
         current = result;
+        Log.d(LOG_TAG, "restoreCurrent -> current = " + current);
     }
 
 
@@ -322,7 +343,11 @@ public class WebviewText implements TextInterface {
     private static StringBuilder getRandomText(int length) {
         StringBuilder result = new StringBuilder(length);
         for(int i=0;i<length;i++) {
-            result.append((char)(32 + Math.random() * (127-32)));
+            char c = (char)(32 + Math.random() * (125-32));
+            if (c=='\'' || c=='"' || c=='\\') {
+                c = 'a';
+            }
+            result.append(c);
         }
         return result;
     }

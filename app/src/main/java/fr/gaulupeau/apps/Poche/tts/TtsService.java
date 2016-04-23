@@ -107,6 +107,8 @@ public class TtsService
     private volatile TextInterface textInterface;
     private volatile String utteranceId = "1";
     private HashMap  utteranceParams = new HashMap();
+    private boolean playFromStart;
+
 
 
     private TextToSpeech tts;
@@ -292,6 +294,10 @@ public class TtsService
         }
     }
 
+    public void playFromStartCmd() {
+        playFromStart = true;
+        playCmd();
+    }
 
     public void playCmd() {
         Log.d(LOG_TAG, "playCmd");
@@ -313,7 +319,12 @@ public class TtsService
                 if (isTTSInitialized && isAudioFocusGranted && (textInterface != null))
                 {
                     state = State.PLAYING;
-                    textInterface.restoreCurrent();
+                    if (playFromStart) {
+                        playFromStart = false;
+                        textInterface.restoreFromStart();
+                    } else {
+                        textInterface.restoreCurrent();
+                    }
                     setMediaSessionPlaybackState();
                     setForegroundAndNotification();
                     registerReceiver(noisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
@@ -437,14 +448,14 @@ public class TtsService
                 params.put("utteranceId", utteranceId);
                 this.utteranceParams = params;
             }
-            Log.d(LOG_TAG, "speak " + utteranceId + ": " + text);
+            //Log.d(LOG_TAG, "speak " + utteranceId + ": " + text);
             this.tts.speak(text, queue, params);
         }
     }
 
     private void onSpeakDone(String doneUtteranceId) {
         {
-            Log.d(LOG_TAG, "onSpeakDone " + doneUtteranceId);
+            //Log.d(LOG_TAG, "onSpeakDone " + doneUtteranceId);
             if ((state == State.PLAYING) && utteranceId.equals(doneUtteranceId)) {
                 if (textInterface.next()) {
                     ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, doneUtteranceId);
@@ -499,6 +510,9 @@ public class TtsService
         Log.d(LOG_TAG, "TextToSpeech.OnInitListener.onInit " + status);
         if (status == TextToSpeech.SUCCESS)
         {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                this.ttsEngine = tts.getDefaultEngine();
+            }
             this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
                 public void onUtteranceCompleted(String utteranceId) {
@@ -553,24 +567,37 @@ public class TtsService
 
     public void setEngineAndVoice(String engine, String voice) {
         Log.d(LOG_TAG, "setEngineAndVoice " + engine + " " + voice);
+        boolean resetEngine = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             if ( ! engine.equals(this.ttsEngine)) {
                 this.ttsEngine = engine;
-                if (tts != null) {
-                    if (state == State.PLAYING) {
-                        pauseCmd(State.WANT_TO_PLAY);
+                resetEngine = true;
+            }
+        } else {
+            this.ttsEngine = engine;
+            if ( ! tts.getDefaultEngine().equals(this.ttsEngine)) {
+                resetEngine = true;
+            }
+        }
+        if (resetEngine) {
+            if (tts != null) {
+                if (state == State.PLAYING) {
+                    pauseCmd(State.WANT_TO_PLAY);
+                }
+                isTTSInitialized = false;
+                final TextToSpeech ttsToShutdown = tts;
+                new Thread() {
+                    @Override
+                    public void run() {
+                        ttsToShutdown.setOnUtteranceCompletedListener(null);
+                        ttsToShutdown.stop();
+                        ttsToShutdown.shutdown();
                     }
-                    isTTSInitialized = false;
-                    final TextToSpeech ttsToShutdown = tts;
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            ttsToShutdown.setOnUtteranceCompletedListener(null);
-                            ttsToShutdown.stop();
-                            ttsToShutdown.shutdown();
-                        }
-                    }.start();
+                }.start();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                     tts = new TextToSpeech(getApplicationContext(), this, engine);
+                } else {
+                    tts = new TextToSpeech(getApplicationContext(), this);
                 }
             }
         }

@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            android:layout_marginLeft="2dp">
+            android:layout_marginLeft="2sp"
+            android:layout_marginRight="2sp">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -35,16 +36,18 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView"
                     android:src="@drawable/ic_running_24dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_column="0" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSSpeed"
-                    android:layout_weight="1"
+                    android:layout_weight="0.9"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="5sp" />
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,16 +67,18 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_musical_notes_24dp" />
+                    android:src="@drawable/ic_musical_notes_24dp"
+                    android:layout_column="0" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSPitch"
-                    android:layout_weight="1"
+                    android:layout_weight="0.9"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10sp"
-                    android:layout_marginBottom="10sp" />
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -94,14 +99,18 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView3"
                     android:src="@drawable/ic_volume_up_24dp"
-                    android:layout_gravity="center" />
+                    android:layout_gravity="center"
+                    android:layout_column="0" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSVolume"
-                    android:layout_weight="1"
-                    android:layout_gravity="center" />
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center"
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -123,14 +132,15 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView4"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_snooze_24dp" />
+                    android:src="@drawable/ic_snooze_24dp"
+                    android:layout_column="0" />
 
                 <SeekBar
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSSleep"
                     android:layout_column="1"
-                    android:layout_weight="1"
+                    android:layout_weight="0.9"
                     android:layout_gravity="center" />
 
                 <TextView
@@ -155,9 +165,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerLanguage"
                 android:spinnerMode="dialog"
-                android:layout_weight="0.3"
+                android:layout_weight="0.35"
                 android:textAlignment="center"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
 
 
             <Spinner
@@ -165,8 +177,10 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerVoice"
                 android:spinnerMode="dialog"
-                android:layout_weight="0.5"
-                android:layout_gravity="center" />
+                android:layout_weight="0.45"
+                android:layout_gravity="center"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -174,9 +188,11 @@
                 android:id="@+id/imgviewTTSContinue"
                 android:src="@drawable/ic_redo_24dp"
                 android:layout_gravity="center_vertical|right"
-                android:layout_marginLeft="10dp"
                 android:clickable="true"
-                android:visibility="gone" />
+                android:visibility="visible"
+                android:paddingLeft="10sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
 
             <CheckBox
                 android:id="@+id/chkbxTTSContinue"
@@ -185,7 +201,9 @@
                 android:text=""
                 android:checked="false"
                 android:layout_gravity="center_vertical|right"
-                android:visibility="gone" />
+                android:visibility="visible"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
 
         </LinearLayout>
 

@@ -86,6 +86,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Long previousArticleID;
     private Long nextArticleID;
 
+    private boolean shouldPostponeOnPageFinishedCall;
+    private boolean onPageFinishedCallPostponed;
     private boolean loadingFinished;
 
     private Settings settings;
@@ -199,10 +201,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
-                        cm.lineNumber(), cm.sourceId()));
+                boolean result = false;
                 if (ttsFragment != null) {
-                    ttsFragment.onWebviewConsoleMessage(cm);
+                    result = ttsFragment.onWebviewConsoleMessage(cm);
+                }
+                if ( ! result) {
+                    Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
+                            cm.lineNumber(), cm.sourceId()));
                 }
                 return true;
             }
@@ -560,9 +565,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             mArticle.setArticleProgress(getReadingPosition());
             mArticleDao.update(mArticle);
         }
-
         super.onStop();
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        shouldPostponeOnPageFinishedCall = true;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        shouldPostponeOnPageFinishedCall = false;
+        if (onPageFinishedCallPostponed) {
+            onPageFinishedCallPostponed = false;
+            onPageFinished();
+        }
+    }
+
 
     private double getReadingPosition() {
         String t = "ReadArticle.getPos";
@@ -673,6 +693,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void onPageFinished() {
+        if (shouldPostponeOnPageFinishedCall) {
+            onPageFinishedCallPostponed = true;
+            if (ttsFragment != null) {
+                ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
+            }
+            return;
+        }
         // dirty. Looks like there is no good solution
         webViewContent.postDelayed(new Runnable() {
             int counter;
