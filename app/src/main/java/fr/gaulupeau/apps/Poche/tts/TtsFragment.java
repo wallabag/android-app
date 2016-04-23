@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -55,6 +56,7 @@ import java.util.Locale;
  */
 public class TtsFragment
     extends Fragment {
+
     private ReadArticleActivity readArticleActivity;
     private WebviewText webviewText;
     private Settings settings;
@@ -82,6 +84,8 @@ public class TtsFragment
     private boolean dontStopTtsService;
     private int activityResultNumber;
     private int ttsEnginesNumber;
+    private String artist = "";
+    private String title = "";
 
     private static ArrayList<DisplayName> ttsEngines = null;
     private static ArrayList<DisplayName> ttsLanguages = new ArrayList();
@@ -91,6 +95,7 @@ public class TtsFragment
     private static final float MAX_TTS_SPEED = 4.0F;
     private static final float MAX_TTS_PITCH = 2.0F;
     private static final int REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS = 60000;
+    private static final String METADATA_ALBUM = "Wallabag";
 
     protected ServiceConnection serviceConnection;
 
@@ -109,7 +114,7 @@ public class TtsFragment
 
     @Override
     public void onAttach(Context context) {
-        Log.d(LOG_TAG, "onAttach");
+        //Log.d(LOG_TAG, "onAttach");
         super.onAttach(context);
         this.readArticleActivity = ((ReadArticleActivity) getActivity());
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -128,7 +133,7 @@ public class TtsFragment
 
     @Override
     public void onDetach() {
-        Log.d(LOG_TAG, "onDetach");
+        //Log.d(LOG_TAG, "onDetach");
         super.onDetach();
         readArticleActivity.unregisterReceiver(volumeChangeReceiver);
         readArticleActivity = null;
@@ -136,7 +141,7 @@ public class TtsFragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreate");
+        //Log.d(LOG_TAG, "onCreate");
         super.onCreate(savedInstanceState);
         this.settings = App.getInstance().getSettings();
         Intent mainFocusIntent = new Intent(Intent.ACTION_MAIN);
@@ -144,13 +149,13 @@ public class TtsFragment
         mainFocusIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         notificationPendingIntent = PendingIntent.getActivity(getActivity(), 0, mainFocusIntent, 0);
         if (ttsEngines == null) {
-            getTtsEngines();
+            loadTtsEnginesList();
         }
     }
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "onDestroy");
+        //Log.d(LOG_TAG, "onDestroy");
         super.onDestroy();
     }
 
@@ -178,8 +183,8 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSPrevious = (ImageButton) view.findViewById(R.id.btnTTSPrevious);
-        btnTTSPrevious.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnTTSFastRewind = (ImageButton) view.findViewById(R.id.btnTTSFastRewind);
+        btnTTSFastRewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ttsService != null) {
@@ -188,8 +193,8 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSNext = (ImageButton) view.findViewById(R.id.btnTTSNext);
-        btnTTSNext.setOnClickListener(new View.OnClickListener() {
+        ImageButton btnTTSFastForward = (ImageButton) view.findViewById(R.id.btnTTSFastForward);
+        btnTTSFastForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ttsService != null) {
@@ -207,31 +212,31 @@ public class TtsFragment
             }
         });
 
-        final CheckBox chkbxTTSContinue = (CheckBox) view.findViewById(R.id.chkbxTTSContinue);
-        final ImageView imgviewTTSContinue = (ImageView) view.findViewById(R.id.imgviewTTSContinue);
-        chkbxTTSContinue.setChecked(settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false));
-        View.OnClickListener ttsContinueClickListner = new View.OnClickListener() {
+        final CheckBox chkbxTTSAutoplayNext = (CheckBox) view.findViewById(R.id.chkbxTTSAutoplayNext);
+        final ImageView imgviewTTSAutolpayNext = (ImageView) view.findViewById(R.id.imgviewTTSAutoplayNext);
+        chkbxTTSAutoplayNext.setChecked(settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false));
+        View.OnClickListener ttsAutoplayNextClickListner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, chkbxTTSContinue.isChecked());
-                if (chkbxTTSContinue.isChecked()) {
-                    showToastMessage("Autoplay next article");
+                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, chkbxTTSAutoplayNext.isChecked());
+                if (chkbxTTSAutoplayNext.isChecked()) {
+                    showToastMessage(R.string.ttsAutoplayNextArticle);
                 }
             }
         };
-        chkbxTTSContinue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        chkbxTTSAutoplayNext.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, isChecked);
                 if (isChecked) {
-                    showToastMessage("Autoplay next article");
+                    showToastMessage(R.string.ttsAutoplayNextArticle);
                 }
             }
         });
-        imgviewTTSContinue.setOnClickListener(new View.OnClickListener() {
+        imgviewTTSAutolpayNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chkbxTTSContinue.toggle();
+                chkbxTTSAutoplayNext.toggle();
             }
         });
 
@@ -311,7 +316,6 @@ public class TtsFragment
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                showToastMessage("Not implemented");
             }
 
             @Override
@@ -388,11 +392,11 @@ public class TtsFragment
                         btnTTSPlayStop.setImageResource(R.drawable.ic_play_arrow_24dp);
                         break;
                     case PlaybackStateCompat.STATE_STOPPED:
-                        Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_STOPPED");
+                        //Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_STOPPED");
                         break;
                     case PlaybackStateCompat.STATE_ERROR:
-                        Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_ERROR");
-                        showToastMessage("Text To Speech Error");
+                        //Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_ERROR");
+                        showToastMessage(R.string.ttsError);
                         break;
                 }
             }
@@ -408,7 +412,7 @@ public class TtsFragment
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
                 if (documentParsed) {
-                    ttsService.setTextInterface(webviewText);
+                    ttsService.setTextInterface(webviewText, artist, title, METADATA_ALBUM);
                 }
             }
 
@@ -432,7 +436,7 @@ public class TtsFragment
 
     @Override
     public void onDestroyView() {
-        Log.d(LOG_TAG, "onDestroyView");
+        //Log.d(LOG_TAG, "onDestroyView");
         super.onDestroyView();
         if (ttsService != null) {
             getActivity().unbindService(serviceConnection);
@@ -446,19 +450,19 @@ public class TtsFragment
 
     @Override
     public void onStart() {
-        Log.d(LOG_TAG, "onStart");
+        //Log.d(LOG_TAG, "onStart");
         super.onStart();
     }
 
     @Override
     public void onStop() {
-        Log.d(LOG_TAG, "onStop");
+        //Log.d(LOG_TAG, "onStop");
         super.onStop();
     }
 
     @Override
     public void onResume() {
-        Log.d(LOG_TAG, "onResume");
+        //Log.d(LOG_TAG, "onResume");
         super.onResume();
         if (ttsService != null) {
             ttsService.setVisible(false, notificationPendingIntent);
@@ -467,7 +471,7 @@ public class TtsFragment
 
     @Override
     public void onPause() {
-        Log.d(LOG_TAG, "onPause");
+        //Log.d(LOG_TAG, "onPause");
         super.onPause();
         saveSettings();
         if (ttsService != null) {
@@ -519,17 +523,17 @@ public class TtsFragment
     }
 
     public void onDocumentLoadStart(String domain, String title) {
-        Log.d(LOG_TAG, "onDocumentLoadStart");
-        TtsService.metaDataArtist = domain;
-        TtsService.metaDataTitle = title;
+        //Log.d(LOG_TAG, "onDocumentLoadStart");
+        this.artist = domain;
+        this.title = title;
         if (ttsService != null) {
-            ttsService.setTextInterface(null);
+            ttsService.setTextInterface(null, artist, title, METADATA_ALBUM);
             ttsService.pauseCmd();
         }
     }
 
     public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
-        Log.d(LOG_TAG, "onDocumentLoadFinished");
+        //Log.d(LOG_TAG, "onDocumentLoadFinished");
         if (webviewText == null) {
             webviewText = new WebviewText(webView, scrollView, readArticleActivity);
             webviewText.setOnReadFinishedCallback(new Runnable() {
@@ -543,7 +547,7 @@ public class TtsFragment
             public void run() {
                 documentParsed = true;
                 if (ttsService != null) {
-                    ttsService.setTextInterface(webviewText);
+                    ttsService.setTextInterface(webviewText, artist, title, METADATA_ALBUM);
                 }
             }
         });
@@ -551,6 +555,9 @@ public class TtsFragment
 
     public void onReadFinished() {
         if (settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false)) {
+            if (ttsService != null) {
+                ttsService.playPageFlipSound();
+            }
             if (readArticleActivity.openNextArticle()) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -566,8 +573,10 @@ public class TtsFragment
 
     public void onOpenNewArticle() {
         this.dontStopTtsService = true;
+        this.artist = "...";
+        this.title = "...";
         if ((ttsService != null)) {
-            ttsService.setTextInterface(null);
+            ttsService.setTextInterface(null, artist, title, METADATA_ALBUM);
         }
     }
 
@@ -589,7 +598,7 @@ public class TtsFragment
     }
 
 
-    private void showToastMessage(String text) {
+    private void showToastMessage(@StringRes int text) {
         Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
@@ -614,9 +623,9 @@ public class TtsFragment
         DisplayName engineInfo;
     }
 
-    private void getTtsEngines() {
-        Log.d(LOG_TAG, "getTtsEngines");
+    private void loadTtsEnginesList() {
         if (ttsEngines == null) {
+            Log.d(LOG_TAG, "loadTtsEnginesList");
             final Intent ttsIntent = new Intent();
             ttsIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
             final PackageManager pm = getActivity().getPackageManager();
@@ -627,7 +636,7 @@ public class TtsFragment
                 DisplayName engineInfo = new DisplayName(
                     resolveInfo.activityInfo.applicationInfo.packageName,
                     resolveInfo.loadLabel(pm).toString());
-                Log.d(LOG_TAG, "getTtsEngines: " + engineInfo.name + ": " + engineInfo.displayName);
+                Log.d(LOG_TAG, "loadTtsEnginesList: " + engineInfo.name + ": " + engineInfo.displayName);
                 ttsEngines.add(engineInfo);
                 Intent getVoicesIntent = new Intent();
                 getVoicesIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -693,7 +702,7 @@ public class TtsFragment
     }
 
     private synchronized void updateLanguageSpinnerData() {
-        Log.d(LOG_TAG, "updateLanguageSpinnerData");
+        //Log.d(LOG_TAG, "updateLanguageSpinnerData");
         if ((ttsEngines != null)
                 && (activityResultNumber == ttsEnginesNumber)
                 && (spinnerLanguageAdapter != null))
@@ -703,21 +712,21 @@ public class TtsFragment
                     voice.substring(0, voice.indexOf("-")) : voice;
             spinnerLanguageAdapter.setNotifyOnChange(false);
             spinnerLanguageAdapter.clear();
-            int langugagePositionToSelec = 0;
+            int langugagePositionToSelect = 0;
             for(DisplayName lang: ttsLanguages) {
                 spinnerLanguageAdapter.add(lang.displayName);
                 if (lang.name.equals(language)) {
-                    langugagePositionToSelec = spinnerLanguageAdapter.getCount() - 1;
+                    langugagePositionToSelect = spinnerLanguageAdapter.getCount() - 1;
                 }
             }
-            spinnerLanguage.setSelection(langugagePositionToSelec);
+            spinnerLanguage.setSelection(langugagePositionToSelect);
             spinnerLanguageAdapter.notifyDataSetChanged();
             spinnerLanguageAdapter.setNotifyOnChange(true);
         }
     }
 
     private void onLanguageSelectionChanged() {
-        Log.d(LOG_TAG, "onLanguageSelectionChanged");
+        //Log.d(LOG_TAG, "onLanguageSelectionChanged");
         spinnerVoiceAdapter.setNotifyOnChange(false);
         spinnerVoiceAdapter.clear();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
@@ -737,7 +746,7 @@ public class TtsFragment
     }
 
     private void onVoiceSelectionChanged() {
-        Log.d(LOG_TAG, "onVoiceSelectionChanged");
+        //Log.d(LOG_TAG, "onVoiceSelectionChanged");
         int voicePosition = spinnerVoice.getSelectedItemPosition();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
         if ((voicePosition >=0) && (languagePosition >=0)) {
@@ -746,7 +755,7 @@ public class TtsFragment
             if (voiceInfo != null) {
                 if (ttsService != null) {
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        // Cannot programatically change TTS Engine with older Android,
+                        // Cannot programmatically change TTS Engine with older Android,
                         // We redirect the user to TTS Settings:
                         String curTtsEngine = ttsService.getEngine();
                         if ( ! ((curTtsEngine == null)

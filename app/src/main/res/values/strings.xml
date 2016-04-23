@@ -25,6 +25,17 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
     <string name="menuTTS">Text To Speech</string>
+    <string name="ttsSpeed">Rate</string>
+    <string name="ttsPitch">Pitch</string>
+    <string name="ttsVolume">Volume</string>
+    <string name="ttsLanguage">Choose Language</string>
+    <string name="ttsVoice">Choose Voice</string>
+    <string name="ttsAutoplayNextArticle">AutoPlay Next Article</string>
+    <string name="ttsError">Text To Speech Error</string>
+    <string name="ttsFastRewind">Fast Rewind</string>
+    <string name="ttsPlayPause">Play / Pause</string>
+    <string name="ttsFastForward">Schnellvorlauf</string>
+    <string name="ttsOptions">Options</string>
     <string name="menu_open_random_article">Open random article</string>
     <string name="menuUploadOfflineURLs">Upload offline URLs</string>
     <string name="menuWipeDb">Wipe Database</string>

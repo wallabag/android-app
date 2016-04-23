@@ -59,7 +59,7 @@
                     android:id="@+id/btnGoPrevious"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Previous"
+                    android:contentDescription="@string/menuPrevious"
                     android:src="@drawable/ic_action_previous_item"
                     android:layout_weight="1" />
                 <Button
@@ -73,7 +73,7 @@
                     android:id="@+id/btnGoNext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="Next"
+                    android:contentDescription="@string/menuNext"
                     android:src="@drawable/ic_action_next_item"
                     android:layout_weight="1" />
             </LinearLayout>

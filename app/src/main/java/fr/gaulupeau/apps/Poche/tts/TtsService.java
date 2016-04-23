@@ -53,9 +53,6 @@ public class TtsService
         implements  AudioManager.OnAudioFocusChangeListener,
                     TextToSpeech.OnInitListener
 {
-    public static String metaDataArtist = "";
-    public static String metaDataTitle = "";
-
     enum State {
 
         /**
@@ -105,6 +102,9 @@ public class TtsService
     private volatile boolean isAudioFocusGranted;
     private volatile boolean isVisible;
     private volatile TextInterface textInterface;
+    private String metaDataArtist = "";
+    private String metaDataTitle = "";
+    private String metaDataAlbum = "";
     private volatile String utteranceId = "1";
     private HashMap  utteranceParams = new HashMap();
     private boolean playFromStart;
@@ -278,13 +278,13 @@ public class TtsService
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(LOG_TAG, "onBind");
+        //Log.d(LOG_TAG, "onBind");
         return new LocalBinder();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(LOG_TAG, "onUnbind");
+        //Log.d(LOG_TAG, "onUnbind");
         return super.onUnbind(intent);
     }
 
@@ -425,7 +425,7 @@ public class TtsService
     }
 
     private void speak() {
-        Log.d(LOG_TAG, "speak");
+        //Log.d(LOG_TAG, "speak");
         assert(state == State.PLAYING);
         assert(textInterface != null);
         // Change the utteranceId so that call to onSpeakDone
@@ -443,7 +443,7 @@ public class TtsService
         assert(isTTSInitialized);
         if (text != null) {
             HashMap params = this.utteranceParams;
-            if (params.get("utteranceId") != utteranceId) {
+            if ( ! utteranceId.equals(params.get("utteranceId"))) {
                 params = new HashMap();
                 params.put("utteranceId", utteranceId);
                 this.utteranceParams = params;
@@ -461,13 +461,12 @@ public class TtsService
                     ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, doneUtteranceId);
                 } else {
                     pauseCmd();
-                    playPageFlipSound();
                 }
             }
         }
     }
 
-    private void playPageFlipSound()
+    public void playPageFlipSound()
     {
         this.mediaPlayerPageFlip.start();
     }
@@ -529,7 +528,8 @@ public class TtsService
         } else {
             isTTSInitialized = false;
             state = State.ERROR;
-            //showToastMessage("TTS initialization Failed!");
+            setMediaSessionPlaybackState();
+            setForegroundAndNotification();
         }
     }
 
@@ -606,7 +606,7 @@ public class TtsService
             if (isTTSInitialized) {
                 tts.setLanguage(convertVoiceNameToLocale(voice));
                 if (state == State.PLAYING) {
-                    speak();
+                    executor.execute(speak); // speak();
                 }
             }
         }
@@ -650,7 +650,10 @@ public class TtsService
         return textInterface;
     }
 
-    public void setTextInterface(TextInterface textInterface) {
+    public void setTextInterface(TextInterface textInterface, String artist, String title, String album) {
+        this.metaDataArtist = artist;
+        this.metaDataTitle = title;
+        this.metaDataAlbum = album;
         if (textInterface != this.textInterface) {
             switch (state) {
                 case CREATED:
@@ -667,6 +670,7 @@ public class TtsService
                     break;
             }
         }
+        setMediaSessionMetaData();
     }
 
     public void registerCallback(MediaControllerCompat.Callback callback, Handler handler) {
@@ -678,18 +682,24 @@ public class TtsService
     }
 
     private void setMediaSessionMetaData() {
-        mediaSession.setMetadata(new MediaMetadataCompat.Builder()
+        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, "Wallabag")
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, metaDataTitle)
-                //getFirstPlayIndex.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, 10000)
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
-                        BitmapFactory.decodeResource(getResources(), R.drawable.icon))
-                .build());
+                        BitmapFactory.decodeResource(getResources(), R.drawable.icon));
+        if (textInterface != null) {
+            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, textInterface.getTotalDuration());
+        }
+        mediaSession.setMetadata(builder.build());
     }
 
 
     private void setMediaSessionPlaybackState() {
+        long position = PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
+        if (textInterface != null) {
+            position = textInterface.getTime();
+        }
         PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
                 .setActions(
                         (this.state == State.PAUSED ?
@@ -702,8 +712,8 @@ public class TtsService
                         | PlaybackStateCompat.ACTION_STOP
                 )
                 .setState(this.state.playbackState,
-                        PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN,
-                        1, // FIXME: ttsGetSpeed()
+                        position,
+                        speed,
                         SystemClock.elapsedRealtime())
                 .build();
         mediaSession.setPlaybackState(playbackState);

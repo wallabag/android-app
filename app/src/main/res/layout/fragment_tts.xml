@@ -43,6 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSSpeed"
+                    android:contentDescription="@string/ttsSpeed"
                     android:layout_weight="0.9"
                     android:layout_gravity="center"
                     android:layout_column="1"
@@ -74,6 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSPitch"
+                    android:contentDescription="@string/ttsPitch"
                     android:layout_weight="0.9"
                     android:layout_gravity="center"
                     android:layout_column="1"
@@ -106,6 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/seekBarTTSVolume"
+                    android:contentDescription="@string/ttsVolume"
                     android:layout_weight="0.9"
                     android:layout_gravity="center"
                     android:layout_column="1"
@@ -164,6 +167,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerLanguage"
+                android:contentDescription="@string/ttsLanguage"
                 android:spinnerMode="dialog"
                 android:layout_weight="0.35"
                 android:textAlignment="center"
@@ -176,6 +180,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerVoice"
+                android:contentDescription="@string/ttsVoice"
                 android:spinnerMode="dialog"
                 android:layout_weight="0.45"
                 android:layout_gravity="center"
@@ -185,7 +190,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imgviewTTSContinue"
+                android:id="@+id/imgviewTTSAutoplayNext"
                 android:src="@drawable/ic_redo_24dp"
                 android:layout_gravity="center_vertical|right"
                 android:clickable="true"
@@ -195,7 +200,8 @@
                 android:paddingBottom="10sp" />
 
             <CheckBox
-                android:id="@+id/chkbxTTSContinue"
+                android:id="@+id/chkbxTTSAutoplayNext"
+                android:contentDescription="@string/ttsAutoplayNextArticle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
@@ -217,7 +223,8 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnTTSPrevious"
+            android:id="@+id/btnTTSFastRewind"
+            android:contentDescription="@string/ttsFastRewind"
             android:layout_weight="1"
             android:src="@drawable/ic_fast_rewind_24dp"
             android:layout_gravity="center_vertical" />
@@ -226,6 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTTSPlayPause"
+            android:contentDescription="@string/ttsPlayPause"
             android:layout_weight="1"
             android:src="@drawable/ic_play_arrow_24dp"
             android:layout_gravity="center_vertical" />
@@ -233,7 +241,8 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnTTSNext"
+            android:id="@+id/btnTTSFastForward"
+            android:contentDescription="@string/ttsFastForward"
             android:layout_weight="1"
             android:src="@drawable/ic_fast_forward_24dp"
             android:layout_gravity="center_vertical" />
@@ -242,6 +251,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnTTSOptions"
+            android:contentDescription="@string/ttsOptions"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
             android:src="@drawable/ic_menu_24dp" />

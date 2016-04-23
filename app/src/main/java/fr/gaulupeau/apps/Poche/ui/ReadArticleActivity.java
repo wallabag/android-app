@@ -86,8 +86,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Long previousArticleID;
     private Long nextArticleID;
 
-    private boolean shouldPostponeOnPageFinishedCall;
-    private boolean onPageFinishedCallPostponed;
+    private boolean isResumed;
+    private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
     private Settings settings;
@@ -571,14 +571,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @Override
     public void onPause() {
         super.onPause();
-        shouldPostponeOnPageFinishedCall = true;
+        isResumed = false;
     }
     @Override
     public void onResume() {
         super.onResume();
-        shouldPostponeOnPageFinishedCall = false;
-        if (onPageFinishedCallPostponed) {
-            onPageFinishedCallPostponed = false;
+        isResumed = true;
+        if (onPageFinishedCallPostponedUntilResume) {
+            onPageFinishedCallPostponedUntilResume = false;
             onPageFinished();
         }
     }
@@ -693,8 +693,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void onPageFinished() {
-        if (shouldPostponeOnPageFinishedCall) {
-            onPageFinishedCallPostponed = true;
+        if ( ! isResumed) {
+            onPageFinishedCallPostponedUntilResume = true;
             if (ttsFragment != null) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }

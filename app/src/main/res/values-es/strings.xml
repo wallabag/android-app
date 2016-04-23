@@ -141,4 +141,16 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="one">%d Artículo</item>
         <item quantity="other">%d Artículos</item>
     </plurals>
+    <string name="menuTTS">Síntesis de voz</string>
+    <string name="ttsAutoplayNextArticle"> Reproducción automática Siguiente artículo</string>
+    <string name="ttsLanguage">Elegir un Idioma</string>
+    <string name="ttsVoice">Seleccionar una Voz</string>
+    <string name="ttsVolume">Volumen</string>
+    <string name="ttsSpeed">Velocidad</string>
+    <string name="ttsPlayPause">Reproducir / Pausa</string>
+    <string name="ttsPitch">Tono</string>
+    <string name="ttsOptions">Opciones</string>
+    <string name="ttsFastRewind">Retroceso rápido</string>
+    <string name="ttsFastForward">Avance rápido</string>
+    <string name="ttsError">Síntesis de voz Error</string>
 </resources>

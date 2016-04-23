@@ -101,7 +101,7 @@ public class WebviewText implements TextInterface {
     }
 
     private void onDocumentParseStart() {
-        Log.d(LOG_TAG, "onDocumentParseStart");
+        //Log.d(LOG_TAG, "onDocumentParseStart");
     }
 
     private void onDocumentParseEnd() {
@@ -117,13 +117,20 @@ public class WebviewText implements TextInterface {
         bottom = convertWebviewToScreenY(bottom);
         //Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
         parsedSize = parsedSize + 1;
+        TextItem item;
         if (parsedSize > this.textList.size()) {
-            textList.add(new TextItem(text, top, bottom));
+            item = new TextItem(text, top, bottom);
+            textList.add(item);
         } else {
-            TextItem item = textList.get(parsedSize - 1);
+            item = textList.get(parsedSize - 1);
             item.text = text;
             item.top = top;
             item.bottom = bottom;
+        }
+        if (parsedSize > 1) {
+            item.timePosition = textList.get(parsedSize-2).timePosition + timeDuration(item.text);
+        } else {
+            item.timePosition = timeDuration(item.text);
         }
     }
 
@@ -195,7 +202,7 @@ public class WebviewText implements TextInterface {
      */
     @Override
     public boolean fastForward() {
-        Log.d(LOG_TAG, "fastForward, current=" + current);
+        //Log.d(LOG_TAG, "fastForward, current=" + current);
         boolean result;
         //for(int i=textListCurrentIndex; i<(textListSize-1) && i<(textListCurrentIndex+6); i++) {
         //    TextItem t = textList.get(i);
@@ -210,7 +217,7 @@ public class WebviewText implements TextInterface {
             {
                 newIndex = newIndex + 1;
             }
-            Log.d(LOG_TAG, " => " + newIndex);
+            Log.d(LOG_TAG, "fastForward " + current + " => " + newIndex);
             current = newIndex;
             result = true;
         } else {
@@ -228,7 +235,7 @@ public class WebviewText implements TextInterface {
      */
     @Override
     public boolean rewind() {
-        Log.d(LOG_TAG, "rewind, current=" + current);
+        //Log.d(LOG_TAG, "rewind, current=" + current);
         boolean result;
         //for(int i=current; (i>=0) && i>(current-8); i--) {
         //    TextItem t = textList.get(i);
@@ -243,7 +250,6 @@ public class WebviewText implements TextInterface {
             {
                 newIndex = newIndex - 1;
             }
-            Log.d(LOG_TAG, " => " + newIndex);
             if (newIndex > 0) {
                 // If there is many text on the previous line, we want
                 // the first on the line, so we look again for the text's index
@@ -256,9 +262,9 @@ public class WebviewText implements TextInterface {
                 {
                     prevPrevIndex = prevPrevIndex - 1;
                     newIndex = prevPrevIndex + 1;
-                    Log.d(LOG_TAG, " => " + newIndex);
                 }
             }
+            Log.d(LOG_TAG, "rewind " + current + " => " + newIndex);
             current = newIndex;
             result = true;
         } else {
@@ -306,13 +312,21 @@ public class WebviewText implements TextInterface {
 
 
     @Override
-    public float getTime() {
-        return 0;
+    public long getTime() {
+        long result = -1;
+        if (current > 0) {
+            result = textList.get(current-1).timePosition;
+        }
+        return result;
     }
 
     @Override
-    public float getTotalDuration() {
-        return 1.0f;
+    public long getTotalDuration() {
+        long result = -1;
+        if (textList.size() > 0) {
+            result = textList.get(textList.size() - 1).timePosition;
+        }
+        return result;
     }
 
     private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward) {
@@ -353,13 +367,18 @@ public class WebviewText implements TextInterface {
     }
 
     private static class TextItem {
-        float top;
-        float bottom;
         String text;
+        float top;    // top location in the webview
+        float bottom; // bottow location in the webview
+        long timePosition; // in milliseconds from the beniging of the document
         public TextItem(String text, float top, float bottom) {
             this.text = text;
             this.top = top;
             this.bottom = bottom;
         }
+    }
+
+    private long timeDuration(String text) {
+        return text.length()*50;  // in ms, total approximation
     }
 }
