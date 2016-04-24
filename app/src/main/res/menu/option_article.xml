@@ -28,4 +28,8 @@
     <item
         android:id="@+id/menuDecreaseFontSize"
         android:title="@string/menu_readArticle_decreaseFontSize" />
+    <item
+        android:id="@+id/menuTTS"
+        android:checkable="true"
+        android:title="@string/menuTTS" />
 </menu>

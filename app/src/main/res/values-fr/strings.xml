@@ -140,4 +140,16 @@ GAULUPEAU Jonathan — 2013
     <string name="firstRun_d_optionalSettings_title">Mettre à jour les paramètres</string>
     <string name="go_to_settings">Aller aux paramètres</string>
     <string name="testConnection_errorMessage6">URL Incorrecte. Code d\'erreur : %d</string>
+    <string name="menuTTS">Synthèse Vocale</string>
+    <string name="ttsAutoplayNextArticle">Lecture automatique de l\'article suivant</string>
+    <string name="ttsLanguage">Choisir la Langue</string>
+    <string name="ttsVoice">Choisir la Voix</string>
+    <string name="ttsVolume">Volume</string>
+    <string name="ttsSpeed">Vitesse de lecture</string>
+    <string name="ttsPlayPause">Lecture / Pause</string>
+    <string name="ttsFastForward">Avance Rapide</string>
+    <string name="ttsFastRewind">Retour Rapide</string>
+    <string name="ttsPitch">Hauteur de la voix</string>
+    <string name="ttsOptions">Options</string>
+    <string name="ttsError">Erreur de Synthèse Vocale</string>
 </resources>

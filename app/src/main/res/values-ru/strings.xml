@@ -142,4 +142,16 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="few">%d статьи</item>
         <item quantity="other">%d статей</item>
     </plurals>
+    <string name="menuTTS"> Текст в речь</string>
+    <string name="ttsAutoplayNextArticle">Автозапуск Следующая статья</string>
+    <string name="ttsLanguage">Выберите язык</string>
+    <string name="ttsVoice">выбрать тембр</string>
+    <string name="ttsVolume">Громкость</string>
+    <string name="ttsSpeed">Скорость</string>
+    <string name="ttsPlayPause">Пуск / Пауза</string>
+    <string name="ttsPitch">Тембр</string>
+    <string name="ttsOptions">опции</string>
+    <string name="ttsFastRewind">Назад</string>
+    <string name="ttsFastForward">Далее</string>
+    <string name="ttsError">Текст в речь ошибки</string>
 </resources>

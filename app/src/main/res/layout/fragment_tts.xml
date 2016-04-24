@@ -1,0 +1,261 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".TtsFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewTTSOptions">
+
+        <View
+            android:id="@+id/viewHbar"
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:layout_marginBottom="5sp"
+            android:layout_marginTop="0sp"
+            android:background="#000000" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            android:layout_marginLeft="2sp"
+            android:layout_marginRight="2sp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:src="@drawable/ic_running_24dp"
+                    android:layout_gravity="center"
+                    android:layout_column="0" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBarTTSSpeed"
+                    android:contentDescription="@string/ttsSpeed"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center"
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/textViewTTSSpeed"
+                    android:layout_column="2"
+                    android:layout_gravity="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView2"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_musical_notes_24dp"
+                    android:layout_column="0" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBarTTSPitch"
+                    android:contentDescription="@string/ttsPitch"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center"
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/textViewTTSPitch"
+                    android:layout_column="2"
+                    android:layout_gravity="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView3"
+                    android:src="@drawable/ic_volume_up_24dp"
+                    android:layout_gravity="center"
+                    android:layout_column="0" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBarTTSVolume"
+                    android:contentDescription="@string/ttsVolume"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center"
+                    android:layout_column="1"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/textViewTTSVolume"
+                    android:layout_column="2"
+                    android:layout_gravity="center" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:id="@+id/notImplemented2">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView4"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_snooze_24dp"
+                    android:layout_column="0" />
+
+                <SeekBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBarTTSSleep"
+                    android:layout_column="1"
+                    android:layout_weight="0.9"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:id="@+id/textViewTTSSleep"
+                    android:layout_column="2"
+                    android:layout_gravity="center" />
+            </TableRow>
+
+        </TableLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerLanguage"
+                android:contentDescription="@string/ttsLanguage"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.35"
+                android:textAlignment="center"
+                android:layout_gravity="center"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
+
+
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerVoice"
+                android:contentDescription="@string/ttsVoice"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.45"
+                android:layout_gravity="center"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgviewTTSAutoplayNext"
+                android:src="@drawable/ic_redo_24dp"
+                android:layout_gravity="center_vertical|right"
+                android:clickable="true"
+                android:visibility="visible"
+                android:paddingLeft="10sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
+
+            <CheckBox
+                android:id="@+id/chkbxTTSAutoplayNext"
+                android:contentDescription="@string/ttsAutoplayNextArticle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:checked="false"
+                android:layout_gravity="center_vertical|right"
+                android:visibility="visible"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnTTSFastRewind"
+            android:contentDescription="@string/ttsFastRewind"
+            android:layout_weight="1"
+            android:src="@drawable/ic_fast_rewind_24dp"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnTTSPlayPause"
+            android:contentDescription="@string/ttsPlayPause"
+            android:layout_weight="1"
+            android:src="@drawable/ic_play_arrow_24dp"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnTTSFastForward"
+            android:contentDescription="@string/ttsFastForward"
+            android:layout_weight="1"
+            android:src="@drawable/ic_fast_forward_24dp"
+            android:layout_gravity="center_vertical" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnTTSOptions"
+            android:contentDescription="@string/ttsOptions"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:src="@drawable/ic_menu_24dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

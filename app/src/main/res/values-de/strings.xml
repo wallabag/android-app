@@ -141,4 +141,16 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="firstRun_d_optionalSettings_title">Aktualisiere Einstellungen</string>
     <string name="testConnection_errorMessage5">Login fehlgeschlagen; prüfe die HTTP Auth Parameter. Fehlercode: %d</string>
     <string name="firstRun_d_optionalSettings_message">Um Seiten mit der App zu speichern (und um lokale Änderungen zum Server zu senden), musst du Wallabag Nutzername und Passwort in den Einstellungen eintragen.</string>
+    <string name="menuTTS">Sprachsynthese</string>
+    <string name="ttsAutoplayNextArticle"> Autoplay Nächster Artikel</string>
+    <string name="ttsLanguage">Sprache auswählen</string>
+    <string name="ttsVoice">Sprachausgabemodul wählen</string>
+    <string name="ttsVolume">Lautstärke</string>
+    <string name="ttsSpeed">Sprechgeschwindigkeit</string>
+    <string name="ttsPlayPause">Wiedergabe / Pause</string>
+    <string name="ttsPitch">Stimmlage</string>
+    <string name="ttsOptions">Optionen</string>
+    <string name="ttsFastRewind"> Fast Forward</string>
+    <string name="ttsFastForward">Rücklauf</string>
+    <string name="ttsError">Fehler Sprachsynthese</string>
 </resources>

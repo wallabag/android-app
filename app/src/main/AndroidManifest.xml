@@ -42,6 +42,18 @@
             android:name="fr.gaulupeau.apps.Poche.ui.DialogHelperActivity"
             android:theme="@style/ProxyTheme"
             android:excludeFromRecents="true" />
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+        <service
+                android:name="fr.gaulupeau.apps.Poche.tts.TtsService"
+                android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
