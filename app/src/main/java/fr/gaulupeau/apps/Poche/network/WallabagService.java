@@ -82,59 +82,17 @@ public class WallabagService {
 
     /**
      * try to guess the version of the wallabag instance
+     * and if valid version is found, save the wallabag version to settings
      *
      * @returns the version as integer, e.g. for wallabag v2 the number 2. if detection fails
      *          it returns -1
      */
     private int guessWallabagVersion() {
         int wallabagVersion = -1;
-        HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
-        if(httpUrl == null) {
-            return -1;
-        }
-        Request guessRequest = getRequest(httpUrl);
-        Response response;
-        try {
-            response = client.newCall(guessRequest).execute();
-        } catch (IOException e) {
-            Log.d(TAG, "guessWallabagVersion() IOException");
-            e.printStackTrace();
-            return -1;
-        }
-        if(response.code() != 200) {
-            Log.d(TAG, "guessWallabagVersion() response.code not 200");
-            return -1;
-        }
-
-        String body;
-        try {
-            body = response.body().string();
-        } catch (NullPointerException e) {
-            Log.d(TAG, "guessWallabagVersion() NullPointerException");
-            e.printStackTrace();
-            return -1;
-        }
-        catch (IOException e) {
-            Log.d(TAG, "guessWallabagVersion() IOException");
-            e.printStackTrace();
-            return -1;
-        }
-
-        if (body.contains(Settings.WALLABAG_LOGOUT_LINK_V2) && body.contains(Settings.WALLABAG_LOGO_V2)) {
-            Log.d(TAG, "guessWallabagVersion() already logged in, found Wallabag v2");
+        if(isWallabagVersion2()) {
             wallabagVersion = 2;
         }
-        else if(body.contains(Settings.WALLABAG_LOGOUT_LINK_V1)) {
-            Log.d(TAG, "guessWallabagVersion() already logged in, found Wallabag v1");
-            wallabagVersion = 1;
-        }
-
-        if (body.contains(Settings.WALLABAG_LOGIN_FORM_V2) && body.contains(Settings.WALLABAG_LOGO_V2)) {
-            Log.d(TAG, "guessWallabagVersion() found Wallabag v2");
-            wallabagVersion = 2;
-        }
-        else if(body.contains(Settings.WALLABAG_LOGIN_FORM_V1)) {
-            Log.d(TAG, "guessWallabagVersion() found Wallabag v1");
+        else if(isWallabagVersion1()) {
             wallabagVersion = 1;
         }
 
@@ -146,6 +104,65 @@ public class WallabagService {
         else {
             Log.w(TAG,"guessWallabagVersion() couldn't guess Wallabag version");
         }
+
         return wallabagVersion;
+    }
+
+    private boolean isWallabagVersion2() {
+        String body = getBodyFromHttpResponse(endpoint + "/api/version");
+        if (body != null
+                && !body.isEmpty()
+                && body.startsWith("\"2")) {
+            Log.d(TAG, "isWallabagVersion2() found Wallabag v2");
+            return true;
+        }
+        Log.d(TAG, "isWallabagVersion2() did not find Wallabag v2");
+        return false;
+    }
+
+    private boolean isWallabagVersion1() {
+        String body = getBodyFromHttpResponse(endpoint + "/?view=about");
+        if (body != null
+                && !body.isEmpty()
+                && (body.contains(Settings.WALLABAG_LOGOUT_LINK_V1) || body.contains(Settings.WALLABAG_LOGIN_FORM_V1))
+                ) {
+            Log.d(TAG, "isWallabagVersion1() found Wallabag v1");
+            return true;
+        }
+        Log.d(TAG, "isWallabagVersion1() did not find Wallabag v1");
+        return false;
+    }
+
+    private String getBodyFromHttpResponse(String url) {
+        Log.d(TAG, "getBodyFromHttpResponse() url=" + url);
+        HttpUrl httpUrl = HttpUrl.parse(url);
+        if(httpUrl == null) {
+            return "";
+        }
+        Request guessRequest = getRequest(httpUrl);
+        Response response;
+        try {
+            response = client.newCall(guessRequest).execute();
+        } catch (IOException e) {
+            Log.d(TAG, "getBodyFromHttpResponse() IOException");
+            e.printStackTrace();
+            return "";
+        }
+        if(response.code() != 200) {
+            Log.d(TAG, "getBodyFromHttpResponse() response.code not 200");
+            return "";
+        }
+        String body = "";
+        try {
+            body = response.body().string();
+        } catch (NullPointerException e) {
+            Log.d(TAG, "getBodyFromHttpResponse() NullPointerException");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            Log.d(TAG, "getBodyFromHttpResponse() IOException");
+            e.printStackTrace();
+        }
+        return body;
     }
 }
