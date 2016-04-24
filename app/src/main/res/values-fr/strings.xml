@@ -152,4 +152,5 @@ GAULUPEAU Jonathan — 2013
     <string name="ttsPitch">Hauteur de la voix</string>
     <string name="ttsOptions">Options</string>
     <string name="ttsError">Erreur de Synthèse Vocale</string>
+    <string name="menuAbout">À propos</string>
 </resources>

@@ -153,4 +153,5 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="one">%d Article</item>
         <item quantity="other">%d Articles</item>
     </plurals>
+    <string name="menuAbout">About</string>
 </resources>

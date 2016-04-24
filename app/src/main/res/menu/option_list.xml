@@ -17,4 +17,6 @@
         android:title="@string/menuUploadOfflineURLs" />
     <item android:id="@+id/menuSettings"
         android:title="@string/btnSettings" />
+    <item android:id="@+id/menuAbout"
+        android:title="@string/menuAbout" />
 </menu>

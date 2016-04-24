@@ -17,6 +17,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
+
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -186,6 +189,14 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuUploadOfflineURLs:
                 uploadOfflineURLs();
                 return true;
+            case R.id.menuAbout:
+                new LibsBuilder()
+                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withAboutIconShown(true)
+                        .withAboutVersionShown(true)
+                        .withAboutDescription("<b>wallabag app for Android</b><br />wallabag is a self hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.")
+                        .start(this);
         }
 
         return super.onOptionsItemSelected(item);
