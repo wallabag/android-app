@@ -195,7 +195,7 @@ public class ArticlesListActivity extends AppCompatActivity
                         .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                         .withAboutIconShown(true)
                         .withAboutVersionShown(true)
-                        .withAboutDescription("<b>wallabag app for Android</b><br />wallabag is a self hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.")
+                        .withAboutDescription(getResources().getString(R.string.aboutText))
                         .start(this);
         }
 

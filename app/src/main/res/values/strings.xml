@@ -154,4 +154,5 @@ GAULUPEAU Jonathan — 2013-2015
         <item quantity="other">%d Articles</item>
     </plurals>
     <string name="menuAbout">About</string>
+    <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br />wallabag is a self hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.</string>
 </resources>
