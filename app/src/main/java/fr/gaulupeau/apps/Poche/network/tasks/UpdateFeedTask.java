@@ -343,6 +343,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id))
                             .build().unique();
+                    if(article == null) continue;
 
                     if(article.getFavorite() != null && article.getFavorite()) continue;
 
