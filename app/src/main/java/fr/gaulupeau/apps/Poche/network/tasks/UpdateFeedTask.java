@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
@@ -312,7 +313,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                         existing = false;
                     }
 
-                    article.setTitle(item.title);
+                    article.setTitle(Html.fromHtml(item.title).toString());
                     article.setContent(item.description);
                     article.setUrl(item.link);
                     article.setArticleId(id);
