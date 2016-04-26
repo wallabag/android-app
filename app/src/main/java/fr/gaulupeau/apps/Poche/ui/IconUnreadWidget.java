@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
@@ -45,7 +46,12 @@ public class IconUnreadWidget extends AppWidgetProvider {
             }
         }
 
-        //views.setOnClickPendingIntent(R.id., getRefreshPendingIntent(context, appWidgetId));
+        // start article list activity on click on the widget
+        Intent intent = new Intent(context, ArticlesListActivity.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
+        views.setOnClickPendingIntent(R.id.icon_unread_layout, pendingIntent);
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -58,33 +64,6 @@ public class IconUnreadWidget extends AppWidgetProvider {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
-    }
-
-    @Override
-    public void onEnabled(Context context) {
-        Log.d(TAG, "onEnabled()");
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    @Override
-    public void onDisabled(Context context) {
-        Log.d(TAG, "onDisabled()");
-        // Enter relevant functionality for when the last widget is disabled
-    }
-
-    @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        Log.d(TAG, "onReceive()");
-        final String action = intent.getAction();
-        Log.d(TAG, "onReceive() action=" + action);
-
-        if (intent.getAction().equals("android.appwidget.action.APPWIDGET_UPDATE")) {
-            Log.d(TAG, "onReceive() some code here that will update your widget");
-            //some code here that will update your widget
-        }
-
-        super.onReceive(context, intent);
     }
 
     public static void triggerWidgetUpdate(Context context) {
