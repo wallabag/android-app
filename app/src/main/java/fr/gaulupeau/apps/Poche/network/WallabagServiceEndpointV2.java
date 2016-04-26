@@ -120,30 +120,52 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     protected String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin)
             throws IOException {
-        Log.d(TAG, "executeRequest() start; autoRelogin: " + autoRelogin);
+        Log.d(TAG, "executeRequestForResult() start: url: " + request.urlString() + " checkResponse: " + checkResponse + " autoRelogin: " + autoRelogin);
 
         Response response = exec(request);
-        Log.d(TAG, "executeRequest() got response");
+        Log.d(TAG, "executeRequestForResult() got response");
 
         if(checkResponse) super.checkResponse(response);
         String body = response.body().string();
-        if(!isLoginPage(body)) return body;
-        Log.d(TAG, "executeRequest() response is login page");
-        if(!autoRelogin) return null;
+        if(!isLoginPage(body)) {
+            Log.d(TAG, "executeRequestForResult() already logged in, returning this response body");
+            return body;
+        }
+        Log.d(TAG, "executeRequestForResult() response is login page");
+        if(!autoRelogin) {
+            Log.d(TAG, "executeRequestForResult() autoRelogin is not true, returning");
+            return null;
+        }
 
+        Log.d(TAG, "executeRequestForResult() trying to re-login");
+        // loading a fresh new clean login page, because otherwise we get an implicit redirect to a
+        // page we want in our variable "request" directly after login. This is not what we want.
+        // We want to explicitly call our request right after we are logged in.
+        HttpUrl url = getHttpURL(endpoint + "/")
+                .newBuilder()
+                .build();
+        Response loginRequest = exec(getRequest(url));
+        body = loginRequest.body().string();
+        if (!isLoginPage(body)) {
+            Log.e(TAG, "executeRequestForResult() got no login page after requesting endpoint");
+            return null;
+        }
         String csrfToken = getCsrfToken(body);
-        if(csrfToken == null) return null;
-        Log.d(TAG, "executeRequest() csrfToken=" + csrfToken);
+        if(csrfToken == null) {
+            Log.d(TAG, "executeRequestForResult() found no csrfToken in login page's body");
+            return null;
+        }
+        Log.d(TAG, "executeRequestForResult() csrfToken=" + csrfToken);
 
-        Log.d(TAG, "executeRequest() trying to re-login");
         Response loginResponse = exec(getLoginRequest(csrfToken));
-        if(checkResponse) checkResponse(response);
+        if(checkResponse) checkResponse(loginResponse);
         if(isLoginPage(loginResponse.body().string())) {
+            Log.w(TAG, "executeRequestForResult() still on login page, wrong credentials");
             throw new IOException(App.getInstance()
                     .getString(R.string.wrongUsernameOrPassword_errorMessage));
         }
 
-        Log.d(TAG, "executeRequest() re-login response is OK; re-executing request");
+        Log.d(TAG, "executeRequestForResult() re-login response is OK; re-executing request");
         response = exec(request);
 
         if(checkResponse) checkResponse(response);
@@ -155,12 +177,12 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         String startCsrfTokenString = "<input type=\"hidden\" name=\"_csrf_token\" value=\"";
         int csrfTokenStartIndex = body.indexOf(startCsrfTokenString) + startCsrfTokenString.length();
         int csrfTokenEndIndex = body.indexOf("\" />", csrfTokenStartIndex);
-        Log.d(TAG, "csrfTokenStartIndex=" + csrfTokenStartIndex + " and csrfTokenEndIndex=" + csrfTokenEndIndex + ", so csrfTokenLength=" + (csrfTokenEndIndex-csrfTokenStartIndex));
+        Log.d(TAG, "getCsrfToken() csrfTokenStartIndex=" + csrfTokenStartIndex + " and csrfTokenEndIndex=" + csrfTokenEndIndex + ", so csrfTokenLength=" + (csrfTokenEndIndex-csrfTokenStartIndex));
         if(csrfTokenStartIndex==-1 || csrfTokenEndIndex==-1){
             return null; // cannot find csrf string in the login page
         }
         String csrfToken = body.substring(csrfTokenStartIndex, csrfTokenEndIndex);
-        Log.d(TAG, "csrfToken=" + csrfToken);
+        Log.d(TAG, "getCsrfToken() csrfToken=" + csrfToken);
         return csrfToken;
     }
 
