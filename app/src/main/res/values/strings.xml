@@ -162,4 +162,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="readVolume">Read volume</string>
     <string name="add_widget">Add widget</string>
     <string name="settings_ui_handleHttpScheme">Handle HTTP scheme (show Wallabag in the list of web browsers)</string>
+    <string name="menuDownloadPdf">Download PDF</string>
+    <string name="downloadPdfPathStart">Started article download to %s</string>
 </resources>

@@ -90,6 +90,8 @@ public abstract class WallabagServiceEndpoint {
 
     public abstract boolean deleteArticle(int articleId) throws IOException;
 
+    public abstract String getExportUrl(long articleId, String exportType);
+
     protected Response exec(Request request) throws IOException {
         return client.newCall(request).execute();
     }
