@@ -49,6 +49,10 @@ public class WallabagService {
         this.wallabagVersion = wallabagVersion;
     }
 
+    public OkHttpClient getClient() {
+        return client;
+    }
+
     public FeedsCredentials getCredentials() throws IOException {
         return getServiceEndpoint().getCredentials();
     }
@@ -67,6 +71,10 @@ public class WallabagService {
 
     public boolean deleteArticle(int articleId) throws IOException {
         return getServiceEndpoint().deleteArticle(articleId);
+    }
+
+    public String getExportUrl(long articleId, String exportType) throws IOException {
+        return serviceEndpoint.getExportUrl(articleId, exportType);
     }
 
     public int testConnection() throws IOException {

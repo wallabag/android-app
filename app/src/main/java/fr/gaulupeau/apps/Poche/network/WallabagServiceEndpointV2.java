@@ -237,6 +237,13 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         return executeRequest(getRequest(url));
     }
 
+    public String getExportUrl(long articleId, String exportType) {
+        Log.d(TAG, "getExportUrl() articleId=" + articleId + " exportType=" + exportType);
+        String exportUrl = endpoint + "/export/" + articleId + "." + exportType;
+        Log.d(TAG, "getExportUrl() exportUrl=" + exportUrl);
+        return exportUrl;
+    }
+
     protected Request getGenerateTokenRequest() throws IOException {
         HttpUrl url = getHttpURL(endpoint + "/generate-token")
                 .newBuilder()
