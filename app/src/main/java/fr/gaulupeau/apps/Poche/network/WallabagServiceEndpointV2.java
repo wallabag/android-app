@@ -2,12 +2,12 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -109,7 +109,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         HttpUrl url = getHttpURL(endpoint + "/login_check");
 
         // TODO: maybe move null checks somewhere else
-        RequestBody formBody = new FormEncodingBuilder()
+        RequestBody formBody = new FormBody.Builder()
                 .add("_username", username != null ? username : "")
                 .add("_password", password != null ? password : "")
                 .add("_csrf_token", csrfToken != null ? csrfToken : "")
@@ -124,7 +124,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     protected String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin)
             throws IOException {
-        Log.d(TAG, "executeRequestForResult() start: url: " + request.urlString() + " checkResponse: " + checkResponse + " autoRelogin: " + autoRelogin);
+        Log.d(TAG, "executeRequestForResult() start: url: " + request.url() + " checkResponse: " + checkResponse + " autoRelogin: " + autoRelogin);
 
         Response response = exec(request);
         Log.d(TAG, "executeRequestForResult() got response");

@@ -6,8 +6,8 @@ import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;

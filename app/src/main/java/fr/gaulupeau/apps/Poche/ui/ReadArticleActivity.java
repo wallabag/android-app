@@ -31,10 +31,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -506,20 +507,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         return;
                     }
                     final int articleId = mArticle.getArticleId();
+                    final String articleTitle = mArticle.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");;
                     final String exportType = "pdf";
                     String exportUrl = service.getExportUrl(articleId, exportType);
                     Log.d(TAG, "doInBackgroundSimple() exportUrl=" + exportUrl);
 
-                    Request request = new Request.Builder().url(exportUrl).build();
+                    Request request = new Request.Builder()
+                            .url(exportUrl)
+                            .build();
                     service.getClient().newCall(request).enqueue(new Callback() {
                         @Override
-                        public void onFailure(Request request, IOException e) {
+                        public void onFailure(Call call, IOException e) {
                             Log.d(TAG, "doInBackgroundSimple() onFailure()");
                             e.printStackTrace();
                         }
 
                         @Override
-                        public void onResponse(Response response) throws IOException {
+                        public void onResponse(Call call, Response response) throws IOException {
                             Log.d(TAG, "doInBackgroundSimple() onResponse()");
                             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -527,7 +531,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                             for (int i = 0, size = responseHeaders.size(); i < size; i++) {
                                 Log.d(TAG, responseHeaders.name(i) + ": " + responseHeaders.value(i));
                             }
-                            File file = new File(App.getInstance().getApplicationContext().getExternalFilesDir(null), articleId + "." + exportType);
+                            File file = new File(App.getInstance().getApplicationContext().getExternalFilesDir(null), articleTitle + "." + exportType);
                             Log.d(TAG, "getExportUrl() saving file " + file.getAbsolutePath());
                             BufferedSink sink = Okio.buffer(Okio.sink(file));
                             sink.writeAll(response.body().source());
