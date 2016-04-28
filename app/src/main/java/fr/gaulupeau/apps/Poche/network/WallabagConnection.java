@@ -7,13 +7,14 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.squareup.okhttp.Credentials;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+import okhttp3.Credentials;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.JavaNetCookieJar;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.net.CookieManager;
@@ -28,6 +29,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -110,19 +112,18 @@ public class WallabagConnection {
     }
 
     public static OkHttpClient createClient() {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = null;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.GINGERBREAD) {
-            CookieManager cookieManager = new CookieManager();
-            cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-            client.setCookieHandler(cookieManager);
-        }
+        CookieManager cookieManager = new CookieManager();
+        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 
         Settings settings = App.getInstance().getSettings();
 
         if(settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false)) {
             try {
-                client.setSslSocketFactory(new CustomSSLSocketFactory());
+                client = new OkHttpClient.Builder()
+                        .sslSocketFactory(new CustomSSLSocketFactory())
+                        .build();
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
@@ -151,17 +152,32 @@ public class WallabagConnection {
                 // Create an ssl socket factory with our all-trusting manager
                 final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-                client.setSslSocketFactory(sslSocketFactory);
-                client.setHostnameVerifier(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String hostname, SSLSession session) {
-                        return true;
-                    }
-                });
+                client = new OkHttpClient.Builder()
+                        .cookieJar(new JavaNetCookieJar(cookieManager))
+                        .connectTimeout(10, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(60, TimeUnit.SECONDS)
+                        .sslSocketFactory(sslSocketFactory)
+                        .hostnameVerifier(new HostnameVerifier() {
+                            @Override
+                            public boolean verify(String hostname, SSLSession session) {
+                                return true;
+                            }
+                        })
+                        .build();
+
             } catch (Exception ignored) {}
         }
+        else {
+            client = new OkHttpClient.Builder()
+                    .cookieJar(new JavaNetCookieJar(cookieManager))
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .build();
+        }
 
-        if (BuildConfig.DEBUG) {
+        if (client != null && BuildConfig.DEBUG) {
             client.interceptors().add(new LoggingInterceptor());
             client.networkInterceptors().add(new StethoInterceptor());
         }

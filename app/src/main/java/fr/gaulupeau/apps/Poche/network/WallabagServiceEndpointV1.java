@@ -2,12 +2,12 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import com.squareup.okhttp.FormEncodingBuilder;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -103,7 +103,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         HttpUrl url = getHttpURL(endpoint + "/?login");
 
         // TODO: maybe move null checks somewhere else
-        RequestBody formBody = new FormEncodingBuilder()
+        RequestBody formBody = new FormBody.Builder()
                 .add("login", username != null ? username : "")
                 .add("password", password != null ? password : "")
 //                .add("longlastingsession", "on")

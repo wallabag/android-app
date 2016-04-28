@@ -156,4 +156,6 @@ GAULUPEAU Jonathan — 2013
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
+    <string name="menuDownloadPdf">Télécharger le fichier PDF</string>
+    <string name="downloadPdfPathStart">Téléchargement du fichier à l\'emplacement %s</string>
 </resources>
