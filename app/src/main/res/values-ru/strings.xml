@@ -65,7 +65,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="firstRun_d_optionalSettings_title">Обновите настройки</string>
     <string name="go_to_settings">Перейти в настройки</string>
     <string name="dismiss">Пропустить</string>
-    <string name="open_original">"Открыть первоисточник: "</string>
     <string name="settings_optionalCredentials">Опциональные данные пользователя</string>
     <string name="settings_optionalCredentialsDesc">Обычно используются для выгрузки на сервер</string>
     <string name="settings_username">Имя пользователя</string>

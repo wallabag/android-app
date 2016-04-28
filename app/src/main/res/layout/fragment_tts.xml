@@ -37,6 +37,7 @@
                     android:id="@+id/imageView"
                     android:src="@drawable/ic_running_24dp"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/readSpeed"
                     android:layout_column="0" />
 
                 <SeekBar
@@ -69,6 +70,7 @@
                     android:id="@+id/imageView2"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_musical_notes_24dp"
+                    android:contentDescription="@string/voiceHeight"
                     android:layout_column="0" />
 
                 <SeekBar
@@ -102,6 +104,7 @@
                     android:id="@+id/imageView3"
                     android:src="@drawable/ic_volume_up_24dp"
                     android:layout_gravity="center"
+                    android:contentDescription="@string/readVolume"
                     android:layout_column="0" />
 
                 <SeekBar
@@ -170,7 +173,6 @@
                 android:contentDescription="@string/ttsLanguage"
                 android:spinnerMode="dialog"
                 android:layout_weight="0.35"
-                android:textAlignment="center"
                 android:layout_gravity="center"
                 android:paddingTop="10sp"
                 android:paddingBottom="10sp" />
@@ -197,7 +199,8 @@
                 android:visibility="visible"
                 android:paddingLeft="10sp"
                 android:paddingTop="10sp"
-                android:paddingBottom="10sp" />
+                android:paddingBottom="10sp"
+                android:contentDescription="@string/ttsAutoplayNextArticle"/>
 
             <CheckBox
                 android:id="@+id/chkbxTTSAutoplayNext"

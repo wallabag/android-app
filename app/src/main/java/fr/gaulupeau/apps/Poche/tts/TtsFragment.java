@@ -502,7 +502,7 @@ public class TtsFragment
     }
 
 
-    public void onTTSOptionsClicked(ImageButton btn) {
+    private void onTTSOptionsClicked(ImageButton btn) {
         if (viewTTSOption.getVisibility() == View.VISIBLE) {
             viewTTSOption.setVisibility(View.GONE);
         } else {
@@ -553,7 +553,7 @@ public class TtsFragment
         });
     }
 
-    public void onReadFinished() {
+    private void onReadFinished() {
         if (settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false)) {
             if (ttsService != null) {
                 ttsService.playPageFlipSound();

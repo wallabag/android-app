@@ -84,7 +84,7 @@ public class WallabagService {
      * try to guess the version of the wallabag instance
      * and if valid version is found, save the wallabag version to settings
      *
-     * @returns the version as integer, e.g. for wallabag v2 the number 2. if detection fails
+     * @return the version as integer, e.g. for wallabag v2 the number 2. if detection fails
      *          it returns -1
      */
     private int guessWallabagVersion() {

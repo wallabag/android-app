@@ -61,7 +61,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_bag_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>
     <string name="firstRun_d_welcome">Willkommen bei wallabag</string>
     <string name="firstRun_d_configure">Um anzufangen, richte die App mit deiner wallabag Installation ein.</string>
-    <string name="open_original">"Öffne Original: "</string>
     <string name="settings_optionalCredentials">Optional Zugangsdaten</string>
     <string name="settings_optionalCredentialsDesc">Um zum Server zurück zu synchronisieren</string>
     <string name="settings_username">Benutzername</string>

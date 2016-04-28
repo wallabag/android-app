@@ -10,7 +10,7 @@ import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 
 public class AddActivity extends BaseActionBarActivity {
 
-    ProgressBar progressBar;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

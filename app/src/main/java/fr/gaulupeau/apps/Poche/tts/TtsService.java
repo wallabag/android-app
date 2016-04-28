@@ -299,7 +299,7 @@ public class TtsService
         playCmd();
     }
 
-    public void playCmd() {
+    private void playCmd() {
         Log.d(LOG_TAG, "playCmd");
         switch (state) {
             case CREATED:
@@ -347,7 +347,7 @@ public class TtsService
         pauseCmd(State.PAUSED);
     }
 
-    public void pauseCmd(State newState) {
+    private void pauseCmd(State newState) {
         Log.d(LOG_TAG, "pauseCmd " + newState);
         switch (state) {
             case PLAYING:
@@ -407,18 +407,18 @@ public class TtsService
         }
     }
 
-    public void stopCmd() {
+    private void stopCmd() {
         Log.d(LOG_TAG, "stopCmd");
         stopSelf();
     }
 
-    public void skipToNextCmd() {
+    private void skipToNextCmd() {
         if (this.textInterface != null) {
             this.textInterface.skipToNext();
         }
     }
 
-    public void skipToPreviousCmd() {
+    private void skipToPreviousCmd() {
         if (this.textInterface != null) {
             this.textInterface.skipToPrevious();
         }
@@ -793,7 +793,7 @@ public class TtsService
     }
 
 
-    public static PendingIntent generateActionIntent(Context context, int mediaKeyEvent)
+    private static PendingIntent generateActionIntent(Context context, int mediaKeyEvent)
     {
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         intent.setPackage(context.getPackageName());

@@ -15,25 +15,19 @@ public class BaseActionBarActivity extends AppCompatActivity {
         addBackButtonToActionBar();
     }
 
-    @TargetApi(11)
     protected void addBackButtonToActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            try {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            } catch (Exception e) {
-                //
-            }
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } catch (Exception e) {
+            //
         }
     }
 
-    @TargetApi(11)
     protected void hideBackButtonToActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            try {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            } catch (Exception e) {
-                //
-            }
+        try {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        } catch (Exception e) {
+            //
         }
     }
 

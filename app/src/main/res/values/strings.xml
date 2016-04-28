@@ -77,7 +77,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="firstRun_d_optionalSettings_message">In order to save pages from the app (and to send local changes back to server) you need to fill in Wallabag username and password in settings.</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="dismiss">Dismiss</string>
-    <string name="open_original">"Open original: "</string>
     <string name="settings_optionalCredentials">Optional credentials</string>
     <string name="settings_optionalCredentialsDesc">Used mostly to be able to sync back to server</string>
     <string name="settings_username">Username</string>
@@ -155,4 +154,7 @@ GAULUPEAU Jonathan — 2013-2015
     </plurals>
     <string name="menuAbout">About</string>
     <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br />wallabag is a self hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.</string>
+    <string name="readSpeed">Read speed</string>
+    <string name="voiceHeight">Voice height</string>
+    <string name="readVolume">Read volume</string>
 </resources>

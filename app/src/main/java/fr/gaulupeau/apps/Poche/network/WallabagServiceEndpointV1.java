@@ -84,9 +84,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     protected boolean isLoginPage(String body) throws IOException {
-        if(body == null || body.length() == 0) return false;
-
-        return body.contains(Settings.WALLABAG_LOGIN_FORM_V1);
+        return !(body == null || body.length() == 0) && body.contains(Settings.WALLABAG_LOGIN_FORM_V1);
     }
 
     protected boolean isRegularPage(String body) throws IOException {

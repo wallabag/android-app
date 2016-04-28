@@ -60,7 +60,6 @@ GAULUPEAU Jonathan — 2013
 <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
     <string name="firstRun_d_welcome">Bienvenue sur wallabag</string>
 <string name="firstRun_d_configure">Merci de configurer cette application avec votre instance de wallabag pour commencer.</string>
-<string name="open_original">"Ouvrir l\'original : "</string>
 <string name="settings_optionalCredentials">Champs facultatifs</string>
 <string name="settings_optionalCredentialsDesc">Utilisés essentiellement pour pouvoir se synchroniser avec le serveur.</string>
 <string name="settings_username">Identifiant</string>
@@ -154,4 +153,7 @@ GAULUPEAU Jonathan — 2013
     <string name="ttsError">Erreur de Synthèse Vocale</string>
     <string name="menuAbout">À propos</string>
     <string name="aboutText">&lt;b>Application wallabag pour Android&lt;/b>&lt;br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="readSpeed">Vitesse de lecture</string>
+    <string name="voiceHeight">Hauteur de voix</string>
+    <string name="readVolume">Volume de lecture</string>
 </resources>

@@ -65,7 +65,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="firstRun_d_optionalSettings_message">Para poder guardar páginas con la aplicación (y enviar cambios locales al servidor) necesitas colocar tu nombre de usuario y contraseña en la configuración.</string>
     <string name="go_to_settings">Ir a configuración</string>
     <string name="dismiss">Ignorar</string>
-    <string name="open_original">"Abrir original: "</string>
     <string name="settings_optionalCredentials">Credenciales opcionales</string>
     <string name="settings_optionalCredentialsDesc">Usadas principalmente para sincronizar con el servidor</string>
     <string name="settings_username">Usuario</string>
