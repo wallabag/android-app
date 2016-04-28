@@ -13,6 +13,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -119,16 +120,13 @@ public class WallabagConnection {
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
 
-        List<Protocol> protocolList = new ArrayList<>();
-        protocolList.add(Protocol.SPDY_3);
-        protocolList.add(Protocol.HTTP_1_1);
-        client.setProtocols(protocolList);
-
         Settings settings = App.getInstance().getSettings();
 
         if(settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false)) {
             try {
-                client.setSslSocketFactory(new CustomSSLSocketFactory());
+                client = new OkHttpClient.Builder()
+                        .sslSocketFactory(new CustomSSLSocketFactory())
+                        .build();
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
