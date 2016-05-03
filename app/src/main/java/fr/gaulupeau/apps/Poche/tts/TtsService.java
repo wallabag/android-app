@@ -256,18 +256,20 @@ public class TtsService
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
-        MediaButtonReceiver.handleIntent( mediaSession, intent);
-        String action = intent.getAction();
-        if ("PLAY".equals(action)) {
-            playCmd();
-        } else if ("PAUSE".equals(action)) {
-            pauseCmd();
-        } else if ("PLAY_PAUSE".equals(action)) {
-            playPauseCmd();
-        } else if ("REWIND".equals(action)) {
-            rewindCmd();
-        } else if ("FAST_FORWARD".equals(action)) {
-            fastForwardCmd();
+        if (intent != null) {
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
+            String action = intent.getAction();
+            if ("PLAY".equals(action)) {
+                playCmd();
+            } else if ("PAUSE".equals(action)) {
+                pauseCmd();
+            } else if ("PLAY_PAUSE".equals(action)) {
+                playPauseCmd();
+            } else if ("REWIND".equals(action)) {
+                rewindCmd();
+            } else if ("FAST_FORWARD".equals(action)) {
+                fastForwardCmd();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
