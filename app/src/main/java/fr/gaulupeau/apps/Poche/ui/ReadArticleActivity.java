@@ -101,6 +101,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Intent intent = getIntent();
         long articleId = intent.getLongExtra(EXTRA_ID, -1);
+        Log.d(TAG, "onCreate() articleId=" + articleId);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
         }
@@ -109,10 +110,28 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         DaoSession session = DbConnection.getSession();
+        if(session == null) {
+            Log.e(TAG, "onCreate() DaoSession is null. Thus we" +
+                    " are not able to create this activity. Finish.");
+            finish();
+            return;
+        }
         mArticleDao = session.getArticleDao();
+        if(mArticleDao == null) {
+            Log.e(TAG, "onCreate() ArticleDao is null. Thus we" +
+                    " are not able to create this activity. Finish.");
+            finish();
+            return;
+        }
         mArticle = mArticleDao.queryBuilder()
                 .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
 
+        if(mArticle == null) {
+            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleId + ". Thus we" +
+                    " are not able to create this activity. Finish.");
+            finish();
+            return;
+        }
         titleText = mArticle.getTitle();
         Log.d(TAG, "onCreate: titleText=" + titleText);
         originalUrlText = mArticle.getUrl();
