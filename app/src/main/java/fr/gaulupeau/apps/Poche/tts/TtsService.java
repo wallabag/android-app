@@ -195,14 +195,13 @@ public class TtsService
             }
         });
         ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
+        if (ttsEngine.equals("") || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             this.tts = new TextToSpeech(getApplicationContext(), this);
             this.ttsEngine = tts.getDefaultEngine();
         } else {
-            this.ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
-            this.tts = new TextToSpeech(getApplicationContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
-            if (ttsEngine.equals("")) {
-                this.ttsEngine = tts.getDefaultEngine();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) { // check done again to avoid error notification in Android Studio
+                this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
             }
         }
         noisyReceiver = new BroadcastReceiver() {
@@ -508,6 +507,11 @@ public class TtsService
         Log.d(LOG_TAG, "TextToSpeech.OnInitListener.onInit " + status);
         if (status == TextToSpeech.SUCCESS)
         {
+            if (state == State.ERROR) {
+                // We finally obtained a success status !
+                // (probably after initializing a new TextToSpeech with different engine)
+                state =  State.CREATED;
+            }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 this.ttsEngine = tts.getDefaultEngine();
             }
@@ -736,11 +740,11 @@ public class TtsService
                     startForeground(1, generateNotification());
                     break;
                 case PAUSED:
-                case ERROR:
                     stopForeground(false);
                     notificationManager.notify(1, generateNotification());
                     break;
                 case STOPPED:
+                case ERROR:
                     stopForeground(true);
                     notificationManager.cancel(1);
                     break;
@@ -765,14 +769,15 @@ public class TtsService
                 builder.addAction(generateAction(android.R.drawable.ic_media_play, "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
             }
             builder.addAction(generateAction(android.R.drawable.ic_media_ff, "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-            builder.addAction( generateAction( android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT ) );
+            builder.addAction(generateAction(android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
+            builder.setStyle(new NotificationCompat.MediaStyle()
+                    .setShowActionsInCompactView(0, 1, 2, 3)
+                    //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
+                    .setMediaSession(mediaSession.getSessionToken())
+                    .setShowCancelButton(true)
+                    .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
+
         }
-        builder.setStyle(new NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0,1,2, 3)
-                //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
-                .setMediaSession(mediaSession.getSessionToken())
-                .setShowCancelButton(true)
-                .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
         return builder.build();
     }
 
