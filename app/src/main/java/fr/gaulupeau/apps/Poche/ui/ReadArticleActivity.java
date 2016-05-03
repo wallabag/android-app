@@ -114,9 +114,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
 
         titleText = mArticle.getTitle();
+        Log.d(TAG, "onCreate: titleText=" + titleText);
         originalUrlText = mArticle.getUrl();
+        Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
         String htmlContent = mArticle.getContent();
+        Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
         positionToRestore = mArticle.getArticleProgress();
+        Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
         setTitle(titleText);
 
