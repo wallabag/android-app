@@ -149,29 +149,12 @@ public class TtsService
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         TtsService.instance = this;
+        isTTSInitialized = false;
+        state = State.CREATED;
         executor = Executors.newSingleThreadExecutor();
         settings = App.getInstance().getSettings();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
-        isTTSInitialized = false;
-        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            this.tts = new TextToSpeech(getApplicationContext(), this);
-            this.ttsEngine = tts.getDefaultEngine();
-        } else {
-            this.ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
-            this.tts = new TextToSpeech(getApplicationContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
-            if (ttsEngine.equals("")) {
-                this.ttsEngine = tts.getDefaultEngine();
-            }
-        }
-        noisyReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                pauseCmd();
-            }
-        };
-
         ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
                 MediaButtonReceiver.class.getName());
         mediaSession = new MediaSessionCompat(this, "Wallabag TTS", mediaButtonReceiverComponentName, null);
@@ -211,7 +194,23 @@ public class TtsService
                 stopCmd();
             }
         });
-        state = State.CREATED;
+        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            this.tts = new TextToSpeech(getApplicationContext(), this);
+            this.ttsEngine = tts.getDefaultEngine();
+        } else {
+            this.ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
+            this.tts = new TextToSpeech(getApplicationContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
+            if (ttsEngine.equals("")) {
+                this.ttsEngine = tts.getDefaultEngine();
+            }
+        }
+        noisyReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                pauseCmd();
+            }
+        };
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
     }
@@ -682,6 +681,9 @@ public class TtsService
     }
 
     private void setMediaSessionMetaData() {
+        if (mediaSession == null) {
+            return;
+        }
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
@@ -696,6 +698,9 @@ public class TtsService
 
 
     private void setMediaSessionPlaybackState() {
+        if (mediaSession == null) {
+            return;
+        }
         long position = PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
         if (textInterface != null) {
             position = textInterface.getTime();
