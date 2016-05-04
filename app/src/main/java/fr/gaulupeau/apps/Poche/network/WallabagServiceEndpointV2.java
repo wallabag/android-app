@@ -178,14 +178,27 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     private String getCsrfToken(String body) {
         String startCsrfTokenString = "<input type=\"hidden\" name=\"_csrf_token\" value=\"";
-        int csrfTokenStartIndex = body.indexOf(startCsrfTokenString) + startCsrfTokenString.length();
-        int csrfTokenEndIndex = body.indexOf("\" />", csrfTokenStartIndex);
-        Log.d(TAG, "getCsrfToken() csrfTokenStartIndex=" + csrfTokenStartIndex + " and csrfTokenEndIndex=" + csrfTokenEndIndex + ", so csrfTokenLength=" + (csrfTokenEndIndex-csrfTokenStartIndex));
-        if(csrfTokenStartIndex==-1 || csrfTokenEndIndex==-1){
-            return null; // cannot find csrf string in the login page
+
+        int csrfTokenStartIndex = body.indexOf(startCsrfTokenString);
+        if(csrfTokenStartIndex == -1) {
+            Log.d(TAG, "getCsrfToken() can't find start");
+            return null;
         }
+        csrfTokenStartIndex += startCsrfTokenString.length();
+
+        int csrfTokenEndIndex = body.indexOf("\" />", csrfTokenStartIndex);
+        if(csrfTokenEndIndex == -1) {
+            Log.d(TAG, "getCsrfToken() can't find end");
+            return null;
+        }
+
+        Log.d(TAG, "getCsrfToken() csrfTokenStartIndex=" + csrfTokenStartIndex
+                + " and csrfTokenEndIndex=" + csrfTokenEndIndex
+                + ", so csrfTokenLength=" + (csrfTokenEndIndex - csrfTokenStartIndex));
+
         String csrfToken = body.substring(csrfTokenStartIndex, csrfTokenEndIndex);
         Log.d(TAG, "getCsrfToken() csrfToken=" + csrfToken);
+
         return csrfToken;
     }
 

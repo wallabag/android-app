@@ -95,10 +95,10 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     private Request getLoginRequest() throws IOException {
-        return getLoginRequest("");
+        return getLoginRequest(null);
     }
 
-    protected Request getLoginRequest(String csrfToken) throws IOException {
+    protected Request getLoginRequest(String unused) throws IOException {
         HttpUrl url = getHttpURL(endpoint + "/?login");
 
         // TODO: maybe move null checks somewhere else
