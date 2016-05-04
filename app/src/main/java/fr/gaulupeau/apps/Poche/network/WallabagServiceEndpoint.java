@@ -118,8 +118,8 @@ public abstract class WallabagServiceEndpoint {
 
     protected abstract boolean isRegularPage(String body) throws IOException;
 
-    protected boolean isRegularPage(String body, String logoutLink) throws IOException {
-        return !(body == null || body.length() == 0) && body.contains(logoutLink);
+    protected boolean containsMarker(String body, String marker) throws IOException {
+        return !(body == null || body.isEmpty()) && body.contains(marker);
     }
 
     protected abstract Request getLoginRequest(String csrfToken) throws IOException;

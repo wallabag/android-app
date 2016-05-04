@@ -27,12 +27,13 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
     public static final String WALLABAG_LOGOUT_LINK_V1 = "href=\"./?logout\"";
 
+    private static final String CREDENTIALS_PATTERN = "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"";
+
     private static final String TAG = WallabagServiceEndpointV1.class.getSimpleName();
 
     public WallabagServiceEndpointV1(String endpoint, String username, String password, OkHttpClient client) {
         super(endpoint, username, password, client);
     }
-
 
     public int testConnection() throws IOException {
         // TODO: detect redirects
@@ -83,7 +84,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     public FeedsCredentials getCredentials() throws IOException {
-        return getCredentials("/?view=config", "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"");
+        return getCredentials("/?view=config", CREDENTIALS_PATTERN);
     }
 
     protected boolean isLoginPage(String body) throws IOException {
@@ -91,7 +92,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, WALLABAG_LOGOUT_LINK_V1);
+        return containsMarker(body, WALLABAG_LOGOUT_LINK_V1);
     }
 
     private Request getLoginRequest() throws IOException {

@@ -28,6 +28,8 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     public static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
     public static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
 
+    private static final String CREDENTIALS_PATTERN = "\"/(\\S+)/([a-zA-Z0-9]+)/unread.xml\"";
+
     private static final String TAG = WallabagServiceEndpointV2.class.getSimpleName();
 
     public int testConnection() throws IOException {
@@ -84,24 +86,23 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     }
 
     public FeedsCredentials getCredentials() throws IOException {
-        FeedsCredentials fc = getCredentials("/config", "\"/(\\S+)/([a-zA-Z0-9]+)/unread.xml\"");
+        FeedsCredentials fc = getCredentials("/config", CREDENTIALS_PATTERN);
         // overwrite userID with username because first matcher group of previous regex, which
         // should return the user name, might include the subdirectory in which wallabag is installed
         fc.userID = username;
         return fc;
     }
 
-
     public WallabagServiceEndpointV2(String endpoint, String username, String password, OkHttpClient client) {
         super(endpoint, username, password, client);
     }
 
     protected boolean isLoginPage(String body) throws IOException {
-        return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V2) && body.contains(WALLABAG_LOGO_V2);
+        return containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2);
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, WALLABAG_LOGOUT_LINK_V2) && isRegularPage(body, WALLABAG_LOGO_V2);
+        return containsMarker(body, WALLABAG_LOGOUT_LINK_V2) && containsMarker(body, WALLABAG_LOGO_V2);
     }
 
     protected Request getLoginRequest(String csrfToken) throws IOException {
@@ -144,6 +145,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         // loading a fresh new clean login page, because otherwise we get an implicit redirect to a
         // page we want in our variable "request" directly after login. This is not what we want.
         // We want to explicitly call our request right after we are logged in.
+        // TODO: check: can we use this implicit redirect to reduce number of requests?
         HttpUrl url = getHttpURL(endpoint + "/")
                 .newBuilder()
                 .build();
@@ -213,7 +215,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public boolean toggleArchive(int articleId) throws IOException {
         Log.d(TAG, "toggleArchive() articleId=" + articleId);
-        HttpUrl url = getHttpURL(endpoint + "/archive/" + Integer.toString(articleId))
+        HttpUrl url = getHttpURL(endpoint + "/archive/" + articleId)
                 .newBuilder()
                 .build();
         return executeRequest(getRequest(url));
@@ -221,7 +223,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public boolean toggleFavorite(int articleId) throws IOException {
         Log.d(TAG, "toggleFavorite() articleId=" + articleId);
-        HttpUrl url = getHttpURL(endpoint + "/star/" + Integer.toString(articleId))
+        HttpUrl url = getHttpURL(endpoint + "/star/" + articleId)
                 .newBuilder()
                 .build();
         return executeRequest(getRequest(url));
@@ -229,7 +231,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public boolean deleteArticle(int articleId) throws IOException {
         Log.d(TAG, "deleteArticle() articleId=" + articleId);
-        HttpUrl url = getHttpURL(endpoint + "/delete/" + Integer.toString(articleId))
+        HttpUrl url = getHttpURL(endpoint + "/delete/" + articleId)
                 .newBuilder()
                 .build();
         return executeRequest(getRequest(url));
