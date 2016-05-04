@@ -149,29 +149,12 @@ public class TtsService
     public void onCreate() {
         Log.d(LOG_TAG, "onCreate");
         TtsService.instance = this;
+        isTTSInitialized = false;
+        state = State.CREATED;
         executor = Executors.newSingleThreadExecutor();
         settings = App.getInstance().getSettings();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
-        isTTSInitialized = false;
-        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            this.tts = new TextToSpeech(getApplicationContext(), this);
-            this.ttsEngine = tts.getDefaultEngine();
-        } else {
-            this.ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
-            this.tts = new TextToSpeech(getApplicationContext(), this, this.settings.getString(Settings.TTS_ENGINE, ""));
-            if (ttsEngine.equals("")) {
-                this.ttsEngine = tts.getDefaultEngine();
-            }
-        }
-        noisyReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                pauseCmd();
-            }
-        };
-
         ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
                 MediaButtonReceiver.class.getName());
         mediaSession = new MediaSessionCompat(this, "Wallabag TTS", mediaButtonReceiverComponentName, null);
@@ -211,7 +194,22 @@ public class TtsService
                 stopCmd();
             }
         });
-        state = State.CREATED;
+        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
+        ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
+        if (ttsEngine.equals("") || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            this.tts = new TextToSpeech(getApplicationContext(), this);
+            this.ttsEngine = tts.getDefaultEngine();
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) { // check done again to avoid error notification in Android Studio
+                this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
+            }
+        }
+        noisyReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                pauseCmd();
+            }
+        };
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
     }
@@ -258,18 +256,20 @@ public class TtsService
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(LOG_TAG, "onStartCommand");
-        MediaButtonReceiver.handleIntent( mediaSession, intent);
-        String action = intent.getAction();
-        if ("PLAY".equals(action)) {
-            playCmd();
-        } else if ("PAUSE".equals(action)) {
-            pauseCmd();
-        } else if ("PLAY_PAUSE".equals(action)) {
-            playPauseCmd();
-        } else if ("REWIND".equals(action)) {
-            rewindCmd();
-        } else if ("FAST_FORWARD".equals(action)) {
-            fastForwardCmd();
+        if (intent != null) {
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
+            String action = intent.getAction();
+            if ("PLAY".equals(action)) {
+                playCmd();
+            } else if ("PAUSE".equals(action)) {
+                pauseCmd();
+            } else if ("PLAY_PAUSE".equals(action)) {
+                playPauseCmd();
+            } else if ("REWIND".equals(action)) {
+                rewindCmd();
+            } else if ("FAST_FORWARD".equals(action)) {
+                fastForwardCmd();
+            }
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -509,6 +509,11 @@ public class TtsService
         Log.d(LOG_TAG, "TextToSpeech.OnInitListener.onInit " + status);
         if (status == TextToSpeech.SUCCESS)
         {
+            if (state == State.ERROR) {
+                // We finally obtained a success status !
+                // (probably after initializing a new TextToSpeech with different engine)
+                state =  State.CREATED;
+            }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 this.ttsEngine = tts.getDefaultEngine();
             }
@@ -682,6 +687,9 @@ public class TtsService
     }
 
     private void setMediaSessionMetaData() {
+        if (mediaSession == null) {
+            return;
+        }
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
@@ -696,6 +704,9 @@ public class TtsService
 
 
     private void setMediaSessionPlaybackState() {
+        if (mediaSession == null) {
+            return;
+        }
         long position = PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
         if (textInterface != null) {
             position = textInterface.getTime();
@@ -731,11 +742,11 @@ public class TtsService
                     startForeground(1, generateNotification());
                     break;
                 case PAUSED:
-                case ERROR:
                     stopForeground(false);
                     notificationManager.notify(1, generateNotification());
                     break;
                 case STOPPED:
+                case ERROR:
                     stopForeground(true);
                     notificationManager.cancel(1);
                     break;
@@ -760,14 +771,15 @@ public class TtsService
                 builder.addAction(generateAction(android.R.drawable.ic_media_play, "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
             }
             builder.addAction(generateAction(android.R.drawable.ic_media_ff, "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-            builder.addAction( generateAction( android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT ) );
+            builder.addAction(generateAction(android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
+            builder.setStyle(new NotificationCompat.MediaStyle()
+                    .setShowActionsInCompactView(0, 1, 2, 3)
+                    //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
+                    .setMediaSession(mediaSession.getSessionToken())
+                    .setShowCancelButton(true)
+                    .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
+
         }
-        builder.setStyle(new NotificationCompat.MediaStyle()
-                .setShowActionsInCompactView(0,1,2, 3)
-                //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
-                .setMediaSession(mediaSession.getSessionToken())
-                .setShowCancelButton(true)
-                .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
         return builder.build();
     }
 
