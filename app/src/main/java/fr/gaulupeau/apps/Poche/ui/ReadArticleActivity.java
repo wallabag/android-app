@@ -110,19 +110,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         DaoSession session = DbConnection.getSession();
-        if(session == null) {
-            Log.e(TAG, "onCreate() DaoSession is null. Thus we" +
-                    " are not able to create this activity. Finish.");
-            finish();
-            return;
-        }
         mArticleDao = session.getArticleDao();
-        if(mArticleDao == null) {
-            Log.e(TAG, "onCreate() ArticleDao is null. Thus we" +
-                    " are not able to create this activity. Finish.");
-            finish();
-            return;
-        }
         mArticle = mArticleDao.queryBuilder()
                 .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
 
