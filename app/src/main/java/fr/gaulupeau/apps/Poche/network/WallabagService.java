@@ -14,6 +14,8 @@ import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
+import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGIN_FORM_V1;
+import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGOUT_LINK_V1;
 
 /**
  * @author Victor Häggqvist
@@ -124,7 +126,7 @@ public class WallabagService {
         String body = getBodyFromHttpResponse(endpoint + "/?view=about");
         if (body != null
                 && !body.isEmpty()
-                && (body.contains(Settings.WALLABAG_LOGOUT_LINK_V1) || body.contains(Settings.WALLABAG_LOGIN_FORM_V1))
+                && (body.contains(WALLABAG_LOGOUT_LINK_V1) || body.contains(WALLABAG_LOGIN_FORM_V1))
                 ) {
             Log.d(TAG, "isWallabagVersion1() found Wallabag v1");
             return true;

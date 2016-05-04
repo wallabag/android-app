@@ -14,7 +14,6 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
@@ -24,6 +23,11 @@ import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuild
  * Created by strubbl on 11.04.16.
  */
 public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
+
+    public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
+    public static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
+
     private static final String TAG = WallabagServiceEndpointV2.class.getSimpleName();
 
     public int testConnection() throws IOException {
@@ -93,11 +97,11 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     }
 
     protected boolean isLoginPage(String body) throws IOException {
-        return !(body == null || body.length() == 0) && body.contains(Settings.WALLABAG_LOGIN_FORM_V2) && body.contains(Settings.WALLABAG_LOGO_V2);
+        return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V2) && body.contains(WALLABAG_LOGO_V2);
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V2) && isRegularPage(body, Settings.WALLABAG_LOGO_V2);
+        return isRegularPage(body, WALLABAG_LOGOUT_LINK_V2) && isRegularPage(body, WALLABAG_LOGO_V2);
     }
 
     protected Request getLoginRequest(String csrfToken) throws IOException {

@@ -14,7 +14,6 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
@@ -24,6 +23,10 @@ import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuild
  * Created by strubbl on 11.04.16.
  */
 public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
+
+    public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
+    public static final String WALLABAG_LOGOUT_LINK_V1 = "href=\"./?logout\"";
+
     private static final String TAG = WallabagServiceEndpointV1.class.getSimpleName();
 
     public WallabagServiceEndpointV1(String endpoint, String username, String password, OkHttpClient client) {
@@ -84,11 +87,11 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     protected boolean isLoginPage(String body) throws IOException {
-        return !(body == null || body.length() == 0) && body.contains(Settings.WALLABAG_LOGIN_FORM_V1);
+        return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V1);
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V1);
+        return isRegularPage(body, WALLABAG_LOGOUT_LINK_V1);
     }
 
     private Request getLoginRequest() throws IOException {
