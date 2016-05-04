@@ -27,6 +27,7 @@ public class WallabagService {
 
     private String endpoint;
     private OkHttpClient client;
+    private String username, password;
     private int wallabagMajorVersion;
     private WallabagServiceEndpoint serviceEndpoint;
     private Settings settings;
@@ -35,51 +36,60 @@ public class WallabagService {
         this(endpoint, username, password, WallabagConnection.getClient(), -1);
     }
 
-    public WallabagService(String endpoint, String username, String password, OkHttpClient client, int wallabagMajorVersion) {
+    public WallabagService(String endpoint, String username, String password, OkHttpClient client,
+                           int wallabagMajorVersion) {
         this.endpoint = endpoint;
         this.client = client;
+        this.username = username;
+        this.password = password;
         this.wallabagMajorVersion = wallabagMajorVersion;
         this.settings = App.getInstance().getSettings();
-
-        if(this.wallabagMajorVersion == -1) {
-            this.wallabagMajorVersion = guessWallabagVersion();
-        }
-
-        switch (this.wallabagMajorVersion) {
-            case 1:
-                serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
-                break;
-            case 2:
-                serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password, client);
-                break;
-            default:
-                Log.w(TAG, "switch default case for wallabagMajorVersion reached. this.wallabagMajorVersion=" + this.wallabagMajorVersion);
-                serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
-        }
     }
 
     public FeedsCredentials getCredentials() throws IOException {
-        return serviceEndpoint.getCredentials();
+        return getServiceEndpoint().getCredentials();
     }
 
     public boolean addLink(String link) throws IOException {
-        return serviceEndpoint.addLink(link);
+        return getServiceEndpoint().addLink(link);
     }
 
     public boolean toggleArchive(int articleId) throws IOException {
-        return serviceEndpoint.toggleArchive(articleId);
+        return getServiceEndpoint().toggleArchive(articleId);
     }
 
     public boolean toggleFavorite(int articleId) throws IOException {
-        return serviceEndpoint.toggleFavorite(articleId);
+        return getServiceEndpoint().toggleFavorite(articleId);
     }
 
     public boolean deleteArticle(int articleId) throws IOException {
-        return serviceEndpoint.deleteArticle(articleId);
+        return getServiceEndpoint().deleteArticle(articleId);
     }
 
     public int testConnection() throws IOException {
-        return serviceEndpoint.testConnection();
+        return getServiceEndpoint().testConnection();
+    }
+
+    private WallabagServiceEndpoint getServiceEndpoint() {
+        if(serviceEndpoint == null) {
+            if(this.wallabagMajorVersion == -1) {
+                this.wallabagMajorVersion = guessWallabagVersion();
+            }
+
+            switch (this.wallabagMajorVersion) {
+                case 2:
+                    serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password, client);
+                    break;
+
+                default:
+                    Log.w(TAG, "Falling back to V1 endpoint; wallabagMajorVersion=" + this.wallabagMajorVersion);
+                case 1:
+                    serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
+                    break;
+            }
+        }
+
+        return serviceEndpoint;
     }
 
     /**
@@ -98,6 +108,7 @@ public class WallabagService {
             wallabagVersion = 1;
         }
 
+        // TODO: this should be done once on set up; also it shouldn't be saved _here_
         // save version as setting if valid version found
         if(wallabagVersion > 0) {
             Log.d(TAG, "guessWallabagVersion() saving Settings.WALLABAG_VERSION=" + wallabagVersion);
@@ -126,7 +137,7 @@ public class WallabagService {
         String body = getBodyFromHttpResponse(endpoint + "/?view=about");
         if (body != null
                 && !body.isEmpty()
-                && (body.contains(WALLABAG_LOGOUT_LINK_V1) || body.contains(WALLABAG_LOGIN_FORM_V1))
+                && (body.contains(WALLABAG_LOGIN_FORM_V1) || body.contains(WALLABAG_LOGOUT_LINK_V1))
                 ) {
             Log.d(TAG, "isWallabagVersion1() found Wallabag v1");
             return true;
@@ -146,24 +157,20 @@ public class WallabagService {
         try {
             response = client.newCall(guessRequest).execute();
         } catch (IOException e) {
-            Log.d(TAG, "getBodyFromHttpResponse() IOException");
-            e.printStackTrace();
+            Log.i(TAG, "getBodyFromHttpResponse() IOException", e);
             return "";
         }
         if(response.code() != 200) {
-            Log.d(TAG, "getBodyFromHttpResponse() response.code not 200");
+            Log.d(TAG, "getBodyFromHttpResponse() response.code is not OK: " + response.code());
             return "";
         }
         String body = "";
         try {
             body = response.body().string();
         } catch (NullPointerException e) {
-            Log.d(TAG, "getBodyFromHttpResponse() NullPointerException");
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            Log.d(TAG, "getBodyFromHttpResponse() IOException");
-            e.printStackTrace();
+            Log.d(TAG, "getBodyFromHttpResponse() NullPointerException", e);
+        } catch (IOException e) {
+            Log.d(TAG, "getBodyFromHttpResponse() IOException", e);
         }
         return body;
     }
