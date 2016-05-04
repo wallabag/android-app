@@ -309,14 +309,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     if(updateType == UpdateType.Fast && latestID != null && id != null
                             && latestID >= id) break;
 
-                    Article article = null;
-                    try {
-                        article = articleDao.queryBuilder()
-                                .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
-                    }
-                    catch (IllegalArgumentException e){
-                        Log.d(TAG, "processFeed() ignoring IllegalArgumentException with id=" + id + " " + e);
-                    }
+                    Article article = articleDao.queryBuilder()
+                            .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
 
                     boolean existing = true;
                     if(article == null) {
