@@ -33,12 +33,23 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     public enum UpdateType { Full, Fast }
 
     public enum FeedType {
-        Main("home"), Favorite("fav"), Archive("archive");
+        Main("home", "unread.xml"),
+        Favorite("fav", "starred.xml"),
+        Archive("archive", "archive.xml");
 
-        String urlPart;
+        String urlPartV1, urlPartV2;
 
-        FeedType(String urlPart) {
-            this.urlPart = urlPart;
+        FeedType(String urlPartV1, String urlPartV2) {
+            this.urlPartV1 = urlPartV1;
+            this.urlPartV2 = urlPartV2;
+        }
+
+        public String getUrlPart(int wallabagVersion) {
+            switch(wallabagVersion) {
+                case 1: return urlPartV1;
+                case 2: return urlPartV2;
+            }
+            return "";
         }
     }
 
@@ -215,30 +226,17 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     private String getFeedUrl(FeedType feedType) {
         if(wallabagVersion == 1) {
             return baseURL + "/?feed"
-                    + "&type=" + feedType.urlPart
+                    + "&type=" + feedType.getUrlPart(wallabagVersion)
                     + "&user_id=" + apiUserId
                     + "&token=" + apiToken;
         } else if (wallabagVersion == 2) {
-            String feedXml = "";
-            switch (feedType.urlPart) {
-                case "archive":
-                    feedXml = "archive.xml";
-                    break;
-                case "fav":
-                    feedXml = "starred.xml";
-                    break;
-                default:
-                    feedXml = "unread.xml";
-                    break;
-            }
             return baseURL + "/"
                     + apiUserId + "/"
                     + apiToken + "/"
-                    + feedXml;
+                    + feedType.getUrlPart(wallabagVersion);
         }
-        else {
-            return "";
-        }
+
+        return "";
     }
 
     private InputStream getInputStream(String urlStr) throws IOException {
@@ -344,7 +342,11 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id))
                             .build().unique();
-                    if(article == null) continue;
+                    if(article == null) {
+                        Log.w(TAG, "processFeed() Favorite: Fast; couldn't find article with ID: "
+                                + id);
+                        continue;
+                    }
 
                     if(article.getFavorite() != null && article.getFavorite()) continue;
 

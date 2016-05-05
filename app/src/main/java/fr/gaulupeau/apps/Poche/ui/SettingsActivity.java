@@ -20,24 +20,29 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
 
-public class SettingsActivity extends BaseActionBarActivity {
+public class SettingsActivity extends BaseActionBarActivity
+        implements GetCredentialsTask.ResultHandler {
+
     private Button btnTestConnection;
     private Button btnGetCredentials;
     private Button btnDone;
     private EditText editPocheUrl;
     private EditText editAPIUsername;
     private EditText editAPIToken;
+    private AppCompatSpinner versionChooser;
     private CheckBox allCerts;
     private AppCompatSpinner themeChooser;
     private EditText fontSizeET;
@@ -72,6 +77,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
         editAPIUsername = (EditText) findViewById(R.id.APIUsername);
         editAPIToken = (EditText) findViewById(R.id.APIToken);
+        versionChooser = (AppCompatSpinner) findViewById(R.id.versionChooser);
         allCerts = (CheckBox) findViewById(R.id.accept_all_certs_cb);
         themeChooser = (AppCompatSpinner) findViewById(R.id.themeChooser);
         fontSizeET = (EditText) findViewById(R.id.fontSizeET);
@@ -82,6 +88,9 @@ public class SettingsActivity extends BaseActionBarActivity {
         editPocheUrl.setSelection(editPocheUrl.getText().length());
         editAPIUsername.setText(wallabagSettings.userID);
         editAPIToken.setText(wallabagSettings.userToken);
+
+        versionChooser.setSelection(settings.getInt(Settings.WALLABAG_VERSION, 2) - 1);
+
         allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
 
         Themes.Theme[] themes = Themes.Theme.values();
@@ -168,8 +177,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 getCredentialsTask = new GetCredentialsTask(
                         SettingsActivity.this, editPocheUrl.getText().toString(),
-                        username.getText().toString(), password.getText().toString(),
-                        editAPIUsername, editAPIToken, progressDialog);
+                        username.getText().toString(), password.getText().toString());
 
                 getCredentialsTask.execute();
             }
@@ -181,6 +189,8 @@ public class SettingsActivity extends BaseActionBarActivity {
                 wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
                 wallabagSettings.userID = editAPIUsername.getText().toString();
                 wallabagSettings.userToken = editAPIToken.getText().toString();
+
+                settings.setInt(Settings.WALLABAG_VERSION, versionChooser.getSelectedItemPosition() + 1);
 
                 settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
                 Themes.Theme selectedTheme = Themes.Theme.values()[themeChooser.getSelectedItemPosition()];
@@ -258,6 +268,24 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void handleGetCredentialsResult(Boolean success, FeedsCredentials credentials,
+                                           int wallabagVersion) {
+        if(progressDialog != null) progressDialog.dismiss();
+
+        if(success) {
+            editAPIUsername.setText(credentials.userID);
+            editAPIToken.setText(credentials.token);
+
+            if(wallabagVersion == -1) wallabagVersion = 2;
+            versionChooser.setSelection(wallabagVersion - 1);
+
+            Toast.makeText(this, R.string.getCredentials_success, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.getCredentials_fail, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cancelTasks() {

@@ -14,7 +14,6 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
@@ -24,12 +23,17 @@ import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuild
  * Created by strubbl on 11.04.16.
  */
 public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
+
+    public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
+    public static final String WALLABAG_LOGOUT_LINK_V1 = "href=\"./?logout\"";
+
+    private static final String CREDENTIALS_PATTERN = "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"";
+
     private static final String TAG = WallabagServiceEndpointV1.class.getSimpleName();
 
     public WallabagServiceEndpointV1(String endpoint, String username, String password, OkHttpClient client) {
         super(endpoint, username, password, client);
     }
-
 
     public int testConnection() throws IOException {
         // TODO: detect redirects
@@ -80,22 +84,22 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     public FeedsCredentials getCredentials() throws IOException {
-        return getCredentials("/?view=config", "\"\\?feed&amp;type=home&amp;user_id=(\\d+)&amp;token=([a-zA-Z0-9]+)\"");
+        return getCredentials("/?view=config", CREDENTIALS_PATTERN);
     }
 
     protected boolean isLoginPage(String body) throws IOException {
-        return !(body == null || body.length() == 0) && body.contains(Settings.WALLABAG_LOGIN_FORM_V1);
+        return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V1);
     }
 
     protected boolean isRegularPage(String body) throws IOException {
-        return isRegularPage(body, Settings.WALLABAG_LOGOUT_LINK_V1);
+        return containsMarker(body, WALLABAG_LOGOUT_LINK_V1);
     }
 
     private Request getLoginRequest() throws IOException {
-        return getLoginRequest("");
+        return getLoginRequest(null);
     }
 
-    protected Request getLoginRequest(String csrfToken) throws IOException {
+    protected Request getLoginRequest(String unused) throws IOException {
         HttpUrl url = getHttpURL(endpoint + "/?login");
 
         // TODO: maybe move null checks somewhere else

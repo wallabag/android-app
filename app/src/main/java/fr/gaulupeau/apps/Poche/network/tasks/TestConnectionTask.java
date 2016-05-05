@@ -9,7 +9,6 @@ import android.util.Log;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
@@ -34,7 +33,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected Integer doInBackground(Void... params) {
-        WallabagService service = new WallabagService(endpoint, username, password);
+        WallabagService service = new WallabagService(endpoint, username, password, -1);
         try {
             int result = service.testConnection();
 

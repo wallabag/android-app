@@ -1,13 +1,13 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 public class BaseActionBarActivity extends AppCompatActivity {
+
+    private static final String TAG = BaseActionBarActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +19,7 @@ public class BaseActionBarActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         } catch (Exception e) {
-            //
+            Log.w(TAG, e);
         }
     }
 
@@ -27,7 +27,7 @@ public class BaseActionBarActivity extends AppCompatActivity {
         try {
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         } catch (Exception e) {
-            //
+            Log.w(TAG, e);
         }
     }
 
