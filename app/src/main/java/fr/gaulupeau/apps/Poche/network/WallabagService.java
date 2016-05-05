@@ -28,22 +28,25 @@ public class WallabagService {
     private String endpoint;
     private OkHttpClient client;
     private String username, password;
-    private int wallabagMajorVersion;
+    private int wallabagVersion;
     private WallabagServiceEndpoint serviceEndpoint;
-    private Settings settings;
 
     public WallabagService(String endpoint, String username, String password) {
-        this(endpoint, username, password, WallabagConnection.getClient(), -1);
+        this(endpoint, username, password,
+                App.getInstance().getSettings().getInt(Settings.WALLABAG_VERSION, -1));
+    }
+
+    public WallabagService(String endpoint, String username, String password, int wallabagVersion) {
+        this(endpoint, username, password, WallabagConnection.getClient(), wallabagVersion);
     }
 
     public WallabagService(String endpoint, String username, String password, OkHttpClient client,
-                           int wallabagMajorVersion) {
+                           int wallabagVersion) {
         this.endpoint = endpoint;
         this.client = client;
         this.username = username;
         this.password = password;
-        this.wallabagMajorVersion = wallabagMajorVersion;
-        this.settings = App.getInstance().getSettings();
+        this.wallabagVersion = wallabagVersion;
     }
 
     public FeedsCredentials getCredentials() throws IOException {
@@ -70,21 +73,25 @@ public class WallabagService {
         return getServiceEndpoint().testConnection();
     }
 
+    public int getWallabagVersion() {
+        if(this.wallabagVersion == -1) {
+            this.wallabagVersion = detectWallabagVersion();
+        }
+
+        return this.wallabagVersion;
+    }
+
     private WallabagServiceEndpoint getServiceEndpoint() {
         if(serviceEndpoint == null) {
-            if(this.wallabagMajorVersion == -1) {
-                this.wallabagMajorVersion = guessWallabagVersion();
-            }
-
-            switch (this.wallabagMajorVersion) {
-                case 2:
-                    serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password, client);
+            switch(getWallabagVersion()) {
+                case 1:
+                    serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
                     break;
 
                 default:
-                    Log.w(TAG, "Falling back to V1 endpoint; wallabagMajorVersion=" + this.wallabagMajorVersion);
-                case 1:
-                    serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
+                    Log.w(TAG, "Falling back to V2 endpoint; wallabagVersion=" + this.wallabagVersion);
+                case 2:
+                    serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password, client);
                     break;
             }
         }
@@ -93,29 +100,19 @@ public class WallabagService {
     }
 
     /**
-     * try to guess the version of the wallabag instance
+     * try to detect the version of the wallabag instance
      * and if valid version is found, save the wallabag version to settings
      *
      * @return the version as integer, e.g. for wallabag v2 the number 2. if detection fails
      *          it returns -1
      */
-    private int guessWallabagVersion() {
+    private int detectWallabagVersion() {
         int wallabagVersion = -1;
         if(isWallabagVersion2()) {
             wallabagVersion = 2;
         }
         else if(isWallabagVersion1()) {
             wallabagVersion = 1;
-        }
-
-        // TODO: this should be done once on set up; also it shouldn't be saved _here_
-        // save version as setting if valid version found
-        if(wallabagVersion > 0) {
-            Log.d(TAG, "guessWallabagVersion() saving Settings.WALLABAG_VERSION=" + wallabagVersion);
-            settings.setInt(Settings.WALLABAG_VERSION, wallabagVersion);
-        }
-        else {
-            Log.w(TAG,"guessWallabagVersion() couldn't guess Wallabag version");
         }
 
         return wallabagVersion;

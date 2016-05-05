@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wallabag_versions">
+        <item>V1</item>
+        <item>V2</item>
+    </string-array>
+</resources>

@@ -141,6 +141,20 @@
                 android:inputType="text" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_wallabagVersion" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/versionChooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp"
+            android:entries="@array/wallabag_versions" />
+
         <CheckBox
             android:id="@+id/accept_all_certs_cb"
             android:layout_width="match_parent"
