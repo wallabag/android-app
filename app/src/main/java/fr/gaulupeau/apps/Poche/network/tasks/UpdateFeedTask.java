@@ -302,13 +302,11 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
 
                     Integer id = getIDFromURL(item.sourceUrl);
                     if(id == null) {
-                        Log.w(TAG, "processFeed() id is null, but it is essential, so we are " +
-                                "continuing the loop without this item");
+                        Log.w(TAG, "processFeed(): id is null, skipping; url: " + item.sourceUrl);
                         continue;
                     }
 
-                    if(updateType == UpdateType.Fast && latestID != null && id != null
-                            && latestID >= id) break;
+                    if(updateType == UpdateType.Fast && latestID != null && latestID >= id) break;
 
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
@@ -471,7 +469,9 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     String idStr = url.substring(index + marker.length());
                     try {
                         return Integer.parseInt(idStr);
-                    } catch (NumberFormatException ignored) {}
+                    } catch (NumberFormatException nfe) {
+                        Log.w(TAG, "getIDFromURL() NumberFormatException; str: " + idStr, nfe);
+                    }
                 }
             }
         }
