@@ -50,6 +50,7 @@ public class SettingsActivity extends BaseActionBarActivity
     private EditText fontSizeET;
     private CheckBox serifFont;
     private EditText listLimit;
+    private CheckBox handleHttpScheme;
     private TextView textViewVersion;
     private EditText username;
     private EditText password;
@@ -86,6 +87,7 @@ public class SettingsActivity extends BaseActionBarActivity
         fontSizeET = (EditText) findViewById(R.id.fontSizeET);
         serifFont = (CheckBox) findViewById(R.id.ui_font_serif);
         listLimit = (EditText) findViewById(R.id.list_limit_number);
+        handleHttpScheme = (CheckBox) findViewById(R.id.handle_http_scheme);
 
         editPocheUrl.setText(wallabagSettings.wallabagURL);
         editPocheUrl.setSelection(editPocheUrl.getText().length());
@@ -121,6 +123,8 @@ public class SettingsActivity extends BaseActionBarActivity
 
         serifFont.setChecked(settings.getBoolean(Settings.SERIF_FONT, false));
         listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
+
+        handleHttpScheme.setChecked(settings.isHandlingHttpScheme());
 
         username = (EditText) findViewById(R.id.username);
         username.setText(settings.getKey(Settings.USERNAME));
@@ -215,6 +219,8 @@ public class SettingsActivity extends BaseActionBarActivity
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
                 } catch (NumberFormatException ignored) {}
+
+                settings.setHandleHttpScheme(handleHttpScheme.isChecked());
 
                 settings.setString(Settings.USERNAME, username.getText().toString());
                 settings.setString(Settings.PASSWORD, password.getText().toString());

@@ -1,7 +1,12 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 
 /**
  * @author Victor Häggqvist
@@ -84,6 +89,26 @@ public class Settings {
 
     public boolean contains(String key) {
         return pref.contains(key);
+    }
+
+    public boolean isHandlingHttpScheme() {
+        return App.getInstance().getPackageManager()
+                .getComponentEnabledSetting(getHttpSchemeHandlingComponent())
+                == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
+    }
+
+    public void setHandleHttpScheme(boolean handleHttpScheme) {
+        if(handleHttpScheme == isHandlingHttpScheme()) return;
+
+        int flag = (handleHttpScheme ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                : PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
+
+        App.getInstance().getPackageManager().setComponentEnabledSetting(
+                getHttpSchemeHandlingComponent(), flag, PackageManager.DONT_KILL_APP);
+    }
+
+    private ComponentName getHttpSchemeHandlingComponent() {
+        return new ComponentName(App.getInstance(), HttpSchemeHandlerActivity.class);
     }
 
 }

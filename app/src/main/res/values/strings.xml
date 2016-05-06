@@ -161,4 +161,5 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="voiceHeight">Voice height</string>
     <string name="readVolume">Read volume</string>
     <string name="add_widget">Add widget</string>
+    <string name="settings_ui_handleHttpScheme">Handle HTTP scheme (show Wallabag in the list of web browsers)</string>
 </resources>
