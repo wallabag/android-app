@@ -54,28 +54,24 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
 
         publishProgress(counter, size);
 
-        boolean result = false;
-        try {
-            // add multithreading?
+        // add multithreading?
 
-            for(OfflineURL url: urls) {
-                if(isCancelled()) break;
-                if(!service.addLink(url.getUrl())) {
-                    if(context != null) {
-                        errorMessage = context.getString(R.string.couldntUploadURL_errorMessage);
-                    }
-                    break;
+        for(OfflineURL url: urls) {
+            if(isCancelled()) break;
+
+            boolean success = false;
+            try {
+                if(service.addLink(url.getUrl())) {
+                    success = true;
                 }
-
-                uploaded.add(url);
-
-                publishProgress(++counter, size);
+            } catch(IOException e) {
+                errorMessage = e.getMessage();
+                e.printStackTrace();
             }
 
-            result = true;
-        } catch (IOException e) {
-            errorMessage = e.getMessage();
-            e.printStackTrace();
+            if(success) uploaded.add(url);
+
+            publishProgress(++counter, size);
         }
 
         if(!uploaded.isEmpty()) {
@@ -84,10 +80,10 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
             }
         }
 
-        totalUploaded = counter;
+        totalUploaded = uploaded.size();
         totalCount = size;
 
-        return result;
+        return totalUploaded == totalCount;
     }
 
     @Override
@@ -115,6 +111,10 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
             }
         } else {
             if(context != null) {
+                if(errorMessage == null) {
+                    errorMessage = context.getString(R.string.couldntUploadURL_errorMessage);
+                }
+
                 DialogHelperActivity.showAlertDialog(context,
                         context.getString(R.string.d_uploadURLs_title), errorMessage,
                         context.getString(R.string.ok));

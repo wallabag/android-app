@@ -351,6 +351,11 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void uploadOfflineURLs() {
+        if(!WallabagConnection.isNetworkOnline()) {
+            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.d_uploadingOfflineURLs));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
