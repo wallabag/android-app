@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.network.tasks;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -70,6 +71,7 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
             }
 
             if(success) uploaded.add(url);
+            else Log.w("UploadOfflineURLsTask", "Failed to upload URL: " + url.getUrl());
 
             publishProgress(++counter, size);
         }
