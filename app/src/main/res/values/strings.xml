@@ -61,6 +61,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="no_articles">No articles</string>
     <string name="accept_all_certs_txt">Accept all SSL certificates</string>
     <string name="accept_all_certs_desc">May require restart; insecure; consider importing self-signed certificates into system.</string>
+    <string name="custom_ssl_settings_txt">Custom SSL settings</string>
+    <string name="custom_ssl_settings_desc">Disables SSL on all devices, enables TLS 1.1 and TLS 1.2 on Android 4.1–4.4</string>
     <string name="list_limit_number_text">Articles list limit</string>
     <string name="loading_article_text">Loading…</string>
     <string name="d_urlAction_title">Select an action for URL</string>

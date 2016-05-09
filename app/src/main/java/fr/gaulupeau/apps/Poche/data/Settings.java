@@ -15,6 +15,7 @@ public class Settings {
     public static final String USER_ID = "APIUsername";
     public static final String TOKEN = "APIToken";
     public static final String ALL_CERTS = "all_certs";
+    public static final String CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
     public static final String FONT_SIZE = "font_size";
     public static final String SERIF_FONT = "serif_font";
     public static final String LIST_LIMIT = "list_limit";
@@ -76,9 +77,12 @@ public class Settings {
         return pref.getFloat(key, defValue);
     }
 
-
     public boolean getBoolean(String key, boolean defValue) {
         return pref.getBoolean(key, defValue);
+    }
+
+    public boolean contains(String key) {
+        return pref.contains(key);
     }
 
 }

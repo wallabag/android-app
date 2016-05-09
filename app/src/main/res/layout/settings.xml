@@ -170,6 +170,21 @@
             android:paddingBottom="5sp"
             android:text="@string/accept_all_certs_desc" />
 
+        <CheckBox
+            android:id="@+id/custom_ssl_settings_cb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/custom_ssl_settings_txt" />
+
+        <TextView
+            android:id="@+id/accept_all_certs_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="5sp"
+            android:text="@string/custom_ssl_settings_desc" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
