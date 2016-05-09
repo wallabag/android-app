@@ -298,6 +298,11 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                     Item item = parseItem(parser);
 
                     Integer id = getIDFromURL(item.sourceUrl);
+                    if(id == null) {
+                        Log.w(TAG, "processFeed() id is null, but it is essential, so we are " +
+                                "continuing the loop without this item");
+                        continue;
+                    }
 
                     if(updateType == UpdateType.Fast && latestID != null && id != null
                             && latestID >= id) break;
