@@ -15,7 +15,7 @@ import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 
-public abstract class GenericArticleTask extends AsyncTask<Void, Void, Boolean> {
+public abstract class GenericArticleTask extends AsyncTask<Void, Integer, Boolean> {
 
     protected static String TAG = ToggleFavoriteTask.class.getSimpleName();
 
