@@ -74,7 +74,7 @@ public class WallabagService {
     }
 
     public String getExportUrl(long articleId, String exportType) throws IOException {
-        return serviceEndpoint.getExportUrl(articleId, exportType);
+        return getServiceEndpoint().getExportUrl(articleId, exportType);
     }
 
     public int testConnection() throws IOException {
