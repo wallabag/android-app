@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/icon_unread_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:clickable="true"
+    android:focusable="true"
+    >
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:src="@drawable/icon"
+            android:contentDescription="@string/app_name"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/unread_count_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:paddingTop="0.5dp"
+            android:paddingBottom="0.5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:background="@drawable/rounded_rectangle_shape"
+            android:textColor="#ffffff" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/unread_count_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="0dp"
+        android:textSize="12sp"
+        android:text="@string/app_name"
+        android:layout_gravity="center_horizontal"
+        android:shadowColor="#000000"
+        android:shadowDy="1"
+        android:shadowRadius="4"
+        android:singleLine="true"
+        android:textColor="#ffffff" />
+</LinearLayout>

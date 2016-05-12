@@ -160,4 +160,5 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="readSpeed">Read speed</string>
     <string name="voiceHeight">Voice height</string>
     <string name="readVolume">Read volume</string>
+    <string name="add_widget">Add widget</string>
 </resources>

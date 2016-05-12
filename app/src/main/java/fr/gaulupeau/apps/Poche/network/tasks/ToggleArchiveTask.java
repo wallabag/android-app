@@ -9,6 +9,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
+import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 
 public class ToggleArchiveTask extends GenericArticleTask {
 
@@ -52,6 +53,7 @@ public class ToggleArchiveTask extends GenericArticleTask {
                     Toast.makeText(context, R.string.toggleArchive_noInternetConnection,
                             Toast.LENGTH_SHORT).show();
                 }
+                IconUnreadWidget.triggerWidgetUpdate(context);
             }
         } else {
             if(context != null) {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    android:installLocation="auto"
-    package="fr.gaulupeau.apps.InThePoche">
+    package="fr.gaulupeau.apps.InThePoche"
+    android:installLocation="auto">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -16,6 +16,7 @@
         <activity android:name="fr.gaulupeau.apps.Poche.ui.ArticlesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,7 +39,7 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddActivity"
-            android:label="@string/activity_add_label"/>
+            android:label="@string/activity_add_label" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.DialogHelperActivity"
             android:theme="@style/ProxyTheme"
@@ -55,6 +56,15 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </service>
+        <receiver android:name="fr.gaulupeau.apps.Poche.ui.IconUnreadWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/icon_unread_info" />
+        </receiver>
     </application>
 
 </manifest>
