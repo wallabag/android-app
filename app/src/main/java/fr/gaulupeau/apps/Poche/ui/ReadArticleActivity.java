@@ -34,6 +34,7 @@ import android.widget.Toast;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -481,8 +482,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean downloadPdf() {
         Log.d(TAG, "downloadPdf()");
 
-        new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(), mArticleDao, mArticle)
-                .execute();
+        File exportDir = getExternalFilesDir(null);
+        if(exportDir != null) {
+            new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
+                    mArticleDao, mArticle, exportDir.getAbsolutePath()).execute();
+        } else {
+            Log.w(TAG, "downloadPdf() exportDir is null");
+        }
 
         return true;
     }
