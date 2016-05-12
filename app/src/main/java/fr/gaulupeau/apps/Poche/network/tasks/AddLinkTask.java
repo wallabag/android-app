@@ -3,6 +3,8 @@ package fr.gaulupeau.apps.Poche.network.tasks;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.view.InflateException;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -29,6 +31,8 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
 
     private boolean isOffline;
     private boolean savedOffline;
+
+    private static final String TAG = AddLinkTask.class.getSimpleName();
 
     public AddLinkTask(String url, Context context) {
         this(url, context, null, null);
@@ -94,7 +98,12 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
     protected void onPostExecute(Boolean success) {
         if (success) {
             if(context != null) {
-                Toast.makeText(context, R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
+                try {
+                    Toast.makeText(context, R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
+                }
+                catch (InflateException e) {
+                    Log.w(TAG, "onPostExecute() ignoring InflateException for Added Link Toast notification: ", e);
+                }
             }
         } else {
             if(context != null) {
