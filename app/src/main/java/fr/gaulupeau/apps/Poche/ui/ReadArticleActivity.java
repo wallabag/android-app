@@ -488,17 +488,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private boolean downloadPdf() {
         Log.d(TAG, "downloadPdf()");
+
         String toastTextStart = String.format(
-                App.getInstance().getString(R.string.downloadPdfPathStart), App.getInstance().getApplicationContext().getExternalFilesDir(null));
+                App.getInstance().getString(R.string.downloadPdfPathStart),
+                App.getInstance().getApplicationContext().getExternalFilesDir(null));
         Toast.makeText(this, toastTextStart, Toast.LENGTH_LONG).show();
-        Thread thread = new Thread(new Runnable()
-        {
+
+        Thread thread = new Thread(new Runnable() {
             @Override
-            public void run()
-            {
-                try
-                {
-                    WallabagService service = new WallabagService(settings.getKey(Settings.URL), settings.getKey(Settings.USERNAME), settings.getKey(Settings.PASSWORD));
+            public void run() {
+                try {
+                    WallabagService service = new WallabagService(
+                            settings.getKey(Settings.URL),
+                            settings.getKey(Settings.USERNAME),
+                            settings.getKey(Settings.PASSWORD));
 
                     int testConn = service.testConnection();
                     Log.d(TAG, "doInBackgroundSimple() testConn=" + testConn);
@@ -506,11 +509,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         Log.w(TAG, "doInBackgroundSimple() testing connection failed with value " + testConn);
                         return;
                     }
-                    final int articleId = mArticle.getArticleId();
-                    final String articleTitle = mArticle.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");;
-                    final String exportType = "pdf";
+                    int articleId = mArticle.getArticleId();
+                    String articleTitle = mArticle.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");
+                    String exportType = "pdf";
                     String exportUrl = service.getExportUrl(articleId, exportType);
                     Log.d(TAG, "doInBackgroundSimple() exportUrl=" + exportUrl);
+                    final String exportFileName = articleTitle + "." + exportType;
 
                     Request request = new Request.Builder()
                             .url(exportUrl)
@@ -518,32 +522,49 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     service.getClient().newCall(request).enqueue(new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            Log.d(TAG, "doInBackgroundSimple() onFailure()");
+                            Log.i(TAG, "doInBackgroundSimple() onFailure()");
                             e.printStackTrace();
                         }
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             Log.d(TAG, "doInBackgroundSimple() onResponse()");
-                            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-                            Headers responseHeaders = response.headers();
-                            for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                                Log.d(TAG, responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                            if(!response.isSuccessful()) {
+                                throw new IOException("Unexpected code: " + response);
                             }
-                            File file = new File(App.getInstance().getApplicationContext().getExternalFilesDir(null), articleTitle + "." + exportType);
+
+                            if(Log.isLoggable(TAG, Log.DEBUG)) {
+                                Headers responseHeaders = response.headers();
+                                for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+                                    Log.d(TAG, responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                                }
+                            }
+
+                            File file = new File(App.getInstance().getApplicationContext()
+                                    .getExternalFilesDir(null), exportFileName);
                             Log.d(TAG, "getExportUrl() saving file " + file.getAbsolutePath());
-                            BufferedSink sink = Okio.buffer(Okio.sink(file));
-                            sink.writeAll(response.body().source());
-                            sink.close();
-                            response.body().close();
+
+                            BufferedSink sink = null;
+                            try {
+                                sink = Okio.buffer(Okio.sink(file));
+                                sink.writeAll(response.body().source());
+                            } catch(Exception e) {
+                                Log.w(TAG, e);
+                            } finally {
+                                if(sink != null) {
+                                    try {
+                                        sink.close();
+                                    } catch(IOException ignored) {}
+                                }
+                                response.body().close();
+                            }
+
                             Log.d(TAG, "doInBackgroundSimple() onResponse() finished");
                         }
                     });
-                }
-                catch (Exception e)
-                {
-                    Log.d(TAG, "downloadPdf() Exception in Thread");
+                } catch (Exception e) {
+                    Log.w(TAG, "downloadPdf() Exception in Thread");
                     e.printStackTrace();
                 }
             }
