@@ -56,7 +56,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         Log.d(TAG, "Bagging " + pageUrl);
 
-        new AddLinkTask(pageUrl, this, null, null).execute();
+        new AddLinkTask(pageUrl, getApplicationContext(), null, null).execute();
 
         finish();
     }
