@@ -115,6 +115,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="toggleFavorite_noInternetConnection">Couldn\'t sync to server: no internet connection</string>
     <string name="deleteArticle_errorMessage">Couldn\'t sync to server</string>
     <string name="deleteArticle_noInternetConnection">Couldn\'t sync to server: no internet connection</string>
+    <string name="downloadPdf_noInternetConnection">Couldn\'t download article: no internet connection</string>
     <string name="deleteArticle_deleted">Article deleted</string>
     <string name="couldntUploadURL_errorMessage">Couldn\'t upload URL</string>
     <string name="uploadURLs_nothingToUpload">Nothing to upload</string>
