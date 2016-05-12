@@ -112,18 +112,18 @@ public class WallabagConnection {
     }
 
     public static OkHttpClient createClient() {
-        OkHttpClient client = null;
+        OkHttpClient.Builder b = new OkHttpClient.Builder()
+                .readTimeout(45, TimeUnit.SECONDS);
 
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+        b.cookieJar(new JavaNetCookieJar(cookieManager));
 
         Settings settings = App.getInstance().getSettings();
 
         if(settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false)) {
             try {
-                client = new OkHttpClient.Builder()
-                        .sslSocketFactory(new CustomSSLSocketFactory())
-                        .build();
+                b.sslSocketFactory(new CustomSSLSocketFactory());
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
@@ -152,37 +152,25 @@ public class WallabagConnection {
                 // Create an ssl socket factory with our all-trusting manager
                 final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
-                client = new OkHttpClient.Builder()
-                        .cookieJar(new JavaNetCookieJar(cookieManager))
-                        .connectTimeout(10, TimeUnit.SECONDS)
-                        .writeTimeout(10, TimeUnit.SECONDS)
-                        .readTimeout(60, TimeUnit.SECONDS)
-                        .sslSocketFactory(sslSocketFactory)
-                        .hostnameVerifier(new HostnameVerifier() {
+                b.sslSocketFactory(sslSocketFactory).hostnameVerifier(
+                        new HostnameVerifier() {
                             @Override
                             public boolean verify(String hostname, SSLSession session) {
                                 return true;
                             }
-                        })
-                        .build();
-
-            } catch (Exception ignored) {}
-        }
-        else {
-            client = new OkHttpClient.Builder()
-                    .cookieJar(new JavaNetCookieJar(cookieManager))
-                    .connectTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(10, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build();
+                        }
+                );
+            } catch(Exception e) {
+                Log.w(TAG, "Couldn't init all-trusting client", e);
+            }
         }
 
-        if (client != null && BuildConfig.DEBUG) {
-            client.interceptors().add(new LoggingInterceptor());
-            client.networkInterceptors().add(new StethoInterceptor());
+        if(BuildConfig.DEBUG) {
+            b.addInterceptor(new LoggingInterceptor());
+            b.addNetworkInterceptor(new StethoInterceptor());
         }
 
-        return client;
+        return b.build();
     }
 
     private static class Holder {
