@@ -290,6 +290,13 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <CheckBox
+            android:id="@+id/handle_http_scheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_ui_handleHttpScheme" />
+
 
         <Button
             android:id="@+id/btnDone"
