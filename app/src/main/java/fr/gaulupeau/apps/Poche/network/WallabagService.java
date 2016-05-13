@@ -2,10 +2,10 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -49,6 +49,10 @@ public class WallabagService {
         this.wallabagVersion = wallabagVersion;
     }
 
+    public OkHttpClient getClient() {
+        return client;
+    }
+
     public FeedsCredentials getCredentials() throws IOException {
         return getServiceEndpoint().getCredentials();
     }
@@ -67,6 +71,10 @@ public class WallabagService {
 
     public boolean deleteArticle(int articleId) throws IOException {
         return getServiceEndpoint().deleteArticle(articleId);
+    }
+
+    public String getExportUrl(long articleId, String exportType) throws IOException {
+        return getServiceEndpoint().getExportUrl(articleId, exportType);
     }
 
     public int testConnection() throws IOException {
