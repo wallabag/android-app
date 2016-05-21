@@ -156,4 +156,11 @@ GAULUPEAU Jonathan — 2013
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
+    <string name="menuDownloadPdf">Télécharger le fichier PDF</string>
+    <string name="downloadPdfPathStart">Téléchargement de l\'article en cours</string>
+    <string name="downloadPdfArticleDownloaded">Article téléchargé</string>
+    <string name="downloadPdfArticleDownloadedDetail">Article %s téléchargé</string>
+    <string name="downloadPdfTouchToOpen">Appuyez pour ouvrir</string>
+    <string name="downloadPdfProgressDetail">wallabag télécharge votre article %s en PDF</string>
+    <string name="downloadPdfProgress">wallabag télécharge votre article en PDF</string>
 </resources>

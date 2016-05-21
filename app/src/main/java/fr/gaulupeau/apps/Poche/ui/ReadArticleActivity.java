@@ -31,7 +31,10 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -41,15 +44,15 @@ import java.util.List;
 import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.network.tasks.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.tasks.ToggleArchiveTask;
-import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
+import fr.gaulupeau.apps.Poche.network.tasks.DeleteArticleTask;
+import fr.gaulupeau.apps.Poche.network.tasks.ToggleArchiveTask;
+import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
@@ -476,6 +479,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private boolean downloadPdf() {
+        Log.d(TAG, "downloadPdf()");
+
+        File exportDir = getExternalFilesDir(null);
+        if(exportDir != null) {
+            new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
+                    mArticleDao, mArticle, exportDir.getAbsolutePath()).execute();
+        } else {
+            Log.w(TAG, "downloadPdf() exportDir is null");
+        }
+
+        return true;
+    }
+
     private void openArticle(Long id) {
         if (ttsFragment != null) {
             ttsFragment.onOpenNewArticle();
@@ -554,6 +571,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return deleteArticle();
             case R.id.menuOpenOriginal:
                 return openOriginal();
+            case R.id.menuDownloadPdf:
+                return downloadPdf();
             case R.id.menuIncreaseFontSize:
                 changeFontSize(true);
                 return true;

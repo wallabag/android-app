@@ -23,6 +23,9 @@
         android:id="@+id/menuOpenOriginal"
         android:title="@string/menuOpenOriginal" />
     <item
+        android:id="@+id/menuDownloadPdf"
+        android:title="@string/menuDownloadPdf" />
+    <item
         android:id="@+id/menuIncreaseFontSize"
         android:title="@string/menu_readArticle_increaseFontSize" />
     <item
