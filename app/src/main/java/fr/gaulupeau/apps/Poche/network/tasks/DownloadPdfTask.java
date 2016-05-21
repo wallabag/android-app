@@ -46,14 +46,17 @@ public class DownloadPdfTask extends GenericArticleTask {
 
         if(context == null) return;
 
-        String title = String.format(context.getString(R.string.downloadPdfPathStart), exportDir);
-
         notificationManager = (NotificationManager)context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationBuilder = new NotificationCompat.Builder(context)
-                .setContentTitle(title).setContentText("Download in progress") // TODO: fix text and icon
+                .setContentTitle(context.getString(R.string.downloadPdfPathStart)).setContentText(context.getString(R.string.downloadPdfProgress))
                 .setSmallIcon(R.drawable.ic_action_refresh);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle(String.format(context.getString(R.string.downloadPdfProgressDetail),article.getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
+        notificationBuilder.setStyle(inboxStyle);
+
     }
 
     @Override
@@ -67,8 +70,8 @@ public class DownloadPdfTask extends GenericArticleTask {
         if (testConn != 0) {
             Log.w(TAG, "doInBackgroundSimple() testing connection failed with value " + testConn);
             if(context != null) {
-                // TODO: set errorMessage
-//                errorMessage = context.getString(R.string.);
+                errorMessage = context.getString(R.string.d_connectionFail_title);
+                Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
             }
             return false;
         }
@@ -147,8 +150,12 @@ public class DownloadPdfTask extends GenericArticleTask {
             intent.setDataAndType(Uri.fromFile(resultFile), "application/pdf");
 
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            notificationBuilder.setContentTitle("Article downloaded").setContentText("Touch to open") // TODO: strings
+            notificationBuilder.setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded)).setContentText(context.getString(R.string.downloadPdfTouchToOpen))
                     .setContentIntent(contentIntent).setProgress(0, 0, false);
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle(String.format(context.getString(R.string.downloadPdfArticleDownloadedDetail),article.getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
+            notificationBuilder.setStyle(inboxStyle);
 
             notificationManager.notify(notificationID, notificationBuilder.build());
         } else {

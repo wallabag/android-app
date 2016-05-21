@@ -164,5 +164,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="add_widget">Add widget</string>
     <string name="settings_ui_handleHttpScheme">Handle HTTP scheme (show Wallabag in the list of web browsers)</string>
     <string name="menuDownloadPdf">Download PDF</string>
-    <string name="downloadPdfPathStart">Downloading article to %s</string>
+    <string name="downloadPdfPathStart">Downloading article</string>
+    <string name="downloadPdfArticleDownloaded">Article downloaded</string>
+    <string name="downloadPdfArticleDownloadedDetail">Article %s downloaded</string>
+    <string name="downloadPdfTouchToOpen">Touch to open</string>
+    <string name="downloadPdfProgressDetail">wallabag downloads your article %s en PDF</string>
+    <string name="downloadPdfProgress">wallabag downloads your article en PDF</string>
 </resources>
