@@ -12,6 +12,7 @@ import com.squareup.okhttp.Credentials;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Protocol;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -23,6 +24,7 @@ import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -117,6 +119,11 @@ public class WallabagConnection {
             cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
             client.setCookieHandler(cookieManager);
         }
+
+        List<Protocol> protocolList = new ArrayList<>();
+        protocolList.add(Protocol.SPDY_3);
+        protocolList.add(Protocol.HTTP_1_1);
+        client.setProtocols(protocolList);
 
         Settings settings = App.getInstance().getSettings();
 
