@@ -87,7 +87,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="settings_b_getFeedCredentials_text">Get feeds credentials</string>
     <string name="settings_feedsCredentials">Feeds credentials (required)</string>
     <string name="settings_feedsCredentialsDesc">Used to get articles from server</string>
-    <string name="settings_wallabagVersion">Wallabag server version:</string>
+    <string name="settings_wallabagVersion">wallabag server version:</string>
     <string name="settings_testingConnection">Testing connection</string>
     <string name="settings_gettingCredentials">Getting credentials</string>
     <string name="addLink_errorMessage">Couldn\'t add link</string>
@@ -162,7 +162,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="voiceHeight">Voice height</string>
     <string name="readVolume">Read volume</string>
     <string name="add_widget">Add widget</string>
-    <string name="settings_ui_handleHttpScheme">Handle HTTP scheme (show Wallabag in the list of web browsers)</string>
+    <string name="settings_ui_handleHttpScheme">Handle HTTP scheme (show wallabag in the list of web browsers)</string>
     <string name="menuDownloadPdf">Download PDF</string>
     <string name="downloadPdfPathStart">Downloading article</string>
     <string name="downloadPdfArticleDownloaded">Article downloaded</string>

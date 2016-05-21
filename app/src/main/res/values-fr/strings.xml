@@ -48,7 +48,9 @@ GAULUPEAU Jonathan — 2013
 <string name="no_articles">Aucun article</string>
 <string name="accept_all_certs_txt">Accepter tous les certificats SSL</string>
 <string name="accept_all_certs_desc">Peut nécessiter un redémarrage. Non sécurisé. Vous devriez plutôt ajouter vos certificats personnels au système.</string>
-    <string name="list_limit_number_text">Limitation du nombre d\'articles dans la liste</string>
+<string name="custom_ssl_settings_txt">Paramètres SSL personnalisés</string>
+<string name="custom_ssl_settings_desc">Désactive SSL sur tous les appareils, active TLS 1.1 et TLS 1.2 sur Android 4.1–4.4</string>
+<string name="list_limit_number_text">Limitation du nombre d\'articles dans la liste</string>
 <string name="loading_article_text">Chargement…</string>
 <string name="d_urlAction_title">Choisissez une action pour l\'URL</string>
 <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
@@ -68,6 +70,7 @@ GAULUPEAU Jonathan — 2013
 <string name="settings_b_getFeedCredentials_text">Obtenir les informations du flux RSS</string>
 <string name="settings_feedsCredentials">Identifiants du flux (nécessaires)</string>
 <string name="settings_feedsCredentialsDesc">Utilisés pour obtenir les articles du serveur.</string>
+<string name="settings_wallabagVersion">Version du serveur wallabag:</string>
 <string name="settings_testingConnection">Test de la connexion en cours</string>
 <string name="settings_gettingCredentials">Obtention des identifiants</string>
 <string name="addLink_errorMessage">Impossible d\'ajouter la page</string>
@@ -89,6 +92,7 @@ GAULUPEAU Jonathan — 2013
 <string name="toggleFavorite_noInternetConnection">Impossible de synchroniser avec le serveur : pas de connexion internet</string>
 <string name="deleteArticle_errorMessage">Impossible de synchroniser avec le serveur</string>
 <string name="deleteArticle_noInternetConnection">Impossible de synchroniser avec le serveur : pas de connexion internet</string>
+<string name="downloadPdf_noInternetConnection">Impossible de télécharger l\'article : pas de connexion internet</string>
 <string name="deleteArticle_deleted">Article supprimé</string>
 <string name="couldntUploadURL_errorMessage">Impossible de sauvegarder en ligne l\'URL</string>
 <string name="uploadURLs_nothingToUpload">Rien à sauvegarder</string>
@@ -156,6 +160,8 @@ GAULUPEAU Jonathan — 2013
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
+    <string name="add_widget">Ajouter un widget</string>
+    <string name="settings_ui_handleHttpScheme">Prendre en charge les URI HTTP (montrer wallabag dans la liste de navigateurs)</string>
     <string name="menuDownloadPdf">Télécharger le fichier PDF</string>
     <string name="downloadPdfPathStart">Téléchargement de l\'article en cours</string>
     <string name="downloadPdfArticleDownloaded">Article téléchargé</string>
