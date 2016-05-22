@@ -13,7 +13,6 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -25,7 +24,6 @@ import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -143,7 +141,7 @@ public class WallabagConnection {
 
                             @Override
                             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return null;
+                                return new java.security.cert.X509Certificate[0];
                             }
                         }
                 };
