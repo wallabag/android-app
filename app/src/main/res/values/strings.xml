@@ -149,6 +149,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_solarized">Solarized</string>
     <string name="settings_ui_fontSize">Article font size (%)</string>
     <string name="settings_ui_serif">Serif typeface for article fonts</string>
+    <string name="settings_ui_touch_scroll">Scroll screen by tapping on left and right screen sides</string>
+    <string name="settings_ui_touch_scroll_percent">Percent of screen height to scroll</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
     <string name="menu_readArticle_switchFontFamily">Switch font family</string>

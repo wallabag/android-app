@@ -50,6 +50,8 @@ public class SettingsActivity extends BaseActionBarActivity
     private EditText fontSizeET;
     private CheckBox serifFont;
     private EditText listLimit;
+    private CheckBox touchScroll;
+    private EditText touchScrollPercent;
     private CheckBox handleHttpScheme;
     private TextView textViewVersion;
     private EditText username;
@@ -87,6 +89,8 @@ public class SettingsActivity extends BaseActionBarActivity
         fontSizeET = (EditText) findViewById(R.id.fontSizeET);
         serifFont = (CheckBox) findViewById(R.id.ui_font_serif);
         listLimit = (EditText) findViewById(R.id.list_limit_number);
+        touchScroll = (CheckBox) findViewById(R.id.ui_touch_scroll);
+        touchScrollPercent = (EditText) findViewById(R.id.ui_touch_scroll_percent);
         handleHttpScheme = (CheckBox) findViewById(R.id.handle_http_scheme);
 
         editPocheUrl.setText(wallabagSettings.wallabagURL);
@@ -123,6 +127,9 @@ public class SettingsActivity extends BaseActionBarActivity
 
         serifFont.setChecked(settings.getBoolean(Settings.SERIF_FONT, false));
         listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
+
+        touchScroll.setChecked(settings.getBoolean(Settings.TOUCH_SCROLL, false));
+        touchScrollPercent.setText(String.valueOf(settings.getFloat(Settings.TOUCH_SCROLL_PERCENT, 90)));
 
         handleHttpScheme.setChecked(settings.isHandlingHttpScheme());
 
@@ -218,6 +225,12 @@ public class SettingsActivity extends BaseActionBarActivity
                 settings.setBoolean(Settings.SERIF_FONT, serifFont.isChecked());
                 try {
                     settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
+                } catch (NumberFormatException ignored) {}
+
+                settings.setBoolean(Settings.TOUCH_SCROLL, touchScroll.isChecked());
+                try {
+                    settings.setFloat(Settings.TOUCH_SCROLL_PERCENT,
+                            Float.parseFloat(touchScrollPercent.getText().toString()));
                 } catch (NumberFormatException ignored) {}
 
                 settings.setHandleHttpScheme(handleHttpScheme.isChecked());
