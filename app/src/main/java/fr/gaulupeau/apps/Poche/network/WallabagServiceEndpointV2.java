@@ -89,7 +89,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         FeedsCredentials fc = getCredentials("/config", CREDENTIALS_PATTERN);
         // overwrite userID with username because first matcher group of previous regex, which
         // should return the user name, might include the subdirectory in which wallabag is installed
-        fc.userID = username;
+        if(fc != null) fc.userID = username;
         return fc;
     }
 
