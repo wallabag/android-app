@@ -543,10 +543,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
         toggleFavoriteItem.setTitle(
                 favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
-        // TODO: replace star icon
         toggleFavoriteItem.setIcon(getIcon(favorite
-                        ? R.drawable.abc_btn_rating_star_on_mtrl_alpha
-                        : R.drawable.abc_btn_rating_star_off_mtrl_alpha, null)
+                        ? R.drawable.ic_star_white_24dp
+                        : R.drawable.ic_star_border_white_24dp, null)
         );
 
         menuTTS = menu.findItem(R.id.menuTTS);
