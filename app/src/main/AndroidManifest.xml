@@ -94,6 +94,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/icon_unread_info" />
         </receiver>
+        <service
+            android:name="fr.gaulupeau.apps.Poche.service.BGService"
+            android:exported="false"/>
     </application>
 
 </manifest>

@@ -20,6 +20,10 @@ import android.widget.Toast;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -28,6 +32,7 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
+import fr.gaulupeau.apps.Poche.events.DataChangedEvent;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
@@ -37,6 +42,8 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 public class ArticlesListActivity extends AppCompatActivity
         implements UpdateFeedTask.CallbackInterface,
         ArticlesListFragment.OnFragmentInteractionListener {
+
+    private static final String TAG = ArticlesListActivity.class.getSimpleName();
 
     private UpdateFeedTask feedUpdater;
 
@@ -86,6 +93,8 @@ public class ArticlesListActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        EventBus.getDefault().register(this);
 
         if(dbIsEmpty) {
             showEmptyDbDialogOnResume = true;
@@ -165,6 +174,13 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+
+        super.onStop();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
@@ -217,6 +233,13 @@ public class ArticlesListActivity extends AppCompatActivity
                 .setPositiveButton(R.string.ok, null)
                 .setCancelable(false)
                 .create().show();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onDataChangedEvent(DataChangedEvent event) {
+        Log.d(TAG, "Got DataChangedEvent; updating lists");
+
+        updateLists();
     }
 
     private void updateFinished() {

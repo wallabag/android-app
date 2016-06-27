@@ -51,8 +51,8 @@ import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 import fr.gaulupeau.apps.Poche.network.tasks.DeleteArticleTask;
-import fr.gaulupeau.apps.Poche.network.tasks.ToggleArchiveTask;
 import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
@@ -431,8 +431,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void markAsReadAndClose() {
-        new ToggleArchiveTask(getApplicationContext(),
-                mArticle.getArticleId(), mArticleDao, mArticle).execute();
+        ServiceHelper.archiveArticle(this, mArticle.getArticleId(), !mArticle.getArchive());
 
         finish();
     }

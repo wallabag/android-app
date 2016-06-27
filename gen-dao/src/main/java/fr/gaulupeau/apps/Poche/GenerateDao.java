@@ -1,4 +1,4 @@
-package com.snilius;
+package fr.gaulupeau.apps.Poche;
 
 import de.greenrobot.daogenerator.DaoGenerator;
 import de.greenrobot.daogenerator.Entity;
@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class GenerateDao {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(2, "fr.gaulupeau.apps.Poche.entity");
+        Schema schema = new Schema(3, "fr.gaulupeau.apps.Poche.entity");
 
         Entity article = schema.addEntity("Article");
         article.addIdProperty();
@@ -17,14 +17,23 @@ public class GenerateDao {
         article.addStringProperty("url").columnName("url");
         article.addBooleanProperty("favorite").columnName("favorite");
         article.addBooleanProperty("archive").columnName("archive");
-        article.addBooleanProperty("sync").columnName("sync");
-        article.addDateProperty("updateDate").columnName("update_date");
+        article.addBooleanProperty("sync").columnName("sync"); // TODO: remove
+        article.addDateProperty("updateDate").columnName("update_date"); // TODO: check: what is this prop for?
         article.addDoubleProperty("articleProgress").columnName("article_progress");
 
+        // TODO: remove
         Entity offlineURL = schema.addEntity("OfflineURL");
         offlineURL.addIdProperty();
         offlineURL.addStringProperty("url").columnName("url").unique();
 
-        new DaoGenerator().generateAll(schema, "../app/src-gen");
+        Entity queueItem = schema.addEntity("QueueItem");
+        queueItem.addIdProperty();
+        queueItem.addIntProperty("status").notNull();
+        queueItem.addLongProperty("queueNumber").columnName("queue_number");
+        queueItem.addIntProperty("action").notNull();
+        queueItem.addIntProperty("articleId").columnName("article_id");
+        queueItem.addStringProperty("extra");
+
+        new DaoGenerator().generateAll(schema, "./app/src-gen");
     }
 }

@@ -27,6 +27,7 @@ public class DbConnection {
             }
 
             Log.d(TAG, "creating new db session");
+            // TODO: create non-dev DB helper
             DaoMaster.DevOpenHelper dbHelper = new DaoMaster.DevOpenHelper(context, "wallabag", null);
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             DaoMaster daoMaster = new DaoMaster(db);

@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.entity;
 
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
@@ -193,8 +192,5 @@ public class ArticleDao extends AbstractDao<Article, Long> {
     protected boolean isEntityUpdateable() {
         return true;
     }
-
-    public long getUnreadCount(SQLiteDatabase db) {
-        return DatabaseUtils.queryNumEntries(db, "ARTICLE", "favorite=0 AND archive=0");
-    }
+    
 }
