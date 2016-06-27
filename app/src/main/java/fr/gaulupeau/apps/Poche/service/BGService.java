@@ -19,6 +19,9 @@ import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public class BGService extends IntentService {
 
@@ -100,7 +103,23 @@ public class BGService extends IntentService {
                         if(getWallabagService().toggleArchive(articleID)) {
                             synced = true;
                         }
-                    } catch(IOException e) { // TODO: differentiate errors
+                    } catch(IncorrectCredentialsException e) {
+                        error = true;
+                        Log.w(TAG, "archiveArticle() IncorrectCredentialsException", e);
+                    } catch(IncorrectConfigurationException e) {
+                        // this means configuration error; enqueue action;
+                        // user must fix something before retry
+                        error = true;
+                        Log.w(TAG, "archiveArticle() IncorrectConfigurationException", e);
+                    } catch(RequestException e) {
+                        // this is unknown yet;
+                        // enqueue action
+                        error = true;
+                        Log.w(TAG, "archiveArticle() RequestException", e);
+                    } catch(IOException e) { // TODO: differentiate errors: timeouts and stuff
+                        // IOExceptions in most cases mean temporary error,
+                        // just queue action and retry later;
+                        // in some cases may mean that the action was completed anyway
                         error = true;
                         Log.w(TAG, "archiveArticle() IOException", e);
                     }

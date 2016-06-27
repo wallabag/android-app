@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
 
@@ -40,8 +41,8 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
             Log.d(TAG, "Connection test result code: " + result);
 
             return result;
-        } catch (IOException e) {
-            Log.d(TAG, "Connection test: IOException", e);
+        } catch (IncorrectConfigurationException | IOException e) {
+            Log.d(TAG, "Connection test: Exception", e);
             errorMessage = e.getMessage();
             return null;
         }

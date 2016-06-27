@@ -2,6 +2,13 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
+import fr.gaulupeau.apps.Poche.network.exceptions.NotAuthorizedException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -11,17 +18,10 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 
-/**
- * Created by strubbl on 11.04.16.
- */
 public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
     public static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
@@ -35,7 +35,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         super(endpoint, username, password, client);
     }
 
-    public int testConnection() throws IOException {
+    public int testConnection() throws IncorrectConfigurationException, IOException {
         // TODO: detect redirects
         // TODO: check response codes prior to getting body
 
@@ -83,11 +83,11 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return 0;
     }
 
-    public FeedsCredentials getCredentials() throws IOException {
+    public FeedsCredentials getCredentials() throws RequestException, IOException {
         return getCredentials("/?view=config", CREDENTIALS_PATTERN);
     }
 
-    protected boolean isLoginPage(String body) throws IOException {
+    protected boolean isLoginPage(String body) {
         return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V1);
     }
 
@@ -95,11 +95,11 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return containsMarker(body, WALLABAG_LOGOUT_LINK_V1);
     }
 
-    private Request getLoginRequest() throws IOException {
+    private Request getLoginRequest() throws IncorrectConfigurationException {
         return getLoginRequest(null);
     }
 
-    protected Request getLoginRequest(String unused) throws IOException {
+    protected Request getLoginRequest(String unused) throws IncorrectConfigurationException {
         HttpUrl url = getHttpURL(endpoint + "/?login");
 
         // TODO: maybe move null checks somewhere else
@@ -115,36 +115,52 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
                 .build();
     }
 
-    protected String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin)
-            throws IOException {
-        Log.d(TAG, "executeRequest() start; autoRelogin: " + autoRelogin);
+    protected String executeRequestForResult(
+            Request request, boolean checkResponse, boolean autoRelogin)
+            throws RequestException, IOException {
+        Log.d(TAG, String.format(
+                "executeRequestForResult(url: %s, checkResponse: %s, autoRelogin: %s) started",
+                request.url(), checkResponse, autoRelogin));
 
         Response response = exec(request);
-        Log.d(TAG, "executeRequest() got response");
+        Log.d(TAG, "executeRequestForResult() got response");
 
-        if(checkResponse) super.checkResponse(response);
+        if(checkResponse) checkResponse(response);
         String body = response.body().string();
-        if(!isLoginPage(body)) return body;
-        Log.d(TAG, "executeRequest() response is login page");
-        if(!autoRelogin) return null;
+        if(!isLoginPage(body)) {
+            Log.d(TAG, "executeRequestForResult() already logged in, returning this response body");
+            return body;
+        }
+        Log.d(TAG, "executeRequestForResult() response is login page");
+        if(!autoRelogin) {
+            Log.d(TAG, "executeRequestForResult() autoRelogin is not set, throwing exception");
+            throw new NotAuthorizedException("Not authorized");
+        }
 
-        Log.d(TAG, "executeRequest() trying to re-login");
+        Log.d(TAG, "executeRequestForResult() trying to re-login");
         Response loginResponse = exec(getLoginRequest());
         if(checkResponse) checkResponse(response);
         if(isLoginPage(loginResponse.body().string())) {
-            throw new IOException(App.getInstance()
+            Log.w(TAG, "executeRequestForResult() still on login page -- incorrect credentials");
+            throw new IncorrectCredentialsException(App.getInstance()
                     .getString(R.string.wrongUsernameOrPassword_errorMessage));
         }
 
-        Log.d(TAG, "executeRequest() re-login response is OK; re-executing request");
+        Log.d(TAG, "executeRequestForResult() re-login response is OK; re-executing request");
         response = exec(request);
 
         if(checkResponse) checkResponse(response);
         body = response.body().string();
-        return !isLoginPage(body) ? body : null;
+        if(isLoginPage(body)) {
+            Log.w(TAG, "executeRequestForResult() login page AGAIN; throwing exception");
+            throw new RequestException("Unstable login session");
+        }
+
+        Log.d(TAG, "executeRequestForResult() finished; returning page body");
+        return body;
     }
 
-    public boolean addLink(String link) throws IOException {
+    public boolean addLink(String link) throws RequestException, IOException {
         Log.d(TAG, "addLink() link=" + link);
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
@@ -154,7 +170,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return executeRequest(getRequest(url));
     }
 
-    public boolean toggleArchive(int articleId) throws IOException {
+    public boolean toggleArchive(int articleId) throws RequestException, IOException {
         Log.d(TAG, "toggleArchive() articleId=" + articleId);
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
@@ -165,7 +181,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return executeRequest(getRequest(url));
     }
 
-    public boolean toggleFavorite(int articleId) throws IOException {
+    public boolean toggleFavorite(int articleId) throws RequestException, IOException {
         Log.d(TAG, "toggleFavorite() articleId=" + articleId);
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
@@ -176,7 +192,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return executeRequest(getRequest(url));
     }
 
-    public boolean deleteArticle(int articleId) throws IOException {
+    public boolean deleteArticle(int articleId) throws RequestException, IOException {
         Log.d(TAG, "deleteArticle() articleId=" + articleId);
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
@@ -194,7 +210,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         return exportUrl;
     }
 
-    protected Request getGenerateTokenRequest() throws IOException {
+    protected Request getGenerateTokenRequest() throws IncorrectConfigurationException {
         HttpUrl url = getHttpURL(endpoint)
                 .newBuilder()
                 .setQueryParameter("feed", null)
@@ -205,4 +221,5 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         return getRequest(url);
     }
+
 }

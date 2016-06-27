@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -33,7 +34,7 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
             wallabagVersion = service.getWallabagVersion();
 
             return credentials != null;
-        } catch (IOException e) {
+        } catch (RequestException | IOException e) {
             e.printStackTrace();
             return false;
         }

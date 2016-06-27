@@ -44,11 +44,8 @@ import javax.net.ssl.X509TrustManager;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
-/**
- * @author Victor Häggqvist
- * @since 10/20/15
- */
 public class WallabagConnection {
 
     private static final String TAG = WallabagConnection.class.getSimpleName();
@@ -87,10 +84,10 @@ public class WallabagConnection {
         return getRequestBuilder().url(url).build();
     }
 
-    public static HttpUrl getHttpURL(String url) throws IOException {
+    public static HttpUrl getHttpURL(String url) throws IncorrectConfigurationException {
         HttpUrl httpUrl = HttpUrl.parse(url);
 
-        if(httpUrl == null) throw new IOException("Incorrect URL");
+        if(httpUrl == null) throw new IncorrectConfigurationException("Incorrect URL");
 
         return httpUrl;
     }

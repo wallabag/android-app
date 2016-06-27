@@ -8,6 +8,7 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class ToggleFavoriteTask extends GenericArticleTask {
@@ -25,7 +26,7 @@ public class ToggleFavoriteTask extends GenericArticleTask {
     }
 
     @Override
-    protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+    protected Boolean doInBackgroundSimple(Void... params) throws RequestException, IOException {
         if(isOffline || noCredentials) return false;
 
         if(service.toggleFavorite(articleId)) return true;

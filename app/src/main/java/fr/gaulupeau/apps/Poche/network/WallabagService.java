@@ -12,15 +12,13 @@ import java.io.IOException;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGIN_FORM_V1;
 import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGOUT_LINK_V1;
 
-/**
- * @author Victor Häggqvist
- * @since 10/20/15
- */
 public class WallabagService {
 
     private static final String TAG = WallabagService.class.getSimpleName();
@@ -53,31 +51,31 @@ public class WallabagService {
         return client;
     }
 
-    public FeedsCredentials getCredentials() throws IOException {
+    public FeedsCredentials getCredentials() throws RequestException, IOException {
         return getServiceEndpoint().getCredentials();
     }
 
-    public boolean addLink(String link) throws IOException {
+    public boolean addLink(String link) throws RequestException, IOException {
         return getServiceEndpoint().addLink(link);
     }
 
-    public boolean toggleArchive(int articleId) throws IOException {
+    public boolean toggleArchive(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().toggleArchive(articleId);
     }
 
-    public boolean toggleFavorite(int articleId) throws IOException {
+    public boolean toggleFavorite(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().toggleFavorite(articleId);
     }
 
-    public boolean deleteArticle(int articleId) throws IOException {
+    public boolean deleteArticle(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().deleteArticle(articleId);
     }
 
-    public String getExportUrl(long articleId, String exportType) throws IOException {
+    public String getExportUrl(long articleId, String exportType) {
         return getServiceEndpoint().getExportUrl(articleId, exportType);
     }
 
-    public int testConnection() throws IOException {
+    public int testConnection() throws IncorrectConfigurationException, IOException {
         return getServiceEndpoint().testConnection();
     }
 
@@ -179,4 +177,5 @@ public class WallabagService {
         }
         return body;
     }
+
 }

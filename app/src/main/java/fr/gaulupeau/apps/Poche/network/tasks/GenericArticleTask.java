@@ -14,6 +14,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public abstract class GenericArticleTask extends AsyncTask<Void, Integer, Boolean> {
 
@@ -53,14 +54,14 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Integer, Boolea
 
         try {
             return doInBackgroundSimple(params);
-        } catch (IOException e) {
+        } catch (RequestException | IOException e) {
             Log.w(TAG, "IOException", e);
             errorMessage = e.getMessage();
             return false;
         }
     }
 
-    protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+    protected Boolean doInBackgroundSimple(Void... params) throws RequestException, IOException {
         return false;
     }
 

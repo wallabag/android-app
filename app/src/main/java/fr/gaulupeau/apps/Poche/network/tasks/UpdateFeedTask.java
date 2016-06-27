@@ -25,6 +25,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
@@ -188,8 +189,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
             // TODO: rewrite?
             try {
                 is = getInputStream(getFeedUrl(feedType));
-            } catch (IOException e) {
-                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
+            } catch (IncorrectConfigurationException | IOException e) {
+                Log.e("FeedUpdater.updateByF", "Exception on " + feedType, e);
                 errorMessage = App.getInstance().getString(R.string.feedUpdater_IOException);
                 return false;
             } catch (RuntimeException e) {
@@ -242,7 +243,8 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         return "";
     }
 
-    private InputStream getInputStream(String urlStr) throws IOException {
+    private InputStream getInputStream(String urlStr)
+            throws IncorrectConfigurationException, IOException {
         Request request = WallabagConnection.getRequest(WallabagConnection.getHttpURL(urlStr));
 
         Response response = WallabagConnection.getClient().newCall(request).execute();

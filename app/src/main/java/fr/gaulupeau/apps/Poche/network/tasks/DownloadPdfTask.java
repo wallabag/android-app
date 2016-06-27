@@ -15,6 +15,7 @@ import java.io.IOException;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -60,7 +61,8 @@ public class DownloadPdfTask extends GenericArticleTask {
     }
 
     @Override
-    protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+    protected Boolean doInBackgroundSimple(Void... params)
+            throws IncorrectConfigurationException, IOException {
         if(isOffline || noCredentials) return false;
 
         publishProgress(1); // report that we didn't stop because of isOffline or noCredentials

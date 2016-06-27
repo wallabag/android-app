@@ -17,6 +17,7 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
@@ -65,7 +66,7 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
                 if(service.addLink(url.getUrl())) {
                     success = true;
                 }
-            } catch(IOException e) {
+            } catch(RequestException | IOException e) {
                 errorMessage = e.getMessage();
                 e.printStackTrace();
             }

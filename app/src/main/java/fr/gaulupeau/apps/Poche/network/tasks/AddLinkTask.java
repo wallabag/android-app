@@ -17,6 +17,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
 public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
@@ -71,7 +72,7 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
                     } else if(context != null) {
                         errorMessage = context.getString(R.string.addLink_errorMessage);
                     }
-                } catch (IOException e) {
+                } catch(RequestException | IOException e) {
                     errorMessage = e.getMessage();
                     e.printStackTrace();
                 }
