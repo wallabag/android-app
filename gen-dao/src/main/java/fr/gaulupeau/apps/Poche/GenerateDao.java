@@ -6,7 +6,7 @@ import de.greenrobot.daogenerator.Schema;
 
 public class GenerateDao {
     public static void main(String[] args) throws Exception {
-        Schema schema = new Schema(3, "fr.gaulupeau.apps.Poche.entity");
+        Schema schema = new Schema(4, "fr.gaulupeau.apps.Poche.entity");
 
         Entity article = schema.addEntity("Article");
         article.addIdProperty();
@@ -28,8 +28,7 @@ public class GenerateDao {
 
         Entity queueItem = schema.addEntity("QueueItem");
         queueItem.addIdProperty();
-        queueItem.addIntProperty("status").notNull();
-        queueItem.addLongProperty("queueNumber").columnName("queue_number");
+        queueItem.addLongProperty("queueNumber").columnName("queue_number"); // not sure it is actually needed
         queueItem.addIntProperty("action").notNull();
         queueItem.addIntProperty("articleId").columnName("article_id");
         queueItem.addStringProperty("extra");

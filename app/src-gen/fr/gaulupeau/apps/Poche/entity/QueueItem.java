@@ -7,7 +7,6 @@ package fr.gaulupeau.apps.Poche.entity;
 public class QueueItem {
 
     private Long id;
-    private int status;
     private Long queueNumber;
     private int action;
     private Integer articleId;
@@ -20,9 +19,8 @@ public class QueueItem {
         this.id = id;
     }
 
-    public QueueItem(Long id, int status, Long queueNumber, int action, Integer articleId, String extra) {
+    public QueueItem(Long id, Long queueNumber, int action, Integer articleId, String extra) {
         this.id = id;
-        this.status = status;
         this.queueNumber = queueNumber;
         this.action = action;
         this.articleId = articleId;
@@ -35,14 +33,6 @@ public class QueueItem {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public Long getQueueNumber() {

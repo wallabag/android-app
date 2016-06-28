@@ -36,6 +36,7 @@ import fr.gaulupeau.apps.Poche.events.DataChangedEvent;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -201,6 +202,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuOpenRandomArticle:
                 openRandomArticle();
+                return true;
+            case R.id.menuSyncQueue:
+                syncQueue();
                 return true;
             case R.id.menuUploadOfflineURLs:
                 uploadOfflineURLs();
@@ -396,6 +400,15 @@ public class ArticlesListActivity extends AppCompatActivity
 
         progressDialog.show();
         uploadOfflineURLsTask.execute();
+    }
+
+    private void syncQueue() {
+        if(!WallabagConnection.isNetworkOnline()) {
+            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ServiceHelper.syncQueue(this);
     }
 
     public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {
