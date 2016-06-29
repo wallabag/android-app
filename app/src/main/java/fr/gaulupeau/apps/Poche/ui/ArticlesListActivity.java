@@ -33,6 +33,7 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.events.DataChangedEvent;
+import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
@@ -277,9 +278,9 @@ public class ArticlesListActivity extends AppCompatActivity
     @Override
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
-        UpdateFeedTask.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        UpdateFeedTask.UpdateType updateType = feedType == UpdateFeedTask.FeedType.Main
-                ? UpdateFeedTask.UpdateType.Fast : UpdateFeedTask.UpdateType.Full;
+        FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
+        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
+                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
         if(updateFeed(true, feedType, updateType)) {
             refreshingFragment = position;
             setRefreshingUI(true);
@@ -296,8 +297,8 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private boolean updateFeed(boolean showErrors,
-                               UpdateFeedTask.FeedType feedType,
-                               UpdateFeedTask.UpdateType updateType) {
+                               FeedUpdater.FeedType feedType,
+                               FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
         WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
@@ -450,14 +451,14 @@ public class ArticlesListActivity extends AppCompatActivity
             }
         }
 
-        public static UpdateFeedTask.FeedType getFeedType(int position) {
+        public static FeedUpdater.FeedType getFeedType(int position) {
             switch(ArticlesListPagerAdapter.PAGES[position]) {
                 case LIST_TYPE_FAVORITES:
-                    return UpdateFeedTask.FeedType.Favorite;
+                    return FeedUpdater.FeedType.Favorite;
                 case LIST_TYPE_ARCHIVED:
-                    return UpdateFeedTask.FeedType.Archive;
+                    return FeedUpdater.FeedType.Archive;
                 default:
-                    return UpdateFeedTask.FeedType.Main;
+                    return FeedUpdater.FeedType.Main;
             }
         }
 
