@@ -33,21 +33,20 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.events.DataChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.StartedUpdatingFeedsEvent;
+import fr.gaulupeau.apps.Poche.events.StoppedUpdatingFeedsEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListActivity extends AppCompatActivity
-        implements UpdateFeedTask.CallbackInterface,
-        ArticlesListFragment.OnFragmentInteractionListener {
+        implements ArticlesListFragment.OnFragmentInteractionListener {
 
     private static final String TAG = ArticlesListActivity.class.getSimpleName();
-
-    private UpdateFeedTask feedUpdater;
 
     private Settings settings;
 
@@ -96,18 +95,18 @@ public class ArticlesListActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        EventBus.getDefault().register(this);
-
         if(dbIsEmpty) {
             showEmptyDbDialogOnResume = true;
         }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        updateLists();
+        updateLists(); // TODO: better update logic (do not update if unnecessary)
 
         if(firstTimeShown) {
             firstTimeShown = false;
@@ -168,14 +167,6 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if (feedUpdater != null) {
-            feedUpdater.cancel(true);
-        }
-    }
-
-    @Override
     protected void onStop() {
         EventBus.getDefault().unregister(this);
 
@@ -218,20 +209,21 @@ public class ArticlesListActivity extends AppCompatActivity
                         .withAboutVersionShown(true)
                         .withAboutDescription(getResources().getString(R.string.aboutText))
                         .start(this);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    // TODO: remove
     public void feedUpdateFinishedSuccessfully() {
-        updateFinished();
+//        updateFinished();
         Toast.makeText(this, R.string.txtSyncDone, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
+    // TODO: remove
     public void feedUpdateFinishedWithError(String errorMessage) {
-        updateFinished();
+//        updateFinished();
         new AlertDialog.Builder(this)
                 .setMessage(getString(R.string.error_feed) + errorMessage)
                 .setTitle(R.string.error)
@@ -247,22 +239,34 @@ public class ArticlesListActivity extends AppCompatActivity
         updateLists();
     }
 
-    private void updateFinished() {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
+        Log.d(TAG, "Got FeedsChangedEvent");
+
+        int position = ArticlesListPagerAdapter.positionByFeedType(event.getFeedType());
+        if(position != -1) {
+            updateList(position);
+        } else {
+            updateLists();
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onStartedUpdatingFeedsEvent(StartedUpdatingFeedsEvent event) {
+        Log.d(TAG, "Got StartedUpdatingFeedsEvent");
+
+        notifyListUpdate(event.getFeedType(), true);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onStoppedUpdatingFeedsEvent(StoppedUpdatingFeedsEvent event) {
+        Log.d(TAG, "Got StoppedUpdatingFeedsEvent");
+
+        // TODO: better "empty DB" suggestion logic
         dbIsEmpty = false;
         showEmptyDbDialogOnResume = false;
 
-        if(fullUpdateRunning) {
-            fullUpdateRunning = false;
-            updateLists();
-            setRefreshingUI(false);
-        }
-        if(refreshingFragment != -1) {
-            if(viewPager.getCurrentItem() == refreshingFragment) {
-                updateList(refreshingFragment);
-                setRefreshingUI(false, refreshingFragment);
-            }
-            refreshingFragment = -1;
-        }
+        notifyListUpdate(event.getFeedType(), false);
     }
 
     @Override
@@ -281,11 +285,39 @@ public class ArticlesListActivity extends AppCompatActivity
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
                 ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+        // TODO: fix
         if(updateFeed(true, feedType, updateType)) {
-            refreshingFragment = position;
-            setRefreshingUI(true);
+//            refreshingFragment = position;
+//            setRefreshingUI(true);
         } else {
-            setRefreshingUI(false);
+//            setRefreshingUI(false);
+        }
+    }
+
+    private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
+        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
+
+        if(started) {
+            if(position != -1) {
+                if(refreshingFragment != -1 && refreshingFragment != position) {
+                    setRefreshingUI(false, refreshingFragment); // should not happen
+                }
+
+                refreshingFragment = position;
+                setRefreshingUI(true, position);
+            } else {
+                fullUpdateRunning = true;
+                setRefreshingUI(true);
+            }
+        } else {
+            if(refreshingFragment != -1) {
+                setRefreshingUI(false, refreshingFragment);
+                refreshingFragment = -1;
+            }
+            if(fullUpdateRunning) {
+                fullUpdateRunning = false;
+                setRefreshingUI(false);
+            }
         }
     }
 
@@ -301,6 +333,7 @@ public class ArticlesListActivity extends AppCompatActivity
                                FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
+        // TODO: rewrite?
         WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
         if(fullUpdateRunning || refreshingFragment != -1) {
             Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
@@ -310,9 +343,8 @@ public class ArticlesListActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkOnline()) {
-            feedUpdater = new UpdateFeedTask(wallabagSettings.wallabagURL,
-                    wallabagSettings.userID, wallabagSettings.userToken, settings.getInt(Settings.WALLABAG_VERSION, -1), this, feedType, updateType);
-            feedUpdater.execute();
+            ServiceHelper.updateFeed(this, feedType, updateType);
+
             result = true;
         } else {
             if(showErrors) {
@@ -460,6 +492,29 @@ public class ArticlesListActivity extends AppCompatActivity
                 default:
                     return FeedUpdater.FeedType.Main;
             }
+        }
+
+        public static int positionByFeedType(FeedUpdater.FeedType feedType) {
+            if(feedType == null) return -1;
+
+            int listType;
+            switch(feedType) {
+                case Favorite:
+                    listType = LIST_TYPE_FAVORITES;
+                    break;
+                case Archive:
+                    listType = LIST_TYPE_ARCHIVED;
+                    break;
+                default:
+                    listType = LIST_TYPE_UNREAD;
+                    break;
+            }
+
+            for(int i = 0; i < PAGES.length; i++) {
+                if(listType == PAGES[i]) return i;
+            }
+
+            return -1;
         }
 
         public ArticlesListFragment getCachedFragment(int position) {

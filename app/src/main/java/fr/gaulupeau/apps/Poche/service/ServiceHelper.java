@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+
 public class ServiceHelper {
 
     private static final String TAG = ServiceHelper.class.getSimpleName();
@@ -87,6 +89,25 @@ public class ServiceHelper {
         context.startService(intent);
 
         Log.d(TAG, "deleteArticle() finished");
+    }
+
+    public static void updateFeed(Context context,
+                                  FeedUpdater.FeedType feedType,
+                                  FeedUpdater.UpdateType updateType) {
+        Log.d(TAG, "updateFeed() started");
+
+        Intent intent = new Intent(context, BGService.class);
+        intent.setAction(BGService.ACTION_UPDATE_FEED);
+        if(feedType != null) {
+            intent.putExtra(BGService.EXTRA_UPDATE_FEED_FEED_TYPE, feedType.toString());
+        }
+        if(updateType != null) {
+            intent.putExtra(BGService.EXTRA_UPDATE_FEED_UPDATE_TYPE, updateType.toString());
+        }
+
+        context.startService(intent);
+
+        Log.d(TAG, "updateFeed() finished");
     }
 
 }
