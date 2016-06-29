@@ -55,12 +55,11 @@ public class BGService extends IntentService {
         public Result() {}
 
         public Result(ErrorType errorType) {
-            this.success = errorType == null;
-            this.errorType = errorType;
+            setErrorType(errorType);
         }
 
         public Result(ErrorType errorType, String message) {
-            this.errorType = errorType;
+            this(errorType);
             this.message = message;
         }
 
@@ -78,6 +77,7 @@ public class BGService extends IntentService {
 
         public void setErrorType(ErrorType errorType) {
             this.errorType = errorType;
+            if(errorType != null) success = false;
         }
 
         public String getMessage() {
@@ -86,6 +86,14 @@ public class BGService extends IntentService {
 
         public void setMessage(String message) {
             this.message = message;
+        }
+
+        public void updateWith(Result r) {
+            if(r == null || r.isSuccess()) return;
+
+            success = false;
+            errorType = r.getErrorType();
+            message = r.getMessage();
         }
 
     }
@@ -291,7 +299,7 @@ public class BGService extends IntentService {
 
                 boolean articleItem = false;
 
-                ErrorType itemError = null;
+                Result itemResult = null;
                 int action = item.getAction();
                 switch(action) {
                     case QueueHelper.QI_ACTION_ARCHIVE:
@@ -299,7 +307,7 @@ public class BGService extends IntentService {
                         articleItem = true;
                         boolean archive = action == QueueHelper.QI_ACTION_ARCHIVE;
 
-                        itemError = archiveArticleRemote(articleID, archive, false);
+                        itemResult = archiveArticleRemote(articleID, archive);
                         break;
                     }
 
@@ -308,14 +316,14 @@ public class BGService extends IntentService {
                         articleItem = true;
                         boolean favorite = action == QueueHelper.QI_ACTION_FAVORITE;
 
-                        itemError = favoriteArticleRemote(articleID, favorite, false);
+                        itemResult = favoriteArticleRemote(articleID, favorite);
                         break;
                     }
 
                     case QueueHelper.QI_ACTION_DELETE: {
                         articleItem = true;
 
-                        itemError = deleteArticleRemote(articleID, false);
+                        itemResult = deleteArticleRemote(articleID);
                         break;
                     }
 
@@ -325,14 +333,18 @@ public class BGService extends IntentService {
                             Log.w(TAG, "syncOfflineQueue() item has no link; skipping");
                         }
 
-                        itemError = addLinkRemote(link, false);
+                        itemResult = addLinkRemote(link);
                         break;
                     }
                 }
 
-                if(itemError == null) {
+                if(itemResult == null || itemResult.isSuccess()) {
                     doneQueueItems.add(item);
-                } else {
+                } else if(itemResult.getErrorType() != null) {
+                    ErrorType itemError = itemResult.getErrorType();
+
+                    Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
+
                     boolean stop = false;
                     boolean mask = false;
                     switch(itemError) {
@@ -354,14 +366,14 @@ public class BGService extends IntentService {
 
                     if(stop) {
                         errorType = itemError;
-                        Log.i(TAG, String.format(
-                                "syncOfflineQueue() itemError (%s) is a showstopper; breaking",
-                                itemError));
+                        Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                         break;
                     }
                     if(mask && articleItem) {
                         maskedArticles.add(articleID);
                     }
+                } else { // should not happen
+                    Log.w(TAG, "syncOfflineQueue() errorType is not present in itemResult");
                 }
 
                 Log.d(TAG, "syncOfflineQueue() finished processing queue item");
@@ -409,7 +421,7 @@ public class BGService extends IntentService {
 
         // remote changes / queue
 
-        ErrorType errorType = null;
+        Result result = new Result();
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -417,14 +429,17 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.archiveArticle(articleID, archive)) {
-                ErrorType r = archiveArticleRemote(articleID, archive, true);
-                if(r != null) errorType = r;
+                if(WallabagConnection.isNetworkOnline()) {
+                    result.updateWith(archiveArticleRemote(articleID, archive));
+                } else {
+                    result.setErrorType(ErrorType.NoNetwork);
+                }
 
-                if(errorType != null) {
+                if(!result.isSuccess()) {
                     queueHelper.enqueueArchiveArticle(articleID, archive);
                 }
 
-                Log.d(TAG, "archiveArticle() synced: " + (errorType == null));
+                Log.d(TAG, "archiveArticle() synced: " + result.isSuccess());
             } else {
                 Log.d(TAG, "archiveArticle(): QueueHelper reports there's nothing to do");
             }
@@ -435,25 +450,22 @@ public class BGService extends IntentService {
         }
 
         Log.d(TAG, "archiveArticle() finished");
-        return new Result(errorType);
+        return result;
     }
 
-    private ErrorType archiveArticleRemote(int articleID, boolean archive, boolean checkNetwork) {
-        ErrorType errorType = null;
-
-        if(checkNetwork) {
-            if(!WallabagConnection.isNetworkOnline()) return ErrorType.NoNetwork;
-        }
+    private Result archiveArticleRemote(int articleID, boolean archive) {
+        Result result = null;
 
         try {
             if(!getWallabagService().toggleArchive(articleID)) {
-                errorType = ErrorType.NegativeResponse;
+                result = new Result(ErrorType.NegativeResponse);
             }
         } catch(RequestException | IOException e) {
-            errorType = processException(e, "archiveArticleRemote()");
+            Result r = processException(e, "archiveArticleRemote()");
+            if(!r.isSuccess()) result = r;
         }
 
-        return errorType;
+        return result;
     }
 
     private Result favoriteArticle(int articleID, boolean favorite) {
@@ -483,7 +495,7 @@ public class BGService extends IntentService {
 
         // remote changes / queue
 
-        ErrorType errorType = null;
+        Result result = new Result();
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -491,14 +503,17 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.favoriteArticle(articleID, favorite)) {
-                ErrorType r = favoriteArticleRemote(articleID, favorite, true);
-                if(r != null) errorType = r;
+                if(WallabagConnection.isNetworkOnline()) {
+                    result.updateWith(favoriteArticleRemote(articleID, favorite));
+                } else {
+                    result.setErrorType(ErrorType.NoNetwork);
+                }
 
-                if(errorType != null) {
+                if(!result.isSuccess()) {
                     queueHelper.enqueueFavoriteArticle(articleID, favorite);
                 }
 
-                Log.d(TAG, "favoriteArticle() synced: " + (errorType == null));
+                Log.d(TAG, "favoriteArticle() synced: " + result.isSuccess());
             } else {
                 Log.d(TAG, "favoriteArticle(): QueueHelper reports there's nothing to do");
             }
@@ -509,25 +524,22 @@ public class BGService extends IntentService {
         }
 
         Log.d(TAG, "favoriteArticle() finished");
-        return new Result(errorType);
+        return result;
     }
 
-    private ErrorType favoriteArticleRemote(int articleID, boolean favorite, boolean checkNetwork) {
-        ErrorType errorType = null;
-
-        if(checkNetwork) {
-            if(!WallabagConnection.isNetworkOnline()) return ErrorType.NoNetwork;
-        }
+    private Result favoriteArticleRemote(int articleID, boolean favorite) {
+        Result result = null;
 
         try {
             if(!getWallabagService().toggleFavorite(articleID)) {
-                errorType = ErrorType.NegativeResponse;
+                result = new Result(ErrorType.NegativeResponse);
             }
         } catch(RequestException | IOException e) {
-            errorType = processException(e, "favoriteArticleRemote()");
+            Result r = processException(e, "favoriteArticleRemote()");
+            if(!r.isSuccess()) result = r;
         }
 
-        return errorType;
+        return result;
     }
 
     private Result deleteArticle(int articleID) {
@@ -550,7 +562,7 @@ public class BGService extends IntentService {
 
         // remote changes / queue
 
-        ErrorType errorType = null;
+        Result result = new Result();
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -558,14 +570,17 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.deleteArticle(articleID)) {
-                ErrorType r = deleteArticleRemote(articleID, true);
-                if(r != null) errorType = r;
+                if(WallabagConnection.isNetworkOnline()) {
+                    result.updateWith(deleteArticleRemote(articleID));
+                } else {
+                    result.setErrorType(ErrorType.NoNetwork);
+                }
 
-                if(errorType != null) {
+                if(!result.isSuccess()) {
                     queueHelper.enqueueDeleteArticle(articleID);
                 }
 
-                Log.d(TAG, "deleteArticle() synced: " + (errorType == null));
+                Log.d(TAG, "deleteArticle() synced: " + result.isSuccess());
             } else {
                 Log.d(TAG, "deleteArticle(): QueueHelper reports there's nothing to do");
             }
@@ -576,25 +591,22 @@ public class BGService extends IntentService {
         }
 
         Log.d(TAG, "deleteArticle() finished");
-        return new Result(errorType);
+        return result;
     }
 
-    private ErrorType deleteArticleRemote(int articleID, boolean checkNetwork) {
-        ErrorType errorType = null;
-
-        if(checkNetwork) {
-            if(!WallabagConnection.isNetworkOnline()) return ErrorType.NoNetwork;
-        }
+    private Result deleteArticleRemote(int articleID) {
+        Result result = null;
 
         try {
             if(!getWallabagService().deleteArticle(articleID)) {
-                errorType = ErrorType.NegativeResponse;
+                result = new Result(ErrorType.NegativeResponse);
             }
         } catch(RequestException | IOException e) {
-            errorType = processException(e, "deleteArticleRemote()");
+            Result r = processException(e, "deleteArticleRemote()");
+            if(!r.isSuccess()) result = r;
         }
 
-        return errorType;
+        return result;
     }
 
     private Result addLink(String link) {
@@ -605,7 +617,7 @@ public class BGService extends IntentService {
 
         // remote changes / queue
 
-        ErrorType errorType = null;
+        Result result = new Result();
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -613,14 +625,17 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.addLink(link)) {
-                ErrorType r = addLinkRemote(link, true);
-                if(r != null) errorType = r;
+                if(WallabagConnection.isNetworkOnline()) {
+                    result.updateWith(addLinkRemote(link));
+                } else {
+                    result.setErrorType(ErrorType.NoNetwork);
+                }
 
-                if(errorType != null) {
+                if(!result.isSuccess()) {
                     queueHelper.enqueueAddLink(link);
                 }
 
-                Log.d(TAG, "addLink() synced: " + (errorType == null));
+                Log.d(TAG, "addLink() synced: " + result.isSuccess());
             } else {
                 Log.d(TAG, "addLink(): QueueHelper reports there's nothing to do");
             }
@@ -631,32 +646,28 @@ public class BGService extends IntentService {
         }
 
         Log.d(TAG, "addLink() finished");
-        return new Result(errorType);
+        return result;
     }
 
-    private ErrorType addLinkRemote(String link, boolean checkNetwork) {
-        ErrorType errorType = null;
-
-        if(checkNetwork) {
-            if(!WallabagConnection.isNetworkOnline()) return ErrorType.NoNetwork;
-        }
+    private Result addLinkRemote(String link) {
+        Result result = null;
 
         try {
             if(!getWallabagService().addLink(link)) {
-                errorType = ErrorType.NegativeResponse;
+                result = new Result(ErrorType.NegativeResponse);
             }
         } catch(RequestException | IOException e) {
-            errorType = processException(e, "addLinkRemote()");
+            Result r = processException(e, "addLinkRemote()");
+            if(!r.isSuccess()) result = r;
         }
 
-        return errorType;
+        return result;
     }
 
     private Result updateFeed(FeedUpdater.FeedType feedType, FeedUpdater.UpdateType updateType) {
         Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
 
         Result result = new Result();
-        ErrorType errorType = null;
 
         if(WallabagConnection.isNetworkOnline()) {
             StartedUpdatingFeedsEvent startedUpdatingFeedsEvent = new StartedUpdatingFeedsEvent(feedType);
@@ -695,8 +706,8 @@ public class BGService extends IntentService {
             } catch (FeedUpdater.FeedUpdaterException e) {
                 Log.w(TAG, "updateFeed() FeedUpdaterException", e);
                 // TODO: error type detection
+                result.setErrorType(ErrorType.Unknown);
                 result.setMessage(e.getMessage());
-                errorType = ErrorType.Unknown;
             } finally {
                 daoSession.getDatabase().endTransaction();
             }
@@ -707,44 +718,37 @@ public class BGService extends IntentService {
             getEventBus().removeStickyEvent(startedUpdatingFeedsEvent);
             getEventBus().post(new StoppedUpdatingFeedsEvent(feedType));
         } else {
-            errorType = ErrorType.NoNetwork;
-        }
-
-        if(errorType != null) {
-            result.setErrorType(errorType);
-            result.setSuccess(false);
+            result.setErrorType(ErrorType.NoNetwork);
         }
 
         Log.d(TAG, "updateFeed() finished");
         return result;
     }
 
-    private ErrorType processException(Exception e, String scope) {
-        ErrorType errorType;
+    private Result processException(Exception e, String scope) {
+        Result result = new Result();
 
-        // TODO: simplify logging?
+        Log.w(TAG, String.format("%s %s", scope, e.getClass().getSimpleName()), e);
+
         if(e instanceof RequestException) {
             if(e instanceof IncorrectCredentialsException) {
-                errorType = ErrorType.IncorrectCredentials;
-                Log.w(TAG, scope + " IncorrectCredentialsException", e);
+                result.setErrorType(ErrorType.IncorrectCredentials);
             } else if(e instanceof IncorrectConfigurationException) {
-                errorType = ErrorType.IncorrectConfiguration;
-                Log.w(TAG, scope + " IncorrectConfigurationException", e);
+                result.setErrorType(ErrorType.IncorrectConfiguration);
             } else {
-                errorType = ErrorType.Unknown;
-                Log.w(TAG, scope + " RequestException", e);
+                result.setErrorType(ErrorType.Unknown);
+                result.setMessage(e.getMessage());
             }
         } else if(e instanceof IOException) { // TODO: differentiate errors: timeouts and stuff
-            errorType = ErrorType.Temporary;
+            result.setErrorType(ErrorType.Temporary);
+            result.setMessage(e.getMessage());
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway
-            Log.w(TAG, scope + " IOException", e);
         } else { // other exceptions meant to be handled outside
-            errorType = ErrorType.Unknown;
-            Log.w(TAG, scope + " Exception", e);
+            result.setErrorType(ErrorType.Unknown);
         }
 
-        return errorType;
+        return result;
     }
 
     private Handler getHandler() {
