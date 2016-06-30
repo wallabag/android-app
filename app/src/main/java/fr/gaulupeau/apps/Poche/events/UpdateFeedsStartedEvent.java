@@ -2,11 +2,16 @@ package fr.gaulupeau.apps.Poche.events;
 
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 
-public class StartedUpdatingFeedsEvent {
+public class UpdateFeedsStartedEvent extends BackgroundOperationEvent {
 
     protected FeedUpdater.FeedType feedType;
 
-    public StartedUpdatingFeedsEvent(FeedUpdater.FeedType feedType) {
+    public UpdateFeedsStartedEvent(FeedUpdater.FeedType feedType) {
+        this.feedType = feedType;
+    }
+
+    public UpdateFeedsStartedEvent(long operationID, FeedUpdater.FeedType feedType) {
+        super(operationID);
         this.feedType = feedType;
     }
 

@@ -2,7 +2,7 @@ package fr.gaulupeau.apps.Poche.events;
 
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 
-public class FeedsChangedEvent {
+public class FeedsChangedEvent extends ContentChangedEvent {
 
     private FeedUpdater.FeedType feedType;
 

@@ -32,10 +32,9 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
-import fr.gaulupeau.apps.Poche.events.DataChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
-import fr.gaulupeau.apps.Poche.events.StartedUpdatingFeedsEvent;
-import fr.gaulupeau.apps.Poche.events.StoppedUpdatingFeedsEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
@@ -233,34 +232,22 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onDataChangedEvent(DataChangedEvent event) {
-        Log.d(TAG, "Got DataChangedEvent; updating lists");
-
-        updateLists();
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
-        int position = ArticlesListPagerAdapter.positionByFeedType(event.getFeedType());
-        if(position != -1) {
-            updateList(position);
-        } else {
-            updateLists();
-        }
+        updateListByFeedType(event.getFeedType());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onStartedUpdatingFeedsEvent(StartedUpdatingFeedsEvent event) {
-        Log.d(TAG, "Got StartedUpdatingFeedsEvent");
+    public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
+        Log.d(TAG, "Got UpdateFeedsStartedEvent");
 
         notifyListUpdate(event.getFeedType(), true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onStoppedUpdatingFeedsEvent(StoppedUpdatingFeedsEvent event) {
-        Log.d(TAG, "Got StoppedUpdatingFeedsEvent");
+    public void onUpdateFeedsStoppedEvent(UpdateFeedsFinishedEvent event) {
+        Log.d(TAG, "Got UpdateFeedsFinishedEvent");
 
         // TODO: better "empty DB" suggestion logic
         dbIsEmpty = false;
@@ -370,6 +357,19 @@ public class ArticlesListActivity extends AppCompatActivity
         ArticlesListFragment f = getFragment(position);
         if(f != null) {
             f.updateList();
+        }
+    }
+
+    private void updateListByFeedType(FeedUpdater.FeedType feedType) {
+        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
+
+        if(position != -1) {
+            ArticlesListFragment f = getFragment(position);
+            if(f != null) {
+                f.updateList();
+            }
+        } else {
+            updateLists();
         }
     }
 

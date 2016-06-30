@@ -23,6 +23,9 @@ public class QueueHelper {
     private DaoSession daoSession;
     private QueueItemDao queueItemDao;
 
+    // that's not a very good implementation
+    private boolean queueChanged;
+
     public QueueHelper(DaoSession daoSession) {
         this.daoSession = daoSession;
         this.queueItemDao = daoSession.getQueueItemDao();
@@ -224,10 +227,20 @@ public class QueueHelper {
         Log.d(TAG, "enqueueAddLink() finished");
     }
 
+    public boolean isQueueChanged() {
+        return queueChanged;
+    }
+
+    public long getQueueLength() {
+        return queueItemDao.queryBuilder().count();
+    }
+
     private void enqueue(QueueItem item) {
         item.setQueueNumber(getNewQueueNumber());
 
         queueItemDao.insertWithoutSettingPk(item);
+
+        queueChanged = true;
     }
 
     private long getNewQueueNumber() {
@@ -243,6 +256,7 @@ public class QueueHelper {
 
     private void dequeueItem(QueueItem item) {
         queueItemDao.delete(item);
+        queueChanged = true;
     }
 
     private List<QueueItem> getQueuedItemsForArticle(int articleID) {

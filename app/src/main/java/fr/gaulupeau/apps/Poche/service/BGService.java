@@ -27,10 +27,15 @@ import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.entity.QueueItem;
+import fr.gaulupeau.apps.Poche.events.AddLinkFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.AddLinkStartedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
-import fr.gaulupeau.apps.Poche.events.StartedUpdatingFeedsEvent;
-import fr.gaulupeau.apps.Poche.events.StoppedUpdatingFeedsEvent;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
@@ -46,7 +51,7 @@ public class BGService extends IntentService {
         NegativeResponse, Unknown
     }
 
-    private static class Result {
+    public static class Result {
 
         private boolean success = true;
         private ErrorType errorType;
@@ -96,6 +101,10 @@ public class BGService extends IntentService {
             message = r.getMessage();
         }
 
+        public Result copy() {
+            return new Result(errorType, message);
+        }
+
     }
 
     public static final String ACTION_ADD_LINK = "wallabag.action.add_link";
@@ -108,6 +117,7 @@ public class BGService extends IntentService {
     public static final String ACTION_UPDATE_FEED = "wallabag.action.update_feed";
 
     public static final String EXTRA_ARTICLE_ID = "wallabag.extra.article_id";
+    public static final String EXTRA_OPERATION_ID = "wallabag.extra.operation_id";
     public static final String EXTRA_LINK = "wallabag.extra.link";
     public static final String EXTRA_UPDATE_FEED_FEED_TYPE = "wallabag.extra.update_feed.feed_type";
     public static final String EXTRA_UPDATE_FEED_UPDATE_TYPE = "wallabag.extra.update_feed.update_type";
@@ -138,11 +148,12 @@ public class BGService extends IntentService {
         Result result = null;
         switch(action) {
             case ACTION_SYNC_QUEUE:
-                result = syncOfflineQueue();
+                result = syncOfflineQueue(intent.getLongExtra(EXTRA_OPERATION_ID, -1));
                 break;
 
             case ACTION_ADD_LINK:
-                result = addLink(intent.getStringExtra(EXTRA_LINK));
+                result = addLink(intent.getStringExtra(EXTRA_LINK),
+                        intent.getLongExtra(EXTRA_OPERATION_ID, -1));
                 break;
 
             case ACTION_ARCHIVE:
@@ -182,7 +193,7 @@ public class BGService extends IntentService {
                     break;
                 }
 
-                result = updateFeed(feedType, updateType);
+                result = updateFeed(feedType, updateType, intent.getLongExtra(EXTRA_OPERATION_ID, -1));
                 break;
             }
         }
@@ -262,15 +273,19 @@ public class BGService extends IntentService {
         Log.d(TAG, "onHandleIntent() finished");
     }
 
-    private Result syncOfflineQueue() {
+    private Result syncOfflineQueue(long operationID) {
         Log.d(TAG, "syncOfflineQueue() started");
+
+        SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(operationID);
+        postStickyEvent(startEvent);
 
         if(!WallabagConnection.isNetworkOnline()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
             return new Result(ErrorType.NoNetwork);
         }
 
-        ErrorType errorType = null;
+        Result result = new Result();
+        Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -365,7 +380,7 @@ public class BGService extends IntentService {
                     }
 
                     if(stop) {
-                        errorType = itemError;
+                        result.setErrorType(itemError);
                         Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                         break;
                     }
@@ -383,13 +398,24 @@ public class BGService extends IntentService {
                 queueHelper.dequeueItems(doneQueueItems);
             }
 
+            if(queueHelper.isQueueChanged()) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
             daoSession.getDatabase().setTransactionSuccessful();
         } finally {
             daoSession.getDatabase().endTransaction();
         }
 
+        removeStickyEvent(startEvent);
+        postEvent(new SyncQueueFinishedEvent(operationID, result.copy()));
+
+        if(queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
+        }
+
         Log.d(TAG, "syncOfflineQueue() finished");
-        return new Result(errorType);
+        return result;
     }
 
     // TODO: reuse code in {archive,favorite,delete}Article{,Remote}
@@ -409,7 +435,12 @@ public class BGService extends IntentService {
             article.setArchive(archive);
             getArticleDao().update(article);
 
-            getEventBus().post(new ArticleChangedEvent(article));
+            ArticleChangedEvent.ChangeType changeType = archive
+                    ? ArticleChangedEvent.ChangeType.Archived
+                    : ArticleChangedEvent.ChangeType.Unarchived;
+
+            postEvent(new ArticleChangedEvent(article, changeType));
+            notifyAboutFeedChanges(article, changeType);
             // TODO: notify widget somehow (more specific event?)
 
             Log.d(TAG, "archiveArticle() article object updated");
@@ -422,6 +453,7 @@ public class BGService extends IntentService {
         // remote changes / queue
 
         Result result = new Result();
+        Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -444,9 +476,17 @@ public class BGService extends IntentService {
                 Log.d(TAG, "archiveArticle(): QueueHelper reports there's nothing to do");
             }
 
+            if(queueHelper.isQueueChanged()) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
             daoSession.getDatabase().setTransactionSuccessful();
         } finally {
             daoSession.getDatabase().endTransaction();
+        }
+
+        if(queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
         }
 
         Log.d(TAG, "archiveArticle() finished");
@@ -483,7 +523,12 @@ public class BGService extends IntentService {
             article.setFavorite(favorite);
             getArticleDao().update(article);
 
-            getEventBus().post(new ArticleChangedEvent(article));
+            ArticleChangedEvent.ChangeType changeType = favorite
+                    ? ArticleChangedEvent.ChangeType.Favorited
+                    : ArticleChangedEvent.ChangeType.Unfavorited;
+
+            postEvent(new ArticleChangedEvent(article, changeType));
+            notifyAboutFeedChanges(article, changeType);
             // TODO: notify widget somehow (more specific event?)
 
             Log.d(TAG, "favoriteArticle() article object updated");
@@ -496,6 +541,7 @@ public class BGService extends IntentService {
         // remote changes / queue
 
         Result result = new Result();
+        Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -518,9 +564,17 @@ public class BGService extends IntentService {
                 Log.d(TAG, "favoriteArticle(): QueueHelper reports there's nothing to do");
             }
 
+            if(queueHelper.isQueueChanged()) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
             daoSession.getDatabase().setTransactionSuccessful();
         } finally {
             daoSession.getDatabase().endTransaction();
+        }
+
+        if(queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
         }
 
         Log.d(TAG, "favoriteArticle() finished");
@@ -555,7 +609,10 @@ public class BGService extends IntentService {
 
         getArticleDao().delete(article);
 
-        getEventBus().post(new ArticleChangedEvent(article));
+        ArticleChangedEvent.ChangeType changeType = ArticleChangedEvent.ChangeType.Deleted;
+
+        postEvent(new ArticleChangedEvent(article, changeType));
+        notifyAboutFeedChanges(article, changeType);
         // TODO: notify widget somehow (more specific event?)
 
         Log.d(TAG, "deleteArticle() article object deleted");
@@ -563,6 +620,7 @@ public class BGService extends IntentService {
         // remote changes / queue
 
         Result result = new Result();
+        Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -585,9 +643,17 @@ public class BGService extends IntentService {
                 Log.d(TAG, "deleteArticle(): QueueHelper reports there's nothing to do");
             }
 
+            if(queueHelper.isQueueChanged()) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
             daoSession.getDatabase().setTransactionSuccessful();
         } finally {
             daoSession.getDatabase().endTransaction();
+        }
+
+        if(queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
         }
 
         Log.d(TAG, "deleteArticle() finished");
@@ -609,8 +675,11 @@ public class BGService extends IntentService {
         return result;
     }
 
-    private Result addLink(String link) {
+    private Result addLink(String link, long operationID) {
         Log.d(TAG, String.format("addLink(%s) started", link));
+
+        AddLinkStartedEvent startEvent = new AddLinkStartedEvent(operationID, link);
+        postStickyEvent(startEvent);
 
         // local changes
         // none
@@ -618,6 +687,7 @@ public class BGService extends IntentService {
         // remote changes / queue
 
         Result result = new Result();
+        Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -640,9 +710,20 @@ public class BGService extends IntentService {
                 Log.d(TAG, "addLink(): QueueHelper reports there's nothing to do");
             }
 
+            if(queueHelper.isQueueChanged()) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
             daoSession.getDatabase().setTransactionSuccessful();
         } finally {
             daoSession.getDatabase().endTransaction();
+        }
+
+        removeStickyEvent(startEvent);
+        postEvent(new AddLinkFinishedEvent(operationID, link, result.copy()));
+
+        if(queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
         }
 
         Log.d(TAG, "addLink() finished");
@@ -664,15 +745,16 @@ public class BGService extends IntentService {
         return result;
     }
 
-    private Result updateFeed(FeedUpdater.FeedType feedType, FeedUpdater.UpdateType updateType) {
+    private Result updateFeed(FeedUpdater.FeedType feedType, FeedUpdater.UpdateType updateType,
+                              long operationID) {
         Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
+
+        UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(operationID, feedType);
+        postStickyEvent(startEvent);
 
         Result result = new Result();
 
         if(WallabagConnection.isNetworkOnline()) {
-            StartedUpdatingFeedsEvent startedUpdatingFeedsEvent = new StartedUpdatingFeedsEvent(feedType);
-            getEventBus().postSticky(startedUpdatingFeedsEvent);
-
             // TODO: move notification stuff somewhere else
             Context context = getApplicationContext();
             NotificationManager notificationManager = (NotificationManager)context
@@ -713,13 +795,13 @@ public class BGService extends IntentService {
             }
 
             notificationManager.cancel(TAG, 100501);
-
-            getEventBus().post(new FeedsChangedEvent(feedType));
-            getEventBus().removeStickyEvent(startedUpdatingFeedsEvent);
-            getEventBus().post(new StoppedUpdatingFeedsEvent(feedType));
         } else {
             result.setErrorType(ErrorType.NoNetwork);
         }
+
+        removeStickyEvent(startEvent);
+        postEvent(new UpdateFeedsFinishedEvent(operationID, feedType, result.copy()));
+        postEvent(new FeedsChangedEvent(feedType)); // TODO: fix: other feeds may be affected too
 
         Log.d(TAG, "updateFeed() finished");
         return result;
@@ -800,6 +882,18 @@ public class BGService extends IntentService {
         return EventBus.getDefault();
     }
 
+    private void postEvent(Object event) {
+        getEventBus().post(event);
+    }
+
+    private void postStickyEvent(Object event) {
+        getEventBus().postSticky(event);
+    }
+
+    private void removeStickyEvent(Object event) {
+        getEventBus().removeStickyEvent(event);
+    }
+
     private void showToast(final String text, final int duration) {
         getHandler().post(new Runnable() {
             @Override
@@ -813,6 +907,40 @@ public class BGService extends IntentService {
         return getArticleDao().queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.eq(articleID))
                 .build().unique();
+    }
+
+    private void notifyAboutFeedChanges(Article article, ArticleChangedEvent.ChangeType changeType) {
+        boolean mainUpdated = false;
+        boolean archiveUpdated = false;
+        boolean favoriteUpdated = false;
+
+        switch(changeType) {
+            case Archived:
+            case Unarchived:
+                mainUpdated = archiveUpdated = true;
+                if(article.getFavorite()) favoriteUpdated = true;
+                break;
+
+            case Favorited:
+            case Unfavorited:
+                favoriteUpdated = true;
+                if(article.getArchive()) archiveUpdated = true;
+                else mainUpdated = true;
+                break;
+
+            case Deleted:
+                if(article.getArchive()) archiveUpdated = true;
+                else mainUpdated = true;
+                break;
+        }
+
+        if(archiveUpdated && mainUpdated && favoriteUpdated) {
+            postEvent(new FeedsChangedEvent(null));
+        } else {
+            if(mainUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Main));
+            if(archiveUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Archive));
+            if(favoriteUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Favorite));
+        }
     }
 
 }

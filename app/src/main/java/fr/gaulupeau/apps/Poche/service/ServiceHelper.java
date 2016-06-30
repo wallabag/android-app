@@ -24,11 +24,16 @@ public class ServiceHelper {
     }
 
     public static void addLink(Context context, String link) {
+        addLink(context, link, null);
+    }
+
+    public static void addLink(Context context, String link, Long operationID) {
         Log.d(TAG, "archiveArticle() started");
 
         Intent intent = new Intent(context, BGService.class);
         intent.setAction(BGService.ACTION_ADD_LINK);
         intent.putExtra(BGService.EXTRA_LINK, link);
+        if(operationID != null) intent.putExtra(BGService.EXTRA_OPERATION_ID, operationID);
 
         context.startService(intent);
 
@@ -94,6 +99,13 @@ public class ServiceHelper {
     public static void updateFeed(Context context,
                                   FeedUpdater.FeedType feedType,
                                   FeedUpdater.UpdateType updateType) {
+        updateFeed(context, feedType, updateType, null);
+    }
+
+    public static void updateFeed(Context context,
+                                  FeedUpdater.FeedType feedType,
+                                  FeedUpdater.UpdateType updateType,
+                                  Long operationID) {
         Log.d(TAG, "updateFeed() started");
 
         Intent intent = new Intent(context, BGService.class);
@@ -103,6 +115,9 @@ public class ServiceHelper {
         }
         if(updateType != null) {
             intent.putExtra(BGService.EXTRA_UPDATE_FEED_UPDATE_TYPE, updateType.toString());
+        }
+        if(operationID != null) {
+            intent.putExtra(BGService.EXTRA_OPERATION_ID, (long)operationID);
         }
 
         context.startService(intent);
