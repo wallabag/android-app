@@ -238,7 +238,7 @@ public class ArticlesListActivity extends AppCompatActivity
         updateListByFeedType(event.getFeedType());
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "Got UpdateFeedsStartedEvent");
 
