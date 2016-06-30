@@ -11,14 +11,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 
 /**
  * Implementation of App Widget functionality.
  */
-public class IconUnreadWidget extends AppWidgetProvider {
+public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget implementation
     private static final String TAG = IconUnreadWidget.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
@@ -57,12 +63,33 @@ public class IconUnreadWidget extends AppWidgetProvider {
     }
 
     @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Log.d(TAG, "onUpdate() appWidgetIds.length=" + appWidgetIds.length);
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
+        Log.d(TAG, "onFeedsChangedEvent() started; updating widget");
+
+        triggerWidgetUpdate(App.getInstance().getApplicationContext());
     }
 
     public static void triggerWidgetUpdate(Context context) {

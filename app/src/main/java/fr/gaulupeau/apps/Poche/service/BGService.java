@@ -441,7 +441,6 @@ public class BGService extends IntentService {
 
             postEvent(new ArticleChangedEvent(article, changeType));
             notifyAboutFeedChanges(article, changeType);
-            // TODO: notify widget somehow (more specific event?)
 
             Log.d(TAG, "archiveArticle() article object updated");
         } else {
@@ -529,7 +528,6 @@ public class BGService extends IntentService {
 
             postEvent(new ArticleChangedEvent(article, changeType));
             notifyAboutFeedChanges(article, changeType);
-            // TODO: notify widget somehow (more specific event?)
 
             Log.d(TAG, "favoriteArticle() article object updated");
         } else {
@@ -613,7 +611,6 @@ public class BGService extends IntentService {
 
         postEvent(new ArticleChangedEvent(article, changeType));
         notifyAboutFeedChanges(article, changeType);
-        // TODO: notify widget somehow (more specific event?)
 
         Log.d(TAG, "deleteArticle() article object deleted");
 

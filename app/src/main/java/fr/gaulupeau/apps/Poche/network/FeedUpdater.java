@@ -184,9 +184,6 @@ public class FeedUpdater {
                         .getString(R.string.feedUpdater_feedProcessingError));
             }
 
-            // TODO: notify widget
-//            IconUnreadWidget.triggerWidgetUpdate(App.getInstance().getApplicationContext());
-
             Log.d(TAG, "updateByFeed() finished successfully");
         } finally {
             if(is != null) {
