@@ -38,8 +38,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="txtAPIToken">Token de la fuente</string>
     <string name="error">Error</string>
     <string name="error_feed">"Error cargando fuente :"</string>
-    <string name="bag_page">Página erronea</string>
-    <string name="activity_add_label">Página erronea</string>
+    <string name="bag_page">Guardar página</string>
+    <string name="activity_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
     <string name="bag_it">Guárdalo</string>
     <string name="share_article_title">Compartir artículo</string>
