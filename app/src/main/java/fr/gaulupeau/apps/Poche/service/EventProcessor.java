@@ -62,6 +62,9 @@ public class EventProcessor {
         Log.d(TAG, "onOfflineQueueChangedEvent() started");
 
         Long queueLength = event.getQueueLength();
+
+        Log.d(TAG, "onOfflineQueueChangedEvent() offline queue length: " + queueLength);
+
         getSettings().setBoolean(Settings.PENDING_OFFLINE_QUEUE,
                 queueLength == null || queueLength != 0);
     }

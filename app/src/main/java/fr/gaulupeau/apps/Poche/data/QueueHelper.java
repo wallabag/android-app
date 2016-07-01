@@ -38,10 +38,14 @@ public class QueueHelper {
     }
 
     public void dequeueItems(List<QueueItem> items) {
-        // supposed to be called in a transaction, so separate operations a probably fine
+        if(items.isEmpty()) return;
+
+        // supposed to be called in a transaction, so separate operations are probably fine
         for(QueueItem item: items) {
             queueItemDao.delete(item);
         }
+
+        queueChanged = true;
     }
 
     // TODO: reuse code in {,enqueue}{archive,favorite,delete}Article
@@ -256,6 +260,7 @@ public class QueueHelper {
 
     private void dequeueItem(QueueItem item) {
         queueItemDao.delete(item);
+
         queueChanged = true;
     }
 
