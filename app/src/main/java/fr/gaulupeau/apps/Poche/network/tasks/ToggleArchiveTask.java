@@ -12,7 +12,7 @@ import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 
-public class ToggleArchiveTask extends GenericArticleTask {
+public class ToggleArchiveTask extends GenericArticleTask { // TODO: remove
 
     public ToggleArchiveTask(Context context, int articleId, ArticleDao articleDao, Article article) {
         super(context, articleId, articleDao, article);

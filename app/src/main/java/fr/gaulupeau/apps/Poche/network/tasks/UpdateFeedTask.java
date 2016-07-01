@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 
-public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
+public class UpdateFeedTask extends AsyncTask<Void, Void, Void> { // TODO: remove
 
     private String baseURL;
     private String apiUserId;

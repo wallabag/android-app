@@ -20,7 +20,7 @@ import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
-public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> {
+public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> { // TODO: remove
 
     private String errorMessage;
     private Context context;

@@ -13,11 +13,17 @@ public class ServiceHelper {
     // TODO: reuse code
 
     public static void syncQueue(Context context) {
+        syncQueue(context, false);
+    }
+
+    public static void syncQueue(Context context, boolean auto) {
         Log.d(TAG, "syncQueue() started");
 
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SyncQueue);
+        if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST,
-                new ActionRequest(ActionRequest.Action.SyncQueue));
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 

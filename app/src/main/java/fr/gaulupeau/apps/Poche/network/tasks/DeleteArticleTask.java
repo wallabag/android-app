@@ -12,7 +12,7 @@ import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 
-public class DeleteArticleTask extends GenericArticleTask {
+public class DeleteArticleTask extends GenericArticleTask { // TODO: remove
 
     public DeleteArticleTask(Context context, int articleId, ArticleDao articleDao, Article article) {
         super(context, articleId, articleDao, article);

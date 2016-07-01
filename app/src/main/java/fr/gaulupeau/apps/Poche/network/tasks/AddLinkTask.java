@@ -20,7 +20,7 @@ import fr.gaulupeau.apps.Poche.entity.OfflineURLDao;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
-public class AddLinkTask extends AsyncTask<Void, Void, Boolean> {
+public class AddLinkTask extends AsyncTask<Void, Void, Boolean> { // TODO: remove
 
     private final String url;
     private String errorMessage;

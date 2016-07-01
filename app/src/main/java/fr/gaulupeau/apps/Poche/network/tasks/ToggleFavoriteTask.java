@@ -11,7 +11,7 @@ import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import fr.gaulupeau.apps.Poche.ui.DialogHelperActivity;
 
-public class ToggleFavoriteTask extends GenericArticleTask {
+public class ToggleFavoriteTask extends GenericArticleTask { // TODO: remove
 
     public ToggleFavoriteTask(Context context, int articleId, ArticleDao articleDao, Article article) {
         super(context, articleId, articleDao, article);

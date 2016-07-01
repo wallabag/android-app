@@ -5,18 +5,24 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.BackgroundOperationEvent;
+import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 
+// TODO: fix getters sync (AFAIK, not so important yet)
 public class EventProcessor {
 
     private static final String TAG = EventProcessor.class.getSimpleName();
@@ -24,10 +30,13 @@ public class EventProcessor {
     private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
 
     private Context context;
-    private Handler handler;
+    private Settings settings;
+    private Handler mainHandler;
     private NotificationManager notificationManager;
 
     private Long currentOperationID; // TODO: replace with ActionRequest?
+
+    private boolean delayedNetworkChangedTask;
 
     public EventProcessor(Context context) {
         this.context = context;
@@ -41,8 +50,26 @@ public class EventProcessor {
         EventBus.getDefault().unregister(this);
     }
 
+    @Subscribe // TODO: check thread
+    public void onConnectivityChangedEvent(ConnectivityChangedEvent event) {
+        Log.d(TAG, "onConnectivityChangedEvent() started");
+
+        networkChanged(false);
+    }
+
+    @Subscribe
+    public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
+        Log.d(TAG, "onOfflineQueueChangedEvent() started");
+
+        Long queueLength = event.getQueueLength();
+        getSettings().setBoolean(Settings.PENDING_OFFLINE_QUEUE,
+                queueLength == null || queueLength != 0);
+    }
+
     @Subscribe(sticky = true)
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
+        Log.d(TAG, "onUpdateFeedsStartedEvent() started");
+
         setOperationID(event);
 
         FeedUpdater.FeedType feedType = event.getFeedType();
@@ -63,6 +90,8 @@ public class EventProcessor {
 
     @Subscribe
     public void onUpdateFeedsFinishedEvent(UpdateFeedsFinishedEvent event) {
+        Log.d(TAG, "onUpdateFeedsFinishedEvent() started");
+
         checkOperationID(event);
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
@@ -72,6 +101,8 @@ public class EventProcessor {
 
     @Subscribe
     public void onActionResultEvent(ActionResultEvent event) {
+        Log.d(TAG, "onActionResultEvent() started");
+
         Notification notification = null;
 
         ActionRequest request = event.getRequest();
@@ -147,16 +178,52 @@ public class EventProcessor {
         }
     }
 
+    private void networkChanged(boolean delayed) {
+        if(!delayed && delayedNetworkChangedTask) return;
+
+        if(!WallabagConnection.isNetworkOnline()) return;
+
+        Settings settings = getSettings();
+
+        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)
+                /*&& settings.getBoolean(Settings.CONFIGURATION_IS_FINE, false)*/) {
+            if(delayed) {
+                Log.d(TAG, "onConnectivityChangedEvent() requesting SyncQueue operation");
+
+                ServiceHelper.syncQueue(getContext(), true);
+
+                delayedNetworkChangedTask = false;
+            } else {
+                getMainHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        networkChanged(true);
+                    }
+                }, 3000);
+
+                delayedNetworkChangedTask = true;
+            }
+        }
+    }
+
     private Context getContext() {
         return context;
     }
 
-    private Handler getHandler() {
-        if(handler == null) {
-            handler = new Handler(getContext().getMainLooper());
+    private Settings getSettings() {
+        if(settings == null) {
+            settings = new Settings(getContext());
         }
 
-        return handler;
+        return settings;
+    }
+
+    private Handler getMainHandler() {
+        if(mainHandler == null) {
+            mainHandler = new Handler(getContext().getMainLooper());
+        }
+
+        return mainHandler;
     }
 
     private NotificationManager getNotificationManager() {
@@ -169,7 +236,7 @@ public class EventProcessor {
     }
 
     private void showToast(final String text, final int duration) {
-        getHandler().post(new Runnable() {
+        getMainHandler().post(new Runnable() {
             @Override
             public void run() {
                 Toast.makeText(getContext(), text, duration).show();

@@ -8,10 +8,6 @@ import android.content.pm.PackageManager;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 
-/**
- * @author Victor Häggqvist
- * @since 10/20/15
- */
 public class Settings {
 
     private static final String PREFS_NAME = "InThePoche"; // keeping prefname for backwards compat
@@ -39,6 +35,11 @@ public class Settings {
     public static final String TTS_VOICE = "tts.voice";
     public static final String TTS_LANGUAGE_VOICE = "tts.language_voice:";
     public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
+
+    public static final String CONFIGURATION_IS_FINE = "configuration_is_fine";
+
+    public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
+
     public static final int WALLABAG_WIDGET_MAX_UNREAD_COUNT = 999;
 
     private SharedPreferences pref;
@@ -48,19 +49,19 @@ public class Settings {
     }
 
     public void setString(String key, String value) {
-        pref.edit().putString(key, value).commit();
+        pref.edit().putString(key, value).apply();
     }
 
     public void setInt(String key, int value) {
-        pref.edit().putInt(key, value).commit();
+        pref.edit().putInt(key, value).apply();
     }
 
     public void setFloat(String key, float value) {
-        pref.edit().putFloat(key, value).commit();
+        pref.edit().putFloat(key, value).apply();
     }
 
     public void setBoolean(String key, boolean value) {
-        pref.edit().putBoolean(key, value).commit();
+        pref.edit().putBoolean(key, value).apply();
     }
 
     public String getUrl() {

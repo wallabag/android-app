@@ -13,7 +13,7 @@ public class ActionRequest implements Parcelable {
     }
 
     public enum RequestType {
-        Manual, Scheduled
+        Manual, Auto
     }
 
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
