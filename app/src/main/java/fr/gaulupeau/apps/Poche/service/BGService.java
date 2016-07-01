@@ -625,7 +625,7 @@ public class BGService extends IntentService {
     private ActionResult processException(Exception e, String scope) {
         ActionResult result = new ActionResult();
 
-        Log.w(TAG, String.format("%s %s", scope, e.getClass().getSimpleName()), e);
+        Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
 
         if(e instanceof RequestException) {
             if(e instanceof IncorrectCredentialsException) {
@@ -640,7 +640,8 @@ public class BGService extends IntentService {
             result.setErrorType(ActionResult.ErrorType.Temporary);
             result.setMessage(e.getMessage());
             // IOExceptions in most cases mean temporary error,
-            // in some cases may mean that the action was completed anyway
+            // in some cases may mean that the action was completed anyway.
+            // Possible values: UnknownHostException
         } else { // other exceptions meant to be handled outside
             result.setErrorType(ActionResult.ErrorType.Unknown);
         }
