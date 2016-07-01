@@ -3,13 +3,11 @@ package fr.gaulupeau.apps.Poche.events;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 
-public class SyncQueueFinishedEvent extends BackgroundOperationEvent {
+public class ActionResultEvent extends BackgroundOperationEvent {
 
-    protected ActionResult result;
+    private ActionResult result;
 
-    public SyncQueueFinishedEvent() {}
-
-    public SyncQueueFinishedEvent(ActionRequest request, ActionResult result) {
+    public ActionResultEvent(ActionRequest request, ActionResult result) {
         super(request);
         this.result = result;
     }

@@ -1,42 +1,32 @@
 package fr.gaulupeau.apps.Poche.events;
 
-import fr.gaulupeau.apps.Poche.service.BGService;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 
 public class AddLinkFinishedEvent extends BackgroundOperationEvent {
 
-    protected String link;
-    protected BGService.Result result;
+    protected ActionResult result;
 
     public AddLinkFinishedEvent() {}
 
-    public AddLinkFinishedEvent(String link) {
-        this.link = link;
+    public AddLinkFinishedEvent(ActionRequest request) {
+        super(request);
     }
 
-    public AddLinkFinishedEvent(long operationID, String link) {
-        super(operationID);
-        this.link = link;
-    }
-
-    public AddLinkFinishedEvent(long operationID, String link, BGService.Result result) {
-        super(operationID);
-        this.link = link;
+    public AddLinkFinishedEvent(ActionRequest request, ActionResult result) {
+        super(request);
         this.result = result;
     }
 
     public String getLink() {
-        return link;
+        return request.getLink();
     }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public BGService.Result getResult() {
+    public ActionResult getResult() {
         return result;
     }
 
-    public void setResult(BGService.Result result) {
+    public void setResult(ActionResult result) {
         this.result = result;
     }
 

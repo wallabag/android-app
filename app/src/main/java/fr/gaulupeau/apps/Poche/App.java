@@ -8,11 +8,8 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.service.EventProcessor;
 
-/**
- * @author Victor Häggqvist
- * @since 10/19/15
- */
 public class App extends Application {
 
     private static App instance;
@@ -29,6 +26,8 @@ public class App extends Application {
         settings = new Settings(this);
 
         WallabagConnection.init(this);
+
+        new EventProcessor(this).start();
 
         instance = this;
     }

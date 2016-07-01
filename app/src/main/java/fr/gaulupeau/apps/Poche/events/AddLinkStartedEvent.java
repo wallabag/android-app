@@ -1,18 +1,17 @@
 package fr.gaulupeau.apps.Poche.events;
 
-public class AddLinkStartedEvent extends BackgroundOperationEvent {
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
 
-    protected String link;
+public class AddLinkStartedEvent extends BackgroundOperationEvent {
 
     public AddLinkStartedEvent() {}
 
-    public AddLinkStartedEvent(String link) {
-        this.link = link;
+    public AddLinkStartedEvent(ActionRequest request) {
+        super(request);
     }
 
-    public AddLinkStartedEvent(long operationID, String link) {
-        super(operationID);
-        this.link = link;
+    public String getLink() {
+        return request.getLink();
     }
 
 }

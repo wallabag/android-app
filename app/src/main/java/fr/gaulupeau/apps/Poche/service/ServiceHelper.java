@@ -16,7 +16,8 @@ public class ServiceHelper {
         Log.d(TAG, "syncQueue() started");
 
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(BGService.ACTION_SYNC_QUEUE);
+        intent.putExtra(ActionRequest.ACTION_REQUEST,
+                new ActionRequest(ActionRequest.Action.SyncQueue));
 
         context.startService(intent);
 
@@ -30,10 +31,12 @@ public class ServiceHelper {
     public static void addLink(Context context, String link, Long operationID) {
         Log.d(TAG, "archiveArticle() started");
 
+        ActionRequest request = new ActionRequest(ActionRequest.Action.AddLink);
+        request.setLink(link);
+        request.setOperationID(operationID);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(BGService.ACTION_ADD_LINK);
-        intent.putExtra(BGService.EXTRA_LINK, link);
-        if(operationID != null) intent.putExtra(BGService.EXTRA_OPERATION_ID, operationID);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 
@@ -51,11 +54,12 @@ public class ServiceHelper {
     public static void archiveArticle(Context context, int articleID, boolean archive) {
         Log.d(TAG, "archiveArticle() started");
 
+        ActionRequest request = new ActionRequest(
+                archive ? ActionRequest.Action.Archive : ActionRequest.Action.Unarchive);
+        request.setArticleID(articleID);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(archive
-                ? BGService.ACTION_ARCHIVE
-                : BGService.ACTION_UNARCHIVE);
-        intent.putExtra(BGService.EXTRA_ARTICLE_ID, articleID);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 
@@ -73,11 +77,12 @@ public class ServiceHelper {
     public static void favoriteArticle(Context context, int articleID, boolean favorite) {
         Log.d(TAG, "favoriteArticle() started");
 
+        ActionRequest request = new ActionRequest(
+                favorite ? ActionRequest.Action.Favorite : ActionRequest.Action.Unfavorite);
+        request.setArticleID(articleID);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(favorite
-                ? BGService.ACTION_FAVORITE
-                : BGService.ACTION_UNFAVORITE);
-        intent.putExtra(BGService.EXTRA_ARTICLE_ID, articleID);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 
@@ -87,9 +92,11 @@ public class ServiceHelper {
     public static void deleteArticle(Context context, int articleID) {
         Log.d(TAG, "deleteArticle() started");
 
+        ActionRequest request = new ActionRequest(ActionRequest.Action.Delete);
+        request.setArticleID(articleID);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(BGService.ACTION_DELETE);
-        intent.putExtra(BGService.EXTRA_ARTICLE_ID, articleID);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 
@@ -108,17 +115,13 @@ public class ServiceHelper {
                                   Long operationID) {
         Log.d(TAG, "updateFeed() started");
 
+        ActionRequest request = new ActionRequest(ActionRequest.Action.UpdateFeed);
+        request.setFeedUpdateFeedType(feedType);
+        request.setFeedUpdateUpdateType(updateType);
+        request.setOperationID(operationID);
+
         Intent intent = new Intent(context, BGService.class);
-        intent.setAction(BGService.ACTION_UPDATE_FEED);
-        if(feedType != null) {
-            intent.putExtra(BGService.EXTRA_UPDATE_FEED_FEED_TYPE, feedType.toString());
-        }
-        if(updateType != null) {
-            intent.putExtra(BGService.EXTRA_UPDATE_FEED_UPDATE_TYPE, updateType.toString());
-        }
-        if(operationID != null) {
-            intent.putExtra(BGService.EXTRA_OPERATION_ID, (long)operationID);
-        }
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 

@@ -63,7 +63,7 @@ public class AddActivity extends BaseActionBarActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onAddLinkFinishedEvent(AddLinkFinishedEvent event) {
-        if(operationID != null && operationID == event.getOperationID()) {
+        if(operationID != null && operationID.equals(event.getOperationID())) {
             progressBar.setVisibility(View.GONE);
 
             // TODO: add visual feedback

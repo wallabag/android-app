@@ -1,21 +1,27 @@
 package fr.gaulupeau.apps.Poche.events;
 
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+
 public class BackgroundOperationEvent {
 
-    protected long operationID = -1;
+    protected ActionRequest request;
 
     public BackgroundOperationEvent() {}
 
-    public BackgroundOperationEvent(long operationID) {
-        this.operationID = operationID;
+    public BackgroundOperationEvent(ActionRequest request) {
+        this.request = request;
     }
 
-    public long getOperationID() {
-        return operationID;
+    public ActionRequest getRequest() {
+        return request;
     }
 
-    public void setOperationID(long operationID) {
-        this.operationID = operationID;
+    public void setRequest(ActionRequest request) {
+        this.request = request;
+    }
+
+    public Long getOperationID() {
+        return request.getOperationID();
     }
 
 }
