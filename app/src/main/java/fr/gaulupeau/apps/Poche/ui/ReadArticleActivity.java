@@ -31,6 +31,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
@@ -525,6 +531,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
+        Log.d(TAG, "onCreateOptionsMenu() started");
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_article, menu);
 
@@ -582,7 +590,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     public void onStop() {
+        EventBus.getDefault().unregister(this);
+
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
@@ -597,6 +614,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.onPause();
         isResumed = false;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -607,6 +625,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onArticleChangedEvent(ArticleChangedEvent event) {
+        Log.d(TAG, "onArticleChangedEvent() started");
+
+        if(!event.getChangedArticle().getArticleId().equals(mArticle.getArticleId())) return;
+        if(event.getChangeType() == null) return;
+
+        switch(event.getChangeType()) {
+            case Favorited:
+            case Unfavorited:
+            case Archived:
+            case Unarchived:
+                Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
+                invalidateOptionsMenu();
+                break;
+        }
+    }
+
+    // TODO: remove if FeedUpdate operation posts ArticleChangedEvent
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
+        Log.d(TAG, "onFeedsChangedEvent() started");
+
+        Log.d(TAG, "onFeedsChangedEvent() calling invalidateOptionsMenu()");
+        invalidateOptionsMenu();
+    }
 
     private double getReadingPosition() {
         String t = "ReadArticle.getPos";

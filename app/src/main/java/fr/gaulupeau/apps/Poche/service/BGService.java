@@ -539,6 +539,7 @@ public class BGService extends IntentService {
         removeStickyEvent(startEvent);
         postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
         postEvent(new FeedsChangedEvent(feedType)); // TODO: fix: other feeds may be affected too
+        // TODO: also post ArticleChangedEvents?
 
         Log.d(TAG, "updateFeed() finished");
         return result;
