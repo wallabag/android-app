@@ -24,6 +24,7 @@ public class EventProcessor {
 
     private static final String TAG = EventProcessor.class.getSimpleName();
 
+    private static final int NOTIFICATION_ID_OTHER = 0;
     private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
     private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
 
@@ -137,73 +138,81 @@ public class EventProcessor {
         ActionRequest request = event.getRequest();
         String actionString = request.getAction().toString();
 
-        ActionResult result = event.getResult();
+        Log.d(TAG, "onActionResultEvent() action: " + actionString);
 
-        // TODO: fix: debug only implementation
+        ActionResult result = event.getResult();
 
         if(result != null) {
             if(result.isSuccess()) {
-                NotificationCompat.Builder notificationBuilder =
-                        new NotificationCompat.Builder(getContext())
-                                .setSmallIcon(R.drawable.ic_done_24dp)
-                                .setContentTitle("Action finished")
-                                .setContentText(actionString)
-                                .setStyle(new NotificationCompat.BigTextStyle().bigText(
-                                        String.format("Action \"%s\" finished", actionString)));
-
-                notification = notificationBuilder.build();
-
-                showToast("Operation completed", Toast.LENGTH_LONG);
+                Log.d(TAG, "onActionResultEvent() result is success");
             } else {
-                // TODO: implement
                 ActionResult.ErrorType errorType = result.getErrorType();
+
+                Log.d(TAG, "onActionResultEvent() result is not success; errorType: " + errorType);
+                Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
+
                 switch(errorType) {
                     case Temporary:
                     case NoNetwork:
                         // don't show it to user at all or make it suppressible
                         // schedule auto-retry
+                        // TODO: not important: implement
+                        // currently "Temporary" may be false-positive -- the error may not be temporary
                         break;
                     case IncorrectConfiguration:
-                    case IncorrectCredentials:
+                    case IncorrectCredentials: {
                         // notify user -- user must fix something before retry
                         // maybe suppress notification if:
-                        //  - the action was not requested by user, and
-                        //  - notification was already shown in the past.
+                        //  - the action was not requested by user (that probably implies the second case), and
+                        //  - notification was already shown in the past
                         // no auto-retry
+                        // TODO: important: implement the logic
+                        if(request.getRequestType() == ActionRequest.RequestType.Manual) {
+                            NotificationCompat.Builder notificationBuilder =
+                                    new NotificationCompat.Builder(getContext())
+                                            .setSmallIcon(R.drawable.ic_stop_24dp)
+                                            .setContentTitle("Action failed")
+                                            .setContentText(errorType == ActionResult.ErrorType.IncorrectCredentials
+                                                            ? "Incorrect credentials"
+                                                            : "Incorrect configuration");
+
+                            notification = notificationBuilder.build();
+                        }
                         break;
-                    case Unknown:
+                    }
+                    case Unknown: {
                         // this is undecided yet
                         // show notification + schedule auto-retry
+                        // TODO: decide on behavior
+                        NotificationCompat.Builder notificationBuilder =
+                                new NotificationCompat.Builder(getContext())
+                                        .setSmallIcon(R.drawable.ic_stop_24dp)
+                                        .setContentTitle("Action failed")
+                                        .setContentText("Unknown error");
+
+                        if (result.getMessage() != null) {
+                            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                                    .bigText("Error: " + result.getMessage()));
+                        }
+
+                        notification = notificationBuilder.build();
                         break;
+                    }
                     case NegativeResponse:
                         // server acknowledged the operation but failed/refused to performed it;
                         // detection of such response is not implemented on client yet
+                        Log.w(TAG, "onActionResultEvent() got a NegativeResponse; that was not expected");
                         break;
                 }
-
-                NotificationCompat.Builder notificationBuilder =
-                        new NotificationCompat.Builder(getContext())
-                                .setSmallIcon(R.drawable.ic_stop_24dp)
-                                .setContentTitle("Action failed")
-                                .setContentText(actionString);
-
-                if(result.getMessage() != null) {
-                    notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().bigText(
-                            String.format("Action: %s\nError: %s", actionString, result.getMessage())));
-
-                    showToast(String.format(
-                            "\"%s\" error detected; message: \"%s\"",
-                            errorType, result.getMessage()), Toast.LENGTH_LONG);
-                } else {
-                    showToast(String.format("\"%s\" error detected", errorType), Toast.LENGTH_LONG);
-                }
-
-                notification = notificationBuilder.build();
             }
+        } else {
+            Log.d(TAG, "onActionResultEvent() result is null");
         }
 
         if(notification != null) {
-            getNotificationManager().notify(TAG, 0, notification);
+            Log.d(TAG, "onActionResultEvent() notification is not null; showing it");
+
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_OTHER, notification);
         }
     }
 
