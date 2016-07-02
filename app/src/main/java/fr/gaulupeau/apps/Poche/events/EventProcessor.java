@@ -157,8 +157,8 @@ public class EventProcessor {
                         // don't show it to user at all or make it suppressible
                         // schedule auto-retry
                         // TODO: not important: implement
-                        // currently "Temporary" may be false-positive -- the error may not be temporary
                         break;
+
                     case IncorrectConfiguration:
                     case IncorrectCredentials: {
                         // notify user -- user must fix something before retry
@@ -180,6 +180,7 @@ public class EventProcessor {
                         }
                         break;
                     }
+
                     case Unknown: {
                         // this is undecided yet
                         // show notification + schedule auto-retry
@@ -198,6 +199,7 @@ public class EventProcessor {
                         notification = notificationBuilder.build();
                         break;
                     }
+
                     case NegativeResponse:
                         // server acknowledged the operation but failed/refused to performed it;
                         // detection of such response is not implemented on client yet
@@ -213,6 +215,29 @@ public class EventProcessor {
             Log.d(TAG, "onActionResultEvent() notification is not null; showing it");
 
             getNotificationManager().notify(TAG, NOTIFICATION_ID_OTHER, notification);
+        }
+    }
+
+    @Subscribe
+    public void onAddLinkFinishedEvent(AddLinkFinishedEvent event) {
+        Log.d(TAG, "onAddLinkFinishedEvent() started");
+
+        if(!event.getRequest().isHeadless()) return;
+
+        ActionResult result = event.getResult();
+        if(result == null || result.isSuccess()) {
+            Log.d(TAG, "onAddLinkFinishedEvent() result is null or success");
+
+            showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
+        } else {
+            ActionResult.ErrorType errorType = result.getErrorType();
+
+            Log.d(TAG, "onAddLinkFinishedEvent() errorType: " + errorType);
+
+            if(errorType == ActionResult.ErrorType.Temporary
+                    || errorType == ActionResult.ErrorType.NoNetwork) {
+                showToast(getContext().getString(R.string.addLink_savedOffline), Toast.LENGTH_SHORT);
+            }
         }
     }
 

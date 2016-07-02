@@ -31,15 +31,24 @@ public class ServiceHelper {
     }
 
     public static void addLink(Context context, String link) {
-        addLink(context, link, null);
+        addLink(context, link, null, false);
     }
 
     public static void addLink(Context context, String link, Long operationID) {
+        addLink(context, link, operationID, false);
+    }
+
+    public static void addLink(Context context, String link, boolean headless) {
+        addLink(context, link, null, headless);
+    }
+
+    public static void addLink(Context context, String link, Long operationID, boolean headless) {
         Log.d(TAG, "archiveArticle() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.AddLink);
         request.setLink(link);
         request.setOperationID(operationID);
+        request.setHeadless(headless);
 
         Intent intent = new Intent(context, BGService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);

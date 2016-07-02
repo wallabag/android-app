@@ -57,7 +57,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         Log.d(TAG, "Bagging " + pageUrl);
 
-        ServiceHelper.addLink(this, pageUrl);
+        ServiceHelper.addLink(this, pageUrl, true);
 
         finish();
     }
