@@ -48,6 +48,7 @@ public class BGService extends IntentService {
 
     public BGService() {
         super(BGService.class.getSimpleName());
+        setIntentRedelivery(true);
 
         Log.d(TAG, "BGService() created");
     }
