@@ -17,6 +17,8 @@ import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.BackgroundOperationEvent;
 import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
@@ -28,6 +30,7 @@ public class EventProcessor {
     private static final String TAG = EventProcessor.class.getSimpleName();
 
     private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
+    private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
 
     private Context context;
     private Settings settings;
@@ -98,6 +101,34 @@ public class EventProcessor {
         checkOperationID(event);
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
+
+        emptyOperationID();
+    }
+
+    @Subscribe(sticky = true)
+    public void onSyncQueueStartedEvent(SyncQueueStartedEvent event) {
+        Log.d(TAG, "onSyncQueueStartedEvent() started");
+
+        setOperationID(event);
+
+        // TODO: fix notification content
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
+                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setContentTitle("Syncing queue")
+//                .setContentText("Syncing queue")
+                .setOngoing(true);
+
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
+                notificationBuilder.setProgress(0, 0, true).build());
+    }
+
+    @Subscribe
+    public void onSyncQueueFinishedEvent(SyncQueueFinishedEvent event) {
+        Log.d(TAG, "onSyncQueueFinishedEvent() started");
+
+        checkOperationID(event);
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
 
         emptyOperationID();
     }
