@@ -45,11 +45,11 @@ import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
-import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
@@ -429,13 +429,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void markAsReadAndClose() {
-        ServiceHelper.archiveArticle(this, mArticle.getArticleId(), !mArticle.getArchive());
+        OperationsHelper.archiveArticle(this, mArticle.getArticleId(), !mArticle.getArchive());
 
         finish();
     }
 
     private boolean toggleFavorite() {
-        ServiceHelper.favoriteArticle(this, mArticle.getArticleId(), !mArticle.getFavorite());
+        OperationsHelper.favoriteArticle(this, mArticle.getArticleId(), !mArticle.getFavorite());
 
         return true;
     }
@@ -456,7 +456,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ServiceHelper.deleteArticle(ReadArticleActivity.this, mArticle.getArticleId());
+                OperationsHelper.deleteArticle(ReadArticleActivity.this, mArticle.getArticleId());
 
                 finish();
             }

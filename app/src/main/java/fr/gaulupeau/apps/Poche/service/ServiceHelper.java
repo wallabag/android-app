@@ -49,14 +49,6 @@ public class ServiceHelper {
         Log.d(TAG, "archiveArticle() finished");
     }
 
-    public static void archiveArticle(Context context, int articleID) {
-        archiveArticle(context, articleID, true);
-    }
-
-    public static void unarchiveArticle(Context context, int articleID) {
-        archiveArticle(context, articleID, false);
-    }
-
     public static void archiveArticle(Context context, int articleID, boolean archive) {
         Log.d(TAG, "archiveArticle() started");
 
@@ -70,14 +62,6 @@ public class ServiceHelper {
         context.startService(intent);
 
         Log.d(TAG, "archiveArticle() finished");
-    }
-
-    public static void favoriteArticle(Context context, int articleID) {
-        favoriteArticle(context, articleID, true);
-    }
-
-    public static void unfavoriteArticle(Context context, int articleID) {
-        favoriteArticle(context, articleID, false);
     }
 
     public static void favoriteArticle(Context context, int articleID, boolean favorite) {

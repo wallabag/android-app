@@ -4,8 +4,6 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,14 +14,11 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.WallabagSettings;
-import fr.gaulupeau.apps.Poche.entity.Article;
-import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.entity.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.AddLinkFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.AddLinkStartedEvent;
-import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
@@ -37,6 +32,10 @@ import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationExceptio
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
+import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
+
 public class BGService extends IntentService {
 
     private static final String TAG = BGService.class.getSimpleName();
@@ -45,7 +44,6 @@ public class BGService extends IntentService {
     private Settings settings;
 
     private DaoSession daoSession;
-    private ArticleDao articleDao;
     private WallabagService wallabagService;
 
     public BGService() {
@@ -57,6 +55,10 @@ public class BGService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
+
+        // this seems to make UI more responsive right after a call to the service.
+        // well, this seemed to help before OperationsHelper introduction
+//        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         ActionRequest actionRequest = ActionRequest.fromIntent(intent);
         ActionResult result = null;
@@ -252,34 +254,6 @@ public class BGService extends IntentService {
 
         Log.d(TAG, String.format("archiveArticle(%d, %s) started", articleID, archive));
 
-        Article article = getArticle(articleID);
-        if(article == null) {
-            Log.w(TAG, "archiveArticle() article was not found");
-            return new ActionResult(); // not an error?
-        }
-
-        // local changes
-
-        if(article.getArchive() != archive) {
-            article.setArchive(archive);
-            getArticleDao().update(article);
-
-            ArticleChangedEvent.ChangeType changeType = archive
-                    ? ArticleChangedEvent.ChangeType.Archived
-                    : ArticleChangedEvent.ChangeType.Unarchived;
-
-            postEvent(new ArticleChangedEvent(article, changeType));
-            notifyAboutFeedChanges(article, changeType);
-
-            Log.d(TAG, "archiveArticle() article object updated");
-        } else {
-            Log.d(TAG, "archiveArticle(): article state was not changed");
-
-            // TODO: check: do we need to continue with the sync part? Probably yes
-        }
-
-        // remote changes / queue
-
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
 
@@ -342,34 +316,6 @@ public class BGService extends IntentService {
 
         Log.d(TAG, String.format("favoriteArticle(%d, %s) started", articleID, favorite));
 
-        Article article = getArticle(articleID);
-        if(article == null) {
-            Log.w(TAG, "favoriteArticle() article was not found");
-            return new ActionResult(); // not an error?
-        }
-
-        // local changes
-
-        if(article.getFavorite() != favorite) {
-            article.setFavorite(favorite);
-            getArticleDao().update(article);
-
-            ArticleChangedEvent.ChangeType changeType = favorite
-                    ? ArticleChangedEvent.ChangeType.Favorited
-                    : ArticleChangedEvent.ChangeType.Unfavorited;
-
-            postEvent(new ArticleChangedEvent(article, changeType));
-            notifyAboutFeedChanges(article, changeType);
-
-            Log.d(TAG, "favoriteArticle() article object updated");
-        } else {
-            Log.d(TAG, "favoriteArticle(): article state was not changed");
-
-            // TODO: check: do we need to continue with the sync part? Probably yes
-        }
-
-        // remote changes / queue
-
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
 
@@ -429,25 +375,6 @@ public class BGService extends IntentService {
     private ActionResult deleteArticle(ActionRequest actionRequest) {
         int articleID = actionRequest.getArticleID(); // TODO: check: not null
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
-
-        Article article = getArticle(articleID);
-        if(article == null) {
-            Log.w(TAG, "favoriteArticle() article was not found");
-            return new ActionResult(); // not an error?
-        }
-
-        // local changes
-
-        getArticleDao().delete(article);
-
-        ArticleChangedEvent.ChangeType changeType = ArticleChangedEvent.ChangeType.Deleted;
-
-        postEvent(new ArticleChangedEvent(article, changeType));
-        notifyAboutFeedChanges(article, changeType);
-
-        Log.d(TAG, "deleteArticle() article object deleted");
-
-        // remote changes / queue
 
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
@@ -511,11 +438,6 @@ public class BGService extends IntentService {
 
         AddLinkStartedEvent startEvent = new AddLinkStartedEvent(actionRequest);
         postStickyEvent(startEvent);
-
-        // local changes
-        // none
-
-        // remote changes / queue
 
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
@@ -665,14 +587,6 @@ public class BGService extends IntentService {
         return daoSession;
     }
 
-    private ArticleDao getArticleDao() {
-        if(articleDao == null) {
-            articleDao = getDaoSession().getArticleDao();
-        }
-
-        return articleDao;
-    }
-
     private WallabagService getWallabagService() {
         if(wallabagService == null) {
             Settings settings = getSettings();
@@ -684,62 +598,6 @@ public class BGService extends IntentService {
         }
 
         return wallabagService;
-    }
-
-    private EventBus getEventBus() {
-        return EventBus.getDefault();
-    }
-
-    private void postEvent(Object event) {
-        getEventBus().post(event);
-    }
-
-    private void postStickyEvent(Object event) {
-        getEventBus().postSticky(event);
-    }
-
-    private void removeStickyEvent(Object event) {
-        getEventBus().removeStickyEvent(event);
-    }
-
-    private Article getArticle(int articleID) {
-        return getArticleDao().queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.eq(articleID))
-                .build().unique();
-    }
-
-    private void notifyAboutFeedChanges(Article article, ArticleChangedEvent.ChangeType changeType) {
-        boolean mainUpdated = false;
-        boolean archiveUpdated = false;
-        boolean favoriteUpdated = false;
-
-        switch(changeType) {
-            case Archived:
-            case Unarchived:
-                mainUpdated = archiveUpdated = true;
-                if(article.getFavorite()) favoriteUpdated = true;
-                break;
-
-            case Favorited:
-            case Unfavorited:
-                favoriteUpdated = true;
-                if(article.getArchive()) archiveUpdated = true;
-                else mainUpdated = true;
-                break;
-
-            case Deleted:
-                if(article.getArchive()) archiveUpdated = true;
-                else mainUpdated = true;
-                break;
-        }
-
-        if(archiveUpdated && mainUpdated && favoriteUpdated) {
-            postEvent(new FeedsChangedEvent(null));
-        } else {
-            if(mainUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Main));
-            if(archiveUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Archive));
-            if(favoriteUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Favorite));
-        }
     }
 
 }

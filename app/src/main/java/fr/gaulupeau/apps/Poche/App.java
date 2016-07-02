@@ -7,8 +7,8 @@ import com.facebook.stetho.Stetho;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.events.EventProcessor;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.service.EventProcessor;
 
 public class App extends Application {
 

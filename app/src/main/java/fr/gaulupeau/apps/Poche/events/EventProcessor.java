@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.events;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -13,16 +13,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
-import fr.gaulupeau.apps.Poche.events.BackgroundOperationEvent;
-import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
-import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
-import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
-import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 // TODO: fix getters sync (AFAIK, not so important yet)
 public class EventProcessor {
