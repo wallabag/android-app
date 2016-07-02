@@ -224,7 +224,7 @@ public class EventProcessor {
         Settings settings = getSettings();
 
         if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)
-                /*&& settings.getBoolean(Settings.CONFIGURATION_IS_FINE, false)*/) {
+                && settings.isConfigurationOk()) {
             if(delayed) {
                 Log.d(TAG, "onConnectivityChangedEvent() requesting SyncQueue operation");
 

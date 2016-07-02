@@ -80,13 +80,13 @@ public abstract class GenericArticleTask extends AsyncTask<Void, Integer, Boolea
     protected void prepareBG() {
         if(WallabagConnection.isNetworkOnline()) {
             Settings settings = App.getInstance().getSettings();
-            String username = settings.getKey(Settings.USERNAME);
+            String username = settings.getString(Settings.USERNAME);
             noCredentials = username == null || username.length() == 0;
             if(!noCredentials) {
                 service = new WallabagService(
                         settings.getUrl(),
                         username,
-                        settings.getKey(Settings.PASSWORD));
+                        settings.getString(Settings.PASSWORD));
             }
         } else {
             isOffline = true;

@@ -31,7 +31,6 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
@@ -110,8 +109,7 @@ public class ArticlesListActivity extends AppCompatActivity
         if(firstTimeShown) {
             firstTimeShown = false;
 
-            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-            if(!wallabagSettings.isValid()) {
+            if(!settings.isConfigurationOk()) {
                 settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
 
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
@@ -125,11 +123,11 @@ public class ArticlesListActivity extends AppCompatActivity
                 });
                 messageBox.setCancelable(false);
                 messageBox.create().show();
-            } else if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
+            } else if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) { // TODO: make all credentials required and remove it
                 settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
 
-                String username = settings.getString(Settings.USERNAME, null);
-                if(username == null || username.length() == 0) {
+                String username = settings.getString(Settings.USERNAME);
+                if(username == null || username.isEmpty()) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                     messageBox.setTitle(R.string.firstRun_d_optionalSettings_title);
                     messageBox.setMessage(R.string.firstRun_d_optionalSettings_message);
@@ -148,8 +146,7 @@ public class ArticlesListActivity extends AppCompatActivity
         if(showEmptyDbDialogOnResume) {
             showEmptyDbDialogOnResume = false;
 
-            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-            if(wallabagSettings.isValid()) {
+            if(settings.isConfigurationOk()) {
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
                 messageBox.setTitle(R.string.d_emptyDB_title);
                 messageBox.setMessage(R.string.d_emptyDB_text);
@@ -323,11 +320,10 @@ public class ArticlesListActivity extends AppCompatActivity
         boolean result = false;
 
         // TODO: rewrite?
-        WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
         if(fullUpdateRunning || refreshingFragment != -1) {
             Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
                     .show();
-        } else if(!wallabagSettings.isValid()) {
+        } else if(!settings.isConfigurationOk()) {
             if(showErrors) {
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }

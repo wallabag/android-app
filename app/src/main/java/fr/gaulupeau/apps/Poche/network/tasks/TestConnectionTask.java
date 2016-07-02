@@ -21,14 +21,16 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
     private final String username;
     private final String password;
     private ProgressDialog progressDialog;
+    private ResultHandler resultHandler;
     private String errorMessage;
 
     public TestConnectionTask(Context context, String endpoint, String username, String password,
-                              ProgressDialog progressDialog) {
+                              ResultHandler resultHandler, ProgressDialog progressDialog) {
         this.context = context;
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.resultHandler = resultHandler;
         this.progressDialog = progressDialog;
     }
 
@@ -50,11 +52,13 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
 
     @Override
     protected void onPostExecute(Integer result) {
+        boolean success = result != null && result == 0;
+        if(resultHandler != null) resultHandler.onTestConnectionResult(success);
         if(progressDialog != null) progressDialog.dismiss();
 
         if(context == null) return;
 
-        if(result != null && result == 0) {
+        if(success) {
             new AlertDialog.Builder(context)
                     .setTitle(R.string.d_testConnection_success_title)
                     .setMessage(R.string.d_connectionTest_success_text)
@@ -99,6 +103,10 @@ public class TestConnectionTask extends AsyncTask<Void, Void, Integer> {
                     .setPositiveButton(R.string.ok, null)
                     .show();
         }
+    }
+
+    public interface ResultHandler {
+        void onTestConnectionResult(boolean success);
     }
 
 }

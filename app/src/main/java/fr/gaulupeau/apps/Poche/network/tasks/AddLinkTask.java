@@ -57,14 +57,14 @@ public class AddLinkTask extends AsyncTask<Void, Void, Boolean> { // TODO: remov
         if(WallabagConnection.isNetworkOnline()) {
             Settings settings = App.getInstance().getSettings();
 
-            String username = settings.getKey(Settings.USERNAME);
+            String username = settings.getString(Settings.USERNAME);
             if(username != null && username.length() > 0) {
                 isOffline = false;
 
                 WallabagService service = new WallabagService(
                         settings.getUrl(),
                         username,
-                        settings.getKey(Settings.PASSWORD));
+                        settings.getString(Settings.PASSWORD));
 
                 try {
                     if(service.addLink(url)) {

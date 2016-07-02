@@ -13,7 +13,6 @@ import java.util.Set;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.entity.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
@@ -511,11 +510,12 @@ public class BGService extends IntentService {
         ActionResult result = new ActionResult();
 
         if(WallabagConnection.isNetworkOnline()) {
-            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(getSettings());
+            Settings settings = getSettings();
             FeedUpdater feedUpdater = new FeedUpdater(
-                    wallabagSettings.wallabagURL,
-                    wallabagSettings.userID, wallabagSettings.userToken,
-                    getSettings().getInt(Settings.WALLABAG_VERSION, -1));
+                    settings.getUrl(),
+                    settings.getString(Settings.USER_ID, ""),
+                    settings.getString(Settings.TOKEN, ""),
+                    settings.getInt(Settings.WALLABAG_VERSION, -1));
 
             // TODO: check: do we need a separate transaction here (since FeedUpdater creates one)?
             // I'll leave it just yet, should not hurt anyway
@@ -595,8 +595,8 @@ public class BGService extends IntentService {
             // TODO: check credentials? (throw an exception)
             wallabagService = new WallabagService(
                     settings.getUrl(),
-                    settings.getKey(Settings.USERNAME),
-                    settings.getKey(Settings.PASSWORD));
+                    settings.getString(Settings.USERNAME),
+                    settings.getString(Settings.PASSWORD));
         }
 
         return wallabagService;

@@ -36,7 +36,7 @@ public class Settings {
     public static final String TTS_LANGUAGE_VOICE = "tts.language_voice:";
     public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
 
-    public static final String CONFIGURATION_IS_FINE = "configuration_is_fine";
+    public static final String CONFIGURATION_IS_OK = "configuration_is_ok";
 
     public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
 
@@ -68,7 +68,11 @@ public class Settings {
         return pref.getString(URL, null);
     }
 
-    public String getKey(String key) {
+    public boolean isConfigurationOk() {
+        return pref.getBoolean(CONFIGURATION_IS_OK, false);
+    }
+
+    public String getString(String key) {
         return pref.getString(key, null);
     }
 

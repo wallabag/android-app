@@ -38,8 +38,8 @@ public class UploadOfflineURLsTask extends AsyncTask<Void, Integer, Boolean> { /
         Settings settings = App.getInstance().getSettings();
         WallabagService service = new WallabagService(
                 settings.getUrl(),
-                settings.getKey(Settings.USERNAME),
-                settings.getKey(Settings.PASSWORD));
+                settings.getString(Settings.USERNAME),
+                settings.getString(Settings.PASSWORD));
 
         OfflineURLDao offlineURLDao = DbConnection.getSession().getOfflineURLDao();
         List<OfflineURL> urls = offlineURLDao.queryBuilder()

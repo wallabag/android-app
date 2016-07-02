@@ -8,8 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,13 +27,12 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.WallabagSettings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
 
 public class SettingsActivity extends BaseActionBarActivity
-        implements GetCredentialsTask.ResultHandler {
+        implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler {
 
     private Button btnTestConnection;
     private Button btnGetCredentials;
@@ -59,10 +56,11 @@ public class SettingsActivity extends BaseActionBarActivity
     private ProgressDialog progressDialog;
 
     private Settings settings;
-    private WallabagSettings wallabagSettings;
 
     private TestConnectionTask testConnectionTask;
     private GetCredentialsTask getCredentialsTask;
+
+    private boolean configurationIsOk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +69,6 @@ public class SettingsActivity extends BaseActionBarActivity
         setContentView(R.layout.settings);
 
         settings = App.getInstance().getSettings();
-        wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-
-        if (!wallabagSettings.isValid()) {
-            hideBackButtonToActionBar();
-        }
 
         editPocheUrl = (EditText) findViewById(R.id.pocheUrl);
         editAPIUsername = (EditText) findViewById(R.id.APIUsername);
@@ -89,10 +82,10 @@ public class SettingsActivity extends BaseActionBarActivity
         listLimit = (EditText) findViewById(R.id.list_limit_number);
         handleHttpScheme = (CheckBox) findViewById(R.id.handle_http_scheme);
 
-        editPocheUrl.setText(wallabagSettings.wallabagURL);
+        editPocheUrl.setText(settings.getString(Settings.URL, "https://"));
         editPocheUrl.setSelection(editPocheUrl.getText().length());
-        editAPIUsername.setText(wallabagSettings.userID);
-        editAPIToken.setText(wallabagSettings.userToken);
+        editAPIUsername.setText(settings.getString(Settings.USER_ID, ""));
+        editAPIToken.setText(settings.getString(Settings.TOKEN, ""));
 
         versionChooser.setSelection(settings.getInt(Settings.WALLABAG_VERSION, 2) - 1);
 
@@ -127,31 +120,14 @@ public class SettingsActivity extends BaseActionBarActivity
         handleHttpScheme.setChecked(settings.isHandlingHttpScheme());
 
         username = (EditText) findViewById(R.id.username);
-        username.setText(settings.getKey(Settings.USERNAME));
+        username.setText(settings.getString(Settings.USERNAME));
         password = (EditText) findViewById(R.id.password);
-        password.setText(settings.getKey(Settings.PASSWORD));
+        password.setText(settings.getString(Settings.PASSWORD));
 
         httpAuthUsername = (EditText) findViewById(R.id.http_auth_username);
-        httpAuthUsername.setText(settings.getKey(Settings.HTTP_AUTH_USERNAME));
+        httpAuthUsername.setText(settings.getString(Settings.HTTP_AUTH_USERNAME));
         httpAuthPassword = (EditText) findViewById(R.id.http_auth_password);
-        httpAuthPassword.setText(settings.getKey(Settings.HTTP_AUTH_PASSWORD));
-
-        TextWatcher textWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                updateButton();
-            }
-        };
-
-        editPocheUrl.addTextChangedListener(textWatcher);
-        editAPIUsername.addTextChangedListener(textWatcher);
-        editAPIToken.addTextChangedListener(textWatcher);
+        httpAuthPassword.setText(settings.getString(Settings.HTTP_AUTH_PASSWORD));
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(true);
@@ -175,7 +151,7 @@ public class SettingsActivity extends BaseActionBarActivity
                 testConnectionTask = new TestConnectionTask(
                         SettingsActivity.this, editPocheUrl.getText().toString(),
                         username.getText().toString(), password.getText().toString(),
-                        progressDialog);
+                        SettingsActivity.this, progressDialog);
 
                 testConnectionTask.execute();
             }
@@ -202,9 +178,9 @@ public class SettingsActivity extends BaseActionBarActivity
         btnDone = (Button) findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
-                wallabagSettings.userID = editAPIUsername.getText().toString();
-                wallabagSettings.userToken = editAPIToken.getText().toString();
+                settings.setString(Settings.URL, editPocheUrl.getText().toString());
+                settings.setString(Settings.USER_ID, editAPIUsername.getText().toString());
+                settings.setString(Settings.TOKEN, editAPIToken.getText().toString());
 
                 settings.setInt(Settings.WALLABAG_VERSION, versionChooser.getSelectedItemPosition() + 1);
 
@@ -230,17 +206,16 @@ public class SettingsActivity extends BaseActionBarActivity
                 settings.setString(Settings.HTTP_AUTH_USERNAME, httpAuthUsername.getText().toString());
                 settings.setString(Settings.HTTP_AUTH_PASSWORD, httpAuthPassword.getText().toString());
 
-                if (wallabagSettings.isValid()) {
-                    wallabagSettings.save();
-                    finish();
+                settings.setBoolean(Settings.CONFIGURATION_IS_OK, configurationIsOk);
 
-                    if(selectedTheme != Themes.getCurrentTheme()) {
-                        Themes.init();
+                finish();
 
-                        Intent intent = new Intent(SettingsActivity.this, ArticlesListActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                    }
+                if(selectedTheme != Themes.getCurrentTheme()) {
+                    Themes.init();
+
+                    Intent intent = new Intent(SettingsActivity.this, ArticlesListActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
             }
         });
@@ -249,8 +224,6 @@ public class SettingsActivity extends BaseActionBarActivity
         textViewVersion.setText(BuildConfig.VERSION_NAME);
 
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        updateButton();
     }
 
     @Override
@@ -290,6 +263,11 @@ public class SettingsActivity extends BaseActionBarActivity
     }
 
     @Override
+    public void onTestConnectionResult(boolean success) {
+        configurationIsOk = success;
+    }
+
+    @Override
     public void handleGetCredentialsResult(Boolean success, FeedsCredentials credentials,
                                            int wallabagVersion) {
         if(progressDialog != null) progressDialog.dismiss();
@@ -325,12 +303,4 @@ public class SettingsActivity extends BaseActionBarActivity
         WallabagConnection.setBasicAuthCredentials(username, password);
     }
 
-    // TODO: remove?
-    private void updateButton() {
-        wallabagSettings.wallabagURL = editPocheUrl.getText().toString();
-        wallabagSettings.userID = editAPIUsername.getText().toString();
-        wallabagSettings.userToken = editAPIToken.getText().toString();
-
-        btnDone.setEnabled(wallabagSettings.isValid());
-    }
 }
