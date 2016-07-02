@@ -277,7 +277,7 @@ public class ArticlesListActivity extends AppCompatActivity
 //            refreshingFragment = position;
 //            setRefreshingUI(true);
         } else {
-//            setRefreshingUI(false);
+            setRefreshingUI(false);
         }
     }
 
@@ -312,6 +312,8 @@ public class ArticlesListActivity extends AppCompatActivity
         if(updateFeed(true, null, null)) {
             fullUpdateRunning = true;
             setRefreshingUI(true);
+        } else {
+            setRefreshingUI(false);
         }
     }
 
