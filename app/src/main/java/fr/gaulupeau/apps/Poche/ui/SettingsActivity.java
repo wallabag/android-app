@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.AlarmManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -138,7 +139,8 @@ public class SettingsActivity extends BaseActionBarActivity
         httpAuthPassword.setText(settings.getString(Settings.HTTP_AUTH_PASSWORD));
 
         final boolean autosyncEnabled = settings.getBoolean(Settings.AUTOSYNC_ENABLED, false);
-        final long autosyncInterval = settings.getLong(Settings.AUTOSYNC_INTERVAL, 4);
+        final long autosyncInterval = settings.getLong(Settings.AUTOSYNC_INTERVAL,
+                AlarmManager.INTERVAL_DAY);
         final int autosyncType = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
         autosyncEnableCheckbox.setChecked(autosyncEnabled);
         // TODO: better ArrayAdapter creation
