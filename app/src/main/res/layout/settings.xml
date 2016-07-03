@@ -298,6 +298,48 @@
             android:text="@string/settings_ui_handleHttpScheme" />
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"
+            android:text="@string/settings_autosync" />
+
+        <CheckBox
+            android:id="@+id/autosync_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_autosync_enable" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_autosync_interval" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/autosync_interval_chooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/settings_autosync_type" />
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/autosync_type_chooser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5sp" />
+
+
         <Button
             android:id="@+id/btnDone"
             android:layout_width="fill_parent"

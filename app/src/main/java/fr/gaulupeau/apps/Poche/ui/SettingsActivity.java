@@ -30,6 +30,7 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 
 public class SettingsActivity extends BaseActionBarActivity
         implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler {
@@ -53,6 +54,10 @@ public class SettingsActivity extends BaseActionBarActivity
     private EditText password;
     private EditText httpAuthUsername;
     private EditText httpAuthPassword;
+    private CheckBox autosyncEnableCheckbox;
+    private AppCompatSpinner autosyncIntervalChooser;
+    private AppCompatSpinner autosyncTypeChooser;
+
     private ProgressDialog progressDialog;
 
     private Settings settings;
@@ -81,6 +86,9 @@ public class SettingsActivity extends BaseActionBarActivity
         serifFont = (CheckBox) findViewById(R.id.ui_font_serif);
         listLimit = (EditText) findViewById(R.id.list_limit_number);
         handleHttpScheme = (CheckBox) findViewById(R.id.handle_http_scheme);
+        autosyncEnableCheckbox = (CheckBox) findViewById(R.id.autosync_enable);
+        autosyncIntervalChooser = (AppCompatSpinner) findViewById(R.id.autosync_interval_chooser);
+        autosyncTypeChooser = (AppCompatSpinner) findViewById(R.id.autosync_type_chooser);
 
         editPocheUrl.setText(settings.getString(Settings.URL, "https://"));
         editPocheUrl.setSelection(editPocheUrl.getText().length());
@@ -128,6 +136,26 @@ public class SettingsActivity extends BaseActionBarActivity
         httpAuthUsername.setText(settings.getString(Settings.HTTP_AUTH_USERNAME));
         httpAuthPassword = (EditText) findViewById(R.id.http_auth_password);
         httpAuthPassword.setText(settings.getString(Settings.HTTP_AUTH_PASSWORD));
+
+        final boolean autosyncEnabled = settings.getBoolean(Settings.AUTOSYNC_ENABLED, false);
+        final long autosyncInterval = settings.getLong(Settings.AUTOSYNC_INTERVAL, 4);
+        final int autosyncType = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
+        autosyncEnableCheckbox.setChecked(autosyncEnabled);
+        // TODO: better ArrayAdapter creation
+        autosyncIntervalChooser.setAdapter(new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, new String[] {
+                getString(R.string.settings_autosync_interval_15m),
+                getString(R.string.settings_autosync_interval_30m),
+                getString(R.string.settings_autosync_interval_1h),
+                getString(R.string.settings_autosync_interval_12h),
+                getString(R.string.settings_autosync_interval_24h)}));
+        autosyncIntervalChooser.setSelection(
+                Settings.autoSyncIntervalToOptionIndex(autosyncInterval));
+        autosyncTypeChooser.setAdapter(new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, new String[] {
+                getString(R.string.settings_autosync_type_fast),
+                getString(R.string.settings_autosync_type_full)}));
+        autosyncIntervalChooser.setSelection(autosyncType);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(true);
@@ -206,7 +234,28 @@ public class SettingsActivity extends BaseActionBarActivity
                 settings.setString(Settings.HTTP_AUTH_USERNAME, httpAuthUsername.getText().toString());
                 settings.setString(Settings.HTTP_AUTH_PASSWORD, httpAuthPassword.getText().toString());
 
-                settings.setBoolean(Settings.CONFIGURATION_IS_OK, configurationIsOk);
+                boolean autosyncEnabledNew = autosyncEnableCheckbox.isChecked();
+                long autosyncIntervalNew = Settings.autoSyncOptionIndexToInterval(
+                        autosyncIntervalChooser.getSelectedItemPosition());
+                int autosyncTypeNew = autosyncTypeChooser.getSelectedItemPosition();
+
+                settings.setBoolean(Settings.AUTOSYNC_ENABLED, autosyncEnabledNew);
+                settings.setLong(Settings.AUTOSYNC_INTERVAL, autosyncIntervalNew);
+                settings.setInt(Settings.AUTOSYNC_TYPE, autosyncTypeNew);
+
+                if(autosyncEnabledNew != autosyncEnabled) {
+                    if(autosyncEnabledNew) {
+                        AlarmHelper.setAlarm(SettingsActivity.this, autosyncIntervalNew, true);
+                    } else {
+                        AlarmHelper.unsetAlarm(SettingsActivity.this, true);
+                    }
+                } else if(autosyncEnabledNew) {
+                    if(autosyncInterval != autosyncIntervalNew) {
+                        AlarmHelper.updateAlarmInterval(SettingsActivity.this, autosyncIntervalNew);
+                    }
+                }
+
+                settings.setConfigurationOk(configurationIsOk);
 
                 finish();
 

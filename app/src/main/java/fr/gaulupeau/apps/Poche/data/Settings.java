@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -40,9 +41,35 @@ public class Settings {
 
     public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
 
+    public static final String AUTOSYNC_ENABLED = "autosync.enabled";
+    public static final String AUTOSYNC_INTERVAL = "autosync.interval";
+    public static final String AUTOSYNC_TYPE = "autosync.type";
+
     public static final int WALLABAG_WIDGET_MAX_UNREAD_COUNT = 999;
 
     private SharedPreferences pref;
+
+    public static long autoSyncOptionIndexToInterval(int index) {
+        switch(index) {
+            case 0: return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+            case 1: return AlarmManager.INTERVAL_HALF_HOUR;
+            case 2: return AlarmManager.INTERVAL_HOUR;
+            case 3: return AlarmManager.INTERVAL_HALF_DAY;
+            default: return AlarmManager.INTERVAL_DAY;
+        }
+    }
+
+    public static int autoSyncIntervalToOptionIndex(long interval) {
+        switch((int)interval) {
+            case (int)AlarmManager.INTERVAL_FIFTEEN_MINUTES: return 0;
+            case (int)AlarmManager.INTERVAL_HALF_HOUR: return 1;
+            case (int)AlarmManager.INTERVAL_HOUR: return 2;
+            case (int)AlarmManager.INTERVAL_HALF_DAY: return 3;
+            case (int)AlarmManager.INTERVAL_DAY: return 4;
+        }
+
+        return -1;
+    }
 
     public Settings(Context context) {
         pref = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
@@ -54,6 +81,10 @@ public class Settings {
 
     public void setInt(String key, int value) {
         pref.edit().putInt(key, value).apply();
+    }
+
+    public void setLong(String key, long value) {
+        pref.edit().putLong(key, value).apply();
     }
 
     public void setFloat(String key, float value) {
@@ -72,6 +103,10 @@ public class Settings {
         return pref.getBoolean(CONFIGURATION_IS_OK, false);
     }
 
+    public void setConfigurationOk(boolean ok) {
+        setBoolean(CONFIGURATION_IS_OK, ok);
+    }
+
     public String getString(String key) {
         return pref.getString(key, null);
     }
@@ -82,6 +117,10 @@ public class Settings {
 
     public int getInt(String key, int defValue) {
         return pref.getInt(key, defValue);
+    }
+
+    public long getLong(String key, long defValue) {
+        return pref.getLong(key, defValue);
     }
 
     public float getFloat(String key, float defValue) {

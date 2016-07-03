@@ -105,19 +105,20 @@ public class ServiceHelper {
     public static void updateFeed(Context context,
                                   FeedUpdater.FeedType feedType,
                                   FeedUpdater.UpdateType updateType) {
-        updateFeed(context, feedType, updateType, null);
+        updateFeed(context, feedType, updateType, null, false);
     }
 
     public static void updateFeed(Context context,
                                   FeedUpdater.FeedType feedType,
                                   FeedUpdater.UpdateType updateType,
-                                  Long operationID) {
+                                  Long operationID, boolean auto) {
         Log.d(TAG, "updateFeed() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.UpdateFeed);
         request.setFeedUpdateFeedType(feedType);
         request.setFeedUpdateUpdateType(updateType);
         request.setOperationID(operationID);
+        if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
 
         Intent intent = new Intent(context, BGService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);

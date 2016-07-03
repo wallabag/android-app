@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.events;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -17,6 +18,7 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
+import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 // TODO: fix getters sync (AFAIK, not so important yet)
@@ -47,6 +49,45 @@ public class EventProcessor {
 
     public void stop() {
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onBootCompletedEvent(BootCompletedEvent event) {
+        Log.d(TAG, "onBootCompletedEvent() started");
+
+        Settings settings = getSettings();
+        if(settings.getBoolean(Settings.AUTOSYNC_ENABLED, false)) {
+            Log.d(TAG, "onBootCompletedEvent() setting an alarm");
+
+            AlarmHelper.setAlarm(getContext(),
+                    settings.getLong(Settings.AUTOSYNC_INTERVAL, AlarmManager.INTERVAL_DAY), false);
+        }
+    }
+
+    @Subscribe
+    public void onAlarmReceivedEvent(AlarmReceivedEvent event) {
+        Log.d(TAG, "onAlarmReceivedEvent() started");
+
+        Settings settings = getSettings();
+        if(!settings.getBoolean(Settings.AUTOSYNC_ENABLED, false)) {
+            Log.w(TAG, "onAlarmReceivedEvent() alarm received even though auto-sync is off");
+            return;
+        }
+
+        if(!WallabagConnection.isNetworkOnline()) {
+            Log.d(TAG, "No network, skipping auto-sync");
+            // TODO: set another closer alarm?
+            return;
+        }
+
+        int updateTypeVal = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
+        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
+        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
+
+        Context context = getContext();
+        // TODO: if the queue sync operation fails, the update feed operation should not be started
+        ServiceHelper.syncQueue(context, true);
+        ServiceHelper.updateFeed(context, feedType, updateType, null, true);
     }
 
     @Subscribe // TODO: check thread
