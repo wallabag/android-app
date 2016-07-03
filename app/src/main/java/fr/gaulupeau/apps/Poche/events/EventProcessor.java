@@ -208,6 +208,15 @@ public class EventProcessor {
                         //  - notification was already shown in the past
                         // no auto-retry
                         // TODO: important: implement the logic
+
+                        Settings settings = getSettings();
+                        if(settings.isConfigurationOk()) {
+                            // TODO: we probably want to automatically test connection
+
+                            settings.setConfigurationOk(false);
+
+                            // TODO: disable scheduled auto-sync?
+                        }
                         if(request.getRequestType() == ActionRequest.RequestType.Manual) {
                             NotificationCompat.Builder notificationBuilder =
                                     new NotificationCompat.Builder(getContext())

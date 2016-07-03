@@ -65,7 +65,7 @@ public class SettingsActivity extends BaseActionBarActivity
     private TestConnectionTask testConnectionTask;
     private GetCredentialsTask getCredentialsTask;
 
-    private boolean configurationIsOk;
+    private Boolean configurationIsOk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -255,7 +255,7 @@ public class SettingsActivity extends BaseActionBarActivity
                     }
                 }
 
-                settings.setConfigurationOk(configurationIsOk);
+                if(configurationIsOk != null) settings.setConfigurationOk(configurationIsOk);
 
                 finish();
 
