@@ -342,6 +342,9 @@ public class EventProcessor {
 
             delayedAlarmReceivedTask = false;
         } else {
+            Log.d(TAG, "alarmReceived() pre-delay: network is available: "
+                    + WallabagConnection.isNetworkOnline());
+
             getMainHandler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
