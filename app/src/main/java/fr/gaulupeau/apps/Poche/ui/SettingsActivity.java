@@ -157,7 +157,7 @@ public class SettingsActivity extends BaseActionBarActivity
                 this, android.R.layout.simple_spinner_item, new String[] {
                 getString(R.string.settings_autosync_type_fast),
                 getString(R.string.settings_autosync_type_full)}));
-        autosyncIntervalChooser.setSelection(autosyncType);
+        autosyncTypeChooser.setSelection(autosyncType);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCanceledOnTouchOutside(true);
