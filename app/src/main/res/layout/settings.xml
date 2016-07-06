@@ -316,6 +316,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="5sp"
+            android:text="@string/settings_autosync_enable_desc" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/toppadding"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/settings_autosync_interval" />
@@ -338,6 +345,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="5sp" />
+
+        <CheckBox
+            android:id="@+id/autosync_queue_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_autosync_queue_enable" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingBottom="5sp"
+            android:text="@string/settings_autosync_queue_enable_desc" />
 
 
         <Button

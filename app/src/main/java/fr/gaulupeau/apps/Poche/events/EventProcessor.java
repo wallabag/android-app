@@ -105,8 +105,17 @@ public class EventProcessor {
 
         Log.d(TAG, "onOfflineQueueChangedEvent() offline queue length: " + queueLength);
 
-        getSettings().setBoolean(Settings.PENDING_OFFLINE_QUEUE,
-                queueLength == null || queueLength != 0);
+        boolean queueIsEmpty = queueLength != null && queueLength == 0;
+
+        Settings settings = getSettings();
+        settings.setBoolean(Settings.PENDING_OFFLINE_QUEUE, !queueIsEmpty);
+
+        if(settings.getBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, false)) {
+            Log.d(TAG, "onOfflineQueueChangedEvent() enable connectivity change receiver: "
+                    + !queueIsEmpty);
+
+            Settings.enableConnectivityChangeReceiver(getContext(), !queueIsEmpty);
+        }
     }
 
     @Subscribe(sticky = true)

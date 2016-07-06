@@ -56,6 +56,7 @@ public class SettingsActivity extends BaseActionBarActivity
     private EditText httpAuthUsername;
     private EditText httpAuthPassword;
     private CheckBox autosyncEnableCheckbox;
+    private CheckBox autosyncQueueEnableCheckbox;
     private AppCompatSpinner autosyncIntervalChooser;
     private AppCompatSpinner autosyncTypeChooser;
 
@@ -88,6 +89,7 @@ public class SettingsActivity extends BaseActionBarActivity
         listLimit = (EditText) findViewById(R.id.list_limit_number);
         handleHttpScheme = (CheckBox) findViewById(R.id.handle_http_scheme);
         autosyncEnableCheckbox = (CheckBox) findViewById(R.id.autosync_enable);
+        autosyncQueueEnableCheckbox = (CheckBox) findViewById(R.id.autosync_queue_enable);
         autosyncIntervalChooser = (AppCompatSpinner) findViewById(R.id.autosync_interval_chooser);
         autosyncTypeChooser = (AppCompatSpinner) findViewById(R.id.autosync_type_chooser);
 
@@ -139,10 +141,12 @@ public class SettingsActivity extends BaseActionBarActivity
         httpAuthPassword.setText(settings.getString(Settings.HTTP_AUTH_PASSWORD));
 
         final boolean autosyncEnabled = settings.getBoolean(Settings.AUTOSYNC_ENABLED, false);
+        final boolean autosyncQueueEnabled = settings.getBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, false);
         final long autosyncInterval = settings.getLong(Settings.AUTOSYNC_INTERVAL,
                 AlarmManager.INTERVAL_DAY);
         final int autosyncType = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
         autosyncEnableCheckbox.setChecked(autosyncEnabled);
+        autosyncQueueEnableCheckbox.setChecked(autosyncQueueEnabled);
         // TODO: better ArrayAdapter creation
         autosyncIntervalChooser.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, new String[] {
@@ -237,11 +241,13 @@ public class SettingsActivity extends BaseActionBarActivity
                 settings.setString(Settings.HTTP_AUTH_PASSWORD, httpAuthPassword.getText().toString());
 
                 boolean autosyncEnabledNew = autosyncEnableCheckbox.isChecked();
+                boolean autosyncQueueEnabledNew = autosyncQueueEnableCheckbox.isChecked();
                 long autosyncIntervalNew = Settings.autoSyncOptionIndexToInterval(
                         autosyncIntervalChooser.getSelectedItemPosition());
                 int autosyncTypeNew = autosyncTypeChooser.getSelectedItemPosition();
 
                 settings.setBoolean(Settings.AUTOSYNC_ENABLED, autosyncEnabledNew);
+                settings.setBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, autosyncQueueEnabledNew);
                 settings.setLong(Settings.AUTOSYNC_INTERVAL, autosyncIntervalNew);
                 settings.setInt(Settings.AUTOSYNC_TYPE, autosyncTypeNew);
 
@@ -254,6 +260,16 @@ public class SettingsActivity extends BaseActionBarActivity
                 } else if(autosyncEnabledNew) {
                     if(autosyncInterval != autosyncIntervalNew) {
                         AlarmHelper.updateAlarmInterval(SettingsActivity.this, autosyncIntervalNew);
+                    }
+                }
+
+                if(autosyncQueueEnabledNew != autosyncQueueEnabled) {
+                    if(autosyncQueueEnabledNew) {
+                        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)) {
+                            Settings.enableConnectivityChangeReceiver(SettingsActivity.this, true);
+                        }
+                    } else {
+                        Settings.enableConnectivityChangeReceiver(SettingsActivity.this, false);
                     }
                 }
 

@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 
 public class Settings {
@@ -41,6 +42,8 @@ public class Settings {
 
     public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
 
+    public static final String AUTOSYNC_QUEUE_ENABLED = "autosync_queue.enabled";
+
     public static final String AUTOSYNC_ENABLED = "autosync.enabled";
     public static final String AUTOSYNC_INTERVAL = "autosync.interval";
     public static final String AUTOSYNC_TYPE = "autosync.type";
@@ -69,6 +72,21 @@ public class Settings {
         }
 
         return -1;
+    }
+
+    public static void enableConnectivityChangeReceiver(Context context, boolean enable) {
+        enableComponent(context, ConnectivityChangeReceiver.class, enable);
+    }
+
+    // TODO: reuse in setHandleHttpScheme
+    // be careful: this method only enables disabled by default components,
+    // it won't disable enabled by default ones
+    public static void enableComponent(Context context, Class<?> cls, boolean enable) {
+        ComponentName componentName = new ComponentName(context, cls);
+        context.getPackageManager().setComponentEnabledSetting(componentName, enable
+                        ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                        : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                PackageManager.DONT_KILL_APP);
     }
 
     public Settings(Context context) {

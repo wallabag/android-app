@@ -2,11 +2,11 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.SystemClock;
+
+import static fr.gaulupeau.apps.Poche.data.Settings.enableComponent;
 
 public class AlarmHelper {
 
@@ -46,15 +46,6 @@ public class AlarmHelper {
 
     private static AlarmManager getAlarmManager(Context context) {
         return (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-    }
-
-    // TODO: move somewhere?
-    private static void enableComponent(Context context, Class<?> cls, boolean enable) {
-        ComponentName componentName = new ComponentName(context, cls);
-        context.getPackageManager().setComponentEnabledSetting(componentName, enable
-                ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-                : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT
-                , PackageManager.DONT_KILL_APP);
     }
 
 }
