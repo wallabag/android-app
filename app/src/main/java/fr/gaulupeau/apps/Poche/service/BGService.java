@@ -64,13 +64,31 @@ public class BGService extends IntentService {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case SyncQueue:
-                result = syncOfflineQueue(actionRequest);
+            case SyncQueue: {
+                SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    result = syncOfflineQueue(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    postEvent(new SyncQueueFinishedEvent(actionRequest, result));
+                }
                 break;
+            }
 
-            case AddLink:
-                result = addLink(actionRequest);
+            case AddLink: {
+                AddLinkStartedEvent startEvent = new AddLinkStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    result = addLink(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    postEvent(new AddLinkFinishedEvent(actionRequest, result));
+                }
                 break;
+            }
 
             case Archive:
             case Unarchive:
@@ -87,7 +105,15 @@ public class BGService extends IntentService {
                 break;
 
             case UpdateFeed: {
-                result = updateFeed(actionRequest);
+                UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    result = updateFeed(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
+                }
                 break;
             }
 
@@ -103,9 +129,6 @@ public class BGService extends IntentService {
 
     private ActionResult syncOfflineQueue(ActionRequest actionRequest) {
         Log.d(TAG, "syncOfflineQueue() started");
-
-        SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
-        postStickyEvent(startEvent);
 
         if(!WallabagConnection.isNetworkOnline()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
@@ -234,9 +257,6 @@ public class BGService extends IntentService {
         } finally {
             daoSession.getDatabase().endTransaction();
         }
-
-        removeStickyEvent(startEvent);
-        postEvent(new SyncQueueFinishedEvent(actionRequest, result));
 
         if(queueChangedLength != null) {
             postEvent(new OfflineQueueChangedEvent(queueChangedLength));
@@ -436,9 +456,6 @@ public class BGService extends IntentService {
         String link = actionRequest.getLink();
         Log.d(TAG, String.format("addLink(%s) started", link));
 
-        AddLinkStartedEvent startEvent = new AddLinkStartedEvent(actionRequest);
-        postStickyEvent(startEvent);
-
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
 
@@ -472,9 +489,6 @@ public class BGService extends IntentService {
             daoSession.getDatabase().endTransaction();
         }
 
-        removeStickyEvent(startEvent);
-        postEvent(new AddLinkFinishedEvent(actionRequest, result));
-
         if(queueChangedLength != null) {
             postEvent(new OfflineQueueChangedEvent(queueChangedLength));
         }
@@ -503,9 +517,6 @@ public class BGService extends IntentService {
         FeedUpdater.UpdateType updateType = actionRequest.getFeedUpdateUpdateType();
 
         Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
-
-        UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
-        postStickyEvent(startEvent);
 
         ActionResult result = new ActionResult();
 
@@ -537,10 +548,9 @@ public class BGService extends IntentService {
             result.setErrorType(ActionResult.ErrorType.NoNetwork);
         }
 
-        removeStickyEvent(startEvent);
-        postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
         postEvent(new FeedsChangedEvent(feedType)); // TODO: fix: other feeds may be affected too
         // TODO: also post ArticleChangedEvents?
+        // TODO: do not post events if nothing changed
 
         Log.d(TAG, "updateFeed() finished");
         return result;
