@@ -23,6 +23,7 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -52,14 +53,6 @@ public class FeedUpdater {
 
     }
 
-    public static class FeedUpdaterException extends Exception {
-
-        public FeedUpdaterException(String detailMessage) {
-            super(detailMessage);
-        }
-
-    }
-
     private static final String TAG = FeedUpdater.class.getSimpleName();
 
     private String baseURL;
@@ -74,7 +67,8 @@ public class FeedUpdater {
         this.wallabagVersion = wallabagVersion;
     }
 
-    public void update(FeedType feedType, UpdateType updateType) throws FeedUpdaterException {
+    public void update(FeedType feedType, UpdateType updateType)
+            throws XmlPullParserException, RequestException, IOException {
         if(feedType == null && updateType == null) {
             updateAllFeeds();
         } else {
@@ -89,7 +83,7 @@ public class FeedUpdater {
         }
     }
 
-    private void updateAllFeeds() throws FeedUpdaterException {
+    private void updateAllFeeds() throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, "updateAllFeeds() started");
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -121,7 +115,7 @@ public class FeedUpdater {
     }
 
     private void updateInternal(FeedType feedType, UpdateType updateType)
-            throws FeedUpdaterException {
+            throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -154,35 +148,16 @@ public class FeedUpdater {
     }
 
     private void updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
-                                 Integer id) throws FeedUpdaterException {
+                              Integer id)
+            throws XmlPullParserException, RequestException, IOException {
         Log.d(TAG, "updateByFeed() started");
 
         InputStream is = null;
         try {
-            // TODO: rewrite?
-            try {
-                is = getInputStream(getFeedUrl(feedType));
-            } catch (IncorrectConfigurationException | IOException e) {
-                Log.e("FeedUpdater.updateByF", "Exception on " + feedType, e);
-                throw new FeedUpdaterException(App.getInstance()
-                        .getString(R.string.feedUpdater_IOException));
-            } catch (RuntimeException e) {
-                Log.e("FeedUpdater.updateByF", "RuntimeException on " + feedType, e);
-                throw new FeedUpdaterException(e.getMessage());
-            }
+            is = getInputStream(getFeedUrl(feedType));
 
             Log.d(TAG, "updateByFeed() got input stream; processing feed");
-            try {
-                processFeed(articleDao, is, feedType, updateType, id);
-            } catch (IOException e) {
-                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
-                throw new FeedUpdaterException(App.getInstance()
-                        .getString(R.string.feedUpdater_IOExceptionOnProcessingFeed));
-            } catch (XmlPullParserException e) {
-                Log.e("FeedUpdater.updateByF", "XmlPullParserException on " + feedType, e);
-                throw new FeedUpdaterException(App.getInstance()
-                        .getString(R.string.feedUpdater_feedProcessingError));
-            }
+            processFeed(articleDao, is, feedType, updateType, id);
 
             Log.d(TAG, "updateByFeed() finished successfully");
         } finally {
@@ -219,11 +194,10 @@ public class FeedUpdater {
         if(response.isSuccessful()) {
             return response.body().byteStream();
         } else {
-            // TODO: fix
-            throw new RuntimeException(String.format(
+            // TODO: check
+            throw new IncorrectConfigurationException(String.format(
                     App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
-                    response.code(), response.message()
-            ));
+                    response.code(), response.message()));
         }
     }
 
@@ -348,7 +322,7 @@ public class FeedUpdater {
     private static void skipElement(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         if(parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
+            throw new XmlPullParserException("Unexpected state");
         }
 
         int depth = 1;

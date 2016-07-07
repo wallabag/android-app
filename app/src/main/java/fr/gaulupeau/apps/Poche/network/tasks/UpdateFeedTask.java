@@ -2,7 +2,12 @@ package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.os.AsyncTask;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public class UpdateFeedTask extends AsyncTask<Void, Void, Void> { // TODO: remove
 
@@ -34,7 +39,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> { // TODO: remov
 
         try {
             feedUpdater.update(feedType, updateType);
-        } catch(FeedUpdater.FeedUpdaterException e) {
+        } catch(XmlPullParserException | RequestException | IOException e) {
             errorMessage = e.getMessage();
         }
 

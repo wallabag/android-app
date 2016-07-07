@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -536,11 +538,13 @@ public class BGService extends IntentService {
                 feedUpdater.update(feedType, updateType);
 
                 daoSession.getDatabase().setTransactionSuccessful();
-            } catch (FeedUpdater.FeedUpdaterException e) {
-                Log.w(TAG, "updateFeed() FeedUpdaterException", e);
-                // TODO: error type detection
+            } catch(XmlPullParserException e) {
+                Log.e(TAG, "updateFeed() XmlPullParserException", e);
                 result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage(e.getMessage());
+                result.setMessage("Error while parsing feed"); // TODO: string resource
+            } catch(RequestException | IOException e) {
+                ActionResult r = processException(e, "updateFeed()");
+                if(!r.isSuccess()) result = r;
             } finally {
                 daoSession.getDatabase().endTransaction();
             }

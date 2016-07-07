@@ -95,9 +95,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_addLink_failedOnline_title">Failed to save online</string>
     <string name="d_addLink_failed_title">Failed to save URL</string>
     <string name="addLink_savedOffline">Saved offline</string>
-    <string name="feedUpdater_IOException">IO Exception on connect</string>
-    <string name="feedUpdater_IOExceptionOnProcessingFeed">IO exception on processing feed</string>
-    <string name="feedUpdater_feedProcessingError">Feed processing error</string>
+    <!--<string name="feedUpdater_IOException">IO Exception on connect</string>-->
+    <!--<string name="feedUpdater_IOExceptionOnProcessingFeed">IO exception on processing feed</string>-->
+    <!--<string name="feedUpdater_feedProcessingError">Feed processing error</string>-->
     <string name="getCredentials_success">Credentials filled</string>
     <string name="getCredentials_fail">Couldn\'t get credentials</string>
     <string name="testConnection_errorMessage1">Wallabag service not found; check URL. Error code: %d</string>
