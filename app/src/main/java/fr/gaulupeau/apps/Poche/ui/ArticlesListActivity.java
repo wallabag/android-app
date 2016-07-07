@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
@@ -194,9 +192,6 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuSyncQueue:
                 syncQueue();
                 return true;
-            case R.id.menuUploadOfflineURLs:
-                uploadOfflineURLs();
-                return true;
             case R.id.menuAbout:
                 new LibsBuilder()
                         //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
@@ -209,23 +204,6 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // TODO: remove
-    public void feedUpdateFinishedSuccessfully() {
-//        updateFinished();
-        Toast.makeText(this, R.string.txtSyncDone, Toast.LENGTH_SHORT).show();
-    }
-
-    // TODO: remove
-    public void feedUpdateFinishedWithError(String errorMessage) {
-//        updateFinished();
-        new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.error_feed) + errorMessage)
-                .setTitle(R.string.error)
-                .setPositiveButton(R.string.ok, null)
-                .setCancelable(false)
-                .create().show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -406,31 +384,6 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private ArticlesListFragment getFragment(int position) {
         return adapter != null ? adapter.getCachedFragment(position) : null;
-    }
-
-    private void uploadOfflineURLs() {
-        if(!WallabagConnection.isNetworkOnline()) {
-            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.d_uploadingOfflineURLs));
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(true);
-
-        final UploadOfflineURLsTask uploadOfflineURLsTask
-                = new UploadOfflineURLsTask(getApplicationContext(), progressDialog);
-
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                uploadOfflineURLsTask.cancel(false);
-            }
-        });
-
-        progressDialog.show();
-        uploadOfflineURLsTask.execute();
     }
 
     private void syncQueue() {
