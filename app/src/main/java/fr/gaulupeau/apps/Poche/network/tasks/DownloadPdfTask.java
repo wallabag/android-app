@@ -84,7 +84,7 @@ public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        if(WallabagConnection.isNetworkOnline()) {
+        if(WallabagConnection.isNetworkAvailable()) {
             Settings settings = App.getInstance().getSettings();
             String username = settings.getString(Settings.USERNAME);
             noCredentials = username == null || username.length() == 0;

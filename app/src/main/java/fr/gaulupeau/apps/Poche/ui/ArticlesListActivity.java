@@ -305,7 +305,7 @@ public class ArticlesListActivity extends AppCompatActivity
             if(showErrors) {
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
-        } else if(WallabagConnection.isNetworkOnline()) {
+        } else if(WallabagConnection.isNetworkAvailable()) {
             ServiceHelper.updateFeed(this, feedType, updateType);
 
             result = true;
@@ -387,7 +387,7 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void syncQueue() {
-        if(!WallabagConnection.isNetworkOnline()) {
+        if(!WallabagConnection.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }

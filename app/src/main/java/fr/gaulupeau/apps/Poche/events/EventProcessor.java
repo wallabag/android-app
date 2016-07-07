@@ -79,7 +79,7 @@ public class EventProcessor {
             return;
         }
 
-        if(!WallabagConnection.isNetworkOnline()) {
+        if(!WallabagConnection.isNetworkAvailable()) {
             Log.d(TAG, "alarmReceived() no network, skipping auto-sync");
             // TODO: set another closer alarm?
             return;
@@ -310,7 +310,7 @@ public class EventProcessor {
     private void networkChanged(boolean delayed) {
         if(!delayed && delayedNetworkChangedTask) return;
 
-        if(!WallabagConnection.isNetworkOnline()) return;
+        if(!WallabagConnection.isNetworkAvailable()) return;
 
         Settings settings = getSettings();
 

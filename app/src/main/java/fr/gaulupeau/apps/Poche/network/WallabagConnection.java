@@ -92,7 +92,7 @@ public class WallabagConnection {
         return httpUrl;
     }
 
-    public static boolean isNetworkOnline() {
+    public static boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 

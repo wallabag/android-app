@@ -132,7 +132,7 @@ public class BGService extends IntentService {
     private ActionResult syncOfflineQueue(ActionRequest actionRequest) {
         Log.d(TAG, "syncOfflineQueue() started");
 
-        if(!WallabagConnection.isNetworkOnline()) {
+        if(!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
             return new ActionResult(ActionResult.ErrorType.NoNetwork);
         }
@@ -285,7 +285,7 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.archiveArticle(articleID, archive)) {
-                if(WallabagConnection.isNetworkOnline()) {
+                if(WallabagConnection.isNetworkAvailable()) {
                     result.updateWith(archiveArticleRemote(articleID, archive));
                 } else {
                     result.setErrorType(ActionResult.ErrorType.NoNetwork);
@@ -347,7 +347,7 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.favoriteArticle(articleID, favorite)) {
-                if(WallabagConnection.isNetworkOnline()) {
+                if(WallabagConnection.isNetworkAvailable()) {
                     result.updateWith(favoriteArticleRemote(articleID, favorite));
                 } else {
                     result.setErrorType(ActionResult.ErrorType.NoNetwork);
@@ -407,7 +407,7 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.deleteArticle(articleID)) {
-                if(WallabagConnection.isNetworkOnline()) {
+                if(WallabagConnection.isNetworkAvailable()) {
                     result.updateWith(deleteArticleRemote(articleID));
                 } else {
                     result.setErrorType(ActionResult.ErrorType.NoNetwork);
@@ -467,7 +467,7 @@ public class BGService extends IntentService {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             if(queueHelper.addLink(link)) {
-                if(WallabagConnection.isNetworkOnline()) {
+                if(WallabagConnection.isNetworkAvailable()) {
                     result.updateWith(addLinkRemote(link));
                 } else {
                     result.setErrorType(ActionResult.ErrorType.NoNetwork);
@@ -522,7 +522,7 @@ public class BGService extends IntentService {
 
         ActionResult result = new ActionResult();
 
-        if(WallabagConnection.isNetworkOnline()) {
+        if(WallabagConnection.isNetworkAvailable()) {
             Settings settings = getSettings();
             FeedUpdater feedUpdater = new FeedUpdater(
                     settings.getUrl(),
