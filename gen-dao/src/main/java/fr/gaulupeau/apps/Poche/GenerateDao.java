@@ -21,11 +21,6 @@ public class GenerateDao {
         article.addDateProperty("updateDate").columnName("update_date"); // TODO: check: what is this prop for?
         article.addDoubleProperty("articleProgress").columnName("article_progress");
 
-        // TODO: remove
-        Entity offlineURL = schema.addEntity("OfflineURL");
-        offlineURL.addIdProperty();
-        offlineURL.addStringProperty("url").columnName("url").unique();
-
         Entity queueItem = schema.addEntity("QueueItem");
         queueItem.addIdProperty();
         queueItem.addLongProperty("queueNumber").columnName("queue_number"); // not sure it is actually needed
