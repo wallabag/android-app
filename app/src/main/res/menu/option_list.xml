@@ -14,7 +14,7 @@
     <item android:id="@+id/menuOpenRandomArticle"
         android:title="@string/menu_open_random_article" />
     <item android:id="@+id/menuSyncQueue"
-        android:title="Sync offline queue" />
+        android:title="@string/menu_syncLocalChanges" />
     <item android:id="@+id/menuSettings"
         android:title="@string/btnSettings" />
     <item android:id="@+id/menuAbout"

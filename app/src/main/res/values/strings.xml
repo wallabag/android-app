@@ -37,6 +37,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="ttsFastForward">Schnellvorlauf</string>
     <string name="ttsOptions">Options</string>
     <string name="menu_open_random_article">Open random article</string>
+    <string name="menu_syncLocalChanges">Sync local changes</string>
     <!--<string name="menuUploadOfflineURLs">Upload offline URLs</string>-->
     <string name="menuWipeDb">Wipe Database</string>
     <string name="wipe_db_dialog_title">Wipe Database?</string>
