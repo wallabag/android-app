@@ -38,7 +38,6 @@ public class EventProcessor {
     private Long currentOperationID; // TODO: replace with ActionRequest?
 
     private boolean delayedNetworkChangedTask;
-    private boolean delayedAlarmReceivedTask;
 
     public EventProcessor(Context context) {
         this.context = context;
@@ -75,7 +74,27 @@ public class EventProcessor {
             return;
         }
 
-        alarmReceived(false);
+        if(!settings.isConfigurationOk()) {
+            Log.d(TAG, "onAlarmReceivedEvent() configuration is not ok: skipping");
+            return;
+        }
+
+        if(!WallabagConnection.isNetworkOnline()) {
+            Log.d(TAG, "alarmReceived() no network, skipping auto-sync");
+            // TODO: set another closer alarm?
+            return;
+        }
+
+        int updateTypeVal = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
+        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
+        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
+
+        Context context = getContext();
+        // TODO: if the queue sync operation fails, the update feed operation should not be started
+        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)) {
+            ServiceHelper.syncQueue(context, true);
+        }
+        ServiceHelper.updateFeed(context, feedType, updateType, null, true);
     }
 
     @Subscribe // TODO: check thread
@@ -313,47 +332,6 @@ public class EventProcessor {
 
                 delayedNetworkChangedTask = true;
             }
-        }
-    }
-
-    private void alarmReceived(boolean delayed) {
-        if(!delayed && delayedAlarmReceivedTask) return;
-
-        Settings settings = getSettings();
-        if(!settings.isConfigurationOk()) return;
-
-        if(delayed) {
-            if(!WallabagConnection.isNetworkOnline()) {
-                Log.d(TAG, "alarmReceived() No network, skipping auto-sync");
-                // TODO: set another closer alarm?
-                delayedAlarmReceivedTask = false;
-                return;
-            }
-
-            int updateTypeVal = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
-            FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
-            FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
-
-            Context context = getContext();
-            // TODO: if the queue sync operation fails, the update feed operation should not be started
-            if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)) {
-                ServiceHelper.syncQueue(context, true);
-            }
-            ServiceHelper.updateFeed(context, feedType, updateType, null, true);
-
-            delayedAlarmReceivedTask = false;
-        } else {
-            Log.d(TAG, "alarmReceived() pre-delay: network is available: "
-                    + WallabagConnection.isNetworkOnline());
-
-            getMainHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    alarmReceived(true);
-                }
-            }, 3000);
-
-            delayedAlarmReceivedTask = true;
         }
     }
 
