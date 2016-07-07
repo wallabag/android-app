@@ -486,7 +486,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         File exportDir = getExternalFilesDir(null);
         if(exportDir != null) {
             new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
-                    mArticleDao, mArticle, exportDir.getAbsolutePath()).execute();
+                    mArticle, exportDir.getAbsolutePath()).execute();
         } else {
             Log.w(TAG, "downloadPdf() exportDir is null");
         }
