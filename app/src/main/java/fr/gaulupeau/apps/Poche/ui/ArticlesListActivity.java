@@ -49,6 +49,10 @@ public class ArticlesListActivity extends AppCompatActivity
     private ArticlesListPagerAdapter adapter;
     private ViewPager viewPager;
 
+    private boolean isActive;
+
+    private boolean[] invalidLists = new boolean[ArticlesListPagerAdapter.PAGES.length];
+
     private boolean firstTimeShown = true;
     private boolean showEmptyDbDialogOnResume;
     private boolean dbIsEmpty;
@@ -74,7 +78,9 @@ public class ArticlesListActivity extends AppCompatActivity
 
         viewPager.setCurrentItem(1);
 
-        dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0;
+        dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0; // TODO: replace with Settings' property
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -84,15 +90,15 @@ public class ArticlesListActivity extends AppCompatActivity
         if(dbIsEmpty) {
             showEmptyDbDialogOnResume = true;
         }
-
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        updateLists(); // TODO: better update logic (do not update if unnecessary)
+        isActive = true;
+
+        checkLists();
 
         if(firstTimeShown) {
             firstTimeShown = false;
@@ -151,10 +157,17 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
+        isActive = false;
+
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
         EventBus.getDefault().unregister(this);
 
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -200,7 +213,7 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
-        updateListByFeedType(event.getFeedType());
+        invalidateList(event.getFeedType());
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -308,34 +321,61 @@ public class ArticlesListActivity extends AppCompatActivity
         return result;
     }
 
-    private void updateLists() {
-        if(adapter != null) {
-            for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
-                ArticlesListFragment f = adapter.getCachedFragment(i);
-                if(f != null) {
-                    f.updateList();
-                }
+    private void invalidateList(FeedUpdater.FeedType feedType) {
+        invalidateList(ArticlesListPagerAdapter.positionByFeedType(feedType));
+    }
+
+    private void invalidateList(int position) {
+        Log.d(TAG, "invalidateList() started with position: " + position);
+
+        if(position != -1) {
+            invalidLists[position] = true;
+        } else {
+            for(int i = 0; i < invalidLists.length; i++) {
+                invalidLists[i] = true;
+            }
+        }
+
+        if(isActive) {
+            Log.d(TAG, "invalidateList() activity is active; calling checkLists()");
+            checkLists();
+        }
+
+        Log.d(TAG, "invalidateList() finished");
+    }
+
+    private void checkLists() {
+        Log.d(TAG, "checkLists() started");
+
+        for(int i = 0; i < invalidLists.length; i++) {
+            if(invalidLists[i]) {
+                invalidLists[i] = false;
+
+                Log.d(TAG, "checkLists() updating list with position: " + i);
+                updateList(i);
+            }
+        }
+
+        Log.d(TAG, "checkLists() finished");
+    }
+
+    private void updateAllLists() {
+        for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
+            ArticlesListFragment f = getFragment(i);
+            if(f != null) {
+                f.updateList();
             }
         }
     }
 
     private void updateList(int position) {
-        ArticlesListFragment f = getFragment(position);
-        if(f != null) {
-            f.updateList();
-        }
-    }
-
-    private void updateListByFeedType(FeedUpdater.FeedType feedType) {
-        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
-
         if(position != -1) {
             ArticlesListFragment f = getFragment(position);
             if(f != null) {
                 f.updateList();
             }
         } else {
-            updateLists();
+            updateAllLists();
         }
     }
 
@@ -357,13 +397,6 @@ public class ArticlesListActivity extends AppCompatActivity
         ArticlesListFragment f = getCurrentFragment();
         if(f != null) {
             f.openRandomArticle();
-        }
-    }
-
-    private void fragmentOnShow() {
-        ArticlesListFragment f = getCurrentFragment();
-        if(f != null) {
-            f.onShow();
         }
     }
 
