@@ -54,8 +54,8 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean[] invalidLists = new boolean[ArticlesListPagerAdapter.PAGES.length];
 
     private boolean firstTimeShown = true;
+    private boolean firstSyncDone;
     private boolean showEmptyDbDialogOnResume;
-    private boolean dbIsEmpty;
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
@@ -78,7 +78,14 @@ public class ArticlesListActivity extends AppCompatActivity
 
         viewPager.setCurrentItem(1);
 
-        dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0; // TODO: replace with Settings' property
+        firstSyncDone = settings.getBoolean(Settings.FIRST_SYNC_DONE, false);
+
+        // compatibility hack for pre-FIRST_SYNC_DONE versions
+        if(!firstSyncDone
+                && DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() != 0) {
+            firstSyncDone = true;
+            settings.setBoolean(Settings.FIRST_SYNC_DONE, true);
+        }
 
         EventBus.getDefault().register(this);
     }
@@ -87,7 +94,7 @@ public class ArticlesListActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
-        if(dbIsEmpty) {
+        if(!firstSyncDone) {
             showEmptyDbDialogOnResume = true;
         }
     }
@@ -227,11 +234,12 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onUpdateFeedsStoppedEvent(UpdateFeedsFinishedEvent event) {
         Log.d(TAG, "Got UpdateFeedsFinishedEvent");
 
-        // TODO: better "empty DB" suggestion logic
-        dbIsEmpty = false;
-        showEmptyDbDialogOnResume = false;
+        if(event.getResult().isSuccess()) {
+            firstSyncDone = true;
+            showEmptyDbDialogOnResume = false;
 
-        notifyListUpdate(event.getFeedType(), false);
+            notifyListUpdate(event.getFeedType(), false);
+        }
     }
 
     @Override

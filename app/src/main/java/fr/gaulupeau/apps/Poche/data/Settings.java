@@ -39,6 +39,7 @@ public class Settings {
     public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
 
     public static final String CONFIGURATION_IS_OK = "configuration_is_ok";
+    public static final String FIRST_SYNC_DONE = "first_sync_done";
 
     public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
 

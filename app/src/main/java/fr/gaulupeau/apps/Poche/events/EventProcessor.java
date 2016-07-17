@@ -155,6 +155,11 @@ public class EventProcessor {
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
 
+        if(event.getResult().isSuccess()
+                && !getSettings().getBoolean(Settings.FIRST_SYNC_DONE, false)) {
+            getSettings().setBoolean(Settings.FIRST_SYNC_DONE, true);
+        }
+
         emptyOperationID();
     }
 
