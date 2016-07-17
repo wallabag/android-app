@@ -154,7 +154,7 @@ public class ArticlesListActivity extends AppCompatActivity
                 messageBox.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fullUpdate();
+                        updateAllFeeds();
                     }
                 });
                 messageBox.setNegativeButton(R.string.negative_answer, null);
@@ -188,7 +188,7 @@ public class ArticlesListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuFullUpdate:
-                fullUpdate();
+                updateAllFeeds();
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
@@ -258,13 +258,14 @@ public class ArticlesListActivity extends AppCompatActivity
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
                 ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
-        // TODO: fix
-        if(updateFeed(true, feedType, updateType)) {
-//            refreshingFragment = position;
-//            setRefreshingUI(true);
-        } else {
+
+        if(!updateFeed(true, feedType, updateType)) {
             setRefreshingUI(false);
         }
+    }
+
+    private void updateAllFeeds() {
+        updateFeed(true, null, null);
     }
 
     private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
@@ -294,21 +295,11 @@ public class ArticlesListActivity extends AppCompatActivity
         }
     }
 
-    private void fullUpdate() {
-        if(updateFeed(true, null, null)) {
-            fullUpdateRunning = true;
-            setRefreshingUI(true);
-        } else {
-            setRefreshingUI(false);
-        }
-    }
-
     private boolean updateFeed(boolean showErrors,
                                FeedUpdater.FeedType feedType,
                                FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
-        // TODO: rewrite?
         if(fullUpdateRunning || refreshingFragment != -1) {
             Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
                     .show();
