@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
-public class DialogHelperActivity extends AppCompatActivity {
+public class DialogHelperActivity extends AppCompatActivity { // TODO: remove?
 
     private static final String EXTRA_TITLE = "title";
     private static final String EXTRA_MESSAGE = "message";

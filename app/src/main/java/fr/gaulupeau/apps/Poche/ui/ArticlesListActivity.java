@@ -70,17 +70,7 @@ public class ArticlesListActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
-
-        tabLayout.setTabsFromPagerAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-
-                fragmentOnShow();
-            }
-        });
+        tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(1);
 
