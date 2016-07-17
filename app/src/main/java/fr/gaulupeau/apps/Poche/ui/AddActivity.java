@@ -36,20 +36,15 @@ public class AddActivity extends BaseActionBarActivity {
         if(progressBar != null) progressBar.setIndeterminate(true);
 
         random = new Random();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
         EventBus.getDefault().unregister(this);
 
-        super.onStop();
+        super.onDestroy();
     }
 
     public void addButtonClicked(View view) {

@@ -384,6 +384,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 toggleTTS(false);
             }
         }
+
+        EventBus.getDefault().register(this);
     }
 
     private void loadingFinished() {
@@ -590,16 +592,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
 
-        EventBus.getDefault().register(this);
+        super.onDestroy();
     }
 
     @Override
     public void onStop() {
-        EventBus.getDefault().unregister(this);
-
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
