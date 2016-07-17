@@ -575,11 +575,14 @@ public class BGService extends IntentService {
                 result.setMessage(e.getMessage());
             }
         } else if(e instanceof IOException) { // TODO: differentiate errors: timeouts and stuff
-            result.setErrorType(ActionResult.ErrorType.Unknown); // TODO: separate Temporary errors
-            result.setMessage(e.toString());
+            if(e instanceof java.net.UnknownHostException && getSettings().isConfigurationOk()) {
+                result.setErrorType(ActionResult.ErrorType.Temporary);
+            } else {
+                result.setErrorType(ActionResult.ErrorType.Unknown); // TODO: separate Temporary errors
+                result.setMessage(e.toString());
+            }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
-            // Possible values: UnknownHostException -- either an incorrect hostname or DNS is not available yet
         } else { // other exceptions meant to be handled outside
             result.setErrorType(ActionResult.ErrorType.Unknown);
         }
