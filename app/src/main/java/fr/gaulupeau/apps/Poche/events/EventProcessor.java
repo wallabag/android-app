@@ -3,7 +3,9 @@ package fr.gaulupeau.apps.Poche.events;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -20,6 +22,7 @@ import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.SettingsActivity;
 
 // TODO: fix getters sync (AFAIK, not so important yet)
 public class EventProcessor {
@@ -131,15 +134,20 @@ public class EventProcessor {
 
         setOperationID(event);
 
-        FeedUpdater.FeedType feedType = event.getFeedType();
+        Context context = getContext();
 
-        // TODO: fix notification content
+        FeedUpdater.FeedType feedType = event.getFeedType();
         String detailedMessage;
-        if(feedType == null) detailedMessage = "Updating all feeds";
-        else detailedMessage = String.format("Updating %s feed", feedType);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
+        if(feedType == null) {
+            detailedMessage = context.getString(R.string.notification_updatingAllFeeds);
+        } else {
+            detailedMessage = context.getString(R.string.notification_updatingSpecificFeed,
+                    context.getString(feedType.getLocalizedResourceID()));
+        }
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle("Updating feeds")
+                .setContentTitle(context.getString(R.string.notification_updatingFeeds))
                 .setContentText(detailedMessage)
                 .setOngoing(true);
 
@@ -169,11 +177,9 @@ public class EventProcessor {
 
         setOperationID(event);
 
-        // TODO: fix notification content
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
                 .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle("Syncing queue")
-//                .setContentText("Syncing queue")
+                .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
                 .setOngoing(true);
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
@@ -225,27 +231,36 @@ public class EventProcessor {
                     case IncorrectCredentials: {
                         // notify user -- user must fix something before retry
                         // maybe suppress notification if:
-                        //  - the action was not requested by user (that probably implies the second case), and
+                        //  - the action was not requested by user (that probably implies the second case), or
                         //  - notification was already shown in the past
                         // no auto-retry
-                        // TODO: important: implement the logic
 
                         Settings settings = getSettings();
                         if(settings.isConfigurationOk()) {
                             // TODO: we probably want to automatically test connection
 
                             settings.setConfigurationOk(false);
-
-                            // TODO: disable scheduled auto-sync?
                         }
-                        if(request.getRequestType() == ActionRequest.RequestType.Manual) {
+
+                        if(request.getRequestType() == ActionRequest.RequestType.Manual
+                                || !settings.getBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, false)) {
+                            settings.setBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, true);
+
+                            Context context = getContext();
+
+                            Intent intent = new Intent(context, SettingsActivity.class);
+                            PendingIntent contentIntent = PendingIntent.getActivity(
+                                    context, 0, intent, 0);
+
                             NotificationCompat.Builder notificationBuilder =
-                                    new NotificationCompat.Builder(getContext())
-                                            .setSmallIcon(R.drawable.ic_stop_24dp)
-                                            .setContentTitle("Action failed")
-                                            .setContentText(errorType == ActionResult.ErrorType.IncorrectCredentials
-                                                            ? "Incorrect credentials"
-                                                            : "Incorrect configuration");
+                                    new NotificationCompat.Builder(context)
+                                            .setSmallIcon(R.drawable.ic_warning_24dp)
+                                            .setContentTitle(context.getString(R.string.notification_error))
+                                            .setContentText(context.getString(
+                                                    errorType == ActionResult.ErrorType.IncorrectCredentials
+                                                            ? R.string.notification_incorrectCredentials
+                                                            : R.string.notification_incorrectConfiguration))
+                                            .setContentIntent(contentIntent);
 
                             notification = notificationBuilder.build();
                         }
@@ -256,15 +271,18 @@ public class EventProcessor {
                         // this is undecided yet
                         // show notification + schedule auto-retry
                         // TODO: decide on behavior
-                        NotificationCompat.Builder notificationBuilder =
-                                new NotificationCompat.Builder(getContext())
-                                        .setSmallIcon(R.drawable.ic_stop_24dp)
-                                        .setContentTitle("Action failed")
-                                        .setContentText("Unknown error");
 
-                        if (result.getMessage() != null) {
+                        Context context = getContext();
+                        NotificationCompat.Builder notificationBuilder =
+                                new NotificationCompat.Builder(context)
+                                        .setSmallIcon(R.drawable.ic_warning_24dp)
+                                        .setContentTitle(context.getString(R.string.notification_error))
+                                        .setContentText(context.getString(R.string.notification_unknownError));
+
+                        if(result.getMessage() != null) {
                             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText("Error: " + result.getMessage()));
+                                    .bigText(context.getString(R.string.notification_expandedError,
+                                            result.getMessage())));
                         }
 
                         notification = notificationBuilder.build();

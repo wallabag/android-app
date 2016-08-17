@@ -32,15 +32,17 @@ public class FeedUpdater {
     public enum UpdateType { Full, Fast }
 
     public enum FeedType {
-        Main("home", "unread.xml"),
-        Favorite("fav", "starred.xml"),
-        Archive("archive", "archive.xml");
+        Main("home", "unread.xml", R.string.feedName_unread),
+        Favorite("fav", "starred.xml", R.string.feedName_favorites),
+        Archive("archive", "archive.xml", R.string.feedName_archived);
 
         String urlPartV1, urlPartV2;
+        int nameResID;
 
-        FeedType(String urlPartV1, String urlPartV2) {
+        FeedType(String urlPartV1, String urlPartV2, int nameResID) {
             this.urlPartV1 = urlPartV1;
             this.urlPartV2 = urlPartV2;
+            this.nameResID = nameResID;
         }
 
         public String getUrlPart(int wallabagVersion) {
@@ -51,6 +53,9 @@ public class FeedUpdater {
             return "";
         }
 
+        public int getLocalizedResourceID() {
+            return nameResID;
+        }
     }
 
     private static final String TAG = FeedUpdater.class.getSimpleName();

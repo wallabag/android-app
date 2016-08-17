@@ -273,7 +273,10 @@ public class SettingsActivity extends BaseActionBarActivity
                     }
                 }
 
-                if(configurationIsOk != null) settings.setConfigurationOk(configurationIsOk);
+                if(configurationIsOk != null) {
+                    settings.setConfigurationOk(configurationIsOk);
+                    settings.setBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, false);
+                }
 
                 finish();
 

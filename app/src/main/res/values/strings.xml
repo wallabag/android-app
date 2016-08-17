@@ -185,4 +185,13 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="downloadPdfTouchToOpen">Touch to open</string>
     <string name="downloadPdfProgressDetail">wallabag downloads your article %s en PDF</string>
     <string name="downloadPdfProgress">wallabag downloads your article en PDF</string>
+    <string name="notification_updatingFeeds">Updating feeds</string>
+    <string name="notification_updatingAllFeeds">Updating all feeds</string>
+    <string name="notification_updatingSpecificFeed">Updating %s feed</string>
+    <string name="notification_syncingQueue">Synchronizing local changes</string>
+    <string name="notification_error">Error</string>
+    <string name="notification_incorrectCredentials">Incorrect credentials</string>
+    <string name="notification_incorrectConfiguration">Incorrect configuration</string>
+    <string name="notification_unknownError">Unknown error</string>
+    <string name="notification_expandedError">Error: %s</string>
 </resources>
