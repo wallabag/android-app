@@ -139,7 +139,7 @@ GAULUPEAU Jonathan — 2013-2015
     <plurals name="numberOfArticles">
         <item quantity="one">%d статья</item>
         <item quantity="few">%d статьи</item>
-        <item quantity="other">%d статей</item>
+        <item quantity="many">%d статей</item>
     </plurals>
     <string name="menuTTS"> Текст в речь</string>
     <string name="ttsAutoplayNextArticle">Автозапуск Следующая статья</string>
