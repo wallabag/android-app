@@ -170,7 +170,7 @@ public class TtsFragment
             this.percentFormat.setMaximumFractionDigits(0);
         }
         this.viewTTSOption = view.findViewById(R.id.viewTTSOptions);
-        if (!this.settings.getBoolean(Settings.TTS_OPTIONS_VISIBLE, false)) {
+        if(!this.settings.isTtsOptionsVisible()) {
             this.viewTTSOption.setVisibility(View.GONE);
         }
         this.btnTTSPlayStop = ((ImageButton) view.findViewById(R.id.btnTTSPlayPause));
@@ -214,11 +214,11 @@ public class TtsFragment
 
         final CheckBox chkbxTTSAutoplayNext = (CheckBox) view.findViewById(R.id.chkbxTTSAutoplayNext);
         final ImageView imgviewTTSAutolpayNext = (ImageView) view.findViewById(R.id.imgviewTTSAutoplayNext);
-        chkbxTTSAutoplayNext.setChecked(settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false));
+        chkbxTTSAutoplayNext.setChecked(settings.isTtsAutoplayNext());
         View.OnClickListener ttsAutoplayNextClickListner = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, chkbxTTSAutoplayNext.isChecked());
+                settings.setTtsAutoplayNext(chkbxTTSAutoplayNext.isChecked());
                 if (chkbxTTSAutoplayNext.isChecked()) {
                     showToastMessage(R.string.ttsAutoplayNextArticle);
                 }
@@ -227,7 +227,7 @@ public class TtsFragment
         chkbxTTSAutoplayNext.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                settings.setBoolean(Settings.TTS_AUTOPLAY_NEXT, isChecked);
+                settings.setTtsAutoplayNext(isChecked);
                 if (isChecked) {
                     showToastMessage(R.string.ttsAutoplayNextArticle);
                 }
@@ -274,7 +274,7 @@ public class TtsFragment
             }
         });
 
-        this.seekBarTTSSpeed.setProgress((int) (this.settings.getFloat(Settings.TTS_SPEED, 1.0F) * this.seekBarTTSSpeed.getMax() / MAX_TTS_SPEED));
+        this.seekBarTTSSpeed.setProgress((int) (this.settings.getTtsSpeed() * this.seekBarTTSSpeed.getMax() / MAX_TTS_SPEED));
 
         this.seekBarTTSPitch = ((SeekBar) view.findViewById(R.id.seekBarTTSPitch));
         this.seekBarTTSPitch.setMax(Integer.MAX_VALUE);
@@ -305,7 +305,7 @@ public class TtsFragment
             }
         });
 
-        this.seekBarTTSPitch.setProgress((int) (this.settings.getFloat(Settings.TTS_PITCH, 1.0F) * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
+        this.seekBarTTSPitch.setProgress((int) (this.settings.getTtsPitch() * this.seekBarTTSPitch.getMax() / MAX_TTS_PITCH));
 
         this.seekBarTTSSleep = ((SeekBar) view.findViewById(R.id.seekBarTTSSleep));
         this.seekBarTTSSleep.setMax(Integer.MAX_VALUE);
@@ -488,9 +488,9 @@ public class TtsFragment
 
 
     private void saveSettings() {
-        this.settings.setFloat(Settings.TTS_SPEED, getSpeedBarValue());
-        this.settings.setFloat(Settings.TTS_PITCH, getPitchBarValue());
-        this.settings.setBoolean(Settings.TTS_OPTIONS_VISIBLE, this.viewTTSOption.getVisibility() == View.VISIBLE);
+        this.settings.setTtsSpeed(getSpeedBarValue());
+        this.settings.setTtsPitch(getPitchBarValue());
+        this.settings.setTtsOptionsVisible(this.viewTTSOption.getVisibility() == View.VISIBLE);
     }
 
     private float getSpeedBarValue() {
@@ -554,7 +554,7 @@ public class TtsFragment
     }
 
     private void onReadFinished() {
-        if (settings.getBoolean(Settings.TTS_AUTOPLAY_NEXT, false)) {
+        if (settings.isTtsAutoplayNext()) {
             if (ttsService != null) {
                 ttsService.playPageFlipSound();
             }
@@ -707,7 +707,7 @@ public class TtsFragment
                 && (activityResultNumber == ttsEnginesNumber)
                 && (spinnerLanguageAdapter != null))
         {
-            String voice = settings.getString(Settings.TTS_VOICE, "");
+            String voice = settings.getTtsVoice();
             String language = voice.indexOf("-") >= 0 ?
                     voice.substring(0, voice.indexOf("-")) : voice;
             spinnerLanguageAdapter.setNotifyOnChange(false);
@@ -731,7 +731,7 @@ public class TtsFragment
         spinnerVoiceAdapter.clear();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
         String language = ttsLanguages.get(languagePosition).name;
-        String languageVoicePreference = settings.getString(Settings.TTS_LANGUAGE_VOICE + language, "");
+        String languageVoicePreference = settings.getTtsLanguageVoice(language);
         int voicePositionToSelect = 0;
         for (VoiceInfo voiceInfo : ttsVoiceByLanguage.get(language)) {
             spinnerVoiceAdapter.add(voiceInfo.displayName);
@@ -774,9 +774,9 @@ public class TtsFragment
                         ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
                     }
                 }
-                settings.setString(Settings.TTS_ENGINE, voiceInfo.engineInfo.name);
-                settings.setString(Settings.TTS_VOICE, voiceInfo.name);
-                settings.setString(Settings.TTS_LANGUAGE_VOICE + voiceInfo.language, voiceInfo.displayName);
+                settings.setTtsEngine(voiceInfo.engineInfo.name);
+                settings.setTtsVoice(voiceInfo.name);
+                settings.setTtsLanguageVoice(voiceInfo.language, voiceInfo.displayName);
             }
         }
     }

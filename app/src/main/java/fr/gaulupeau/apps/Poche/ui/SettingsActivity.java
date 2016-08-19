@@ -1,11 +1,9 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.AlarmManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
@@ -93,27 +91,20 @@ public class SettingsActivity extends BaseActionBarActivity
         autosyncIntervalChooser = (AppCompatSpinner) findViewById(R.id.autosync_interval_chooser);
         autosyncTypeChooser = (AppCompatSpinner) findViewById(R.id.autosync_type_chooser);
 
-        editPocheUrl.setText(settings.getString(Settings.URL, "https://"));
+        editPocheUrl.setText(settings.getUrl());
         editPocheUrl.setSelection(editPocheUrl.getText().length());
-        editAPIUsername.setText(settings.getString(Settings.USER_ID, ""));
-        editAPIToken.setText(settings.getString(Settings.TOKEN, ""));
+        editAPIUsername.setText(settings.getFeedsUserID());
+        editAPIToken.setText(settings.getFeedsToken());
 
-        versionChooser.setSelection(settings.getInt(Settings.WALLABAG_VERSION, 2) - 1);
+        int wallabagVersion = settings.getWallabagServerVersion();
+        versionChooser.setSelection((wallabagVersion == -1 ? 2 : wallabagVersion) - 1);
 
-        allCerts.setChecked(settings.getBoolean(Settings.ALL_CERTS, false));
-
-        boolean customSSL = false;
-        if(settings.contains(Settings.CUSTOM_SSL_SETTINGS)) {
-            customSSL = settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false);
-        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            customSSL = true;
-        }
-        customSSLSettings.setChecked(customSSL);
+        allCerts.setChecked(settings.isAcceptAllCertificates());
+        customSSLSettings.setChecked(settings.isCustomSSLSettings());
 
         Themes.Theme[] themes = Themes.Theme.values();
         String[] themeOptions = new String[themes.length];
-        Themes.Theme currentThemeName = Themes.getCurrentTheme();
+        Themes.Theme currentThemeName = settings.getTheme();
         int currentThemeIndex = 0;
         for(int i = 0; i < themes.length; i++) {
             if(themes[i] == currentThemeName) currentThemeIndex = i;
@@ -123,28 +114,27 @@ public class SettingsActivity extends BaseActionBarActivity
                 this, android.R.layout.simple_spinner_item, themeOptions));
         themeChooser.setSelection(currentThemeIndex);
 
-        fontSizeET.setText(String.valueOf(settings.getInt(Settings.FONT_SIZE, 100)));
+        fontSizeET.setText(String.valueOf(settings.getArticleFontSize()));
 
-        serifFont.setChecked(settings.getBoolean(Settings.SERIF_FONT, false));
-        listLimit.setText(String.valueOf(settings.getInt(Settings.LIST_LIMIT, 50)));
+        serifFont.setChecked(settings.isArticleFontSerif());
+        listLimit.setText(String.valueOf(settings.getArticlesListLimit()));
 
         handleHttpScheme.setChecked(settings.isHandlingHttpScheme());
 
         username = (EditText) findViewById(R.id.username);
-        username.setText(settings.getString(Settings.USERNAME));
+        username.setText(settings.getUsername());
         password = (EditText) findViewById(R.id.password);
-        password.setText(settings.getString(Settings.PASSWORD));
+        password.setText(settings.getPassword());
 
         httpAuthUsername = (EditText) findViewById(R.id.http_auth_username);
-        httpAuthUsername.setText(settings.getString(Settings.HTTP_AUTH_USERNAME));
+        httpAuthUsername.setText(settings.getHttpAuthUsername());
         httpAuthPassword = (EditText) findViewById(R.id.http_auth_password);
-        httpAuthPassword.setText(settings.getString(Settings.HTTP_AUTH_PASSWORD));
+        httpAuthPassword.setText(settings.getHttpAuthPassword());
 
-        final boolean autosyncEnabled = settings.getBoolean(Settings.AUTOSYNC_ENABLED, false);
-        final boolean autosyncQueueEnabled = settings.getBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, false);
-        final long autosyncInterval = settings.getLong(Settings.AUTOSYNC_INTERVAL,
-                AlarmManager.INTERVAL_DAY);
-        final int autosyncType = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
+        final boolean autosyncEnabled = settings.isAutoUpdateEnabled();
+        final boolean autosyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+        final long autosyncInterval = settings.getAutoUpdateInterval();
+        final int autosyncType = settings.getAutoUpdateType();
         autosyncEnableCheckbox.setChecked(autosyncEnabled);
         autosyncQueueEnableCheckbox.setChecked(autosyncQueueEnabled);
         // TODO: better ArrayAdapter creation
@@ -156,7 +146,7 @@ public class SettingsActivity extends BaseActionBarActivity
                 getString(R.string.settings_autosync_interval_12h),
                 getString(R.string.settings_autosync_interval_24h)}));
         autosyncIntervalChooser.setSelection(
-                Settings.autoSyncIntervalToOptionIndex(autosyncInterval));
+                Settings.autoUpdateIntervalToOptionIndex(autosyncInterval));
         autosyncTypeChooser.setAdapter(new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, new String[] {
                 getString(R.string.settings_autosync_type_fast),
@@ -212,44 +202,44 @@ public class SettingsActivity extends BaseActionBarActivity
         btnDone = (Button) findViewById(R.id.btnDone);
         btnDone.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                settings.setString(Settings.URL, editPocheUrl.getText().toString());
-                settings.setString(Settings.USER_ID, editAPIUsername.getText().toString());
-                settings.setString(Settings.TOKEN, editAPIToken.getText().toString());
+                settings.setUrl(editPocheUrl.getText().toString());
+                settings.setFeedsUserID(editAPIUsername.getText().toString());
+                settings.setFeedsToken(editAPIToken.getText().toString());
 
-                settings.setInt(Settings.WALLABAG_VERSION, versionChooser.getSelectedItemPosition() + 1);
+                settings.setWallabagServerVersion(versionChooser.getSelectedItemPosition() + 1);
 
-                settings.setBoolean(Settings.ALL_CERTS, allCerts.isChecked());
-                settings.setBoolean(Settings.CUSTOM_SSL_SETTINGS, customSSLSettings.isChecked());
+                settings.setAcceptAllCertificates(allCerts.isChecked());
+                settings.setCustomSSLSettings(customSSLSettings.isChecked());
                 Themes.Theme selectedTheme = Themes.Theme.values()[themeChooser.getSelectedItemPosition()];
-                settings.setString(Settings.THEME, selectedTheme.toString());
+                settings.setTheme(selectedTheme);
                 try {
-                    settings.setInt(Settings.FONT_SIZE, Integer.parseInt(fontSizeET.getText().toString()));
+                    settings.setArticleFontSize(Integer.parseInt(fontSizeET.getText().toString()));
                 } catch(NumberFormatException ignored) {}
-                settings.setBoolean(Settings.SERIF_FONT, serifFont.isChecked());
+                settings.setArticleFontSerif(serifFont.isChecked());
                 try {
-                    settings.setInt(Settings.LIST_LIMIT, Integer.parseInt(listLimit.getText().toString()));
-                } catch (NumberFormatException ignored) {}
+                    settings.setArticlesListLimit(Integer.parseInt(listLimit.getText().toString()));
+                } catch(NumberFormatException ignored) {}
 
                 settings.setHandleHttpScheme(handleHttpScheme.isChecked());
 
-                settings.setString(Settings.USERNAME, username.getText().toString());
-                settings.setString(Settings.PASSWORD, password.getText().toString());
+                settings.setUsername(username.getText().toString());
+                settings.setPassword(password.getText().toString());
 
                 applyHttpAuth();
 
-                settings.setString(Settings.HTTP_AUTH_USERNAME, httpAuthUsername.getText().toString());
-                settings.setString(Settings.HTTP_AUTH_PASSWORD, httpAuthPassword.getText().toString());
+                settings.setHttpAuthUsername(httpAuthUsername.getText().toString());
+                settings.setHttpAuthPassword(httpAuthPassword.getText().toString());
 
                 boolean autosyncEnabledNew = autosyncEnableCheckbox.isChecked();
                 boolean autosyncQueueEnabledNew = autosyncQueueEnableCheckbox.isChecked();
-                long autosyncIntervalNew = Settings.autoSyncOptionIndexToInterval(
+                long autosyncIntervalNew = Settings.autoUpdateOptionIndexToInterval(
                         autosyncIntervalChooser.getSelectedItemPosition());
                 int autosyncTypeNew = autosyncTypeChooser.getSelectedItemPosition();
 
-                settings.setBoolean(Settings.AUTOSYNC_ENABLED, autosyncEnabledNew);
-                settings.setBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, autosyncQueueEnabledNew);
-                settings.setLong(Settings.AUTOSYNC_INTERVAL, autosyncIntervalNew);
-                settings.setInt(Settings.AUTOSYNC_TYPE, autosyncTypeNew);
+                settings.setAutoUpdateEnabled(autosyncEnabledNew);
+                settings.setAutoSyncQueueEnabled(autosyncQueueEnabledNew);
+                settings.setAutoUpdateInterval(autosyncIntervalNew);
+                settings.setAutoUpdateType(autosyncTypeNew);
 
                 if(autosyncEnabledNew != autosyncEnabled) {
                     if(autosyncEnabledNew) {
@@ -265,7 +255,7 @@ public class SettingsActivity extends BaseActionBarActivity
 
                 if(autosyncQueueEnabledNew != autosyncQueueEnabled) {
                     if(autosyncQueueEnabledNew) {
-                        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)) {
+                        if(settings.isOfflineQueuePending()) {
                             Settings.enableConnectivityChangeReceiver(SettingsActivity.this, true);
                         }
                     } else {
@@ -275,7 +265,7 @@ public class SettingsActivity extends BaseActionBarActivity
 
                 if(configurationIsOk != null) {
                     settings.setConfigurationOk(configurationIsOk);
-                    settings.setBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, false);
+                    settings.setConfigurationErrorShown(false);
                 }
 
                 finish();

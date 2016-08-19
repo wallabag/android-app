@@ -99,7 +99,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private Settings settings;
 
-    private int fontSize = 100;
+    private int fontSize;
 
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
@@ -140,7 +140,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         settings = App.getInstance().getSettings();
 
-        acceptAllSSLCerts = settings.getBoolean(Settings.ALL_CERTS, false);
+        acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
         String cssName;
         boolean highContrast = false;
@@ -164,10 +164,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
         }
 
-        fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);
-        boolean serifFont = settings.getBoolean(Settings.SERIF_FONT, false);
-
-        if(fontSize < 5) fontSize = 100; // TODO: remove: temp hack for compatibility
+        fontSize = settings.getArticleFontSize();
+        boolean serifFont = settings.isArticleFontSerif();
 
         List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
@@ -210,8 +208,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             httpAuthHostTemp = new URL(httpAuthHostTemp).getHost();
         } catch (Exception ignored) {}
         final String httpAuthHost = httpAuthHostTemp;
-        final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
-        final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
+        final String httpAuthUsername = settings.getHttpAuthUsername();
+        final String httpAuthPassword = settings.getHttpAuthPassword();
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
         webViewContent = (WebView) findViewById(R.id.webViewContent);
@@ -378,7 +376,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
         });
 
-        if (settings.getBoolean(Settings.TTS_VISIBLE, false) && (ttsFragment == null)) {
+        if(settings.isTtsVisible() && (ttsFragment == null)) {
             ttsFragment = (TtsFragment)getSupportFragmentManager().findFragmentByTag("ttsFragment");
             if (ttsFragment == null) {
                 toggleTTS(false);
@@ -699,7 +697,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 .beginTransaction()
                 .add(R.id.viewMain, ttsFragment, "ttsFragment")
                 .commit();
-            settings.setBoolean(Settings.TTS_VISIBLE, true);
+            settings.setTtsVisible(true);
             ttsFragment.onDocumentLoadStart(domainText, titleText);
             if (loadingFinished) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
@@ -711,7 +709,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     .remove(ttsFragment)
                     .commit();
             ttsFragment = null;
-            settings.setBoolean(Settings.TTS_VISIBLE, false);
+            settings.setTtsVisible(false);
             result = false;
         }
         if (menuTTS != null) {
@@ -841,7 +839,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setFontSize(webViewContent, fontSize);
 
-        settings.setInt(Settings.FONT_SIZE, fontSize);
+        settings.setArticleFontSize(fontSize);
 
         restorePositionAfterUpdate();
     }

@@ -18,14 +18,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget implementation
+
     private static final String TAG = IconUnreadWidget.class.getSimpleName();
+
+    private static final int MAX_UNREAD_COUNT = 999;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -44,8 +46,8 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
             views.setViewVisibility(R.id.unread_count_text, View.GONE);
         } else {
             views.setViewVisibility(R.id.unread_count_text, View.VISIBLE);
-            if (unreadCount > Settings.WALLABAG_WIDGET_MAX_UNREAD_COUNT) {
-                views.setTextViewText(R.id.unread_count_text, Settings.WALLABAG_WIDGET_MAX_UNREAD_COUNT + "+");
+            if (unreadCount > MAX_UNREAD_COUNT) {
+                views.setTextViewText(R.id.unread_count_text, MAX_UNREAD_COUNT + "+");
             } else {
                 views.setTextViewText(R.id.unread_count_text, "" + unreadCount);
             }

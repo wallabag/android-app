@@ -78,13 +78,13 @@ public class ArticlesListActivity extends AppCompatActivity
 
         viewPager.setCurrentItem(1);
 
-        firstSyncDone = settings.getBoolean(Settings.FIRST_SYNC_DONE, false);
+        firstSyncDone = settings.isFirstSyncDone();
 
-        // compatibility hack for pre-FIRST_SYNC_DONE versions
+        // compatibility hack for pre-FIRST_SYNC_DONE versions // TODO: remove?
         if(!firstSyncDone
                 && DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() != 0) {
             firstSyncDone = true;
-            settings.setBoolean(Settings.FIRST_SYNC_DONE, true);
+            settings.setFirstSyncDone(true);
         }
 
         EventBus.getDefault().register(this);
@@ -111,7 +111,7 @@ public class ArticlesListActivity extends AppCompatActivity
             firstTimeShown = false;
 
             if(!settings.isConfigurationOk()) {
-                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
+                settings.setConfigureOptionalDialogShown(true);
 
                 AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                 messageBox.setTitle(R.string.firstRun_d_welcome);
@@ -124,10 +124,10 @@ public class ArticlesListActivity extends AppCompatActivity
                 });
                 messageBox.setCancelable(false);
                 messageBox.create().show();
-            } else if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) { // TODO: make all credentials required and remove it
-                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
+            } else if(!settings.isOptionalConfigurationDialogShown()) { // TODO: make all credentials required and remove it
+                settings.setConfigureOptionalDialogShown(true);
 
-                String username = settings.getString(Settings.USERNAME);
+                String username = settings.getUsername();
                 if(username == null || username.isEmpty()) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                     messageBox.setTitle(R.string.firstRun_d_optionalSettings_title);

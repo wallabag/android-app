@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.events;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -59,11 +58,10 @@ public class EventProcessor {
         Log.d(TAG, "onBootCompletedEvent() started");
 
         Settings settings = getSettings();
-        if(settings.getBoolean(Settings.AUTOSYNC_ENABLED, false)) {
+        if(settings.isAutoUpdateEnabled()) {
             Log.d(TAG, "onBootCompletedEvent() setting an alarm");
 
-            AlarmHelper.setAlarm(getContext(),
-                    settings.getLong(Settings.AUTOSYNC_INTERVAL, AlarmManager.INTERVAL_DAY), false);
+            AlarmHelper.setAlarm(getContext(), settings.getAutoUpdateInterval(), false);
         }
     }
 
@@ -72,7 +70,7 @@ public class EventProcessor {
         Log.d(TAG, "onAlarmReceivedEvent() started");
 
         Settings settings = getSettings();
-        if(!settings.getBoolean(Settings.AUTOSYNC_ENABLED, false)) {
+        if(!settings.isAutoUpdateEnabled()) {
             Log.w(TAG, "onAlarmReceivedEvent() alarm received even though auto-sync is off");
             return;
         }
@@ -88,13 +86,13 @@ public class EventProcessor {
             return;
         }
 
-        int updateTypeVal = settings.getInt(Settings.AUTOSYNC_TYPE, 0);
+        int updateTypeVal = settings.getAutoUpdateType();
         FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
         FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
 
         Context context = getContext();
         // TODO: if the queue sync operation fails, the update feed operation should not be started
-        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)) {
+        if(settings.isOfflineQueuePending()) {
             ServiceHelper.syncQueue(context, true);
         }
         ServiceHelper.updateFeed(context, feedType, updateType, null, true);
@@ -118,9 +116,9 @@ public class EventProcessor {
         boolean queueIsEmpty = queueLength != null && queueLength == 0;
 
         Settings settings = getSettings();
-        settings.setBoolean(Settings.PENDING_OFFLINE_QUEUE, !queueIsEmpty);
+        settings.setOfflineQueuePending(!queueIsEmpty);
 
-        if(settings.getBoolean(Settings.AUTOSYNC_QUEUE_ENABLED, false)) {
+        if(settings.isAutoSyncQueueEnabled()) {
             Log.d(TAG, "onOfflineQueueChangedEvent() enable connectivity change receiver: "
                     + !queueIsEmpty);
 
@@ -163,9 +161,8 @@ public class EventProcessor {
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
 
-        if(event.getResult().isSuccess()
-                && !getSettings().getBoolean(Settings.FIRST_SYNC_DONE, false)) {
-            getSettings().setBoolean(Settings.FIRST_SYNC_DONE, true);
+        if(event.getResult().isSuccess() && !getSettings().isFirstSyncDone()) {
+            getSettings().setFirstSyncDone(true);
         }
 
         emptyOperationID();
@@ -243,8 +240,8 @@ public class EventProcessor {
                         }
 
                         if(request.getRequestType() == ActionRequest.RequestType.Manual
-                                || !settings.getBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, false)) {
-                            settings.setBoolean(Settings.CONFIGURATION_ERROR_WAS_SHOWN, true);
+                                || !settings.isConfigurationErrorShown()) {
+                            settings.setConfigurationErrorShown(true);
 
                             Context context = getContext();
 
@@ -337,8 +334,7 @@ public class EventProcessor {
 
         Settings settings = getSettings();
 
-        if(settings.getBoolean(Settings.PENDING_OFFLINE_QUEUE, false)
-                && settings.isConfigurationOk()) {
+        if(settings.isOfflineQueuePending() && settings.isConfigurationOk()) {
             if(delayed) {
                 Log.d(TAG, "networkChanged() requesting SyncQueue operation");
 

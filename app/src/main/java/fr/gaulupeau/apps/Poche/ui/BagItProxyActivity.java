@@ -51,7 +51,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         // TODO: queue url anyway
         Settings settings = new Settings(this);
-        if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
+        if(!settings.isOptionalConfigurationDialogShown()) {
             startActivity(new Intent(this, ArticlesListActivity.class)); // FLAG_ACTIVITY_CLEAR_TOP and/or FLAG_ACTIVITY_NEW_TASK maybe?
         }
 

@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
@@ -31,7 +30,7 @@ public class WallabagService {
 
     public WallabagService(String endpoint, String username, String password) {
         this(endpoint, username, password,
-                App.getInstance().getSettings().getInt(Settings.WALLABAG_VERSION, -1));
+                App.getInstance().getSettings().getWallabagServerVersion());
     }
 
     public WallabagService(String endpoint, String username, String password, int wallabagVersion) {

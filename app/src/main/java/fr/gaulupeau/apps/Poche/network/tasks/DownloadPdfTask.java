@@ -86,13 +86,13 @@ public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
     protected Boolean doInBackground(Void... params) {
         if(WallabagConnection.isNetworkAvailable()) {
             Settings settings = App.getInstance().getSettings();
-            String username = settings.getString(Settings.USERNAME);
-            noCredentials = username == null || username.length() == 0;
+            String username = settings.getUsername();
+            noCredentials = username == null || username.isEmpty();
             if(!noCredentials) {
                 service = new WallabagService(
                         settings.getUrl(),
                         username,
-                        settings.getString(Settings.PASSWORD));
+                        settings.getPassword());
             }
         } else {
             isOffline = true;

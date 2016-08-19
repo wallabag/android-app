@@ -19,11 +19,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.DEBUG)
-            Stetho.initializeWithDefaults(this);
+
+        if(BuildConfig.DEBUG) Stetho.initializeWithDefaults(this);
+
+        settings = new Settings(this);
+        settings.initPreferences();
 
         DbConnection.setContext(this);
-        settings = new Settings(this);
 
         WallabagConnection.init(this);
 

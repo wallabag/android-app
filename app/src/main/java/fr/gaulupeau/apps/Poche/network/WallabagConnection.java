@@ -56,8 +56,8 @@ public class WallabagConnection {
         Settings settings = app.getSettings();
 
         setBasicAuthCredentials(
-                settings.getString(Settings.HTTP_AUTH_USERNAME, null),
-                settings.getString(Settings.HTTP_AUTH_PASSWORD, null)
+                settings.getHttpAuthUsername(),
+                settings.getHttpAuthPassword()
         );
     }
 
@@ -126,13 +126,13 @@ public class WallabagConnection {
 
         Settings settings = App.getInstance().getSettings();
 
-        if(settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false)) {
+        if(settings.isCustomSSLSettings()) {
             try {
                 b.sslSocketFactory(new CustomSSLSocketFactory());
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
-        } else if(settings.getBoolean(Settings.ALL_CERTS, false)) {
+        } else if(settings.isAcceptAllCertificates()) {
             try {
                 final TrustManager[] trustAllCerts = new TrustManager[]{
                         new X509TrustManager() {

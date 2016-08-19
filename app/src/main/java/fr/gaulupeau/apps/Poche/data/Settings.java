@@ -5,56 +5,22 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
+import android.preference.PreferenceManager;
 
-import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
+import fr.gaulupeau.apps.Poche.ui.Themes;
 
 public class Settings {
 
-    private static final String PREFS_NAME = "InThePoche"; // keeping prefname for backwards compat
+    private static final int PREFERENCES_VERSION = 1;
 
-    public static final String URL = "pocheUrl";
-    public static final String USER_ID = "APIUsername";
-    public static final String TOKEN = "APIToken";
-    public static final String ALL_CERTS = "all_certs";
-    public static final String CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
-    public static final String FONT_SIZE = "font_size";
-    public static final String SERIF_FONT = "serif_font";
-    public static final String LIST_LIMIT = "list_limit";
-    public static final String USERNAME = "username";
-    public static final String PASSWORD = "password";
-    public static final String HTTP_AUTH_USERNAME = "http_auth_username";
-    public static final String HTTP_AUTH_PASSWORD = "http_auth_password";
-    public static final String THEME = "theme";
-    public static final String CONFIGURE_OPTIONAL_DIALOG_SHOWN = "configure_optional_dialog_shown";
-    public static final String WALLABAG_VERSION = "wallabag_version";
-    public static final String TTS_VISIBLE = "tts.visible";
-    public static final String TTS_OPTIONS_VISIBLE = "tts.options.visible";
-    public static final String TTS_SPEED = "tts.speed";
-    public static final String TTS_PITCH = "tts.pitch";
-    public static final String TTS_ENGINE = "tts.engine";
-    public static final String TTS_VOICE = "tts.voice";
-    public static final String TTS_LANGUAGE_VOICE = "tts.language_voice:";
-    public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
-
-    public static final String CONFIGURATION_IS_OK = "configuration_is_ok";
-    public static final String CONFIGURATION_ERROR_WAS_SHOWN = "configuration_error_was_shown";
-    public static final String FIRST_SYNC_DONE = "first_sync_done";
-
-    public static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
-
-    public static final String AUTOSYNC_QUEUE_ENABLED = "autosync_queue.enabled";
-
-    public static final String AUTOSYNC_ENABLED = "autosync.enabled";
-    public static final String AUTOSYNC_INTERVAL = "autosync.interval";
-    public static final String AUTOSYNC_TYPE = "autosync.type";
-
-    public static final int WALLABAG_WIDGET_MAX_UNREAD_COUNT = 999;
-
+    private Context context;
     private SharedPreferences pref;
 
-    public static long autoSyncOptionIndexToInterval(int index) {
+    public static long autoUpdateOptionIndexToInterval(int index) {
         switch(index) {
             case 0: return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
             case 1: return AlarmManager.INTERVAL_HALF_HOUR;
@@ -64,16 +30,14 @@ public class Settings {
         }
     }
 
-    public static int autoSyncIntervalToOptionIndex(long interval) {
+    public static int autoUpdateIntervalToOptionIndex(long interval) {
         switch((int)interval) {
             case (int)AlarmManager.INTERVAL_FIFTEEN_MINUTES: return 0;
             case (int)AlarmManager.INTERVAL_HALF_HOUR: return 1;
             case (int)AlarmManager.INTERVAL_HOUR: return 2;
             case (int)AlarmManager.INTERVAL_HALF_DAY: return 3;
-            case (int)AlarmManager.INTERVAL_DAY: return 4;
+            default: return 4;
         }
-
-        return -1;
     }
 
     public static void enableConnectivityChangeReceiver(Context context, boolean enable) {
@@ -92,71 +56,430 @@ public class Settings {
     }
 
     public Settings(Context context) {
-        pref = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        this.context = context.getApplicationContext();
+        pref = PreferenceManager.getDefaultSharedPreferences(this.context);
     }
 
-    public void setString(String key, String value) {
-        pref.edit().putString(key, value).apply();
-    }
+    public void initPreferences() {
+        int prefVersion = getInt(R.string.pref_key_internal_preferencesVersion, -1);
 
-    public void setInt(String key, int value) {
-        pref.edit().putInt(key, value).apply();
-    }
+        if(prefVersion == PREFERENCES_VERSION) { // preferences are up to date
+            return;
+        }
 
-    public void setLong(String key, long value) {
-        pref.edit().putLong(key, value).apply();
-    }
+        if(prefVersion == -1) { // preferences are not set
+            if(LegacySettingsHelper.migrateLegacySettings(context, pref)) {
+                // TODO: maybe mark preferences as migrated
+                setConfigurationOk(false);
+            }
 
-    public void setFloat(String key, float value) {
-        pref.edit().putFloat(key, value).apply();
-    }
+            // TODO: set missing default values with preferences.xml
 
-    public void setBoolean(String key, boolean value) {
-        pref.edit().putBoolean(key, value).apply();
-    }
+            // *** TODO: remove
+            SharedPreferences.Editor prefEditor = pref.edit();
+            if(!contains(R.string.pref_key_connection_url)) {
+                prefEditor.putString(context.getString(R.string.pref_key_connection_url), "https://");
+            }
+            if(!contains(R.string.pref_key_ui_article_fontSize)) {
+                prefEditor.putInt(context.getString(R.string.pref_key_ui_article_fontSize), 100);
+            }
+            if(!contains(R.string.pref_key_ui_lists_limit)) {
+                prefEditor.putInt(context.getString(R.string.pref_key_ui_lists_limit), 50);
+            }
+            if(!contains(R.string.pref_key_autoUpdate_interval)) {
+                prefEditor.putLong(context.getString(R.string.pref_key_autoUpdate_interval),
+                        AlarmManager.INTERVAL_DAY);
+            }
+            // ***
 
-    public String getUrl() {
-        return pref.getString(URL, null);
-    }
+            if(!contains(R.string.pref_key_tts_speed)) {
+                prefEditor.putFloat(context.getString(R.string.pref_key_tts_speed), 1);
+            }
+            if(!contains(R.string.pref_key_tts_pitch)) {
+                prefEditor.putFloat(context.getString(R.string.pref_key_tts_pitch), 1);
+            }
 
-    public boolean isConfigurationOk() {
-        return pref.getBoolean(CONFIGURATION_IS_OK, false);
-    }
+            // wallabag version is 1, 2 or -1; default value is -1 for code and 2 for UI
+            if(!contains(R.string.pref_key_connection_serverVersion)) {
+                prefEditor.putInt(context.getString(R.string.pref_key_connection_serverVersion), -1);
+            }
 
-    public void setConfigurationOk(boolean ok) {
-        setBoolean(CONFIGURATION_IS_OK, ok);
-    }
+            if(!contains(R.string.pref_key_connection_advanced_customSSLSettings)) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    prefEditor.putBoolean(context.getString(
+                            R.string.pref_key_connection_advanced_customSSLSettings), true);
+                }
+            }
 
-    public String getString(String key) {
-        return pref.getString(key, null);
-    }
+            if(!contains(R.string.pref_key_ui_theme)) {
+                Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
+                        ? Themes.Theme.LightContrast : Themes.Theme.Light;
+                prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
+            }
 
-    public String getString(String key, String defValue) {
-        return pref.getString(key, defValue);
-    }
+            prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),
+                    PREFERENCES_VERSION);
 
-    public int getInt(String key, int defValue) {
-        return pref.getInt(key, defValue);
-    }
-
-    public long getLong(String key, long defValue) {
-        return pref.getLong(key, defValue);
-    }
-
-    public float getFloat(String key, float defValue) {
-        return pref.getFloat(key, defValue);
-    }
-
-    public boolean getBoolean(String key, boolean defValue) {
-        return pref.getBoolean(key, defValue);
+            prefEditor.apply();
+        }
     }
 
     public boolean contains(String key) {
         return pref.contains(key);
     }
 
+    public boolean contains(int keyResourceID) {
+        return contains(context.getString(keyResourceID));
+    }
+
+    public boolean getBoolean(String key, boolean defValue) {
+        return pref.getBoolean(key, defValue);
+    }
+
+    public boolean getBoolean(int keyResourceID, boolean defValue) {
+        return getBoolean(context.getString(keyResourceID), defValue);
+    }
+
+    public void setBoolean(String key, boolean value) {
+        pref.edit().putBoolean(key, value).apply();
+    }
+
+    public void setBoolean(int keyResourceID, boolean value) {
+        setBoolean(context.getString(keyResourceID), value);
+    }
+
+    public String getString(String key) {
+        return getString(key, null);
+    }
+
+    public String getString(String key, String defValue) {
+        return pref.getString(key, defValue);
+    }
+
+    public String getString(int keyResourceID) {
+        return getString(keyResourceID, null);
+    }
+
+    public String getString(int keyResourceID, String defValue) {
+        return getString(context.getString(keyResourceID), defValue);
+    }
+
+    public void setString(String key, String defValue) {
+        pref.edit().putString(key, defValue).apply();
+    }
+
+    public void setString(int keyResourceID, String value) {
+        setString(context.getString(keyResourceID), value);
+    }
+
+    public int getInt(String key, int defValue) {
+        return pref.getInt(key, defValue);
+    }
+
+    public int getInt(int keyResourceID, int defValue) {
+        return getInt(context.getString(keyResourceID), defValue);
+    }
+
+    public void setInt(String key, int value) {
+        pref.edit().putInt(key, value).apply();
+    }
+
+    public void setInt(int keyResourceID, int value) {
+        setInt(context.getString(keyResourceID), value);
+    }
+
+    public long getLong(String key, long defValue) {
+        return pref.getLong(key, defValue);
+    }
+
+    public long getLong(int keyResourceID, long defValue) {
+        return getLong(context.getString(keyResourceID), defValue);
+    }
+
+    public void setLong(String key, long value) {
+        pref.edit().putLong(key, value).apply();
+    }
+
+    public void setLong(int keyResourceID, long value) {
+        setLong(context.getString(keyResourceID), value);
+    }
+
+    public float getFloat(String key, float defValue) {
+        return pref.getFloat(key, defValue);
+    }
+
+    public float getFloat(int keyResourceID, float defValue) {
+        return getFloat(context.getString(keyResourceID), defValue);
+    }
+
+    public void setFloat(String key, float value) {
+        pref.edit().putFloat(key, value).apply();
+    }
+
+    public void setFloat(int keyResourceID, float value) {
+        setFloat(context.getString(keyResourceID), value);
+    }
+
+    public String getUrl() {
+        return getString(R.string.pref_key_connection_url);
+    }
+
+    public void setUrl(String url) {
+        setString(R.string.pref_key_connection_url, url);
+    }
+
+    public int getWallabagServerVersion() {
+        return getInt(R.string.pref_key_connection_serverVersion, -1);
+    }
+
+    public void setWallabagServerVersion(int version) {
+        setInt(R.string.pref_key_connection_serverVersion, version);
+    }
+
+    public String getUsername() {
+        return getString(R.string.pref_key_connection_username);
+    }
+
+    public void setUsername(String username) {
+        setString(R.string.pref_key_connection_username, username);
+    }
+
+    public String getPassword() {
+        return getString(R.string.pref_key_connection_password);
+    }
+
+    public void setPassword(String password) {
+        setString(R.string.pref_key_connection_password, password);
+    }
+
+    public String getFeedsUserID() {
+        return getString(R.string.pref_key_connection_feedsUserID);
+    }
+
+    public void setFeedsUserID(String feedsUserID) {
+        setString(R.string.pref_key_connection_feedsUserID, feedsUserID);
+    }
+
+    public String getFeedsToken() {
+        return getString(R.string.pref_key_connection_feedsToken);
+    }
+
+    public void setFeedsToken(String feedsToken) {
+        setString(R.string.pref_key_connection_feedsToken, feedsToken);
+    }
+
+    public boolean isAcceptAllCertificates() {
+        return getBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, false);
+    }
+
+    public void setAcceptAllCertificates(boolean value) {
+        setBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, value);
+    }
+
+    public boolean isCustomSSLSettings() {
+        return getBoolean(R.string.pref_key_connection_advanced_customSSLSettings, false);
+    }
+
+    public void setCustomSSLSettings(boolean value) {
+        setBoolean(R.string.pref_key_connection_advanced_customSSLSettings, value);
+    }
+
+    public String getHttpAuthUsername() {
+        return getString(R.string.pref_key_connection_advanced_httpAuthUsername);
+    }
+
+    public void setHttpAuthUsername(String httpAuthUsername) {
+        setString(R.string.pref_key_connection_advanced_httpAuthUsername, httpAuthUsername);
+    }
+
+    public String getHttpAuthPassword() {
+        return getString(R.string.pref_key_connection_advanced_httpAuthPassword);
+    }
+
+    public void setHttpAuthPassword(String httpAuthPassword) {
+        setString(R.string.pref_key_connection_advanced_httpAuthPassword, httpAuthPassword);
+    }
+
+    public int getArticleFontSize() {
+        return getInt(R.string.pref_key_ui_article_fontSize, 100);
+    }
+
+    public void setArticleFontSize(int fontSize) {
+        setInt(R.string.pref_key_ui_article_fontSize, fontSize);
+    }
+
+    public boolean isArticleFontSerif() {
+        return getBoolean(R.string.pref_key_ui_article_fontSerif, false);
+    }
+
+    public void setArticleFontSerif(boolean value) {
+        setBoolean(R.string.pref_key_ui_article_fontSerif, value);
+    }
+
+    public int getArticlesListLimit() {
+        return getInt(R.string.pref_key_ui_lists_limit, 50);
+    }
+
+    public void setArticlesListLimit(int limit) {
+        setInt(R.string.pref_key_ui_lists_limit, limit);
+    }
+
+    public Themes.Theme getTheme() {
+        String themeName = getString(R.string.pref_key_ui_theme);
+
+        Themes.Theme theme = null;
+        if(themeName != null) {
+            try {
+                theme = Themes.Theme.valueOf(themeName);
+            } catch(IllegalArgumentException ignored) {}
+        }
+
+        return theme != null ? theme : Themes.Theme.Light;
+    }
+
+    public void setTheme(Themes.Theme theme) {
+        setString(R.string.pref_key_ui_theme, theme.toString());
+    }
+
+    public boolean isTtsVisible() {
+        return getBoolean(R.string.pref_key_tts_visible, false);
+    }
+
+    public void setTtsVisible(boolean value) {
+        setBoolean(R.string.pref_key_tts_visible, value);
+    }
+
+    public boolean isTtsOptionsVisible() {
+        return getBoolean(R.string.pref_key_tts_optionsVisible, false);
+    }
+
+    public void setTtsOptionsVisible(boolean value) {
+        setBoolean(R.string.pref_key_tts_optionsVisible, value);
+    }
+
+    public float getTtsSpeed() {
+        return getFloat(R.string.pref_key_tts_speed, 1);
+    }
+
+    public void setTtsSpeed(float speed) {
+        setFloat(R.string.pref_key_tts_speed, speed);
+    }
+
+    public float getTtsPitch() {
+        return getFloat(R.string.pref_key_tts_pitch, 1);
+    }
+
+    public void setTtsPitch(float pitch) {
+        setFloat(R.string.pref_key_tts_pitch, pitch);
+    }
+
+    public String getTtsEngine() {
+        return getString(R.string.pref_key_tts_engine, "");
+    }
+
+    public void setTtsEngine(String engine) {
+        setString(R.string.pref_key_tts_engine, engine);
+    }
+
+    public String getTtsVoice() {
+        return getString(R.string.pref_key_tts_voice, "");
+    }
+
+    public void setTtsVoice(String voice) {
+        setString(R.string.pref_key_tts_voice, voice);
+    }
+
+    public String getTtsLanguageVoice(String language) {
+        return getString(context.getString(R.string.pref_key_tts_languageVoice_prefix) + language, "");
+    }
+
+    public void setTtsLanguageVoice(String language, String voice) {
+        setString(context.getString(R.string.pref_key_tts_languageVoice_prefix) + language, voice);
+    }
+
+    public boolean isTtsAutoplayNext() {
+        return getBoolean(R.string.pref_key_tts_autoplayNext, false);
+    }
+
+    public void setTtsAutoplayNext(boolean value) {
+        setBoolean(R.string.pref_key_tts_autoplayNext, value);
+    }
+
+    public boolean isAutoUpdateEnabled() {
+        return getBoolean(R.string.pref_key_autoUpdate_enabled, false);
+    }
+
+    public void setAutoUpdateEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoUpdate_enabled, value);
+    }
+
+    public long getAutoUpdateInterval() {
+        return getLong(R.string.pref_key_autoUpdate_interval, AlarmManager.INTERVAL_DAY);
+    }
+
+    public void setAutoUpdateInterval(long interval) {
+        setLong(R.string.pref_key_autoUpdate_interval, interval);
+    }
+
+    public int getAutoUpdateType() {
+        return getInt(R.string.pref_key_autoUpdate_type, 0);
+    }
+
+    public void setAutoUpdateType(int type) {
+        setInt(R.string.pref_key_autoUpdate_type, type);
+    }
+
+    public boolean isAutoSyncQueueEnabled() {
+        return getBoolean(R.string.pref_key_autoSyncQueue_enabled, false);
+    }
+
+    public void setAutoSyncQueueEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoSyncQueue_enabled, value);
+    }
+
+    public boolean isOptionalConfigurationDialogShown() {
+        return getBoolean(R.string.pref_key_internal_optionalConfigurationDialogShown, false);
+    }
+
+    public void setConfigureOptionalDialogShown(boolean value) {
+        setBoolean(R.string.pref_key_internal_optionalConfigurationDialogShown, value);
+    }
+
+    public boolean isConfigurationOk() {
+        return getBoolean(R.string.pref_key_internal_configurationIsOk, false);
+    }
+
+    public void setConfigurationOk(boolean ok) {
+        setBoolean(R.string.pref_key_internal_configurationIsOk, ok);
+    }
+
+    public boolean isConfigurationErrorShown() {
+        return getBoolean(R.string.pref_key_internal_configurationErrorShown, false);
+    }
+
+    public void setConfigurationErrorShown(boolean value) {
+        setBoolean(R.string.pref_key_internal_configurationErrorShown, value);
+    }
+
+    public boolean isFirstSyncDone() {
+        return getBoolean(R.string.pref_key_internal_firstSyncDone, false);
+    }
+
+    public void setFirstSyncDone(boolean value) {
+        setBoolean(R.string.pref_key_internal_firstSyncDone, value);
+    }
+
+    public boolean isOfflineQueuePending() {
+        return getBoolean(R.string.pref_key_internal_offlineQueue_pending, false);
+    }
+
+    public void setOfflineQueuePending(boolean value) {
+        setBoolean(R.string.pref_key_internal_offlineQueue_pending, value);
+    }
+
     public boolean isHandlingHttpScheme() {
-        return App.getInstance().getPackageManager()
+        return context.getPackageManager()
                 .getComponentEnabledSetting(getHttpSchemeHandlingComponent())
                 == PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
     }
@@ -167,12 +490,12 @@ public class Settings {
         int flag = (handleHttpScheme ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                 : PackageManager.COMPONENT_ENABLED_STATE_DISABLED);
 
-        App.getInstance().getPackageManager().setComponentEnabledSetting(
+        context.getPackageManager().setComponentEnabledSetting(
                 getHttpSchemeHandlingComponent(), flag, PackageManager.DONT_KILL_APP);
     }
 
     private ComponentName getHttpSchemeHandlingComponent() {
-        return new ComponentName(App.getInstance(), HttpSchemeHandlerActivity.class);
+        return new ComponentName(context, HttpSchemeHandlerActivity.class);
     }
 
 }
