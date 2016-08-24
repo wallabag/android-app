@@ -194,4 +194,62 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="notification_incorrectConfiguration">Incorrect configuration</string>
     <string name="notification_unknownError">Unknown error</string>
     <string name="notification_expandedError">Error: %s</string>
+
+    <string name="pref_categoryName_connection">Connection</string>
+    <string name="pref_name_connection_url">Wallabag URL</string>
+    <string name="pref_desc_connection_url">
+        Examples:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://www.example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
+    <string name="pref_name_connection_username">Username</string>
+    <string name="pref_name_connection_password">Password</string>
+    <string name="pref_name_connection_serverVersion">Wallabag server version</string>
+    <string-array name="pref_option_connection_serverVersion">
+        <item>v1.9</item>
+        <item>v2</item>
+    </string-array>
+    <string-array name="pref_option_connection_serverVersion_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="pref_name_connection_feedsUserID">User ID</string>
+    <string name="pref_name_connection_feedsToken">Token</string>
+
+    <string name="pref_categoryName_connection_advanced">Advanced connection settings</string>
+    <string name="pref_name_connection_advanced_acceptAllCertificates">Accept all SSL certificates</string>
+    <string name="pref_desc_connection_advanced_acceptAllCertificates">May require restart; insecure; consider importing self-signed certificates into system.</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Disables SSL on all devices, enables TLS 1.1 and TLS 1.2 on Android 4.1–4.4</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Auth</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth username</string>
+
+    <string name="pref_categoryName_ui">UI</string>
+    <string name="pref_name_ui_theme">Application theme</string>
+    <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Serif typeface for article fonts</string>
+    <string name="pref_name_ui_lists_limit">Articles list limit</string>
+
+    <string name="pref_categoryName_autoSync">Auto-sync</string>
+    <string name="pref_name_autoUpdate_enabled">Enable auto-update</string>
+    <string name="pref_desc_autoUpdate_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>
+    <string name="pref_name_autoUpdate_interval">Auto-update interval</string>
+    <string name="pref_name_autoUpdate_type">Auto-update type</string>
+    <string-array name="pref_option_autoUpdate_type">
+        <item>Fast</item>
+        <item>Full</item>
+    </string-array>
+    <string-array name="pref_option_autoUpdate_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="pref_name_autoSyncQueue_enabled">Enable separate auto-sync for local changes</string>
+    <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available</string>
+
+    <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
+    <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
+    <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
 </resources>

@@ -193,6 +193,9 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
+            case R.id.menuSettingsNew:
+                startActivity(new Intent(getBaseContext(), SettingsActivityNew.class));
+                return true;
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));
                 return true;

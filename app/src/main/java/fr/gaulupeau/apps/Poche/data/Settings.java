@@ -68,54 +68,32 @@ public class Settings {
         }
 
         if(prefVersion == -1) { // preferences are not set
+            PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+
             if(LegacySettingsHelper.migrateLegacySettings(context, pref)) {
                 // TODO: maybe mark preferences as migrated
                 setConfigurationOk(false);
+            } else { // preferences are not migrated -- set some default values
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                    pref.edit().putBoolean(context.getString(
+                            R.string.pref_key_connection_advanced_customSSLSettings), true)
+                            .apply();
+                }
+
+                Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
+                        ? Themes.Theme.LightContrast : Themes.Theme.Light;
+                pref.edit().putString(context.getString(R.string.pref_key_ui_theme), theme.toString())
+                        .apply();
             }
 
-            // TODO: set missing default values with preferences.xml
-
-            // *** TODO: remove
             SharedPreferences.Editor prefEditor = pref.edit();
-            if(!contains(R.string.pref_key_connection_url)) {
-                prefEditor.putString(context.getString(R.string.pref_key_connection_url), "https://");
-            }
-            if(!contains(R.string.pref_key_ui_article_fontSize)) {
-                prefEditor.putInt(context.getString(R.string.pref_key_ui_article_fontSize), 100);
-            }
-            if(!contains(R.string.pref_key_ui_lists_limit)) {
-                prefEditor.putInt(context.getString(R.string.pref_key_ui_lists_limit), 50);
-            }
-            if(!contains(R.string.pref_key_autoUpdate_interval)) {
-                prefEditor.putLong(context.getString(R.string.pref_key_autoUpdate_interval),
-                        AlarmManager.INTERVAL_DAY);
-            }
-            // ***
 
             if(!contains(R.string.pref_key_tts_speed)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_speed), 1);
             }
             if(!contains(R.string.pref_key_tts_pitch)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_pitch), 1);
-            }
-
-            // wallabag version is 1, 2 or -1; default value is -1 for code and 2 for UI
-            if(!contains(R.string.pref_key_connection_serverVersion)) {
-                prefEditor.putInt(context.getString(R.string.pref_key_connection_serverVersion), -1);
-            }
-
-            if(!contains(R.string.pref_key_connection_advanced_customSSLSettings)) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
-                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    prefEditor.putBoolean(context.getString(
-                            R.string.pref_key_connection_advanced_customSSLSettings), true);
-                }
-            }
-
-            if(!contains(R.string.pref_key_ui_theme)) {
-                Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
-                        ? Themes.Theme.LightContrast : Themes.Theme.Light;
-                prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
             }
 
             prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),

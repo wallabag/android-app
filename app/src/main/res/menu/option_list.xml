@@ -17,6 +17,8 @@
         android:title="@string/menu_syncLocalChanges" />
     <item android:id="@+id/menuSettings"
         android:title="@string/btnSettings" />
+    <item android:id="@+id/menuSettingsNew"
+        android:title="New settings" />
     <item android:id="@+id/menuAbout"
         android:title="@string/menuAbout" />
 </menu>
