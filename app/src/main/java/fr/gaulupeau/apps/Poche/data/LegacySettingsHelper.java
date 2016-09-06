@@ -23,7 +23,6 @@ class LegacySettingsHelper {
     static final String HTTP_AUTH_USERNAME = "http_auth_username";
     static final String HTTP_AUTH_PASSWORD = "http_auth_password";
     static final String THEME = "theme";
-    static final String CONFIGURE_OPTIONAL_DIALOG_SHOWN = "configure_optional_dialog_shown";
     static final String WALLABAG_VERSION = "wallabag_version";
     static final String TTS_VISIBLE = "tts.visible";
     static final String TTS_OPTIONS_VISIBLE = "tts.options.visible";
@@ -93,9 +92,6 @@ class LegacySettingsHelper {
             }
         }
         migrateBooleanPref(cx, TTS_AUTOPLAY_NEXT, R.string.pref_key_tts_autoplayNext, legacyPref, prefEditor);
-
-        migrateBooleanPref(cx, CONFIGURE_OPTIONAL_DIALOG_SHOWN,
-                R.string.pref_key_internal_optionalConfigurationDialogShown, legacyPref, prefEditor);
 
         // some of the next preferences were used only in development
         migrateBooleanPref(cx, CONFIGURATION_IS_OK,

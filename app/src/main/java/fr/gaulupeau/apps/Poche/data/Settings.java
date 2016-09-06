@@ -3,15 +3,18 @@ package fr.gaulupeau.apps.Poche.data;
 import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
+import fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity;
 
 public class Settings {
 
@@ -19,6 +22,20 @@ public class Settings {
 
     private Context context;
     private SharedPreferences pref;
+
+    public static boolean checkFirstRunInit(Context context) {
+        Settings settings = App.getInstance().getSettings();
+
+        if(settings.isFirstRun()) {
+            settings.setFirstRun(false);
+
+            context.startActivity(new Intent(context, ConnectionWizardActivity.class));
+
+            return true;
+        }
+
+        return false;
+    }
 
     public static long autoUpdateOptionIndexToInterval(int index) {
         switch(index) {
@@ -55,6 +72,11 @@ public class Settings {
                 PackageManager.DONT_KILL_APP);
     }
 
+    public static boolean getDefaultCustomSSLSettingsValue() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
+                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
+    }
+
     public Settings(Context context) {
         this.context = context.getApplicationContext();
         pref = PreferenceManager.getDefaultSharedPreferences(this.context);
@@ -71,11 +93,10 @@ public class Settings {
             PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
 
             if(LegacySettingsHelper.migrateLegacySettings(context, pref)) {
-                // TODO: maybe mark preferences as migrated
+                setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
-                        && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if(getDefaultCustomSSLSettingsValue()) {
                     pref.edit().putBoolean(context.getString(
                             R.string.pref_key_connection_advanced_customSSLSettings), true)
                             .apply();
@@ -416,12 +437,12 @@ public class Settings {
         setBoolean(R.string.pref_key_autoSyncQueue_enabled, value);
     }
 
-    public boolean isOptionalConfigurationDialogShown() {
-        return getBoolean(R.string.pref_key_internal_optionalConfigurationDialogShown, false);
+    public boolean isFirstRun() {
+        return getBoolean(R.string.pref_key_internal_firstRun, true);
     }
 
-    public void setConfigureOptionalDialogShown(boolean value) {
-        setBoolean(R.string.pref_key_internal_optionalConfigurationDialogShown, value);
+    public void setFirstRun(boolean value) {
+        setBoolean(R.string.pref_key_internal_firstRun, value);
     }
 
     public boolean isConfigurationOk() {

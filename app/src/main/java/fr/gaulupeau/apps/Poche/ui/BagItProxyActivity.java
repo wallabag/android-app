@@ -31,7 +31,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         // Parsing string for urls.
         Matcher matcher;
-        if (extraText != null && extraText.length() > 0
+        if(extraText != null && !extraText.isEmpty()
                 && (matcher = Patterns.WEB_URL.matcher(extraText)).find()) {
             pageUrl = matcher.group();
         } else {
@@ -49,11 +49,7 @@ public class BagItProxyActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: queue url anyway
-        Settings settings = new Settings(this);
-        if(!settings.isOptionalConfigurationDialogShown()) {
-            startActivity(new Intent(this, ArticlesListActivity.class)); // FLAG_ACTIVITY_CLEAR_TOP and/or FLAG_ACTIVITY_NEW_TASK maybe?
-        }
+        Settings.checkFirstRunInit(this);
 
         Log.d(TAG, "Bagging " + pageUrl);
 

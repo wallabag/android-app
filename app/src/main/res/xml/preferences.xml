@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference android:title="@string/pref_name_runConnectionWizard" >
+<!-- TODO: use this one for release
+        <intent android:targetPackage="fr.gaulupeau.apps.InThePoche"
+            android:targetClass="fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity" />
+-->
+        <intent android:targetPackage="fr.gaulupeau.apps.InThePoche.debug"
+            android:targetClass="fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity" />
+    </Preference>
     <PreferenceScreen android:title="@string/pref_categoryName_connection">
         <PreferenceCategory android:title="@string/pref_categoryName_connection">
             <EditTextPreference

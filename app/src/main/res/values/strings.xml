@@ -74,12 +74,14 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_connectionFail_title">Connection Failure</string>
     <string name="d_bag_fail_title">Fail</string>
     <string name="d_bag_fail_text">Couldn\'t find a URL in share string:\n</string>
-    <string name="firstRun_d_welcome">Welcome to wallabag</string>
-    <string name="firstRun_d_configure">Please configure this app with your hosted wallabag to get started.</string>
-    <string name="firstRun_d_optionalSettings_title">Update settings</string>
-    <string name="firstRun_d_optionalSettings_message">In order to save pages from the app (and to send local changes back to server) you need to fill in Wallabag username and password in settings.</string>
-    <string name="go_to_settings">Go to settings</string>
-    <string name="dismiss">Dismiss</string>
+    <!--<string name="firstRun_d_welcome">Welcome to wallabag</string>-->
+    <!--<string name="firstRun_d_configure">Please configure this app with your hosted wallabag to get started.</string>-->
+    <!--<string name="firstRun_d_optionalSettings_title">Update settings</string>-->
+    <!--<string name="firstRun_d_optionalSettings_message">In order to save pages from the app (and to send local changes back to server) you need to fill in Wallabag username and password in settings.</string>-->
+    <!--<string name="go_to_settings">Go to settings</string>-->
+    <!--<string name="dismiss">Dismiss</string>-->
+    <string name="d_configurationChanged_title">Parameters changed</string>
+    <string name="d_configurationChanged_message">It seems some parameters have been changed. It is recommended to perform a connection test.</string>
     <string name="settings_optionalCredentials">Optional credentials</string>
     <string name="settings_optionalCredentialsDesc">Used mostly to be able to sync back to server</string>
     <string name="settings_username">Username</string>
@@ -194,6 +196,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="notification_incorrectConfiguration">Incorrect configuration</string>
     <string name="notification_unknownError">Unknown error</string>
     <string name="notification_expandedError">Error: %s</string>
+
+    <string name="pref_name_runConnectionWizard">Run connection wizard</string>
 
     <string name="pref_categoryName_connection">Connection</string>
     <string name="pref_name_connection_url">Wallabag URL</string>

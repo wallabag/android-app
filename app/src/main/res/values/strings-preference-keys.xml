@@ -33,7 +33,7 @@
     <string name="pref_key_misc_handleHttpScheme" translatable="false">misc.handleHttpScheme</string>
 
     <string name="pref_key_internal_preferencesVersion" translatable="false">internal.preferencesVersion</string>
-    <string name="pref_key_internal_optionalConfigurationDialogShown" translatable="false">internal.optionalConfigurationDialogShown</string>
+    <string name="pref_key_internal_firstRun" translatable="false">internal.firstRun</string>
     <string name="pref_key_internal_configurationIsOk" translatable="false">internal.configurationIsOk</string>
     <string name="pref_key_internal_configurationErrorShown" translatable="false">internal.configurationErrorShown</string>
     <string name="pref_key_internal_firstSyncDone" translatable="false">internal.firstSyncDone</string>

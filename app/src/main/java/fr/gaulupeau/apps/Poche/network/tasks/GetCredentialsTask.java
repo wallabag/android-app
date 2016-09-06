@@ -57,7 +57,7 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 
     public interface ResultHandler {
         void handleGetCredentialsResult(
-                Boolean success, FeedsCredentials credentials, int wallabagVersion
+                boolean success, FeedsCredentials credentials, int wallabagVersion
         );
     }
 

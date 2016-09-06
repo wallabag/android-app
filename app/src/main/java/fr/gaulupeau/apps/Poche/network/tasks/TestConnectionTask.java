@@ -25,6 +25,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
         public String url;
         public WallabagServiceEndpoint.ConnectionTestResult result;
         public String errorMessage;
+        public int wallabagServerVersion = -1;
     }
 
     private static final String TAG = TestConnectionTask.class.getSimpleName();
@@ -116,6 +117,8 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
             try {
                 testResult.result = service.testConnection();
+                testResult.wallabagServerVersion = service.getWallabagVersionWithoutDetection();
+
                 Log.d(TAG, "Connection test result: " + testResult.result);
             } catch(IncorrectConfigurationException e) {
                 Log.d(TAG, "Connection test: Exception", e);

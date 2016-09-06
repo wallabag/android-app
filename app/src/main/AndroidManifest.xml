@@ -82,6 +82,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity"/>
+
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />

@@ -36,6 +36,7 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -110,36 +111,19 @@ public class ArticlesListActivity extends AppCompatActivity
         if(firstTimeShown) {
             firstTimeShown = false;
 
-            if(!settings.isConfigurationOk()) {
-                settings.setConfigureOptionalDialogShown(true);
-
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                messageBox.setTitle(R.string.firstRun_d_welcome);
-                messageBox.setMessage(R.string.firstRun_d_configure);
-                messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
-                    }
-                });
-                messageBox.setCancelable(false);
-                messageBox.create().show();
-            } else if(!settings.isOptionalConfigurationDialogShown()) { // TODO: make all credentials required and remove it
-                settings.setConfigureOptionalDialogShown(true);
-
-                String username = settings.getUsername();
-                if(username == null || username.isEmpty()) {
+            if(!Settings.checkFirstRunInit(this)) {
+                if(!settings.isConfigurationOk()) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                    messageBox.setTitle(R.string.firstRun_d_optionalSettings_title);
-                    messageBox.setMessage(R.string.firstRun_d_optionalSettings_message);
-                    messageBox.setPositiveButton(R.string.go_to_settings, new DialogInterface.OnClickListener() {
+                    messageBox.setTitle(R.string.d_configurationChanged_title);
+                    messageBox.setMessage(R.string.d_configurationChanged_message);
+                    messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
+                            // TODO: implement a connection test
+                            Toast.makeText(ArticlesListActivity.this, "Not implemented yet :/", Toast.LENGTH_SHORT).show();
                         }
                     });
-                    messageBox.setNegativeButton(R.string.dismiss, null);
-                    messageBox.create().show();
+                    messageBox.show();
                 }
             }
         }
@@ -195,6 +179,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuSettingsNew:
                 startActivity(new Intent(getBaseContext(), SettingsActivityNew.class));
+                return true;
+            case R.id.menuConnectionWizard:
+                startActivity(new Intent(getBaseContext(), ConnectionWizardActivity.class));
                 return true;
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));

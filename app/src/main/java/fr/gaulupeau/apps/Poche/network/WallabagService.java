@@ -96,6 +96,10 @@ public class WallabagService {
         return this.wallabagVersion;
     }
 
+    public int getWallabagVersionWithoutDetection() {
+        return wallabagVersion;
+    }
+
     private WallabagServiceEndpoint getServiceEndpoint() {
         if(serviceEndpoint == null) {
             RequestCreator requestCreator = new RequestCreator(httpAuthUsername, httpAuthPassword);

@@ -376,7 +376,7 @@ public class SettingsActivity extends BaseActionBarActivity
     }
 
     @Override
-    public void handleGetCredentialsResult(Boolean success, FeedsCredentials credentials,
+    public void handleGetCredentialsResult(boolean success, FeedsCredentials credentials,
                                            int wallabagVersion) {
         if(progressDialog != null) progressDialog.dismiss();
 
