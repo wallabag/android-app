@@ -8,7 +8,6 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.EventProcessor;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 
 public class App extends Application {
 
@@ -26,8 +25,6 @@ public class App extends Application {
         settings.initPreferences();
 
         DbConnection.setContext(this);
-
-        WallabagConnection.init(this);
 
         new EventProcessor(this).start();
 

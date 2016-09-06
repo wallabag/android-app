@@ -19,8 +19,6 @@ import okhttp3.Response;
 import java.io.IOException;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 
 public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
@@ -32,33 +30,37 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     private static final String TAG = WallabagServiceEndpointV2.class.getSimpleName();
 
-    public int testConnection() throws IncorrectConfigurationException, IOException {
-        // TODO: detect redirects
+    public ConnectionTestResult testConnection()
+            throws IncorrectConfigurationException, IOException {
         // TODO: check response codes prior to getting body
 
         HttpUrl httpUrl = HttpUrl.parse(endpoint + "/");
         if(httpUrl == null) {
-            return 6;
+            return ConnectionTestResult.IncorrectURL;
         }
         Request testRequest = getRequest(httpUrl);
 
         Response response = exec(testRequest);
         if(response.code() == 401) {
-            return 5; // fail because of HTTP Auth
+            // fail because of HTTP Auth
+            return ConnectionTestResult.HTTPAuth;
         }
 
         String body = response.body().string();
         if(isRegularPage(body)) {
-            return 0; // if HTTP-auth-only access control used, we should be already logged in
+            // if HTTP-auth-only access control used, we should be already logged in
+            return ConnectionTestResult.OK;
         }
 
         if(!isLoginPage(body)) {
-            return 1; // it's not even wallabag login page: probably something wrong with the URL
+            // it's not even wallabag login page: probably something wrong with the URL
+            return ConnectionTestResult.WallabagNotFound;
         }
 
         String csrfToken = getCsrfToken(body);
         if(csrfToken == null){
-            return 7; // cannot find csrf string in the login page
+            // cannot find csrf string in the login page
+            return ConnectionTestResult.NoCSRF;
         }
 
         Request loginRequest = getLoginRequest(csrfToken);
@@ -68,21 +70,27 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
         if(isLoginPage(body)) {
 //            if(body.contains("div class='messages error'"))
-            return 2; // still login page: probably wrong username or password
+            // still login page: probably wrong username or password
+            return ConnectionTestResult.IncorrectCredentials;
         }
 
         response = exec(testRequest);
         body = response.body().string();
 
         if(isLoginPage(body)) {
-            return 3; // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+            // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+            // usually caused by redirects:
+            // HTTP -> HTTPS -- guaranteed
+            // other (hostname -> www.hostname) -- maybe
+            return ConnectionTestResult.AuthProblem;
         }
 
         if(!isRegularPage(body)) {
-            return 4; // unexpected content: expected to find "log out" button
+            // unexpected content: expected to find "log out" button
+            return ConnectionTestResult.UnknownPageAfterLogin;
         }
 
-        return 0;
+        return ConnectionTestResult.OK;
     }
 
     public FeedsCredentials getCredentials() throws RequestException, IOException {
@@ -93,8 +101,9 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         return fc;
     }
 
-    public WallabagServiceEndpointV2(String endpoint, String username, String password, OkHttpClient client) {
-        super(endpoint, username, password, client);
+    public WallabagServiceEndpointV2(String endpoint, String username, String password,
+                                     RequestCreator requestCreator, OkHttpClient client) {
+        super(endpoint, username, password, requestCreator, client);
     }
 
     protected boolean isLoginPage(String body) {

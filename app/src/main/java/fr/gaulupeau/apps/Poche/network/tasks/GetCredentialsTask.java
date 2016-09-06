@@ -14,21 +14,27 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     private final String endpoint;
     private final String username;
     private final String password;
+    private String httpAuthUsername;
+    private String httpAuthPassword;
 
     private FeedsCredentials credentials;
     private int wallabagVersion = -1;
 
     public GetCredentialsTask(ResultHandler handler, String endpoint,
-                              String username, String password) {
+                              String username, String password,
+                              String httpAuthUsername, String httpAuthPassword) {
         this.handler = handler;
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.httpAuthUsername = httpAuthUsername;
+        this.httpAuthPassword = httpAuthPassword;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        WallabagService service = new WallabagService(endpoint, username, password, -1);
+        WallabagService service = new WallabagService(endpoint, username, password,
+                httpAuthUsername, httpAuthPassword, -1);
         try {
             credentials = service.getCredentials();
             wallabagVersion = service.getWallabagVersion();

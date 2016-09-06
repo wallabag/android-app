@@ -21,6 +21,7 @@ import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.Headers;
@@ -89,10 +90,7 @@ public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
             String username = settings.getUsername();
             noCredentials = username == null || username.isEmpty();
             if(!noCredentials) {
-                service = new WallabagService(
-                        settings.getUrl(),
-                        username,
-                        settings.getPassword());
+                service = WallabagService.fromSettings(settings);
             }
         } else {
             isOffline = true;
@@ -113,9 +111,9 @@ public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
 
         publishProgress(1); // report that we didn't stop because of isOffline or noCredentials
 
-        int testConn = service.testConnection();
+        WallabagServiceEndpoint.ConnectionTestResult testConn = service.testConnection();
         Log.d(TAG, "doInBackgroundSimple() testConn=" + testConn);
-        if (testConn != 0) {
+        if(testConn != WallabagServiceEndpoint.ConnectionTestResult.OK) {
             Log.w(TAG, "doInBackgroundSimple() testing connection failed with value " + testConn);
             if(context != null) {
                 errorMessage = context.getString(R.string.d_connectionFail_title);

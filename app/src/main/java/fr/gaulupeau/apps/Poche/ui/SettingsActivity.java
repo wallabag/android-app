@@ -20,15 +20,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask.TestResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 
 public class SettingsActivity extends BaseActionBarActivity
@@ -170,12 +173,12 @@ public class SettingsActivity extends BaseActionBarActivity
                 progressDialog.setMessage(getString(R.string.settings_testingConnection));
                 progressDialog.show();
 
-                applyHttpAuth();
-
                 testConnectionTask = new TestConnectionTask(
-                        SettingsActivity.this, editPocheUrl.getText().toString(),
+                        editPocheUrl.getText().toString(),
                         username.getText().toString(), password.getText().toString(),
-                        SettingsActivity.this, progressDialog);
+                        httpAuthUsername.getText().toString(), httpAuthPassword.getText().toString(),
+                        customSSLSettings.isChecked(), allCerts.isChecked(), -1, false,
+                        SettingsActivity.this);
 
                 testConnectionTask.execute();
             }
@@ -189,11 +192,10 @@ public class SettingsActivity extends BaseActionBarActivity
                 progressDialog.setMessage(getString(R.string.settings_gettingCredentials));
                 progressDialog.show();
 
-                applyHttpAuth();
-
                 getCredentialsTask = new GetCredentialsTask(
                         SettingsActivity.this, editPocheUrl.getText().toString(),
-                        username.getText().toString(), password.getText().toString());
+                        username.getText().toString(), password.getText().toString(),
+                        httpAuthUsername.getText().toString(), httpAuthPassword.getText().toString());
 
                 getCredentialsTask.execute();
             }
@@ -224,8 +226,6 @@ public class SettingsActivity extends BaseActionBarActivity
 
                 settings.setUsername(username.getText().toString());
                 settings.setPassword(password.getText().toString());
-
-                applyHttpAuth();
 
                 settings.setHttpAuthUsername(httpAuthUsername.getText().toString());
                 settings.setHttpAuthPassword(httpAuthPassword.getText().toString());
@@ -323,7 +323,55 @@ public class SettingsActivity extends BaseActionBarActivity
     }
 
     @Override
-    public void onTestConnectionResult(boolean success) {
+    public void onTestConnectionResult(List<TestResult> results) {
+        if(progressDialog != null) progressDialog.dismiss();
+
+        TestResult testResult = results.get(0);
+        WallabagServiceEndpoint.ConnectionTestResult result = testResult.result;
+        String errorMessage = testResult.errorMessage;
+
+        boolean success = testResult.result == WallabagServiceEndpoint.ConnectionTestResult.OK;
+        if(success) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.d_testConnection_success_title)
+                    .setMessage(R.string.d_connectionTest_success_text)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        } else {
+            if(result != null) {
+                switch(result) {
+                    case WallabagNotFound:
+                        errorMessage = getString(R.string.testConnection_errorMessage1, 1);
+                        break;
+
+                    case IncorrectCredentials:
+                        errorMessage = getString(R.string.testConnection_errorMessage2, 2);
+                        break;
+
+                    case AuthProblem:
+                        errorMessage = getString(R.string.testConnection_errorMessage3, 3);
+                        break;
+
+                    case HTTPAuth:
+                        errorMessage = getString(R.string.testConnection_errorMessage5, 5);
+                        break;
+
+                    case IncorrectURL:
+                        errorMessage = getString(R.string.testConnection_errorMessage6, 6);
+                        break;
+
+                    default:
+                        errorMessage = getString(R.string.testConnection_errorMessage_unknown)
+                                + result;
+                }
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.d_testConnection_fail_title)
+                    .setMessage(errorMessage)
+                    .setPositiveButton(R.string.ok, null)
+                    .show();
+        }
+
         configurationIsOk = success;
     }
 
@@ -354,13 +402,6 @@ public class SettingsActivity extends BaseActionBarActivity
         if(task != null) {
             task.cancel(true);
         }
-    }
-
-    private void applyHttpAuth() {
-        String username = httpAuthUsername.getText().toString();
-        String password = httpAuthPassword.getText().toString();
-
-        WallabagConnection.setBasicAuthCredentials(username, password);
     }
 
 }

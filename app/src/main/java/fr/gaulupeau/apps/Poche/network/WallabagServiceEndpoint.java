@@ -17,25 +17,34 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 
 public abstract class WallabagServiceEndpoint {
 
     private static final String TAG = WallabagServiceEndpoint.class.getSimpleName();
 
+    public enum ConnectionTestResult {
+        OK, IncorrectURL, WallabagNotFound, HTTPAuth, NoCSRF, IncorrectCredentials,
+        AuthProblem, UnknownPageAfterLogin
+    }
+
     protected String endpoint;
     protected final String username;
     protected final String password;
+    protected RequestCreator requestCreator;
+
     protected OkHttpClient client;
 
-    public WallabagServiceEndpoint(String endpoint, String username, String password, OkHttpClient client) {
+    public WallabagServiceEndpoint(String endpoint, String username, String password,
+                                   RequestCreator requestCreator, OkHttpClient client) {
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.requestCreator = requestCreator;
         this.client = client;
     }
 
-    public abstract int testConnection() throws IncorrectConfigurationException, IOException;
+    public abstract ConnectionTestResult testConnection()
+            throws IncorrectConfigurationException, IOException;
 
     public abstract FeedsCredentials getCredentials() throws RequestException, IOException;
 
@@ -125,6 +134,14 @@ public abstract class WallabagServiceEndpoint {
         return !(body == null || body.isEmpty()) && body.contains(marker);
     }
 
+    protected Request.Builder getRequestBuilder() {
+        return requestCreator.getRequestBuilder();
+    }
+
+    protected Request getRequest(HttpUrl url) {
+        return requestCreator.getRequest(url);
+    }
+
     protected abstract Request getLoginRequest(String csrfToken)
             throws IncorrectConfigurationException;
 
@@ -137,7 +154,7 @@ public abstract class WallabagServiceEndpoint {
                 .newBuilder()
                 .build();
         Log.d(TAG, "getConfigRequest() url: " + url.toString());
-        return getRequest(url);
+        return requestCreator.getRequest(url);
     }
 
     protected abstract Request getGenerateTokenRequest() throws IncorrectConfigurationException;

@@ -19,8 +19,6 @@ import okhttp3.Response;
 import java.io.IOException;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequestBuilder;
 
 public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
@@ -31,32 +29,37 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
     private static final String TAG = WallabagServiceEndpointV1.class.getSimpleName();
 
-    public WallabagServiceEndpointV1(String endpoint, String username, String password, OkHttpClient client) {
-        super(endpoint, username, password, client);
+    public WallabagServiceEndpointV1(String endpoint, String username, String password,
+                                     RequestCreator requestCreator,
+                                     OkHttpClient client) {
+        super(endpoint, username, password, requestCreator, client);
     }
 
-    public int testConnection() throws IncorrectConfigurationException, IOException {
-        // TODO: detect redirects
+    public ConnectionTestResult testConnection()
+            throws IncorrectConfigurationException, IOException {
         // TODO: check response codes prior to getting body
 
         HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
         if(httpUrl == null) {
-            return 6;
+            return ConnectionTestResult.IncorrectURL;
         }
         Request testRequest = getRequest(httpUrl);
 
         Response response = exec(testRequest);
         if(response.code() == 401) {
-            return 5; // fail because of HTTP Auth
+            // fail because of HTTP Auth
+            return ConnectionTestResult.HTTPAuth;
         }
 
         String body = response.body().string();
         if(isRegularPage(body)) {
-            return 0; // if HTTP-auth-only access control used, we should be already logged in
+            // if HTTP-auth-only access control used, we should be already logged in
+            return ConnectionTestResult.OK;
         }
 
         if(!isLoginPage(body)) {
-            return 1; // it's not even wallabag login page: probably something wrong with the URL
+            // it's not even wallabag login page: probably something wrong with the URL
+            return ConnectionTestResult.WallabagNotFound;
         }
 
         Request loginRequest = getLoginRequest();
@@ -66,21 +69,24 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         if(isLoginPage(body)) {
 //            if(body.contains("div class='messages error'"))
-            return 2; // still login page: probably wrong username or password
+            // still login page: probably wrong username or password
+            return ConnectionTestResult.IncorrectCredentials;
         }
 
         response = exec(testRequest);
         body = response.body().string();
 
         if(isLoginPage(body)) {
-            return 3; // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+            // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+            return ConnectionTestResult.AuthProblem;
         }
 
         if(!isRegularPage(body)) {
-            return 4; // unexpected content: expected to find "log out" button
+            // unexpected content: expected to find "log out" button
+            return ConnectionTestResult.UnknownPageAfterLogin;
         }
 
-        return 0;
+        return ConnectionTestResult.OK;
     }
 
     public FeedsCredentials getCredentials() throws RequestException, IOException {
@@ -88,7 +94,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     }
 
     protected boolean isLoginPage(String body) {
-        return !(body == null || body.length() == 0) && body.contains(WALLABAG_LOGIN_FORM_V1);
+        return !(body == null || body.isEmpty()) && body.contains(WALLABAG_LOGIN_FORM_V1);
     }
 
     protected boolean isRegularPage(String body) throws IOException {

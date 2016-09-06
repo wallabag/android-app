@@ -528,6 +528,8 @@ public class BGService extends IntentService {
                     settings.getUrl(),
                     settings.getFeedsUserID(),
                     settings.getFeedsToken(),
+                    settings.getHttpAuthUsername(),
+                    settings.getHttpAuthPassword(),
                     settings.getWallabagServerVersion());
 
             // TODO: check: do we need a separate transaction here (since FeedUpdater creates one)?
@@ -609,11 +611,7 @@ public class BGService extends IntentService {
     private WallabagService getWallabagService() {
         if(wallabagService == null) {
             Settings settings = getSettings();
-            // TODO: check credentials? (throw an exception)
-            wallabagService = new WallabagService(
-                    settings.getUrl(),
-                    settings.getUsername(),
-                    settings.getPassword());
+            wallabagService = WallabagService.fromSettings(settings);
         }
 
         return wallabagService;

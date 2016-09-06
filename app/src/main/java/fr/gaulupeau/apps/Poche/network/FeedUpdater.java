@@ -63,12 +63,16 @@ public class FeedUpdater {
     private String baseURL;
     private String apiUserId;
     private String apiToken;
+    private RequestCreator requestCreator;
     private int wallabagVersion;
 
-    public FeedUpdater(String baseURL, String apiUserId, String apiToken, int wallabagVersion) {
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       String httpAuthUsername, String httpAuthPassword,
+                       int wallabagVersion) {
         this.baseURL = baseURL;
         this.apiUserId = apiUserId;
         this.apiToken = apiToken;
+        requestCreator = new RequestCreator(httpAuthUsername, httpAuthPassword);
         this.wallabagVersion = wallabagVersion;
     }
 
@@ -192,7 +196,7 @@ public class FeedUpdater {
 
     private InputStream getInputStream(String urlStr)
             throws IncorrectConfigurationException, IOException {
-        Request request = WallabagConnection.getRequest(WallabagConnection.getHttpURL(urlStr));
+        Request request = requestCreator.getRequest(WallabagConnection.getHttpURL(urlStr));
 
         Response response = WallabagConnection.getClient().newCall(request).execute();
 
@@ -427,7 +431,7 @@ public class FeedUpdater {
     }
 
     private static String cleanString(String s) {
-        if(s == null || s.length() == 0) return s;
+        if(s == null || s.isEmpty()) return s;
 
         s = s.replace("&Atilde;&copy;", "&eacute;");
         s = s.replace("&Atilde;&uml;", "&egrave;");

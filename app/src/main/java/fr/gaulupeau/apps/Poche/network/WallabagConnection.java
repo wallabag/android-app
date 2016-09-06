@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import okhttp3.Credentials;
+
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
@@ -50,40 +50,6 @@ public class WallabagConnection {
 
     private static final String TAG = WallabagConnection.class.getSimpleName();
 
-    private static String basicAuthCredentials;
-
-    public static void init(App app) {
-        Settings settings = app.getSettings();
-
-        setBasicAuthCredentials(
-                settings.getHttpAuthUsername(),
-                settings.getHttpAuthPassword()
-        );
-    }
-
-    public static void setBasicAuthCredentials(String username, String password) {
-        if((username == null || username.length() == 0)
-                && (password == null || password.length() == 0)) {
-            basicAuthCredentials = null;
-        } else {
-            basicAuthCredentials = Credentials.basic(username, password);
-        }
-    }
-
-    public static Request.Builder getRequestBuilder() {
-        Request.Builder b = new Request.Builder();
-
-        // we use this method instead of OkHttpClient.setAuthenticator()
-        // to save time on 401 responses
-        if(basicAuthCredentials != null) b.header("Authorization", basicAuthCredentials);
-
-        return b;
-    }
-
-    public static Request getRequest(HttpUrl url) {
-        return getRequestBuilder().url(url).build();
-    }
-
     public static HttpUrl getHttpURL(String url) throws IncorrectConfigurationException {
         HttpUrl httpUrl = HttpUrl.parse(url);
 
@@ -111,6 +77,13 @@ public class WallabagConnection {
     }
 
     public static OkHttpClient createClient() {
+        Settings settings = App.getInstance().getSettings();
+
+        return createClient(settings.isCustomSSLSettings(), settings.isAcceptAllCertificates());
+    }
+
+    public static OkHttpClient createClient(
+            boolean customSSLSettings, boolean acceptAllCertificates) {
         OkHttpClient.Builder b = new OkHttpClient.Builder()
                 .readTimeout(45, TimeUnit.SECONDS);
 
@@ -124,15 +97,13 @@ public class WallabagConnection {
         protocolList.add(Protocol.HTTP_1_1);
         b.protocols(protocolList);
 
-        Settings settings = App.getInstance().getSettings();
-
-        if(settings.isCustomSSLSettings()) {
+        if(customSSLSettings) {
             try {
                 b.sslSocketFactory(new CustomSSLSocketFactory());
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
-        } else if(settings.isAcceptAllCertificates()) {
+        } else if(acceptAllCertificates) {
             try {
                 final TrustManager[] trustAllCerts = new TrustManager[]{
                         new X509TrustManager() {
