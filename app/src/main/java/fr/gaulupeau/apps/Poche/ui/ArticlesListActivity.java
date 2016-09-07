@@ -36,6 +36,7 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.wizard.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
@@ -60,6 +61,8 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
+
+    private ConfigurationTestHelper configurationTestHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +122,7 @@ public class ArticlesListActivity extends AppCompatActivity
                     messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // TODO: implement a connection test
-                            Toast.makeText(ArticlesListActivity.this, "Not implemented yet :/", Toast.LENGTH_SHORT).show();
+                            testConfiguration();
                         }
                     });
                     messageBox.show();
@@ -155,6 +157,16 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop() {
+        if(configurationTestHelper != null) {
+            configurationTestHelper.cancel();
+            configurationTestHelper = null;
+        }
+
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
 
@@ -182,6 +194,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuConnectionWizard:
                 startActivity(new Intent(getBaseContext(), ConnectionWizardActivity.class));
+                return true;
+            case R.id.menuTestConfiguration:
+                testConfiguration();
                 return true;
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));
@@ -405,6 +420,13 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         ServiceHelper.syncQueue(this);
+    }
+
+    private void testConfiguration() {
+        ConfigurationTestHelper configurationTestHelper
+                = new ConfigurationTestHelper(this, null, settings);
+
+        configurationTestHelper.test();
     }
 
     public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {

@@ -21,6 +21,8 @@
         android:title="New settings" />
     <item android:id="@+id/menuConnectionWizard"
         android:title="Connection wizard" />
+    <item android:id="@+id/menuTestConfiguration"
+        android:title="Test configuration" />
     <item android:id="@+id/menuAbout"
         android:title="@string/menuAbout" />
 </menu>

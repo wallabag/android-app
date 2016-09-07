@@ -267,7 +267,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     public static class GenericConfigFragment extends WizardPageFragment
             implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler,
-            ConfigurationTestHelper.ResultHandler, TestFeedsTask.ResultHandler {
+            ConnectionTestHelper.ResultHandler, TestFeedsTask.ResultHandler {
 
         protected String url;
         protected String username, password;
@@ -341,7 +341,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
             progressDialog.dismiss();
 
-            ConfigurationTestHelper.processTestResults(activity, url, results, this);
+            ConnectionTestHelper.processTestResults(activity, url, results, this);
         }
 
         @Override
