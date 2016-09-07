@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.ui.wizard;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -54,7 +55,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String PAGE_CONFIG_GENERIC = "config_generic";
     private static final String PAGE_CONFIG_FRAMABAG = "config_framabag";
     private static final String PAGE_CONFIG_V2_WALLABAG_ORG = "config_v2_wallabag_org";
-    private static final String PAGE_FEEDS = "feeds";
     private static final String PAGE_SUMMARY = "summary";
 
     @Override
@@ -115,10 +115,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             case PAGE_CONFIG_GENERIC:
             case PAGE_CONFIG_FRAMABAG:
             case PAGE_CONFIG_V2_WALLABAG_ORG:
-                goToFragment = new FeedsFragment();
-                break;
-
-            case PAGE_FEEDS:
                 goToFragment = new SummaryFragment();
                 break;
 
@@ -270,7 +266,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     public static class GenericConfigFragment extends WizardPageFragment
-            implements TestConnectionTask.ResultHandler {
+            implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler {
 
         protected String url;
         protected String username, password;
@@ -282,6 +278,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
         protected ProgressDialog progressDialog;
         protected TestConnectionTask testConnectionTask;
+        protected GetCredentialsTask getCredentialsTask;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -292,10 +289,9 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
-                    cancelTask();
+                    cancelTasks();
                 }
             });
-            progressDialog.setMessage(getString(R.string.settings_testingConnection));
         }
 
         public String getPageName() {
@@ -327,9 +323,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         }
 
         protected void runTest() {
+            progressDialog.setMessage(getString(R.string.settings_testingConnection));
             progressDialog.show();
 
-            cancelTask();
+            cancelTasks();
             testConnectionTask = new TestConnectionTask(
                     url, username, password, httpAuthUsername, httpAuthPassword,
                     customSSLSettings, acceptAllCertificates, wallabagServerVersion,
@@ -337,20 +334,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             testConnectionTask.execute();
         }
 
-        protected void populateBundle() {
-            Bundle bundle = getArguments();
-            bundle.putString(DATA_URL, url);
-            bundle.putString(DATA_USERNAME, username);
-            bundle.putString(DATA_PASSWORD, password);
-            bundle.putString(DATA_HTTP_AUTH_USERNAME, httpAuthUsername);
-            bundle.putString(DATA_HTTP_AUTH_PASSWORD, httpAuthPassword);
-            bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
-            bundle.putBoolean(DATA_ACCEPT_ALL_CERTIFICATES, acceptAllCertificates);
-            bundle.putInt(DATA_SERVER_VERSION, wallabagServerVersion);
-        }
-
         @Override
         public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
+            progressDialog.dismiss();
+
             if(results != null) {
                 if(results.isEmpty()) { // should not happen?
                     Log.w(TAG, "onTestConnectionResult(): results are empty");
@@ -386,7 +373,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                     }
 
                     if(isOriginalBest) { // the entered URL is just fine
-                        processSuccess(bestUrl);
+                        acceptSuggestion(bestUrl); // just in case
+                        getCredentials();
                     } else if(bestUrl != null) { // there is a better option
                         showSuggestionDialog(bestUrl, isOriginalOk);
                     } else { // all the options have failed
@@ -396,17 +384,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             } else { // should not happen
                 Log.w(TAG, "onTestConnectionResult(): results are null");
             }
-
-            if(progressDialog != null) progressDialog.dismiss();
-        }
-
-        protected void processSuccess(String newUrl) {
-            if(newUrl != null) url = newUrl;
-            Log.i(TAG, "processSuccess() going with " + url);
-
-            populateBundle();
-
-            goForward();
         }
 
         protected void showSuggestionDialog(final String suggestion, boolean allowToDecline) {
@@ -416,7 +393,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                     .setPositiveButton("Use suggested", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            processSuccess(suggestion);
+                            acceptSuggestion(suggestion);
+                            getCredentials();
                         }
                     });
 
@@ -426,7 +404,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                         .setNegativeButton("Use mine", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                processSuccess(null);
+                                getCredentials();
                             }
                         });
             } else {
@@ -439,6 +417,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         protected void showErrorDialog(WallabagServiceEndpoint.ConnectionTestResult error,
                                      String errorMessage) {
             // TODO: string constants
+            // TODO: human-readable error message
             new AlertDialog.Builder(getActivity())
                     .setTitle("Connection test failed")
                     .setMessage("Error: " + ((error != null) ? error : errorMessage))
@@ -446,10 +425,69 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                     .show();
         }
 
-        protected void cancelTask() {
-            if(testConnectionTask != null) {
-                testConnectionTask.cancel(true);
+        protected void acceptSuggestion(String newUrl) {
+            if(newUrl != null) url = newUrl;
+            Log.i(TAG, "acceptSuggestion() going with " + url);
+
+            View view = getView();
+            EditText urlEditText = view != null
+                    ? (EditText)view.findViewById(R.id.wallabag_url) : null;
+            if(urlEditText != null) urlEditText.setText(url);
+        }
+
+        protected void getCredentials() {
+            progressDialog.setMessage("Setting up feeds...");
+            progressDialog.show();
+
+            getCredentialsTask = new GetCredentialsTask(this, url,
+                    username, password,
+                    httpAuthUsername, httpAuthPassword);
+            getCredentialsTask.execute();
+        }
+
+        @Override
+        public void handleGetCredentialsResult(
+                boolean success, FeedsCredentials credentials, int wallabagVersion) {
+            progressDialog.dismiss();
+
+            if(success) {
+                populateBundleWithConnectionSettings();
+
+                Bundle bundle = getArguments();
+
+                bundle.putString(DATA_FEEDS_USER_ID, credentials.userID);
+                bundle.putString(DATA_FEEDS_TOKEN, credentials.token);
+
+                goForward();
+            } else {
+                // TODO: string constants
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Couldn't set up feeds")
+                        .setMessage("Something went wrong. Check your internet connection and try again.")
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
             }
+        }
+
+        protected void populateBundleWithConnectionSettings() {
+            Bundle bundle = getArguments();
+            bundle.putString(DATA_URL, url);
+            bundle.putString(DATA_USERNAME, username);
+            bundle.putString(DATA_PASSWORD, password);
+            bundle.putString(DATA_HTTP_AUTH_USERNAME, httpAuthUsername);
+            bundle.putString(DATA_HTTP_AUTH_PASSWORD, httpAuthPassword);
+            bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
+            bundle.putBoolean(DATA_ACCEPT_ALL_CERTIFICATES, acceptAllCertificates);
+            bundle.putInt(DATA_SERVER_VERSION, wallabagServerVersion);
+        }
+
+        protected void cancelTasks() {
+            cancelTask(testConnectionTask);
+            cancelTask(getCredentialsTask);
+        }
+
+        protected void cancelTask(AsyncTask task) {
+            if(task != null) task.cancel(true);
         }
 
     }
@@ -510,78 +548,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             wallabagServerVersion = 1;
 
             tryPossibleURLs = false;
-        }
-
-    }
-
-    public static class FeedsFragment extends WizardPageFragment
-            implements GetCredentialsTask.ResultHandler {
-
-        protected ProgressDialog progressDialog;
-        protected GetCredentialsTask getCredentialsTask;
-
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setCanceledOnTouchOutside(true);
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    cancelTask();
-                }
-            });
-            progressDialog.setMessage("Setting up feeds...");
-        }
-
-        public String getPageName() {
-            return PAGE_FEEDS;
-        }
-
-        @Override
-        protected int getLayoutResourceID() {
-            return R.layout.connection_wizard_feeds_fragment;
-        }
-
-        @Override
-        protected void nextButtonPressed() {
-            progressDialog.show();
-
-            Bundle bundle = getArguments();
-
-            cancelTask();
-            getCredentialsTask = new GetCredentialsTask(this, bundle.getString(DATA_URL),
-                    bundle.getString(DATA_USERNAME), bundle.getString(DATA_PASSWORD),
-                    bundle.getString(DATA_HTTP_AUTH_USERNAME),
-                    bundle.getString(DATA_HTTP_AUTH_PASSWORD));
-            getCredentialsTask.execute();
-        }
-
-        @Override
-        public void handleGetCredentialsResult(
-                boolean success, FeedsCredentials credentials, int wallabagVersion) {
-            if(progressDialog != null) progressDialog.dismiss();
-
-            if(success) {
-                Bundle bundle = getArguments();
-
-                bundle.putString(DATA_FEEDS_USER_ID, credentials.userID);
-                bundle.putString(DATA_FEEDS_TOKEN, credentials.token);
-
-                goForward();
-            } else {
-                // TODO: string constants
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Couldn't set up feeds")
-                        .setMessage("Something went wrong. Check your internet connection and try again.")
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
-            }
-        }
-
-        protected void cancelTask() {
-            if(getCredentialsTask != null) getCredentialsTask.cancel(true);
         }
 
     }
