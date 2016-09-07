@@ -45,13 +45,15 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String DATA_FEEDS_TOKEN = "feeds_token";
 
     private static final int PROVIDER_NO = -1;
-    private static final int PROVIDER_FRAMABAG = 0;
+    private static final int PROVIDER_V2_WALLABAG_ORG = 0;
+    private static final int PROVIDER_FRAMABAG = 1;
 
     private static final String PAGE_NONE = "";
     private static final String PAGE_WELCOME = "welcome";
     private static final String PAGE_PROVIDER_SELECTION = "provider_selection";
     private static final String PAGE_CONFIG_GENERIC = "config_generic";
     private static final String PAGE_CONFIG_FRAMABAG = "config_framabag";
+    private static final String PAGE_CONFIG_V2_WALLABAG_ORG = "config_v2_wallabag_org";
     private static final String PAGE_FEEDS = "feeds";
     private static final String PAGE_SUMMARY = "summary";
 
@@ -96,6 +98,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             case PAGE_PROVIDER_SELECTION:
                 int provider = bundle.getInt(DATA_PROVIDER, PROVIDER_NO);
                 switch(provider) {
+                    case PROVIDER_V2_WALLABAG_ORG:
+                        goToFragment = new V2WallabagOrgConfigFragment();
+                        break;
+
                     case PROVIDER_FRAMABAG:
                         goToFragment = new FramabagConfigFragment();
                         break;
@@ -108,6 +114,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
             case PAGE_CONFIG_GENERIC:
             case PAGE_CONFIG_FRAMABAG:
+            case PAGE_CONFIG_V2_WALLABAG_ORG:
                 goToFragment = new FeedsFragment();
                 break;
 
@@ -241,6 +248,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 RadioGroup radioGroup = (RadioGroup)view.findViewById(R.id.providerRadioGroup);
                 int provider;
                 switch(radioGroup.getCheckedRadioButtonId()) {
+                    case R.id.providerV2WallabagOrg:
+                        provider = PROVIDER_V2_WALLABAG_ORG;
+                        break;
+
                     case R.id.providerFramabag:
                         provider = PROVIDER_FRAMABAG;
                         break;
@@ -439,6 +450,36 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             if(testConnectionTask != null) {
                 testConnectionTask.cancel(true);
             }
+        }
+
+    }
+
+    public static class V2WallabagOrgConfigFragment extends GenericConfigFragment {
+
+        public String getPageName() {
+            return PAGE_CONFIG_V2_WALLABAG_ORG;
+        }
+
+        @Override
+        protected int getLayoutResourceID() {
+            return R.layout.connection_wizard_v2wallabagorg_config_fragment;
+        }
+
+        @Override
+        protected void gatherData() {
+            View view = getView();
+            if(view == null) return;
+
+            EditText usernameEditText = (EditText)view.findViewById(R.id.username);
+            EditText passwordEditText = (EditText)view.findViewById(R.id.password);
+
+            username = usernameEditText.getText().toString();
+            password = passwordEditText.getText().toString();
+
+            url = "https://v2.wallabag.org";
+            wallabagServerVersion = 2;
+
+            tryPossibleURLs = false;
         }
 
     }

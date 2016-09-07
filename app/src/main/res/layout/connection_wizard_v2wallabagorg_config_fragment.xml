@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <!-- Disable on-screen keyboard by default -->
+    <View android:layout_width="0dp" android:layout_height="0dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:contentDescription="@null"
+        android:importantForAccessibility="no" tools:ignore="UnusedAttribute">
+        <requestFocus/>
+    </View>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,51 +28,40 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:layout_marginBottom="20dp"
+                android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="Select Wallabag provider"/>
+                android:text="v2.wallabag.org configuration"/>
 
-            <RadioGroup
-                android:id="@+id/providerRadioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <RadioButton
-                    android:id="@+id/providerV2WallabagOrg"
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="v2.wallabag.org"
-                    android:checked="true" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select this option if you have an account on https://v2.wallabag.org" />
+                    android:ems="10"
+                    android:hint="@string/settings_username"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/providerFramabag"
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Framabag.org"
-                    android:checked="false" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select this option if you have an account on https://framabag.org" />
+                    android:ems="10"
+                    android:hint="@string/settings_password"
+                    android:inputType="textPassword" />
+            </android.support.design.widget.TextInputLayout>
 
-                <RadioButton
-                    android:id="@+id/providerOther"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Other" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Select this option to input required settings manually" />
-            </RadioGroup>
         </LinearLayout>
     </ScrollView>
 
@@ -82,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Skip" />
+            android:text="Back" />
 
         <View android:layout_width="1dp"
             android:layout_height="fill_parent"
@@ -94,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Next" />
+            android:text="Connect" />
 
     </LinearLayout>
 
