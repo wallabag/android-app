@@ -24,6 +24,7 @@ import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -66,14 +67,25 @@ public class FeedUpdater {
     private RequestCreator requestCreator;
     private int wallabagVersion;
 
+    private OkHttpClient httpClient;
+
     public FeedUpdater(String baseURL, String apiUserId, String apiToken,
                        String httpAuthUsername, String httpAuthPassword,
                        int wallabagVersion) {
+        this(baseURL, apiUserId, apiToken,
+                httpAuthUsername, httpAuthPassword,
+                wallabagVersion, null);
+    }
+
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       String httpAuthUsername, String httpAuthPassword,
+                       int wallabagVersion, OkHttpClient httpClient) {
         this.baseURL = baseURL;
         this.apiUserId = apiUserId;
         this.apiToken = apiToken;
         requestCreator = new RequestCreator(httpAuthUsername, httpAuthPassword);
         this.wallabagVersion = wallabagVersion;
+        this.httpClient = httpClient;
     }
 
     public void update(FeedType feedType, UpdateType updateType)
@@ -178,7 +190,7 @@ public class FeedUpdater {
         }
     }
 
-    private String getFeedUrl(FeedType feedType) {
+    public String getFeedUrl(FeedType feedType) {
         if(wallabagVersion == 1) {
             return baseURL + "/?feed"
                     + "&type=" + feedType.getUrlPart(wallabagVersion)
@@ -194,12 +206,9 @@ public class FeedUpdater {
         return "";
     }
 
-    private InputStream getInputStream(String urlStr)
+    private InputStream getInputStream(String url)
             throws IncorrectConfigurationException, IOException {
-        Request request = requestCreator.getRequest(WallabagConnection.getHttpURL(urlStr));
-
-        Response response = WallabagConnection.getClient().newCall(request).execute();
-
+        Response response = getResponse(url);
         if(response.isSuccessful()) {
             return response.body().byteStream();
         } else {
@@ -208,6 +217,20 @@ public class FeedUpdater {
                     App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
                     response.code(), response.message()));
         }
+    }
+
+    public Response getResponse(String url) throws IncorrectConfigurationException, IOException {
+        Request request = requestCreator.getRequest(WallabagConnection.getHttpURL(url));
+
+        return getHttpClient().newCall(request).execute();
+    }
+
+    private OkHttpClient getHttpClient() {
+        if(httpClient == null) {
+            httpClient = WallabagConnection.getClient();
+        }
+
+        return httpClient;
     }
 
     private void processFeed(ArticleDao articleDao, InputStream is,

@@ -24,9 +24,9 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 
 // TODO: split classes
 public class ConnectionWizardActivity extends AppCompatActivity {
@@ -266,10 +266,12 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     public static class GenericConfigFragment extends WizardPageFragment
-            implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler {
+            implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler,
+            ConfigurationTestHelper.ResultHandler, TestFeedsTask.ResultHandler {
 
         protected String url;
         protected String username, password;
+        protected String feedsUserID, feedsToken;
         protected String httpAuthUsername, httpAuthPassword;
         protected boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
         protected boolean acceptAllCertificates;
@@ -279,6 +281,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         protected ProgressDialog progressDialog;
         protected TestConnectionTask testConnectionTask;
         protected GetCredentialsTask getCredentialsTask;
+        protected TestFeedsTask testFeedsTask;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -338,92 +341,19 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
             progressDialog.dismiss();
 
-            if(results != null) {
-                if(results.isEmpty()) { // should not happen?
-                    Log.w(TAG, "onTestConnectionResult(): results are empty");
-                } else {
-                    String bestUrl = null;
-                    boolean isOriginalBest = false;
-                    boolean isOriginalOk = false;
-                    WallabagServiceEndpoint.ConnectionTestResult error = null;
-                    String errorMessage = null;
-
-                    for(int i = results.size() - 1; i >= 0; i--) {
-                        TestConnectionTask.TestResult result = results.get(i);
-                        String url = result.url;
-                        if(TestConnectionTask.areUrlsEqual(url, this.url)) {
-                            if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
-                                isOriginalOk = true;
-
-                                // a bit of a hack, can break something in case of weird server configurations
-                                wallabagServerVersion = result.wallabagServerVersion;
-
-                                if(bestUrl == null) {
-                                    bestUrl = result.url;
-                                    isOriginalBest = true;
-                                    break;
-                                }
-                            } else {
-                                error = result.result;
-                                errorMessage = result.errorMessage;
-                            }
-                        } else if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
-                            if(bestUrl == null) bestUrl = result.url;
-                        }
-                    }
-
-                    if(isOriginalBest) { // the entered URL is just fine
-                        acceptSuggestion(bestUrl); // just in case
-                        getCredentials();
-                    } else if(bestUrl != null) { // there is a better option
-                        showSuggestionDialog(bestUrl, isOriginalOk);
-                    } else { // all the options have failed
-                        showErrorDialog(error, errorMessage);
-                    }
-                }
-            } else { // should not happen
-                Log.w(TAG, "onTestConnectionResult(): results are null");
-            }
+            ConfigurationTestHelper.processTestResults(activity, url, results, this);
         }
 
-        protected void showSuggestionDialog(final String suggestion, boolean allowToDecline) {
-            // TODO: string constants
-            AlertDialog.Builder b = new AlertDialog.Builder(getActivity())
-                    .setTitle("Consider changing URL")
-                    .setPositiveButton("Use suggested", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            acceptSuggestion(suggestion);
-                            getCredentials();
-                        }
-                    });
+        @Override
+        public void connectionTestOnSuccess(String url, Integer serverVersion) {
+            if(url != null) acceptSuggestion(url);
+            if(serverVersion != null) this.wallabagServerVersion = serverVersion;
 
-            if(allowToDecline) {
-                b.setMessage(String.format("It is recommended to change URL to: \"%s\". "
-                        + "But you may use the entered one too.", suggestion))
-                        .setNegativeButton("Use mine", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getCredentials();
-                            }
-                        });
-            } else {
-                b.setMessage(String.format("It is suggested to change URL to: \"%s\"", suggestion))
-                        .setNegativeButton("Cancel", null);
-            }
-            b.show();
+            getCredentials();
         }
 
-        protected void showErrorDialog(WallabagServiceEndpoint.ConnectionTestResult error,
-                                     String errorMessage) {
-            // TODO: string constants
-            // TODO: human-readable error message
-            new AlertDialog.Builder(getActivity())
-                    .setTitle("Connection test failed")
-                    .setMessage("Error: " + ((error != null) ? error : errorMessage))
-                    .setPositiveButton(R.string.ok, null)
-                    .show();
-        }
+        @Override
+        public void connectionTestOnFail() {}
 
         protected void acceptSuggestion(String newUrl) {
             if(newUrl != null) url = newUrl;
@@ -451,18 +381,44 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             progressDialog.dismiss();
 
             if(success) {
-                populateBundleWithConnectionSettings();
+                feedsUserID = credentials.userID;
+                feedsToken = credentials.token;
 
-                Bundle bundle = getArguments();
-
-                bundle.putString(DATA_FEEDS_USER_ID, credentials.userID);
-                bundle.putString(DATA_FEEDS_TOKEN, credentials.token);
-
-                goForward();
+                testFeeds();
             } else {
                 // TODO: string constants
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Couldn't set up feeds")
+                        .setMessage("Something went wrong. Check your internet connection and try again.")
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+            }
+        }
+
+        protected void testFeeds() {
+            progressDialog.setMessage("Checking feeds...");
+            progressDialog.show();
+
+            testFeedsTask = new TestFeedsTask(url, feedsUserID, feedsToken,
+                    httpAuthUsername, httpAuthPassword,
+                    customSSLSettings, acceptAllCertificates,
+                    wallabagServerVersion, this);
+            testFeedsTask.execute();
+        }
+
+        @Override
+        public void testFeedsTaskOnResult(TestFeedsTask.Result result, String details) {
+            progressDialog.dismiss();
+
+            if(result == TestFeedsTask.Result.OK) {
+                populateBundleWithConnectionSettings();
+
+                goForward();
+            } else {
+                // TODO: detailed message
+                // TODO: string constants
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Feeds test failed")
                         .setMessage("Something went wrong. Check your internet connection and try again.")
                         .setPositiveButton(R.string.ok, null)
                         .show();
@@ -474,6 +430,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             bundle.putString(DATA_URL, url);
             bundle.putString(DATA_USERNAME, username);
             bundle.putString(DATA_PASSWORD, password);
+            bundle.putString(DATA_FEEDS_USER_ID, feedsUserID);
+            bundle.putString(DATA_FEEDS_TOKEN, feedsToken);
             bundle.putString(DATA_HTTP_AUTH_USERNAME, httpAuthUsername);
             bundle.putString(DATA_HTTP_AUTH_PASSWORD, httpAuthPassword);
             bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
@@ -484,6 +442,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         protected void cancelTasks() {
             cancelTask(testConnectionTask);
             cancelTask(getCredentialsTask);
+            cancelTask(testFeedsTask);
         }
 
         protected void cancelTask(AsyncTask task) {
