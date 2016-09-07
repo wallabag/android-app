@@ -79,6 +79,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private boolean acceptAllSSLCerts;
 
+    private boolean touchScroll;
+    private float touchScrollPercent;
+
     private String titleText;
     private String originalUrlText;
     private String domainText;
@@ -137,6 +140,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         settings = App.getInstance().getSettings();
 
         acceptAllSSLCerts = settings.getBoolean(Settings.ALL_CERTS, false);
+
+        touchScroll = settings.getBoolean(Settings.TOUCH_SCROLL, false);
+        touchScrollPercent = settings.getFloat(Settings.TOUCH_SCROLL_PERCENT, 0);
 
         String cssName;
         boolean highContrast = false;
@@ -320,6 +326,37 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     openPreviousArticle();
                 }
                 return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                if(!touchScroll) return false;
+
+                if(e.getPointerCount() > 1) return false;
+
+                int viewHeight = scrollView.getHeight();
+                int yOffset = scrollView.getScrollY();
+                float y = e.getY() - yOffset;
+
+                if(y > viewHeight * 0.25 && y < viewHeight * 0.75) {
+                    int viewWidth = scrollView.getWidth();
+                    float x = e.getX();
+
+                    int newYOffset = yOffset;
+                    int step = (int)(viewHeight * touchScrollPercent / 100);
+                    if(x < viewWidth * 0.3) { // left part
+                        newYOffset -= step;
+                    } else if(x > viewWidth * 0.7) { // right part
+                        newYOffset += step;
+                    }
+
+                    if(newYOffset != yOffset) {
+                        scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
+                        return true;
+                    }
+                }
+
+                return false;
             }
         };
 

@@ -291,6 +291,32 @@
         </android.support.design.widget.TextInputLayout>
 
         <CheckBox
+            android:id="@+id/ui_touch_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding"
+            android:text="@string/settings_ui_touch_scroll" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/toppadding" >
+
+            <EditText
+                android:id="@+id/ui_touch_scroll_percent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="@string/settings_ui_touch_scroll_percent"
+                android:inputType="numberDecimal|numberSigned"
+                android:linksClickable="false"
+                android:maxLines="1"
+                android:scrollHorizontally="false" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <CheckBox
             android:id="@+id/handle_http_scheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

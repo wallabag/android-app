@@ -39,6 +39,8 @@ public class Settings {
     public static final String TTS_VOICE = "tts.voice";
     public static final String TTS_LANGUAGE_VOICE = "tts.language_voice:";
     public static final String TTS_AUTOPLAY_NEXT = "tts.autoplay_next";
+    public static final String TOUCH_SCROLL = "touch_scroll";
+    public static final String TOUCH_SCROLL_PERCENT = "touch_scroll_percent";
     public static final int WALLABAG_WIDGET_MAX_UNREAD_COUNT = 999;
 
     private SharedPreferences pref;
