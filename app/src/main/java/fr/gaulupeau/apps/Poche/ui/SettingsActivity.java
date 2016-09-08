@@ -195,7 +195,8 @@ public class SettingsActivity extends BaseActionBarActivity
                 getCredentialsTask = new GetCredentialsTask(
                         SettingsActivity.this, editPocheUrl.getText().toString(),
                         username.getText().toString(), password.getText().toString(),
-                        httpAuthUsername.getText().toString(), httpAuthPassword.getText().toString());
+                        httpAuthUsername.getText().toString(), httpAuthPassword.getText().toString(),
+                        -1);
 
                 getCredentialsTask.execute();
             }

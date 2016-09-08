@@ -1,14 +1,9 @@
 package fr.gaulupeau.apps.Poche.ui.wizard;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,14 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
-import java.util.List;
-
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
-import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 
 // TODO: split classes
@@ -266,8 +257,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     public static class GenericConfigFragment extends WizardPageFragment
-            implements TestConnectionTask.ResultHandler, GetCredentialsTask.ResultHandler,
-            ConnectionTestHelper.ResultHandler, TestFeedsTask.ResultHandler {
+            implements ConfigurationTestHelper.GetCredentialsHandler,
+            ConfigurationTestHelper.ResultHandler {
 
         protected String url;
         protected String username, password;
@@ -278,24 +269,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         protected int wallabagServerVersion = -1;
         protected boolean tryPossibleURLs = true;
 
-        protected ProgressDialog progressDialog;
-        protected TestConnectionTask testConnectionTask;
-        protected GetCredentialsTask getCredentialsTask;
-        protected TestFeedsTask testFeedsTask;
-
-        @Override
-        public void onCreate(@Nullable Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setCanceledOnTouchOutside(true);
-            progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    cancelTasks();
-                }
-            });
-        }
+        protected ConfigurationTestHelper configurationTestHelper;
 
         public String getPageName() {
             return PAGE_CONFIG_GENERIC;
@@ -326,34 +300,47 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         }
 
         protected void runTest() {
-            progressDialog.setMessage(getString(R.string.settings_testingConnection));
-            progressDialog.show();
+            cancelTest();
 
-            cancelTasks();
-            testConnectionTask = new TestConnectionTask(
-                    url, username, password, httpAuthUsername, httpAuthPassword,
-                    customSSLSettings, acceptAllCertificates, wallabagServerVersion,
-                    tryPossibleURLs, this);
-            testConnectionTask.execute();
+            configurationTestHelper = new ConfigurationTestHelper(
+                    activity, this, this, url, username, password, feedsUserID, feedsToken,
+                    httpAuthUsername, httpAuthPassword, customSSLSettings, acceptAllCertificates,
+                    wallabagServerVersion, tryPossibleURLs);
+            configurationTestHelper.test();
+        }
+
+        protected void cancelTest() {
+            if(configurationTestHelper != null) {
+                configurationTestHelper.cancel();
+                configurationTestHelper = null;
+            }
         }
 
         @Override
-        public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
-            progressDialog.dismiss();
-
-            ConnectionTestHelper.processTestResults(activity, url, results, this);
+        public void onGetCredentialsResult(String feedsUserID, String feedsToken) {
+            this.feedsUserID = feedsUserID;
+            this.feedsToken = feedsToken;
         }
 
         @Override
-        public void connectionTestOnSuccess(String url, Integer serverVersion) {
+        public void onGetCredentialsFail() {}
+
+        @Override
+        public void onConfigurationTestSuccess(String url, Integer wallabagServerVersion) {
             if(url != null) acceptSuggestion(url);
-            if(serverVersion != null) this.wallabagServerVersion = serverVersion;
+            if(wallabagServerVersion != null) this.wallabagServerVersion = wallabagServerVersion;
 
-            getCredentials();
+            populateBundleWithConnectionSettings();
+
+            goForward();
         }
 
         @Override
-        public void connectionTestOnFail() {}
+        public void onConnectionTestFail(WallabagServiceEndpoint.ConnectionTestResult result,
+                                         String details) {}
+
+        @Override
+        public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
 
         protected void acceptSuggestion(String newUrl) {
             if(newUrl != null) url = newUrl;
@@ -363,66 +350,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             EditText urlEditText = view != null
                     ? (EditText)view.findViewById(R.id.wallabag_url) : null;
             if(urlEditText != null) urlEditText.setText(url);
-        }
-
-        protected void getCredentials() {
-            progressDialog.setMessage("Setting up feeds...");
-            progressDialog.show();
-
-            getCredentialsTask = new GetCredentialsTask(this, url,
-                    username, password,
-                    httpAuthUsername, httpAuthPassword);
-            getCredentialsTask.execute();
-        }
-
-        @Override
-        public void handleGetCredentialsResult(
-                boolean success, FeedsCredentials credentials, int wallabagVersion) {
-            progressDialog.dismiss();
-
-            if(success) {
-                feedsUserID = credentials.userID;
-                feedsToken = credentials.token;
-
-                testFeeds();
-            } else {
-                // TODO: string constants
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Couldn't set up feeds")
-                        .setMessage("Something went wrong. Check your internet connection and try again.")
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
-            }
-        }
-
-        protected void testFeeds() {
-            progressDialog.setMessage("Checking feeds...");
-            progressDialog.show();
-
-            testFeedsTask = new TestFeedsTask(url, feedsUserID, feedsToken,
-                    httpAuthUsername, httpAuthPassword,
-                    customSSLSettings, acceptAllCertificates,
-                    wallabagServerVersion, this);
-            testFeedsTask.execute();
-        }
-
-        @Override
-        public void testFeedsTaskOnResult(TestFeedsTask.Result result, String details) {
-            progressDialog.dismiss();
-
-            if(result == TestFeedsTask.Result.OK) {
-                populateBundleWithConnectionSettings();
-
-                goForward();
-            } else {
-                // TODO: detailed message
-                // TODO: string constants
-                new AlertDialog.Builder(getActivity())
-                        .setTitle("Feeds test failed")
-                        .setMessage("Something went wrong. Check your internet connection and try again.")
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
-            }
         }
 
         protected void populateBundleWithConnectionSettings() {
@@ -437,16 +364,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
             bundle.putBoolean(DATA_ACCEPT_ALL_CERTIFICATES, acceptAllCertificates);
             bundle.putInt(DATA_SERVER_VERSION, wallabagServerVersion);
-        }
-
-        protected void cancelTasks() {
-            cancelTask(testConnectionTask);
-            cancelTask(getCredentialsTask);
-            cancelTask(testFeedsTask);
-        }
-
-        protected void cancelTask(AsyncTask task) {
-            if(task != null) task.cancel(true);
         }
 
     }
