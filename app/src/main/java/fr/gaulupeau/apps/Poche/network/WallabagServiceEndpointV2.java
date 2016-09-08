@@ -19,6 +19,7 @@ import okhttp3.Response;
 import java.io.IOException;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
+import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGIN_FORM_V1;
 
 public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
@@ -53,8 +54,12 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         }
 
         if(!isLoginPage(body)) {
-            // it's not even wallabag login page: probably something wrong with the URL
-            return ConnectionTestResult.WallabagNotFound;
+            if(isLoginPageOfDifferentVersion(body)) {
+                return ConnectionTestResult.IncorrectServerVersion;
+            } else {
+                // it's not even wallabag login page: probably something wrong with the URL
+                return ConnectionTestResult.WallabagNotFound;
+            }
         }
 
         String csrfToken = getCsrfToken(body);
@@ -112,6 +117,10 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     protected boolean isRegularPage(String body) throws IOException {
         return containsMarker(body, WALLABAG_LOGOUT_LINK_V2) && containsMarker(body, WALLABAG_LOGO_V2);
+    }
+
+    private boolean isLoginPageOfDifferentVersion(String body) {
+        return containsMarker(body, WALLABAG_LOGIN_FORM_V1);
     }
 
     protected Request getLoginRequest(String csrfToken) throws IncorrectConfigurationException {
