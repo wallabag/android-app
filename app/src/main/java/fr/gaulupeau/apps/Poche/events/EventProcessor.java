@@ -21,6 +21,7 @@ import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.SettingsActivity;
 
 // TODO: fix getters sync (AFAIK, not so important yet)
@@ -123,6 +124,16 @@ public class EventProcessor {
                     + !queueIsEmpty);
 
             Settings.enableConnectivityChangeReceiver(getContext(), !queueIsEmpty);
+        }
+    }
+
+    @Subscribe
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
+        Log.d(TAG, "onFeedsChangedEvent() started");
+
+        if(event.getFeedType() == FeedUpdater.FeedType.Main) {
+            Log.d(TAG, "onFeedsChangedEvent() triggering update for IconUnreadWidget");
+            IconUnreadWidget.triggerWidgetUpdate(getContext());
         }
     }
 
