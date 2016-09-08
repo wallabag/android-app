@@ -102,6 +102,8 @@ GAULUPEAU Jonathan — 2013-2015
     <!--<string name="feedUpdater_IOException">IO Exception on connect</string>-->
     <!--<string name="feedUpdater_IOExceptionOnProcessingFeed">IO exception on processing feed</string>-->
     <!--<string name="feedUpdater_feedProcessingError">Feed processing error</string>-->
+    <string name="settings_parametersAreOk">Parameters are fine</string>
+    <string name="settings_parametersAutofilled">Parameters filled</string>
     <string name="getCredentials_success">Credentials filled</string>
     <string name="getCredentials_fail">Couldn\'t get credentials</string>
     <string name="testConnection_errorMessage1">Wallabag service not found; check URL. Error code: %d</string>

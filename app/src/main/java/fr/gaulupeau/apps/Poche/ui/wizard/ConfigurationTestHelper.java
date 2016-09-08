@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -318,12 +319,7 @@ public class ConfigurationTestHelper
 
                 settings.setConfigurationOk(true);
 
-                // TODO: string constants
-                new AlertDialog.Builder(context)
-                        .setTitle("Test completed")
-                        .setMessage("Configuration is fine")
-                        .setPositiveButton(R.string.ok, null)
-                        .show();
+                Toast.makeText(context, R.string.settings_parametersAreOk, Toast.LENGTH_SHORT).show();
             }
         } else {
             if(handler != null) {

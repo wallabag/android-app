@@ -9,6 +9,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -271,6 +272,9 @@ public class SettingsActivityNew extends AppCompatActivity {
             settings.setConfigurationOk(true);
 
             connectionParametersChanged = false;
+
+            Toast.makeText(getActivity(), R.string.settings_parametersAutofilled,
+                    Toast.LENGTH_SHORT).show();
         }
 
         @Override
