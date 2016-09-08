@@ -55,7 +55,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean[] invalidLists = new boolean[ArticlesListPagerAdapter.PAGES.length];
 
-    private boolean firstTimeShown = true;
+    private boolean checkConfigurationOnResume;
     private boolean firstSyncDone;
     private boolean showEmptyDbDialogOnResume;
 
@@ -98,6 +98,8 @@ public class ArticlesListActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        checkConfigurationOnResume = true;
+
         if(!firstSyncDone) {
             showEmptyDbDialogOnResume = true;
         }
@@ -111,8 +113,8 @@ public class ArticlesListActivity extends AppCompatActivity
 
         checkLists();
 
-        if(firstTimeShown) {
-            firstTimeShown = false;
+        if(checkConfigurationOnResume) {
+            checkConfigurationOnResume = false;
 
             if(!Settings.checkFirstRunInit(this)) {
                 if(!settings.isConfigurationOk()) {
@@ -125,6 +127,7 @@ public class ArticlesListActivity extends AppCompatActivity
                             testConfiguration();
                         }
                     });
+                    messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
                     messageBox.show();
                 }
             }

@@ -124,6 +124,10 @@ public class Settings {
         }
     }
 
+    public SharedPreferences getSharedPreferences() {
+        return pref;
+    }
+
     public boolean contains(String key) {
         return pref.contains(key);
     }

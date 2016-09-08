@@ -1,11 +1,13 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.AlarmManager;
+import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -24,7 +26,10 @@ public class SettingsActivityNew extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment
-            implements Preference.OnPreferenceChangeListener {
+            implements Preference.OnPreferenceChangeListener,
+            SharedPreferences.OnSharedPreferenceChangeListener {
+
+        private static final String TAG = SettingsFragment.class.getSimpleName();
 
         private Settings settings;
 
@@ -39,6 +44,8 @@ public class SettingsActivityNew extends AppCompatActivity {
         private boolean autoSyncChanged;
         private boolean initialAutoSyncEnabled;
         private boolean newAutoSyncEnabled;
+
+        private boolean connectionParametersChanged;
 
         public SettingsFragment() {}
 
@@ -63,14 +70,6 @@ public class SettingsActivityNew extends AppCompatActivity {
 
                 themeListPreference.setEntries(themeEntries);
                 themeListPreference.setEntryValues(themeEntryValues);
-
-                themeListPreference.setOnPreferenceChangeListener(this);
-            }
-
-            Preference autoUpdateEnabledPreference = findPreference(
-                    getString(R.string.pref_key_autoUpdate_enabled));
-            if(autoUpdateEnabledPreference != null) {
-                autoUpdateEnabledPreference.setOnPreferenceChangeListener(this);
             }
 
             ListPreference autoUpdateIntervalListPreference = (ListPreference)findPreference(
@@ -91,14 +90,6 @@ public class SettingsActivityNew extends AppCompatActivity {
                         String.valueOf(AlarmManager.INTERVAL_HALF_DAY),
                         String.valueOf(AlarmManager.INTERVAL_DAY)
                 });
-
-                autoUpdateIntervalListPreference.setOnPreferenceChangeListener(this);
-            }
-
-            Preference autoSyncQueueEnabledPreference = findPreference(
-                    getString(R.string.pref_key_autoSyncQueue_enabled));
-            if(autoSyncQueueEnabledPreference != null) {
-                autoSyncQueueEnabledPreference.setOnPreferenceChangeListener(this);
             }
 
             Preference handleHttpSchemePreference = findPreference(
@@ -110,8 +101,8 @@ public class SettingsActivityNew extends AppCompatActivity {
         }
 
         @Override
-        public void onStart() {
-            super.onStart();
+        public void onResume() {
+            super.onResume();
 
             newTheme = false;
 
@@ -121,10 +112,14 @@ public class SettingsActivityNew extends AppCompatActivity {
 
             autoSyncChanged = false;
             initialAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
+
+            settings.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
         @Override
-        public void onStop() {
+        public void onPause() {
+            settings.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+
             if(newTheme) {
                 Themes.init();
             }
@@ -159,7 +154,14 @@ public class SettingsActivityNew extends AppCompatActivity {
                 }
             }
 
-            super.onStop();
+            if(connectionParametersChanged) {
+                connectionParametersChanged = false;
+
+                Log.i(TAG, "onStop() setting isConfigurationOk(false)");
+                settings.setConfigurationOk(false);
+            }
+
+            super.onPause();
         }
 
         @Override
@@ -168,22 +170,43 @@ public class SettingsActivityNew extends AppCompatActivity {
 
             if(key == null || key.isEmpty()) return true;
 
-            if(key.equals(getString(R.string.pref_key_ui_theme))) {
-                newTheme = true;
-            } else if(key.equals(getString(R.string.pref_key_autoUpdate_enabled))) {
-                autoUpdateChanged = true;
-                newAutoUpdateEnabled = (Boolean)newValue;
-            } else if(key.equals(getString(R.string.pref_key_autoUpdate_interval))) {
-                autoUpdateChanged = true;
-                newAutoUpdateInterval = (Long)newValue;
-            } else if(key.equals(getString(R.string.pref_key_autoSyncQueue_enabled))) {
-                autoSyncChanged = true;
-                newAutoSyncEnabled = (Boolean)newValue;
-            } else if(key.equals(getString(R.string.pref_key_misc_handleHttpScheme))) {
+            if(key.equals(getString(R.string.pref_key_misc_handleHttpScheme))) {
                 settings.setHandleHttpScheme((Boolean)newValue);
             }
 
             return true;
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "onSharedPreferenceChanged(" + key + ")");
+
+            if(key == null || key.isEmpty()) return;
+
+            if(key.equals(getString(R.string.pref_key_ui_theme))) {
+                newTheme = true;
+            } else if(key.equals(getString(R.string.pref_key_autoUpdate_enabled))) {
+                autoUpdateChanged = true;
+                newAutoUpdateEnabled = settings.isAutoUpdateEnabled();
+            } else if(key.equals(getString(R.string.pref_key_autoUpdate_interval))) {
+                autoUpdateChanged = true;
+                newAutoUpdateInterval = settings.getAutoUpdateInterval();
+            } else if(key.equals(getString(R.string.pref_key_autoSyncQueue_enabled))) {
+                autoSyncChanged = true;
+                newAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
+            } else if(key.equals(getString(R.string.pref_key_connection_url))
+                    || key.equals(getString(R.string.pref_key_connection_username))
+                    || key.equals(getString(R.string.pref_key_connection_password))
+                    || key.equals(getString(R.string.pref_key_connection_serverVersion))
+                    || key.equals(getString(R.string.pref_key_connection_advanced_acceptAllCertificates))
+                    || key.equals(getString(R.string.pref_key_connection_advanced_customSSLSettings))
+                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthUsername))
+                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthPassword))
+                    || key.equals(getString(R.string.pref_key_connection_feedsUserID))
+                    || key.equals(getString(R.string.pref_key_connection_feedsToken))) {
+                Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
+                connectionParametersChanged = true;
+            }
         }
 
     }
