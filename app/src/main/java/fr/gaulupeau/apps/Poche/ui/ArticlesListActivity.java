@@ -56,6 +56,7 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean[] invalidLists = new boolean[ArticlesListPagerAdapter.PAGES.length];
 
     private boolean checkConfigurationOnResume;
+    private AlertDialog checkConfigurationDialog;
     private boolean firstSyncDone;
     private boolean showEmptyDbDialogOnResume;
 
@@ -117,7 +118,7 @@ public class ArticlesListActivity extends AppCompatActivity
             checkConfigurationOnResume = false;
 
             if(!Settings.checkFirstRunInit(this)) {
-                if(!settings.isConfigurationOk()) {
+                if(!settings.isConfigurationOk() && checkConfigurationDialog == null) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
                     messageBox.setTitle(R.string.d_configurationChanged_title);
                     messageBox.setMessage(R.string.d_configurationChanged_message);
@@ -128,7 +129,13 @@ public class ArticlesListActivity extends AppCompatActivity
                         }
                     });
                     messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
-                    messageBox.show();
+                    messageBox.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            checkConfigurationDialog = null;
+                        }
+                    });
+                    checkConfigurationDialog = messageBox.show();
                 }
             }
         }
