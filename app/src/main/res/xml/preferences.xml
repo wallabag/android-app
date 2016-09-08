@@ -24,6 +24,10 @@
                 android:title="@string/pref_name_connection_password"
                 android:inputType="textPassword"
                 android:defaultValue="" />
+            <Preference
+                android:key="@string/pref_key_connection_autofill"
+                android:title="@string/pref_name_connection_autofill"
+                android:summary="@string/pref_desc_connection_autofill"/>
             <fr.gaulupeau.apps.Poche.ui.IntListPreference
                 android:key="@string/pref_key_connection_serverVersion"
                 android:title="@string/pref_name_connection_serverVersion"

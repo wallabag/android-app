@@ -62,13 +62,14 @@ public class ConfigurationTestHelper
     private Integer newWallabagServerVersion;
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
-                                   GetCredentialsHandler credentialsHandler, Settings settings) {
+                                   GetCredentialsHandler credentialsHandler,
+                                   Settings settings, boolean detectVersion) {
         this(context, handler, credentialsHandler, settings.getUrl(),
                 settings.getUsername(), settings.getPassword(),
                 settings.getFeedsUserID(), settings.getFeedsToken(),
                 settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
                 settings.isCustomSSLSettings(), settings.isAcceptAllCertificates(),
-                settings.getWallabagServerVersion(), false);
+                detectVersion ? -1 : settings.getWallabagServerVersion(), false);
     }
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,

@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.AlarmManager;
 import android.content.SharedPreferences;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -12,7 +13,10 @@ import android.util.Log;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
+import fr.gaulupeau.apps.Poche.ui.wizard.ConfigurationTestHelper;
 
 public class SettingsActivityNew extends AppCompatActivity {
 
@@ -26,8 +30,11 @@ public class SettingsActivityNew extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment
-            implements Preference.OnPreferenceChangeListener,
-            SharedPreferences.OnSharedPreferenceChangeListener {
+            implements Preference.OnPreferenceClickListener,
+            Preference.OnPreferenceChangeListener,
+            SharedPreferences.OnSharedPreferenceChangeListener,
+            ConfigurationTestHelper.ResultHandler,
+            ConfigurationTestHelper.GetCredentialsHandler {
 
         private static final String TAG = SettingsFragment.class.getSimpleName();
 
@@ -47,6 +54,8 @@ public class SettingsActivityNew extends AppCompatActivity {
 
         private boolean connectionParametersChanged;
 
+        private ConfigurationTestHelper configurationTestHelper;
+
         public SettingsFragment() {}
 
         @Override
@@ -56,6 +65,12 @@ public class SettingsActivityNew extends AppCompatActivity {
             addPreferencesFromResource(R.xml.preferences);
 
             settings = new Settings(App.getInstance());
+
+            Preference autofillPreference = findPreference(
+                    getString(R.string.pref_key_connection_autofill));
+            if(autofillPreference != null) {
+                autofillPreference.setOnPreferenceClickListener(this);
+            }
 
             ListPreference themeListPreference = (ListPreference)findPreference(
                     getString(R.string.pref_key_ui_theme));
@@ -165,6 +180,16 @@ public class SettingsActivityNew extends AppCompatActivity {
         }
 
         @Override
+        public void onStop() {
+            if(configurationTestHelper != null) {
+                configurationTestHelper.cancel();
+                configurationTestHelper = null;
+            }
+
+            super.onStop();
+        }
+
+        @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             String key = preference.getKey();
 
@@ -206,6 +231,61 @@ public class SettingsActivityNew extends AppCompatActivity {
                     || key.equals(getString(R.string.pref_key_connection_feedsToken))) {
                 Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
                 connectionParametersChanged = true;
+            }
+        }
+
+        @Override
+        public boolean onPreferenceClick(Preference preference) {
+            configurationTestHelper = new ConfigurationTestHelper(
+                    getActivity(), this, this, settings, true);
+            configurationTestHelper.test();
+
+            return true;
+        }
+
+        @Override
+        public void onGetCredentialsResult(String feedsUserID, String feedsToken) {
+            setTextPreference(R.string.pref_key_connection_feedsUserID, feedsUserID);
+            setTextPreference(R.string.pref_key_connection_feedsToken, feedsToken);
+        }
+
+        @Override
+        public void onGetCredentialsFail() {}
+
+        @Override
+        public void onConfigurationTestSuccess(String url, Integer serverVersion) {
+            Log.d(TAG, String.format("onConfigurationTestSuccess(%s, %s)", url, serverVersion));
+
+            if(url != null) {
+                setTextPreference(R.string.pref_key_connection_url, url);
+            }
+            if(serverVersion != null) {
+                ListPreference serverVersionPreference = (ListPreference)findPreference(
+                        getString(R.string.pref_key_connection_serverVersion));
+
+                if(serverVersionPreference != null) {
+                    serverVersionPreference.setValue(String.valueOf(serverVersion));
+                }
+            }
+
+            settings.setConfigurationOk(true);
+
+            connectionParametersChanged = false;
+        }
+
+        @Override
+        public void onConnectionTestFail(WallabagServiceEndpoint.ConnectionTestResult result,
+                                         String details) {}
+
+        @Override
+        public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
+
+        private void setTextPreference(int preferenceID, String value) {
+            EditTextPreference preference = (EditTextPreference)
+                    findPreference(getString(preferenceID));
+
+            if(preference != null) {
+                preference.setText(value);
             }
         }
 

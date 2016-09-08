@@ -427,7 +427,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private void testConfiguration() {
         ConfigurationTestHelper configurationTestHelper
-                = new ConfigurationTestHelper(this, null, null, settings);
+                = new ConfigurationTestHelper(this, null, null, settings, false);
 
         configurationTestHelper.test();
     }
