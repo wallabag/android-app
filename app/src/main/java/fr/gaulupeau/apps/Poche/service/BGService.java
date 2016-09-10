@@ -59,8 +59,8 @@ public class BGService extends IntentService {
         Log.d(TAG, "onHandleIntent() started");
 
         // this seems to make UI more responsive right after a call to the service.
-        // well, this seemed to help before OperationsHelper introduction
-//        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        // well, this seemed to help better before OperationsHelper introduction
+        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         ActionRequest actionRequest = ActionRequest.fromIntent(intent);
         ActionResult result = null;
