@@ -13,7 +13,6 @@ import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -25,7 +24,6 @@ import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -90,12 +88,6 @@ public class WallabagConnection {
         CookieManager cookieManager = new CookieManager();
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
         b.cookieJar(new JavaNetCookieJar(cookieManager));
-
-        // TODO : Delete this part when OKHTTP 3.3 is released https://github.com/square/okhttp/issues/2543
-        List<Protocol> protocolList = new ArrayList<>();
-        protocolList.add(Protocol.SPDY_3);
-        protocolList.add(Protocol.HTTP_1_1);
-        b.protocols(protocolList);
 
         if(customSSLSettings) {
             try {
