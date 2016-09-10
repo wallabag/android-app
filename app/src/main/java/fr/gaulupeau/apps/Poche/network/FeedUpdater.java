@@ -22,6 +22,7 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.OkHttpClient;
@@ -88,10 +89,14 @@ public class FeedUpdater {
         this.httpClient = httpClient;
     }
 
-    public void update(FeedType feedType, UpdateType updateType)
+    public ArticlesChangedEvent update(FeedType feedType, UpdateType updateType)
             throws XmlPullParserException, RequestException, IOException {
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+
         if(feedType == null && updateType == null) {
             updateAllFeeds();
+
+            event.setInvalidateAll(true);
         } else {
             if(feedType == null) {
                 throw new IllegalArgumentException("If updateType is set, feedType must be set too");
@@ -100,8 +105,10 @@ public class FeedUpdater {
                 updateType = UpdateType.Full;
             }
 
-            updateInternal(feedType, updateType);
+            updateInternal(feedType, updateType, event);
         }
+
+        return event;
     }
 
     private void updateAllFeeds() throws XmlPullParserException, RequestException, IOException {
@@ -117,13 +124,13 @@ public class FeedUpdater {
             articleDao.deleteAll();
 
             Log.d(TAG, "updateAllFeeds() updating Main feed");
-            updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0);
+            updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
 
             Log.d(TAG, "updateAllFeeds() updating Archive feed");
-            updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0);
+            updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
 
             Log.d(TAG, "updateAllFeeds() updating Favorite feed");
-            updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0);
+            updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
 
             Log.d(TAG, "updateAllFeeds() setting transaction successful");
             db.setTransactionSuccessful();
@@ -135,7 +142,8 @@ public class FeedUpdater {
         Log.d(TAG, "updateAllFeeds() finished");
     }
 
-    private void updateInternal(FeedType feedType, UpdateType updateType)
+    private void updateInternal(
+            FeedType feedType, UpdateType updateType, ArticlesChangedEvent event)
             throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
 
@@ -158,7 +166,7 @@ public class FeedUpdater {
                 }
             }
 
-            updateByFeed(articleDao, feedType, updateType, latestID);
+            updateByFeed(articleDao, feedType, updateType, latestID, event);
 
             db.setTransactionSuccessful();
         } finally {
@@ -169,7 +177,7 @@ public class FeedUpdater {
     }
 
     private void updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
-                              Integer id)
+                              Integer id, ArticlesChangedEvent event)
             throws XmlPullParserException, RequestException, IOException {
         Log.d(TAG, "updateByFeed() started");
 
@@ -178,7 +186,7 @@ public class FeedUpdater {
             is = getInputStream(getFeedUrl(feedType));
 
             Log.d(TAG, "updateByFeed() got input stream; processing feed");
-            processFeed(articleDao, is, feedType, updateType, id);
+            processFeed(articleDao, is, feedType, updateType, id, event);
 
             Log.d(TAG, "updateByFeed() finished successfully");
         } finally {
@@ -234,7 +242,8 @@ public class FeedUpdater {
     }
 
     private void processFeed(ArticleDao articleDao, InputStream is,
-                             FeedType feedType, UpdateType updateType, Integer latestID)
+                             FeedType feedType, UpdateType updateType, Integer latestID,
+                             ArticlesChangedEvent event)
             throws XmlPullParserException, IOException {
         Log.d(TAG, "processFeed() latestID=" + latestID);
         // TODO: use parser.require() all over the place?
@@ -312,6 +321,15 @@ public class FeedUpdater {
                         article.setFavorite(feedType == FeedType.Favorite);
                     }
 
+                    if(event != null) {
+                        ArticlesChangedEvent.ChangeType changeType = existing
+                                ? ArticlesChangedEvent.ChangeType.Unspecified
+                                : ArticlesChangedEvent.ChangeType.Added;
+
+                        event.setChangedByFeedType(feedType);
+                        event.addChangedArticle(article, changeType);
+                    }
+
                     articleDao.insertOrReplace(article);
                 } else if(feedType == FeedType.Favorite) {
                     // Favorite: Fast (ONLY applicable if Main and Archive feeds are up to date)
@@ -329,11 +347,23 @@ public class FeedUpdater {
                         continue;
                     }
 
-                    if(article.getFavorite() != null && article.getFavorite()) continue;
+                    if(article.getFavorite() == null || !article.getFavorite()) {
+                        article.setFavorite(true);
 
-                    article.setFavorite(true);
+                        articleDao.update(article);
 
-                    articleDao.update(article);
+                        if(event != null) {
+                            event.setFavoriteFeedChanged(true);
+                            if(article.getArchive()) {
+                                event.setArchiveFeedChanged(true);
+                            } else {
+                                event.setMainFeedChanged(true);
+                            }
+
+                            event.addChangedArticle(article,
+                                    ArticlesChangedEvent.ChangeType.Favorited);
+                        }
+                    }
                 }
             } else {
                 skipElement(parser);

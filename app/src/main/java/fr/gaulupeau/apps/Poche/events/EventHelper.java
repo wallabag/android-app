@@ -3,7 +3,6 @@ package fr.gaulupeau.apps.Poche.events;
 import org.greenrobot.eventbus.EventBus;
 
 import fr.gaulupeau.apps.Poche.entity.Article;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 
 public class EventHelper {
 
@@ -19,8 +18,8 @@ public class EventHelper {
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    public static void notifyAboutFeedChanges(
-            Article article, ArticleChangedEvent.ChangeType changeType) {
+    public static void notifyAboutArticleChange(
+            Article article, ArticlesChangedEvent.ChangeType changeType) {
         boolean mainUpdated = false;
         boolean archiveUpdated = false;
         boolean favoriteUpdated = false;
@@ -46,13 +45,11 @@ public class EventHelper {
                 break;
         }
 
-        if(archiveUpdated && mainUpdated && favoriteUpdated) {
-            postEvent(new FeedsChangedEvent(null));
-        } else {
-            if(mainUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Main));
-            if(archiveUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Archive));
-            if(favoriteUpdated) postEvent(new FeedsChangedEvent(FeedUpdater.FeedType.Favorite));
-        }
+        ArticlesChangedEvent event = new ArticlesChangedEvent(article, changeType);
+        event.setMainFeedChanged(mainUpdated);
+        event.setArchiveFeedChanged(archiveUpdated);
+        event.setFavoriteFeedChanged(favoriteUpdated);
+        postEvent(event);
     }
 
 }

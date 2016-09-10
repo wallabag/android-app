@@ -6,11 +6,10 @@ import android.util.Log;
 
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
-import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
-import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
-import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutFeedChanges;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
 
 public class OperationsHelper {
 
@@ -42,16 +41,13 @@ public class OperationsHelper {
             articleDao.update(article);
             Log.v(TAG, "archiveArticle() after getArticleDao().update()");
 
-            ArticleChangedEvent.ChangeType changeType = archive
-                    ? ArticleChangedEvent.ChangeType.Archived
-                    : ArticleChangedEvent.ChangeType.Unarchived;
+            ArticlesChangedEvent.ChangeType changeType = archive
+                    ? ArticlesChangedEvent.ChangeType.Archived
+                    : ArticlesChangedEvent.ChangeType.Unarchived;
 
-            Log.v(TAG, "archiveArticle() before post(ArticleChangedEvent)");
-            postEvent(new ArticleChangedEvent(article, changeType));
-            Log.v(TAG, "archiveArticle() after post(ArticleChangedEvent)");
-            Log.v(TAG, "archiveArticle() before notifyAboutFeedChanges()");
-            notifyAboutFeedChanges(article, changeType);
-            Log.v(TAG, "archiveArticle() after notifyAboutFeedChanges()");
+            Log.v(TAG, "archiveArticle() before notifyAboutArticleChange()");
+            notifyAboutArticleChange(article, changeType);
+            Log.v(TAG, "archiveArticle() after notifyAboutArticleChange()");
 
             Log.d(TAG, "archiveArticle() article object updated");
         } else {
@@ -84,12 +80,11 @@ public class OperationsHelper {
             article.setFavorite(favorite);
             articleDao.update(article);
 
-            ArticleChangedEvent.ChangeType changeType = favorite
-                    ? ArticleChangedEvent.ChangeType.Favorited
-                    : ArticleChangedEvent.ChangeType.Unfavorited;
+            ArticlesChangedEvent.ChangeType changeType = favorite
+                    ? ArticlesChangedEvent.ChangeType.Favorited
+                    : ArticlesChangedEvent.ChangeType.Unfavorited;
 
-            postEvent(new ArticleChangedEvent(article, changeType));
-            notifyAboutFeedChanges(article, changeType);
+            notifyAboutArticleChange(article, changeType);
 
             Log.d(TAG, "favoriteArticle() article object updated");
         } else {
@@ -116,10 +111,7 @@ public class OperationsHelper {
 
         articleDao.delete(article);
 
-        ArticleChangedEvent.ChangeType changeType = ArticleChangedEvent.ChangeType.Deleted;
-
-        postEvent(new ArticleChangedEvent(article, changeType));
-        notifyAboutFeedChanges(article, changeType);
+        notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.Deleted);
 
         Log.d(TAG, "deleteArticle() article object deleted");
 

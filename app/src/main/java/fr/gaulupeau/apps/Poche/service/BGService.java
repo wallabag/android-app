@@ -20,7 +20,7 @@ import fr.gaulupeau.apps.Poche.entity.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.AddLinkFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.AddLinkStartedEvent;
-import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
@@ -521,6 +521,7 @@ public class BGService extends IntentService {
         Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
 
         ActionResult result = new ActionResult();
+        ArticlesChangedEvent event = null;
 
         if(WallabagConnection.isNetworkAvailable()) {
             Settings settings = getSettings();
@@ -537,7 +538,7 @@ public class BGService extends IntentService {
             DaoSession daoSession = getDaoSession();
             daoSession.getDatabase().beginTransaction();
             try {
-                feedUpdater.update(feedType, updateType);
+                event = feedUpdater.update(feedType, updateType);
 
                 daoSession.getDatabase().setTransactionSuccessful();
             } catch(XmlPullParserException e) {
@@ -554,9 +555,9 @@ public class BGService extends IntentService {
             result.setErrorType(ActionResult.ErrorType.NoNetwork);
         }
 
-        postEvent(new FeedsChangedEvent(feedType)); // TODO: fix: other feeds may be affected too
-        // TODO: also post ArticleChangedEvents?
-        // TODO: do not post events if nothing changed
+        if(event != null && event.isAnythingChanged()) {
+            postEvent(event);
+        }
 
         Log.d(TAG, "updateFeed() finished");
         return result;

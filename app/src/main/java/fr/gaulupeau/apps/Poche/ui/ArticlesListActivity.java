@@ -235,7 +235,7 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
-        invalidateList(event.getFeedType());
+        invalidateLists(event);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
@@ -335,8 +335,16 @@ public class ArticlesListActivity extends AppCompatActivity
         return result;
     }
 
-    private void invalidateList(FeedUpdater.FeedType feedType) {
-        invalidateList(ArticlesListPagerAdapter.positionByFeedType(feedType));
+    private void invalidateLists(FeedsChangedEvent event) {
+        if(event.isMainFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Main));
+        }
+        if(event.isFavoriteFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Favorite));
+        }
+        if(event.isArchiveFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Archive));
+        }
     }
 
     private void invalidateList(int position) {

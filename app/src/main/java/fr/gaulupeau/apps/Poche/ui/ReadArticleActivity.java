@@ -35,8 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import fr.gaulupeau.apps.Poche.events.ArticleChangedEvent;
-import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
@@ -624,30 +623,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onArticleChangedEvent(ArticleChangedEvent event) {
-        Log.d(TAG, "onArticleChangedEvent() started");
+    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
+        Log.d(TAG, "onArticlesChangedEvent() started");
 
-        if(!event.getChangedArticle().getArticleId().equals(mArticle.getArticleId())) return;
-        if(event.getChangeType() == null) return;
+        ArticlesChangedEvent.ChangeType changeType
+                = event.getArticleChangeType(mArticle.getArticleId());
+        if(changeType == null) return;
 
-        switch(event.getChangeType()) {
+        Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
+
+        switch(changeType) {
             case Favorited:
             case Unfavorited:
             case Archived:
             case Unarchived:
+            case Unspecified:
                 Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
                 invalidateOptionsMenu();
                 break;
         }
-    }
-
-    // TODO: remove if FeedUpdate operation posts ArticleChangedEvent
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFeedsChangedEvent(FeedsChangedEvent event) {
-        Log.d(TAG, "onFeedsChangedEvent() started");
-
-        Log.d(TAG, "onFeedsChangedEvent() calling invalidateOptionsMenu()");
-        invalidateOptionsMenu();
     }
 
     private double getReadingPosition() {

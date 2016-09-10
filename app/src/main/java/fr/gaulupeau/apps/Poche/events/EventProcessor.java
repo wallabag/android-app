@@ -131,7 +131,7 @@ public class EventProcessor {
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "onFeedsChangedEvent() started");
 
-        if(event.getFeedType() == FeedUpdater.FeedType.Main) {
+        if(event.isMainFeedChanged()) {
             Log.d(TAG, "onFeedsChangedEvent() triggering update for IconUnreadWidget");
             IconUnreadWidget.triggerWidgetUpdate(getContext());
         }
