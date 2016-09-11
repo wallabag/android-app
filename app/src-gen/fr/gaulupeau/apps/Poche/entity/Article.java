@@ -14,7 +14,6 @@ public class Article {
     private String url;
     private Boolean favorite;
     private Boolean archive;
-    private Boolean sync;
     private java.util.Date updateDate;
     private Double articleProgress;
 
@@ -25,7 +24,7 @@ public class Article {
         this.id = id;
     }
 
-    public Article(Long id, Integer articleId, String content, String author, String title, String url, Boolean favorite, Boolean archive, Boolean sync, java.util.Date updateDate, Double articleProgress) {
+    public Article(Long id, Integer articleId, String content, String author, String title, String url, Boolean favorite, Boolean archive, java.util.Date updateDate, Double articleProgress) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
@@ -34,7 +33,6 @@ public class Article {
         this.url = url;
         this.favorite = favorite;
         this.archive = archive;
-        this.sync = sync;
         this.updateDate = updateDate;
         this.articleProgress = articleProgress;
     }
@@ -101,14 +99,6 @@ public class Article {
 
     public void setArchive(Boolean archive) {
         this.archive = archive;
-    }
-
-    public Boolean getSync() {
-        return sync;
-    }
-
-    public void setSync(Boolean sync) {
-        this.sync = sync;
     }
 
     public java.util.Date getUpdateDate() {
