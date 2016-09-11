@@ -1,6 +1,8 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -39,6 +41,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         private static final String TAG = SettingsFragment.class.getSimpleName();
 
+        private static final int[] SUMMARIES_TO_INITIATE = {
+                R.string.pref_key_connection_url,
+                R.string.pref_key_connection_username,
+                R.string.pref_key_connection_serverVersion,
+                R.string.pref_key_connection_feedsUserID,
+                R.string.pref_key_connection_advanced_httpAuthUsername,
+                R.string.pref_key_ui_theme,
+                R.string.pref_key_ui_article_fontSize,
+                R.string.pref_key_ui_lists_limit,
+                R.string.pref_key_autoUpdate_interval,
+                R.string.pref_key_autoUpdate_type
+        };
+
         private Settings settings;
 
         private boolean newTheme;
@@ -66,6 +81,12 @@ public class SettingsActivity extends AppCompatActivity {
             addPreferencesFromResource(R.xml.preferences);
 
             settings = new Settings(App.getInstance());
+
+            Preference connectionWizardPreference = findPreference(
+                    getString(R.string.pref_key_connection_wizard));
+            if(connectionWizardPreference != null) {
+                connectionWizardPreference.setOnPreferenceClickListener(this);
+            }
 
             Preference autofillPreference = findPreference(
                     getString(R.string.pref_key_connection_autofill));
@@ -113,6 +134,10 @@ public class SettingsActivity extends AppCompatActivity {
             if(handleHttpSchemePreference != null) {
                 handleHttpSchemePreference.setDefaultValue(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
+            }
+
+            for(int keyID: SUMMARIES_TO_INITIATE) {
+                updateSummary(getString(keyID));
             }
         }
 
@@ -233,15 +258,34 @@ public class SettingsActivity extends AppCompatActivity {
                 Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
                 connectionParametersChanged = true;
             }
+
+            // not optimal :/
+            updateSummary(key);
         }
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            configurationTestHelper = new ConfigurationTestHelper(
-                    getActivity(), this, this, settings, true);
-            configurationTestHelper.test();
+            String key = preference.getKey();
+            if(key == null || key.isEmpty()) return false;
 
-            return true;
+            if(key.equals(getString(R.string.pref_key_connection_wizard))) {
+                Activity activity = getActivity();
+                if(activity != null) {
+                    startActivity(new Intent(activity, ConnectionWizardActivity.class));
+
+                    activity.finish();
+                }
+
+                return true;
+            } else if(key.equals(getString(R.string.pref_key_connection_autofill))) {
+                configurationTestHelper = new ConfigurationTestHelper(
+                        getActivity(), this, this, settings, true);
+                configurationTestHelper.test();
+
+                return true;
+            }
+
+            return false;
         }
 
         @Override
@@ -290,6 +334,52 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(preference != null) {
                 preference.setText(value);
+            }
+        }
+
+        private void updateSummary(String key) {
+            if(key == null || key.isEmpty()) return;
+
+            if(key.equals(getString(R.string.pref_key_connection_url))) {
+                EditTextPreference preference = (EditTextPreference)
+                        findPreference(key);
+                if(preference != null) {
+                    String value = preference.getText();
+                    setSummary(key, (value == null || value.isEmpty())
+                            ? getString(R.string.pref_desc_connection_url) : value);
+                }
+            } else if(key.equals(getString(R.string.pref_key_connection_username))
+                    || key.equals(getString(R.string.pref_key_connection_feedsUserID))
+                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthUsername))
+                    || key.equals(getString(R.string.pref_key_ui_article_fontSize))
+                    || key.equals(getString(R.string.pref_key_ui_lists_limit))) {
+                setEditTextSummaryFromContent(key);
+            } else if(key.equals(getString(R.string.pref_key_connection_serverVersion))
+                    || key.equals(getString(R.string.pref_key_ui_theme))
+                    || key.equals(getString(R.string.pref_key_autoUpdate_interval))
+                    || key.equals(getString(R.string.pref_key_autoUpdate_type))) {
+                setListSummaryFromContent(key);
+            }
+        }
+
+        private void setSummary(String key, String text) {
+            Preference preference = findPreference(key);
+            if(preference != null) {
+                preference.setSummary(text);
+            }
+        }
+
+        private void setEditTextSummaryFromContent(String key) {
+            EditTextPreference preference = (EditTextPreference)findPreference(key);
+            if(preference != null) {
+                preference.setSummary(preference.getText());
+            }
+        }
+
+        private void setListSummaryFromContent(String key) {
+            ListPreference preference = (ListPreference)findPreference(key);
+            if(preference != null) {
+                preference.setSummary(preference.getEntry());
             }
         }
 

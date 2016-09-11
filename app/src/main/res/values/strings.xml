@@ -201,13 +201,14 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="notification_expandedError">Error: %s</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
+    <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
 
     <string name="pref_categoryName_connection">Connection</string>
     <string name="pref_name_connection_url">Wallabag URL</string>
     <string name="pref_desc_connection_url">
         Examples:\n
         <i>https://wallabag.example.com</i>\n
-        <i>https://www.example.com/wallabag</i>\n
+        <i>https://example.com/wallabag</i>\n
         <i>https://framabag.org/u/your-username</i>
     </string>
     <string name="pref_name_connection_username">Username</string>
@@ -239,7 +240,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Application theme</string>
     <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
-    <string name="pref_name_ui_article_fontSerif">Serif typeface for article fonts</string>
+    <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
+    <string name="pref_desc_ui_article_fontSerif">Serif typeface for article fonts</string>
     <string name="pref_name_ui_lists_limit">Articles list limit</string>
 
     <string name="pref_categoryName_autoSync">Auto-sync</string>

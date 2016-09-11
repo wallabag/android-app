@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:title="@string/pref_name_runConnectionWizard" >
-<!-- TODO: use this one for release
-        <intent android:targetPackage="fr.gaulupeau.apps.InThePoche"
-            android:targetClass="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity" />
--->
-        <intent android:targetPackage="fr.gaulupeau.apps.InThePoche.debug"
-            android:targetClass="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity" />
+    <Preference
+        android:key="@string/pref_key_connection_wizard"
+        android:title="@string/pref_name_runConnectionWizard"
+        android:summary="@string/pref_desc_runConnectionWizard" >
     </Preference>
     <PreferenceScreen android:title="@string/pref_categoryName_connection">
         <PreferenceCategory android:title="@string/pref_categoryName_connection">
@@ -83,6 +80,7 @@
         <CheckBoxPreference
             android:key="@string/pref_key_ui_article_fontSerif"
             android:title="@string/pref_name_ui_article_fontSerif"
+            android:summary="@string/pref_desc_ui_article_fontSerif"
             android:defaultValue="false" />
         <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_lists_limit"
