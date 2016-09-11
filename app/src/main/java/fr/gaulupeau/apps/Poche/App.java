@@ -25,9 +25,9 @@ public class App extends Application {
         settings = new Settings(this);
         settings.initPreferences();
 
-        DbConnection.setContext(this);
-
         new EventProcessor(this).start();
+
+        DbConnection.setContext(this);
 
         instance = this;
     }
