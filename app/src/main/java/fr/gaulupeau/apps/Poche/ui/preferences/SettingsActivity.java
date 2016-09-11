@@ -45,9 +45,12 @@ public class SettingsActivity extends AppCompatActivity {
         private static final int[] SUMMARIES_TO_INITIATE = {
                 R.string.pref_key_connection_url,
                 R.string.pref_key_connection_username,
+                R.string.pref_key_connection_password,
                 R.string.pref_key_connection_serverVersion,
                 R.string.pref_key_connection_feedsUserID,
+                R.string.pref_key_connection_feedsToken,
                 R.string.pref_key_connection_advanced_httpAuthUsername,
+                R.string.pref_key_connection_advanced_httpAuthPassword,
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_lists_limit,
@@ -371,6 +374,12 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.pref_key_autoUpdate_type:
                     setListSummaryFromContent(key);
                     break;
+
+                case R.string.pref_key_connection_password:
+                case R.string.pref_key_connection_feedsToken:
+                case R.string.pref_key_connection_advanced_httpAuthPassword:
+                    setPasswordSummary(key);
+                    break;
             }
         }
 
@@ -392,6 +401,14 @@ public class SettingsActivity extends AppCompatActivity {
             ListPreference preference = (ListPreference)findPreference(key);
             if(preference != null) {
                 preference.setSummary(preference.getEntry());
+            }
+        }
+
+        private void setPasswordSummary(String key) {
+            EditTextPreference preference = (EditTextPreference)findPreference(key);
+            if(preference != null) {
+                String value = preference.getText();
+                preference.setSummary(value == null || value.isEmpty() ? "" : "********");
             }
         }
 
