@@ -21,6 +21,7 @@ public class App extends Application {
 
         if(BuildConfig.DEBUG) Stetho.initializeWithDefaults(this);
 
+        Settings.init(this);
         settings = new Settings(this);
         settings.initPreferences();
 

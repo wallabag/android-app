@@ -137,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             for(int keyID: SUMMARIES_TO_INITIATE) {
-                updateSummary(getString(keyID));
+                updateSummary(keyID);
             }
         }
 
@@ -217,11 +217,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            String key = preference.getKey();
-
-            if(key == null || key.isEmpty()) return true;
-
-            if(key.equals(getString(R.string.pref_key_misc_handleHttpScheme))) {
+            int keyID = Settings.getPrefKeyIDByValue(preference.getKey());
+            if(keyID == R.string.pref_key_misc_handleHttpScheme) {
                 settings.setHandleHttpScheme((Boolean)newValue);
             }
 
@@ -232,57 +229,65 @@ public class SettingsActivity extends AppCompatActivity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.d(TAG, "onSharedPreferenceChanged(" + key + ")");
 
-            if(key == null || key.isEmpty()) return;
+            int keyResID = Settings.getPrefKeyIDByValue(key);
+            switch(keyResID) {
+                case R.string.pref_key_ui_theme:
+                    newTheme = true;
+                    break;
 
-            if(key.equals(getString(R.string.pref_key_ui_theme))) {
-                newTheme = true;
-            } else if(key.equals(getString(R.string.pref_key_autoUpdate_enabled))) {
-                autoUpdateChanged = true;
-                newAutoUpdateEnabled = settings.isAutoUpdateEnabled();
-            } else if(key.equals(getString(R.string.pref_key_autoUpdate_interval))) {
-                autoUpdateChanged = true;
-                newAutoUpdateInterval = settings.getAutoUpdateInterval();
-            } else if(key.equals(getString(R.string.pref_key_autoSyncQueue_enabled))) {
-                autoSyncChanged = true;
-                newAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
-            } else if(key.equals(getString(R.string.pref_key_connection_url))
-                    || key.equals(getString(R.string.pref_key_connection_username))
-                    || key.equals(getString(R.string.pref_key_connection_password))
-                    || key.equals(getString(R.string.pref_key_connection_serverVersion))
-                    || key.equals(getString(R.string.pref_key_connection_advanced_acceptAllCertificates))
-                    || key.equals(getString(R.string.pref_key_connection_advanced_customSSLSettings))
-                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthUsername))
-                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthPassword))
-                    || key.equals(getString(R.string.pref_key_connection_feedsUserID))
-                    || key.equals(getString(R.string.pref_key_connection_feedsToken))) {
-                Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
-                connectionParametersChanged = true;
+                case R.string.pref_key_autoUpdate_enabled:
+                    autoUpdateChanged = true;
+                    newAutoUpdateEnabled = settings.isAutoUpdateEnabled();
+                    break;
+
+                case R.string.pref_key_autoUpdate_interval:
+                    autoUpdateChanged = true;
+                    newAutoUpdateInterval = settings.getAutoUpdateInterval();
+                    break;
+
+                case R.string.pref_key_autoSyncQueue_enabled:
+                    autoSyncChanged = true;
+                    newAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
+                    break;
+
+                case R.string.pref_key_connection_url:
+                case R.string.pref_key_connection_username:
+                case R.string.pref_key_connection_password:
+                case R.string.pref_key_connection_serverVersion:
+                case R.string.pref_key_connection_advanced_acceptAllCertificates:
+                case R.string.pref_key_connection_advanced_customSSLSettings:
+                case R.string.pref_key_connection_advanced_httpAuthUsername:
+                case R.string.pref_key_connection_advanced_httpAuthPassword:
+                case R.string.pref_key_connection_feedsUserID:
+                case R.string.pref_key_connection_feedsToken:
+                    Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
+                    connectionParametersChanged = true;
+                    break;
             }
 
             // not optimal :/
-            updateSummary(key);
+            updateSummary(keyResID);
         }
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            String key = preference.getKey();
-            if(key == null || key.isEmpty()) return false;
+            switch(Settings.getPrefKeyIDByValue(preference.getKey())) {
+                case R.string.pref_key_connection_wizard:
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        startActivity(new Intent(activity, ConnectionWizardActivity.class));
 
-            if(key.equals(getString(R.string.pref_key_connection_wizard))) {
-                Activity activity = getActivity();
-                if(activity != null) {
-                    startActivity(new Intent(activity, ConnectionWizardActivity.class));
+                        activity.finish();
+                    }
 
-                    activity.finish();
-                }
+                    return true;
 
-                return true;
-            } else if(key.equals(getString(R.string.pref_key_connection_autofill))) {
-                configurationTestHelper = new ConfigurationTestHelper(
-                        getActivity(), this, this, settings, true);
-                configurationTestHelper.test();
+                case R.string.pref_key_connection_autofill:
+                    configurationTestHelper = new ConfigurationTestHelper(
+                            getActivity(), this, this, settings, true);
+                    configurationTestHelper.test();
 
-                return true;
+                    return true;
             }
 
             return false;
@@ -337,28 +342,34 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
 
-        private void updateSummary(String key) {
-            if(key == null || key.isEmpty()) return;
+        private void updateSummary(int keyResID) {
+            String key = getString(keyResID);
 
-            if(key.equals(getString(R.string.pref_key_connection_url))) {
-                EditTextPreference preference = (EditTextPreference)
-                        findPreference(key);
-                if(preference != null) {
-                    String value = preference.getText();
-                    setSummary(key, (value == null || value.isEmpty())
-                            ? getString(R.string.pref_desc_connection_url) : value);
-                }
-            } else if(key.equals(getString(R.string.pref_key_connection_username))
-                    || key.equals(getString(R.string.pref_key_connection_feedsUserID))
-                    || key.equals(getString(R.string.pref_key_connection_advanced_httpAuthUsername))
-                    || key.equals(getString(R.string.pref_key_ui_article_fontSize))
-                    || key.equals(getString(R.string.pref_key_ui_lists_limit))) {
-                setEditTextSummaryFromContent(key);
-            } else if(key.equals(getString(R.string.pref_key_connection_serverVersion))
-                    || key.equals(getString(R.string.pref_key_ui_theme))
-                    || key.equals(getString(R.string.pref_key_autoUpdate_interval))
-                    || key.equals(getString(R.string.pref_key_autoUpdate_type))) {
-                setListSummaryFromContent(key);
+            switch(keyResID) {
+                case R.string.pref_key_connection_url:
+                    EditTextPreference preference = (EditTextPreference)
+                            findPreference(key);
+                    if(preference != null) {
+                        String value = preference.getText();
+                        setSummary(key, (value == null || value.isEmpty())
+                                ? getString(R.string.pref_desc_connection_url) : value);
+                    }
+                    break;
+
+                case R.string.pref_key_connection_username:
+                case R.string.pref_key_connection_feedsUserID:
+                case R.string.pref_key_connection_advanced_httpAuthUsername:
+                case R.string.pref_key_ui_article_fontSize:
+                case R.string.pref_key_ui_lists_limit:
+                    setEditTextSummaryFromContent(key);
+                    break;
+
+                case R.string.pref_key_connection_serverVersion:
+                case R.string.pref_key_ui_theme:
+                case R.string.pref_key_autoUpdate_interval:
+                case R.string.pref_key_autoUpdate_type:
+                    setListSummaryFromContent(key);
+                    break;
             }
         }
 

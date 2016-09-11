@@ -9,6 +9,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
@@ -20,8 +23,68 @@ public class Settings {
 
     private static final int PREFERENCES_VERSION = 1;
 
+    private static Map<String, Integer> preferenceKeysMap;
+
     private Context context;
     private SharedPreferences pref;
+
+    public static void init(Context c) {
+        preferenceKeysMap = new HashMap<>();
+
+        addToMap(c, R.string.pref_key_connection_url);
+        addToMap(c, R.string.pref_key_connection_serverVersion);
+        addToMap(c, R.string.pref_key_connection_username);
+        addToMap(c, R.string.pref_key_connection_password);
+        addToMap(c, R.string.pref_key_connection_feedsUserID);
+        addToMap(c, R.string.pref_key_connection_feedsToken);
+        addToMap(c, R.string.pref_key_connection_advanced_acceptAllCertificates);
+        addToMap(c, R.string.pref_key_connection_advanced_customSSLSettings);
+        addToMap(c, R.string.pref_key_connection_advanced_httpAuthUsername);
+        addToMap(c, R.string.pref_key_connection_advanced_httpAuthPassword);
+
+        addToMap(c, R.string.pref_key_ui_article_fontSize);
+        addToMap(c, R.string.pref_key_ui_article_fontSerif);
+        addToMap(c, R.string.pref_key_ui_lists_limit);
+        addToMap(c, R.string.pref_key_ui_theme);
+
+        addToMap(c, R.string.pref_key_tts_visible);
+        addToMap(c, R.string.pref_key_tts_optionsVisible);
+        addToMap(c, R.string.pref_key_tts_speed);
+        addToMap(c, R.string.pref_key_tts_pitch);
+        addToMap(c, R.string.pref_key_tts_engine);
+        addToMap(c, R.string.pref_key_tts_voice);
+        addToMap(c, R.string.pref_key_tts_languageVoice_prefix);
+        addToMap(c, R.string.pref_key_tts_autoplayNext);
+
+        addToMap(c, R.string.pref_key_autoUpdate_enabled);
+        addToMap(c, R.string.pref_key_autoUpdate_interval);
+        addToMap(c, R.string.pref_key_autoUpdate_type);
+        addToMap(c, R.string.pref_key_autoSyncQueue_enabled);
+
+        addToMap(c, R.string.pref_key_misc_handleHttpScheme);
+
+        addToMap(c, R.string.pref_key_internal_preferencesVersion);
+        addToMap(c, R.string.pref_key_internal_firstRun);
+        addToMap(c, R.string.pref_key_internal_configurationIsOk);
+        addToMap(c, R.string.pref_key_internal_configurationErrorShown);
+        addToMap(c, R.string.pref_key_internal_firstSyncDone);
+        addToMap(c, R.string.pref_key_internal_offlineQueue_pending);
+
+        addToMap(c, R.string.pref_key_connection_wizard);
+        addToMap(c, R.string.pref_key_connection_autofill);
+    }
+
+    public static int getPrefKeyIDByValue(String value) {
+        if(value == null || value.isEmpty()) return -1;
+
+        Integer id = preferenceKeysMap.get(value);
+
+        return id != null ? id : -1;
+    }
+
+    private static void addToMap(Context context, int resID) {
+        preferenceKeysMap.put(context.getString(resID), resID);
+    }
 
     public static boolean checkFirstRunInit(Context context) {
         Settings settings = App.getInstance().getSettings();
