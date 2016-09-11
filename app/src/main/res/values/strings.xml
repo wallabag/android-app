@@ -235,7 +235,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Auth</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth username</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Application theme</string>
