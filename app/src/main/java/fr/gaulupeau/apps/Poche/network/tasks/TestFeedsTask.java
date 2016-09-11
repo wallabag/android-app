@@ -57,7 +57,7 @@ public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
         OkHttpClient client = WallabagConnection.createClient(
-                customSSLSettings, acceptAllCertificates);
+                false, customSSLSettings, acceptAllCertificates);
         FeedUpdater feedUpdater = new FeedUpdater(
                 endpointUrl, feedsUserID, feedsToken,
                 httpAuthUsername, httpAuthPassword,

@@ -8,23 +8,28 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
+import com.franmontiel.persistentcookiejar.ClearableCookieJar;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
+import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,17 +82,20 @@ public class WallabagConnection {
     public static OkHttpClient createClient() {
         Settings settings = App.getInstance().getSettings();
 
-        return createClient(settings.isCustomSSLSettings(), settings.isAcceptAllCertificates());
+        return createClient(true, settings.isCustomSSLSettings(), settings.isAcceptAllCertificates());
     }
 
     public static OkHttpClient createClient(
-            boolean customSSLSettings, boolean acceptAllCertificates) {
+            boolean persistentCookies, boolean customSSLSettings, boolean acceptAllCertificates) {
         OkHttpClient.Builder b = new OkHttpClient.Builder()
                 .readTimeout(45, TimeUnit.SECONDS);
 
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        b.cookieJar(new JavaNetCookieJar(cookieManager));
+        ClearableCookieJar cookieJar = new PersistentCookieJar(
+                new SetCookieCache(),
+                persistentCookies
+                        ? new SharedPrefsCookiePersistor(App.getInstance())
+                        : new FakeCookiePersistor());
+        b.cookieJar(cookieJar);
 
         if(customSSLSettings) {
             try {
@@ -143,6 +151,24 @@ public class WallabagConnection {
 
     private static class Holder {
         private static OkHttpClient client = getClient();
+    }
+
+    static class FakeCookiePersistor implements CookiePersistor {
+
+        @Override
+        public List<Cookie> loadAll() {
+            return new ArrayList<>(0);
+        }
+
+        @Override
+        public void saveAll(Collection<Cookie> cookies) {}
+
+        @Override
+        public void removeAll(Collection<Cookie> cookies) {}
+
+        @Override
+        public void clear() {}
+
     }
 
     /**

@@ -122,7 +122,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         RequestBody formBody = new FormBody.Builder()
                 .add("login", username != null ? username : "")
                 .add("password", password != null ? password : "")
-//                .add("longlastingsession", "on")
+                .add("longlastingsession", "on")
                 .build();
 
         return getRequestBuilder()

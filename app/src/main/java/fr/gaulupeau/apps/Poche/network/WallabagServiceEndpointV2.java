@@ -131,7 +131,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
                 .add("_username", username != null ? username : "")
                 .add("_password", password != null ? password : "")
                 .add("_csrf_token", csrfToken != null ? csrfToken : "")
-//                .add("_remember_me", "on")
+                .add("_remember_me", "on")
                 .build();
 
         return getRequestBuilder()

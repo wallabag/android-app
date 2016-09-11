@@ -45,7 +45,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'org.greenrobot:greendao:2.2.1'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.4.1'
+    compile 'com.github.franmontiel:PersistentCookieJar:v1.0.0'
     compile 'com.facebook.stetho:stetho:1.4.0'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.0'
     compile 'com.mikepenz:aboutlibraries:5.7.3'

@@ -113,7 +113,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
             WallabagService service = new WallabagService(url, username, password,
                     httpAuthUsername, httpAuthPassword, wallabagServerVersion,
-                    WallabagConnection.createClient(customSSLSettings, acceptAllCertificates));
+                    WallabagConnection.createClient(false, customSSLSettings, acceptAllCertificates));
 
             try {
                 testResult.result = service.testConnection();
@@ -142,7 +142,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
     // well, it's a mess
     private String detectRedirection(String url) throws IOException {
         OkHttpClient client = WallabagConnection.createClient(
-                customSSLSettings, acceptAllCertificates);
+                false, customSSLSettings, acceptAllCertificates);
 
         HttpUrl httpUrl = HttpUrl.parse(url + "/");
         if(httpUrl == null) {
