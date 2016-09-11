@@ -3,10 +3,10 @@
     <Preference android:title="@string/pref_name_runConnectionWizard" >
 <!-- TODO: use this one for release
         <intent android:targetPackage="fr.gaulupeau.apps.InThePoche"
-            android:targetClass="fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity" />
+            android:targetClass="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity" />
 -->
         <intent android:targetPackage="fr.gaulupeau.apps.InThePoche.debug"
-            android:targetClass="fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity" />
+            android:targetClass="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity" />
     </Preference>
     <PreferenceScreen android:title="@string/pref_categoryName_connection">
         <PreferenceCategory android:title="@string/pref_categoryName_connection">
@@ -28,7 +28,7 @@
                 android:key="@string/pref_key_connection_autofill"
                 android:title="@string/pref_name_connection_autofill"
                 android:summary="@string/pref_desc_connection_autofill"/>
-            <fr.gaulupeau.apps.Poche.ui.IntListPreference
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
                 android:key="@string/pref_key_connection_serverVersion"
                 android:title="@string/pref_name_connection_serverVersion"
                 android:dialogTitle="@string/pref_name_connection_serverVersion"
@@ -75,7 +75,7 @@
             android:title="@string/pref_name_ui_theme"
             android:dialogTitle="@string/pref_name_ui_theme"
             android:defaultValue="Light" />
-        <fr.gaulupeau.apps.Poche.ui.IntEditTextPreference
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_article_fontSize"
             android:title="@string/pref_name_ui_article_fontSize"
             android:inputType="numberDecimal"
@@ -84,7 +84,7 @@
             android:key="@string/pref_key_ui_article_fontSerif"
             android:title="@string/pref_name_ui_article_fontSerif"
             android:defaultValue="false" />
-        <fr.gaulupeau.apps.Poche.ui.IntEditTextPreference
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_lists_limit"
             android:title="@string/pref_name_ui_lists_limit"
             android:inputType="numberDecimal"
@@ -96,13 +96,13 @@
             android:title="@string/pref_name_autoUpdate_enabled"
             android:summary="@string/pref_desc_autoUpdate_enabled"
             android:defaultValue="false" />
-        <fr.gaulupeau.apps.Poche.ui.LongListPreference
+        <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
             android:dependency="@string/pref_key_autoUpdate_enabled"
             android:key="@string/pref_key_autoUpdate_interval"
             android:title="@string/pref_name_autoUpdate_interval"
             android:dialogTitle="@string/pref_name_autoUpdate_interval"
             android:defaultValue="86400000" />
-        <fr.gaulupeau.apps.Poche.ui.IntListPreference
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
             android:dependency="@string/pref_key_autoUpdate_enabled"
             android:key="@string/pref_key_autoUpdate_type"
             android:title="@string/pref_name_autoUpdate_type"

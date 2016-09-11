@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.ui;
+package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.app.AlarmManager;
 import android.content.SharedPreferences;
@@ -17,9 +17,9 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
-import fr.gaulupeau.apps.Poche.ui.wizard.ConfigurationTestHelper;
+import fr.gaulupeau.apps.Poche.ui.Themes;
 
-public class SettingsActivityNew extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

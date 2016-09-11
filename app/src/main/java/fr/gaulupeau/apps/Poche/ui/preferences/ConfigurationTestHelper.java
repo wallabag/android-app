@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.ui.wizard;
+package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.app.ProgressDialog;
 import android.content.Context;

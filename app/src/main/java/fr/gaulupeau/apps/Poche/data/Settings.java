@@ -14,7 +14,7 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
-import fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity;
+import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
 
 public class Settings {
 

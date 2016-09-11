@@ -36,8 +36,9 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
-import fr.gaulupeau.apps.Poche.ui.wizard.ConfigurationTestHelper;
-import fr.gaulupeau.apps.Poche.ui.wizard.ConnectionWizardActivity;
+import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
+import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
+import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -197,10 +198,10 @@ public class ArticlesListActivity extends AppCompatActivity
                 updateAllFeeds();
                 return true;
             case R.id.menuSettings:
-                startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                startActivity(new Intent(getBaseContext(), fr.gaulupeau.apps.Poche.ui.SettingsActivity.class));
                 return true;
             case R.id.menuSettingsNew:
-                startActivity(new Intent(getBaseContext(), SettingsActivityNew.class));
+                startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
             case R.id.menuConnectionWizard:
                 startActivity(new Intent(getBaseContext(), ConnectionWizardActivity.class));
