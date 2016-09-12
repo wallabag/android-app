@@ -192,9 +192,6 @@ public class ArticlesListActivity extends AppCompatActivity
                 updateAllFeeds();
                 return true;
             case R.id.menuSettings:
-                startActivity(new Intent(getBaseContext(), fr.gaulupeau.apps.Poche.ui.SettingsActivity.class));
-                return true;
-            case R.id.menuSettingsNew:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
             case R.id.menuConnectionWizard:

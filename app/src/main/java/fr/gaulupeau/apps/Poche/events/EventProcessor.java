@@ -22,7 +22,7 @@ import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
-import fr.gaulupeau.apps.Poche.ui.SettingsActivity;
+import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 // TODO: fix getters sync (AFAIK, not so important yet)
 public class EventProcessor {

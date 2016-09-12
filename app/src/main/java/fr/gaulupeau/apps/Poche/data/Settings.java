@@ -79,26 +79,6 @@ public class Settings {
         return false;
     }
 
-    public static long autoUpdateOptionIndexToInterval(int index) {
-        switch(index) {
-            case 0: return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-            case 1: return AlarmManager.INTERVAL_HALF_HOUR;
-            case 2: return AlarmManager.INTERVAL_HOUR;
-            case 3: return AlarmManager.INTERVAL_HALF_DAY;
-            default: return AlarmManager.INTERVAL_DAY;
-        }
-    }
-
-    public static int autoUpdateIntervalToOptionIndex(long interval) {
-        switch((int)interval) {
-            case (int)AlarmManager.INTERVAL_FIFTEEN_MINUTES: return 0;
-            case (int)AlarmManager.INTERVAL_HALF_HOUR: return 1;
-            case (int)AlarmManager.INTERVAL_HOUR: return 2;
-            case (int)AlarmManager.INTERVAL_HALF_DAY: return 3;
-            default: return 4;
-        }
-    }
-
     public static void enableConnectivityChangeReceiver(Context context, boolean enable) {
         enableComponent(context, ConnectivityChangeReceiver.class, enable);
     }
