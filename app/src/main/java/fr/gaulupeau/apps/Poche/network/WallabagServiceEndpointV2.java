@@ -126,7 +126,6 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     protected Request getLoginRequest(String csrfToken) throws IncorrectConfigurationException {
         HttpUrl url = getHttpURL(endpoint + "/login_check");
 
-        // TODO: maybe move null checks somewhere else
         RequestBody formBody = new FormBody.Builder()
                 .add("_username", username != null ? username : "")
                 .add("_password", password != null ? password : "")

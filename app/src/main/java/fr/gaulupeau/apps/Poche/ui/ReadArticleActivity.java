@@ -626,8 +626,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
-        ArticlesChangedEvent.ChangeType changeType
-                = event.getArticleChangeType(mArticle.getArticleId());
+        ArticlesChangedEvent.ChangeType changeType = event.getArticleChangeType(mArticle);
         if(changeType == null) return;
 
         Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);

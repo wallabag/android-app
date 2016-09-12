@@ -118,7 +118,6 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     protected Request getLoginRequest(String unused) throws IncorrectConfigurationException {
         HttpUrl url = getHttpURL(endpoint + "/?login");
 
-        // TODO: maybe move null checks somewhere else
         RequestBody formBody = new FormBody.Builder()
                 .add("login", username != null ? username : "")
                 .add("password", password != null ? password : "")

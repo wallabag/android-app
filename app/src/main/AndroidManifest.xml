@@ -70,10 +70,6 @@
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddActivity"
             android:label="@string/activity_add_label" />
-        <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.DialogHelperActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/ProxyTheme" />
 
         <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
             <intent-filter>

@@ -108,8 +108,7 @@ public class ConfigurationTestHelper
     public void test() {
         canceled = false;
 
-        // TODO: string constants
-        progressDialog.setMessage("Testing connection...");
+        progressDialog.setMessage(context.getString(R.string.testConnection_progressDialogMessage));
         progressDialog.show();
 
         testConnectionTask = new TestConnectionTask(url, username, password,
@@ -197,10 +196,10 @@ public class ConfigurationTestHelper
                                         final int suggestedUrlServerVersion,
                                         final int originalUrlServerVersion,
                                         boolean allowToDecline) {
-        // TODO: string constants
         AlertDialog.Builder b = new AlertDialog.Builder(context)
-                .setTitle("Consider changing URL")
-                .setPositiveButton("Use suggested", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.d_testConnection_urlSuggestion_title)
+                .setPositiveButton(R.string.d_testConnection_urlSuggestion_acceptButton,
+                        new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         connectionTestOnSuccess(suggestedUrl, suggestedUrlServerVersion);
@@ -208,28 +207,65 @@ public class ConfigurationTestHelper
                 });
 
         if(allowToDecline) {
-            b.setMessage(String.format("It is recommended to change URL to: \"%s\". "
-                    + "But you may use the entered one too.", suggestedUrl))
-                    .setNegativeButton("Use mine", new DialogInterface.OnClickListener() {
+            b.setMessage(context.getString(R.string.d_testConnection_urlSuggestion_message, suggestedUrl))
+                    .setNegativeButton(R.string.d_testConnection_urlSuggestion_declineButton,
+                            new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             connectionTestOnSuccess(null, originalUrlServerVersion);
                         }
                     });
         } else {
-            b.setMessage(String.format("It is suggested to change URL to: \"%s\"", suggestedUrl))
-                    .setNegativeButton("Cancel", null);
+            b.setMessage(context.getString(R.string.d_testConnection_urlSuggestion_message_mandatory, suggestedUrl))
+                    .setNegativeButton(R.string.d_testConnection_urlSuggestion_cancelButton, null);
         }
         b.show();
     }
 
     protected void showErrorDialog(WallabagServiceEndpoint.ConnectionTestResult error,
                                    String errorMessage) {
-        // TODO: string constants
-        // TODO: human-readable error message
+        String errorStr;
+        if(error != null) {
+            switch(error) {
+                case IncorrectURL:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectUrl);
+                    break;
+                case IncorrectServerVersion:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectServerVersion);
+                    break;
+                case WallabagNotFound:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_wallabagNotFound);
+                    break;
+                case HTTPAuth:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_httpAuth);
+                    break;
+                case NoCSRF:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_noCSRF);
+                    break;
+                case IncorrectCredentials:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectCredentials);
+                    break;
+                case AuthProblem:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_authProblems);
+                    break;
+                case UnknownPageAfterLogin:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_unknownPageAfterLogin);
+                    break;
+                default:
+                    errorStr = context.getString(R.string.testConnection_errorMessage_unknown);
+                    break;
+            }
+        } else {
+            if(errorMessage != null && !errorMessage.isEmpty()) {
+                errorStr = context.getString(R.string.testConnection_errorMessage_unknownWithMessage, errorMessage);
+            } else {
+                errorStr = context.getString(R.string.testConnection_errorMessage_unknown);
+            }
+        }
+
         new AlertDialog.Builder(context)
-                .setTitle("Connection test failed")
-                .setMessage("Error: " + ((error != null) ? error : errorMessage))
+                .setTitle(R.string.d_testConnection_fail_title)
+                .setMessage(errorStr)
                 .setPositiveButton(R.string.ok, null)
                 .show();
     }
@@ -249,7 +285,7 @@ public class ConfigurationTestHelper
     }
 
     protected void getFeedsCredentials() {
-        progressDialog.setMessage("Setting up feeds...");
+        progressDialog.setMessage(context.getString(R.string.getFeedsCredentials_progressDialogMessage));
         progressDialog.show();
 
         getCredentialsTask = new GetCredentialsTask(this, getUrl(),
@@ -280,18 +316,16 @@ public class ConfigurationTestHelper
                 credentialsHandler.onGetCredentialsFail();
             }
 
-            // TODO: string constants
             new AlertDialog.Builder(context)
-                    .setTitle("Couldn't set up feeds")
-                    .setMessage("Something went wrong. Check your internet connection and try again.")
+                    .setTitle(R.string.d_getFeedsCredentials_title_fail)
+                    .setMessage(R.string.d_getFeedsCredentials_title_message)
                     .setPositiveButton(R.string.ok, null)
                     .show();
         }
     }
 
     protected void testFeedsCredentials() {
-        // TODO: string constants
-        progressDialog.setMessage("Checking feeds...");
+        progressDialog.setMessage(context.getString(R.string.checkFeeds_progressDialogMessage));
         progressDialog.show();
 
         testFeedsTask = new TestFeedsTask(getUrl(), feedsUserID, feedsToken,
@@ -326,11 +360,30 @@ public class ConfigurationTestHelper
             if(handler != null) {
                 handler.onFeedsTestFail(result, details);
             } else {
-                // TODO: detailed message
-                // TODO: string constants
+                String errorMessage;
+                if(result != null) {
+                    switch(result) {
+                        case NotFound:
+                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_notFound);
+                            break;
+                        case NoAccess:
+                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_noAccess);
+                            break;
+                        default:
+                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknown);
+                            break;
+                    }
+                } else {
+                    if(details != null) {
+                        errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknownWithMessage, details);
+                    } else {
+                        errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknown);
+                    }
+                }
+
                 new AlertDialog.Builder(context)
-                        .setTitle("Feeds test failed")
-                        .setMessage("Something went wrong.")
+                        .setTitle(R.string.d_checkFeeds_title_fail)
+                        .setMessage(errorMessage)
                         .setPositiveButton(R.string.ok, null)
                         .show();
             }

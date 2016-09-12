@@ -29,7 +29,6 @@ public class WallabagService {
     private WallabagServiceEndpoint serviceEndpoint;
 
     public static WallabagService fromSettings(Settings settings) {
-        // TODO: check credentials? (throw an exception)
         return new WallabagService(settings.getUrl(),
                 settings.getUsername(), settings.getPassword(),
                 settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
