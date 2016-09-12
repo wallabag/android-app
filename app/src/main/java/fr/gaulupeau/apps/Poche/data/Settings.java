@@ -3,7 +3,6 @@ package fr.gaulupeau.apps.Poche.data;
 import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -71,7 +70,7 @@ public class Settings {
         if(settings.isFirstRun()) {
             settings.setFirstRun(false);
 
-            context.startActivity(new Intent(context, ConnectionWizardActivity.class));
+            ConnectionWizardActivity.runWizard(context, false);
 
             return true;
         }

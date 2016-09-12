@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -19,8 +20,10 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 
-// TODO: split classes
+// TODO: split classes?
 public class ConnectionWizardActivity extends AppCompatActivity {
+
+    public static final String EXTRA_SKIP_WELCOME = "skip_welcome";
 
     private static final String TAG = "ConnectionWizard";
 
@@ -48,12 +51,24 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String PAGE_CONFIG_V2_WALLABAG_ORG = "config_v2_wallabag_org";
     private static final String PAGE_SUMMARY = "summary";
 
+    public static void runWizard(Context context, boolean skipWelcome) {
+        Intent intent = new Intent(context, ConnectionWizardActivity.class);
+        if(skipWelcome) intent.putExtra(EXTRA_SKIP_WELCOME, true);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null) {
-            next(null, null);
+            Intent intent = getIntent();
+
+            if(intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
+                next(PAGE_WELCOME, null);
+            } else {
+                next((String)null, null);
+            }
         } else {
             // TODO: check
             Log.w(TAG, "onCreate() savedInstanceState != null");
@@ -72,7 +87,11 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     public void next(WizardPageFragment fragment, Bundle bundle) {
-        String currentPage = fragment != null ? fragment.getPageName() : PAGE_NONE;
+        next(fragment != null ? fragment.getPageName() : PAGE_NONE, bundle);
+    }
+
+    public void next(String currentPage, Bundle bundle) {
+        if(currentPage == null) currentPage = PAGE_NONE;
         if(bundle == null) bundle = new Bundle();
 
         Fragment goToFragment = null;
@@ -201,7 +220,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     }
 
-    // TODO: skip the welcome fragment if not a first run
     public static class WelcomeFragment extends WizardPageFragment {
 
         public String getPageName() {

@@ -37,7 +37,6 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
-import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
@@ -193,9 +192,6 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
-                return true;
-            case R.id.menuConnectionWizard:
-                startActivity(new Intent(getBaseContext(), ConnectionWizardActivity.class));
                 return true;
             case R.id.menuTestConfiguration:
                 testConfiguration();

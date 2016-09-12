@@ -279,7 +279,7 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.pref_key_connection_wizard:
                     Activity activity = getActivity();
                     if(activity != null) {
-                        startActivity(new Intent(activity, ConnectionWizardActivity.class));
+                        ConnectionWizardActivity.runWizard(activity, true);
 
                         activity.finish();
                     }

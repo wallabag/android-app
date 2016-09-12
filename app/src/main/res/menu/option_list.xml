@@ -17,8 +17,6 @@
         android:title="@string/menu_syncLocalChanges" />
     <item android:id="@+id/menuSettings"
         android:title="@string/btnSettings" />
-    <item android:id="@+id/menuConnectionWizard"
-        android:title="Connection wizard" />
     <item android:id="@+id/menuTestConfiguration"
         android:title="Test configuration" />
     <item android:id="@+id/menuAbout"
