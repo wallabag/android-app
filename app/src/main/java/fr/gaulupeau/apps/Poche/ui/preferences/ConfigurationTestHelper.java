@@ -318,6 +318,7 @@ public class ConfigurationTestHelper
                 }
 
                 settings.setConfigurationOk(true);
+                settings.setConfigurationErrorShown(false);
 
                 Toast.makeText(context, R.string.settings_parametersAreOk, Toast.LENGTH_SHORT).show();
             }

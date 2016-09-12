@@ -99,7 +99,7 @@ public class EventProcessor {
         ServiceHelper.updateFeed(context, feedType, updateType, null, true);
     }
 
-    @Subscribe // TODO: check thread
+    @Subscribe
     public void onConnectivityChangedEvent(ConnectivityChangedEvent event) {
         Log.d(TAG, "onConnectivityChangedEvent() started");
 
@@ -231,7 +231,7 @@ public class EventProcessor {
                     case Temporary:
                     case NoNetwork:
                         // don't show it to user at all or make it suppressible
-                        // schedule auto-retry
+                        // optionally schedule auto-retry
                         // TODO: not important: implement
                         break;
 

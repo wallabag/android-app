@@ -121,8 +121,12 @@ public class ArticlesListActivity extends AppCompatActivity
             if(!Settings.checkFirstRunInit(this)) {
                 if(!settings.isConfigurationOk() && checkConfigurationDialog == null) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                    messageBox.setTitle(R.string.d_configurationChanged_title);
-                    messageBox.setMessage(R.string.d_configurationChanged_message);
+                    messageBox.setTitle(settings.isConfigurationErrorShown()
+                            ? R.string.d_configurationIsQuestionable_title
+                            : R.string.d_configurationChanged_title);
+                    messageBox.setMessage(settings.isConfigurationErrorShown()
+                            ? R.string.d_configurationIsQuestionable_message
+                            : R.string.d_configurationChanged_message);
                     messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

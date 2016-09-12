@@ -323,6 +323,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
 
             settings.setConfigurationOk(true);
+            settings.setConfigurationErrorShown(false);
 
             connectionParametersChanged = false;
 

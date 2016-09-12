@@ -83,6 +83,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_configurationChanged_title">Parameters changed</string>
     <string name="d_configurationChanged_message">It seems some parameters have been changed. It is recommended to perform a connection test.</string>
     <string name="d_configurationChanged_answer_decline">Not now</string>
+    <string name="d_configurationIsQuestionable_title">Problem detected</string>
+    <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
     <string name="settings_optionalCredentials">Optional credentials</string>
     <string name="settings_optionalCredentialsDesc">Used mostly to be able to sync back to server</string>
     <string name="settings_username">Username</string>
