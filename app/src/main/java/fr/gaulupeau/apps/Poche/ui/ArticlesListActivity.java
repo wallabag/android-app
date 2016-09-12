@@ -86,7 +86,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
         firstSyncDone = settings.isFirstSyncDone();
 
-        // compatibility hack for pre-FIRST_SYNC_DONE versions // TODO: remove?
+        // compatibility hack for pre-Settings.isFirstSyncDone() versions // TODO: remove later
         if(!firstSyncDone
                 && DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() != 0) {
             firstSyncDone = true;
@@ -149,17 +149,7 @@ public class ArticlesListActivity extends AppCompatActivity
             showEmptyDbDialogOnResume = false;
 
             if(settings.isConfigurationOk()) {
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
-                messageBox.setTitle(R.string.d_emptyDB_title);
-                messageBox.setMessage(R.string.d_emptyDB_text);
-                messageBox.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateAllFeeds();
-                    }
-                });
-                messageBox.setNegativeButton(R.string.negative_answer, null);
-                messageBox.create().show();
+                updateAllFeeds();
             }
         }
     }
