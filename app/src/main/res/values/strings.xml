@@ -137,7 +137,7 @@ GAULUPEAU Jonathan — 2013-2015
     <!--<string name="d_connectionTest_success_text">Connection test was successful</string>-->
     <string name="d_testConnection_fail_title">Connection test failed</string>
     <string name="getFeedsCredentials_progressDialogMessage">Setting up feeds…</string>
-    <string name="d_getFeedsCredentials_title_fail">Couldn't set up feeds</string>
+    <string name="d_getFeedsCredentials_title_fail">Couldn\'t set up feeds</string>
     <string name="d_getFeedsCredentials_title_message">Something went wrong. Check your internet connection and try again.</string>
     <string name="checkFeeds_progressDialogMessage">Checking feeds…</string>
     <string name="d_checkFeeds_title_fail">Feeds test failed</string>
