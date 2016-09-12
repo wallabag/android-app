@@ -65,7 +65,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             Intent intent = getIntent();
 
             if(intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
-                next(PAGE_WELCOME, null);
+                next(PAGE_WELCOME, null, true);
             } else {
                 next((String)null, null);
             }
@@ -91,6 +91,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     public void next(String currentPage, Bundle bundle) {
+        next(currentPage, bundle, false);
+    }
+
+    private void next(String currentPage, Bundle bundle, boolean noBackStack) {
         if(currentPage == null) currentPage = PAGE_NONE;
         if(bundle == null) bundle = new Bundle();
 
@@ -139,7 +143,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, goToFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            if(!PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
+            if(!noBackStack && !PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
             ft.commit();
         }
     }
