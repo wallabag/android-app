@@ -28,7 +28,7 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
         Log.d(TAG, "updateAppWidget() appWidgetId=" + appWidgetId);
 
         long unreadCount = DatabaseUtils.queryNumEntries(
-                DbConnection.getSession().getDatabase(), "ARTICLE", "favorite=0 AND archive=0");
+                DbConnection.getSession().getDatabase(), "ARTICLE", "archive=0");
         Log.d(TAG, "updateAppWidget() read from database unreadCount=" + unreadCount);
 
         // Construct the RemoteViews object
