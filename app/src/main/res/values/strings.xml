@@ -89,8 +89,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
     <!--<string name="settings_optionalCredentials">Optional credentials</string>-->
     <!--<string name="settings_optionalCredentialsDesc">Used mostly to be able to sync back to server</string>-->
-    <string name="settings_username">Username</string>
-    <string name="settings_password">Password</string>
+    <!--<string name="settings_username">Username</string>-->
+    <!--<string name="settings_password">Password</string>-->
     <!--<string name="settings_b_testConnection_text">Test connection</string>-->
     <!--<string name="settings_b_getFeedCredentials_text">Get feeds credentials</string>-->
     <!--<string name="settings_feedsCredentials">Feeds credentials (required)</string>-->
@@ -294,5 +294,37 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
     <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
 
+    <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag</string>
+    <string name="connectionWizard_welcome_text">Something welcoming here. Blah-blah-blah.</string>
+    <string name="connectionWizard_welcome_rerunNotice">You can always re-run this wizard from the Settings screen.</string>
+    <string name="connectionWizard_welcome_prev">Skip</string>
+    <string name="connectionWizard_welcome_next">Next</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Select Wallabag provider</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name">v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Select this option if you have an account on https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_name">Framabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
+    <string name="connectionWizard_providerSelection_prev">Skip</string>
+    <string name="connectionWizard_providerSelection_next">Next</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Basic configuration</string>
+    <string name="connectionWizard_provider_general_prev">Back</string>
+    <string name="connectionWizard_provider_general_next">Connect</string>
+
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">v2.wallabag.org configuration</string>
+    <string name="connectionWizard_provider_v2wallabagorg_prev">Back</string>
+    <string name="connectionWizard_provider_v2wallabagorg_next">Connect</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
+    <string name="connectionWizard_provider_framabag_prev">Back</string>
+    <string name="connectionWizard_provider_framabag_next">Connect</string>
+
+    <string name="connectionWizard_summary_titleMessage">We\'re all done!</string>
+    <string name="connectionWizard_summary_text">Press the button to save settings and go to the main screen.</string>
     <string name="connectionWizard_summary_toastMessage">Setup is complete</string>
+    <string name="connectionWizard_summary_prev">Back</string>
+    <string name="connectionWizard_summary_next">Save settings</string>
 </resources>

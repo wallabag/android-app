@@ -34,7 +34,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="Framabag configuration"/>
+                android:text="@string/connectionWizard_provider_framabag_titleMessage"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/settings_username"
+                    android:hint="@string/pref_name_connection_username"
                     android:inputType="text" />
             </android.support.design.widget.TextInputLayout>
 
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/settings_password"
+                    android:hint="@string/pref_name_connection_password"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Back" />
+            android:text="@string/connectionWizard_provider_framabag_prev" />
 
         <View android:layout_width="1dp"
             android:layout_height="fill_parent"
@@ -93,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Connect" />
+            android:text="@string/connectionWizard_provider_framabag_next" />
 
     </LinearLayout>
 

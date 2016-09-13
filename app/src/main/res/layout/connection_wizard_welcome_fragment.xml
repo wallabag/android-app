@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -27,7 +28,8 @@
                     android:layout_weight="0.3"
                     android:id="@+id/imageView"
                     android:src="@drawable/welcome"
-                    android:adjustViewBounds="true"/>
+                    android:adjustViewBounds="true"
+                    tools:ignore="ContentDescription" />
             </LinearLayout>
 
             <TextView
@@ -37,7 +39,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="Welcome to Wallabag"/>
+                android:text="@string/connectionWizard_welcome_titleMessage"/>
 
             <TextView
                 android:layout_margin="20dp"
@@ -46,7 +48,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="Something welcoming here. Blah-blah-blah."/>
+                android:text="@string/connectionWizard_welcome_text"/>
 
             <TextView
                 android:layout_margin="20dp"
@@ -55,7 +57,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?android:attr/textColorSecondary"
-                android:text="You can always re-run this wizard from the Settings screen."/>
+                android:text="@string/connectionWizard_welcome_rerunNotice"/>
 
         </LinearLayout>
     </ScrollView>
@@ -76,7 +78,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Skip" />
+            android:text="@string/connectionWizard_welcome_prev" />
 
         <View android:layout_width="1dp"
             android:layout_height="fill_parent"
@@ -88,7 +90,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Next" />
+            android:text="@string/connectionWizard_welcome_next" />
 
     </LinearLayout>
 
