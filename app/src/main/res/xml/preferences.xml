@@ -121,5 +121,9 @@
             android:summary="@string/pref_desc_misc_handleHttpScheme"
             android:defaultValue="false"
             android:persistent="false" />
+        <Preference
+            android:key="@string/pref_key_misc_wipeDB"
+            android:title="@string/pref_name_misc_wipeDB"
+            android:summary="@string/pref_desc_misc_wipeDB" />
     </PreferenceScreen>
 </PreferenceScreen>

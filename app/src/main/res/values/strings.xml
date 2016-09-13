@@ -199,6 +199,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
     <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
     <string name="pref_name_misc_wipeDB">Wipe Database</string>
+    <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe database?</string>
 

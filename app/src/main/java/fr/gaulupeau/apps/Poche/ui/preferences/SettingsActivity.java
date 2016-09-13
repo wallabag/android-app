@@ -2,12 +2,13 @@ package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.app.Activity;
 import android.app.AlarmManager;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
@@ -86,17 +88,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             settings = new Settings(App.getInstance());
 
-            Preference connectionWizardPreference = findPreference(
-                    getString(R.string.pref_key_connection_wizard));
-            if(connectionWizardPreference != null) {
-                connectionWizardPreference.setOnPreferenceClickListener(this);
-            }
-
-            Preference autofillPreference = findPreference(
-                    getString(R.string.pref_key_connection_autofill));
-            if(autofillPreference != null) {
-                autofillPreference.setOnPreferenceClickListener(this);
-            }
+            setOnClickListener(R.string.pref_key_connection_wizard);
+            setOnClickListener(R.string.pref_key_connection_autofill);
+            setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
                     getString(R.string.pref_key_ui_theme));
@@ -276,7 +270,7 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public boolean onPreferenceClick(Preference preference) {
             switch(Settings.getPrefKeyIDByValue(preference.getKey())) {
-                case R.string.pref_key_connection_wizard:
+                case R.string.pref_key_connection_wizard: {
                     Activity activity = getActivity();
                     if(activity != null) {
                         ConnectionWizardActivity.runWizard(activity, true);
@@ -285,13 +279,34 @@ public class SettingsActivity extends AppCompatActivity {
                     }
 
                     return true;
-
-                case R.string.pref_key_connection_autofill:
+                }
+                case R.string.pref_key_connection_autofill: {
                     configurationTestHelper = new ConfigurationTestHelper(
                             getActivity(), this, this, settings, true);
                     configurationTestHelper.test();
 
                     return true;
+                }
+                case R.string.pref_key_misc_wipeDB: {
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(R.string.pref_name_misc_wipeDB_confirmTitle)
+                                .setMessage(R.string.pref_name_misc_wipeDB_confirmMessage)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        DbConnection.getSession().getArticleDao().deleteAll();
+                                        DbConnection.getSession().getQueueItemDao().deleteAll();
+
+                                        App.getInstance().getSettings().setFirstSyncDone(false);
+                                    }
+                                })
+                                .setNegativeButton(R.string.negative_answer, null)
+                                .show();
+                    }
+                    return true;
+                }
             }
 
             return false;
@@ -337,6 +352,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
+
+        private void setOnClickListener(int keyResID) {
+            Preference preference = findPreference(getString(keyResID));
+            if(preference != null) {
+                preference.setOnPreferenceClickListener(this);
+            }
+        }
 
         private void setTextPreference(int preferenceID, String value) {
             EditTextPreference preference = (EditTextPreference)
