@@ -293,4 +293,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
     <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
+
+    <string name="connectionWizard_summary_toastMessage">Setup is complete</string>
 </resources>

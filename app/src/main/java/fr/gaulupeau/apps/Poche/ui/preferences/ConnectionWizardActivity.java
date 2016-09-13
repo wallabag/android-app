@@ -1,8 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -24,6 +27,7 @@ import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 public class ConnectionWizardActivity extends AppCompatActivity {
 
     public static final String EXTRA_SKIP_WELCOME = "skip_welcome";
+    public static final String EXTRA_SHOW_SUMMARY = "show_summary";
 
     private static final String TAG = "ConnectionWizard";
 
@@ -52,8 +56,13 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String PAGE_SUMMARY = "summary";
 
     public static void runWizard(Context context, boolean skipWelcome) {
+        runWizard(context, skipWelcome, false);
+    }
+
+    public static void runWizard(Context context, boolean skipWelcome, boolean showSummary) {
         Intent intent = new Intent(context, ConnectionWizardActivity.class);
         if(skipWelcome) intent.putExtra(EXTRA_SKIP_WELCOME, true);
+        if(showSummary) intent.putExtra(EXTRA_SHOW_SUMMARY, true);
         context.startActivity(intent);
     }
 
@@ -63,11 +72,16 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
         if(savedInstanceState == null) {
             Intent intent = getIntent();
+            Bundle bundle = new Bundle();
+
+            if(intent.getBooleanExtra(EXTRA_SHOW_SUMMARY, false)) {
+                bundle.putBoolean(EXTRA_SHOW_SUMMARY, true);
+            }
 
             if(intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
-                next(PAGE_WELCOME, null, true);
+                next(PAGE_WELCOME, bundle, true);
             } else {
-                next((String)null, null);
+                next((String)null, bundle);
             }
         } else {
             // TODO: check
@@ -452,6 +466,24 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     public static class SummaryFragment extends WizardPageFragment {
 
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            Bundle bundle = getArguments();
+            if(bundle == null || !bundle.getBoolean(EXTRA_SHOW_SUMMARY)) {
+                Activity activity = getActivity();
+                if(activity != null) {
+                    saveSettings();
+
+                    Toast.makeText(activity, R.string.connectionWizard_summary_toastMessage,
+                            Toast.LENGTH_SHORT).show();
+
+                    activity.finish();
+                }
+            }
+        }
+
         public String getPageName() {
             return PAGE_SUMMARY;
         }
@@ -463,6 +495,11 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
         @Override
         protected void nextButtonPressed() {
+            saveSettings();
+            goForward();
+        }
+
+        protected void saveSettings() {
             Bundle bundle = getArguments();
 
             Settings settings = App.getInstance().getSettings();
@@ -480,8 +517,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             settings.setConfigurationOk(true);
             settings.setConfigurationErrorShown(false);
             settings.setFirstRun(false);
-
-            goForward();
         }
 
     }
