@@ -14,10 +14,6 @@ android {
 
     lintOptions {
         lintConfig file("lint.xml")
-        textReport false
-        htmlReport false
-        xmlReport false
-        explainIssues true
     }
 
     buildTypes {

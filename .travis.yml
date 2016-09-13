@@ -26,6 +26,4 @@ android:
 jdk:
     - oraclejdk8
 sudo: false
-script:
-  - sed -i 's,textReport false,textReport true,g' app/build.gradle
-  - ./gradlew build check
+script: ./gradlew build check
