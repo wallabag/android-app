@@ -104,10 +104,10 @@ class LegacySettingsHelper {
                 R.string.pref_key_internal_offlineQueue_pending, legacyPref, prefEditor);
 
         migrateBooleanPref(cx, AUTOSYNC_ENABLED,
-                R.string.pref_key_autoUpdate_enabled, legacyPref, prefEditor);
+                R.string.pref_key_autoSync_enabled, legacyPref, prefEditor);
         migrateLongPref(cx, AUTOSYNC_INTERVAL,
-                R.string.pref_key_autoUpdate_interval, legacyPref, prefEditor, AlarmManager.INTERVAL_DAY);
-        migrateIntPref(cx, AUTOSYNC_TYPE, R.string.pref_key_autoUpdate_type, legacyPref, prefEditor);
+                R.string.pref_key_autoSync_interval, legacyPref, prefEditor, AlarmManager.INTERVAL_DAY);
+        migrateIntPref(cx, AUTOSYNC_TYPE, R.string.pref_key_autoSync_type, legacyPref, prefEditor);
         migrateBooleanPref(cx, AUTOSYNC_QUEUE_ENABLED,
                 R.string.pref_key_autoSyncQueue_enabled, legacyPref, prefEditor);
 

@@ -430,28 +430,28 @@ public class Settings {
         setBoolean(R.string.pref_key_tts_autoplayNext, value);
     }
 
-    public boolean isAutoUpdateEnabled() {
-        return getBoolean(R.string.pref_key_autoUpdate_enabled, false);
+    public boolean isAutoSyncEnabled() {
+        return getBoolean(R.string.pref_key_autoSync_enabled, false);
     }
 
-    public void setAutoUpdateEnabled(boolean value) {
-        setBoolean(R.string.pref_key_autoUpdate_enabled, value);
+    public void setAutoSyncEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoSync_enabled, value);
     }
 
-    public long getAutoUpdateInterval() {
-        return getLong(R.string.pref_key_autoUpdate_interval, AlarmManager.INTERVAL_DAY);
+    public long getAutoSyncInterval() {
+        return getLong(R.string.pref_key_autoSync_interval, AlarmManager.INTERVAL_DAY);
     }
 
-    public void setAutoUpdateInterval(long interval) {
-        setLong(R.string.pref_key_autoUpdate_interval, interval);
+    public void setAutoSyncInterval(long interval) {
+        setLong(R.string.pref_key_autoSync_interval, interval);
     }
 
-    public int getAutoUpdateType() {
-        return getInt(R.string.pref_key_autoUpdate_type, 0);
+    public int getAutoSyncType() {
+        return getInt(R.string.pref_key_autoSync_type, 0);
     }
 
-    public void setAutoUpdateType(int type) {
-        setInt(R.string.pref_key_autoUpdate_type, type);
+    public void setAutoSyncType(int type) {
+        setInt(R.string.pref_key_autoSync_type, type);
     }
 
     public boolean isAutoSyncQueueEnabled() {

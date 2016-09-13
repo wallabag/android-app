@@ -90,23 +90,23 @@
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_autoSync">
         <CheckBoxPreference
-            android:key="@string/pref_key_autoUpdate_enabled"
-            android:title="@string/pref_name_autoUpdate_enabled"
-            android:summary="@string/pref_desc_autoUpdate_enabled"
+            android:key="@string/pref_key_autoSync_enabled"
+            android:title="@string/pref_name_autoSync_enabled"
+            android:summary="@string/pref_desc_autoSync_enabled"
             android:defaultValue="false" />
         <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
-            android:dependency="@string/pref_key_autoUpdate_enabled"
-            android:key="@string/pref_key_autoUpdate_interval"
-            android:title="@string/pref_name_autoUpdate_interval"
-            android:dialogTitle="@string/pref_name_autoUpdate_interval"
+            android:dependency="@string/pref_key_autoSync_enabled"
+            android:key="@string/pref_key_autoSync_interval"
+            android:title="@string/pref_name_autoSync_interval"
+            android:dialogTitle="@string/pref_name_autoSync_interval"
             android:defaultValue="86400000" />
         <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
-            android:dependency="@string/pref_key_autoUpdate_enabled"
-            android:key="@string/pref_key_autoUpdate_type"
-            android:title="@string/pref_name_autoUpdate_type"
-            android:dialogTitle="@string/pref_name_autoUpdate_type"
-            android:entries="@array/pref_option_autoUpdate_type"
-            android:entryValues="@array/pref_option_autoUpdate_type_values"
+            android:dependency="@string/pref_key_autoSync_enabled"
+            android:key="@string/pref_key_autoSync_type"
+            android:title="@string/pref_name_autoSync_type"
+            android:dialogTitle="@string/pref_name_autoSync_type"
+            android:entries="@array/pref_option_autoSync_type"
+            android:entryValues="@array/pref_option_autoSync_type_values"
             android:defaultValue="0" />
         <CheckBoxPreference
             android:key="@string/pref_key_autoSyncQueue_enabled"

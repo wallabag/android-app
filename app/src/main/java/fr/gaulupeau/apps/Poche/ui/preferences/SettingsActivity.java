@@ -56,23 +56,23 @@ public class SettingsActivity extends AppCompatActivity {
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_lists_limit,
-                R.string.pref_key_autoUpdate_interval,
-                R.string.pref_key_autoUpdate_type
+                R.string.pref_key_autoSync_interval,
+                R.string.pref_key_autoSync_type
         };
 
         private Settings settings;
 
         private boolean newTheme;
 
-        private boolean autoUpdateChanged;
-        private boolean initialAutoUpdateEnabled;
-        private long initialAutoUpdateInterval;
-        private boolean newAutoUpdateEnabled;
-        private long newAutoUpdateInterval;
-
         private boolean autoSyncChanged;
         private boolean initialAutoSyncEnabled;
+        private long initialAutoSyncInterval;
         private boolean newAutoSyncEnabled;
+        private long newAutoSyncInterval;
+
+        private boolean autoSyncQueueChanged;
+        private boolean initialAutoSyncQueueEnabled;
+        private boolean newAutoSyncQueueEnabled;
 
         private boolean connectionParametersChanged;
 
@@ -107,18 +107,18 @@ public class SettingsActivity extends AppCompatActivity {
                 themeListPreference.setEntryValues(themeEntryValues);
             }
 
-            ListPreference autoUpdateIntervalListPreference = (ListPreference)findPreference(
-                    getString(R.string.pref_key_autoUpdate_interval));
-            if(autoUpdateIntervalListPreference != null) {
+            ListPreference autoSyncIntervalListPreference = (ListPreference)findPreference(
+                    getString(R.string.pref_key_autoSync_interval));
+            if(autoSyncIntervalListPreference != null) {
                 // may set arbitrary values on Android API 19+
-                autoUpdateIntervalListPreference.setEntries(new String[] {
-                        getString(R.string.pref_name_autoUpdate_interval_15m),
-                        getString(R.string.pref_name_autoUpdate_interval_30m),
-                        getString(R.string.pref_name_autoUpdate_interval_1h),
-                        getString(R.string.pref_name_autoUpdate_interval_12h),
-                        getString(R.string.pref_name_autoUpdate_interval_24h)
+                autoSyncIntervalListPreference.setEntries(new String[] {
+                        getString(R.string.pref_option_autoSync_interval_15m),
+                        getString(R.string.pref_option_autoSync_interval_30m),
+                        getString(R.string.pref_option_autoSync_interval_1h),
+                        getString(R.string.pref_option_autoSync_interval_12h),
+                        getString(R.string.pref_option_autoSync_interval_24h)
                 });
-                autoUpdateIntervalListPreference.setEntryValues(new String[] {
+                autoSyncIntervalListPreference.setEntryValues(new String[] {
                         String.valueOf(AlarmManager.INTERVAL_FIFTEEN_MINUTES),
                         String.valueOf(AlarmManager.INTERVAL_HALF_HOUR),
                         String.valueOf(AlarmManager.INTERVAL_HOUR),
@@ -145,12 +145,12 @@ public class SettingsActivity extends AppCompatActivity {
 
             newTheme = false;
 
-            autoUpdateChanged = false;
-            initialAutoUpdateEnabled = settings.isAutoUpdateEnabled();
-            initialAutoUpdateInterval = settings.getAutoUpdateInterval();
-
             autoSyncChanged = false;
-            initialAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
+            initialAutoSyncEnabled = settings.isAutoSyncEnabled();
+            initialAutoSyncInterval = settings.getAutoSyncInterval();
+
+            autoSyncQueueChanged = false;
+            initialAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
 
             settings.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
@@ -163,27 +163,27 @@ public class SettingsActivity extends AppCompatActivity {
                 Themes.init();
             }
 
-            if(autoUpdateChanged) {
-                autoUpdateChanged = false;
-
-                if(newAutoUpdateEnabled != initialAutoUpdateEnabled) {
-                    if(newAutoUpdateEnabled) {
-                        AlarmHelper.setAlarm(getActivity(), newAutoUpdateInterval, true);
-                    } else {
-                        AlarmHelper.unsetAlarm(getActivity(), true);
-                    }
-                } else if(newAutoUpdateEnabled) {
-                    if(newAutoUpdateInterval != initialAutoUpdateInterval) {
-                        AlarmHelper.updateAlarmInterval(getActivity(), newAutoUpdateInterval);
-                    }
-                }
-            }
-
             if(autoSyncChanged) {
                 autoSyncChanged = false;
 
                 if(newAutoSyncEnabled != initialAutoSyncEnabled) {
                     if(newAutoSyncEnabled) {
+                        AlarmHelper.setAlarm(getActivity(), newAutoSyncInterval, true);
+                    } else {
+                        AlarmHelper.unsetAlarm(getActivity(), true);
+                    }
+                } else if(newAutoSyncEnabled) {
+                    if(newAutoSyncInterval != initialAutoSyncInterval) {
+                        AlarmHelper.updateAlarmInterval(getActivity(), newAutoSyncInterval);
+                    }
+                }
+            }
+
+            if(autoSyncQueueChanged) {
+                autoSyncQueueChanged = false;
+
+                if(newAutoSyncQueueEnabled != initialAutoSyncQueueEnabled) {
+                    if(newAutoSyncQueueEnabled) {
                         if(settings.isOfflineQueuePending()) {
                             Settings.enableConnectivityChangeReceiver(getActivity(), true);
                         }
@@ -233,19 +233,19 @@ public class SettingsActivity extends AppCompatActivity {
                     newTheme = true;
                     break;
 
-                case R.string.pref_key_autoUpdate_enabled:
-                    autoUpdateChanged = true;
-                    newAutoUpdateEnabled = settings.isAutoUpdateEnabled();
+                case R.string.pref_key_autoSync_enabled:
+                    autoSyncChanged = true;
+                    newAutoSyncEnabled = settings.isAutoSyncEnabled();
                     break;
 
-                case R.string.pref_key_autoUpdate_interval:
-                    autoUpdateChanged = true;
-                    newAutoUpdateInterval = settings.getAutoUpdateInterval();
+                case R.string.pref_key_autoSync_interval:
+                    autoSyncChanged = true;
+                    newAutoSyncInterval = settings.getAutoSyncInterval();
                     break;
 
                 case R.string.pref_key_autoSyncQueue_enabled:
-                    autoSyncChanged = true;
-                    newAutoSyncEnabled = settings.isAutoSyncQueueEnabled();
+                    autoSyncQueueChanged = true;
+                    newAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
                     break;
 
                 case R.string.pref_key_connection_url:
@@ -393,8 +393,8 @@ public class SettingsActivity extends AppCompatActivity {
 
                 case R.string.pref_key_connection_serverVersion:
                 case R.string.pref_key_ui_theme:
-                case R.string.pref_key_autoUpdate_interval:
-                case R.string.pref_key_autoUpdate_type:
+                case R.string.pref_key_autoSync_interval:
+                case R.string.pref_key_autoSync_type:
                     setListSummaryFromContent(key);
                     break;
 

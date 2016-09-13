@@ -59,10 +59,10 @@ public class EventProcessor {
         Log.d(TAG, "onBootCompletedEvent() started");
 
         Settings settings = getSettings();
-        if(settings.isAutoUpdateEnabled()) {
+        if(settings.isAutoSyncEnabled()) {
             Log.d(TAG, "onBootCompletedEvent() setting an alarm");
 
-            AlarmHelper.setAlarm(getContext(), settings.getAutoUpdateInterval(), false);
+            AlarmHelper.setAlarm(getContext(), settings.getAutoSyncInterval(), false);
         }
     }
 
@@ -71,7 +71,7 @@ public class EventProcessor {
         Log.d(TAG, "onAlarmReceivedEvent() started");
 
         Settings settings = getSettings();
-        if(!settings.isAutoUpdateEnabled()) {
+        if(!settings.isAutoSyncEnabled()) {
             Log.w(TAG, "onAlarmReceivedEvent() alarm received even though auto-sync is off");
             return;
         }
@@ -87,7 +87,7 @@ public class EventProcessor {
             return;
         }
 
-        int updateTypeVal = settings.getAutoUpdateType();
+        int updateTypeVal = settings.getAutoSyncType();
         FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
         FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
 

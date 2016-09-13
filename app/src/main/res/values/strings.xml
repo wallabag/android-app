@@ -175,24 +175,24 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_ui_lists_limit">Articles list limit</string>
 
     <string name="pref_categoryName_autoSync">Auto-sync</string>
-    <string name="pref_name_autoUpdate_enabled">Enable auto-update</string>
-    <string name="pref_desc_autoUpdate_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>
-    <string name="pref_name_autoUpdate_interval">Auto-update interval</string>
-    <string name="pref_name_autoUpdate_interval_15m">15 minutes</string>
-    <string name="pref_name_autoUpdate_interval_30m">30 minutes</string>
-    <string name="pref_name_autoUpdate_interval_1h">1 hour</string>
-    <string name="pref_name_autoUpdate_interval_12h">12 hours</string>
-    <string name="pref_name_autoUpdate_interval_24h">24 hours</string>
-    <string name="pref_name_autoUpdate_type">Auto-update type</string>
-    <string-array name="pref_option_autoUpdate_type">
+    <string name="pref_name_autoSync_enabled">Enable auto-sync</string>
+    <string name="pref_desc_autoSync_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>
+    <string name="pref_name_autoSync_interval">Auto-sync interval</string>
+    <string name="pref_option_autoSync_interval_15m">15 minutes</string>
+    <string name="pref_option_autoSync_interval_30m">30 minutes</string>
+    <string name="pref_option_autoSync_interval_1h">1 hour</string>
+    <string name="pref_option_autoSync_interval_12h">12 hours</string>
+    <string name="pref_option_autoSync_interval_24h">24 hours</string>
+    <string name="pref_name_autoSync_type">Auto-sync type</string>
+    <string-array name="pref_option_autoSync_type">
         <item>Fast</item>
         <item>Full</item>
     </string-array>
-    <string-array name="pref_option_autoUpdate_type_values">
+    <string-array name="pref_option_autoSync_type_values">
         <item>0</item>
         <item>1</item>
     </string-array>
-    <string name="pref_name_autoSyncQueue_enabled">Enable separate auto-sync for local changes</string>
+    <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
