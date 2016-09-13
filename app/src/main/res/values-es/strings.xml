@@ -2,42 +2,25 @@
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">¡Guardalo!</string>
-    <string name="author">
+<!--    <string name="author">
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
-</string>
-    <string name="instructions">Con wallabag, puedes guardar páginas para leerlas más tarde. Para hacerlo, primero abre la página en tu navegador, como normalmente harías. Luego toca <i>Compartir</i> y luego <i>¡Guárdalo!</i>. \nLuego verás tu página de inicio de sesión en wallabag. \n¡Y listo! \nPuedes encontrar más información sobre wallabag en:\n http://www.wallabag.org</string>
-    <string name="btnDone">Guardar</string>
-    <string name="url_label">URL de wallabag</string>
-    <string name="url_help">Ejemplos:\n<i>https://wallabag.example.com</i>\n<i>https://www.example.com/wallabag</i>\n<i>https://framabag.org/u/your-username</i></string>
+</string>-->
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
-    <string name="moved_to_archive_message">Archivado</string>
-    <string name="marked_as_unread_message">Marcado como no leído</string>
     <string name="btnSettings">Configuración</string>
     <string name="add_to_favorites">Añadir a favoritos</string>
     <string name="remove_from_favorites">Eliminar de favoritos</string>
-    <string name="added_to_favorites_message">Añadido a favoritos</string>
-    <string name="removed_from_favorites_message">Eliminado de favoritos</string>
     <string name="menuShare">Compartir</string>
     <string name="menuNext">Artículo siguiente</string>
     <string name="menuPrevious">Artículo anterior</string>
     <string name="menuDelete">Eliminar</string>
     <string name="menuOpenOriginal">Abrir original</string>
     <string name="menu_open_random_article">Abrir articulo aleatorio</string>
-    <string name="menuUploadOfflineURLs">Subir URLs caídas</string>
-    <string name="menuWipeDb">Eliminar base de datos</string>
-    <string name="wipe_db_dialog_title">¿Eliminar base de datos?</string>
-    <string name="wipe_db_dialog_message">"¿Seguro que deseas eliminar la base de datos?"</string>
     <string name="d_deleteArticle_title">¿Eliminar artículo?</string>
     <string name="d_deleteArticle_message">¿Seguro que deseas eliminar este artículo?</string>
-    <string name="txtSyncDone">¡Sincronización terminada!</string>
     <string name="txtNetOffline">¡Por favor verifica tu conexión a internet!</string>
     <string name="txtConfigNotSet">¡Por favor configura la aplicación antes de sincronizar!</string>
-    <string name="txtAPIUsername">ID de usuario</string>
-    <string name="txtAPIToken">Token de la fuente</string>
-    <string name="error">Error</string>
-    <string name="error_feed">"Error cargando fuente :"</string>
     <string name="bag_page">Guardar página</string>
     <string name="activity_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
@@ -47,65 +30,23 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="positive_answer">Si</string>
     <string name="negative_answer">No</string>
     <string name="no_articles">Sin artículos</string>
-    <string name="accept_all_certs_txt">Aceptar todos los certificados SSL</string>
-    <string name="accept_all_certs_desc">Puede necesitar un reinicio; inseguro; considera importar certificados firmados por ti mismo al sistema.</string>
-    <string name="list_limit_number_text">Límite de la lista de artículos</string>
     <string name="loading_article_text">Cargando…</string>
     <string name="d_urlAction_title">Selecciona una acción para la URL</string>
     <string name="d_urlAction_openInBrowser">Abrir en el navegador</string>
     <string name="d_urlAction_addToWallabag">Añadir a wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_uploadingOfflineURLs">Subiendo URLs caídas</string>
     <string name="d_connectionFail_title">Fallo de conexión</string>
     <string name="d_bag_fail_title">Fallido</string>
     <string name="d_bag_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
-    <string name="firstRun_d_welcome">Bienvenido a wallabag</string>
-    <string name="firstRun_d_configure">Por favor configura la aplicación con tu instancia de wallabag para empezar.</string>
-    <string name="firstRun_d_optionalSettings_title">Actualizar configuración</string>
-    <string name="firstRun_d_optionalSettings_message">Para poder guardar páginas con la aplicación (y enviar cambios locales al servidor) necesitas colocar tu nombre de usuario y contraseña en la configuración.</string>
-    <string name="go_to_settings">Ir a configuración</string>
-    <string name="dismiss">Ignorar</string>
-    <string name="settings_optionalCredentials">Credenciales opcionales</string>
-    <string name="settings_optionalCredentialsDesc">Usadas principalmente para sincronizar con el servidor</string>
-    <string name="settings_username">Usuario</string>
-    <string name="settings_password">Contraseña</string>
-    <string name="settings_b_testConnection_text">Probar configuración</string>
-    <string name="settings_b_getFeedCredentials_text">Solicitar credenciales de fuente</string>
-    <string name="settings_feedsCredentials">Credenciales de fuente (requeridas)</string>
-    <string name="settings_feedsCredentialsDesc">Usadas para obtener artículos del servidor</string>
-    <string name="settings_testingConnection">Probando conexión</string>
-    <string name="settings_gettingCredentials">Obteniendo credenciales</string>
-    <string name="addLink_errorMessage">No se puedo añadir el enlace</string>
     <string name="addLink_success_text">Añadido</string>
-    <string name="d_addLink_failedOnline_title">No se pudo guardar en línea</string>
-    <string name="d_addLink_failed_title">No se pudo guardar URL</string>
     <string name="addLink_savedOffline">Guardado para leer sin conexión</string>
-    <string name="feedUpdater_IOException">Excepción de E/S al conectar</string>
-    <string name="feedUpdater_IOExceptionOnProcessingFeed">Excepción de E/S al procesar fuente</string>
-    <string name="feedUpdater_feedProcessingError">Error al procesar fuente</string>
-    <string name="getCredentials_success">Credenciales llenadas</string>
-    <string name="getCredentials_fail">No se pudieron obtener las credenciales</string>
-    <string name="testConnection_errorMessage1">Servicio de wallabag no encontrado; revisa la URL. Código de error: %d</string>
-    <string name="testConnection_errorMessage2">No se pudo iniciar sesión; revisa usuario y contraseña. Código de error: %d</string>
-    <string name="testConnection_errorMessage3">Problemas de autorización. Código de error: %d</string>
-    <string name="testConnection_errorMessage5">No se pudo iniciar sesión; revisa los parámetros de autenticación HTTP. Código de error: %d</string>
-    <string name="testConnection_errorMessage6">URL incorrecta. Código de error: %d</string>
-    <string name="testConnection_errorMessage_unknown">Error desconocido. Código de error: %d</string>
-    <string name="d_testConnection_success_title">Éxito</string>
-    <string name="d_connectionTest_success_text">La prueba de conexión fue exitosa</string>
+    <string name="testConnection_progressDialogMessage">Probando conexión…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">URL incorrecta</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Servicio de wallabag no encontrado — revisa la URL</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">No se pudo iniciar sesión — revisa usuario y contraseña</string>
+    <string name="testConnection_errorMessage_unknown">Error desconocido</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="d_testConnection_fail_title">Fallido</string>
-    <string name="toggleArchive_errorMessage">No se pudo sincronizar con el servidor</string>
-    <string name="toggleArchive_noInternetConnection">No se pudo sincronizar con el servidor: sin conexión a internet</string>
-    <string name="toggleFavorite_errorMessage">No se pudo sincronizar con el servidor</string>
-    <string name="toggleFavorite_noInternetConnection">No se pudo sincronizar con el servidor: sin conexión a internet</string>
-    <string name="deleteArticle_errorMessage">No se pudo sincronizar con el servidor</string>
-    <string name="deleteArticle_noInternetConnection">No se pudo sincronizar con el servidor: sin conexión a internet</string>
-    <string name="deleteArticle_deleted">Artículo eliminado</string>
-    <string name="couldntUploadURL_errorMessage">No se pudo subir la URL</string>
-    <string name="uploadURLs_nothingToUpload">Nada pendiente por subir</string>
-    <string name="uploadURLs_finished">Subida terminada</string>
-    <string name="d_uploadURLs_title">Fallido</string>
-    <string name="uploadURLs_result_text">Se subieron %1$d de %2$d URLs</string>
     <string name="wrongUsernameOrPassword_errorMessage">No se pudo iniciar sesión: probablemente usuario o contraseña equivocado</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud no exitosa; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
     <string name="update_allFeeds">Actualizar todas las fuentes</string>
@@ -113,33 +54,17 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>
     <string name="feedName_unread">No leídos</string>
-    <string name="d_emptyDB_title">Sin artículos</string>
-    <string name="d_emptyDB_text">Parece que no hay artículos en la base de datos. ¿Le gustaría actualizar todas las fuentes?</string>
-    <string name="d_emptyDB_answer_updateAll">Si (recomendado)</string>
     <string name="articleList_favoriteMark">Favorito</string>
     <string name="articleList_ArchivedMark">Archivar</string>
-    <string name="settings_httpAuth">Autorización HTTP básica (opcional)</string>
-    <string name="settings_httpAuth_desc">Si no sabes que es, déjalo vacío</string>
-    <string name="settings_httpAuth_username">Usuario de autorización HTTP</string>
-    <string name="settings_httpAuth_password">Contraseña de autorización HTTP</string>
-    <string name="settings_UI">Configuración de interfaz</string>
     <string name="noPreviousArticle">No hay artículos previos en la lista actual</string>
     <string name="noNextArticle">No hay artículos siguientes en la lista actual</string>
-    <string name="settings_appTheme">Tema de la aplicación:</string>
     <string name="themeName_light">Claro</string>
     <string name="themeName_light_contrast">Claro (alto contraste)</string>
     <string name="themeName_dark">Oscuro</string>
     <string name="themeName_dark_contrast">Oscuro (alto contraste)</string>
     <string name="themeName_solarized">Solarizado</string>
-    <string name="settings_ui_fontSize">Tamaño de tipo de letra en artículos (%)</string>
-    <string name="settings_ui_serif">Tipo de letra Serif en artículos</string>
     <string name="menu_readArticle_increaseFontSize">Aumentar tamaño de letra</string>
     <string name="menu_readArticle_decreaseFontSize">Disminuir tamaño de letra</string>
-    <string name="menu_readArticle_switchFontFamily">Cambiar familia de tipo de letra</string>
-    <plurals name="numberOfArticles">
-        <item quantity="one">%d Artículo</item>
-        <item quantity="other">%d Artículos</item>
-    </plurals>
     <string name="menuTTS">Síntesis de voz</string>
     <string name="ttsAutoplayNextArticle"> Reproducción automática Siguiente artículo</string>
     <string name="ttsLanguage">Elegir un Idioma</string>
@@ -152,4 +77,35 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="ttsFastRewind">Retroceso rápido</string>
     <string name="ttsFastForward">Avance rápido</string>
     <string name="ttsError">Síntesis de voz Error</string>
+
+    <string name="notification_error">Error</string>
+
+    <string name="pref_name_connection_url">URL de wallabag</string>
+    <string name="pref_desc_connection_url">
+        Ejemplos:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
+    <string name="pref_name_connection_username">Usuario</string>
+    <string name="pref_name_connection_password">Contraseña</string>
+    <string name="pref_name_connection_feedsUserID">ID de usuario</string>
+    <string name="pref_name_connection_feedsToken">Token de la fuente</string>
+
+    <string name="pref_name_connection_advanced_acceptAllCertificates">Aceptar todos los certificados SSL</string>
+    <string name="pref_desc_connection_advanced_acceptAllCertificates">Puede necesitar un reinicio; inseguro; considera importar certificados firmados por ti mismo al sistema.</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Autorización HTTP básica</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes que es, déjalo vacío</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Usuario de autorización HTTP</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">Contraseña de autorización HTTP</string>
+
+    <string name="pref_name_ui_theme">Tema de la aplicación</string>
+    <string name="pref_name_ui_article_fontSize">Tamaño de tipo de letra en artículos (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Tipo de letra Serif</string>
+    <string name="pref_desc_ui_article_fontSerif">Tipo de letra Serif en artículos</string>
+    <string name="pref_name_ui_lists_limit">Límite de la lista de artículos</string>
+
+    <string name="pref_name_misc_wipeDB">Eliminar base de datos</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">¿Eliminar base de datos?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que deseas eliminar la base de datos?</string>
 </resources>

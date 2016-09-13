@@ -118,11 +118,11 @@ public class SettingsActivity extends AppCompatActivity {
             if(autoUpdateIntervalListPreference != null) {
                 // may set arbitrary values on Android API 19+
                 autoUpdateIntervalListPreference.setEntries(new String[] {
-                        getString(R.string.settings_autosync_interval_15m),
-                        getString(R.string.settings_autosync_interval_30m),
-                        getString(R.string.settings_autosync_interval_1h),
-                        getString(R.string.settings_autosync_interval_12h),
-                        getString(R.string.settings_autosync_interval_24h)
+                        getString(R.string.pref_name_autoUpdate_interval_15m),
+                        getString(R.string.pref_name_autoUpdate_interval_30m),
+                        getString(R.string.pref_name_autoUpdate_interval_1h),
+                        getString(R.string.pref_name_autoUpdate_interval_12h),
+                        getString(R.string.pref_name_autoUpdate_interval_24h)
                 });
                 autoUpdateIntervalListPreference.setEntryValues(new String[] {
                         String.valueOf(AlarmManager.INTERVAL_FIFTEEN_MINUTES),
