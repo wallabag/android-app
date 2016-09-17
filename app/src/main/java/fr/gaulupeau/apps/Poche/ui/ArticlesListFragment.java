@@ -222,7 +222,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         qb.orderDesc(ArticleDao.Properties.ArticleId);
 
         if(honorLimit) {
-            int limit = settings.getInt(Settings.LIST_LIMIT, -1);
+            int limit = settings.getArticlesListLimit();
             if(limit > 0) qb.limit(limit);
         }
 

@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +19,10 @@ import android.widget.Toast;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -27,30 +30,40 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.WallabagSettings;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
+import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.tasks.UpdateFeedTask;
-import fr.gaulupeau.apps.Poche.network.tasks.UploadOfflineURLsTask;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
+import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListActivity extends AppCompatActivity
-        implements UpdateFeedTask.CallbackInterface,
-        ArticlesListFragment.OnFragmentInteractionListener {
+        implements ArticlesListFragment.OnFragmentInteractionListener {
 
-    private UpdateFeedTask feedUpdater;
+    private static final String TAG = ArticlesListActivity.class.getSimpleName();
 
     private Settings settings;
 
     private ArticlesListPagerAdapter adapter;
     private ViewPager viewPager;
 
-    private boolean firstTimeShown = true;
+    private boolean isActive;
+
+    private boolean[] invalidLists = new boolean[ArticlesListPagerAdapter.PAGES.length];
+
+    private boolean checkConfigurationOnResume;
+    private AlertDialog checkConfigurationDialog;
+    private boolean firstSyncDone;
     private boolean showEmptyDbDialogOnResume;
-    private boolean dbIsEmpty;
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
+
+    private ConfigurationTestHelper configurationTestHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,28 +79,29 @@ public class ArticlesListActivity extends AppCompatActivity
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
-
-        tabLayout.setTabsFromPagerAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(viewPager));
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-
-                fragmentOnShow();
-            }
-        });
+        tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(1);
 
-        dbIsEmpty = DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() == 0;
+        firstSyncDone = settings.isFirstSyncDone();
+
+        // compatibility hack for pre-Settings.isFirstSyncDone() versions // TODO: remove later
+        if(!firstSyncDone
+                && DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() != 0) {
+            firstSyncDone = true;
+            settings.setFirstSyncDone(true);
+        }
+
+        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(dbIsEmpty) {
+        checkConfigurationOnResume = true;
+
+        if(!firstSyncDone) {
             showEmptyDbDialogOnResume = true;
         }
     }
@@ -96,42 +110,36 @@ public class ArticlesListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        updateLists();
+        isActive = true;
 
-        if(firstTimeShown) {
-            firstTimeShown = false;
+        checkLists();
 
-            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-            if(!wallabagSettings.isValid()) {
-                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
+        if(checkConfigurationOnResume) {
+            checkConfigurationOnResume = false;
 
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                messageBox.setTitle(R.string.firstRun_d_welcome);
-                messageBox.setMessage(R.string.firstRun_d_configure);
-                messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
-                    }
-                });
-                messageBox.setCancelable(false);
-                messageBox.create().show();
-            } else if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
-                settings.setBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, true);
-
-                String username = settings.getString(Settings.USERNAME, null);
-                if(username == null || username.length() == 0) {
+            if(!Settings.checkFirstRunInit(this)) {
+                if(!settings.isConfigurationOk() && checkConfigurationDialog == null) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                    messageBox.setTitle(R.string.firstRun_d_optionalSettings_title);
-                    messageBox.setMessage(R.string.firstRun_d_optionalSettings_message);
-                    messageBox.setPositiveButton(R.string.go_to_settings, new DialogInterface.OnClickListener() {
+                    messageBox.setTitle(settings.isConfigurationErrorShown()
+                            ? R.string.d_configurationIsQuestionable_title
+                            : R.string.d_configurationChanged_title);
+                    messageBox.setMessage(settings.isConfigurationErrorShown()
+                            ? R.string.d_configurationIsQuestionable_message
+                            : R.string.d_configurationChanged_message);
+                    messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            startActivity(new Intent(ArticlesListActivity.this, SettingsActivity.class));
+                            testConfiguration();
                         }
                     });
-                    messageBox.setNegativeButton(R.string.dismiss, null);
-                    messageBox.create().show();
+                    messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
+                    messageBox.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            checkConfigurationDialog = null;
+                        }
+                    });
+                    checkConfigurationDialog = messageBox.show();
                 }
             }
         }
@@ -139,29 +147,34 @@ public class ArticlesListActivity extends AppCompatActivity
         if(showEmptyDbDialogOnResume) {
             showEmptyDbDialogOnResume = false;
 
-            WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
-            if(wallabagSettings.isValid()) {
-                AlertDialog.Builder messageBox = new AlertDialog.Builder(ArticlesListActivity.this);
-                messageBox.setTitle(R.string.d_emptyDB_title);
-                messageBox.setMessage(R.string.d_emptyDB_text);
-                messageBox.setPositiveButton(R.string.d_emptyDB_answer_updateAll, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        fullUpdate();
-                    }
-                });
-                messageBox.setNegativeButton(R.string.negative_answer, null);
-                messageBox.create().show();
+            if(settings.isConfigurationOk()) {
+                updateAllFeeds();
             }
         }
     }
 
     @Override
     protected void onPause() {
+        isActive = false;
+
         super.onPause();
-        if (feedUpdater != null) {
-            feedUpdater.cancel(true);
+    }
+
+    @Override
+    protected void onStop() {
+        if(configurationTestHelper != null) {
+            configurationTestHelper.cancel();
+            configurationTestHelper = null;
         }
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+
+        super.onDestroy();
     }
 
     @Override
@@ -175,10 +188,13 @@ public class ArticlesListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuFullUpdate:
-                fullUpdate();
+                updateAllFeeds();
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+                return true;
+            case R.id.menuTestConfiguration:
+                testConfiguration();
                 return true;
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));
@@ -186,8 +202,8 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuOpenRandomArticle:
                 openRandomArticle();
                 return true;
-            case R.id.menuUploadOfflineURLs:
-                uploadOfflineURLs();
+            case R.id.menuSyncQueue:
+                syncQueue();
                 return true;
             case R.id.menuAbout:
                 new LibsBuilder()
@@ -197,43 +213,35 @@ public class ArticlesListActivity extends AppCompatActivity
                         .withAboutVersionShown(true)
                         .withAboutDescription(getResources().getString(R.string.aboutText))
                         .start(this);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void feedUpdateFinishedSuccessfully() {
-        updateFinished();
-        Toast.makeText(this, R.string.txtSyncDone, Toast.LENGTH_SHORT).show();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
+        Log.d(TAG, "Got FeedsChangedEvent");
+
+        invalidateLists(event);
     }
 
-    @Override
-    public void feedUpdateFinishedWithError(String errorMessage) {
-        updateFinished();
-        new AlertDialog.Builder(this)
-                .setMessage(getString(R.string.error_feed) + errorMessage)
-                .setTitle(R.string.error)
-                .setPositiveButton(R.string.ok, null)
-                .setCancelable(false)
-                .create().show();
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
+        Log.d(TAG, "Got UpdateFeedsStartedEvent");
+
+        notifyListUpdate(event.getFeedType(), true);
     }
 
-    private void updateFinished() {
-        dbIsEmpty = false;
-        showEmptyDbDialogOnResume = false;
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateFeedsStoppedEvent(UpdateFeedsFinishedEvent event) {
+        Log.d(TAG, "Got UpdateFeedsFinishedEvent");
 
-        if(fullUpdateRunning) {
-            fullUpdateRunning = false;
-            updateLists();
-            setRefreshingUI(false);
-        }
-        if(refreshingFragment != -1) {
-            if(viewPager.getCurrentItem() == refreshingFragment) {
-                updateList(refreshingFragment);
-                setRefreshingUI(false, refreshingFragment);
-            }
-            refreshingFragment = -1;
+        if(event.getResult().isSuccess()) {
+            firstSyncDone = true;
+            showEmptyDbDialogOnResume = false;
+
+            notifyListUpdate(event.getFeedType(), false);
         }
     }
 
@@ -250,41 +258,61 @@ public class ArticlesListActivity extends AppCompatActivity
     @Override
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
-        UpdateFeedTask.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        UpdateFeedTask.UpdateType updateType = feedType == UpdateFeedTask.FeedType.Main
-                ? UpdateFeedTask.UpdateType.Fast : UpdateFeedTask.UpdateType.Full;
-        if(updateFeed(true, feedType, updateType)) {
-            refreshingFragment = position;
-            setRefreshingUI(true);
-        } else {
+        FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
+        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
+                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+
+        if(!updateFeed(true, feedType, updateType)) {
             setRefreshingUI(false);
         }
     }
 
-    private void fullUpdate() {
-        if(updateFeed(true, null, null)) {
-            fullUpdateRunning = true;
-            setRefreshingUI(true);
+    private void updateAllFeeds() {
+        updateFeed(true, null, null);
+    }
+
+    private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
+        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
+
+        if(started) {
+            if(position != -1) {
+                if(refreshingFragment != -1 && refreshingFragment != position) {
+                    setRefreshingUI(false, refreshingFragment); // should not happen
+                }
+
+                refreshingFragment = position;
+                setRefreshingUI(true, position);
+            } else {
+                fullUpdateRunning = true;
+                setRefreshingUI(true);
+            }
+        } else {
+            if(refreshingFragment != -1) {
+                setRefreshingUI(false, refreshingFragment);
+                refreshingFragment = -1;
+            }
+            if(fullUpdateRunning) {
+                fullUpdateRunning = false;
+                setRefreshingUI(false);
+            }
         }
     }
 
     private boolean updateFeed(boolean showErrors,
-                               UpdateFeedTask.FeedType feedType,
-                               UpdateFeedTask.UpdateType updateType) {
+                               FeedUpdater.FeedType feedType,
+                               FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
-        WallabagSettings wallabagSettings = WallabagSettings.settingsFromDisk(settings);
         if(fullUpdateRunning || refreshingFragment != -1) {
             Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
                     .show();
-        } else if(!wallabagSettings.isValid()) {
+        } else if(!settings.isConfigurationOk()) {
             if(showErrors) {
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
-        } else if(WallabagConnection.isNetworkOnline()) {
-            feedUpdater = new UpdateFeedTask(wallabagSettings.wallabagURL,
-                    wallabagSettings.userID, wallabagSettings.userToken, settings.getInt(Settings.WALLABAG_VERSION, -1), this, feedType, updateType);
-            feedUpdater.execute();
+        } else if(WallabagConnection.isNetworkAvailable()) {
+            ServiceHelper.updateFeed(this, feedType, updateType);
+
             result = true;
         } else {
             if(showErrors) {
@@ -295,21 +323,69 @@ public class ArticlesListActivity extends AppCompatActivity
         return result;
     }
 
-    private void updateLists() {
-        if(adapter != null) {
-            for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
-                ArticlesListFragment f = adapter.getCachedFragment(i);
-                if(f != null) {
-                    f.updateList();
-                }
+    private void invalidateLists(FeedsChangedEvent event) {
+        if(event.isMainFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Main));
+        }
+        if(event.isFavoriteFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Favorite));
+        }
+        if(event.isArchiveFeedChanged()) {
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Archive));
+        }
+    }
+
+    private void invalidateList(int position) {
+        Log.d(TAG, "invalidateList() started with position: " + position);
+
+        if(position != -1) {
+            invalidLists[position] = true;
+        } else {
+            for(int i = 0; i < invalidLists.length; i++) {
+                invalidLists[i] = true;
+            }
+        }
+
+        if(isActive) {
+            Log.d(TAG, "invalidateList() activity is active; calling checkLists()");
+            checkLists();
+        }
+
+        Log.d(TAG, "invalidateList() finished");
+    }
+
+    private void checkLists() {
+        Log.d(TAG, "checkLists() started");
+
+        for(int i = 0; i < invalidLists.length; i++) {
+            if(invalidLists[i]) {
+                invalidLists[i] = false;
+
+                Log.d(TAG, "checkLists() updating list with position: " + i);
+                updateList(i);
+            }
+        }
+
+        Log.d(TAG, "checkLists() finished");
+    }
+
+    private void updateAllLists() {
+        for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
+            ArticlesListFragment f = getFragment(i);
+            if(f != null) {
+                f.updateList();
             }
         }
     }
 
     private void updateList(int position) {
-        ArticlesListFragment f = getFragment(position);
-        if(f != null) {
-            f.updateList();
+        if(position != -1) {
+            ArticlesListFragment f = getFragment(position);
+            if(f != null) {
+                f.updateList();
+            }
+        } else {
+            updateAllLists();
         }
     }
 
@@ -334,13 +410,6 @@ public class ArticlesListActivity extends AppCompatActivity
         }
     }
 
-    private void fragmentOnShow() {
-        ArticlesListFragment f = getCurrentFragment();
-        if(f != null) {
-            f.onShow();
-        }
-    }
-
     private ArticlesListFragment getCurrentFragment() {
         return adapter == null || viewPager == null ? null
                 : adapter.getCachedFragment(viewPager.getCurrentItem());
@@ -350,29 +419,20 @@ public class ArticlesListActivity extends AppCompatActivity
         return adapter != null ? adapter.getCachedFragment(position) : null;
     }
 
-    private void uploadOfflineURLs() {
-        if(!WallabagConnection.isNetworkOnline()) {
+    private void syncQueue() {
+        if(!WallabagConnection.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }
 
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.d_uploadingOfflineURLs));
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progressDialog.setCancelable(true);
+        ServiceHelper.syncQueue(this);
+    }
 
-        final UploadOfflineURLsTask uploadOfflineURLsTask
-                = new UploadOfflineURLsTask(getApplicationContext(), progressDialog);
+    private void testConfiguration() {
+        ConfigurationTestHelper configurationTestHelper
+                = new ConfigurationTestHelper(this, null, null, settings, false);
 
-        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                uploadOfflineURLsTask.cancel(false);
-            }
-        });
-
-        progressDialog.show();
-        uploadOfflineURLsTask.execute();
+        configurationTestHelper.test();
     }
 
     public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {
@@ -414,15 +474,38 @@ public class ArticlesListActivity extends AppCompatActivity
             }
         }
 
-        public static UpdateFeedTask.FeedType getFeedType(int position) {
+        public static FeedUpdater.FeedType getFeedType(int position) {
             switch(ArticlesListPagerAdapter.PAGES[position]) {
                 case LIST_TYPE_FAVORITES:
-                    return UpdateFeedTask.FeedType.Favorite;
+                    return FeedUpdater.FeedType.Favorite;
                 case LIST_TYPE_ARCHIVED:
-                    return UpdateFeedTask.FeedType.Archive;
+                    return FeedUpdater.FeedType.Archive;
                 default:
-                    return UpdateFeedTask.FeedType.Main;
+                    return FeedUpdater.FeedType.Main;
             }
+        }
+
+        public static int positionByFeedType(FeedUpdater.FeedType feedType) {
+            if(feedType == null) return -1;
+
+            int listType;
+            switch(feedType) {
+                case Favorite:
+                    listType = LIST_TYPE_FAVORITES;
+                    break;
+                case Archive:
+                    listType = LIST_TYPE_ARCHIVED;
+                    break;
+                default:
+                    listType = LIST_TYPE_UNREAD;
+                    break;
+            }
+
+            for(int i = 0; i < PAGES.length; i++) {
+                if(listType == PAGES[i]) return i;
+            }
+
+            return -1;
         }
 
         public ArticlesListFragment getCachedFragment(int position) {

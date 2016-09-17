@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,17 +14,33 @@ import java.io.File;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
 import okio.Okio;
 
-public class DownloadPdfTask extends GenericArticleTask {
+public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
 
     protected static String TAG = DownloadPdfTask.class.getSimpleName();
+
+    protected Context context;
+    protected int articleId;
+    protected Article article;
+    protected WallabagService service;
+    protected String errorMessage;
+    protected boolean isOffline;
+    protected boolean noCredentials;
 
     private NotificationManager notificationManager;
     private NotificationCompat.Builder notificationBuilder;
@@ -34,15 +51,22 @@ public class DownloadPdfTask extends GenericArticleTask {
 
     private File resultFile;
 
-    public DownloadPdfTask(Context context, int articleId, ArticleDao articleDao, Article article,
-                           String exportDir) {
-        super(context, articleId, articleDao, article);
+    public DownloadPdfTask(Context context, int articleId, Article article, String exportDir) {
+        this.context = context;
+        this.articleId = articleId;
+        this.article = article;
         this.exportDir = exportDir;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+
+        if(article == null) {
+            article = DbConnection.getSession().getArticleDao().queryBuilder()
+                    .where(ArticleDao.Properties.Id.eq(articleId))
+                    .build().unique();
+        }
 
         if(context == null) return;
 
@@ -60,14 +84,36 @@ public class DownloadPdfTask extends GenericArticleTask {
     }
 
     @Override
-    protected Boolean doInBackgroundSimple(Void... params) throws IOException {
+    protected Boolean doInBackground(Void... params) {
+        if(WallabagConnection.isNetworkAvailable()) {
+            Settings settings = App.getInstance().getSettings();
+            String username = settings.getUsername();
+            noCredentials = username == null || username.isEmpty();
+            if(!noCredentials) {
+                service = WallabagService.fromSettings(settings);
+            }
+        } else {
+            isOffline = true;
+        }
+
+        try {
+            return doInBackgroundSimple();
+        } catch (RequestException | IOException e) {
+            Log.w(TAG, "IOException", e);
+            errorMessage = e.getMessage();
+            return false;
+        }
+    }
+
+    protected Boolean doInBackgroundSimple()
+            throws IncorrectConfigurationException, IOException {
         if(isOffline || noCredentials) return false;
 
         publishProgress(1); // report that we didn't stop because of isOffline or noCredentials
 
-        int testConn = service.testConnection();
+        WallabagServiceEndpoint.ConnectionTestResult testConn = service.testConnection();
         Log.d(TAG, "doInBackgroundSimple() testConn=" + testConn);
-        if (testConn != 0) {
+        if(testConn != WallabagServiceEndpoint.ConnectionTestResult.OK) {
             Log.w(TAG, "doInBackgroundSimple() testing connection failed with value " + testConn);
             if(context != null) {
                 errorMessage = context.getString(R.string.d_connectionFail_title);

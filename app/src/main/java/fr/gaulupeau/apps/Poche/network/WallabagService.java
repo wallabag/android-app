@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
+import fr.gaulupeau.apps.Poche.data.Settings;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -9,18 +10,13 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGIN_FORM_V1;
 import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG_LOGOUT_LINK_V1;
 
-/**
- * @author Victor Häggqvist
- * @since 10/20/15
- */
 public class WallabagService {
 
     private static final String TAG = WallabagService.class.getSimpleName();
@@ -28,56 +24,66 @@ public class WallabagService {
     private String endpoint;
     private OkHttpClient client;
     private String username, password;
+    private String httpAuthUsername, httpAuthPassword;
     private int wallabagVersion;
     private WallabagServiceEndpoint serviceEndpoint;
 
-    public WallabagService(String endpoint, String username, String password) {
-        this(endpoint, username, password,
-                App.getInstance().getSettings().getInt(Settings.WALLABAG_VERSION, -1));
+    public static WallabagService fromSettings(Settings settings) {
+        return new WallabagService(settings.getUrl(),
+                settings.getUsername(), settings.getPassword(),
+                settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
+                settings.getWallabagServerVersion());
     }
 
-    public WallabagService(String endpoint, String username, String password, int wallabagVersion) {
-        this(endpoint, username, password, WallabagConnection.getClient(), wallabagVersion);
-    }
-
-    public WallabagService(String endpoint, String username, String password, OkHttpClient client,
+    public WallabagService(String endpoint, String username, String password,
+                           String httpAuthUsername, String httpAuthPassword,
                            int wallabagVersion) {
+        this(endpoint, username, password, httpAuthUsername, httpAuthPassword,
+                wallabagVersion, WallabagConnection.getClient());
+    }
+
+    public WallabagService(String endpoint, String username, String password,
+                           String httpAuthUsername, String httpAuthPassword,
+                           int wallabagVersion, OkHttpClient client) {
         this.endpoint = endpoint;
-        this.client = client;
         this.username = username;
         this.password = password;
+        this.httpAuthUsername = httpAuthUsername;
+        this.httpAuthPassword = httpAuthPassword;
         this.wallabagVersion = wallabagVersion;
+        this.client = client;
     }
 
     public OkHttpClient getClient() {
         return client;
     }
 
-    public FeedsCredentials getCredentials() throws IOException {
+    public FeedsCredentials getCredentials() throws RequestException, IOException {
         return getServiceEndpoint().getCredentials();
     }
 
-    public boolean addLink(String link) throws IOException {
+    public boolean addLink(String link) throws RequestException, IOException {
         return getServiceEndpoint().addLink(link);
     }
 
-    public boolean toggleArchive(int articleId) throws IOException {
+    public boolean toggleArchive(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().toggleArchive(articleId);
     }
 
-    public boolean toggleFavorite(int articleId) throws IOException {
+    public boolean toggleFavorite(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().toggleFavorite(articleId);
     }
 
-    public boolean deleteArticle(int articleId) throws IOException {
+    public boolean deleteArticle(int articleId) throws RequestException, IOException {
         return getServiceEndpoint().deleteArticle(articleId);
     }
 
-    public String getExportUrl(long articleId, String exportType) throws IOException {
+    public String getExportUrl(long articleId, String exportType) {
         return getServiceEndpoint().getExportUrl(articleId, exportType);
     }
 
-    public int testConnection() throws IOException {
+    public WallabagServiceEndpoint.ConnectionTestResult testConnection()
+            throws IncorrectConfigurationException, IOException {
         return getServiceEndpoint().testConnection();
     }
 
@@ -89,17 +95,24 @@ public class WallabagService {
         return this.wallabagVersion;
     }
 
+    public int getWallabagVersionWithoutDetection() {
+        return wallabagVersion;
+    }
+
     private WallabagServiceEndpoint getServiceEndpoint() {
         if(serviceEndpoint == null) {
+            RequestCreator requestCreator = new RequestCreator(httpAuthUsername, httpAuthPassword);
             switch(getWallabagVersion()) {
                 case 1:
-                    serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password, client);
+                    serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password,
+                            requestCreator, client);
                     break;
 
                 default:
                     Log.w(TAG, "Falling back to V2 endpoint; wallabagVersion=" + this.wallabagVersion);
                 case 2:
-                    serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password, client);
+                    serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password,
+                            requestCreator, client);
                     break;
             }
         }
@@ -157,7 +170,8 @@ public class WallabagService {
         if(httpUrl == null) {
             return "";
         }
-        Request guessRequest = getRequest(httpUrl);
+        Request guessRequest = new RequestCreator(httpAuthUsername, httpAuthPassword)
+                .getRequest(httpUrl);
         Response response;
         try {
             response = client.newCall(guessRequest).execute();
@@ -179,4 +193,5 @@ public class WallabagService {
         }
         return body;
     }
+
 }

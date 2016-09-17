@@ -2,23 +2,15 @@
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Mit wallabag speichern</string>
-    <string name="author">
+<!--    <string name="author">
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
-</string>
-    <string name="instructions">Mit wallabag kannst du Artikel speichern, um sie später zu lesen. Um einen Artikel zu speichern benutze einfach den <i>Teilen</i> Button deines Browsers und drücke danach auf <i>Mit wallabag speichern</i>.\nErfahre mehr über wallabag unter:\nhttps://www.wallabag.org</string>
-    <string name="btnDone">Speichern</string>
-    <string name="url_label">wallabag URL</string>
-    <string name="url_help">Beispiele:\n<i>https://wallabag.example.de</i>\n<i>https://www.example.de/wallabag</i>/n<i>https://framabag.org/u/your-username</i></string>
+</string>-->
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnMarkUnread">Als ungelesen markieren</string>
-    <string name="moved_to_archive_message">Archiviert</string>
-    <string name="marked_as_unread_message">Als ungelesen markiert</string>
     <string name="btnSettings">Einstellungen</string>
     <string name="add_to_favorites">Zu Favoriten hinzufügen</string>
     <string name="remove_from_favorites">Aus Favoriten entfernen</string>
-    <string name="added_to_favorites_message">Zu Favoriten hinzugefügt</string>
-    <string name="removed_from_favorites_message">Aus Favoriten entfernt</string>
     <string name="menuShare">Teilen</string>
     <string name="menuNext">Nächster Artikel</string>
     <string name="menuPrevious">Vorheriger Artikel</string>
@@ -37,19 +29,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="ttsFastForward">Rücklauf</string>
     <string name="ttsOptions">Optionen</string>
     <string name="menu_open_random_article">Zufälligen Artikel öffnen</string>    
-    <string name="menuUploadOfflineURLs">Offline-URLs hochladen</string>
-    <string name="menuWipeDb">Datenbank leeren</string>
-    <string name="wipe_db_dialog_title">Datenbank leeren?</string>
-    <string name="wipe_db_dialog_message">"Möchtest du die Datenbank wirklich leeren?"</string>
     <string name="d_deleteArticle_title">Artikel entfernen?</string>
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
-    <string name="txtSyncDone">Synchronisation erledigt!</string>
     <string name="txtNetOffline">Prüfe deine Internetverbindung!</string>
     <string name="txtConfigNotSet">Die App muss zuerst eingerichtet werden!</string>
-    <string name="txtAPIUsername">Deine Benutzer ID</string>
-    <string name="txtAPIToken">Dein Token</string>
-    <string name="error">Fehler</string>
-    <string name="error_feed">"Fehler beim Laden des Feeds: "</string>
     <string name="bag_page">Neuen Artikel hinzufügen</string>
     <string name="activity_add_label">Neuen Artikel hinzufügen</string>
     <string name="page_url">Artikel-URL</string>
@@ -59,69 +42,24 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="positive_answer">Ja</string>
     <string name="negative_answer">Nein</string>
     <string name="no_articles">Keine Artikel</string>
-    <string name="accept_all_certs_txt">Akzeptiere alle SSL Zertifikate</string>
-    <string name="accept_all_certs_desc">Kann Neustart erfordern. Unsicher. \nSelbst-signierte Zertifikate müssen in Android importiert werden.</string>
-          <string name="custom_ssl_settings_txt">SSL Einstellungen</string>
-          <string name="custom_ssl_settings_desc">Deaktiviert SSL auf allen Geräten, aktiviert TLS 1.1 und TLS 1.2 auf Android 4.1–4.4</string>
-    <string name="list_limit_number_text">Limit für Artikel-Liste</string>
     <string name="loading_article_text">Laden…</string>
     <string name="d_urlAction_title">Wähle eine Aktion für die URL</string>
     <string name="d_urlAction_openInBrowser">In Browser öffnen</string>
     <string name="d_urlAction_addToWallabag">Zu wallabag hinzufügen</string>
     <string name="ok">OK</string>
-    <string name="d_uploadingOfflineURLs">Offline-URLs hochladen</string>
     <string name="d_connectionFail_title">Verbindung fehlgeschlagen</string>
     <string name="d_bag_fail_title">Fehlgeschlagen</string>
     <string name="d_bag_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>
-    <string name="firstRun_d_welcome">Willkommen bei wallabag</string>
-    <string name="firstRun_d_configure">Die App muss zu Beginn mit deiner wallabag Installation eingerichtet werden.</string>
-    <string name="firstRun_d_optionalSettings_title">Aktualisiere Einstellungen</string>
-    <string name="firstRun_d_optionalSettings_message">Um Seiten mit der App zu speichern (und um lokale Änderungen zum Server zu senden), musst du Benutzername und Passwort deiner wallabag in den Einstellungen eintragen</string>
-    <string name="go_to_settings">Zu Einstellungen gehen</string>
-    <string name="dismiss">Verwerfen</string>
-    <string name="settings_optionalCredentials">Zugangsdaten (optional)</string>
-    <string name="settings_optionalCredentialsDesc">Für die Synchronisation zum Server</string>
-    <string name="settings_username">Benutzername</string>
-    <string name="settings_password">Passwort</string>
-    <string name="settings_b_testConnection_text">Verbindung testen</string>
-    <string name="settings_b_getFeedCredentials_text">Feed Zugangsdaten abrufen</string>
-    <string name="settings_feedsCredentials">Feed Zugangsdaten (erforderlich)</string>
-    <string name="settings_feedsCredentialsDesc">Um Artikel vom Server abzurufen</string>
-    <string name="settings_wallabagVersion">wallabag Server-Version:</string>
-    <string name="settings_testingConnection">Verbindung wird überprüft</string>
-    <string name="settings_gettingCredentials">Zugangsdaten abrufen</string>
-    <string name="addLink_errorMessage">URL konnte nicht hinzugefügt werden</string>
     <string name="addLink_success_text">Hinzugefügt</string>
-    <string name="d_addLink_failedOnline_title">Konnte nicht online speichern</string>
-    <string name="d_addLink_failed_title">Das Speichern der URL ist fehlgeschlagen</string>
     <string name="addLink_savedOffline">Offline gespeichert</string>
-    <string name="feedUpdater_IOException">IO exception bei Verbindung</string>
-    <string name="feedUpdater_IOExceptionOnProcessingFeed">IO exception beim Verarbeiten der Feeds</string>
-    <string name="feedUpdater_feedProcessingError">Feed Verarbeitungsfehler</string>
-    <string name="getCredentials_success">Zugangsdaten ausgefüllt</string>
-    <string name="getCredentials_fail">Konnte Zugangsdaten nicht abrufen</string>
-    <string name="testConnection_errorMessage1">wallabag Dienst nicht gefunden; überprüfe bitte die wallabag URL. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage2">Anmeldung fehlgeschlagen; überprüfe bitte Benutzername und Passwort. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage3">Probleme mit Autorisierung. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage5">Anmeldung fehlgeschlagen; prüfe die HTTP Auth Parameter. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage6">Falsche URL. Fehlercode: %d</string>
-    <string name="testConnection_errorMessage_unknown">Unbekannter Fehler. Fehlercode: %d</string>
-    <string name="d_testConnection_success_title">Erfolgreich</string>
-    <string name="d_connectionTest_success_text">Verbindungstest war erfolgreich</string>
+    <string name="testConnection_progressDialogMessage">Verbindung wird überprüft…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">Falsche URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag Dienst nicht gefunden — überprüfe bitte die wallabag URL</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Anmeldung fehlgeschlagen — überprüfe bitte Benutzername und Passwort</string>
+    <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Fehlgeschlagen</string>
-    <string name="toggleArchive_errorMessage">Konnte nicht zum Server synchronisieren</string>
-    <string name="toggleArchive_noInternetConnection">Konnte nicht zum Server synchronisieren: keine Internetverbindung</string>
-    <string name="toggleFavorite_errorMessage">Konnte nicht zum Server synchronisieren</string>
-    <string name="toggleFavorite_noInternetConnection">Konnte nicht zum Server synchronisieren: keine Internetverbindung</string>
-    <string name="deleteArticle_errorMessage">Konnte nicht zum Server synchronisieren</string>
-    <string name="deleteArticle_noInternetConnection">Konnte nicht zum Server synchronisieren: keine Internetverbindung</string>
     <string name="downloadPdf_noInternetConnection">Konnte Artikel nicht herunterladen: keine Internetverbindung</string>
-    <string name="deleteArticle_deleted">Artikel entfernt</string>
-    <string name="couldntUploadURL_errorMessage">Konnte URL nicht hochladen</string>
-    <string name="uploadURLs_nothingToUpload">Nichts zum Hochladen</string>
-    <string name="uploadURLs_finished">Hochladen fertig</string>
-    <string name="d_uploadURLs_title">Fehlgeschlagen</string>
-    <string name="uploadURLs_result_text">%1$d von %2$d URLs hochgeladen</string>
     <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
     <string name="update_allFeeds">Alle Feeds aktualisiert</string>
@@ -129,40 +67,22 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
     <string name="feedName_unread">Ungelesen</string>
-    <string name="d_emptyDB_title">Keine Artikel</string>
-    <string name="d_emptyDB_text">Es sieht aus als gibt es keine Artikel in der Datenbank. Möchtest du alle Feeds aktualisieren?</string>
-    <string name="d_emptyDB_answer_updateAll">Ja (empfohlen)</string>
     <string name="articleList_favoriteMark">Favorit Markierung</string>
     <string name="articleList_ArchivedMark">Archiv Markierung</string>
-    <string name="settings_httpAuth">Basic HTTP Autorisierung (optional)</string>
-    <string name="settings_httpAuth_desc">Leer lassen, wenn du nicht weißt was das ist</string>
-    <string name="settings_httpAuth_username">HTTP Auth Benutzername</string>
-    <string name="settings_httpAuth_password">HTTP Auth Passwort</string>
-    <string name="settings_UI">Oberfläche</string>
     <string name="noPreviousArticle">Es gibt keinen vorherigen Artikel in der aktuellen Liste</string>
     <string name="noNextArticle">Es gibt keinen nächsten Artikel in der aktuellen Liste</string>
-    <string name="settings_appTheme">Thema:</string>
     <string name="themeName_light">Hell</string>
     <string name="themeName_light_contrast">Hell (hoher Kontrast)</string>
     <string name="themeName_dark">Dunkel</string>
     <string name="themeName_dark_contrast">Dunkel (hoher Kontrast)</string>
     <string name="themeName_solarized">Sepia</string>
-    <string name="settings_ui_fontSize">Artikel Schriftgröße (%)</string>
-    <string name="settings_ui_serif">Serife Schrift für Artikel</string>
     <string name="menu_readArticle_increaseFontSize">Schrift größer</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift kleiner</string>
-    <string name="menu_readArticle_switchFontFamily">Schrift ändern</string>
-    <plurals name="numberOfArticles">
-        <item quantity="one">%d Artikel</item>
-        <item quantity="other">%d Artikel</item>
-    </plurals>
     <string name="menuAbout">Über</string>
     <string name="aboutText">&lt;b>wallabag App für Android&lt;/b>&lt;br />wallabag ist eine selbst gehostete Anwendung die dir ermöglicht nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Sprachhöhe</string>
     <string name="readVolume">Leselautstärke</string>
-    <string name="add_widget">Widget hinzufügen</string>
-    <string name="settings_ui_handleHttpScheme">HTTP-Schema benutzen (zeige wallabag in der Liste von Web-Browsern)</string>
     <string name="menuDownloadPdf">PDF herunterladen</string>
     <string name="downloadPdfPathStart">Artikel wird heruntergeladen</string>
     <string name="downloadPdfArticleDownloaded">Artikel heruntergeladen</string>
@@ -170,4 +90,40 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="downloadPdfTouchToOpen">Zum Öffnen tippen</string>
     <string name="downloadPdfProgressDetail">wallabag lädt deinen Artikel %s als PDF herunter</string>
     <string name="downloadPdfProgress">wallabag lädt deinen Artikel als PDF herunter</string>
+
+    <string name="notification_error">Fehler</string>
+
+    <string name="pref_name_connection_url">wallabag URL</string>
+    <string name="pref_desc_connection_url">
+        Beispiele:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
+    <string name="pref_name_connection_username">Benutzername</string>
+    <string name="pref_name_connection_password">Passwort</string>
+    <string name="pref_name_connection_serverVersion">wallabag Server-Version</string>
+    <string name="pref_name_connection_feedsUserID">Deine Benutzer ID</string>
+    <string name="pref_name_connection_feedsToken">Dein Token</string>
+
+    <string name="pref_name_connection_advanced_acceptAllCertificates">Akzeptiere alle SSL Zertifikate</string>
+    <string name="pref_desc_connection_advanced_acceptAllCertificates">Kann Neustart erfordern. Unsicher. \nSelbst-signierte Zertifikate müssen in Android importiert werden.</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">SSL Einstellungen</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Deaktiviert SSL auf allen Geräten, aktiviert TLS 1.1 und TLS 1.2 auf Android 4.1–4.4</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Autorisierung</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth Benutzername</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth Passwort</string>
+
+    <string name="pref_name_ui_theme">Thema</string>
+    <string name="pref_name_ui_article_fontSize">Artikel Schriftgröße (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Serife Schrift</string>
+    <string name="pref_desc_ui_article_fontSerif">Serife Schrift für Artikel</string>
+    <string name="pref_name_ui_lists_limit">Limit für Artikel-Liste</string>
+
+    <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
+    <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste von Web-Browsern</string>
+    <string name="pref_name_misc_wipeDB">Datenbank leeren</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Datenbank leeren?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Möchtest du die Datenbank wirklich leeren?</string>
 </resources>

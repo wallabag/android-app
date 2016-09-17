@@ -194,8 +194,8 @@ public class TtsService
                 stopCmd();
             }
         });
-        ttsVoice = this.settings.getString(Settings.TTS_VOICE, "");
-        ttsEngine = this.settings.getString(Settings.TTS_ENGINE, "");
+        ttsVoice = this.settings.getTtsVoice();
+        ttsEngine = this.settings.getTtsEngine();
         if (ttsEngine.equals("") || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             this.tts = new TextToSpeech(getApplicationContext(), this);
             this.ttsEngine = tts.getDefaultEngine();

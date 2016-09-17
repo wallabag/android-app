@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:layout_marginBottom="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="?android:attr/textColorPrimary"
+                android:text="@string/connectionWizard_providerSelection_titleMessage"/>
+
+            <RadioGroup
+                android:id="@+id/providerRadioGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/providerV2WallabagOrg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_v2wallabagorg_name"
+                    android:checked="true" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_v2wallabagorg_desc" />
+
+                <RadioButton
+                    android:id="@+id/providerFramabag"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_framabag_name"
+                    android:checked="false" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_framabag_desc" />
+
+                <RadioButton
+                    android:id="@+id/providerOther"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_general_name" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connectionWizard_providerSelection_provider_general_desc" />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerHorizontal" />
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/prev_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/connectionWizard_providerSelection_prev" />
+
+        <View android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="?android:attr/dividerVertical" />
+
+        <Button
+            style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/next_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/connectionWizard_providerSelection_next" />
+
+    </LinearLayout>
+
+</LinearLayout>

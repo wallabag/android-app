@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.entity;
 
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
@@ -32,9 +31,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         public final static Property Url = new Property(5, String.class, "url", false, "url");
         public final static Property Favorite = new Property(6, Boolean.class, "favorite", false, "favorite");
         public final static Property Archive = new Property(7, Boolean.class, "archive", false, "archive");
-        public final static Property Sync = new Property(8, Boolean.class, "sync", false, "sync");
-        public final static Property UpdateDate = new Property(9, java.util.Date.class, "updateDate", false, "update_date");
-        public final static Property ArticleProgress = new Property(10, Double.class, "articleProgress", false, "article_progress");
+        public final static Property UpdateDate = new Property(8, java.util.Date.class, "updateDate", false, "update_date");
+        public final static Property ArticleProgress = new Property(9, Double.class, "articleProgress", false, "article_progress");
     };
 
 
@@ -58,9 +56,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
                 "\"url\" TEXT," + // 5: url
                 "\"favorite\" INTEGER," + // 6: favorite
                 "\"archive\" INTEGER," + // 7: archive
-                "\"sync\" INTEGER," + // 8: sync
-                "\"update_date\" INTEGER," + // 9: updateDate
-                "\"article_progress\" REAL);"); // 10: articleProgress
+                "\"update_date\" INTEGER," + // 8: updateDate
+                "\"article_progress\" REAL);"); // 9: articleProgress
     }
 
     /** Drops the underlying database table. */
@@ -114,19 +111,14 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             stmt.bindLong(8, archive ? 1L: 0L);
         }
  
-        Boolean sync = entity.getSync();
-        if (sync != null) {
-            stmt.bindLong(9, sync ? 1L: 0L);
-        }
- 
         java.util.Date updateDate = entity.getUpdateDate();
         if (updateDate != null) {
-            stmt.bindLong(10, updateDate.getTime());
+            stmt.bindLong(9, updateDate.getTime());
         }
  
         Double articleProgress = entity.getArticleProgress();
         if (articleProgress != null) {
-            stmt.bindDouble(11, articleProgress);
+            stmt.bindDouble(10, articleProgress);
         }
     }
 
@@ -148,9 +140,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // url
             cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0, // favorite
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // archive
-            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0, // sync
-            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)), // updateDate
-            cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10) // articleProgress
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // updateDate
+            cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9) // articleProgress
         );
         return entity;
     }
@@ -166,9 +157,8 @@ public class ArticleDao extends AbstractDao<Article, Long> {
         entity.setUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setFavorite(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
         entity.setArchive(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
-        entity.setSync(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
-        entity.setUpdateDate(cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)));
-        entity.setArticleProgress(cursor.isNull(offset + 10) ? null : cursor.getDouble(offset + 10));
+        entity.setUpdateDate(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setArticleProgress(cursor.isNull(offset + 9) ? null : cursor.getDouble(offset + 9));
      }
     
     /** @inheritdoc */
@@ -193,8 +183,5 @@ public class ArticleDao extends AbstractDao<Article, Long> {
     protected boolean isEntityUpdateable() {
         return true;
     }
-
-    public long getUnreadCount(SQLiteDatabase db) {
-        return DatabaseUtils.queryNumEntries(db, "ARTICLE", "favorite=0 AND archive=0");
-    }
+    
 }

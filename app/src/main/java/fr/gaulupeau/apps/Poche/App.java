@@ -7,12 +7,8 @@ import com.facebook.stetho.Stetho;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.events.EventProcessor;
 
-/**
- * @author Victor Häggqvist
- * @since 10/19/15
- */
 public class App extends Application {
 
     private static App instance;
@@ -22,13 +18,16 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (BuildConfig.DEBUG)
-            Stetho.initializeWithDefaults(this);
+
+        if(BuildConfig.DEBUG) Stetho.initializeWithDefaults(this);
+
+        Settings.init(this);
+        settings = new Settings(this);
+        settings.initPreferences();
+
+        new EventProcessor(this).start();
 
         DbConnection.setContext(this);
-        settings = new Settings(this);
-
-        WallabagConnection.init(this);
 
         instance = this;
     }

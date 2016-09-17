@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Workaround for https://github.com/square/okio/issues/58 -->
+    <issue id="InvalidPackage">
+        <ignore regexp="okio-.*\.jar" />
+    </issue>
+
+    <!-- Consider localization issues as Warnings -->
+    <issue id="MissingTranslation" severity="warning" />
+    <issue id="MissingQuantity" severity="warning" />
+    <issue id="ExtraTranslation" severity="warning" />
+</lint>

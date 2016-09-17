@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 public class BagItProxyActivity extends AppCompatActivity {
 
@@ -31,7 +31,7 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         // Parsing string for urls.
         Matcher matcher;
-        if (extraText != null && extraText.length() > 0
+        if(extraText != null && !extraText.isEmpty()
                 && (matcher = Patterns.WEB_URL.matcher(extraText)).find()) {
             pageUrl = matcher.group();
         } else {
@@ -49,14 +49,11 @@ public class BagItProxyActivity extends AppCompatActivity {
             return;
         }
 
-        Settings settings = new Settings(this);
-        if(!settings.getBoolean(Settings.CONFIGURE_OPTIONAL_DIALOG_SHOWN, false)) {
-            startActivity(new Intent(this, ArticlesListActivity.class)); // FLAG_ACTIVITY_CLEAR_TOP and/or FLAG_ACTIVITY_NEW_TASK maybe?
-        }
+        Settings.checkFirstRunInit(this);
 
         Log.d(TAG, "Bagging " + pageUrl);
 
-        new AddLinkTask(pageUrl, getApplicationContext(), null, null).execute();
+        ServiceHelper.addLink(this, pageUrl, true);
 
         finish();
     }

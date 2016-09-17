@@ -8,18 +8,20 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import okhttp3.Credentials;
+import com.franmontiel.persistentcookiejar.ClearableCookieJar;
+import com.franmontiel.persistentcookiejar.PersistentCookieJar;
+import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
+import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
+import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+
+import okhttp3.Cookie;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
-import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
@@ -27,6 +29,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,58 +47,21 @@ import javax.net.ssl.X509TrustManager;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
-/**
- * @author Victor Häggqvist
- * @since 10/20/15
- */
 public class WallabagConnection {
 
     private static final String TAG = WallabagConnection.class.getSimpleName();
 
-    private static String basicAuthCredentials;
-
-    public static void init(App app) {
-        Settings settings = app.getSettings();
-
-        setBasicAuthCredentials(
-                settings.getString(Settings.HTTP_AUTH_USERNAME, null),
-                settings.getString(Settings.HTTP_AUTH_PASSWORD, null)
-        );
-    }
-
-    public static void setBasicAuthCredentials(String username, String password) {
-        if((username == null || username.length() == 0)
-                && (password == null || password.length() == 0)) {
-            basicAuthCredentials = null;
-        } else {
-            basicAuthCredentials = Credentials.basic(username, password);
-        }
-    }
-
-    public static Request.Builder getRequestBuilder() {
-        Request.Builder b = new Request.Builder();
-
-        // we use this method instead of OkHttpClient.setAuthenticator()
-        // to save time on 401 responses
-        if(basicAuthCredentials != null) b.header("Authorization", basicAuthCredentials);
-
-        return b;
-    }
-
-    public static Request getRequest(HttpUrl url) {
-        return getRequestBuilder().url(url).build();
-    }
-
-    public static HttpUrl getHttpURL(String url) throws IOException {
+    public static HttpUrl getHttpURL(String url) throws IncorrectConfigurationException {
         HttpUrl httpUrl = HttpUrl.parse(url);
 
-        if(httpUrl == null) throw new IOException("Incorrect URL");
+        if(httpUrl == null) throw new IncorrectConfigurationException("Incorrect URL");
 
         return httpUrl;
     }
 
-    public static boolean isNetworkOnline() {
+    public static boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -114,28 +80,30 @@ public class WallabagConnection {
     }
 
     public static OkHttpClient createClient() {
+        Settings settings = App.getInstance().getSettings();
+
+        return createClient(true, settings.isCustomSSLSettings(), settings.isAcceptAllCertificates());
+    }
+
+    public static OkHttpClient createClient(
+            boolean persistentCookies, boolean customSSLSettings, boolean acceptAllCertificates) {
         OkHttpClient.Builder b = new OkHttpClient.Builder()
                 .readTimeout(45, TimeUnit.SECONDS);
 
-        CookieManager cookieManager = new CookieManager();
-        cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-        b.cookieJar(new JavaNetCookieJar(cookieManager));
+        ClearableCookieJar cookieJar = new PersistentCookieJar(
+                new SetCookieCache(),
+                persistentCookies
+                        ? new SharedPrefsCookiePersistor(App.getInstance())
+                        : new FakeCookiePersistor());
+        b.cookieJar(cookieJar);
 
-        // TODO : Delete this part when OKHTTP 3.3 is released https://github.com/square/okhttp/issues/2543
-        List<Protocol> protocolList = new ArrayList<>();
-        protocolList.add(Protocol.SPDY_3);
-        protocolList.add(Protocol.HTTP_1_1);
-        b.protocols(protocolList);
-
-        Settings settings = App.getInstance().getSettings();
-
-        if(settings.getBoolean(Settings.CUSTOM_SSL_SETTINGS, false)) {
+        if(customSSLSettings) {
             try {
                 b.sslSocketFactory(new CustomSSLSocketFactory());
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
             }
-        } else if(settings.getBoolean(Settings.ALL_CERTS, false)) {
+        } else if(acceptAllCertificates) {
             try {
                 final TrustManager[] trustAllCerts = new TrustManager[]{
                         new X509TrustManager() {
@@ -183,6 +151,24 @@ public class WallabagConnection {
 
     private static class Holder {
         private static OkHttpClient client = getClient();
+    }
+
+    static class FakeCookiePersistor implements CookiePersistor {
+
+        @Override
+        public List<Cookie> loadAll() {
+            return new ArrayList<>(0);
+        }
+
+        @Override
+        public void saveAll(Collection<Cookie> cookies) {}
+
+        @Override
+        public void removeAll(Collection<Cookie> cookies) {}
+
+        @Override
+        public void clear() {}
+
     }
 
     /**

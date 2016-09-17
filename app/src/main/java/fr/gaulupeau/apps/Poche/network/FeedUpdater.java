@@ -1,13 +1,9 @@
-package fr.gaulupeau.apps.Poche.network.tasks;
+package fr.gaulupeau.apps.Poche.network;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
-
-import okhttp3.Request;
-import okhttp3.Response;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -24,25 +20,31 @@ import de.greenrobot.dao.query.WhereCondition;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
-import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
+public class FeedUpdater {
 
     public enum UpdateType { Full, Fast }
 
     public enum FeedType {
-        Main("home", "unread.xml"),
-        Favorite("fav", "starred.xml"),
-        Archive("archive", "archive.xml");
+        Main("home", "unread.xml", R.string.feedName_unread),
+        Favorite("fav", "starred.xml", R.string.feedName_favorites),
+        Archive("archive", "archive.xml", R.string.feedName_archived);
 
         String urlPartV1, urlPartV2;
+        int nameResID;
 
-        FeedType(String urlPartV1, String urlPartV2) {
+        FeedType(String urlPartV1, String urlPartV2, int nameResID) {
             this.urlPartV1 = urlPartV1;
             this.urlPartV2 = urlPartV2;
+            this.nameResID = nameResID;
         }
 
         public String getUrlPart(int wallabagVersion) {
@@ -52,36 +54,49 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
             }
             return "";
         }
+
+        public int getLocalizedResourceID() {
+            return nameResID;
+        }
     }
 
-    private static final String TAG = UpdateFeedTask.class.getSimpleName();
+    private static final String TAG = FeedUpdater.class.getSimpleName();
 
     private String baseURL;
     private String apiUserId;
     private String apiToken;
+    private RequestCreator requestCreator;
     private int wallabagVersion;
-    private CallbackInterface callback;
-    private FeedType feedType;
-    private UpdateType updateType;
 
-    private String errorMessage;
+    private OkHttpClient httpClient;
 
-    public UpdateFeedTask(String baseURL, String apiUserId, String apiToken, int wallabagVersion,
-                          CallbackInterface callback,
-                          FeedType feedType, UpdateType updateType) {
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       String httpAuthUsername, String httpAuthPassword,
+                       int wallabagVersion) {
+        this(baseURL, apiUserId, apiToken,
+                httpAuthUsername, httpAuthPassword,
+                wallabagVersion, null);
+    }
+
+    public FeedUpdater(String baseURL, String apiUserId, String apiToken,
+                       String httpAuthUsername, String httpAuthPassword,
+                       int wallabagVersion, OkHttpClient httpClient) {
         this.baseURL = baseURL;
         this.apiUserId = apiUserId;
         this.apiToken = apiToken;
+        requestCreator = new RequestCreator(httpAuthUsername, httpAuthPassword);
         this.wallabagVersion = wallabagVersion;
-        this.callback = callback;
-        this.feedType = feedType;
-        this.updateType = updateType;
+        this.httpClient = httpClient;
     }
 
-    @Override
-    protected Void doInBackground(Void... params) {
+    public ArticlesChangedEvent update(FeedType feedType, UpdateType updateType)
+            throws XmlPullParserException, RequestException, IOException {
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+
         if(feedType == null && updateType == null) {
             updateAllFeeds();
+
+            event.setInvalidateAll(true);
         } else {
             if(feedType == null) {
                 throw new IllegalArgumentException("If updateType is set, feedType must be set too");
@@ -90,26 +105,13 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 updateType = UpdateType.Full;
             }
 
-            update(feedType, updateType);
+            updateInternal(feedType, updateType, event);
         }
 
-        return null;
+        return event;
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        if (callback == null)
-            return;
-
-        if (errorMessage == null) {
-            callback.feedUpdateFinishedSuccessfully();
-        } else {
-            callback.feedUpdateFinishedWithError(errorMessage);
-        }
-    }
-
-    private void updateAllFeeds() {
+    private void updateAllFeeds() throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, "updateAllFeeds() started");
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -122,22 +124,13 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
             articleDao.deleteAll();
 
             Log.d(TAG, "updateAllFeeds() updating Main feed");
-            if(!updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0)) {
-                Log.w(TAG, "updateAllFeeds() Main feed update failed; exiting");
-                return;
-            }
+            updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
 
             Log.d(TAG, "updateAllFeeds() updating Archive feed");
-            if(!updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0)) {
-                Log.w(TAG, "updateAllFeeds() Archive feed update failed; exiting");
-                return;
-            }
+            updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
 
             Log.d(TAG, "updateAllFeeds() updating Favorite feed");
-            if(!updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0)) {
-                Log.w(TAG, "updateAllFeeds() Favorite feed update failed; exiting");
-                return;
-            }
+            updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
 
             Log.d(TAG, "updateAllFeeds() setting transaction successful");
             db.setTransactionSuccessful();
@@ -149,7 +142,11 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         Log.d(TAG, "updateAllFeeds() finished");
     }
 
-    private void update(FeedType feedType, UpdateType updateType) {
+    private void updateInternal(
+            FeedType feedType, UpdateType updateType, ArticlesChangedEvent event)
+            throws XmlPullParserException, RequestException, IOException {
+        Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
+
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
         SQLiteDatabase db = articleDao.getDatabase();
 
@@ -169,54 +166,29 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                 }
             }
 
-            if(!updateByFeed(articleDao, feedType, updateType, latestID)) {
-                return;
-            }
+            updateByFeed(articleDao, feedType, updateType, latestID, event);
 
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
         }
+
+        Log.i(TAG, String.format("updateInternal(%s, %s) finished", feedType, updateType));
     }
 
-    private boolean updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
-                                 Integer id) {
+    private void updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
+                              Integer id, ArticlesChangedEvent event)
+            throws XmlPullParserException, RequestException, IOException {
         Log.d(TAG, "updateByFeed() started");
 
         InputStream is = null;
         try {
-            // TODO: rewrite?
-            try {
-                is = getInputStream(getFeedUrl(feedType));
-            } catch (IOException e) {
-                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
-                errorMessage = App.getInstance().getString(R.string.feedUpdater_IOException);
-                return false;
-            } catch (RuntimeException e) {
-                Log.e("FeedUpdater.updateByF", "RuntimeException on " + feedType, e);
-                errorMessage = e.getMessage();
-                return false;
-            }
+            is = getInputStream(getFeedUrl(feedType));
 
             Log.d(TAG, "updateByFeed() got input stream; processing feed");
-            try {
-                processFeed(articleDao, is, feedType, updateType, id);
-            } catch (IOException e) {
-                Log.e("FeedUpdater.updateByF", "IOException on " + feedType, e);
-                errorMessage = App.getInstance()
-                        .getString(R.string.feedUpdater_IOExceptionOnProcessingFeed);
-                return false;
-            } catch (XmlPullParserException e) {
-                Log.e("FeedUpdater.updateByF", "XmlPullParserException on " + feedType, e);
-                errorMessage = App.getInstance().getString(R.string.feedUpdater_feedProcessingError);
-                return false;
-            }
-
-            IconUnreadWidget.triggerWidgetUpdate(App.getInstance().getApplicationContext());
+            processFeed(articleDao, is, feedType, updateType, id, event);
 
             Log.d(TAG, "updateByFeed() finished successfully");
-
-            return true;
         } finally {
             if(is != null) {
                 try {
@@ -226,7 +198,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         }
     }
 
-    private String getFeedUrl(FeedType feedType) {
+    public String getFeedUrl(FeedType feedType) {
         if(wallabagVersion == 1) {
             return baseURL + "/?feed"
                     + "&type=" + feedType.getUrlPart(wallabagVersion)
@@ -242,24 +214,36 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         return "";
     }
 
-    private InputStream getInputStream(String urlStr) throws IOException {
-        Request request = WallabagConnection.getRequest(WallabagConnection.getHttpURL(urlStr));
-
-        Response response = WallabagConnection.getClient().newCall(request).execute();
-
+    private InputStream getInputStream(String url)
+            throws IncorrectConfigurationException, IOException {
+        Response response = getResponse(url);
         if(response.isSuccessful()) {
             return response.body().byteStream();
         } else {
-            // TODO: fix
-            throw new RuntimeException(String.format(
+            // TODO: check
+            throw new IncorrectConfigurationException(String.format(
                     App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
-                    response.code(), response.message()
-            ));
+                    response.code(), response.message()));
         }
     }
 
+    public Response getResponse(String url) throws IncorrectConfigurationException, IOException {
+        Request request = requestCreator.getRequest(WallabagConnection.getHttpURL(url));
+
+        return getHttpClient().newCall(request).execute();
+    }
+
+    private OkHttpClient getHttpClient() {
+        if(httpClient == null) {
+            httpClient = WallabagConnection.getClient();
+        }
+
+        return httpClient;
+    }
+
     private void processFeed(ArticleDao articleDao, InputStream is,
-                             FeedType feedType, UpdateType updateType, Integer latestID)
+                             FeedType feedType, UpdateType updateType, Integer latestID,
+                             ArticlesChangedEvent event)
             throws XmlPullParserException, IOException {
         Log.d(TAG, "processFeed() latestID=" + latestID);
         // TODO: use parser.require() all over the place?
@@ -337,6 +321,15 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                         article.setFavorite(feedType == FeedType.Favorite);
                     }
 
+                    if(event != null) {
+                        ArticlesChangedEvent.ChangeType changeType = existing
+                                ? ArticlesChangedEvent.ChangeType.Unspecified
+                                : ArticlesChangedEvent.ChangeType.Added;
+
+                        event.setChangedByFeedType(feedType);
+                        event.addChangedArticle(article, changeType);
+                    }
+
                     articleDao.insertOrReplace(article);
                 } else if(feedType == FeedType.Favorite) {
                     // Favorite: Fast (ONLY applicable if Main and Archive feeds are up to date)
@@ -354,11 +347,23 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
                         continue;
                     }
 
-                    if(article.getFavorite() != null && article.getFavorite()) continue;
+                    if(article.getFavorite() == null || !article.getFavorite()) {
+                        article.setFavorite(true);
 
-                    article.setFavorite(true);
+                        articleDao.update(article);
 
-                    articleDao.update(article);
+                        if(event != null) {
+                            event.setFavoriteFeedChanged(true);
+                            if(article.getArchive()) {
+                                event.setArchiveFeedChanged(true);
+                            } else {
+                                event.setMainFeedChanged(true);
+                            }
+
+                            event.addChangedArticle(article,
+                                    ArticlesChangedEvent.ChangeType.Favorited);
+                        }
+                    }
                 }
             } else {
                 skipElement(parser);
@@ -379,7 +384,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     private static void skipElement(XmlPullParser parser)
             throws XmlPullParserException, IOException {
         if(parser.getEventType() != XmlPullParser.START_TAG) {
-            throw new IllegalStateException();
+            throw new XmlPullParserException("Unexpected state");
         }
 
         int depth = 1;
@@ -479,7 +484,7 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
     }
 
     private static String cleanString(String s) {
-        if(s == null || s.length() == 0) return s;
+        if(s == null || s.isEmpty()) return s;
 
         s = s.replace("&Atilde;&copy;", "&eacute;");
         s = s.replace("&Atilde;&uml;", "&egrave;");
@@ -511,11 +516,6 @@ public class UpdateFeedTask extends AsyncTask<Void, Void, Void> {
         String link;
         String pubDate;
         String description;
-    }
-
-    public interface CallbackInterface {
-        void feedUpdateFinishedWithError(String errorMessage);
-        void feedUpdateFinishedSuccessfully();
     }
 
 }

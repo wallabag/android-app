@@ -5,6 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="fr.gaulupeau.apps.Poche.App"
@@ -24,9 +25,6 @@
             android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
             android:hardwareAccelerated="true" />
         <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.SettingsActivity"
-            android:label="@string/btnSettings" />
-        <activity
             android:name="fr.gaulupeau.apps.Poche.ui.BagItProxyActivity"
             android:theme="@style/ProxyTheme">
             <intent-filter android:label="@string/label_name">
@@ -39,52 +37,60 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity"
-            android:enabled="false"
             android:autoRemoveFromRecents="true"
+            android:enabled="false"
             android:excludeFromRecents="true"
             android:noHistory="true">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
-                <data android:mimeType="text/html"/>
-                <data android:mimeType="text/plain"/>
-                <data android:mimeType="application/xhtml+xml"/>
-                <data android:mimeType="application/vnd.wap.xhtml+xml"/>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:mimeType="text/html" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/xhtml+xml" />
+                <data android:mimeType="application/vnd.wap.xhtml+xml" />
             </intent-filter>
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddActivity"
             android:label="@string/activity_add_label" />
-        <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.DialogHelperActivity"
-            android:theme="@style/ProxyTheme"
-            android:excludeFromRecents="true" />
-        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver" >
+
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity"/>
+
+        <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
         <service
-                android:name="fr.gaulupeau.apps.Poche.tts.TtsService"
-                android:exported="false">
+            android:name="fr.gaulupeau.apps.Poche.tts.TtsService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </service>
+
         <receiver android:name="fr.gaulupeau.apps.Poche.ui.IconUnreadWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -94,6 +100,28 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/icon_unread_info" />
         </receiver>
+        <receiver
+            android:name="fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="fr.gaulupeau.apps.Poche.service.BootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="fr.gaulupeau.apps.Poche.service.AlarmReceiver"
+            android:enabled="false" />
+
+        <service
+            android:name="fr.gaulupeau.apps.Poche.service.BGService"
+            android:exported="false" />
+
     </application>
 
 </manifest>

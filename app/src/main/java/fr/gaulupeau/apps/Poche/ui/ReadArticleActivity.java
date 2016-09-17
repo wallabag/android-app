@@ -31,6 +31,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
@@ -45,14 +50,12 @@ import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
-import fr.gaulupeau.apps.Poche.network.tasks.AddLinkTask;
-import fr.gaulupeau.apps.Poche.network.tasks.DeleteArticleTask;
-import fr.gaulupeau.apps.Poche.network.tasks.ToggleArchiveTask;
-import fr.gaulupeau.apps.Poche.network.tasks.ToggleFavoriteTask;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
@@ -95,7 +98,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private Settings settings;
 
-    private int fontSize = 100;
+    private int fontSize;
 
     public void onCreate(Bundle savedInstanceState) {
         Themes.applyTheme(this);
@@ -136,7 +139,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         settings = App.getInstance().getSettings();
 
-        acceptAllSSLCerts = settings.getBoolean(Settings.ALL_CERTS, false);
+        acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
         String cssName;
         boolean highContrast = false;
@@ -160,10 +163,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
         }
 
-        fontSize = settings.getInt(Settings.FONT_SIZE, fontSize);
-        boolean serifFont = settings.getBoolean(Settings.SERIF_FONT, false);
-
-        if(fontSize < 5) fontSize = 100; // TODO: remove: temp hack for compatibility
+        fontSize = settings.getArticleFontSize();
+        boolean serifFont = settings.isArticleFontSerif();
 
         List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
@@ -206,8 +207,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             httpAuthHostTemp = new URL(httpAuthHostTemp).getHost();
         } catch (Exception ignored) {}
         final String httpAuthHost = httpAuthHostTemp;
-        final String httpAuthUsername = settings.getString(Settings.HTTP_AUTH_USERNAME, null);
-        final String httpAuthPassword = settings.getString(Settings.HTTP_AUTH_PASSWORD, null);
+        final String httpAuthUsername = settings.getHttpAuthUsername();
+        final String httpAuthPassword = settings.getHttpAuthPassword();
 
         scrollView = (ScrollView) findViewById(R.id.scroll);
         webViewContent = (WebView) findViewById(R.id.webViewContent);
@@ -374,12 +375,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
         });
 
-        if (settings.getBoolean(Settings.TTS_VISIBLE, false) && (ttsFragment == null)) {
+        if(settings.isTtsVisible() && (ttsFragment == null)) {
             ttsFragment = (TtsFragment)getSupportFragmentManager().findFragmentByTag("ttsFragment");
             if (ttsFragment == null) {
                 toggleTTS(false);
             }
         }
+
+        EventBus.getDefault().register(this);
     }
 
     private void loadingFinished() {
@@ -420,7 +423,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 startActivity(launchBrowserIntent);
                                 break;
                             case 1:
-                                new AddLinkTask(url, getApplicationContext()).execute();
+                                ServiceHelper.addLink(ReadArticleActivity.this, url);
                                 break;
                         }
                     }
@@ -431,15 +434,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void markAsReadAndClose() {
-        new ToggleArchiveTask(getApplicationContext(),
-                mArticle.getArticleId(), mArticleDao, mArticle).execute();
+        OperationsHelper.archiveArticle(this, mArticle.getArticleId(), !mArticle.getArchive());
 
         finish();
     }
 
     private boolean toggleFavorite() {
-        new ToggleFavoriteTask(getApplicationContext(),
-                mArticle.getArticleId(), mArticleDao, mArticle).execute();
+        OperationsHelper.favoriteArticle(this, mArticle.getArticleId(), !mArticle.getFavorite());
 
         return true;
     }
@@ -460,8 +461,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                new DeleteArticleTask(getApplicationContext(),
-                        mArticle.getArticleId(), mArticleDao, mArticle).execute();
+                OperationsHelper.deleteArticle(ReadArticleActivity.this, mArticle.getArticleId());
 
                 finish();
             }
@@ -485,7 +485,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         File exportDir = getExternalFilesDir(null);
         if(exportDir != null) {
             new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
-                    mArticleDao, mArticle, exportDir.getAbsolutePath()).execute();
+                    mArticle, exportDir.getAbsolutePath()).execute();
         } else {
             Log.w(TAG, "downloadPdf() exportDir is null");
         }
@@ -529,6 +529,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+
+        Log.d(TAG, "onCreateOptionsMenu() started");
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_article, menu);
@@ -587,6 +589,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+
+        super.onDestroy();
+    }
+
+    @Override
     public void onStop() {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
@@ -602,6 +611,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.onPause();
         isResumed = false;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -612,6 +622,26 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
+        Log.d(TAG, "onArticlesChangedEvent() started");
+
+        ArticlesChangedEvent.ChangeType changeType = event.getArticleChangeType(mArticle);
+        if(changeType == null) return;
+
+        Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
+
+        switch(changeType) {
+            case Favorited:
+            case Unfavorited:
+            case Archived:
+            case Unarchived:
+            case Unspecified:
+                Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
+                invalidateOptionsMenu();
+                break;
+        }
+    }
 
     private double getReadingPosition() {
         String t = "ReadArticle.getPos";
@@ -660,7 +690,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 .beginTransaction()
                 .add(R.id.viewMain, ttsFragment, "ttsFragment")
                 .commit();
-            settings.setBoolean(Settings.TTS_VISIBLE, true);
+            settings.setTtsVisible(true);
             ttsFragment.onDocumentLoadStart(domainText, titleText);
             if (loadingFinished) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
@@ -672,7 +702,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     .remove(ttsFragment)
                     .commit();
             ttsFragment = null;
-            settings.setBoolean(Settings.TTS_VISIBLE, false);
+            settings.setTtsVisible(false);
             result = false;
         }
         if (menuTTS != null) {
@@ -802,7 +832,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         setFontSize(webViewContent, fontSize);
 
-        settings.setInt(Settings.FONT_SIZE, fontSize);
+        settings.setArticleFontSize(fontSize);
 
         restorePositionAfterUpdate();
     }

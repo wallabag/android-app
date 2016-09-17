@@ -2,6 +2,11 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -11,36 +16,41 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
-
 import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getHttpURL;
-import static fr.gaulupeau.apps.Poche.network.WallabagConnection.getRequest;
 
-/**
- * Created by strubbl on 11.04.16.
- */
 public abstract class WallabagServiceEndpoint {
+
     private static final String TAG = WallabagServiceEndpoint.class.getSimpleName();
+
+    public enum ConnectionTestResult {
+        OK, IncorrectURL, IncorrectServerVersion, WallabagNotFound,
+        HTTPAuth, NoCSRF, IncorrectCredentials,
+        AuthProblem, UnknownPageAfterLogin
+    }
 
     protected String endpoint;
     protected final String username;
     protected final String password;
+    protected RequestCreator requestCreator;
+
     protected OkHttpClient client;
 
-    public WallabagServiceEndpoint(String endpoint, String username, String password, OkHttpClient client) {
+    public WallabagServiceEndpoint(String endpoint, String username, String password,
+                                   RequestCreator requestCreator, OkHttpClient client) {
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.requestCreator = requestCreator;
         this.client = client;
     }
 
-    public abstract int testConnection() throws IOException;
+    public abstract ConnectionTestResult testConnection()
+            throws IncorrectConfigurationException, IOException;
 
-    public abstract FeedsCredentials getCredentials() throws IOException;
+    public abstract FeedsCredentials getCredentials() throws RequestException, IOException;
 
-    protected FeedsCredentials getCredentials(String configPath, String credentialsPattern) throws IOException {
+    protected FeedsCredentials getCredentials(String configPath, String credentialsPattern)
+            throws RequestException, IOException {
         Log.d(TAG, "getCredentials(): configPath=" + configPath + " credentialsPattern=" + credentialsPattern);
         Request configRequest = getConfigRequest(configPath);
 
@@ -82,13 +92,13 @@ public abstract class WallabagServiceEndpoint {
         return credentials;
     }
 
-    public abstract boolean addLink(String link) throws IOException;
+    public abstract boolean addLink(String link) throws RequestException, IOException;
 
-    public abstract boolean toggleArchive(int articleId) throws IOException;
+    public abstract boolean toggleArchive(int articleId) throws RequestException, IOException;
 
-    public abstract boolean toggleFavorite(int articleId) throws IOException;
+    public abstract boolean toggleFavorite(int articleId) throws RequestException, IOException;
 
-    public abstract boolean deleteArticle(int articleId) throws IOException;
+    public abstract boolean deleteArticle(int articleId) throws RequestException, IOException;
 
     public abstract String getExportUrl(long articleId, String exportType);
 
@@ -96,16 +106,17 @@ public abstract class WallabagServiceEndpoint {
         return client.newCall(request).execute();
     }
 
-    protected boolean checkResponse(Response response) throws IOException {
+    protected boolean checkResponse(Response response) throws RequestException {
         return checkResponse(response, true);
     }
 
-    protected boolean checkResponse(Response response, boolean throwException) throws IOException {
+    protected boolean checkResponse(Response response, boolean throwException)
+            throws RequestException {
         if(!response.isSuccessful()) {
             Log.w(TAG, "checkResponse() response is not OK; response code: " + response.code()
                     + ", response message: " + response.message());
-            if(throwException)
-                throw new IOException(String.format(
+            if(throwException) // TODO: throw multiple more specific exceptions
+                throw new RequestException(String.format(
                         App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
                         response.code(), response.message()
                 ));
@@ -120,33 +131,46 @@ public abstract class WallabagServiceEndpoint {
 
     protected abstract boolean isRegularPage(String body) throws IOException;
 
-    protected boolean containsMarker(String body, String marker) throws IOException {
+    protected boolean containsMarker(String body, String marker) {
         return !(body == null || body.isEmpty()) && body.contains(marker);
     }
 
-    protected abstract Request getLoginRequest(String csrfToken) throws IOException;
+    protected Request.Builder getRequestBuilder() {
+        return requestCreator.getRequestBuilder();
+    }
 
-    protected abstract String executeRequestForResult(Request request, boolean checkResponse, boolean autoRelogin) throws IOException;
+    protected Request getRequest(HttpUrl url) {
+        return requestCreator.getRequest(url);
+    }
 
-    protected Request getConfigRequest(String path) throws IOException {
+    protected abstract Request getLoginRequest(String csrfToken)
+            throws IncorrectConfigurationException;
+
+    protected abstract String executeRequestForResult(
+            Request request, boolean checkResponse, boolean autoRelogin)
+            throws RequestException, IOException;
+
+    protected Request getConfigRequest(String path) throws IncorrectConfigurationException {
         HttpUrl url = getHttpURL(endpoint + path)
                 .newBuilder()
                 .build();
         Log.d(TAG, "getConfigRequest() url: " + url.toString());
-        return getRequest(url);
+        return requestCreator.getRequest(url);
     }
 
-    protected abstract Request getGenerateTokenRequest() throws IOException;
+    protected abstract Request getGenerateTokenRequest() throws IncorrectConfigurationException;
 
-    protected boolean executeRequest(Request request) throws IOException {
+    protected boolean executeRequest(Request request) throws RequestException, IOException {
         return executeRequest(request, true, true);
     }
 
-    private boolean executeRequest(Request request, boolean checkResponse, boolean autoRelogin) throws IOException {
-        return executeRequestForResult(request, checkResponse, autoRelogin) != null;
+    private boolean executeRequest(Request request, boolean checkResponse, boolean autoRelogin)
+            throws RequestException, IOException {
+        return executeRequestForResult(request, checkResponse, autoRelogin) != null; // TODO: fix: this method does not return null anymore
     }
 
-    private String executeRequestForResult(Request request) throws IOException {
+    private String executeRequestForResult(Request request) throws RequestException, IOException {
         return executeRequestForResult(request, true, true);
     }
+
 }

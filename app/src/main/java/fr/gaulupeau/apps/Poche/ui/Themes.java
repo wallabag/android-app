@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 public class Themes {
 
@@ -15,20 +14,7 @@ public class Themes {
     }
 
     public static void init() {
-        String themeName = App.getInstance().getSettings().getString(Settings.THEME, null);
-
-        Theme theme = null;
-        if(themeName != null) {
-            try {
-                theme = Theme.valueOf(themeName);
-            } catch(IllegalArgumentException ignored) {}
-        }
-
-        if(theme == null) {
-            theme = android.os.Build.MODEL.equals("NOOK") ? Theme.LightContrast : Theme.Light;
-        }
-
-        Themes.theme = theme;
+        Themes.theme = App.getInstance().getSettings().getTheme();
     }
 
     public static Theme getCurrentTheme() {
