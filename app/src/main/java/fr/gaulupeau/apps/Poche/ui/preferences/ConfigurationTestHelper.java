@@ -47,6 +47,7 @@ public class ConfigurationTestHelper
     protected int wallabagServerVersion = -1;
 
     protected boolean tryPossibleURLs;
+    protected boolean handleResult;
 
     private ResultHandler handler;
     private GetCredentialsHandler credentialsHandler;
@@ -64,13 +65,14 @@ public class ConfigurationTestHelper
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
                                    GetCredentialsHandler credentialsHandler,
-                                   Settings settings, boolean detectVersion) {
+                                   Settings settings, boolean detectVersion,
+                                   boolean handleResult) {
         this(context, handler, credentialsHandler, settings.getUrl(),
                 settings.getUsername(), settings.getPassword(),
                 settings.getFeedsUserID(), settings.getFeedsToken(),
                 settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
                 settings.isCustomSSLSettings(), settings.isAcceptAllCertificates(),
-                detectVersion ? -1 : settings.getWallabagServerVersion(), false);
+                detectVersion ? -1 : settings.getWallabagServerVersion(), false, handleResult);
     }
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
@@ -79,7 +81,8 @@ public class ConfigurationTestHelper
                                    String feedsUserID, String feedsToken,
                                    String httpAuthUsername, String httpAuthPassword,
                                    boolean customSSLSettings, boolean acceptAllCertificates,
-                                   int wallabagServerVersion, boolean tryPossibleURLs) {
+                                   int wallabagServerVersion, boolean tryPossibleURLs,
+                                   boolean handleResult) {
         this.context = context;
         this.handler = handler;
         this.credentialsHandler = credentialsHandler;
@@ -95,6 +98,7 @@ public class ConfigurationTestHelper
         this.wallabagServerVersion = wallabagServerVersion;
 
         this.tryPossibleURLs = tryPossibleURLs;
+        this.handleResult = handleResult;
 
         progressDialog = new ProgressDialog(context);
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -342,9 +346,7 @@ public class ConfigurationTestHelper
         if(canceled) return;
 
         if(result == TestFeedsTask.Result.OK) {
-            if(handler != null) {
-                handler.onConfigurationTestSuccess(newUrl, newWallabagServerVersion);
-            } else {
+            if(handleResult) {
                 Settings settings = App.getInstance().getSettings();
 
                 if(newUrl != null) {
@@ -356,10 +358,10 @@ public class ConfigurationTestHelper
 
                 Toast.makeText(context, R.string.settings_parametersAreOk, Toast.LENGTH_SHORT).show();
             }
+
+            handler.onConfigurationTestSuccess(newUrl, newWallabagServerVersion);
         } else {
-            if(handler != null) {
-                handler.onFeedsTestFail(result, details);
-            } else {
+            if(handleResult) {
                 String errorMessage;
                 if(result != null) {
                     switch(result) {
@@ -387,6 +389,8 @@ public class ConfigurationTestHelper
                         .setPositiveButton(R.string.ok, null)
                         .show();
             }
+
+            handler.onFeedsTestFail(result, details);
         }
     }
 

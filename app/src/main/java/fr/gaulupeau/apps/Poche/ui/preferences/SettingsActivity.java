@@ -282,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 case R.string.pref_key_connection_autofill: {
                     configurationTestHelper = new ConfigurationTestHelper(
-                            getActivity(), this, this, settings, true);
+                            getActivity(), this, this, settings, true, false);
                     configurationTestHelper.test();
 
                     return true;
