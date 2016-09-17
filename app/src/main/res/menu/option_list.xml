@@ -11,10 +11,10 @@
         android:title="@string/update_allFeeds"
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="ifRoom" />
-    <item android:id="@+id/menuOpenRandomArticle"
-        android:title="@string/menu_open_random_article" />
     <item android:id="@+id/menuSyncQueue"
         android:title="@string/menu_syncLocalChanges" />
+    <item android:id="@+id/menuOpenRandomArticle"
+        android:title="@string/menu_open_random_article" />
     <item android:id="@+id/menuSettings"
         android:title="@string/btnSettings" />
     <item android:id="@+id/menuAbout"

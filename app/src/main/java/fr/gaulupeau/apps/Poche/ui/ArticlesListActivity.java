@@ -30,6 +30,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
@@ -61,6 +62,8 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean firstSyncDone;
     private boolean tryToUpdateOnResume;
 
+    private boolean offlineQueuePending;
+
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
 
@@ -85,6 +88,8 @@ public class ArticlesListActivity extends AppCompatActivity
         viewPager.setCurrentItem(1);
 
         firstSyncDone = settings.isFirstSyncDone();
+
+        offlineQueuePending = settings.isOfflineQueuePending();
 
         EventBus.getDefault().register(this);
     }
@@ -170,6 +175,14 @@ public class ArticlesListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
+
+        if(!offlineQueuePending) {
+            MenuItem menuItem = menu.findItem(R.id.menuSyncQueue);
+            if(menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+
         return true;
     }
 
@@ -179,6 +192,9 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuFullUpdate:
                 updateAllFeeds(true);
                 return true;
+            case R.id.menuSyncQueue:
+                syncQueue();
+                return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
@@ -187,9 +203,6 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuOpenRandomArticle:
                 openRandomArticle();
-                return true;
-            case R.id.menuSyncQueue:
-                syncQueue();
                 return true;
             case R.id.menuAbout:
                 new LibsBuilder()
@@ -228,6 +241,23 @@ public class ArticlesListActivity extends AppCompatActivity
             tryToUpdateOnResume = false;
 
             notifyListUpdate(event.getFeedType(), false);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
+    public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
+        Log.d(TAG, "onOfflineQueueChangedEvent() started");
+
+        Long queueLength = event.getQueueLength();
+
+        boolean prevValue = offlineQueuePending;
+        offlineQueuePending = queueLength == null || queueLength > 0;
+
+        Log.d(TAG, "onOfflineQueueChangedEvent() offlineQueuePending: " + offlineQueuePending);
+
+        if(prevValue != offlineQueuePending) {
+            Log.d(TAG, "onOfflineQueueChangedEvent() invalidating options menu");
+            invalidateOptionsMenu();
         }
     }
 
