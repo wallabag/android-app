@@ -76,6 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         private boolean newAutoSyncQueueEnabled;
 
         private boolean connectionParametersChanged;
+        private boolean httpClientReinitializationNeeded;
 
         private ConfigurationTestHelper configurationTestHelper;
 
@@ -198,8 +199,15 @@ public class SettingsActivity extends AppCompatActivity {
             if(connectionParametersChanged) {
                 connectionParametersChanged = false;
 
-                Log.i(TAG, "onStop() setting isConfigurationOk(false)");
+                Log.i(TAG, "onPause() setting isConfigurationOk(false)");
                 settings.setConfigurationOk(false);
+            }
+
+            if(httpClientReinitializationNeeded) {
+                httpClientReinitializationNeeded = false;
+
+                Log.i(TAG, "onPause() calling WallabagConnection.replaceClient()");
+                WallabagConnection.replaceClient();
             }
 
             super.onPause();
@@ -250,12 +258,14 @@ public class SettingsActivity extends AppCompatActivity {
                     newAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
                     break;
 
+                case R.string.pref_key_connection_advanced_acceptAllCertificates:
+                case R.string.pref_key_connection_advanced_customSSLSettings:
+                    Log.d(TAG, "onSharedPreferenceChanged() httpClientReinitializationNeeded");
+                    httpClientReinitializationNeeded = true;
                 case R.string.pref_key_connection_url:
                 case R.string.pref_key_connection_username:
                 case R.string.pref_key_connection_password:
                 case R.string.pref_key_connection_serverVersion:
-                case R.string.pref_key_connection_advanced_acceptAllCertificates:
-                case R.string.pref_key_connection_advanced_customSSLSettings:
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                 case R.string.pref_key_connection_feedsUserID:
