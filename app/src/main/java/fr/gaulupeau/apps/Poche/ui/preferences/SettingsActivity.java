@@ -18,6 +18,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
@@ -90,6 +91,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
+            setOnClickListener(R.string.pref_key_connection_advanced_clearCookies);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
@@ -284,6 +286,19 @@ public class SettingsActivity extends AppCompatActivity {
                     configurationTestHelper = new ConfigurationTestHelper(
                             getActivity(), this, this, settings, true, false);
                     configurationTestHelper.test();
+
+                    return true;
+                }
+                case R.string.pref_key_connection_advanced_clearCookies: {
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        WallabagConnection.clearCookies(getActivity());
+                        WallabagConnection.replaceClient();
+
+                        Toast.makeText(activity,
+                                R.string.pref_toast_connection_advanced_clearCookies,
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                     return true;
                 }

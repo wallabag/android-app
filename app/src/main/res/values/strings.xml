@@ -167,6 +167,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
 
+    <string name="pref_name_connection_advanced_clearCookies">Clear cookies</string>
+    <string name="pref_desc_connection_advanced_clearCookies">Resets the established login session (if any)</string>
+    <string name="pref_toast_connection_advanced_clearCookies">Cookies cleared</string>
+
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Application theme</string>
     <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
