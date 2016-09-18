@@ -198,6 +198,8 @@ GAULUPEAU Jonathan — 2013-2015
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available</string>
+    <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
+    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
