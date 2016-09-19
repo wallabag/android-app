@@ -32,10 +32,10 @@ import okio.Okio;
 
 public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
 
-    protected static String TAG = DownloadPdfTask.class.getSimpleName();
+    protected static final String TAG = DownloadPdfTask.class.getSimpleName();
 
-    protected Context context;
-    protected int articleId;
+    protected final Context context;
+    protected final int articleId;
     protected Article article;
     protected WallabagService service;
     protected String errorMessage;
@@ -45,9 +45,9 @@ public class DownloadPdfTask extends AsyncTask<Void, Integer, Boolean> {
     private NotificationManager notificationManager;
     private NotificationCompat.Builder notificationBuilder;
 
-    private int notificationID = 1337; // TODO: fix?
+    private final int notificationID = 1337; // TODO: fix?
 
-    private String exportDir;
+    private final String exportDir;
 
     private File resultFile;
 
