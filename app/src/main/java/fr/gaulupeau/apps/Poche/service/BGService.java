@@ -139,6 +139,7 @@ public class BGService extends IntentService {
 
         ActionResult result = new ActionResult();
         Long queueChangedLength = null;
+        boolean urlUploaded = false;
 
         DaoSession daoSession = getDaoSession();
         daoSession.getDatabase().beginTransaction();
@@ -202,6 +203,7 @@ public class BGService extends IntentService {
                         }
 
                         itemResult = addLinkRemote(link);
+                        if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
                         break;
                     }
                 }
@@ -262,6 +264,12 @@ public class BGService extends IntentService {
 
         if(queueChangedLength != null) {
             postEvent(new OfflineQueueChangedEvent(queueChangedLength));
+        }
+
+        if(urlUploaded) {
+            postEvent(new AddLinkFinishedEvent(
+                    new ActionRequest(ActionRequest.Action.AddLink),
+                    new ActionResult()));
         }
 
         Log.d(TAG, "syncOfflineQueue() finished");

@@ -85,6 +85,8 @@ public class DbConnection {
             DaoMaster.dropAllTables(db, true);
             onCreate(db);
 
+            new Settings(context).setFirstSyncDone(false);
+
             if(offlineUrls != null && !offlineUrls.isEmpty()) {
                 boolean inserted = false;
 

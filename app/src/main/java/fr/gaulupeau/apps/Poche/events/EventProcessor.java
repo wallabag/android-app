@@ -319,21 +319,31 @@ public class EventProcessor {
     public void onAddLinkFinishedEvent(AddLinkFinishedEvent event) {
         Log.d(TAG, "onAddLinkFinishedEvent() started");
 
-        if(!event.getRequest().isHeadless()) return;
-
         ActionResult result = event.getResult();
         if(result == null || result.isSuccess()) {
             Log.d(TAG, "onAddLinkFinishedEvent() result is null or success");
 
-            showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
+            if(getSettings().isAutoDownloadNewArticlesEnabled()
+                    && !getSettings().isOfflineQueuePending()) {
+                Log.d(TAG, "onAddLinkFinishedEvent() autoDlNew enabled, triggering fast update");
+
+                ServiceHelper.updateFeed(getContext(),
+                        FeedUpdater.FeedType.Main, FeedUpdater.UpdateType.Fast, null, true);
+            }
+
+            if(event.getRequest().isHeadless()) {
+                showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
+            }
         } else {
             ActionResult.ErrorType errorType = result.getErrorType();
 
             Log.d(TAG, "onAddLinkFinishedEvent() errorType: " + errorType);
 
-            if(errorType == ActionResult.ErrorType.Temporary
-                    || errorType == ActionResult.ErrorType.NoNetwork) {
-                showToast(getContext().getString(R.string.addLink_savedOffline), Toast.LENGTH_SHORT);
+            if(event.getRequest().isHeadless()) {
+                if(errorType == ActionResult.ErrorType.Temporary
+                        || errorType == ActionResult.ErrorType.NoNetwork) {
+                    showToast(getContext().getString(R.string.addLink_savedOffline), Toast.LENGTH_SHORT);
+                }
             }
         }
     }

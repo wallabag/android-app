@@ -35,20 +35,24 @@ public class Settings {
     public static void init(Context c) {
         preferenceKeysMap = new HashMap<>();
 
-        for(Field field: R.string.class.getDeclaredFields()) {
-            int modifiers = field.getModifiers();
-            if(Modifier.isStatic(modifiers)
-                    && !Modifier.isPrivate(modifiers)
-                    && field.getType().equals(int.class)) {
-                try {
-                    if(field.getName().startsWith("pref_key_")) {
-                        int resID = field.getInt(null);
-                        addToMap(c, resID);
+        try {
+            for(Field field: R.string.class.getDeclaredFields()) {
+                int modifiers = field.getModifiers();
+                if(Modifier.isStatic(modifiers)
+                        && !Modifier.isPrivate(modifiers)
+                        && field.getType().equals(int.class)) {
+                    try {
+                        if(field.getName().startsWith("pref_key_")) {
+                            int resID = field.getInt(null);
+                            addToMap(c, resID);
+                        }
+                    } catch(IllegalArgumentException | IllegalAccessException e) {
+                        Log.e(TAG, "init() exception", e);
                     }
-                } catch(IllegalArgumentException | IllegalAccessException e) {
-                    Log.e(TAG, "init() exception", e);
                 }
             }
+        } catch(Exception e) {
+            Log.e(TAG, "init() exception", e);
         }
     }
 
@@ -460,6 +464,14 @@ public class Settings {
 
     public void setAutoSyncQueueEnabled(boolean value) {
         setBoolean(R.string.pref_key_autoSyncQueue_enabled, value);
+    }
+
+    public boolean isAutoDownloadNewArticlesEnabled() {
+        return getBoolean(R.string.pref_key_autoDlNew_enabled, false);
+    }
+
+    public void setAutoDownloadNewArticlesEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoDlNew_enabled, value);
     }
 
     public boolean isFirstRun() {

@@ -341,7 +341,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             configurationTestHelper = new ConfigurationTestHelper(
                     activity, this, this, url, username, password, feedsUserID, feedsToken,
                     httpAuthUsername, httpAuthPassword, customSSLSettings, acceptAllCertificates,
-                    wallabagServerVersion, tryPossibleURLs);
+                    wallabagServerVersion, tryPossibleURLs, false);
             configurationTestHelper.test();
         }
 

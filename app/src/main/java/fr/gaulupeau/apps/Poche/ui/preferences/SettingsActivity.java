@@ -18,6 +18,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
@@ -75,6 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         private boolean newAutoSyncQueueEnabled;
 
         private boolean connectionParametersChanged;
+        private boolean httpClientReinitializationNeeded;
 
         private ConfigurationTestHelper configurationTestHelper;
 
@@ -90,6 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
+            setOnClickListener(R.string.pref_key_connection_advanced_clearCookies);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
@@ -196,8 +199,15 @@ public class SettingsActivity extends AppCompatActivity {
             if(connectionParametersChanged) {
                 connectionParametersChanged = false;
 
-                Log.i(TAG, "onStop() setting isConfigurationOk(false)");
+                Log.i(TAG, "onPause() setting isConfigurationOk(false)");
                 settings.setConfigurationOk(false);
+            }
+
+            if(httpClientReinitializationNeeded) {
+                httpClientReinitializationNeeded = false;
+
+                Log.i(TAG, "onPause() calling WallabagConnection.replaceClient()");
+                WallabagConnection.replaceClient();
             }
 
             super.onPause();
@@ -248,12 +258,14 @@ public class SettingsActivity extends AppCompatActivity {
                     newAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
                     break;
 
+                case R.string.pref_key_connection_advanced_acceptAllCertificates:
+                case R.string.pref_key_connection_advanced_customSSLSettings:
+                    Log.d(TAG, "onSharedPreferenceChanged() httpClientReinitializationNeeded");
+                    httpClientReinitializationNeeded = true;
                 case R.string.pref_key_connection_url:
                 case R.string.pref_key_connection_username:
                 case R.string.pref_key_connection_password:
                 case R.string.pref_key_connection_serverVersion:
-                case R.string.pref_key_connection_advanced_acceptAllCertificates:
-                case R.string.pref_key_connection_advanced_customSSLSettings:
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                 case R.string.pref_key_connection_feedsUserID:
@@ -282,8 +294,21 @@ public class SettingsActivity extends AppCompatActivity {
                 }
                 case R.string.pref_key_connection_autofill: {
                     configurationTestHelper = new ConfigurationTestHelper(
-                            getActivity(), this, this, settings, true);
+                            getActivity(), this, this, settings, true, false);
                     configurationTestHelper.test();
+
+                    return true;
+                }
+                case R.string.pref_key_connection_advanced_clearCookies: {
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        WallabagConnection.clearCookies(getActivity());
+                        WallabagConnection.replaceClient();
+
+                        Toast.makeText(activity,
+                                R.string.pref_toast_connection_advanced_clearCookies,
+                                Toast.LENGTH_SHORT).show();
+                    }
 
                     return true;
                 }

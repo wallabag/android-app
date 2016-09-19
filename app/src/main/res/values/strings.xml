@@ -167,6 +167,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
 
+    <string name="pref_name_connection_advanced_clearCookies">Clear cookies</string>
+    <string name="pref_desc_connection_advanced_clearCookies">Resets the established login session (if any)</string>
+    <string name="pref_toast_connection_advanced_clearCookies">Cookies cleared</string>
+
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Application theme</string>
     <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
@@ -194,6 +198,8 @@ GAULUPEAU Jonathan — 2013-2015
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available</string>
+    <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
+    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
@@ -203,9 +209,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe database?</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag</string>
-    <string name="connectionWizard_welcome_text">Something welcoming here. Blah-blah-blah.</string>
-    <string name="connectionWizard_welcome_rerunNotice">You can always re-run this wizard from the Settings screen.</string>
+    <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag!</string>
+    <string name="connectionWizard_welcome_text">Before you can use Wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
+    <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from the Settings screen.</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 

@@ -28,13 +28,15 @@ import java.util.WeakHashMap;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
@@ -58,7 +60,9 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean checkConfigurationOnResume;
     private AlertDialog checkConfigurationDialog;
     private boolean firstSyncDone;
-    private boolean showEmptyDbDialogOnResume;
+    private boolean tryToUpdateOnResume;
+
+    private boolean offlineQueuePending;
 
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
@@ -85,12 +89,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
         firstSyncDone = settings.isFirstSyncDone();
 
-        // compatibility hack for pre-Settings.isFirstSyncDone() versions // TODO: remove later
-        if(!firstSyncDone
-                && DbConnection.getSession().getArticleDao().queryBuilder().limit(1).count() != 0) {
-            firstSyncDone = true;
-            settings.setFirstSyncDone(true);
-        }
+        offlineQueuePending = settings.isOfflineQueuePending();
 
         EventBus.getDefault().register(this);
     }
@@ -102,7 +101,7 @@ public class ArticlesListActivity extends AppCompatActivity
         checkConfigurationOnResume = true;
 
         if(!firstSyncDone) {
-            showEmptyDbDialogOnResume = true;
+            tryToUpdateOnResume = true;
         }
     }
 
@@ -144,12 +143,10 @@ public class ArticlesListActivity extends AppCompatActivity
             }
         }
 
-        if(showEmptyDbDialogOnResume) {
-            showEmptyDbDialogOnResume = false;
+        if(tryToUpdateOnResume) {
+            tryToUpdateOnResume = false;
 
-            if(settings.isConfigurationOk()) {
-                updateAllFeeds();
-            }
+            updateAllFeedsIfDbIsEmpty();
         }
     }
 
@@ -162,10 +159,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     @Override
     protected void onStop() {
-        if(configurationTestHelper != null) {
-            configurationTestHelper.cancel();
-            configurationTestHelper = null;
-        }
+        cancelConfigurationTest();
 
         super.onStop();
     }
@@ -181,6 +175,14 @@ public class ArticlesListActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
+
+        if(!offlineQueuePending) {
+            MenuItem menuItem = menu.findItem(R.id.menuSyncQueue);
+            if(menuItem != null) {
+                menuItem.setVisible(false);
+            }
+        }
+
         return true;
     }
 
@@ -188,22 +190,19 @@ public class ArticlesListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuFullUpdate:
-                updateAllFeeds();
+                updateAllFeeds(true);
+                return true;
+            case R.id.menuSyncQueue:
+                syncQueue();
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
-                return true;
-            case R.id.menuTestConfiguration:
-                testConfiguration();
                 return true;
             case R.id.menuBagPage:
                 startActivity(new Intent(getBaseContext(), AddActivity.class));
                 return true;
             case R.id.menuOpenRandomArticle:
                 openRandomArticle();
-                return true;
-            case R.id.menuSyncQueue:
-                syncQueue();
                 return true;
             case R.id.menuAbout:
                 new LibsBuilder()
@@ -239,9 +238,26 @@ public class ArticlesListActivity extends AppCompatActivity
 
         if(event.getResult().isSuccess()) {
             firstSyncDone = true;
-            showEmptyDbDialogOnResume = false;
+            tryToUpdateOnResume = false;
 
             notifyListUpdate(event.getFeedType(), false);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
+    public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
+        Log.d(TAG, "onOfflineQueueChangedEvent() started");
+
+        Long queueLength = event.getQueueLength();
+
+        boolean prevValue = offlineQueuePending;
+        offlineQueuePending = queueLength == null || queueLength > 0;
+
+        Log.d(TAG, "onOfflineQueueChangedEvent() offlineQueuePending: " + offlineQueuePending);
+
+        if(prevValue != offlineQueuePending) {
+            Log.d(TAG, "onOfflineQueueChangedEvent() invalidating options menu");
+            invalidateOptionsMenu();
         }
     }
 
@@ -267,8 +283,14 @@ public class ArticlesListActivity extends AppCompatActivity
         }
     }
 
-    private void updateAllFeeds() {
-        updateFeed(true, null, null);
+    private void updateAllFeedsIfDbIsEmpty() {
+        if(settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
+            updateAllFeeds(false);
+        }
+    }
+
+    private void updateAllFeeds(boolean showErrors) {
+        updateFeed(showErrors, null, null);
     }
 
     private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
@@ -304,8 +326,10 @@ public class ArticlesListActivity extends AppCompatActivity
         boolean result = false;
 
         if(fullUpdateRunning || refreshingFragment != -1) {
-            Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished, Toast.LENGTH_SHORT)
-                    .show();
+            if(showErrors) {
+                Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished,
+                        Toast.LENGTH_SHORT).show();
+            }
         } else if(!settings.isConfigurationOk()) {
             if(showErrors) {
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
@@ -429,10 +453,31 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void testConfiguration() {
-        ConfigurationTestHelper configurationTestHelper
-                = new ConfigurationTestHelper(this, null, null, settings, false);
+        cancelConfigurationTest();
+
+        configurationTestHelper = new ConfigurationTestHelper(
+                this, new ConfigurationTestHelper.ResultHandler() {
+            @Override
+            public void onConfigurationTestSuccess(String url, Integer serverVersion) {
+                updateAllFeedsIfDbIsEmpty();
+            }
+
+            @Override
+            public void onConnectionTestFail(
+                    WallabagServiceEndpoint.ConnectionTestResult result, String details) {}
+
+            @Override
+            public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
+        }, null, settings, false, true);
 
         configurationTestHelper.test();
+    }
+
+    private void cancelConfigurationTest() {
+        if(configurationTestHelper != null) {
+            configurationTestHelper.cancel();
+            configurationTestHelper = null;
+        }
     }
 
     public static class ArticlesListPagerAdapter extends FragmentPagerAdapter {

@@ -69,6 +69,14 @@ public class WallabagConnection {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
+    public static void clearCookies(Context context) {
+        new SharedPrefsCookiePersistor(context).clear();
+    }
+
+    public static OkHttpClient replaceClient() {
+        return Holder.client = createClient();
+    }
+
     public static OkHttpClient getClient() {
         if (Holder.client != null)
             return Holder.client;

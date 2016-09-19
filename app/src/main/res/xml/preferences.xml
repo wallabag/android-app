@@ -64,6 +64,10 @@
                     android:inputType="textPassword"
                     android:defaultValue="" />
             </PreferenceCategory>
+            <Preference
+                android:key="@string/pref_key_connection_advanced_clearCookies"
+                android:title="@string/pref_name_connection_advanced_clearCookies"
+                android:summary="@string/pref_desc_connection_advanced_clearCookies"/>
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_ui">
@@ -112,6 +116,11 @@
             android:key="@string/pref_key_autoSyncQueue_enabled"
             android:title="@string/pref_name_autoSyncQueue_enabled"
             android:summary="@string/pref_desc_autoSyncQueue_enabled"
+            android:defaultValue="false" />
+        <CheckBoxPreference
+            android:key="@string/pref_key_autoDlNew_enabled"
+            android:title="@string/pref_name_autoDlNew_enabled"
+            android:summary="@string/pref_desc_autoDlNew_enabled"
             android:defaultValue="false" />
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_miscellaneous">
