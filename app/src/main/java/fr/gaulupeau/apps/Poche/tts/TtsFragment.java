@@ -58,7 +58,7 @@ public class TtsFragment
     extends Fragment {
 
     private ReadArticleActivity readArticleActivity;
-    private WebviewText webviewText;
+    private WebViewText webViewText;
     private Settings settings;
     private View viewTTSOption;
     private ImageButton btnTTSPlayStop;
@@ -94,7 +94,7 @@ public class TtsFragment
     private static final String LOG_TAG = "TtsFragment";
     private static final float MAX_TTS_SPEED = 4.0F;
     private static final float MAX_TTS_PITCH = 2.0F;
-    private static final int REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS = 60000;
+    private static final int REQUEST_CODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS = 60000;
     private static final String METADATA_ALBUM = "Wallabag";
 
     protected ServiceConnection serviceConnection;
@@ -212,19 +212,19 @@ public class TtsFragment
             }
         });
 
-        final CheckBox chkbxTTSAutoplayNext = (CheckBox) view.findViewById(R.id.chkbxTTSAutoplayNext);
-        final ImageView imgviewTTSAutolpayNext = (ImageView) view.findViewById(R.id.imgviewTTSAutoplayNext);
-        chkbxTTSAutoplayNext.setChecked(settings.isTtsAutoplayNext());
-        View.OnClickListener ttsAutoplayNextClickListner = new View.OnClickListener() {
+        final CheckBox checkboxTTSAutoplayNext = (CheckBox) view.findViewById(R.id.chkbxTTSAutoplayNext);
+        final ImageView imgViewTTSAutoplayNext = (ImageView) view.findViewById(R.id.imgviewTTSAutoplayNext);
+        checkboxTTSAutoplayNext.setChecked(settings.isTtsAutoplayNext());
+        View.OnClickListener ttsAutoplayNextClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                settings.setTtsAutoplayNext(chkbxTTSAutoplayNext.isChecked());
-                if (chkbxTTSAutoplayNext.isChecked()) {
+                settings.setTtsAutoplayNext(checkboxTTSAutoplayNext.isChecked());
+                if (checkboxTTSAutoplayNext.isChecked()) {
                     showToastMessage(R.string.ttsAutoplayNextArticle);
                 }
             }
         };
-        chkbxTTSAutoplayNext.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        checkboxTTSAutoplayNext.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 settings.setTtsAutoplayNext(isChecked);
@@ -233,10 +233,10 @@ public class TtsFragment
                 }
             }
         });
-        imgviewTTSAutolpayNext.setOnClickListener(new View.OnClickListener() {
+        imgViewTTSAutoplayNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chkbxTTSAutoplayNext.toggle();
+                checkboxTTSAutoplayNext.toggle();
             }
         });
 
@@ -412,7 +412,7 @@ public class TtsFragment
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
                 if (documentParsed) {
-                    ttsService.setTextInterface(webviewText, artist, title, METADATA_ALBUM);
+                    ttsService.setTextInterface(webViewText, artist, title, METADATA_ALBUM);
                 }
             }
 
@@ -534,20 +534,20 @@ public class TtsFragment
 
     public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
         //Log.d(LOG_TAG, "onDocumentLoadFinished");
-        if (webviewText == null) {
-            webviewText = new WebviewText(webView, scrollView, readArticleActivity);
-            webviewText.setOnReadFinishedCallback(new Runnable() {
+        if (webViewText == null) {
+            webViewText = new WebViewText(webView, scrollView, readArticleActivity);
+            webViewText.setOnReadFinishedCallback(new Runnable() {
                 @Override
                 public void run() {
                     onReadFinished();
                 }
             });
         }
-        webviewText.parseWebviewDocument(new Runnable() {
+        webViewText.parseWebViewDocument(new Runnable() {
             public void run() {
                 documentParsed = true;
                 if (ttsService != null) {
-                    ttsService.setTextInterface(webviewText, artist, title, METADATA_ALBUM);
+                    ttsService.setTextInterface(webViewText, artist, title, METADATA_ALBUM);
                 }
             }
         });
@@ -580,10 +580,10 @@ public class TtsFragment
         }
     }
 
-    public boolean onWebviewConsoleMessage(ConsoleMessage cm) {
+    public boolean onWebViewConsoleMessage(ConsoleMessage cm) {
         boolean result = false;
-        if (webviewText != null) {
-            result = webviewText.onWebviewConsoleMessage(cm);
+        if (webViewText != null) {
+            result = webViewText.onWebViewConsoleMessage(cm);
         }
         return result;
     }
@@ -650,7 +650,7 @@ public class TtsFragment
     @Override
     public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         Log.d(LOG_TAG, "onActivityResult: requestCode: " + requestCode + ", resultCode: " + resultCode);
-        if (requestCode == REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS) {
+        if (requestCode == REQUEST_CODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS) {
             if (ttsService != null) {
                 ttsService.setEngineAndVoice(ttsService.getEngine(), ttsService.getVoice());
             }
@@ -712,14 +712,14 @@ public class TtsFragment
                     voice.substring(0, voice.indexOf("-")) : voice;
             spinnerLanguageAdapter.setNotifyOnChange(false);
             spinnerLanguageAdapter.clear();
-            int langugagePositionToSelect = 0;
+            int languagePositionToSelect = 0;
             for(DisplayName lang: ttsLanguages) {
                 spinnerLanguageAdapter.add(lang.displayName);
                 if (lang.name.equals(language)) {
-                    langugagePositionToSelect = spinnerLanguageAdapter.getCount() - 1;
+                    languagePositionToSelect = spinnerLanguageAdapter.getCount() - 1;
                 }
             }
-            spinnerLanguage.setSelection(langugagePositionToSelect);
+            spinnerLanguage.setSelection(languagePositionToSelect);
             spinnerLanguageAdapter.notifyDataSetChanged();
             spinnerLanguageAdapter.setNotifyOnChange(true);
         }
@@ -766,7 +766,7 @@ public class TtsFragment
                             intent.setAction("com.android.settings.TTS_SETTINGS");
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             this.startActivity(intent);
-                            startActivityForResult(intent, REQUESTCODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS);
+                            startActivityForResult(intent, REQUEST_CODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS);
                         } else {
                             ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
                         }

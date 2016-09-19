@@ -229,7 +229,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 boolean result = false;
                 if (ttsFragment != null) {
-                    result = ttsFragment.onWebviewConsoleMessage(cm);
+                    result = ttsFragment.onWebViewConsoleMessage(cm);
                 }
                 if ( ! result) {
                     Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
