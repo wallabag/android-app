@@ -159,7 +159,7 @@ GAULUPEAU Jonathan — 2013
     <string name="d_checkFeeds_errorMessage_notFound">Flux non trouvés</string>
     <string name="d_checkFeeds_errorMessage_unknown">Erreur inconnue</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
-    <string name="d_checkFeeds_title_fail">Échec du test des flux </string>
+    <string name="d_checkFeeds_title_fail">Échec du test des flux</string>
     <string name="d_configurationChanged_answer_decline">Pas maintenant</string>
     <string name="d_configurationChanged_message">Il semble que certains paramètres aient été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationChanged_title">Paramètres modifiés</string>
@@ -170,7 +170,7 @@ GAULUPEAU Jonathan — 2013
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
-    <string name="d_testConnection_urlSuggestion_message"> Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
+    <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
     <string name="getFeedsCredentials_progressDialogMessage">Configuration des flux...</string>
@@ -201,7 +201,7 @@ GAULUPEAU Jonathan — 2013
     <string name="pref_name_autoSync_type">Type de synchronisation automatique</string>
     <string name="pref_name_connection_advanced_clearCookies">Nettoyer les cookies</string>
     <string name="pref_name_connection_autofill">Remplir automatiquement</string>
-    <string name="pref_name_runConnectionWizard">Lançer l\'assistant de connexion</string>
+    <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
     <string name="pref_name_ui_article_fontSerif">Police avec Serif</string>
     <string name="pref_option_autoSync_interval_12h">12 heures</string>
     <string name="pref_option_autoSync_interval_15m">15 minutes</string>
@@ -213,7 +213,7 @@ GAULUPEAU Jonathan — 2013
     <string name="settings_parametersAutofilled">Paramètres récupérés</string>
     <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP</string>
     <string name="testConnection_errorMessage_httpAuth">Échec de l\'authentification HTTP</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Version du serveur choisie inccorecte</string>
+    <string name="testConnection_errorMessage_incorrectServerVersion">Version du serveur choisie incorrecte</string>
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion</string>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
