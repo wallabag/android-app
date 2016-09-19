@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -612,7 +613,7 @@ public class TtsFragment
             this.displayName = displayName;
         }
         @Override
-        public int compareTo(DisplayName another) {
+        public int compareTo(@NonNull DisplayName another) {
             return this.displayName.compareTo(another.displayName);
         }
     }
