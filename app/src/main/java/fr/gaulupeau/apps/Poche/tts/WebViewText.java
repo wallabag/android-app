@@ -11,9 +11,9 @@ import java.util.Vector;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 
 /**
- * TextInterface to navigate in a Webview.
+ * TextInterface to navigate in a WebView.
  */
-public class WebviewText implements TextInterface {
+public class WebViewText implements TextInterface {
 
     private final ReadArticleActivity readArticleActivity;
     private final WebView webView;
@@ -28,7 +28,7 @@ public class WebviewText implements TextInterface {
 
 
 
-    private final String WEBVIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
+    private final String WEB_VIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
     private final String JAVASCRIPT_PARSE_DOCUMENT_TEXT = "" +
             "function nextDomElem(elem) {\n" +
             "    var result;\n" +
@@ -56,13 +56,13 @@ public class WebviewText implements TextInterface {
             "}\n" +
             "\n" +
             "function cmdStart() {\n" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "start');\n" +
+            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "start');\n" +
             "}\n" +
             "function cmdEnd() {\n" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "end');\n" +
+            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "end');\n" +
             "}\n" +
             "function cmdText(text, top, bottom) {\n" +
-            "        console.log('" + WEBVIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);\n" +
+            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);\n" +
             "}\n" +
             "\n" +
             "function parseDocumentText() {\n" +
@@ -78,10 +78,10 @@ public class WebviewText implements TextInterface {
             "    cmdEnd();\n" +
             "}\n";
 
-    private static final String LOG_TAG = "WebviewText";
+    private static final String LOG_TAG = "WebViewText";
 
 
-    public WebviewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
+    public WebViewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
         this.webView = webView;
         this.scrollView = scrollView;
         this.readArticleActivity = readArticleActivity;
@@ -92,9 +92,9 @@ public class WebviewText implements TextInterface {
         this.onReadFinishedCallback = onReadFinishedCallback;
     }
 
-    public void parseWebviewDocument(Runnable callback)
+    public void parseWebViewDocument(Runnable callback)
     {
-        Log.d(LOG_TAG, "parseWebviewDocument");
+        Log.d(LOG_TAG, "parseWebViewDocument");
         this.parsedSize = 0;
         this.parsedCallback = callback;
         webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
@@ -113,8 +113,8 @@ public class WebviewText implements TextInterface {
     }
 
     private void onDocumentParseItem(String text, float top, float bottom) {
-        top = convertWebviewToScreenY(top);
-        bottom = convertWebviewToScreenY(bottom);
+        top = convertWebViewToScreenY(top);
+        bottom = convertWebViewToScreenY(bottom);
         //Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
         parsedSize = parsedSize + 1;
         TextItem item;
@@ -134,7 +134,7 @@ public class WebviewText implements TextInterface {
         }
     }
 
-    public boolean onWebviewConsoleMessage(ConsoleMessage cm)
+    public boolean onWebViewConsoleMessage(ConsoleMessage cm)
     {
         boolean result = false;
         // It is insecure to use WebView.addJavascriptInterface with older
@@ -144,9 +144,9 @@ public class WebviewText implements TextInterface {
         if (cm.messageLevel() == ConsoleMessage.MessageLevel.LOG)
         {
             String message = cm.message();
-            if (message.startsWith(WEBVIEW_LOG_CMD_HEADER))
+            if (message.startsWith(WEB_VIEW_LOG_CMD_HEADER))
             {
-                String content = message.substring(WEBVIEW_LOG_CMD_HEADER.length());
+                String content = message.substring(WEB_VIEW_LOG_CMD_HEADER.length());
                 if (content.equals("start")) {
                     onDocumentParseStart();
                 } else if (content.equals("end")) {
@@ -344,12 +344,12 @@ public class WebviewText implements TextInterface {
     }
 
 
-    private float convertWebviewToScreenY(float y)
+    private float convertWebViewToScreenY(float y)
     {
         return y * this.webView.getHeight() / this.webView.getContentHeight();
     }
 
-    private float convertScreenToWebviewY(float y)
+    private float convertScreenToWebViewY(float y)
     {
         return y * this.webView.getContentHeight() / this.webView.getHeight();
     }
@@ -368,9 +368,9 @@ public class WebviewText implements TextInterface {
 
     private static class TextItem {
         String text;
-        float top;    // top location in the webview
-        float bottom; // bottow location in the webview
-        long timePosition; // in milliseconds from the beniging of the document
+        float top;    // top location in the web view
+        float bottom; // bottom location in the web view
+        long timePosition; // in milliseconds from the beginning of the document
         public TextItem(String text, float top, float bottom) {
             this.text = text;
             this.top = top;
