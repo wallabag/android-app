@@ -746,7 +746,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return sb.toString();
         } finally {
             if(reader != null) {
-                reader.close();
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // unrecoverable exception, only log it and move on
+                    Log.w(TAG, "readRawString() failed to close reader\n" + e.toString()
+                            + "\n" + e.getStackTrace().toString());
+                }
             }
         }
     }
