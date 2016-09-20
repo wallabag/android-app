@@ -75,7 +75,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity"/>
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:scheme="wallabag"/>
+            </intent-filter>
+        </activity>
 
         <receiver android:name="android.support.v4.media.session.MediaButtonReceiver">
             <intent-filter>

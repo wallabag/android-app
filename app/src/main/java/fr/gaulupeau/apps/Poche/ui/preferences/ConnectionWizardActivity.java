@@ -89,6 +89,45 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String dataString = getIntent().getDataString();
+        if (dataString != null) {
+            try {
+                ConnectionData connectionData = parseLoginData(dataString);
+                Bundle bundle = new Bundle();
+                bundle.putString(DATA_URL, connectionData.mUrl);
+                bundle.putString(DATA_USERNAME, connectionData.mUsername);
+                next(PAGE_PROVIDER_SELECTION, bundle, true);
+            } catch (IllegalArgumentException e) {
+                Toast.makeText(this, "Illegal connection URI used", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private ConnectionData parseLoginData(String connectionUri) {
+        // wallabag://user@server.tld
+        String prefix = "wallabag://";
+
+        // URI missing or to short
+        if (connectionUri == null || connectionUri.length() <= prefix.length() || !connectionUri.startsWith(prefix)) {
+            throw new IllegalArgumentException("Invalid login URI detected");
+        }
+
+        String data = connectionUri.substring(prefix.length());
+
+        String[] values = data.split("@");
+
+        if (values.length < 1 || values.length > 2) {
+            // error illegal number of URI elements detected
+            throw new IllegalArgumentException("Illegal number of login URL elements detected: " + values.length);
+        }
+
+        return new ConnectionData(values[0], values[1]);
+    }
+
     public void prev(WizardPageFragment fragment, Bundle bundle) {
         String currentPage = fragment != null ? fragment.getPageName() : PAGE_NONE;
 
@@ -312,6 +351,26 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         }
 
         @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = super.onCreateView(inflater, container, savedInstanceState);
+
+            if (v != null) {
+                EditText urlEditText = (EditText) v.findViewById(R.id.wallabag_url);
+                EditText usernameEditText = (EditText) v.findViewById(R.id.username);
+
+                if (urlEditText != null && getArguments().containsKey(DATA_URL)) {
+                    urlEditText.setText(getArguments().getString(DATA_URL));
+                }
+
+                if (usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
+                    usernameEditText.setText(getArguments().getString(DATA_USERNAME));
+                }
+            }
+
+            return v;
+        }
+
+        @Override
         protected int getLayoutResourceID() {
             return R.layout.connection_wizard_generic_config_fragment;
         }
@@ -521,4 +580,13 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     }
 
+    private class ConnectionData {
+        String mUsername;
+        String mUrl;
+
+        public ConnectionData(String username, String url) {
+            mUsername = username;
+            mUrl = url;
+        }
+    }
 }
