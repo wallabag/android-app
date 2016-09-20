@@ -27,6 +27,6 @@ public class GenerateDao {
         queueItem.addIntProperty("articleId").columnName("article_id");
         queueItem.addStringProperty("extra");
 
-        new DaoGenerator().generateAll(schema, "./app/src-gen");
+        new DaoGenerator().generateAll(schema, "../app/src-gen");
     }
 }

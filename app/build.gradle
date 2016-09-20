@@ -50,3 +50,9 @@ dependencies {
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.0'
     compile 'com.mikepenz:aboutlibraries:5.7.3'
 }
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.javaCompiler.dependsOn(':gen-dao:run')
+    }
+}
