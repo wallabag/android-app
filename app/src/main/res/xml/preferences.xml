@@ -42,6 +42,7 @@
                 android:defaultValue="" />
         </PreferenceCategory>
         <PreferenceScreen android:title="@string/pref_categoryName_connection_advanced">
+          <PreferenceCategory android:title="@string/pref_categoryName_connection_advanced">
             <CheckBoxPreference
                 android:key="@string/pref_key_connection_advanced_acceptAllCertificates"
                 android:title="@string/pref_name_connection_advanced_acceptAllCertificates"
@@ -52,6 +53,11 @@
                 android:title="@string/pref_name_connection_advanced_customSSLSettings"
                 android:summary="@string/pref_desc_connection_advanced_customSSLSettings"
                 android:defaultValue="false" />
+            <Preference
+                android:key="@string/pref_key_connection_advanced_clearCookies"
+                android:title="@string/pref_name_connection_advanced_clearCookies"
+                android:summary="@string/pref_desc_connection_advanced_clearCookies"/>
+            </PreferenceCategory>
             <PreferenceCategory android:title="@string/pref_categoryName_connection_advanced_httpAuth"
                 android:summary="@string/pref_categoryDesc_connection_advanced_httpAuth">
                 <EditTextPreference
@@ -64,13 +70,10 @@
                     android:inputType="textPassword"
                     android:defaultValue="" />
             </PreferenceCategory>
-            <Preference
-                android:key="@string/pref_key_connection_advanced_clearCookies"
-                android:title="@string/pref_name_connection_advanced_clearCookies"
-                android:summary="@string/pref_desc_connection_advanced_clearCookies"/>
         </PreferenceScreen>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_ui">
+      <PreferenceCategory android:title="@string/pref_categoryName_ui">
         <ListPreference
             android:key="@string/pref_key_ui_theme"
             android:title="@string/pref_name_ui_theme"
@@ -91,8 +94,10 @@
             android:title="@string/pref_name_ui_lists_limit"
             android:inputType="numberDecimal"
             android:defaultValue="50" />
+        </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_autoSync">
+      <PreferenceCategory android:title="@string/pref_categoryName_autoSync">
         <CheckBoxPreference
             android:key="@string/pref_key_autoSync_enabled"
             android:title="@string/pref_name_autoSync_enabled"
@@ -122,8 +127,10 @@
             android:title="@string/pref_name_autoDlNew_enabled"
             android:summary="@string/pref_desc_autoDlNew_enabled"
             android:defaultValue="false" />
+        </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_miscellaneous">
+      <PreferenceCategory android:title="@string/pref_categoryName_miscellaneous">
         <CheckBoxPreference
             android:key="@string/pref_key_misc_handleHttpScheme"
             android:title="@string/pref_name_misc_handleHttpScheme"
@@ -134,5 +141,6 @@
             android:key="@string/pref_key_misc_wipeDB"
             android:title="@string/pref_name_misc_wipeDB"
             android:summary="@string/pref_desc_misc_wipeDB" />
+        </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>
