@@ -173,7 +173,7 @@ GAULUPEAU Jonathan — 2013
     <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Configuration des flux...</string>
+    <string name="getFeedsCredentials_progressDialogMessage">Configuration des flux…</string>
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
     <string name="notification_expandedError">Erreur : %s</string>
     <string name="notification_incorrectConfiguration">Configuration incorrecte</string>
