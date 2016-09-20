@@ -370,6 +370,22 @@ public class Settings {
         setString(R.string.pref_key_ui_theme, theme.toString());
     }
 
+    public boolean isTapToScrollEnabled() {
+        return getBoolean(R.string.pref_key_ui_tapToScroll_enabled, false);
+    }
+
+    public void setTapToScrollEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_tapToScroll_enabled, value);
+    }
+
+    public float getTapToScrollPercent() {
+        return getFloat(R.string.pref_key_ui_tapToScroll_percent, 95);
+    }
+
+    public void setTapToScrollPercent(float percent) {
+        setFloat(R.string.pref_key_ui_tapToScroll_percent, percent);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }

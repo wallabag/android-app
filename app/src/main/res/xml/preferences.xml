@@ -94,7 +94,18 @@
             android:title="@string/pref_name_ui_lists_limit"
             android:inputType="numberDecimal"
             android:defaultValue="50" />
-        </PreferenceCategory>
+        <CheckBoxPreference
+            android:key="@string/pref_key_ui_tapToScroll_enabled"
+            android:title="@string/pref_name_ui_tapToScroll_enabled"
+            android:summary="@string/pref_desc_ui_tapToScroll_enabled"
+            android:defaultValue="false" />
+        <fr.gaulupeau.apps.Poche.ui.preferences.FloatEditTextPreference
+            android:dependency="@string/pref_key_ui_tapToScroll_enabled"
+            android:key="@string/pref_key_ui_tapToScroll_percent"
+            android:title="@string/pref_name_ui_tapToScroll_percent"
+            android:inputType="numberDecimal"
+            android:defaultValue="95" />
+      </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_autoSync">
       <PreferenceCategory android:title="@string/pref_categoryName_autoSync">
