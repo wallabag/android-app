@@ -205,6 +205,10 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_option_autoSync_interval_1h">1 Stunde</string>
     <string name="pref_option_autoSync_interval_24h">24 Stunden</string>
     <string name="pref_option_autoSync_interval_30m">30 Minuten</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Schnell</item>
+        <item>Vollständig</item>
+    </string-array>
     <string name="pref_toast_connection_advanced_clearCookies">Cookies gelöscht</string>
     <string name="settings_parametersAreOk">Parameter sind okay</string>
     <string name="settings_parametersAutofilled">Parameter ausgefüllt</string>
