@@ -162,7 +162,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_desc_connection_advanced_acceptAllCertificates">May require restart; insecure; consider importing self-signed certificates into system.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Disables SSL on all devices, enables TLS 1.1 and TLS 1.2 on Android 4.1–4.4</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Authorization</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basic Authentication</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
