@@ -78,32 +78,33 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 bundle.putBoolean(EXTRA_SHOW_SUMMARY, true);
             }
 
-            if(intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
-                next(PAGE_WELCOME, bundle, true);
-            } else {
-                next((String)null, bundle);
+            String currentPage = null;
+
+            String dataString = intent.getDataString();
+            if(dataString != null) {
+                Log.d(TAG, "onCreate() got data string: " + dataString);
+                try {
+                    ConnectionData connectionData = parseLoginData(dataString);
+
+                    bundle.putString(DATA_URL, connectionData.mUrl);
+                    bundle.putString(DATA_USERNAME, connectionData.mUsername);
+
+                    currentPage = PAGE_PROVIDER_SELECTION;
+                } catch(IllegalArgumentException e) {
+                    Log.w(TAG, "onCreate() login data parsing exception", e);
+                    Toast.makeText(this, R.string.connectionWizard_misc_incorrectConnectionURI,
+                            Toast.LENGTH_SHORT).show();
+                }
             }
+
+            if(currentPage == null && intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
+                currentPage = PAGE_WELCOME;
+            }
+
+            next(currentPage, bundle, true);
         } else {
             // TODO: check
             Log.w(TAG, "onCreate() savedInstanceState != null");
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        String dataString = getIntent().getDataString();
-        if (dataString != null) {
-            try {
-                ConnectionData connectionData = parseLoginData(dataString);
-                Bundle bundle = new Bundle();
-                bundle.putString(DATA_URL, connectionData.mUrl);
-                bundle.putString(DATA_USERNAME, connectionData.mUsername);
-                next(PAGE_PROVIDER_SELECTION, bundle, true);
-            } catch (IllegalArgumentException e) {
-                Toast.makeText(this, "Illegal connection URI used", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -113,7 +114,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
         // URI missing or to short
         if (connectionUri == null || connectionUri.length() <= prefix.length() || !connectionUri.startsWith(prefix)) {
-            throw new IllegalArgumentException("Invalid login URI detected");
+            throw new IllegalArgumentException("Incorrect URI scheme detected");
         }
 
         String data = connectionUri.substring(prefix.length());
