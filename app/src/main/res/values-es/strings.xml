@@ -26,7 +26,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="page_url">URL de la página</string>
     <string name="bag_it">Guárdalo</string>
     <string name="share_article_title">Compartir artículo</string>
-    <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="share_text_extra">" vía @wallabagapp"</string>
     <string name="positive_answer">Si</string>
     <string name="negative_answer">No</string>
     <string name="no_articles">Sin artículos</string>

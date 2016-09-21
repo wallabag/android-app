@@ -162,7 +162,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_desc_connection_advanced_acceptAllCertificates">May require restart; insecure; consider importing self-signed certificates into system.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Disables SSL on all devices, enables TLS 1.1 and TLS 1.2 on Android 4.1–4.4</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Authorization</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basic Authentication</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
@@ -220,9 +220,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="connectionWizard_providerSelection_titleMessage">Select Wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name">v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Select this option if you have an account on https://v2.wallabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_name">Framabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>

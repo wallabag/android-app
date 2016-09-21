@@ -15,7 +15,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuNext">Nächster Artikel</string>
     <string name="menuPrevious">Vorheriger Artikel</string>
     <string name="menuDelete">Löschen</string>
-    <string name="menuOpenOriginal">Original-Artikel</string>
+    <string name="menuOpenOriginal">Originalartikel</string>
     <string name="menuTTS">Sprachsynthese</string>
     <string name="ttsSpeed">Sprechgeschwindigkeit</string>
     <string name="ttsPitch">Stimmlage</string>
@@ -44,7 +44,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="no_articles">Keine Artikel</string>
     <string name="loading_article_text">Laden…</string>
     <string name="d_urlAction_title">Wähle eine Aktion für die URL</string>
-    <string name="d_urlAction_openInBrowser">In Browser öffnen</string>
+    <string name="d_urlAction_openInBrowser">Im Browser öffnen</string>
     <string name="d_urlAction_addToWallabag">Zu wallabag hinzufügen</string>
     <string name="ok">OK</string>
     <string name="d_connectionFail_title">Verbindung fehlgeschlagen</string>
@@ -67,8 +67,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
     <string name="feedName_unread">Ungelesen</string>
-    <string name="articleList_favoriteMark">Favorit Markierung</string>
-    <string name="articleList_ArchivedMark">Archiv Markierung</string>
+    <string name="articleList_favoriteMark">Favoritmarkierung</string>
+    <string name="articleList_ArchivedMark">Archivmarkierung</string>
     <string name="noPreviousArticle">Es gibt keinen vorherigen Artikel in der aktuellen Liste</string>
     <string name="noNextArticle">Es gibt keinen nächsten Artikel in der aktuellen Liste</string>
     <string name="themeName_light">Hell</string>
@@ -98,32 +98,124 @@ GAULUPEAU Jonathan — 2013-2015
         Beispiele:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://framabag.org/u/dein-benutzer</i>
     </string>
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>
-    <string name="pref_name_connection_serverVersion">wallabag Server-Version</string>
+    <string name="pref_name_connection_serverVersion">wallabag Server Version</string>
     <string name="pref_name_connection_feedsUserID">Deine Benutzer ID</string>
     <string name="pref_name_connection_feedsToken">Dein Token</string>
 
     <string name="pref_name_connection_advanced_acceptAllCertificates">Akzeptiere alle SSL Zertifikate</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">Kann Neustart erfordern. Unsicher. \nSelbst-signierte Zertifikate müssen in Android importiert werden.</string>
+    <string name="pref_desc_connection_advanced_acceptAllCertificates">Kann Neustart erfordern. Unsicher. \nSelbst signierte Zertifikate müssen in Android importiert werden.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">SSL Einstellungen</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Deaktiviert SSL auf allen Geräten, aktiviert TLS 1.1 und TLS 1.2 auf Android 4.1–4.4</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Autorisierung</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basisauthentifizierung</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth Benutzername</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth Passwort</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierung Benutzername</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierung Passwort</string>
 
     <string name="pref_name_ui_theme">Thema</string>
-    <string name="pref_name_ui_article_fontSize">Artikel Schriftgröße (%)</string>
+    <string name="pref_name_ui_article_fontSize">Schriftgröße für Artikel (in %)</string>
     <string name="pref_name_ui_article_fontSerif">Serife Schrift</string>
-    <string name="pref_desc_ui_article_fontSerif">Serife Schrift für Artikel</string>
-    <string name="pref_name_ui_lists_limit">Limit für Artikel-Liste</string>
+    <string name="pref_desc_ui_article_fontSerif">Serife Schriftart für Artikel</string>
+    <string name="pref_name_ui_lists_limit">Limit für Artikelliste</string>
 
     <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
-    <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste von Web-Browsern</string>
+    <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste von Webbrowsern</string>
     <string name="pref_name_misc_wipeDB">Datenbank leeren</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Datenbank leeren?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Möchtest du die Datenbank wirklich leeren?</string>
+    <string name="checkFeeds_progressDialogMessage">Überprüfe Feeds…</string>
+    <string name="connectionWizard_providerSelection_next">Weiter</string>
+    <string name="connectionWizard_providerSelection_prev">Überspringen</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Anderer</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Wähle diese Option, wenn du einen Account auf https://framabag.org hast</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Wähle diese Option, um die Einstellungen manuell einzugeben</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Wähle diese Option, wenn du einen Account auf https://v2.wallabag.org hast</string>
+    <string name="connectionWizard_providerSelection_titleMessage">Wähle deinen wallabag Anbieter</string>
+    <string name="connectionWizard_provider_framabag_next">Verbinden</string>
+    <string name="connectionWizard_provider_framabag_prev">Zurück</string>
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag Einstellungen</string>
+    <string name="connectionWizard_provider_general_next">Verbinden</string>
+    <string name="connectionWizard_provider_general_prev">Zurück</string>
+    <string name="connectionWizard_provider_general_titleMessage">Grundlegende Einstellungen</string>
+    <string name="connectionWizard_provider_v2wallabagorg_next">Verbinden</string>
+    <string name="connectionWizard_provider_v2wallabagorg_prev">Zurück</string>
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">v2.wallabag.org Einstellungen</string>
+    <string name="connectionWizard_summary_next">Einstellungen speichern</string>
+    <string name="connectionWizard_summary_prev">Zurück</string>
+    <string name="connectionWizard_summary_text">Einstellungen speichern und zum Hauptbildschirm gelangen</string>
+    <string name="connectionWizard_summary_titleMessage">Wir sind fertig!</string>
+    <string name="connectionWizard_summary_toastMessage">Das Setup ist vollständig.</string>
+    <string name="connectionWizard_welcome_next">Weiter</string>
+    <string name="connectionWizard_welcome_prev">Überspringen</string>
+    <string name="connectionWizard_welcome_rerunNotice">Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.</string>
+    <string name="connectionWizard_welcome_text">Bevor du die wallabag App nutzen kannst, musst du die Verbindung zu deinem wallabag Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
+    <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag!</string>
+    <string name="d_checkFeeds_errorMessage_noAccess">Kein Zugriff auf die Feeds erlaubt</string>
+    <string name="d_checkFeeds_errorMessage_notFound">Feeds nicht gefunden</string>
+    <string name="d_checkFeeds_errorMessage_unknown">Unbekannter Fehler</string>
+    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
+    <string name="d_checkFeeds_title_fail">Feedstest fehlgeschlagen</string>
+    <string name="d_configurationChanged_answer_decline">Jetzt nicht</string>
+    <string name="d_configurationChanged_message">Einige Parameter haben sich geändert. Es ist empfohlen einen Verbindungstest durchzuführen.</string>
+    <string name="d_configurationChanged_title">Parameter geändert</string>
+    <string name="d_configurationIsQuestionable_message">Es gab kürzlich einen Verbindungsfehler. Es ist empfohlen einen Verbindungstest durchzuführen.</string>
+    <string name="d_configurationIsQuestionable_title">Problem erkannt</string>
+    <string name="d_getFeedsCredentials_title_fail">Konnte die Feeds nicht einrichten</string>
+    <string name="d_getFeedsCredentials_title_message">Etwas ist schiefgelaufen. Überprüfe deine Internetverbindung und versuch es noch einmal.</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Nutze Empfehlung</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Abbrechen</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Nutze eigene</string>
+    <string name="d_testConnection_urlSuggestion_message">Es ist empfohlen, die URL zu \"%s\" zu ändern. Aber du kannst auch die eingegebene verwenden.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Es ist empfohlen, die URL zu \"%s\" zu ändern.</string>
+    <string name="d_testConnection_urlSuggestion_title">Erwäge die URL zu ändern</string>
+    <string name="getFeedsCredentials_progressDialogMessage">Einrichten der Feeds…</string>
+    <string name="menu_syncLocalChanges">Synchronisiere lokale Änderungen</string>
+    <string name="notification_expandedError">Fehler: %s</string>
+    <string name="notification_incorrectConfiguration">Fehlerhafte Konfiguration</string>
+    <string name="notification_incorrectCredentials">Fehlerhafte Zugangsdaten</string>
+    <string name="notification_syncingQueue">Synchronisiere lokale Änderungen</string>
+    <string name="notification_unknownError">Unbekannter Fehler</string>
+    <string name="notification_updatingAllFeeds">Aktualisiere alle Feeds</string>
+    <string name="notification_updatingFeeds">Aktualisiere Feeds</string>
+    <string name="notification_updatingSpecificFeed">Aktualisiere %s Feed</string>
+    <string name="pref_categoryName_autoSync">Automatische Synchronisation</string>
+    <string name="pref_categoryName_connection">Verbindung</string>
+    <string name="pref_categoryName_connection_advanced">Erweiterte Verbindungseinstellungen</string>
+    <string name="pref_categoryName_miscellaneous">Sonstiges</string>
+    <string name="pref_categoryName_ui">Benutzeroberfläche</string>
+    <string name="pref_desc_autoDlNew_enabled">Lade neue Artikel automatisch herunter sobald sie mit der App hinzugefügt wurden. Beachte: Der Download findet nicht statt, wenn du ausstehende unsynchronisierte Änderungen hast.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren sobald die Internetverbindung verfügbar wird.</string>
+    <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter.</string>
+    <string name="pref_desc_connection_advanced_clearCookies">Setzt eine bestehende Anmeldesitzung zurück (falls eine besteht)</string>
+    <string name="pref_desc_connection_autofill">Testet die Verbindung zu wallabag und füllt die Felder Server Version, Benutzer ID und den Token automatisch aus</string>
+    <string name="pref_desc_misc_wipeDB">Löscht alle Artikel vom Gerät, löscht auch alle nicht synchronisierten lokalen Änderungen und URLs</string>
+    <string name="pref_desc_runConnectionWizard">Der Verbindungsassistent hilft dir die grundlegenden Verbindungsdaten einzurichten</string>
+    <string name="pref_name_autoDlNew_enabled">Download neuer Artikel bei Hinzufügen</string>
+    <string name="pref_name_autoSync_enabled">Aktiviere automatische Synchronisation</string>
+    <string name="pref_name_autoSync_interval">Zeitintervall für automatische Synchronisation</string>
+    <string name="pref_name_autoSync_type">Art der automatischen Synchronisation</string>
+    <string name="pref_name_connection_advanced_clearCookies">Lösche Cookies</string>
+    <string name="pref_name_connection_autofill">Automatisch ausfüllen</string>
+    <string name="pref_name_runConnectionWizard">Starte Verbindingsassistent</string>
+    <string name="pref_option_autoSync_interval_12h">12 Stunden</string>
+    <string name="pref_option_autoSync_interval_15m">15 Minuten</string>
+    <string name="pref_option_autoSync_interval_1h">1 Stunde</string>
+    <string name="pref_option_autoSync_interval_24h">24 Stunden</string>
+    <string name="pref_option_autoSync_interval_30m">30 Minuten</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Schnell</item>
+        <item>Vollständig</item>
+    </string-array>
+    <string name="pref_toast_connection_advanced_clearCookies">Cookies gelöscht</string>
+    <string name="settings_parametersAreOk">Parameter sind okay</string>
+    <string name="settings_parametersAutofilled">Parameter ausgefüllt</string>
+    <string name="testConnection_errorMessage_authProblems">Autorisierungbezogenes Problem. Diese sind meist durch HTTP Umleitungen verursacht.</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP Authentifizierung fehlgeschlagen</string>
+    <string name="testConnection_errorMessage_incorrectServerVersion">Falsche Server Version ausgewählt</string>
+    <string name="testConnection_errorMessage_noCSRF">Fehler beim Loginformular parsen</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login</string>
+    <string name="pref_name_autoSyncQueue_enabled">Gesonderte Synchronisation lokaler Änderungen</string>
 </resources>
