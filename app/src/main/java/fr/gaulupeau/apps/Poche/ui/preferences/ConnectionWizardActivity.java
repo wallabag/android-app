@@ -78,15 +78,55 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 bundle.putBoolean(EXTRA_SHOW_SUMMARY, true);
             }
 
-            if(intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
-                next(PAGE_WELCOME, bundle, true);
-            } else {
-                next((String)null, bundle);
+            String currentPage = null;
+
+            String dataString = intent.getDataString();
+            if(dataString != null) {
+                Log.d(TAG, "onCreate() got data string: " + dataString);
+                try {
+                    ConnectionData connectionData = parseLoginData(dataString);
+
+                    bundle.putString(DATA_URL, connectionData.mUrl);
+                    bundle.putString(DATA_USERNAME, connectionData.mUsername);
+
+                    currentPage = PAGE_PROVIDER_SELECTION;
+                } catch(IllegalArgumentException e) {
+                    Log.w(TAG, "onCreate() login data parsing exception", e);
+                    Toast.makeText(this, R.string.connectionWizard_misc_incorrectConnectionURI,
+                            Toast.LENGTH_SHORT).show();
+                }
             }
+
+            if(currentPage == null && intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
+                currentPage = PAGE_WELCOME;
+            }
+
+            next(currentPage, bundle, true);
         } else {
             // TODO: check
             Log.w(TAG, "onCreate() savedInstanceState != null");
         }
+    }
+
+    private ConnectionData parseLoginData(String connectionUri) {
+        // wallabag://user@server.tld
+        String prefix = "wallabag://";
+
+        // URI missing or to short
+        if (connectionUri == null || connectionUri.length() <= prefix.length() || !connectionUri.startsWith(prefix)) {
+            throw new IllegalArgumentException("Incorrect URI scheme detected");
+        }
+
+        String data = connectionUri.substring(prefix.length());
+
+        String[] values = data.split("@");
+
+        if (values.length < 1 || values.length > 2) {
+            // error illegal number of URI elements detected
+            throw new IllegalArgumentException("Illegal number of login URL elements detected: " + values.length);
+        }
+
+        return new ConnectionData(values[0], values[1]);
     }
 
     public void prev(WizardPageFragment fragment, Bundle bundle) {
@@ -312,6 +352,26 @@ public class ConnectionWizardActivity extends AppCompatActivity {
         }
 
         @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = super.onCreateView(inflater, container, savedInstanceState);
+
+            if (v != null) {
+                EditText urlEditText = (EditText) v.findViewById(R.id.wallabag_url);
+                EditText usernameEditText = (EditText) v.findViewById(R.id.username);
+
+                if (urlEditText != null && getArguments().containsKey(DATA_URL)) {
+                    urlEditText.setText(getArguments().getString(DATA_URL));
+                }
+
+                if (usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
+                    usernameEditText.setText(getArguments().getString(DATA_USERNAME));
+                }
+            }
+
+            return v;
+        }
+
+        @Override
         protected int getLayoutResourceID() {
             return R.layout.connection_wizard_generic_config_fragment;
         }
@@ -521,4 +581,13 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     }
 
+    private class ConnectionData {
+        String mUsername;
+        String mUrl;
+
+        public ConnectionData(String username, String url) {
+            mUsername = username;
+            mUrl = url;
+        }
+    }
 }
