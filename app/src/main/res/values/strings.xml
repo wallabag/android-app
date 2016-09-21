@@ -209,6 +209,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe database?</string>
 
+    <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
+
     <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag!</string>
     <string name="connectionWizard_welcome_text">Before you can use Wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
     <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from the Settings screen.</string>
