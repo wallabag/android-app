@@ -132,7 +132,7 @@ public class WallabagConnection {
 
                 // Install the all-trusting trust manager
                 final SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+                sslContext.init(null, trustAllCerts, null);
                 // Create an ssl socket factory with our all-trusting manager
                 final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
