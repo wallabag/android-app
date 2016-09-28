@@ -67,8 +67,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         private boolean autoSyncChanged;
         private boolean initialAutoSyncEnabled;
-        private long initialAutoSyncInterval;
         private boolean newAutoSyncEnabled;
+        private long initialAutoSyncInterval;
         private long newAutoSyncInterval;
 
         private boolean autoSyncQueueChanged;
@@ -143,31 +143,58 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onResume() {
-            super.onResume();
+        public void onStart() {
+            super.onStart();
 
-            newTheme = false;
+            Log.d(TAG, "onStart() started");
 
-            autoSyncChanged = false;
-            initialAutoSyncEnabled = settings.isAutoSyncEnabled();
-            initialAutoSyncInterval = settings.getAutoSyncInterval();
-
-            autoSyncQueueChanged = false;
-            initialAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+            resetChanges();
 
             settings.getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         }
 
         @Override
-        public void onPause() {
+        public void onStop() {
+            Log.d(TAG, "onStop() started");
+
             settings.getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 
+            if(configurationTestHelper != null) {
+                configurationTestHelper.cancel();
+                configurationTestHelper = null;
+            }
+
+            applyChanges();
+
+            super.onStop();
+        }
+
+        private void resetChanges() {
+            Log.d(TAG, "resetChanges() started");
+
+            newTheme = false;
+
+            autoSyncChanged = false;
+            initialAutoSyncEnabled = newAutoSyncEnabled = settings.isAutoSyncEnabled();
+            initialAutoSyncInterval = newAutoSyncInterval = settings.getAutoSyncInterval();
+
+            autoSyncQueueChanged = false;
+            initialAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+        }
+
+        private void applyChanges() {
+            Log.d(TAG, "applyChanges() started");
+
             if(newTheme) {
+                newTheme = false;
+                Log.d(TAG, "applyChanges() newTheme is true");
+
                 Themes.init();
             }
 
             if(autoSyncChanged) {
                 autoSyncChanged = false;
+                Log.d(TAG, "applyChanges() autoSyncChanged is true");
 
                 if(newAutoSyncEnabled != initialAutoSyncEnabled) {
                     if(newAutoSyncEnabled) {
@@ -184,6 +211,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             if(autoSyncQueueChanged) {
                 autoSyncQueueChanged = false;
+                Log.d(TAG, "applyChanges() autoSyncQueueChanged is true");
 
                 if(newAutoSyncQueueEnabled != initialAutoSyncQueueEnabled) {
                     if(newAutoSyncQueueEnabled) {
@@ -199,28 +227,16 @@ public class SettingsActivity extends AppCompatActivity {
             if(connectionParametersChanged) {
                 connectionParametersChanged = false;
 
-                Log.i(TAG, "onPause() setting isConfigurationOk(false)");
+                Log.i(TAG, "applyChanges() setting isConfigurationOk(false)");
                 settings.setConfigurationOk(false);
             }
 
             if(httpClientReinitializationNeeded) {
                 httpClientReinitializationNeeded = false;
 
-                Log.i(TAG, "onPause() calling WallabagConnection.replaceClient()");
+                Log.i(TAG, "applyChanges() calling WallabagConnection.replaceClient()");
                 WallabagConnection.replaceClient();
             }
-
-            super.onPause();
-        }
-
-        @Override
-        public void onStop() {
-            if(configurationTestHelper != null) {
-                configurationTestHelper.cancel();
-                configurationTestHelper = null;
-            }
-
-            super.onStop();
         }
 
         @Override
