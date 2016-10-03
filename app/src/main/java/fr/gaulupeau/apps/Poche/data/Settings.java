@@ -17,6 +17,7 @@ import java.util.Map;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
+import fr.gaulupeau.apps.Poche.service.WallabagJobService;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
@@ -83,7 +84,11 @@ public class Settings {
     }
 
     public static void enableConnectivityChangeReceiver(Context context, boolean enable) {
-        enableComponent(context, ConnectivityChangeReceiver.class, enable);
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            enableComponent(context, ConnectivityChangeReceiver.class, enable);
+        } else {
+            WallabagJobService.enable(context, enable);
+        }
     }
 
     // TODO: reuse in setHandleHttpScheme
