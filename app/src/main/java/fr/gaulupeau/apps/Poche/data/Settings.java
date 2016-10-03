@@ -370,6 +370,14 @@ public class Settings {
         setString(R.string.pref_key_ui_theme, theme.toString());
     }
 
+    public boolean isVolumeButtonsScrollingEnabled() {
+        return getBoolean(R.string.pref_key_ui_volumeButtonsScrolling_enabled, false);
+    }
+
+    public void setVolumeButtonsScrollingEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_volumeButtonsScrolling_enabled, value);
+    }
+
     public boolean isTapToScrollEnabled() {
         return getBoolean(R.string.pref_key_ui_tapToScroll_enabled, false);
     }
@@ -378,12 +386,20 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_tapToScroll_enabled, value);
     }
 
-    public float getTapToScrollPercent() {
-        return getFloat(R.string.pref_key_ui_tapToScroll_percent, 95);
+    public float getScreenScrollingPercent() {
+        return getFloat(R.string.pref_key_ui_screenScrolling_percent, 95);
     }
 
-    public void setTapToScrollPercent(float percent) {
-        setFloat(R.string.pref_key_ui_tapToScroll_percent, percent);
+    public void setScreenScrollingPercent(float percent) {
+        setFloat(R.string.pref_key_ui_screenScrolling_percent, percent);
+    }
+
+    public boolean isScreenScrollingSmooth() {
+        return getBoolean(R.string.pref_key_ui_screenScrolling_smooth, true);
+    }
+
+    public void setScreenScrollingSmooth(boolean value) {
+        setBoolean(R.string.pref_key_ui_screenScrolling_smooth, value);
     }
 
     public boolean isTtsVisible() {

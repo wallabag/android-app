@@ -177,10 +177,12 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif typeface for article fonts</string>
     <string name="pref_name_ui_lists_limit">Articles list limit</string>
-    <string name="pref_categoryName_ui_tapToScroll">Tap-to-scroll</string>
+    <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scroll with volume buttons</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tap-to-scroll</string>
     <string name="pref_desc_ui_tapToScroll_enabled">Scroll screen by tapping on left and right screen sides</string>
-    <string name="pref_name_ui_tapToScroll_percent">Percent of screen height to scroll</string>
+    <string name="pref_name_ui_screenScrolling_percent">Percent of screen height to scroll</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Use smooth scrolling</string>
 
     <string name="pref_categoryName_autoSync">Auto-sync</string>
     <string name="pref_name_autoSync_enabled">Enable auto-sync</string>
