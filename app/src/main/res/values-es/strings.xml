@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="label_name">¡Guardalo!</string>
-<!--    <string name="author">
+    <string name="label_name">¡Guárdalo!</string>
+<!--
+    <string name="author">
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
-</string>-->
+</string>
+-->
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
     <string name="btnSettings">Configuración</string>
@@ -16,9 +18,22 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menuPrevious">Artículo anterior</string>
     <string name="menuDelete">Eliminar</string>
     <string name="menuOpenOriginal">Abrir original</string>
-    <string name="menu_open_random_article">Abrir articulo aleatorio</string>
+    <string name="menuTTS">Síntesis de voz</string>
+    <string name="ttsSpeed">Velocidad</string>
+    <string name="ttsPitch">Tono</string>
+    <string name="ttsVolume">Volumen</string>
+    <string name="ttsLanguage">Elegir idioma</string>
+    <string name="ttsVoice">Elegir voz</string>
+    <string name="ttsAutoplayNextArticle">Reproducir próximo artículo automáticamente</string>
+    <string name="ttsError">Error en síntesis de voz</string>
+    <string name="ttsFastRewind">Retroceder</string>
+    <string name="ttsPlayPause">Reproducir / Pausa</string>
+    <string name="ttsFastForward">Adelantar</string>
+    <string name="ttsOptions">Opciones</string>
+    <string name="menu_open_random_article">Abrir artículo aleatorio</string>
+    <string name="menu_syncLocalChanges">Sincronizar cambios locales</string>
     <string name="d_deleteArticle_title">¿Eliminar artículo?</string>
-    <string name="d_deleteArticle_message">¿Seguro que deseas eliminar este artículo?</string>
+    <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor verifica tu conexión a internet!</string>
     <string name="txtConfigNotSet">¡Por favor configura la aplicación antes de sincronizar!</string>
     <string name="bag_page">Guardar página</string>
@@ -38,24 +53,51 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_connectionFail_title">Fallo de conexión</string>
     <string name="d_bag_fail_title">Fallido</string>
     <string name="d_bag_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
+    <string name="d_configurationChanged_title">Parámetros alterados</string>
+    <string name="d_configurationChanged_message">Parece que algunos parámetros han cambiado. Se recomienda hacer una prueba de conexión.</string>
+    <string name="d_configurationChanged_answer_decline">Ahora no</string>
+    <string name="d_configurationIsQuestionable_title">Problema encontrado</string>
+    <string name="d_configurationIsQuestionable_message">Hubo un problema de conexión recientemente. Se recomienda haver una prueba de conexión.</string>
     <string name="addLink_success_text">Añadido</string>
-    <string name="addLink_savedOffline">Guardado para leer sin conexión</string>
+    <string name="addLink_savedOffline">Guardado sin conexión</string>
+    <string name="settings_parametersAreOk">Parámetros correctos</string>
+    <string name="settings_parametersAutofilled">Parámetros rellenados</string>
     <string name="testConnection_progressDialogMessage">Probando conexión…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorrecta</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Servicio de wallabag no encontrado — revisa la URL</string>
+    <string name="testConnection_errorMessage_httpAuth">Autenticación por HTTP fallida</string>
+    <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">No se pudo iniciar sesión — revisa usuario y contraseña</string>
+    <string name="testConnection_errorMessage_authProblems">Problemas relacionados con autorización. Estos son causados generalmente por redirecciones HTTP.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión.</string>
     <string name="testConnection_errorMessage_unknown">Error desconocido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Error desconocido: %s</string>
-    <string name="d_testConnection_fail_title">Fallido</string>
-    <string name="wrongUsernameOrPassword_errorMessage">No se pudo iniciar sesión: probablemente usuario o contraseña equivocado</string>
-    <string name="unsuccessfulRequest_errorMessage">"Solicitud no exitosa; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
+    <string name="d_testConnection_urlSuggestion_title">Considera cambiar de URL</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Usar una sugerida</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Usar una propia</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Cancelar</string>
+    <string name="d_testConnection_urlSuggestion_message">Se recomienda cambiar la URL a: "%s". Pero también puedes usar la que escribiste.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Se recomienda cambiar la URL a: "%s"</string>
+    <string name="d_testConnection_fail_title">Prueba de conexión fallida</string>
+    <string name="getFeedsCredentials_progressDialogMessage">Preparando fuentes…</string>
+    <string name="d_getFeedsCredentials_title_fail">No se pudieron configurar la fuentes</string>
+    <string name="d_getFeedsCredentials_title_message">Algo salió mal. Verifica tu conexión a internet e intenta de nuevo.</string>
+    <string name="checkFeeds_progressDialogMessage">Revisando fuentes…</string>
+    <string name="d_checkFeeds_title_fail">Revisión de fuentes fallida</string>
+    <string name="d_checkFeeds_errorMessage_notFound">Fuentes no encontradas</string>
+    <string name="d_checkFeeds_errorMessage_noAccess">No se pudo acceder a las fuentes</string>
+    <string name="d_checkFeeds_errorMessage_unknown">Error desconocido</string>
+    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Error desconocido: %s</string>
+    <string name="downloadPdf_noInternetConnection">No se pudo descargar el artículo: sin conexión a internet</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña equivocada</string>
+    <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuestas: %2$s"</string>
     <string name="update_allFeeds">Actualizar todas las fuentes</string>
     <string name="updateFeed_previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>
     <string name="feedName_unread">No leídos</string>
-    <string name="articleList_favoriteMark">Favorito</string>
-    <string name="articleList_ArchivedMark">Archivar</string>
+    <string name="articleList_favoriteMark">Marca de favorito</string>
+    <string name="articleList_ArchivedMark">Marca de archivado</string>
     <string name="noPreviousArticle">No hay artículos previos en la lista actual</string>
     <string name="noNextArticle">No hay artículos siguientes en la lista actual</string>
     <string name="themeName_light">Claro</string>
@@ -65,47 +107,140 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_solarized">Solarizado</string>
     <string name="menu_readArticle_increaseFontSize">Aumentar tamaño de letra</string>
     <string name="menu_readArticle_decreaseFontSize">Disminuir tamaño de letra</string>
-    <string name="menuTTS">Síntesis de voz</string>
-    <string name="ttsAutoplayNextArticle"> Reproducción automática Siguiente artículo</string>
-    <string name="ttsLanguage">Elegir un Idioma</string>
-    <string name="ttsVoice">Seleccionar una Voz</string>
-    <string name="ttsVolume">Volumen</string>
-    <string name="ttsSpeed">Velocidad</string>
-    <string name="ttsPlayPause">Reproducir / Pausa</string>
-    <string name="ttsPitch">Tono</string>
-    <string name="ttsOptions">Opciones</string>
-    <string name="ttsFastRewind">Retroceso rápido</string>
-    <string name="ttsFastForward">Avance rápido</string>
-    <string name="ttsError">Síntesis de voz Error</string>
-
+    <string name="menuAbout">Acerca de</string>
+    <string name="aboutText">&lt;b>Aplicación de wallabag para Android&lt;/b>&lt;br />wallabag es una aplicación self hosted que te ayuda a no perderte to contenido nunca más. Haz clic, guarda y lée cuando puedas. Extrae contenido de forma automática para que puedas leerlo cuando tengas tiempo.</string>
+    <string name="readSpeed">Velocidad de lectura</string>
+    <string name="voiceHeight">Tono de voz</string>
+    <string name="readVolume">Volumen de lectura</string>
+    <string name="menuDownloadPdf">Descargar como PDF</string>
+    <string name="downloadPdfPathStart">Descargando artículo</string>
+    <string name="downloadPdfArticleDownloaded">Artículo descargado</string>
+    <string name="downloadPdfArticleDownloadedDetail">Artículo %s descargado</string>
+    <string name="downloadPdfTouchToOpen">Toca para abrir</string>
+    <string name="downloadPdfProgressDetail">wallabag está descargando tus %s artículo en PDF</string>
+    <string name="downloadPdfProgress">wallabag está descargando tu artículo en PDF</string>
+    <string name="notification_updatingFeeds">Actualizando fuentes</string>
+    <string name="notification_updatingAllFeeds">Actualizando todas las fuentes</string>
+    <string name="notification_updatingSpecificFeed">Actualizando fuente %s</string>
+    <string name="notification_syncingQueue">Sincronizando cambios locales</string>
     <string name="notification_error">Error</string>
+    <string name="notification_incorrectCredentials">Credenciales incorrectas</string>
+    <string name="notification_incorrectConfiguration">Configuración incorrecta</string>
+    <string name="notification_unknownError">Error desconocido</string>
+    <string name="notification_expandedError">Error: %s</string>
 
+    <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
+    <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a relizar una configuración de conexión básica</string>
+
+    <string name="pref_categoryName_connection">Conexión</string>
     <string name="pref_name_connection_url">URL de wallabag</string>
     <string name="pref_desc_connection_url">
-        Ejemplos:\n
+        Examples:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
         <i>https://framabag.org/u/your-username</i>
     </string>
     <string name="pref_name_connection_username">Usuario</string>
     <string name="pref_name_connection_password">Contraseña</string>
+    <string name="pref_name_connection_autofill">Autorellenar</string>
+    <string name="pref_desc_connection_autofill">Probar conexión y rellenar versión del servidor, ID de usuario y Token</string>
+    <string name="pref_name_connection_serverVersion">Versión del servidor de wallabag</string>
+    <string-array name="pref_option_connection_serverVersion">
+        <item>v1.9</item>
+        <item>v2</item>
+    </string-array>
+    <string-array name="pref_option_connection_serverVersion_values">
+        <item>1</item>
+        <item>2</item>
+    </string-array>
     <string name="pref_name_connection_feedsUserID">ID de usuario</string>
-    <string name="pref_name_connection_feedsToken">Token de la fuente</string>
+    <string name="pref_name_connection_feedsToken">Token</string>
 
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Aceptar todos los certificados SSL</string>
+    <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
+    <string name="pref_name_connection_advanced_acceptAllCertificates">Acceptar todos los certificados SSL</string>
     <string name="pref_desc_connection_advanced_acceptAllCertificates">Puede necesitar un reinicio; inseguro; considera importar certificados firmados por ti mismo al sistema.</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Autorización HTTP básica</string>
-    <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes que es, déjalo vacío</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">Usuario de autorización HTTP</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">Contraseña de autorización HTTP</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizado</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Desactiva SSL en todos los dispositivos, activa TLS 1.1 y TLS 1.2 en Android 4.1–4.4</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Autenticación básica por HTTP</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes qué es, déjalo vacío</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Usuario HTTP</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">Contraseña HTTP</string>
 
+    <string name="pref_name_connection_advanced_clearCookies">Limpiar cookies</string>
+    <string name="pref_desc_connection_advanced_clearCookies">Reinicia la sesión configurada (si la hay)</string>
+    <string name="pref_toast_connection_advanced_clearCookies">Cookies limpiadas</string>
+
+    <string name="pref_categoryName_ui">Interfaz</string>
     <string name="pref_name_ui_theme">Tema de la aplicación</string>
-    <string name="pref_name_ui_article_fontSize">Tamaño de tipo de letra en artículos (%)</string>
-    <string name="pref_name_ui_article_fontSerif">Tipo de letra Serif</string>
-    <string name="pref_desc_ui_article_fontSerif">Tipo de letra Serif en artículos</string>
+    <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
+    <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para contenido del artículo</string>
     <string name="pref_name_ui_lists_limit">Límite de la lista de artículos</string>
 
-    <string name="pref_name_misc_wipeDB">Eliminar base de datos</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">¿Eliminar base de datos?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que deseas eliminar la base de datos?</string>
+    <string name="pref_categoryName_autoSync">Sincronización automática</string>
+    <string name="pref_name_autoSync_enabled">Activar sincronización automática</string>
+    <string name="pref_desc_autoSync_enabled">Esto activa la sincronización automática de cambios locales (enlaces añadidos, artículos archivados, etc.) y descarga de artículos nuevos basado en un horario</string>
+    <string name="pref_name_autoSync_interval">Intervalo de sincronización automática</string>
+    <string name="pref_option_autoSync_interval_15m">15 minutos</string>
+    <string name="pref_option_autoSync_interval_30m">30 minutos</string>
+    <string name="pref_option_autoSync_interval_1h">1 hora</string>
+    <string name="pref_option_autoSync_interval_12h">12 horas</string>
+    <string name="pref_option_autoSync_interval_24h">24 horas</string>
+    <string name="pref_name_autoSync_type">Tipo de sincronización</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Rápida</item>
+        <item>Completa</item>
+    </string-array>
+    <string-array name="pref_option_autoSync_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="pref_name_autoSyncQueue_enabled">Sincronizar cambios locales por separado</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Esto permite sincronizar cambios locales (enlaces añadidos, artículos archivados, etc.) con el servidor tan pronto haya una conexión disponible</string>
+    <string name="pref_name_autoDlNew_enabled">Descargar artículos nuevos al añadirlos</string>
+    <string name="pref_desc_autoDlNew_enabled">Descargar artículos nuevos automáticamente justo después de añadirlos desde la app. Nota: no se descargará si tienes cambios locales pendientes por sincronizar.</string>
+
+    <string name="pref_categoryName_miscellaneous">Misceláneos</string>
+    <string name="pref_name_misc_handleHttpScheme">Manejar esquemas HTTP</string>
+    <string name="pref_desc_misc_handleHttpScheme">Mistrar wallabag en la lista de navegadores web</string>
+    <string name="pref_name_misc_wipeDB">Limpiar base de datos</string>
+    <string name="pref_desc_misc_wipeDB">Limpia todos los artículos de la base de datos local, tambi[en elimina cambios locales y URLs no sincronizados</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">¿Limpiar base de datos?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que quieres limpiar la base de datos?</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">URI de conexión incorrecta</string>
+
+    <string name="connectionWizard_welcome_titleMessage">¡Bienvenido a wallabag!</string>
+    <string name="connectionWizard_welcome_text">Antes de usar la aplicación de wallabag necesitas configurar una conexión. Este asistente de conexión tratará de ayudarte a hacerlo.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Siempre puedes volver a ejecutar el asistente de conexión desde el menú de Ajustes.</string>
+    <string name="connectionWizard_welcome_prev">Saltar</string>
+    <string name="connectionWizard_welcome_next">Siguiente</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Selecciona un proveedor de wallabag</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir detalles manualmente</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Selecciona esta opción si tienes una cuenta en https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecciona esta opción si tienes una cuenta en https://framabag.org</string>
+    <string name="connectionWizard_providerSelection_prev">Saltar</string>
+    <string name="connectionWizard_providerSelection_next">Siguiente</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Configuración básica</string>
+    <string name="connectionWizard_provider_general_prev">Volver</string>
+    <string name="connectionWizard_provider_general_next">Conectar</string>
+
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Configuración para v2.wallabag.org</string>
+    <string name="connectionWizard_provider_v2wallabagorg_prev">Volver</string>
+    <string name="connectionWizard_provider_v2wallabagorg_next">Conectar</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Configuración para Framabag</string>
+    <string name="connectionWizard_provider_framabag_prev">Volver</string>
+    <string name="connectionWizard_provider_framabag_next">Conectar</string>
+
+    <string name="connectionWizard_summary_titleMessage">¡Todo listo!</string>
+    <string name="connectionWizard_summary_text">Presiona el botón para guardar tus ajustes e ir a la pantalla principal.</string>
+    <string name="connectionWizard_summary_toastMessage">Configuración completada</string>
+    <string name="connectionWizard_summary_prev">Volver</string>
+    <string name="connectionWizard_summary_next">Guardar ajustes</string>
 </resources>
