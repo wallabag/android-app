@@ -585,11 +585,25 @@ public class BGService extends IntentService {
                 result.setErrorType(ActionResult.ErrorType.Unknown);
                 result.setMessage(e.getMessage());
             }
-        } else if(e instanceof IOException) { // TODO: differentiate errors: timeouts and stuff
-            if(e instanceof java.net.UnknownHostException && getSettings().isConfigurationOk()) {
-                result.setErrorType(ActionResult.ErrorType.Temporary);
-            } else {
-                result.setErrorType(ActionResult.ErrorType.Unknown); // TODO: separate Temporary errors
+        } else if(e instanceof IOException) {
+            boolean handled = false;
+
+            if(getSettings().isConfigurationOk()) {
+                if(e instanceof java.net.UnknownHostException
+                        || e instanceof java.net.ConnectException // TODO: maybe filter by message
+                        || e instanceof java.net.SocketTimeoutException) {
+                    result.setErrorType(ActionResult.ErrorType.Temporary);
+                    handled = true;
+                } else if(e instanceof javax.net.ssl.SSLException
+                        && e.getMessage() != null
+                        && e.getMessage().contains("Connection timed out")) {
+                    result.setErrorType(ActionResult.ErrorType.Temporary);
+                    handled = true;
+                }
+            }
+
+            if(!handled) {
+                result.setErrorType(ActionResult.ErrorType.Unknown);
                 result.setMessage(e.toString());
             }
             // IOExceptions in most cases mean temporary error,
