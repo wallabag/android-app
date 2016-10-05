@@ -118,7 +118,7 @@ public class FeedUpdater {
         SQLiteDatabase db = articleDao.getDatabase();
 
         Log.d(TAG, "updateAllFeeds() beginning transaction");
-        db.beginTransaction();
+        db.beginTransactionNonExclusive();
         try {
             Log.d(TAG, "updateAllFeeds() deleting old articles");
             articleDao.deleteAll();
@@ -150,7 +150,7 @@ public class FeedUpdater {
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
         SQLiteDatabase db = articleDao.getDatabase();
 
-        db.beginTransaction();
+        db.beginTransactionNonExclusive();
         try {
 
             Integer latestID = null;

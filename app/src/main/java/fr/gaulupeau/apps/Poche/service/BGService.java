@@ -142,7 +142,7 @@ public class BGService extends IntentService {
         boolean urlUploaded = false;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        daoSession.getDatabase().beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -288,7 +288,7 @@ public class BGService extends IntentService {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        daoSession.getDatabase().beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -350,7 +350,7 @@ public class BGService extends IntentService {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        daoSession.getDatabase().beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -410,7 +410,7 @@ public class BGService extends IntentService {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        daoSession.getDatabase().beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -470,7 +470,7 @@ public class BGService extends IntentService {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        daoSession.getDatabase().beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -544,7 +544,7 @@ public class BGService extends IntentService {
             // TODO: check: do we need a separate transaction here (since FeedUpdater creates one)?
             // I'll leave it just yet, should not hurt anyway
             DaoSession daoSession = getDaoSession();
-            daoSession.getDatabase().beginTransaction();
+            daoSession.getDatabase().beginTransactionNonExclusive();
             try {
                 event = feedUpdater.update(feedType, updateType);
 
