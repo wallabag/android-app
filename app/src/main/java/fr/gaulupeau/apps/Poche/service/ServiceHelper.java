@@ -13,14 +13,21 @@ public class ServiceHelper {
     // TODO: reuse code
 
     public static void syncQueue(Context context) {
-        syncQueue(context, false);
+        syncQueue(context, false, false, null);
     }
 
     public static void syncQueue(Context context, boolean auto) {
+        syncQueue(context, auto, false, null);
+    }
+
+    public static void syncQueue(Context context, boolean auto,
+                                 boolean byOperation, Long queueLength) {
         Log.d(TAG, "syncQueue() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.SyncQueue);
         if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
+        else if(byOperation) request.setRequestType(ActionRequest.RequestType.ManualByOperation);
+        if(queueLength != null) request.setQueueLength(queueLength);
 
         Intent intent = new Intent(context, BGService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
@@ -32,10 +39,6 @@ public class ServiceHelper {
 
     public static void addLink(Context context, String link) {
         addLink(context, link, null, false);
-    }
-
-    public static void addLink(Context context, String link, Long operationID) {
-        addLink(context, link, operationID, false);
     }
 
     public static void addLink(Context context, String link, boolean headless) {

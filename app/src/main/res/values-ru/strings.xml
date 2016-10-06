@@ -41,7 +41,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_bag_fail_title">Ошибка</string>
     <string name="d_bag_fail_text">В строке не найден URL:\n</string>
     <string name="addLink_success_text">Добавлено</string>
-    <string name="addLink_savedOffline">Сохранено офлайн</string>
     <string name="testConnection_progressDialogMessage">Проверка соединения…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Некорректный URL</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Служба wallabag не найдена — проверьте URL</string>

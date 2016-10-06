@@ -59,7 +59,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_configurationIsQuestionable_title">Problem detected</string>
     <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
     <string name="addLink_success_text">Added</string>
-    <string name="addLink_savedOffline">Saved offline</string>
     <string name="settings_parametersAreOk">Parameters are fine</string>
     <string name="settings_parametersAutofilled">Parameters filled</string>
     <string name="testConnection_progressDialogMessage">Testing connection…</string>

@@ -23,9 +23,6 @@ public class QueueHelper {
     private DaoSession daoSession;
     private QueueItemDao queueItemDao;
 
-    // that's not a very good implementation
-    private boolean queueChanged;
-
     public QueueHelper(DaoSession daoSession) {
         this.daoSession = daoSession;
         this.queueItemDao = daoSession.getQueueItemDao();
@@ -44,8 +41,6 @@ public class QueueHelper {
         for(QueueItem item: items) {
             queueItemDao.delete(item);
         }
-
-        queueChanged = true;
     }
 
     // TODO: reuse code in {,enqueue}{archive,favorite,delete}Article
@@ -85,12 +80,20 @@ public class QueueHelper {
             }
         }
 
+        boolean queueChanged = false;
+
         if(itemToCancel != null) {
             dequeueItem(itemToCancel);
+            queueChanged = true;
+        }
+
+        if(!cancel) {
+            enqueueArchiveArticle(articleID, archive);
+            queueChanged = true;
         }
 
         Log.d(TAG, "archiveArticle() finished");
-        return !cancel;
+        return queueChanged;
     }
 
     public boolean favoriteArticle(int articleID, boolean favorite) {
@@ -128,12 +131,20 @@ public class QueueHelper {
             }
         }
 
+        boolean queueChanged = false;
+
         if(itemToCancel != null) {
             dequeueItem(itemToCancel);
+            queueChanged = true;
+        }
+
+        if(!cancel) {
+            enqueueFavoriteArticle(articleID, favorite);
+            queueChanged = true;
         }
 
         Log.d(TAG, "favoriteArticle() finished");
-        return !cancel;
+        return queueChanged;
     }
 
     public boolean deleteArticle(int articleID) {
@@ -160,27 +171,40 @@ public class QueueHelper {
             }
         }
 
+        boolean queueChanged = false;
+
         if(!itemsToCancel.isEmpty()) {
             dequeueItems(itemsToCancel);
+            queueChanged = true;
+        }
+
+        if(!cancel) {
+            enqueueDeleteArticle(articleID);
+            queueChanged = true;
         }
 
         Log.d(TAG, "deleteArticle() finished");
-        return !cancel;
+        return queueChanged;
     }
 
     public boolean addLink(String link) {
-        Log.d(TAG, String.format("deleteArticle(\"%s\") started", link));
+        Log.d(TAG, String.format("addLink(\"%s\") started", link));
 
-        long count = queueItemDao.queryBuilder()
+        boolean cancel = queueItemDao.queryBuilder()
                 .where(QueueItemDao.Properties.Action.eq(QI_ACTION_ADD_LINK),
-                        QueueItemDao.Properties.Extra.eq(link)).count();
+                        QueueItemDao.Properties.Extra.eq(link)).count() != 0;
 
-        Log.d(TAG, "deleteArticle() finished");
-        return count == 0;
+        if(!cancel) {
+            enqueueAddLink(link);
+        } else {
+            Log.d(TAG, "addLink() the link is already in queue");
+        }
+
+        Log.d(TAG, "addLink() finished");
+        return !cancel;
     }
 
-    // dumb insert, all the checks are done in archiveArticle()
-    public void enqueueArchiveArticle(int articleID, boolean archive) {
+    private void enqueueArchiveArticle(int articleID, boolean archive) {
         Log.d(TAG, String.format("enqueueArchiveArticle(%d, %s) started", articleID, archive));
 
         QueueItem item = new QueueItem();
@@ -192,8 +216,7 @@ public class QueueHelper {
         Log.d(TAG, "enqueueArchiveArticle() finished");
     }
 
-    // dumb insert, all the checks are done in favoriteArticle()
-    public void enqueueFavoriteArticle(int articleID, boolean archive) {
+    private void enqueueFavoriteArticle(int articleID, boolean archive) {
         Log.d(TAG, String.format("enqueueFavoriteArticle(%d, %s) started", articleID, archive));
 
         QueueItem item = new QueueItem();
@@ -205,8 +228,7 @@ public class QueueHelper {
         Log.d(TAG, "enqueueFavoriteArticle() finished");
     }
 
-    // dumb insert, all the checks are done in deleteArticle()
-    public void enqueueDeleteArticle(int articleID) {
+    private void enqueueDeleteArticle(int articleID) {
         Log.d(TAG, String.format("enqueueDeleteArticle(%d) started", articleID));
 
         QueueItem item = new QueueItem();
@@ -218,8 +240,7 @@ public class QueueHelper {
         Log.d(TAG, "enqueueDeleteArticle() finished");
     }
 
-    // dumb insert, all the checks are done in addLink()
-    public void enqueueAddLink(String link) {
+    private void enqueueAddLink(String link) {
         Log.d(TAG, String.format("enqueueAddLink(%s) started", link));
 
         QueueItem item = new QueueItem();
@@ -231,10 +252,6 @@ public class QueueHelper {
         Log.d(TAG, "enqueueAddLink() finished");
     }
 
-    public boolean isQueueChanged() {
-        return queueChanged;
-    }
-
     public long getQueueLength() {
         return queueItemDao.queryBuilder().count();
     }
@@ -243,8 +260,6 @@ public class QueueHelper {
         item.setQueueNumber(getNewQueueNumber());
 
         queueItemDao.insertWithoutSettingPk(item);
-
-        queueChanged = true;
     }
 
     private long getNewQueueNumber() {
@@ -260,8 +275,6 @@ public class QueueHelper {
 
     private void dequeueItem(QueueItem item) {
         queueItemDao.delete(item);
-
-        queueChanged = true;
     }
 
     private List<QueueItem> getQueuedItemsForArticle(int articleID) {

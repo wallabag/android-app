@@ -59,7 +59,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_configurationIsQuestionable_title">Problema encontrado</string>
     <string name="d_configurationIsQuestionable_message">Hubo un problema de conexión recientemente. Se recomienda haver una prueba de conexión.</string>
     <string name="addLink_success_text">Añadido</string>
-    <string name="addLink_savedOffline">Guardado sin conexión</string>
     <string name="settings_parametersAreOk">Parámetros correctos</string>
     <string name="settings_parametersAutofilled">Parámetros rellenados</string>
     <string name="testConnection_progressDialogMessage">Probando conexión…</string>

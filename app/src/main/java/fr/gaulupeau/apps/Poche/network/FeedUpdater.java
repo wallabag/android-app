@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.network;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
@@ -115,29 +114,18 @@ public class FeedUpdater {
         Log.i(TAG, "updateAllFeeds() started");
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
-        SQLiteDatabase db = articleDao.getDatabase();
 
-        Log.d(TAG, "updateAllFeeds() beginning transaction");
-        db.beginTransactionNonExclusive();
-        try {
-            Log.d(TAG, "updateAllFeeds() deleting old articles");
-            articleDao.deleteAll();
+        Log.d(TAG, "updateAllFeeds() deleting old articles");
+        articleDao.deleteAll();
 
-            Log.d(TAG, "updateAllFeeds() updating Main feed");
-            updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
+        Log.d(TAG, "updateAllFeeds() updating Main feed");
+        updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
 
-            Log.d(TAG, "updateAllFeeds() updating Archive feed");
-            updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
+        Log.d(TAG, "updateAllFeeds() updating Archive feed");
+        updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
 
-            Log.d(TAG, "updateAllFeeds() updating Favorite feed");
-            updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
-
-            Log.d(TAG, "updateAllFeeds() setting transaction successful");
-            db.setTransactionSuccessful();
-        } finally {
-            Log.d(TAG, "updateAllFeeds() ending transaction");
-            db.endTransaction();
-        }
+        Log.d(TAG, "updateAllFeeds() updating Favorite feed");
+        updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
 
         Log.d(TAG, "updateAllFeeds() finished");
     }
@@ -148,30 +136,21 @@ public class FeedUpdater {
         Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
-        SQLiteDatabase db = articleDao.getDatabase();
 
-        db.beginTransactionNonExclusive();
-        try {
+        Integer latestID = null;
+        if(feedType == FeedType.Main || feedType == FeedType.Archive) {
+            WhereCondition cond = feedType == FeedType.Main
+                    ? ArticleDao.Properties.Archive.notEq(true)
+                    : ArticleDao.Properties.Archive.eq(true);
+            List<Article> l = articleDao.queryBuilder().where(cond)
+                    .orderDesc(ArticleDao.Properties.ArticleId).limit(1).list();
 
-            Integer latestID = null;
-            if(feedType == FeedType.Main || feedType == FeedType.Archive) {
-                WhereCondition cond = feedType == FeedType.Main
-                        ? ArticleDao.Properties.Archive.notEq(true)
-                        : ArticleDao.Properties.Archive.eq(true);
-                List<Article> l = articleDao.queryBuilder().where(cond)
-                        .orderDesc(ArticleDao.Properties.ArticleId).limit(1).list();
-
-                if(!l.isEmpty()) {
-                    latestID = l.get(0).getArticleId();
-                }
+            if(!l.isEmpty()) {
+                latestID = l.get(0).getArticleId();
             }
-
-            updateByFeed(articleDao, feedType, updateType, latestID, event);
-
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
         }
+
+        updateByFeed(articleDao, feedType, updateType, latestID, event);
 
         Log.i(TAG, String.format("updateInternal(%s, %s) finished", feedType, updateType));
     }
