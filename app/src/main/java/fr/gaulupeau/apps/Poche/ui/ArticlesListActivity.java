@@ -239,9 +239,9 @@ public class ArticlesListActivity extends AppCompatActivity
         if(event.getResult().isSuccess()) {
             firstSyncDone = true;
             tryToUpdateOnResume = false;
-
-            notifyListUpdate(event.getFeedType(), false);
         }
+
+        notifyListUpdate(event.getFeedType(), false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
