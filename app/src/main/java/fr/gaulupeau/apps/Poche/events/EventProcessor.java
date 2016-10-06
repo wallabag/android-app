@@ -206,8 +206,8 @@ public class EventProcessor {
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
 
         ActionResult result = event.getResult();
-        if(result != null && !result.isSuccess()
-                || event.getQueueLength() == null || event.getQueueLength() > 0) {
+        if((result != null && !result.isSuccess())
+                || (event.getQueueLength() == null || event.getQueueLength() > 0)) {
             enableConnectivityChangeReceiver(true);
         }
 
@@ -375,7 +375,7 @@ public class EventProcessor {
 
     private void enableConnectivityChangeReceiver(boolean enable) {
         if(getSettings().isAutoSyncQueueEnabled()) {
-            Log.d(TAG, "onOfflineQueueChangedEvent() enable connectivity change receiver: " + enable);
+            Log.d(TAG, "enableConnectivityChangeReceiver() enable connectivity change receiver: " + enable);
 
             Settings.enableConnectivityChangeReceiver(getContext(), enable);
         }
