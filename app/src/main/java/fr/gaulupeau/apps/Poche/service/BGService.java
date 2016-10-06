@@ -309,18 +309,25 @@ public class BGService extends IntentService {
             Log.d(TAG, "syncOfflineQueue() finished processing queue item");
         }
 
-        boolean queueChanged = false;
+        Long queueLength = null;
 
         if(!completedQueueItems.isEmpty()) {
-            queueHelper.dequeueItems(completedQueueItems);
-            queueChanged = true;
+            daoSession.getDatabase().beginTransactionNonExclusive();
+            try {
+                queueHelper.dequeueItems(completedQueueItems);
+
+                queueLength = queueHelper.getQueueLength();
+
+                daoSession.getDatabase().setTransactionSuccessful();
+            } finally {
+                daoSession.getDatabase().endTransaction();
+            }
         }
 
-        long queueLength;
-        if(queueChanged) {
-            postEvent(new OfflineQueueChangedEvent(queueLength = queueHelper.getQueueLength()));
+        if(queueLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueLength));
         } else {
-            queueLength = queueItems.size();
+            queueLength = (long)queueItems.size();
         }
 
         if(urlUploaded) {
