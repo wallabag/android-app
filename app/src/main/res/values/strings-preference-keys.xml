@@ -15,6 +15,10 @@
     <string name="pref_key_ui_article_fontSerif" translatable="false">ui.article.fontSerif</string>
     <string name="pref_key_ui_lists_limit" translatable="false">ui.lists.limit</string>
     <string name="pref_key_ui_theme" translatable="false">ui.theme</string>
+    <string name="pref_key_ui_volumeButtonsScrolling_enabled" translatable="false">ui.volumeButtonsScrolling.enabled</string>
+    <string name="pref_key_ui_tapToScroll_enabled" translatable="false">ui.tapToScroll.enabled</string>
+    <string name="pref_key_ui_screenScrolling_percent" translatable="false">ui.screenScrolling.percent</string>
+    <string name="pref_key_ui_screenScrolling_smooth" translatable="false">ui.screenScrolling.smooth</string>
 
     <string name="pref_key_tts_visible" translatable="false">tts.visible</string>
     <string name="pref_key_tts_optionsVisible" translatable="false">tts.optionsVisible</string>

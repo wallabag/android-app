@@ -82,7 +82,7 @@
         <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_article_fontSize"
             android:title="@string/pref_name_ui_article_fontSize"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:defaultValue="100" />
         <CheckBoxPreference
             android:key="@string/pref_key_ui_article_fontSerif"
@@ -92,8 +92,28 @@
         <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_lists_limit"
             android:title="@string/pref_name_ui_lists_limit"
-            android:inputType="numberDecimal"
+            android:inputType="number"
             android:defaultValue="50" />
+      </PreferenceCategory>
+        <PreferenceCategory android:title="@string/pref_categoryName_ui_screenScrolling">
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_volumeButtonsScrolling_enabled"
+                android:title="@string/pref_name_ui_volumeButtonsScrolling_enabled"
+                android:defaultValue="false" />
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_tapToScroll_enabled"
+                android:title="@string/pref_name_ui_tapToScroll_enabled"
+                android:summary="@string/pref_desc_ui_tapToScroll_enabled"
+                android:defaultValue="false" />
+            <fr.gaulupeau.apps.Poche.ui.preferences.FloatEditTextPreference
+                android:key="@string/pref_key_ui_screenScrolling_percent"
+                android:title="@string/pref_name_ui_screenScrolling_percent"
+                android:inputType="numberDecimal"
+                android:defaultValue="95" />
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_screenScrolling_smooth"
+                android:title="@string/pref_name_ui_screenScrolling_smooth"
+                android:defaultValue="true" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen android:title="@string/pref_categoryName_autoSync">

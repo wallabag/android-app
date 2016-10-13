@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -82,6 +83,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private boolean acceptAllSSLCerts;
 
+    private boolean volumeButtonsScrolling;
+    private boolean tapToScroll;
+    private float screenScrollingPercent;
+    private boolean smoothScrolling;
+
     private String titleText;
     private String originalUrlText;
     private String domainText;
@@ -140,6 +146,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         settings = App.getInstance().getSettings();
 
         acceptAllSSLCerts = settings.isAcceptAllCertificates();
+
+        volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
+        tapToScroll = settings.isTapToScrollEnabled();
+        screenScrollingPercent = settings.getScreenScrollingPercent();
+        smoothScrolling = settings.isScreenScrollingSmooth();
 
         String cssName;
         boolean highContrast = false;
@@ -321,6 +332,29 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     openPreviousArticle();
                 }
                 return true;
+            }
+
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent e) {
+                if(!tapToScroll) return false;
+
+                if(e.getPointerCount() > 1) return false;
+
+                int viewHeight = scrollView.getHeight();
+                float y = e.getY() - scrollView.getScrollY();
+
+                if(y > viewHeight * 0.25 && y < viewHeight * 0.75) {
+                    int viewWidth = scrollView.getWidth();
+                    float x = e.getX();
+
+                    if(x < viewWidth * 0.3) { // left part
+                        scroll(true, screenScrollingPercent, smoothScrolling);
+                    } else if(x > viewWidth * 0.7) { // right part
+                        scroll(false, screenScrollingPercent, smoothScrolling);
+                    }
+                }
+
+                return false;
             }
         };
 
@@ -622,6 +656,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(volumeButtonsScrolling) {
+            switch(event.getKeyCode()) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    scroll(true, screenScrollingPercent, smoothScrolling);
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    scroll(false, screenScrollingPercent, smoothScrolling);
+                    return true;
+            }
+        }
+
+        return super.dispatchKeyEvent(event);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
@@ -640,6 +690,29 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
                 invalidateOptionsMenu();
                 break;
+        }
+    }
+
+    private void scroll(boolean up, float percent, boolean smooth) {
+        if(scrollView == null) return;
+
+        int viewHeight = scrollView.getHeight();
+        int yOffset = scrollView.getScrollY();
+
+        int newYOffset = yOffset;
+        int step = (int)(viewHeight * percent / 100);
+        if(up) {
+            newYOffset -= step;
+        } else {
+            newYOffset += step;
+        }
+
+        if(newYOffset != yOffset) {
+            if(smooth) {
+                scrollView.smoothScrollTo(scrollView.getScrollX(), newYOffset);
+            } else {
+                scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
+            }
         }
     }
 

@@ -57,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_lists_limit,
+                R.string.pref_key_ui_screenScrolling_percent,
                 R.string.pref_key_autoSync_interval,
                 R.string.pref_key_autoSync_type
         };
@@ -429,6 +430,7 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
                 case R.string.pref_key_ui_article_fontSize:
                 case R.string.pref_key_ui_lists_limit:
+                case R.string.pref_key_ui_screenScrolling_percent:
                     setEditTextSummaryFromContent(key);
                     break;
 
