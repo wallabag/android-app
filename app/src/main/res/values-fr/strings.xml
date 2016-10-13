@@ -40,7 +40,6 @@ GAULUPEAU Jonathan — 2013
 <string name="d_bag_fail_title">Échec</string>
 <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
 <string name="addLink_success_text">Ajouté</string>
-<string name="addLink_savedOffline">Sauvegardé hors-ligne</string>
 <string name="downloadPdf_noInternetConnection">Impossible de télécharger l\'article : pas de connexion internet</string>
 <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
 <string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>

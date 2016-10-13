@@ -119,11 +119,10 @@ public class EventProcessor {
         Settings settings = getSettings();
         settings.setOfflineQueuePending(!queueIsEmpty);
 
-        if(settings.isAutoSyncQueueEnabled()) {
-            Log.d(TAG, "onOfflineQueueChangedEvent() enable connectivity change receiver: "
-                    + !queueIsEmpty);
-
-            Settings.enableConnectivityChangeReceiver(getContext(), !queueIsEmpty);
+        if(event.isTriggeredByOperation() && WallabagConnection.isNetworkAvailable()) {
+            ServiceHelper.syncQueue(getContext(), false, true, queueLength);
+        } else if(settings.isAutoSyncQueueEnabled()) {
+            enableConnectivityChangeReceiver(!queueIsEmpty);
         }
     }
 
@@ -185,13 +184,17 @@ public class EventProcessor {
 
         setOperationID(event);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
-                .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
-                .setOngoing(true);
+        ActionRequest request = event.getRequest();
+        if(request.getRequestType() != ActionRequest.RequestType.ManualByOperation
+                || (request.getQueueLength() != null && request.getQueueLength() > 1)) {
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
+                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
+                    .setOngoing(true);
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
-                notificationBuilder.setProgress(0, 0, true).build());
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
+                    notificationBuilder.setProgress(0, 0, true).build());
+        }
     }
 
     @Subscribe
@@ -201,6 +204,12 @@ public class EventProcessor {
         checkOperationID(event);
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
+
+        ActionResult result = event.getResult();
+        if((result != null && !result.isSuccess())
+                || (event.getQueueLength() == null || event.getQueueLength() > 0)) {
+            enableConnectivityChangeReceiver(true);
+        }
 
         emptyOperationID();
     }
@@ -215,6 +224,10 @@ public class EventProcessor {
         String actionString = request.getAction().toString();
 
         Log.d(TAG, "onActionResultEvent() action: " + actionString);
+
+        if(request.getAction() == ActionRequest.Action.AddLink && request.isHeadless()) {
+            showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
+        }
 
         ActionResult result = event.getResult();
 
@@ -250,7 +263,7 @@ public class EventProcessor {
                             settings.setConfigurationOk(false);
                         }
 
-                        if(request.getRequestType() == ActionRequest.RequestType.Manual
+                        if(request.getRequestType() != ActionRequest.RequestType.Auto
                                 || !settings.isConfigurationErrorShown()) {
                             settings.setConfigurationErrorShown(true);
 
@@ -316,34 +329,19 @@ public class EventProcessor {
     }
 
     @Subscribe
-    public void onAddLinkFinishedEvent(AddLinkFinishedEvent event) {
-        Log.d(TAG, "onAddLinkFinishedEvent() started");
+    public void onLinkUploadedEvent(LinkUploadedEvent event) {
+        Log.d(TAG, "onLinkUploadedEvent() started");
 
         ActionResult result = event.getResult();
         if(result == null || result.isSuccess()) {
-            Log.d(TAG, "onAddLinkFinishedEvent() result is null or success");
+            Log.d(TAG, "onLinkUploadedEvent() result is null or success");
 
             if(getSettings().isAutoDownloadNewArticlesEnabled()
                     && !getSettings().isOfflineQueuePending()) {
-                Log.d(TAG, "onAddLinkFinishedEvent() autoDlNew enabled, triggering fast update");
+                Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
                 ServiceHelper.updateFeed(getContext(),
                         FeedUpdater.FeedType.Main, FeedUpdater.UpdateType.Fast, null, true);
-            }
-
-            if(event.getRequest().isHeadless()) {
-                showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
-            }
-        } else {
-            ActionResult.ErrorType errorType = result.getErrorType();
-
-            Log.d(TAG, "onAddLinkFinishedEvent() errorType: " + errorType);
-
-            if(event.getRequest().isHeadless()) {
-                if(errorType == ActionResult.ErrorType.Temporary
-                        || errorType == ActionResult.ErrorType.NoNetwork) {
-                    showToast(getContext().getString(R.string.addLink_savedOffline), Toast.LENGTH_SHORT);
-                }
             }
         }
     }
@@ -372,6 +370,14 @@ public class EventProcessor {
 
                 delayedNetworkChangedTask = true;
             }
+        }
+    }
+
+    private void enableConnectivityChangeReceiver(boolean enable) {
+        if(getSettings().isAutoSyncQueueEnabled()) {
+            Log.d(TAG, "enableConnectivityChangeReceiver() enable connectivity change receiver: " + enable);
+
+            Settings.enableConnectivityChangeReceiver(getContext(), enable);
         }
     }
 

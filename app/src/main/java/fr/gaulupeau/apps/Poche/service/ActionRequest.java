@@ -13,7 +13,7 @@ public class ActionRequest implements Parcelable {
     }
 
     public enum RequestType {
-        Manual, Auto
+        Auto, Manual, ManualByOperation
     }
 
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
@@ -24,6 +24,7 @@ public class ActionRequest implements Parcelable {
 
     private Integer articleID;
     private String link;
+    private Long queueLength;
     private FeedUpdater.FeedType feedUpdateFeedType;
     private FeedUpdater.UpdateType feedUpdateUpdateType;
     private boolean headless;
@@ -76,6 +77,14 @@ public class ActionRequest implements Parcelable {
         this.link = link;
     }
 
+    public Long getQueueLength() {
+        return queueLength;
+    }
+
+    public void setQueueLength(Long queueLength) {
+        this.queueLength = queueLength;
+    }
+
     public FeedUpdater.FeedType getFeedUpdateFeedType() {
         return feedUpdateFeedType;
     }
@@ -115,6 +124,7 @@ public class ActionRequest implements Parcelable {
 
         writeInteger(articleID, out);
         writeString(link, out);
+        writeLong(queueLength, out);
         writeInteger(this.feedUpdateFeedType != null ? this.feedUpdateFeedType.ordinal() : null, out);
         writeInteger(this.feedUpdateUpdateType != null ? this.feedUpdateUpdateType.ordinal() : null, out);
         out.writeByte((byte)(headless ? 1 : 0));
@@ -127,6 +137,7 @@ public class ActionRequest implements Parcelable {
 
         articleID = readInteger(in);
         link = readString(in);
+        queueLength = readLong(in);
         Integer feedUpdateFeedTypeInteger = readInteger(in);
         if(feedUpdateFeedTypeInteger != null) {
             feedUpdateFeedType = FeedUpdater.FeedType.values()[feedUpdateFeedTypeInteger];

@@ -51,7 +51,6 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_bag_fail_title">Fehlgeschlagen</string>
     <string name="d_bag_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>
     <string name="addLink_success_text">Hinzugefügt</string>
-    <string name="addLink_savedOffline">Offline gespeichert</string>
     <string name="testConnection_progressDialogMessage">Verbindung wird überprüft…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Falsche URL</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag Dienst nicht gefunden — überprüfe bitte die wallabag URL</string>

@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import android.util.Pair;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -18,8 +19,7 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
 import fr.gaulupeau.apps.Poche.entity.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
-import fr.gaulupeau.apps.Poche.events.AddLinkFinishedEvent;
-import fr.gaulupeau.apps.Poche.events.AddLinkStartedEvent;
+import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
@@ -58,53 +58,39 @@ public class BGService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
 
-        // this seems to make UI more responsive right after a call to the service.
-        // well, this seemed to help better before OperationsHelper introduction
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
         ActionRequest actionRequest = ActionRequest.fromIntent(intent);
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
+            case Archive:
+            case Unarchive:
+            case Favorite:
+            case Unfavorite:
+            case Delete:
+            case AddLink:
+                Long queueChangedLength = serveSimpleRequest(actionRequest);
+                if(queueChangedLength != null) {
+                    postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
+                }
+                break;
+
             case SyncQueue: {
                 SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
+                Pair<ActionResult, Long> syncResult = null;
                 try {
-                    result = syncOfflineQueue(actionRequest);
+                    syncResult = syncOfflineQueue(actionRequest);
+                    result = syncResult.first;
                 } finally {
                     removeStickyEvent(startEvent);
                     if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
-                    postEvent(new SyncQueueFinishedEvent(actionRequest, result));
+                    postEvent(new SyncQueueFinishedEvent(actionRequest, result,
+                            syncResult != null ? syncResult.second : null));
                 }
                 break;
             }
-
-            case AddLink: {
-                AddLinkStartedEvent startEvent = new AddLinkStartedEvent(actionRequest);
-                postStickyEvent(startEvent);
-                try {
-                    result = addLink(actionRequest);
-                } finally {
-                    removeStickyEvent(startEvent);
-                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
-                    postEvent(new AddLinkFinishedEvent(actionRequest, result));
-                }
-                break;
-            }
-
-            case Archive:
-            case Unarchive:
-                result = archiveArticle(actionRequest);
-                break;
-
-            case Favorite:
-            case Unfavorite:
-                result = favoriteArticle(actionRequest);
-                break;
-
-            case Delete:
-                result = deleteArticle(actionRequest);
-                break;
 
             case UpdateFeed: {
                 UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
@@ -124,402 +110,232 @@ public class BGService extends IntentService {
                 break;
         }
 
-        postEvent(new ActionResultEvent(actionRequest, result));
+        if(result != null) {
+            postEvent(new ActionResultEvent(actionRequest, result));
+        }
 
         Log.d(TAG, "onHandleIntent() finished");
     }
 
-    private ActionResult syncOfflineQueue(ActionRequest actionRequest) {
+    private Long serveSimpleRequest(ActionRequest actionRequest) {
+        Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s, link: %s",
+                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getLink()));
+
+        Long queueChangedLength = null;
+
+        DaoSession daoSession = getDaoSession();
+        daoSession.getDatabase().beginTransactionNonExclusive();
+        try {
+            QueueHelper queueHelper = new QueueHelper(daoSession);
+
+            ActionRequest.Action action = actionRequest.getAction();
+            switch(action) {
+                case Archive:
+                case Unarchive:
+                    if(queueHelper.archiveArticle(actionRequest.getArticleID(),
+                            action == ActionRequest.Action.Archive)) {
+                        queueChangedLength = queueHelper.getQueueLength();
+                    }
+                    break;
+
+                case Favorite:
+                case Unfavorite:
+                    if(queueHelper.favoriteArticle(actionRequest.getArticleID(),
+                            action == ActionRequest.Action.Favorite)) {
+                        queueChangedLength = queueHelper.getQueueLength();
+                    }
+                    break;
+
+                case Delete:
+                    if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
+                        queueChangedLength = queueHelper.getQueueLength();
+                    }
+                    break;
+
+                case AddLink:
+                    if(queueHelper.addLink(actionRequest.getLink())) {
+                        queueChangedLength = queueHelper.getQueueLength();
+                    }
+                    break;
+
+                default:
+                    Log.w(TAG, "serveSimpleRequest() action is not implemented: " + action);
+                    break;
+            }
+
+            daoSession.getDatabase().setTransactionSuccessful();
+        } finally {
+            daoSession.getDatabase().endTransaction();
+        }
+
+        Log.d(TAG, "serveSimpleRequest() finished");
+        return queueChangedLength;
+    }
+
+    private Pair<ActionResult, Long> syncOfflineQueue(ActionRequest actionRequest) {
         Log.d(TAG, "syncOfflineQueue() started");
 
         if(!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
-            return new ActionResult(ActionResult.ErrorType.NoNetwork);
+            return new Pair<>(new ActionResult(ActionResult.ErrorType.NoNetwork), null);
         }
 
         ActionResult result = new ActionResult();
-        Long queueChangedLength = null;
         boolean urlUploaded = false;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
+        QueueHelper queueHelper = new QueueHelper(daoSession);
 
-            List<QueueItem> queueItems = queueHelper.getQueueItems();
+        List<QueueItem> queueItems = queueHelper.getQueueItems();
 
-            List<QueueItem> doneQueueItems = new ArrayList<>(queueItems.size());
-            Set<Integer> maskedArticles = new HashSet<>();
+        List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
+        Set<Integer> maskedArticles = new HashSet<>();
 
-            for(QueueItem item: queueItems) {
-                Integer articleIdInteger = item.getArticleId();
+        for(QueueItem item: queueItems) {
+            Integer articleIdInteger = item.getArticleId();
 
+            Log.d(TAG, String.format(
+                    "syncOfflineQueue() processing: queue item ID: %d, article ID: \"%s\"",
+                    item.getId(), articleIdInteger));
+
+            if(articleIdInteger != null && maskedArticles.contains(articleIdInteger)) {
                 Log.d(TAG, String.format(
-                        "syncOfflineQueue() processing: queue item ID: %d, article ID: \"%s\"",
-                        item.getId(), articleIdInteger));
+                        "syncOfflineQueue() article with ID: \"%d\" is masked; skipping",
+                        articleIdInteger));
+                continue;
+            }
+            int articleID = articleIdInteger != null ? articleIdInteger : -1;
 
-                if(articleIdInteger != null && maskedArticles.contains(articleIdInteger)) {
-                    Log.d(TAG, String.format(
-                            "syncOfflineQueue() article with ID: \"%d\" is masked; skipping",
-                            articleIdInteger));
-                    continue;
-                }
-                int articleID = articleIdInteger != null ? articleIdInteger : -1;
+            boolean articleItem = false;
 
-                boolean articleItem = false;
-
-                ActionResult itemResult = null;
+            ActionResult itemResult = null;
+            try {
                 int action = item.getAction();
                 switch(action) {
                     case QueueHelper.QI_ACTION_ARCHIVE:
                     case QueueHelper.QI_ACTION_UNARCHIVE: {
                         articleItem = true;
-                        boolean archive = action == QueueHelper.QI_ACTION_ARCHIVE;
 
-                        itemResult = archiveArticleRemote(articleID, archive);
+                        if(!getWallabagService().toggleArchive(articleID)) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                        }
                         break;
                     }
 
                     case QueueHelper.QI_ACTION_FAVORITE:
                     case QueueHelper.QI_ACTION_UNFAVORITE: {
                         articleItem = true;
-                        boolean favorite = action == QueueHelper.QI_ACTION_FAVORITE;
 
-                        itemResult = favoriteArticleRemote(articleID, favorite);
+                        if(!getWallabagService().toggleFavorite(articleID)) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                        }
                         break;
                     }
 
                     case QueueHelper.QI_ACTION_DELETE: {
                         articleItem = true;
 
-                        itemResult = deleteArticleRemote(articleID);
+                        if(!getWallabagService().deleteArticle(articleID)) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                        }
                         break;
                     }
 
                     case QueueHelper.QI_ACTION_ADD_LINK: {
                         String link = item.getExtra();
-                        if(link == null || link.isEmpty()) {
+                        if(link != null && !link.isEmpty()) {
+                            if(!getWallabagService().addLink(link)) {
+                                itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            }
+                            if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
+                        } else {
                             Log.w(TAG, "syncOfflineQueue() item has no link; skipping");
                         }
-
-                        itemResult = addLinkRemote(link);
-                        if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
                         break;
                     }
+
+                    default:
+                        throw new IllegalArgumentException("Unknown action: " + action);
                 }
+            } catch(RequestException | IOException e) {
+                ActionResult r = processException(e, "syncOfflineQueue()");
+                if(!r.isSuccess()) itemResult = r;
+            } catch(Exception e) {
+                Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
-                if(itemResult == null || itemResult.isSuccess()) {
-                    doneQueueItems.add(item);
-                } else if(itemResult.getErrorType() != null) {
-                    ActionResult.ErrorType itemError = itemResult.getErrorType();
+                itemResult = new ActionResult();
+                itemResult.setErrorType(ActionResult.ErrorType.Unknown);
+                itemResult.setMessage(e.toString());
+            }
 
-                    Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
+            if(itemResult == null || itemResult.isSuccess()) {
+                completedQueueItems.add(item);
+            } else if(itemResult.getErrorType() != null) {
+                ActionResult.ErrorType itemError = itemResult.getErrorType();
 
-                    boolean stop = false;
-                    boolean mask = false;
-                    switch(itemError) {
-                        case Temporary:
-                        case NoNetwork:
-                            stop = true;
-                            break;
-                        case IncorrectConfiguration:
-                        case IncorrectCredentials:
-                            stop = true;
-                            break;
-                        case Unknown:
-                            mask = true; // ?
-                            break;
-                        case NegativeResponse:
-                            mask = true; // ?
-                            break;
-                    }
+                Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
 
-                    if(stop) {
-                        result.setErrorType(itemError);
-                        Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
+                boolean stop = false;
+                boolean mask = false; // it seems masking is not used
+                switch(itemError) {
+                    case Temporary:
+                    case NoNetwork:
+                        stop = true;
                         break;
-                    }
-                    if(mask && articleItem) {
-                        maskedArticles.add(articleID);
-                    }
-                } else { // should not happen
-                    Log.w(TAG, "syncOfflineQueue() errorType is not present in itemResult");
+                    case IncorrectConfiguration:
+                    case IncorrectCredentials:
+                        stop = true;
+                        break;
+                    case Unknown:
+                        stop = true;
+                        break;
+                    case NegativeResponse:
+                        mask = true; // ?
+                        break;
                 }
 
-                Log.d(TAG, "syncOfflineQueue() finished processing queue item");
+                if(stop) {
+                    result.setErrorType(itemError);
+                    Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
+                    break;
+                }
+                if(mask && articleItem) {
+                    maskedArticles.add(articleID);
+                }
+            } else { // should not happen
+                Log.w(TAG, "syncOfflineQueue() errorType is not present in itemResult");
             }
 
-            if(!doneQueueItems.isEmpty()) {
-                queueHelper.dequeueItems(doneQueueItems);
-            }
-
-            if(queueHelper.isQueueChanged()) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
+            Log.d(TAG, "syncOfflineQueue() finished processing queue item");
         }
 
-        if(queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
+        Long queueLength = null;
+
+        if(!completedQueueItems.isEmpty()) {
+            daoSession.getDatabase().beginTransactionNonExclusive();
+            try {
+                queueHelper.dequeueItems(completedQueueItems);
+
+                queueLength = queueHelper.getQueueLength();
+
+                daoSession.getDatabase().setTransactionSuccessful();
+            } finally {
+                daoSession.getDatabase().endTransaction();
+            }
+        }
+
+        if(queueLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueLength));
+        } else {
+            queueLength = (long)queueItems.size();
         }
 
         if(urlUploaded) {
-            postEvent(new AddLinkFinishedEvent(
-                    new ActionRequest(ActionRequest.Action.AddLink),
-                    new ActionResult()));
+            postEvent(new LinkUploadedEvent(new ActionResult()));
         }
 
         Log.d(TAG, "syncOfflineQueue() finished");
-        return result;
-    }
-
-    // TODO: reuse code in {archive,favorite,delete}Article{,Remote}
-
-    private ActionResult archiveArticle(ActionRequest actionRequest) {
-        int articleID = actionRequest.getArticleID(); // TODO: check: not null
-        boolean archive = actionRequest.getAction() == ActionRequest.Action.Archive;
-
-        Log.d(TAG, String.format("archiveArticle(%d, %s) started", articleID, archive));
-
-        ActionResult result = new ActionResult();
-        Long queueChangedLength = null;
-
-        DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
-
-            if(queueHelper.archiveArticle(articleID, archive)) {
-                if(WallabagConnection.isNetworkAvailable()) {
-                    result.updateWith(archiveArticleRemote(articleID, archive));
-                } else {
-                    result.setErrorType(ActionResult.ErrorType.NoNetwork);
-                }
-
-                if(!result.isSuccess()) {
-                    queueHelper.enqueueArchiveArticle(articleID, archive);
-                }
-
-                Log.d(TAG, "archiveArticle() synced: " + result.isSuccess());
-            } else {
-                Log.d(TAG, "archiveArticle(): QueueHelper reports there's nothing to do");
-            }
-
-            if(queueHelper.isQueueChanged()) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
-        }
-
-        if(queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
-        }
-
-        Log.d(TAG, "archiveArticle() finished");
-        return result;
-    }
-
-    private ActionResult archiveArticleRemote(int articleID, boolean archive) {
-        ActionResult result = null;
-
-        try {
-            if(!getWallabagService().toggleArchive(articleID)) {
-                result = new ActionResult(ActionResult.ErrorType.NegativeResponse);
-            }
-        } catch(RequestException | IOException e) {
-            ActionResult r = processException(e, "archiveArticleRemote()");
-            if(!r.isSuccess()) result = r;
-        }
-
-        return result;
-    }
-
-    private ActionResult favoriteArticle(ActionRequest actionRequest) {
-        int articleID = actionRequest.getArticleID(); // TODO: check: not null
-        boolean favorite = actionRequest.getAction() == ActionRequest.Action.Favorite;
-
-        Log.d(TAG, String.format("favoriteArticle(%d, %s) started", articleID, favorite));
-
-        ActionResult result = new ActionResult();
-        Long queueChangedLength = null;
-
-        DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
-
-            if(queueHelper.favoriteArticle(articleID, favorite)) {
-                if(WallabagConnection.isNetworkAvailable()) {
-                    result.updateWith(favoriteArticleRemote(articleID, favorite));
-                } else {
-                    result.setErrorType(ActionResult.ErrorType.NoNetwork);
-                }
-
-                if(!result.isSuccess()) {
-                    queueHelper.enqueueFavoriteArticle(articleID, favorite);
-                }
-
-                Log.d(TAG, "favoriteArticle() synced: " + result.isSuccess());
-            } else {
-                Log.d(TAG, "favoriteArticle(): QueueHelper reports there's nothing to do");
-            }
-
-            if(queueHelper.isQueueChanged()) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
-        }
-
-        if(queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
-        }
-
-        Log.d(TAG, "favoriteArticle() finished");
-        return result;
-    }
-
-    private ActionResult favoriteArticleRemote(int articleID, boolean favorite) {
-        ActionResult result = null;
-
-        try {
-            if(!getWallabagService().toggleFavorite(articleID)) {
-                result = new ActionResult(ActionResult.ErrorType.NegativeResponse);
-            }
-        } catch(RequestException | IOException e) {
-            ActionResult r = processException(e, "favoriteArticleRemote()");
-            if(!r.isSuccess()) result = r;
-        }
-
-        return result;
-    }
-
-    private ActionResult deleteArticle(ActionRequest actionRequest) {
-        int articleID = actionRequest.getArticleID(); // TODO: check: not null
-        Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
-
-        ActionResult result = new ActionResult();
-        Long queueChangedLength = null;
-
-        DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
-
-            if(queueHelper.deleteArticle(articleID)) {
-                if(WallabagConnection.isNetworkAvailable()) {
-                    result.updateWith(deleteArticleRemote(articleID));
-                } else {
-                    result.setErrorType(ActionResult.ErrorType.NoNetwork);
-                }
-
-                if(!result.isSuccess()) {
-                    queueHelper.enqueueDeleteArticle(articleID);
-                }
-
-                Log.d(TAG, "deleteArticle() synced: " + result.isSuccess());
-            } else {
-                Log.d(TAG, "deleteArticle(): QueueHelper reports there's nothing to do");
-            }
-
-            if(queueHelper.isQueueChanged()) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
-        }
-
-        if(queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
-        }
-
-        Log.d(TAG, "deleteArticle() finished");
-        return result;
-    }
-
-    private ActionResult deleteArticleRemote(int articleID) {
-        ActionResult result = null;
-
-        try {
-            if(!getWallabagService().deleteArticle(articleID)) {
-                result = new ActionResult(ActionResult.ErrorType.NegativeResponse);
-            }
-        } catch(RequestException | IOException e) {
-            ActionResult r = processException(e, "deleteArticleRemote()");
-            if(!r.isSuccess()) result = r;
-        }
-
-        return result;
-    }
-
-    private ActionResult addLink(ActionRequest actionRequest) {
-        String link = actionRequest.getLink();
-        Log.d(TAG, String.format("addLink(%s) started", link));
-
-        ActionResult result = new ActionResult();
-        Long queueChangedLength = null;
-
-        DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
-
-            if(queueHelper.addLink(link)) {
-                if(WallabagConnection.isNetworkAvailable()) {
-                    result.updateWith(addLinkRemote(link));
-                } else {
-                    result.setErrorType(ActionResult.ErrorType.NoNetwork);
-                }
-
-                if(!result.isSuccess()) {
-                    queueHelper.enqueueAddLink(link);
-                }
-
-                Log.d(TAG, "addLink() synced: " + result.isSuccess());
-            } else {
-                Log.d(TAG, "addLink(): QueueHelper reports there's nothing to do");
-            }
-
-            if(queueHelper.isQueueChanged()) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
-        }
-
-        if(queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength));
-        }
-
-        Log.d(TAG, "addLink() finished");
-        return result;
-    }
-
-    private ActionResult addLinkRemote(String link) {
-        ActionResult result = null;
-
-        try {
-            if(!getWallabagService().addLink(link)) {
-                result = new ActionResult(ActionResult.ErrorType.NegativeResponse);
-            }
-        } catch(RequestException | IOException e) {
-            ActionResult r = processException(e, "addLinkRemote()");
-            if(!r.isSuccess()) result = r;
-        }
-
-        return result;
+        return new Pair<>(result, queueLength);
     }
 
     private ActionResult updateFeed(ActionRequest actionRequest) {
@@ -541,10 +357,8 @@ public class BGService extends IntentService {
                     settings.getHttpAuthPassword(),
                     settings.getWallabagServerVersion());
 
-            // TODO: check: do we need a separate transaction here (since FeedUpdater creates one)?
-            // I'll leave it just yet, should not hurt anyway
             DaoSession daoSession = getDaoSession();
-            daoSession.getDatabase().beginTransaction();
+            daoSession.getDatabase().beginTransactionNonExclusive();
             try {
                 event = feedUpdater.update(feedType, updateType);
 
