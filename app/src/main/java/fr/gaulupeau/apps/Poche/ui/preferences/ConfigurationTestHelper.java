@@ -294,7 +294,9 @@ public class ConfigurationTestHelper
 
         getCredentialsTask = new GetCredentialsTask(this, getUrl(),
                 username, password,
-                httpAuthUsername, httpAuthPassword, getWallabagServerVersion());
+                httpAuthUsername, httpAuthPassword,
+                customSSLSettings, acceptAllCertificates,
+                getWallabagServerVersion());
         getCredentialsTask.execute();
     }
 
