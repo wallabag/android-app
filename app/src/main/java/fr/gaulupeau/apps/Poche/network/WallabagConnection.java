@@ -71,6 +71,7 @@ public class WallabagConnection {
 
     public static void clearCookies(Context context) {
         new SharedPrefsCookiePersistor(context).clear();
+        replaceClient();
     }
 
     public static OkHttpClient replaceClient() {

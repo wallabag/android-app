@@ -52,4 +52,10 @@ public class EventHelper {
         postEvent(event);
     }
 
+    public static void notifyEverythingChanged() {
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+        event.setInvalidateAll(true);
+        postEvent(event);
+    }
+
 }

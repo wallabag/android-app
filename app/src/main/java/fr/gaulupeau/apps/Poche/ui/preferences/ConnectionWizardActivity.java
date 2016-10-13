@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 
@@ -564,19 +566,43 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
             Settings settings = App.getInstance().getSettings();
 
-            settings.setUrl(bundle.getString(DATA_URL));
-            settings.setUsername(bundle.getString(DATA_USERNAME));
+            String url = bundle.getString(DATA_URL);
+            String username = bundle.getString(DATA_USERNAME);
+            String httpAuthUsername = bundle.getString(DATA_HTTP_AUTH_USERNAME);
+            int wallabagServerVersion = bundle.getInt(DATA_SERVER_VERSION);
+            String feedsUserID = bundle.getString(DATA_FEEDS_USER_ID);
+
+            boolean newUser = !stringsEqual(settings.getUrl(), url)
+                    || !stringsEqual(settings.getUsername(), username)
+                    || !stringsEqual(settings.getHttpAuthUsername(), httpAuthUsername)
+                    || !stringsEqual(settings.getFeedsUserID(), feedsUserID)
+                    || settings.getWallabagServerVersion() != wallabagServerVersion;
+
+            settings.setUrl(url);
+            settings.setUsername(username);
             settings.setPassword(bundle.getString(DATA_PASSWORD));
-            settings.setHttpAuthUsername(bundle.getString(DATA_HTTP_AUTH_USERNAME));
+            settings.setHttpAuthUsername(httpAuthUsername);
             settings.setHttpAuthPassword(bundle.getString(DATA_HTTP_AUTH_PASSWORD));
             settings.setCustomSSLSettings(bundle.getBoolean(DATA_CUSTOM_SSL_SETTINGS));
             settings.setAcceptAllCertificates(bundle.getBoolean(DATA_ACCEPT_ALL_CERTIFICATES));
-            settings.setWallabagServerVersion(bundle.getInt(DATA_SERVER_VERSION));
-            settings.setFeedsUserID(bundle.getString(DATA_FEEDS_USER_ID));
+            settings.setWallabagServerVersion(wallabagServerVersion);
+            settings.setFeedsUserID(feedsUserID);
             settings.setFeedsToken(bundle.getString(DATA_FEEDS_TOKEN));
             settings.setConfigurationOk(true);
             settings.setConfigurationErrorShown(false);
             settings.setFirstRun(false);
+
+            if(newUser) {
+                WallabagConnection.clearCookies(getActivity());
+                OperationsHelper.wipeDB(settings);
+            }
+        }
+
+        private boolean stringsEqual(String s1, String s2) {
+            if(s1 == null && s2 == null) return true;
+            if(s1 == null || s2 == null) return false;
+
+            return s1.equals(s2);
         }
 
     }

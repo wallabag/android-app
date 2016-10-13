@@ -7,6 +7,7 @@ import android.util.Log;
 import fr.gaulupeau.apps.Poche.entity.Article;
 import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
@@ -118,6 +119,15 @@ public class OperationsHelper {
         ServiceHelper.deleteArticle(context, articleID);
 
         Log.d(TAG, "deleteArticle() finished");
+    }
+
+    public static void wipeDB(Settings settings) {
+        DbConnection.getSession().getArticleDao().deleteAll();
+        DbConnection.getSession().getQueueItemDao().deleteAll();
+
+        settings.setFirstSyncDone(false);
+
+        EventHelper.notifyEverythingChanged();
     }
 
     private static ArticleDao getArticleDao() {
