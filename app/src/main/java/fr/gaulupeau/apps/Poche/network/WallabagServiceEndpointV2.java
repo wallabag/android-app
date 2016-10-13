@@ -100,9 +100,21 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public FeedsCredentials getCredentials() throws RequestException, IOException {
         FeedsCredentials fc = getCredentials("/config", CREDENTIALS_PATTERN);
-        // overwrite userID with username because first matcher group of previous regex, which
-        // should return the user name, might include the subdirectory in which wallabag is installed
-        if(fc != null) fc.userID = username;
+        // fc.userID might include the subdirectory in which wallabag is installed.
+        // If feed url is "https://example.com/wallabag/complex/user/name/token/unread.xml",
+        // fc.userID will be "wallabag/complex/user/name", but should be "complex/user/name"
+        if(fc != null) {
+            // TODO: do something if username is empty (only HTTP Auth used)
+            if(username != null && !username.isEmpty() && fc.userID != null
+                    && username.length() != fc.userID.length()) {
+                if(fc.userID.length() > username.length()) {
+                    Log.d(TAG, "getCredentials() fc.userID is longer than username");
+                    fc.userID = fc.userID.substring(fc.userID.length() - username.length());
+                } else {
+                    Log.w(TAG, "getCredentials() fc.userID is shorter than username");
+                }
+            }
+        }
         return fc;
     }
 
