@@ -222,6 +222,10 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
+        if(event.isInvalidateAll()) {
+            firstSyncDone = settings.isFirstSyncDone();
+        }
+
         invalidateLists(event);
     }
 
