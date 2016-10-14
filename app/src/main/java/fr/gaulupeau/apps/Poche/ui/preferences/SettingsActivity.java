@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
@@ -320,7 +320,6 @@ public class SettingsActivity extends AppCompatActivity {
                     Activity activity = getActivity();
                     if(activity != null) {
                         WallabagConnection.clearCookies(getActivity());
-                        WallabagConnection.replaceClient();
 
                         Toast.makeText(activity,
                                 R.string.pref_toast_connection_advanced_clearCookies,
@@ -338,10 +337,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        DbConnection.getSession().getArticleDao().deleteAll();
-                                        DbConnection.getSession().getQueueItemDao().deleteAll();
-
-                                        App.getInstance().getSettings().setFirstSyncDone(false);
+                                        OperationsHelper.wipeDB(App.getInstance().getSettings());
                                     }
                                 })
                                 .setNegativeButton(R.string.negative_answer, null)

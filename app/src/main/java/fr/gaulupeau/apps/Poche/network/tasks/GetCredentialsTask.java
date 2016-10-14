@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
@@ -16,6 +17,8 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     private final String password;
     private String httpAuthUsername;
     private String httpAuthPassword;
+    private boolean customSSLSettings;
+    private boolean acceptAllCertificates;
 
     private FeedsCredentials credentials;
     private int wallabagVersion = -1;
@@ -23,6 +26,7 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     public GetCredentialsTask(ResultHandler handler, String endpoint,
                               String username, String password,
                               String httpAuthUsername, String httpAuthPassword,
+                              boolean customSSLSettings, boolean acceptAllCertificates,
                               int wallabagVersion) {
         this.handler = handler;
         this.endpoint = endpoint;
@@ -30,13 +34,16 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
         this.password = password;
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
+        this.customSSLSettings = customSSLSettings;
+        this.acceptAllCertificates = acceptAllCertificates;
         this.wallabagVersion = wallabagVersion;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         WallabagService service = new WallabagService(endpoint, username, password,
-                httpAuthUsername, httpAuthPassword, wallabagVersion);
+                httpAuthUsername, httpAuthPassword, wallabagVersion,
+                WallabagConnection.createClient(false, customSSLSettings, acceptAllCertificates));
         try {
             credentials = service.getCredentials();
             wallabagVersion = service.getWallabagVersion();
