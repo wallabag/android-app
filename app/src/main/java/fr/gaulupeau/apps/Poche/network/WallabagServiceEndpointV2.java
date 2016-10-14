@@ -102,25 +102,42 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         FeedsCredentials fc = getCredentials("/config", CREDENTIALS_PATTERN);
         // fc.userID might include the subdirectory in which wallabag is installed.
         // If feed url is "https://example.com/wallabag/complex/user/name/token/unread.xml",
-        // fc.userID will be "wallabag/complex/user/name", but should be "complex/user/name"
+        // fc.userID will be "wallabag/complex/user/name", but should be "complex/user/name".
+        // The following code is an attempt to work around this issue.
         if(fc != null) {
-            // TODO: do something if username is empty (only HTTP Auth used)
-            if(username != null && !username.isEmpty() && fc.userID != null
-                    && username.length() != fc.userID.length()) {
-                if(fc.userID.length() > username.length()) {
-                    Log.d(TAG, "getCredentials() fc.userID is longer than username");
-                    fc.userID = fc.userID.substring(fc.userID.length() - username.length());
-                } else {
-                    Log.w(TAG, "getCredentials() fc.userID is shorter than username");
+            int presumedUsernameLength = (username != null && !username.isEmpty()) ? username.length()
+                    : httpAuthUsername != null ? httpAuthUsername.length() : 0;
+
+            boolean failedToCheck = false;
+
+            if(presumedUsernameLength > 0) {
+                // if fc.userID is null, we have more serious issues and should not try to fix it here
+                if(fc.userID != null && presumedUsernameLength != fc.userID.length()) {
+                    if(fc.userID.length() > presumedUsernameLength) {
+                        Log.d(TAG, "getCredentials() fc.userID is longer than presumedUsername");
+                        fc.userID = fc.userID.substring(fc.userID.length() - presumedUsernameLength);
+                    } else {
+                        Log.i(TAG, "getCredentials() fc.userID is shorter than presumedUsername");
+                        failedToCheck = true;
+                    }
                 }
+            } else {
+                Log.i(TAG, "getCredentials() no presumedUsername, can't check fc.userID");
+                failedToCheck = true;
+            }
+
+            if(failedToCheck) {
+                Log.w(TAG, "getCredentials() if you see this and can't access feeds, " +
+                        "check \"feeds user ID\"");
             }
         }
         return fc;
     }
 
     public WallabagServiceEndpointV2(String endpoint, String username, String password,
+                                     String httpAuthUsername, String httpAuthPassword,
                                      RequestCreator requestCreator, OkHttpClient client) {
-        super(endpoint, username, password, requestCreator, client);
+        super(endpoint, username, password, httpAuthUsername, httpAuthPassword, requestCreator, client);
     }
 
     protected boolean isLoginPage(String body) {

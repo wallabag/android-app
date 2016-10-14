@@ -32,9 +32,10 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
     private static final String TAG = WallabagServiceEndpointV1.class.getSimpleName();
 
     public WallabagServiceEndpointV1(String endpoint, String username, String password,
+                                     String httpAuthUsername, String httpAuthPassword,
                                      RequestCreator requestCreator,
                                      OkHttpClient client) {
-        super(endpoint, username, password, requestCreator, client);
+        super(endpoint, username, password, httpAuthUsername, httpAuthPassword, requestCreator, client);
     }
 
     public ConnectionTestResult testConnection()
