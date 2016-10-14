@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -572,10 +573,10 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             int wallabagServerVersion = bundle.getInt(DATA_SERVER_VERSION);
             String feedsUserID = bundle.getString(DATA_FEEDS_USER_ID);
 
-            boolean newUser = !stringsEqual(settings.getUrl(), url)
-                    || !stringsEqual(settings.getUsername(), username)
-                    || !stringsEqual(settings.getHttpAuthUsername(), httpAuthUsername)
-                    || !stringsEqual(settings.getFeedsUserID(), feedsUserID)
+            boolean newUser = !TextUtils.equals(settings.getUrl(), url)
+                    || !TextUtils.equals(settings.getUsername(), username)
+                    || !TextUtils.equals(settings.getHttpAuthUsername(), httpAuthUsername)
+                    || !TextUtils.equals(settings.getFeedsUserID(), feedsUserID)
                     || settings.getWallabagServerVersion() != wallabagServerVersion;
 
             settings.setUrl(url);
@@ -596,13 +597,6 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 WallabagConnection.clearCookies(getActivity());
                 OperationsHelper.wipeDB(settings);
             }
-        }
-
-        private boolean stringsEqual(String s1, String s2) {
-            if(s1 == null && s2 == null) return true;
-            if(s1 == null || s2 == null) return false;
-
-            return s1.equals(s2);
         }
 
     }

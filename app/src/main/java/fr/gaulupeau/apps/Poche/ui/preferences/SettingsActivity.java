@@ -11,6 +11,7 @@ import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -67,16 +68,19 @@ public class SettingsActivity extends AppCompatActivity {
         private boolean newTheme;
 
         private boolean autoSyncChanged;
-        private boolean initialAutoSyncEnabled;
-        private boolean newAutoSyncEnabled;
-        private long initialAutoSyncInterval;
-        private long newAutoSyncInterval;
+        private boolean oldAutoSyncEnabled;
+        private long oldAutoSyncInterval;
 
         private boolean autoSyncQueueChanged;
-        private boolean initialAutoSyncQueueEnabled;
-        private boolean newAutoSyncQueueEnabled;
+        private boolean oldAutoSyncQueueEnabled;
 
-        private boolean connectionParametersChanged;
+        private boolean checkUserChanged;
+        private String oldUrl;
+        private String oldUsername;
+        private String oldHttpAuthUsername;
+        private String oldFeedsUserID;
+
+        private boolean invalidateConfiguration;
         private boolean httpClientReinitializationNeeded;
 
         private ConfigurationTestHelper configurationTestHelper;
@@ -176,11 +180,17 @@ public class SettingsActivity extends AppCompatActivity {
             newTheme = false;
 
             autoSyncChanged = false;
-            initialAutoSyncEnabled = newAutoSyncEnabled = settings.isAutoSyncEnabled();
-            initialAutoSyncInterval = newAutoSyncInterval = settings.getAutoSyncInterval();
+            oldAutoSyncEnabled = settings.isAutoSyncEnabled();
+            oldAutoSyncInterval = settings.getAutoSyncInterval();
 
             autoSyncQueueChanged = false;
-            initialAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+            oldAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+
+            checkUserChanged = false;
+            oldUrl = settings.getUrl();
+            oldUsername = settings.getUsername();
+            oldHttpAuthUsername = settings.getHttpAuthUsername();
+            oldFeedsUserID = settings.getFeedsUserID();
         }
 
         private void applyChanges() {
@@ -197,14 +207,16 @@ public class SettingsActivity extends AppCompatActivity {
                 autoSyncChanged = false;
                 Log.d(TAG, "applyChanges() autoSyncChanged is true");
 
-                if(newAutoSyncEnabled != initialAutoSyncEnabled) {
+                boolean newAutoSyncEnabled = settings.isAutoSyncEnabled();
+                long newAutoSyncInterval = settings.getAutoSyncInterval();
+                if(newAutoSyncEnabled != oldAutoSyncEnabled) {
                     if(newAutoSyncEnabled) {
                         AlarmHelper.setAlarm(getActivity(), newAutoSyncInterval, true);
                     } else {
                         AlarmHelper.unsetAlarm(getActivity(), true);
                     }
                 } else if(newAutoSyncEnabled) {
-                    if(newAutoSyncInterval != initialAutoSyncInterval) {
+                    if(newAutoSyncInterval != oldAutoSyncInterval) {
                         AlarmHelper.updateAlarmInterval(getActivity(), newAutoSyncInterval);
                     }
                 }
@@ -214,7 +226,8 @@ public class SettingsActivity extends AppCompatActivity {
                 autoSyncQueueChanged = false;
                 Log.d(TAG, "applyChanges() autoSyncQueueChanged is true");
 
-                if(newAutoSyncQueueEnabled != initialAutoSyncQueueEnabled) {
+                boolean newAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
+                if(newAutoSyncQueueEnabled != oldAutoSyncQueueEnabled) {
                     if(newAutoSyncQueueEnabled) {
                         if(settings.isOfflineQueuePending()) {
                             Settings.enableConnectivityChangeReceiver(getActivity(), true);
@@ -225,8 +238,33 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
 
-            if(connectionParametersChanged) {
-                connectionParametersChanged = false;
+            if(checkUserChanged) {
+                checkUserChanged = false;
+
+                boolean clearSession = false;
+                boolean wipeDB = false;
+                if(!TextUtils.equals(settings.getUrl(), oldUrl)
+                        || !TextUtils.equals(settings.getUsername(), oldUsername)) {
+                    clearSession = true;
+                    wipeDB = true;
+                } else if(!TextUtils.equals(settings.getHttpAuthUsername(), oldHttpAuthUsername)
+                        && (settings.getUsername() == null || settings.getUsername().isEmpty())) {
+                    clearSession = true;
+                    wipeDB = true;
+                } else if(TextUtils.equals(settings.getFeedsUserID(), oldFeedsUserID)) {
+                    wipeDB = true;
+                }
+
+                if(clearSession) {
+                    WallabagConnection.clearCookies(getActivity());
+                }
+                if(wipeDB) {
+                    OperationsHelper.wipeDB(settings);
+                }
+            }
+
+            if(invalidateConfiguration) {
+                invalidateConfiguration = false;
 
                 Log.i(TAG, "applyChanges() setting isConfigurationOk(false)");
                 settings.setConfigurationOk(false);
@@ -262,17 +300,14 @@ public class SettingsActivity extends AppCompatActivity {
 
                 case R.string.pref_key_autoSync_enabled:
                     autoSyncChanged = true;
-                    newAutoSyncEnabled = settings.isAutoSyncEnabled();
                     break;
 
                 case R.string.pref_key_autoSync_interval:
                     autoSyncChanged = true;
-                    newAutoSyncInterval = settings.getAutoSyncInterval();
                     break;
 
                 case R.string.pref_key_autoSyncQueue_enabled:
                     autoSyncQueueChanged = true;
-                    newAutoSyncQueueEnabled = settings.isAutoSyncQueueEnabled();
                     break;
 
                 case R.string.pref_key_connection_advanced_acceptAllCertificates:
@@ -287,8 +322,17 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                 case R.string.pref_key_connection_feedsUserID:
                 case R.string.pref_key_connection_feedsToken:
-                    Log.i(TAG, "onSharedPreferenceChanged() connectionParametersChanged");
-                    connectionParametersChanged = true;
+                    Log.i(TAG, "onSharedPreferenceChanged() invalidateConfiguration");
+                    invalidateConfiguration = true;
+                    break;
+            }
+
+            switch(keyResID) {
+                case R.string.pref_key_connection_url:
+                case R.string.pref_key_connection_username:
+                case R.string.pref_key_connection_advanced_httpAuthUsername:
+                case R.string.pref_key_connection_feedsUserID:
+                    checkUserChanged = true;
                     break;
             }
 
@@ -378,7 +422,7 @@ public class SettingsActivity extends AppCompatActivity {
             settings.setConfigurationOk(true);
             settings.setConfigurationErrorShown(false);
 
-            connectionParametersChanged = false;
+            invalidateConfiguration = false;
 
             Toast.makeText(getActivity(), R.string.settings_parametersAutofilled,
                     Toast.LENGTH_SHORT).show();
