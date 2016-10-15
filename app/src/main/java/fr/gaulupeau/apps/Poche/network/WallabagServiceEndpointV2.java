@@ -100,37 +100,35 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public FeedsCredentials getCredentials() throws RequestException, IOException {
         FeedsCredentials fc = getCredentials("/config", CREDENTIALS_PATTERN);
+        if(fc == null || fc.userID == null) return fc;
+
         // fc.userID might include the subdirectory in which wallabag is installed.
         // If feed url is "https://example.com/wallabag/complex/user/name/token/unread.xml",
         // fc.userID will be "wallabag/complex/user/name", but should be "complex/user/name".
         // The following code is an attempt to work around this issue.
-        if(fc != null) {
-            int presumedUsernameLength = (username != null && !username.isEmpty()) ? username.length()
-                    : httpAuthUsername != null ? httpAuthUsername.length() : 0;
+        int presumedUsernameLength = (username != null && !username.isEmpty()) ? username.length()
+                : httpAuthUsername != null ? httpAuthUsername.length() : 0;
 
-            boolean failedToCheck = false;
+        boolean failedToCheck = false;
 
-            if(presumedUsernameLength > 0) {
-                // if fc.userID is null, we have more serious issues and should not try to fix it here
-                if(fc.userID != null && presumedUsernameLength != fc.userID.length()) {
-                    if(fc.userID.length() > presumedUsernameLength) {
-                        Log.d(TAG, "getCredentials() fc.userID is longer than presumedUsername");
-                        fc.userID = fc.userID.substring(fc.userID.length() - presumedUsernameLength);
-                    } else {
-                        Log.i(TAG, "getCredentials() fc.userID is shorter than presumedUsername");
-                        failedToCheck = true;
-                    }
-                }
+        if(presumedUsernameLength <= 0) {
+            Log.i(TAG, "getCredentials() no presumedUsername, can't check fc.userID");
+            failedToCheck = true;
+        } else if(presumedUsernameLength != fc.userID.length()) {
+            if(fc.userID.length() > presumedUsernameLength) {
+                Log.d(TAG, "getCredentials() fc.userID is longer than presumedUsername");
+                fc.userID = fc.userID.substring(fc.userID.length() - presumedUsernameLength);
             } else {
-                Log.i(TAG, "getCredentials() no presumedUsername, can't check fc.userID");
+                Log.i(TAG, "getCredentials() fc.userID is shorter than presumedUsername");
                 failedToCheck = true;
             }
-
-            if(failedToCheck) {
-                Log.w(TAG, "getCredentials() if you see this and can't access feeds, " +
-                        "check \"feeds user ID\"");
-            }
         }
+
+        if(failedToCheck) {
+            Log.w(TAG, "getCredentials() if you see this and can't access feeds, " +
+                    "check \"feeds user ID\"");
+        }
+
         return fc;
     }
 
