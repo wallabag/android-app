@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.dao.query.QueryBuilder;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.entity.DaoMaster;
 import fr.gaulupeau.apps.Poche.entity.DaoSession;
@@ -33,7 +35,7 @@ public class DbConnection {
 
             Log.d(TAG, "creating new db session");
             WallabagOpenHelper dbHelper = new WallabagOpenHelper(context, "wallabag", null);
-            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            Database db = dbHelper.getWritableDb();
             DaoMaster daoMaster = new DaoMaster(db);
             Holder.session = daoMaster.newSession();
         } else {
@@ -60,7 +62,7 @@ public class DbConnection {
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(Database db, int oldVersion, int newVersion) {
             Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
             List<String> offlineUrls = null;
@@ -92,7 +94,7 @@ public class DbConnection {
 
                 db.beginTransaction();
                 try {
-                    SQLiteStatement stmt = db.compileStatement(
+                    DatabaseStatement stmt = db.compileStatement(
                             "insert into queue_item(_id, queue_number, action, extra) values(?, ?, ?, ?)");
 
                     int i = 1;
