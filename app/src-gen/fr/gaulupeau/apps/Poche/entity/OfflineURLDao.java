@@ -4,9 +4,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
-import de.greenrobot.dao.AbstractDao;
-import de.greenrobot.dao.Property;
-import de.greenrobot.dao.internal.DaoConfig;
+import org.greenrobot.greendao.AbstractDao;
+import org.greenrobot.greendao.Property;
+import org.greenrobot.greendao.database.DatabaseStatement;
+import org.greenrobot.greendao.internal.DaoConfig;
 
 import fr.gaulupeau.apps.Poche.entity.OfflineURL;
 
@@ -88,7 +89,22 @@ public class OfflineURLDao extends AbstractDao<OfflineURL, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
      }
-    
+
+    @Override
+    protected void bindValues(DatabaseStatement stmt, OfflineURL entity) {
+        stmt.clearBindings();
+
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
+
+        String url = entity.getUrl();
+        if (url != null) {
+            stmt.bindString(2, url);
+        }
+    }
+
     /** @inheritdoc */
     @Override
     protected Long updateKeyAfterInsert(OfflineURL entity, long rowId) {
@@ -104,6 +120,14 @@ public class OfflineURLDao extends AbstractDao<OfflineURL, Long> {
         } else {
             return null;
         }
+    }
+
+    @Override
+    protected boolean hasKey(OfflineURL entity) {
+        if(entity != null && entity.getId()!=0) {
+            return true;
+        }
+        return false;
     }
 
     /** @inheritdoc */
