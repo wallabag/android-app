@@ -28,7 +28,7 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
         Log.d(TAG, "updateAppWidget() appWidgetId=" + appWidgetId);
 
         long unreadCount = DbConnection.getSession().getArticleDao().queryBuilder().
-                where(ArticleDao.Properties.Archive.eq(0)).count();
+                where(ArticleDao.Properties.Archive.eq(false)).count();
 
         Log.d(TAG, "updateAppWidget() read from database unreadCount=" + unreadCount);
 
