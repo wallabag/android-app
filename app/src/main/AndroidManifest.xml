@@ -41,7 +41,8 @@
             android:autoRemoveFromRecents="true"
             android:enabled="false"
             android:excludeFromRecents="true"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@style/ProxyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
