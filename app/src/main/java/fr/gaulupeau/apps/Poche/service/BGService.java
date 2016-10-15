@@ -124,7 +124,7 @@ public class BGService extends IntentService {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransactionNonExclusive();
+        daoSession.getDatabase().beginTransaction();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -312,7 +312,7 @@ public class BGService extends IntentService {
         Long queueLength = null;
 
         if(!completedQueueItems.isEmpty()) {
-            daoSession.getDatabase().beginTransactionNonExclusive();
+            daoSession.getDatabase().beginTransaction();
             try {
                 queueHelper.dequeueItems(completedQueueItems);
 
@@ -358,7 +358,7 @@ public class BGService extends IntentService {
                     settings.getWallabagServerVersion());
 
             DaoSession daoSession = getDaoSession();
-            daoSession.getDatabase().beginTransactionNonExclusive();
+            daoSession.getDatabase().beginTransaction();
             try {
                 event = feedUpdater.update(feedType, updateType);
 
