@@ -43,7 +43,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'org.greenrobot:greendao:2.2.1'
+    compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.github.franmontiel:PersistentCookieJar:v1.0.0'
     compile 'com.facebook.stetho:stetho:1.4.0'
