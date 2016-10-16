@@ -4,8 +4,8 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.Log;
 
-import fr.gaulupeau.apps.Poche.entity.Article;
-import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;

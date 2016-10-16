@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.entity.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 

@@ -25,9 +25,9 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.entity.Article;
-import fr.gaulupeau.apps.Poche.entity.ArticleDao;
-import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
