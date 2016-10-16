@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.entity;
+package fr.gaulupeau.apps.Poche.data.dao.entities;
 
 import org.greenrobot.greendao.annotation.*;
 

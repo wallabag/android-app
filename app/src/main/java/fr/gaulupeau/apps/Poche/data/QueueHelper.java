@@ -5,9 +5,9 @@ import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 
-import fr.gaulupeau.apps.Poche.entity.DaoSession;
-import fr.gaulupeau.apps.Poche.entity.QueueItem;
-import fr.gaulupeau.apps.Poche.entity.QueueItemDao;
+import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 
 public class QueueHelper {
 

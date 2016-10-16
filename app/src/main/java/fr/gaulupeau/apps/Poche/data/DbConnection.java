@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
-import fr.gaulupeau.apps.Poche.entity.DaoMaster;
-import fr.gaulupeau.apps.Poche.entity.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
+import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 public class DbConnection {
