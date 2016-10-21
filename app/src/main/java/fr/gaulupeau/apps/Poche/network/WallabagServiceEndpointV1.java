@@ -43,6 +43,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
         if(httpUrl == null) {
+            Log.i(TAG, "testConnection() incorrect URL: \"" + endpoint + "/?view=about\"");
             return ConnectionTestResult.IncorrectURL;
         }
         Request testRequest = getRequest(httpUrl);
@@ -50,20 +51,26 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         Response response = exec(testRequest);
         if(response.code() == 401) {
             // fail because of HTTP Auth
+            Log.i(TAG, "testConnection() response code: 401");
             return ConnectionTestResult.HTTPAuth;
         }
 
         String body = response.body().string();
         if(isRegularPage(body)) {
             // if HTTP-auth-only access control used, we should be already logged in
+            Log.i(TAG, "testConnection() got regular page");
             return ConnectionTestResult.OK;
         }
 
         if(!isLoginPage(body)) {
             if(isLoginPageOfDifferentVersion(body)) {
+                Log.i(TAG, "testConnection() found a login page of different server version");
                 return ConnectionTestResult.IncorrectServerVersion;
             } else {
                 // it's not even wallabag login page: probably something wrong with the URL
+                Log.i(TAG, "testConnection() expected login page, got unknown response");
+                Log.i(TAG, "testConnection() response code: " + response.code());
+                Log.i(TAG, "testConnection() response body: " + body);
                 return ConnectionTestResult.WallabagNotFound;
             }
         }
@@ -76,6 +83,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         if(isLoginPage(body)) {
 //            if(body.contains("div class='messages error'"))
             // still login page: probably wrong username or password
+            Log.i(TAG, "testConnection() got login page as a result for a login attempt");
             return ConnectionTestResult.IncorrectCredentials;
         }
 
@@ -84,14 +92,19 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         if(isLoginPage(body)) {
             // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
+            Log.i(TAG, "testConnection() got login page again - after a successful login");
             return ConnectionTestResult.AuthProblem;
         }
 
         if(!isRegularPage(body)) {
             // unexpected content: expected to find "log out" button
+            Log.i(TAG, "testConnection() expected regular page, got unknown response");
+            Log.i(TAG, "testConnection() response code: " + response.code());
+            Log.i(TAG, "testConnection() response body: " + body);
             return ConnectionTestResult.UnknownPageAfterLogin;
         }
 
+        Log.i(TAG, "testConnection() test finished successfully");
         return ConnectionTestResult.OK;
     }
 
