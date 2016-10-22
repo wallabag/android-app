@@ -31,15 +31,20 @@ public abstract class WallabagServiceEndpoint {
     protected String endpoint;
     protected final String username;
     protected final String password;
+    protected final String httpAuthUsername;
+    protected final String httpAuthPassword;
     protected RequestCreator requestCreator;
 
     protected OkHttpClient client;
 
     public WallabagServiceEndpoint(String endpoint, String username, String password,
+                                   String httpAuthUsername, String httpAuthPassword,
                                    RequestCreator requestCreator, OkHttpClient client) {
         this.endpoint = endpoint;
         this.username = username;
         this.password = password;
+        this.httpAuthUsername = httpAuthUsername;
+        this.httpAuthPassword = httpAuthPassword;
         this.requestCreator = requestCreator;
         this.client = client;
     }
