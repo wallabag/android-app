@@ -4,6 +4,7 @@ import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
+import org.greenrobot.greendao.query.WhereCondition;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -15,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
-import de.greenrobot.dao.query.WhereCondition;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;

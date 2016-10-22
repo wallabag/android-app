@@ -6,13 +6,13 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DatabaseUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.entity.ArticleDao;
 
 /**
  * Implementation of App Widget functionality.
@@ -27,8 +27,9 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
                                 int appWidgetId) {
         Log.d(TAG, "updateAppWidget() appWidgetId=" + appWidgetId);
 
-        long unreadCount = DatabaseUtils.queryNumEntries(
-                DbConnection.getSession().getDatabase(), "ARTICLE", "archive=0");
+        long unreadCount = DbConnection.getSession().getArticleDao().queryBuilder().
+                where(ArticleDao.Properties.Archive.eq(false)).count();
+
         Log.d(TAG, "updateAppWidget() read from database unreadCount=" + unreadCount);
 
         // Construct the RemoteViews object
