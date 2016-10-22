@@ -229,7 +229,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 boolean result = false;
                 if (ttsFragment != null) {
-                    result = ttsFragment.onWebviewConsoleMessage(cm);
+                    result = ttsFragment.onWebViewConsoleMessage(cm);
                 }
                 if ( ! result) {
                     Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
@@ -819,7 +819,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return sb.toString();
         } finally {
             if(reader != null) {
-                reader.close();
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // unrecoverable exception, only log it and move on
+                    Log.w(TAG, "readRawString() failed to close reader", e);
+                }
             }
         }
     }
