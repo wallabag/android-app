@@ -128,7 +128,6 @@ public class ServiceHelper {
 
         context.startService(intent);
 
-
         Log.d(TAG, "updateFeed() finished");
     }
 

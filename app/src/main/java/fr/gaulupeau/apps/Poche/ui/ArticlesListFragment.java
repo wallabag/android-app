@@ -189,7 +189,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void setRefreshingUI(boolean refreshing) {
         if(refreshLayout != null) {
             refreshLayout.setRefreshing(refreshing);
-
         }
     }
 

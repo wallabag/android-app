@@ -226,8 +226,6 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
-
-
         if(event.isInvalidateAll()) {
             firstSyncDone = settings.isFirstSyncDone();
         }
@@ -245,6 +243,7 @@ public class ArticlesListActivity extends AppCompatActivity
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "Got UpdateFeedsStartedEvent");
+
         notifyListUpdate(event.getFeedType(), true);
     }
 
@@ -440,7 +439,6 @@ public class ArticlesListActivity extends AppCompatActivity
         ArticlesListFragment f = getFragment(position);
         if(f != null) {
             f.setRefreshingUI(refreshing);
-
         }
     }
 
