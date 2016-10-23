@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -23,7 +24,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.WeakHashMap;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -222,17 +226,25 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
+
+
         if(event.isInvalidateAll()) {
             firstSyncDone = settings.isFirstSyncDone();
         }
 
         invalidateLists(event);
+
+
+        TextView lastUpdate = (TextView) findViewById(R.id.lastUpdateTime);
+        Calendar calendar = Calendar.getInstance();
+        String minute  = calendar.get(Calendar.MINUTE) > 10 ? "" + calendar.get(Calendar.MINUTE) : ("0" + calendar.get(Calendar.MINUTE));
+        String hour = calendar.get(Calendar.HOUR_OF_DAY) > 10 ? "" + calendar.get(Calendar.HOUR_OF_DAY) : ("0" + calendar.get(Calendar.HOUR_OF_DAY));
+        lastUpdate.setText("Last Update: " + hour + ":" + minute);
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "Got UpdateFeedsStartedEvent");
-
         notifyListUpdate(event.getFeedType(), true);
     }
 
@@ -428,6 +440,7 @@ public class ArticlesListActivity extends AppCompatActivity
         ArticlesListFragment f = getFragment(position);
         if(f != null) {
             f.setRefreshingUI(refreshing);
+
         }
     }
 

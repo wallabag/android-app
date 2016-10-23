@@ -8,6 +8,17 @@
     android:fitsSystemWindows="true"
     tools:context="fr.gaulupeau.apps.Poche.ui.ArticlesListActivity" >
 
+    <TextView
+        android:id="@+id/lastUpdateTime"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="5pt"
+        android:paddingTop="5dp"
+        android:clickable="false" />
+
+
     <android.support.design.widget.TabLayout
         android:id="@+id/articles_list_tab_layout"
         android:layout_width="match_parent"
