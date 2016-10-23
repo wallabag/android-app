@@ -551,6 +551,14 @@ public class Settings {
         setBoolean(R.string.pref_key_internal_offlineQueue_pending, value);
     }
 
+    public long getLastFeedUpdateTimestamp() {
+        return getLong(R.string.pref_key_internal_lastFeedUpdateTime, -1);
+    }
+
+    public void setLastFeedUpdateTimestamp(long value) {
+        setLong(R.string.pref_key_internal_lastFeedUpdateTime, value);
+    }
+
     public boolean isHandlingHttpScheme() {
         return context.getPackageManager()
                 .getComponentEnabledSetting(getHttpSchemeHandlingComponent())
