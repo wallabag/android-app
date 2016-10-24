@@ -11,11 +11,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +31,8 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.WeakHashMap;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -458,15 +463,51 @@ public class ArticlesListActivity extends AppCompatActivity
         return adapter != null ? adapter.getCachedFragment(position) : null;
     }
 
+
+    
+    // in - Fade in (true) or out(false)
+    private void fadeView(boolean in, long fadeDuration, View view) {
+        float startingAlpha,endingAlpha;
+        if(in){
+            startingAlpha = 0;
+            endingAlpha = 1;
+        } else {
+            startingAlpha = 1;
+            endingAlpha = 0;
+        }
+        final Animation fadeOut = new AlphaAnimation(startingAlpha, endingAlpha);
+        fadeOut.setDuration(fadeDuration);
+        fadeOut.setFillAfter(true);
+        view.startAnimation(fadeOut);
+
+    }
+
+
+    private void fadeOutTimer(long waitBeforeFading, final long fadeDuration, final View view){
+        TimerTask fadeOutTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fadeView(false,fadeDuration,view);
+                    }
+                });
+            }
+        };
+        Timer fadeOutTimer = new Timer();
+        fadeOutTimer.schedule(fadeOutTask,waitBeforeFading);
+    }
+
+
     private void updateLastUpdateTimeUI() {
         long lastUpdateTimestamp = settings.getLastFeedUpdateTimestamp();
 
         if(lastUpdateTimestamp > 0) {
-            String timeStr = DateFormat.getTimeFormat(this).format(new Date(lastUpdateTimestamp));
+            String timeStr = DateUtils.getRelativeTimeSpanString(lastUpdateTimestamp).toString();
             lastUpdateTimeTextView.setText(getString(R.string.lastUpdateTimeLabel, timeStr));
-            lastUpdateTimeTextView.setVisibility(View.VISIBLE);
-        } else {
-            lastUpdateTimeTextView.setVisibility(View.GONE);
+            fadeView(true,1000,lastUpdateTimeTextView);
+            fadeOutTimer(5000,1000,lastUpdateTimeTextView);
         }
     }
 
