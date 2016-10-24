@@ -16,8 +16,8 @@
         android:gravity="center"
         android:textSize="5pt"
         android:paddingTop="5dp"
-        android:clickable="false" />
-
+        android:clickable="false"
+        android:visibility="gone" />
 
     <android.support.design.widget.TabLayout
         android:id="@+id/articles_list_tab_layout"
