@@ -2,7 +2,7 @@ package fr.gaulupeau.apps.Poche.events;
 
 import org.greenrobot.eventbus.EventBus;
 
-import fr.gaulupeau.apps.Poche.entity.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
 public class EventHelper {
 

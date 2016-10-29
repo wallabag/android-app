@@ -3,7 +3,7 @@ package fr.gaulupeau.apps.Poche.events;
 import java.util.HashMap;
 import java.util.Map;
 
-import fr.gaulupeau.apps.Poche.entity.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
 public class ArticlesChangedEvent extends FeedsChangedEvent {
 

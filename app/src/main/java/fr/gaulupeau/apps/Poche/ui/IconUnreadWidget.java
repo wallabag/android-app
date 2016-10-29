@@ -12,7 +12,7 @@ import android.widget.RemoteViews;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.entity.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 
 /**
  * Implementation of App Widget functionality.
