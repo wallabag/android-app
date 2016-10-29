@@ -105,14 +105,14 @@ public class WallabagService {
             switch(getWallabagVersion()) {
                 case 1:
                     serviceEndpoint = new WallabagServiceEndpointV1(endpoint, username, password,
-                            requestCreator, client);
+                            httpAuthUsername, httpAuthPassword, requestCreator, client);
                     break;
 
                 default:
                     Log.w(TAG, "Falling back to V2 endpoint; wallabagVersion=" + this.wallabagVersion);
                 case 2:
                     serviceEndpoint = new WallabagServiceEndpointV2(endpoint, username, password,
-                            requestCreator, client);
+                            httpAuthUsername, httpAuthPassword, requestCreator, client);
                     break;
             }
         }

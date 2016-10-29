@@ -225,9 +225,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="connectionWizard_providerSelection_titleMessage">Select Wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Select this option if you have an account on https://v2.wallabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>

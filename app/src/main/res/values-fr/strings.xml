@@ -1,48 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">wallabag</string>
-<string name="label_name">Sauvegarder</string>
-<!--
-<string name="author">
-GAULUPEAU Jonathan — 2013
-\nVictor Häggqvist — 2015
-</string>
--->
-<string name="btnMarkRead">Marquer comme lu</string>
-<string name="btnMarkUnread">Marquer comme non lu</string>
-<string name="btnSettings">Paramètres</string>
-<string name="add_to_favorites">Ajouter aux favoris</string>
-<string name="remove_from_favorites">Supprimer des favoris</string>
-<string name="menuShare">Partager</string>
-<string name="menuNext">Article suivant</string>
-<string name="menuPrevious">Article précédent</string><string name="menuDelete">Supprimer</string>
-<string name="menuOpenOriginal">Ouvrir l\'original</string>
-<string name="menu_open_random_article">Ouvrir un article au hasard</string>
-<string name="d_deleteArticle_title">Supprimer l\'article ?</string>
-<string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
-<string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
-<string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
-<string name="bag_page">Sauvegarder la page</string>
-<string name="activity_add_label">Sauvegarder</string>
-<string name="page_url">URL de la page</string>
-<string name="bag_it">Sauvegarder</string>
-<string name="share_article_title">Partager l\'article</string>
-<string name="share_text_extra">" via @wallabagapp"</string>
-<string name="positive_answer">Oui</string>
-<string name="negative_answer">Non</string>
-<string name="no_articles">Aucun article</string>
-<string name="loading_article_text">Chargement…</string>
-<string name="d_urlAction_title">Choisissez une action pour l\'URL</string>
-<string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
-<string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
-<string name="ok">OK</string>
-<string name="d_connectionFail_title">Erreur de connexion</string>
-<string name="d_bag_fail_title">Échec</string>
-<string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
-<string name="addLink_success_text">Ajouté</string>
-<string name="downloadPdf_noInternetConnection">Impossible de télécharger l\'article : pas de connexion internet</string>
-<string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
-<string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
+    <string name="label_name">Sauvegarder</string>
+    <string name="btnMarkRead">Marquer comme lu</string>
+    <string name="btnMarkUnread">Marquer comme non lu</string>
+    <string name="btnSettings">Paramètres</string>
+    <string name="add_to_favorites">Ajouter aux favoris</string>
+    <string name="remove_from_favorites">Supprimer des favoris</string>
+    <string name="menuShare">Partager</string>
+    <string name="menuNext">Article suivant</string>
+    <string name="menuPrevious">Article précédent</string><string name="menuDelete">Supprimer</string>
+    <string name="menuOpenOriginal">Ouvrir l\'original</string>
+    <string name="menu_open_random_article">Ouvrir un article au hasard</string>
+    <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
+    <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
+    <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
+    <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
+    <string name="bag_page">Sauvegarder la page</string>
+    <string name="activity_add_label">Sauvegarder</string>
+    <string name="page_url">URL de la page</string>
+    <string name="bag_it">Sauvegarder</string>
+    <string name="share_article_title">Partager l\'article</string>
+    <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="positive_answer">Oui</string>
+    <string name="negative_answer">Non</string>
+    <string name="no_articles">Aucun article</string>
+    <string name="loading_article_text">Chargement…</string>
+    <string name="d_urlAction_title">Choisissez une action pour l\'URL</string>
+    <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
+    <string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
+    <string name="ok">OK</string>
+    <string name="d_connectionFail_title">Erreur de connexion</string>
+    <string name="d_bag_fail_title">Échec</string>
+    <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
+    <string name="addLink_success_text">Ajouté</string>
+    <string name="downloadPdf_noInternetConnection">Impossible de télécharger l\'article : pas de connexion internet</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
+    <string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
     <string name="feedName_archived">Archivés</string>
     <string name="feedName_unread">Non lus</string>
     <string name="feedName_favorites">Favoris</string>
@@ -95,10 +89,10 @@ GAULUPEAU Jonathan — 2013
 
     <string name="pref_name_connection_url">Votre URL wallabag</string>
     <string name="pref_desc_connection_url">
-        Exemples:\n
-        <i>https://wallabag.example.com</i>\n
-        <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+    Exemples:\n
+    <i>https://wallabag.example.com</i>\n
+    <i>https://example.com/wallabag</i>\n
+    <i>https://framabag.org/u/your-username</i>
     </string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
@@ -129,11 +123,9 @@ GAULUPEAU Jonathan — 2013
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_name">Framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres requis manuellement</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Choisissez cette option si vous avez un compte sur https://v2.wallabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_titleMessage">Choisissez votre fournisseur de wallabag</string>
     <string name="connectionWizard_provider_framabag_next">Connecter</string>
     <string name="connectionWizard_provider_framabag_prev">Retour</string>
@@ -216,4 +208,11 @@ GAULUPEAU Jonathan — 2013
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion</string>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Faites défiler l\'écran en tapant sur les côtés latéraux de l\'écran</string>
+    <string name="pref_name_ui_screenScrolling_percent">Pourcentage de la hauteur d\'écran à faire défiler</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Défilement d\'écran doux</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Appuyer pour faire défiler</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Faire défiler à l\'aide des boutons du volume</string>
+    <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
+    <string name="connectionWizard_misc_incorrectConnectionURI">URI de connexion incorrecte</string>
 </resources>
