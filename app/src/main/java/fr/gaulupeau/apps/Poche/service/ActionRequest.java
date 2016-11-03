@@ -27,7 +27,6 @@ public class ActionRequest implements Parcelable {
     private Long queueLength;
     private FeedUpdater.FeedType feedUpdateFeedType;
     private FeedUpdater.UpdateType feedUpdateUpdateType;
-    private boolean headless;
 
     public static ActionRequest fromIntent(Intent intent) {
         return intent.getParcelableExtra(ACTION_REQUEST);
@@ -101,14 +100,6 @@ public class ActionRequest implements Parcelable {
         this.feedUpdateUpdateType = feedUpdateUpdateType;
     }
 
-    public boolean isHeadless() {
-        return headless;
-    }
-
-    public void setHeadless(boolean headless) {
-        this.headless = headless;
-    }
-
 // Parcelable implementation
 
     @Override
@@ -127,7 +118,6 @@ public class ActionRequest implements Parcelable {
         writeLong(queueLength, out);
         writeInteger(this.feedUpdateFeedType != null ? this.feedUpdateFeedType.ordinal() : null, out);
         writeInteger(this.feedUpdateUpdateType != null ? this.feedUpdateUpdateType.ordinal() : null, out);
-        out.writeByte((byte)(headless ? 1 : 0));
     }
 
     private ActionRequest(Parcel in) {
@@ -146,7 +136,6 @@ public class ActionRequest implements Parcelable {
         if(feedUpdateUpdateTypeInteger != null) {
             feedUpdateUpdateType = FeedUpdater.UpdateType.values()[feedUpdateUpdateTypeInteger];
         }
-        headless = in.readByte() == 1;
     }
 
     private void writeLong(Long value, Parcel out) {

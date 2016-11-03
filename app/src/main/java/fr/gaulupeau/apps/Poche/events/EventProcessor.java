@@ -225,10 +225,6 @@ public class EventProcessor {
 
         Log.d(TAG, "onActionResultEvent() action: " + actionString);
 
-        if(request.getAction() == ActionRequest.Action.AddLink && request.isHeadless()) {
-            showToast(getContext().getString(R.string.addLink_success_text), Toast.LENGTH_SHORT);
-        }
-
         ActionResult result = event.getResult();
 
         if(result != null) {
