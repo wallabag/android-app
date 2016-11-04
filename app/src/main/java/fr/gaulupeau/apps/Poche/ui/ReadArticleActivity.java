@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -44,9 +45,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.CRC32;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -66,6 +74,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
+    private static final String IMAGE_CACHE_DIR = "imagecache";
 
     private ScrollView scrollView;
     private WebView webViewContent;
@@ -129,7 +138,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         invalidateOptionsMenu();
 
         if(mArticle == null) {
-            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleID + ". Thus we" +
+            Log.e(TAG, "onCreate: Did not find article with articleId=" + articleID + ". Thus we" +
                     " are not able to create this activity. Finish.");
             finish();
             return;
@@ -146,6 +155,42 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setTitle(titleText);
 
         settings = App.getInstance().getSettings();
+
+        Log.d(TAG, "onCreate: isImageCacheEnabled=" + settings.isImageCacheEnabled());
+        if(settings.isImageCacheEnabled()) {
+            String newHTMLcontent = htmlContent;
+            // pass null for root directory for app's private directory on external storage
+            File extStorage = getExternalFilesDir(null);
+            if(extStorage == null || !isExternalStorageReadable()) {
+                Log.w(TAG, "onCreate: getExternalFilesDir() returned null or is not readable");
+            }
+            else {
+                Log.d(TAG, "onCreate: looking up local cached images in folder " + extStorage.getPath() + "/" + IMAGE_CACHE_DIR +  "/" + articleID + "/ and replacing them in htmlContent");
+                List<String> imageURLs = findImageUrlsInHtml(htmlContent);
+                Log.d(TAG, "onCreate: imageURLs=" + imageURLs);
+
+                for (int i = 0; i < imageURLs.size(); i++) {
+                    String imageURL = imageURLs.get(i);
+                    // localImageName = hash + file extension
+                    String localImageName = md5(imageURL) + imageURL.substring(imageURL.lastIndexOf("."));
+                    Log.d(TAG, "onCreate: localImageName=" + localImageName + " for URL " + imageURLs.get(i));
+                    String localImagePath = extStorage.getPath() + "/" + IMAGE_CACHE_DIR +  "/" + articleID + localImageName;
+                    File image = new File(localImagePath);
+                    if(image.exists() && image.canRead()) {
+                        Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
+                        newHTMLcontent = replaceImageWithCachedVersion(htmlContent, imageURL, localImagePath);
+                    }
+                    else {
+                        Log.d(TAG, "onCreate: no cached version of " + imageURL + " found at path " + localImagePath);
+                    }
+                }
+                if(htmlContent.equals(newHTMLcontent)) {
+                    Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced to cache");
+                } else {
+                    Log.d(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+                }
+            }
+        } // else nothing to do, because image links to the web in the html content are user's wish
 
         acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
@@ -933,6 +978,65 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             setFontSizeOld(view, size);
         }
     }
+
+    private List<String> findImageUrlsInHtml(String htmlContent){
+        List<String> imageURLs = new ArrayList<>();
+        Pattern pattern = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
+        Matcher matcher = pattern.matcher(htmlContent);
+        while (matcher.find()) {
+            imageURLs.add(matcher.group(1)); //group(0) is the whole tag, 1 only the image URL
+            Log.d(TAG, "findImageUrlsInHtml: found image URL " + matcher.group(1));
+        }
+        return imageURLs;
+    }
+
+    private String replaceImageWithCachedVersion(String htmlContent, String imageURL, String imageCachePath) {
+        return htmlContent.replace(imageURL, imageCachePath);
+    }
+
+    /**
+     * http://stackoverflow.com/a/6847711/709697
+     */
+    private String md5(String s)
+    {
+        MessageDigest digest;
+        try
+        {
+            digest = MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes(Charset.forName("US-ASCII")),0,s.length());
+            byte[] magnitude = digest.digest();
+            BigInteger bi = new BigInteger(1, magnitude);
+            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
+            return hash;
+        }
+        catch (NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /* Checks if external storage is available for read and write
+    *  copied from https://developer.android.com/training/basics/data-storage/files.html#WriteExternalStorage */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read
+    *  copied from https://developer.android.com/training/basics/data-storage/files.html#WriteExternalStorage */
+    public boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setFontSizeNew(WebView view, int size) {
