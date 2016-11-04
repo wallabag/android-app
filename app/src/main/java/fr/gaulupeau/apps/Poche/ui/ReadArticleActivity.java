@@ -39,6 +39,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
@@ -74,7 +75,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
-    private static final String IMAGE_CACHE_DIR = "imagecache";
 
     private ScrollView scrollView;
     private WebView webViewContent;
@@ -161,24 +161,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             String newHTMLcontent = htmlContent;
             // pass null for root directory for app's private directory on external storage
             File extStorage = getExternalFilesDir(null);
-            if(extStorage == null || !isExternalStorageReadable()) {
+            if(extStorage == null || !ImageCacheUtils.isExternalStorageReadable()) {
                 Log.w(TAG, "onCreate: getExternalFilesDir() returned null or is not readable");
             }
             else {
-                Log.d(TAG, "onCreate: looking up local cached images in folder " + extStorage.getPath() + "/" + IMAGE_CACHE_DIR +  "/" + articleID + "/ and replacing them in htmlContent");
-                List<String> imageURLs = findImageUrlsInHtml(htmlContent);
+                Log.d(TAG, "onCreate: looking up local cached images in folder and replacing them in htmlContent");
+                List<String> imageURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
                 Log.d(TAG, "onCreate: imageURLs=" + imageURLs);
 
                 for (int i = 0; i < imageURLs.size(); i++) {
                     String imageURL = imageURLs.get(i);
                     // localImageName = hash + file extension
-                    String localImageName = md5(imageURL) + imageURL.substring(imageURL.lastIndexOf("."));
-                    Log.d(TAG, "onCreate: localImageName=" + localImageName + " for URL " + imageURLs.get(i));
-                    String localImagePath = extStorage.getPath() + "/" + IMAGE_CACHE_DIR +  "/" + articleID + localImageName;
+                    String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage.getPath(), articleID, imageURL);
                     File image = new File(localImagePath);
                     if(image.exists() && image.canRead()) {
                         Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
-                        newHTMLcontent = replaceImageWithCachedVersion(htmlContent, imageURL, localImagePath);
+                        newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(htmlContent, imageURL, localImagePath);
                     }
                     else {
                         Log.d(TAG, "onCreate: no cached version of " + imageURL + " found at path " + localImagePath);
@@ -979,63 +977,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    private List<String> findImageUrlsInHtml(String htmlContent){
-        List<String> imageURLs = new ArrayList<>();
-        Pattern pattern = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
-        Matcher matcher = pattern.matcher(htmlContent);
-        while (matcher.find()) {
-            imageURLs.add(matcher.group(1)); //group(0) is the whole tag, 1 only the image URL
-            Log.d(TAG, "findImageUrlsInHtml: found image URL " + matcher.group(1));
-        }
-        return imageURLs;
-    }
-
-    private String replaceImageWithCachedVersion(String htmlContent, String imageURL, String imageCachePath) {
-        return htmlContent.replace(imageURL, imageCachePath);
-    }
-
-    /**
-     * http://stackoverflow.com/a/6847711/709697
-     */
-    private String md5(String s)
-    {
-        MessageDigest digest;
-        try
-        {
-            digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes(Charset.forName("US-ASCII")),0,s.length());
-            byte[] magnitude = digest.digest();
-            BigInteger bi = new BigInteger(1, magnitude);
-            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
-            return hash;
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    /* Checks if external storage is available for read and write
-    *  copied from https://developer.android.com/training/basics/data-storage/files.html#WriteExternalStorage */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
-
-    /* Checks if external storage is available to at least read
-    *  copied from https://developer.android.com/training/basics/data-storage/files.html#WriteExternalStorage */
-    public boolean isExternalStorageReadable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
-    }
 
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
