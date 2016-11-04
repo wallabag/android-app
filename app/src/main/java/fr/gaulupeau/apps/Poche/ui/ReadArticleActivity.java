@@ -184,6 +184,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 if(htmlContent.equals(newHTMLcontent)) {
                     Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced to cache");
                 } else {
+                    htmlContent = newHTMLcontent;
                     Log.d(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
                 }
             }
