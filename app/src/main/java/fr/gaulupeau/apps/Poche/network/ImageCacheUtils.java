@@ -46,7 +46,8 @@ public class ImageCacheUtils {
     }
 
     public static String replaceImageWithCachedVersion(String htmlContent, String imageURL, String imageCachePath) {
-        return htmlContent.replace(imageURL, imageCachePath);
+        Log.d(TAG, "replaceImageWithCachedVersion: trying to replace " + imageURL + " --> " + imageCachePath);
+        return htmlContent.replaceAll(imageURL, imageCachePath);
     }
 
     public static String getCacheImagePath(String extStoragePath, Long articleId, String imageURL) {
