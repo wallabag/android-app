@@ -360,7 +360,7 @@ public class BGService extends IntentService {
             DaoSession daoSession = getDaoSession();
             daoSession.getDatabase().beginTransaction();
             try {
-                event = feedUpdater.update(feedType, updateType);
+                event = feedUpdater.update(feedType, updateType, settings.isImageCacheEnabled());
 
                 daoSession.getDatabase().setTransactionSuccessful();
             } catch(XmlPullParserException e) {
