@@ -50,6 +50,7 @@ public class ImageCacheUtils {
     }
 
     public static String getCacheImagePath(String extStoragePath, Long articleId, String imageURL) {
+        Log.d(TAG, "getCacheImagePath: articleId=" + articleId);
         int fileExt = imageURL.lastIndexOf(".");
 
         if (fileExt < 0) {
@@ -139,6 +140,8 @@ public class ImageCacheUtils {
                     returnPath = extStorage[i].getPath(); // TODO uses the last path in the array, which is USUALLY the sd card
                 }
             }
+            Log.d(TAG, "getExternalStoragePath: returnPath=" + returnPath);
+            externalStoragePath = returnPath;
             return returnPath;
         } else {
             return externalStoragePath;
@@ -146,11 +149,23 @@ public class ImageCacheUtils {
     }
 
     public static boolean isExternalStorageReadable() {
+        if(externalStoragePath==null) {
+            getExternalStoragePath();
+        }
+        // now, if it is still null, return false
+        if(externalStoragePath == null) return false;
+
         File f = new File(externalStoragePath);
         return f != null && f.exists() && f.canRead();
     }
 
     public static boolean isExternalStorageWritable() {
+        if(externalStoragePath==null) {
+            getExternalStoragePath();
+        }
+        // now, if it is still null, return false
+        if(externalStoragePath == null) return false;
+
         File f = new File(externalStoragePath);
         return f != null && f.exists() && f.canWrite();
     }

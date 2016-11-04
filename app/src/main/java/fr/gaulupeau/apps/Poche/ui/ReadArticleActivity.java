@@ -158,9 +158,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(settings.isImageCacheEnabled()) {
             String newHTMLcontent = htmlContent;
             // pass null for root directory for app's private directory on external storage
-            File extStorage = getExternalFilesDir(null);
-            if(extStorage == null || !ImageCacheUtils.isExternalStorageReadable()) {
-                Log.w(TAG, "onCreate: getExternalFilesDir() returned null or is not readable");
+
+            String extStorage = ImageCacheUtils.getExternalStoragePath();
+            if(extStorage == null) {
+                Log.w(TAG, "onCreate: did not find extStorage path");
             }
             else {
                 Log.d(TAG, "onCreate: looking up local cached images in folder and replacing them in htmlContent");
@@ -170,7 +171,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 for (int i = 0; i < imageURLs.size(); i++) {
                     String imageURL = imageURLs.get(i);
                     // localImageName = hash + file extension
-                    String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage.getPath(), articleId, imageURL);
+                    String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage, mArticle.getArticleId().longValue(), imageURL);
                     File image = new File(localImagePath);
                     if(image.exists() && image.canRead()) {
                         Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
