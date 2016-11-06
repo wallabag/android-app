@@ -132,7 +132,12 @@ public class ImageCacheUtils {
     public static String getExternalStoragePath() {
         if (externalStoragePath == null) {
             String returnPath = null;
-            File[] extStorage = App.getInstance().getExternalFilesDirs(null);
+            File[] extStorage;
+            if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                extStorage = App.getInstance().getExternalFilesDirs(null);
+            } else {
+                extStorage = new File[] {App.getInstance().getExternalFilesDir(null)};
+            }
             if (extStorage == null) {
                 Log.w(TAG, "onCreate: getExternalFilesDirs() returned null or is not readable");
             } else {

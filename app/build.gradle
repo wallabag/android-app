@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
-        minSdkVersion 19
+        minSdkVersion 11
         targetSdkVersion 25
         versionCode 29
         versionName "1.11.0"
