@@ -175,7 +175,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     File image = new File(localImagePath);
                     if(image != null && image.exists() && image.canRead()) {
                         Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
-                        newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(htmlContent, imageURL, localImagePath);
+                        newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(newHTMLcontent, imageURL, localImagePath);
                     }
                     else {
                         Log.d(TAG, "onCreate: no cached version of " + imageURL + " found at path " + localImagePath);
