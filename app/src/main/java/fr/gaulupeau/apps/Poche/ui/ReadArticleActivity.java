@@ -157,7 +157,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onCreate: isImageCacheEnabled=" + settings.isImageCacheEnabled());
         if(settings.isImageCacheEnabled()) {
             String newHTMLcontent = htmlContent;
-            // pass null for root directory for app's private directory on external storage
 
             String extStorage = ImageCacheUtils.getExternalStoragePath();
             if(extStorage == null) {
@@ -184,6 +183,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 if(htmlContent.equals(newHTMLcontent)) {
                     Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced to cache");
                 } else {
+                    Log.d(TAG, "onCreate: newHTMLcontent before removing responsive image params:\n" + newHTMLcontent);
+                    newHTMLcontent = newHTMLcontent.replaceAll("srcset=\".*\"", "");
+                    newHTMLcontent = newHTMLcontent.replaceAll("sizes=\".*\"", "");
+                    newHTMLcontent = newHTMLcontent.replaceAll("data-zoom-src=\".*\"", "");
                     htmlContent = newHTMLcontent;
                     Log.d(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
                 }
