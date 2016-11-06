@@ -171,6 +171,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     String imageURL = imageURLs.get(i);
                     // localImageName = hash + file extension
                     String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage, mArticle.getArticleId().longValue(), imageURL);
+                    if (localImagePath == null){
+                        continue;
+                    }
                     File image = new File(localImagePath);
                     if(image != null && image.exists() && image.canRead()) {
                         Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
