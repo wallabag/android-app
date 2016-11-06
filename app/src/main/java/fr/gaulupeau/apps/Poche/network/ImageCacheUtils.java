@@ -60,7 +60,7 @@ public class ImageCacheUtils {
         }
         String fileExtName = imageURL.substring(fileExt);
         if (fileExtName.contains("/") || fileExtName.length() > MAXIMUM_FILE_EXT_LENGTH) {
-            Log.d(TAG, "getCacheImagePath: suspicious file extension, returning null");
+            Log.d(TAG, "getCacheImagePath: suspicious file extension in image URL " + imageURL + ", returning null");
             return null;
         }
 
