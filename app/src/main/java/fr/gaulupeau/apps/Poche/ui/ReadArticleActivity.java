@@ -173,7 +173,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     // localImageName = hash + file extension
                     String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage, mArticle.getArticleId().longValue(), imageURL);
                     File image = new File(localImagePath);
-                    if(image.exists() && image.canRead()) {
+                    if(image != null && image.exists() && image.canRead()) {
                         Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
                         newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(htmlContent, imageURL, localImagePath);
                     }
