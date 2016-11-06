@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
+import android.widget.Toast;
 
 import java.util.regex.Matcher;
 
@@ -53,7 +54,10 @@ public class BagItProxyActivity extends AppCompatActivity {
 
         Log.d(TAG, "Bagging " + pageUrl);
 
-        ServiceHelper.addLink(this, pageUrl, true);
+        ServiceHelper.addLink(this, pageUrl);
+
+        Toast.makeText(getApplicationContext(),
+                R.string.addLink_success_text, Toast.LENGTH_SHORT).show();
 
         finish();
     }
