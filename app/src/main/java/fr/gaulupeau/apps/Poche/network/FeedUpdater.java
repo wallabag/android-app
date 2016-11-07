@@ -88,12 +88,12 @@ public class FeedUpdater {
         this.httpClient = httpClient;
     }
 
-    public ArticlesChangedEvent update(FeedType feedType, UpdateType updateType, boolean downloadImagesToCache)
+    public ArticlesChangedEvent update(FeedType feedType, UpdateType updateType)
             throws XmlPullParserException, RequestException, IOException {
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
         if(feedType == null && updateType == null) {
-            updateAllFeeds(downloadImagesToCache);
+            updateAllFeeds();
 
             event.setInvalidateAll(true);
         } else {
@@ -104,13 +104,13 @@ public class FeedUpdater {
                 updateType = UpdateType.Full;
             }
 
-            updateInternal(feedType, updateType, event, downloadImagesToCache);
+            updateInternal(feedType, updateType, event);
         }
 
         return event;
     }
 
-    private void updateAllFeeds(boolean downloadImagesToCache) throws XmlPullParserException, RequestException, IOException {
+    private void updateAllFeeds() throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, "updateAllFeeds() started");
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -119,19 +119,19 @@ public class FeedUpdater {
         articleDao.deleteAll();
 
         Log.d(TAG, "updateAllFeeds() updating Main feed");
-        updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null, downloadImagesToCache);
+        updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
 
         Log.d(TAG, "updateAllFeeds() updating Archive feed");
-        updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null, downloadImagesToCache);
+        updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
 
         Log.d(TAG, "updateAllFeeds() updating Favorite feed");
-        updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null, downloadImagesToCache);
+        updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
 
         Log.d(TAG, "updateAllFeeds() finished");
     }
 
     private void updateInternal(
-            FeedType feedType, UpdateType updateType, ArticlesChangedEvent event, boolean downloadImagesToCache)
+            FeedType feedType, UpdateType updateType, ArticlesChangedEvent event)
             throws XmlPullParserException, RequestException, IOException {
         Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
 
@@ -150,13 +150,13 @@ public class FeedUpdater {
             }
         }
 
-        updateByFeed(articleDao, feedType, updateType, latestID, event, downloadImagesToCache);
+        updateByFeed(articleDao, feedType, updateType, latestID, event);
 
         Log.i(TAG, String.format("updateInternal(%s, %s) finished", feedType, updateType));
     }
 
     private void updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
-                              Integer id, ArticlesChangedEvent event, boolean downloadImagesToCache)
+                              Integer id, ArticlesChangedEvent event)
             throws XmlPullParserException, RequestException, IOException {
         Log.d(TAG, "updateByFeed() started");
 
@@ -165,7 +165,7 @@ public class FeedUpdater {
             is = getInputStream(getFeedUrl(feedType));
 
             Log.d(TAG, "updateByFeed() got input stream; processing feed");
-            processFeed(articleDao, is, feedType, updateType, id, event, downloadImagesToCache);
+            processFeed(articleDao, is, feedType, updateType, id, event);
 
             Log.d(TAG, "updateByFeed() finished successfully");
         } finally {
@@ -222,9 +222,9 @@ public class FeedUpdater {
 
     private void processFeed(ArticleDao articleDao, InputStream is,
                              FeedType feedType, UpdateType updateType, Integer latestID,
-                             ArticlesChangedEvent event, boolean downloadImagesToCache)
+                             ArticlesChangedEvent event)
             throws XmlPullParserException, IOException {
-        Log.d(TAG, "processFeed() latestID=" + latestID + " downloadImagesToCache=" + downloadImagesToCache);
+        Log.d(TAG, "processFeed() latestID=" + latestID);
         // TODO: use parser.require() all over the place?
 
         XmlPullParser parser = Xml.newPullParser();
@@ -246,12 +246,6 @@ public class FeedUpdater {
             // <pubDate>Thu, 14 Apr 2016 16:28:06</pubDate>
             dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss", Locale.US);
         }
-
-        boolean cacheWritable = false;
-        if(downloadImagesToCache) {
-            cacheWritable = ImageCacheUtils.isExternalStorageWritable();
-        }
-        Log.d(TAG, "processFeed() cacheWritable=" + cacheWritable);
 
         Log.d(TAG, "processFeed() starting to loop through all elements");
         while (parser.next() != XmlPullParser.END_DOCUMENT) {
@@ -293,9 +287,6 @@ public class FeedUpdater {
                     article.setContent(item.description);
                     article.setUrl(item.link);
                     article.setArticleId(id);
-                    if(downloadImagesToCache && cacheWritable){
-                        cacheImages(id.longValue(), article.getContent());
-                    }
                     try {
                         article.setUpdateDate(dateFormat.parse(item.pubDate));
                     } catch (ParseException e) {
@@ -311,6 +302,7 @@ public class FeedUpdater {
                         article.setArchive(feedType == FeedType.Archive);
                         article.setFavorite(feedType == FeedType.Favorite);
                     }
+                    article.setImagesDownloaded(false);
 
                     if(event != null) {
                         ArticlesChangedEvent.ChangeType changeType = existing
@@ -507,32 +499,6 @@ public class FeedUpdater {
         String link;
         String pubDate;
         String description;
-    }
-
-    private void cacheImages(Long articleId, String articleContent) {
-        Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty=" + articleContent.isEmpty());
-        String extStoragePath = ImageCacheUtils.getExternalStoragePath();
-        Log.d(TAG, "cacheImages: extStoragePath=" + extStoragePath);
-
-        if(articleId == null || articleContent == null || extStoragePath == null || extStoragePath.isEmpty()) {
-            Log.d(TAG, "cacheImages: returning, because an essential var is null, see previous debug messages");
-            // TODO: fresh articles always have null as id, therefore image caching currently only works on second full update
-            return;
-        }
-        // TODO: collect them all and process them in a thread with progress showing in status bar as notification
-        List<String> imageURLs = ImageCacheUtils.findImageUrlsInHtml(articleContent);
-        for(int i = 0; i < imageURLs.size(); i++) {
-            String imageURL = imageURLs.get(i);
-            Log.d(TAG, "cacheImages: downloading " + imageURL);
-            String destinationPath = ImageCacheUtils.getCacheImagePath(extStoragePath, articleId, imageURL);
-            if(destinationPath == null) {
-                Log.d(TAG, "cacheImages: destinationPath is null, skip downloading " + imageURL);
-                continue;
-            }
-            else {
-                ImageCacheUtils.downloadImageToCache(imageURL, destinationPath, articleId);
-            }
-        }
     }
 
 }

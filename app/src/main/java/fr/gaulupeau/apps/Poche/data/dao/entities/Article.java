@@ -41,6 +41,9 @@ public class Article {
     @Property(nameInDb = "article_progress")
     private Double articleProgress;
 
+    @Property(nameInDb = "images_downloaded")
+    private Boolean imagesDownloaded;
+
     @Generated(hash = 742516792)
     public Article() {}
 
@@ -48,10 +51,10 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 1900630499)
-    public Article(Long id, Integer articleId, String content, String author, String title,
-            String url, Boolean favorite, Boolean archive, Date updateDate,
-            Double articleProgress) {
+    @Generated(hash = 1635440040)
+    public Article(Long id, Integer articleId, String content, String author,
+            String title, String url, Boolean favorite, Boolean archive,
+            Date updateDate, Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
@@ -62,6 +65,7 @@ public class Article {
         this.archive = archive;
         this.updateDate = updateDate;
         this.articleProgress = articleProgress;
+        this.imagesDownloaded = imagesDownloaded;
     }
 
     public Long getId() {
@@ -142,6 +146,14 @@ public class Article {
 
     public void setArticleProgress(Double articleProgress) {
         this.articleProgress = articleProgress;
+    }
+
+    public Boolean getImagesDownloaded() {
+        return imagesDownloaded;
+    }
+
+    public void setImagesDownloaded(Boolean imagesDownloaded) {
+        this.imagesDownloaded = imagesDownloaded;
     }
 
 }

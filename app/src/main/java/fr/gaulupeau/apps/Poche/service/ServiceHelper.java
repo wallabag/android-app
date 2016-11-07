@@ -113,6 +113,17 @@ public class ServiceHelper {
         Log.d(TAG, "updateFeed() finished");
     }
 
+    public static void fetchImages(Context context) {
+        Log.d(TAG, "fetchImages() started");
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.FetchImages);
+        request.setPriority(-1);
+
+        startService(context, request);
+
+        Log.d(TAG, "fetchImages() finished");
+    }
+
     static void startService(Context context, ActionRequest request) {
         Intent intent = new Intent(context, BGService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
