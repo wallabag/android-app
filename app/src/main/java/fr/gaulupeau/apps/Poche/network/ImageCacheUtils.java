@@ -34,6 +34,32 @@ public class ImageCacheUtils {
     private static OkHttpClient okHttpClient = null;
     private static String externalStoragePath = null;
 
+    public static void cacheImages(Long articleId, String articleContent) {
+        Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty=" + articleContent.isEmpty());
+        String extStoragePath = getExternalStoragePath();
+        Log.d(TAG, "cacheImages: extStoragePath=" + extStoragePath);
+
+        if(articleId == null || articleContent == null || extStoragePath == null || extStoragePath.isEmpty()) {
+            Log.d(TAG, "cacheImages: returning, because an essential var is null, see previous debug messages");
+            // TODO: fresh articles always have null as id, therefore image caching currently only works on second full update
+            return;
+        }
+        // TODO: collect them all and process them in a thread with progress showing in status bar as notification
+        List<String> imageURLs = findImageUrlsInHtml(articleContent);
+        for(int i = 0; i < imageURLs.size(); i++) {
+            String imageURL = imageURLs.get(i);
+            Log.d(TAG, "cacheImages: downloading " + imageURL);
+            String destinationPath = getCacheImagePath(extStoragePath, articleId, imageURL);
+            if(destinationPath == null) {
+                Log.d(TAG, "cacheImages: destinationPath is null, skip downloading " + imageURL);
+                continue;
+            }
+            else {
+                downloadImageToCache(imageURL, destinationPath, articleId);
+            }
+        }
+    }
+
     public static List<String> findImageUrlsInHtml(String htmlContent) {
         List<String> imageURLs = new ArrayList<>();
         Pattern pattern = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");

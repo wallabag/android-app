@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
+import org.greenrobot.greendao.query.LazyList;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -17,7 +18,9 @@ import java.util.Set;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
@@ -30,6 +33,7 @@ import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
@@ -70,8 +74,8 @@ public class BGService extends IntentService {
             return actionRequest;
         }
 
-        synchronized boolean hasHigherPriorityRequests(ActionRequest actionRequest) {
-            return topPriority != null && topPriority > actionRequest.getPriority();
+        synchronized boolean hasHigherPriorityRequests(int priority) {
+            return topPriority != null && priority < topPriority;
         }
 
         private void updateState() {
@@ -180,7 +184,7 @@ public class BGService extends IntentService {
                 FetchImagesStartedEvent startEvent = new FetchImagesStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
-                    fetchImages();
+                    fetchImages(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
                     postEvent(new FetchImagesFinishedEvent(actionRequest));
@@ -441,7 +445,7 @@ public class BGService extends IntentService {
             DaoSession daoSession = getDaoSession();
             daoSession.getDatabase().beginTransaction();
             try {
-                event = feedUpdater.update(feedType, updateType, settings.isImageCacheEnabled());
+                event = feedUpdater.update(feedType, updateType);
 
                 daoSession.getDatabase().setTransactionSuccessful();
             } catch(XmlPullParserException e) {
@@ -466,12 +470,56 @@ public class BGService extends IntentService {
         return result;
     }
 
-    private void fetchImages() {
+    private void fetchImages(ActionRequest actionRequest) {
+        Log.d(TAG, "fetchImages() started");
 
+        if(!ImageCacheUtils.isExternalStorageWritable()) {
+            Log.w(TAG, "fetchImages() external storage is not writable");
+            return;
+        }
+
+        if(checkPriorityAndReschedule(actionRequest)) {
+            Log.i(TAG, "fetchImages() has higher priority work, rescheduled");
+            return;
+        }
+
+        // TODO: probably need to save results in a separate transaction
+
+        ArticleDao articleDao = getDaoSession().getArticleDao();
+        LazyList<Article> articleList = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
+                .orderAsc(ArticleDao.Properties.ArticleId).listLazyUncached();
+
+        for(Article article: articleList) {
+            if(checkPriorityAndReschedule(actionRequest)) {
+                Log.i(TAG, "fetchImages() has higher priority work, rescheduled");
+                break;
+            }
+
+            Log.d(TAG, "fetchImages() processing article " + article.getArticleId());
+
+            ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
+
+            article.setImagesDownloaded(true);
+            articleDao.update(article);
+        }
+
+        articleList.close();
+
+        Log.d(TAG, "fetchImages() finished");
     }
 
-    private boolean hasHigherPriorityRequests(ActionRequest actionRequest) {
-        return queueState.hasHigherPriorityRequests(actionRequest);
+    private boolean checkPriorityAndReschedule(ActionRequest actionRequest) {
+        if(hasHigherPriorityRequests(actionRequest.getPriority())) {
+            rescheduleRequest(actionRequest);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean hasHigherPriorityRequests(int priority) {
+        return queueState.hasHigherPriorityRequests(priority);
     }
 
     private void rescheduleRequest(ActionRequest request) {
