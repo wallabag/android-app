@@ -10,6 +10,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -19,6 +20,8 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
@@ -39,7 +42,59 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
 public class BGService extends IntentService {
 
+    private static class RequestQueueState {
+
+        private LinkedHashMap<Intent, ActionRequest> queue = new LinkedHashMap<>(1);
+
+        private Integer topPriority;
+
+        RequestQueueState() {}
+
+        synchronized void add(Intent intent, ActionRequest request) {
+            if(queue.put(intent, request) == null) {
+                int requestPriority = request.getPriority();
+                if(topPriority == null || requestPriority > topPriority) {
+                    topPriority = requestPriority;
+                }
+            } else {
+                Log.w(TAG, "RequestQueueState.add() already contained the intent!");
+            }
+        }
+
+        synchronized ActionRequest remove(Intent intent) {
+            ActionRequest actionRequest = queue.remove(intent);
+            if(actionRequest != null) {
+                updateState();
+            }
+
+            return actionRequest;
+        }
+
+        synchronized boolean hasHigherPriorityRequests(ActionRequest actionRequest) {
+            return topPriority != null && topPriority > actionRequest.getPriority();
+        }
+
+        private void updateState() {
+            if(queue.isEmpty()) {
+                topPriority = null;
+                return;
+            }
+
+            int priority = Integer.MIN_VALUE;
+            for(ActionRequest request: queue.values()) {
+                if(request.getPriority() > priority) {
+                    priority = request.getPriority();
+                }
+            }
+
+            topPriority = priority;
+        }
+
+    }
+
     private static final String TAG = BGService.class.getSimpleName();
+
+    private final RequestQueueState queueState = new RequestQueueState();
 
     // TODO: rename these so it is obvious to use getters instead?
     private Settings settings;
@@ -55,12 +110,28 @@ public class BGService extends IntentService {
     }
 
     @Override
+    public void onStart(Intent intent, int startId) {
+        Log.d(TAG, "onStart() started");
+
+        queueState.add(intent, ActionRequest.fromIntent(intent));
+
+        super.onStart(intent, startId);
+
+        Log.d(TAG, "onStart() finished");
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
 
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-        ActionRequest actionRequest = ActionRequest.fromIntent(intent);
+        handle(queueState.remove(intent));
+
+        Log.d(TAG, "onHandleIntent() finished");
+    }
+
+    private void handle(ActionRequest actionRequest) {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
@@ -105,6 +176,18 @@ public class BGService extends IntentService {
                 break;
             }
 
+            case FetchImages: {
+                FetchImagesStartedEvent startEvent = new FetchImagesStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    fetchImages();
+                } finally {
+                    removeStickyEvent(startEvent);
+                    postEvent(new FetchImagesFinishedEvent(actionRequest));
+                }
+                break;
+            }
+
             default:
                 Log.w(TAG, "Unknown action requested: " + actionRequest.getAction());
                 break;
@@ -113,8 +196,6 @@ public class BGService extends IntentService {
         if(result != null) {
             postEvent(new ActionResultEvent(actionRequest, result));
         }
-
-        Log.d(TAG, "onHandleIntent() finished");
     }
 
     private Long serveSimpleRequest(ActionRequest actionRequest) {
@@ -383,6 +464,18 @@ public class BGService extends IntentService {
 
         Log.d(TAG, "updateFeed() finished");
         return result;
+    }
+
+    private void fetchImages() {
+
+    }
+
+    private boolean hasHigherPriorityRequests(ActionRequest actionRequest) {
+        return queueState.hasHigherPriorityRequests(actionRequest);
+    }
+
+    private void rescheduleRequest(ActionRequest request) {
+        ServiceHelper.startService(getApplicationContext(), request);
     }
 
     private ActionResult processException(Exception e, String scope) {
