@@ -9,7 +9,7 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed
+        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed, FetchImages
     }
 
     public enum RequestType {
@@ -19,6 +19,7 @@ public class ActionRequest implements Parcelable {
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
 
     private Action action;
+    private int priority;
     private RequestType requestType = RequestType.Manual;
     private Long operationID;
 
@@ -43,6 +44,14 @@ public class ActionRequest implements Parcelable {
 
     public void setAction(Action action) {
         this.action = action;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public RequestType getRequestType() {
@@ -119,6 +128,7 @@ public class ActionRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(action.ordinal());
+        out.writeInt(priority);
         out.writeInt(requestType.ordinal());
         writeLong(operationID, out);
 
@@ -132,6 +142,7 @@ public class ActionRequest implements Parcelable {
 
     private ActionRequest(Parcel in) {
         action = Action.values()[in.readInt()];
+        priority = in.readInt();
         requestType = RequestType.values()[in.readInt()];
         operationID = readLong(in);
 

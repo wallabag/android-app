@@ -29,10 +29,7 @@ public class ServiceHelper {
         else if(byOperation) request.setRequestType(ActionRequest.RequestType.ManualByOperation);
         if(queueLength != null) request.setQueueLength(queueLength);
 
-        Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request);
 
         Log.d(TAG, "syncQueue() finished");
     }
@@ -53,10 +50,7 @@ public class ServiceHelper {
         request.setOperationID(operationID);
         request.setHeadless(headless);
 
-        Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request);
 
         Log.d(TAG, "archiveArticle() finished");
     }
@@ -68,10 +62,7 @@ public class ServiceHelper {
                 archive ? ActionRequest.Action.Archive : ActionRequest.Action.Unarchive);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request);
 
         Log.d(TAG, "archiveArticle() finished");
     }
@@ -83,10 +74,7 @@ public class ServiceHelper {
                 favorite ? ActionRequest.Action.Favorite : ActionRequest.Action.Unfavorite);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request);
 
         Log.d(TAG, "favoriteArticle() finished");
     }
@@ -97,10 +85,7 @@ public class ServiceHelper {
         ActionRequest request = new ActionRequest(ActionRequest.Action.Delete);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request);
 
         Log.d(TAG, "deleteArticle() finished");
     }
@@ -123,12 +108,16 @@ public class ServiceHelper {
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
 
+        startService(context, request);
+
+        Log.d(TAG, "updateFeed() finished");
+    }
+
+    static void startService(Context context, ActionRequest request) {
         Intent intent = new Intent(context, BGService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
-
-        Log.d(TAG, "updateFeed() finished");
     }
 
 }
