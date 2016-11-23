@@ -74,6 +74,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private View hrBar;
     private TtsFragment ttsFragment;
 
+    private long articleID;
     private Article mArticle;
     private ArticleDao mArticleDao;
 
@@ -111,8 +112,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setContentView(R.layout.article);
 
         Intent intent = getIntent();
-        long articleId = intent.getLongExtra(EXTRA_ID, -1);
-        Log.d(TAG, "onCreate() articleId=" + articleId);
+        articleID = intent.getLongExtra(EXTRA_ID, -1);
+        Log.d(TAG, "onCreate() articleId=" + articleID);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
         }
@@ -122,14 +123,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         DaoSession session = DbConnection.getSession();
         mArticleDao = session.getArticleDao();
-        mArticle = mArticleDao.queryBuilder()
-                .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
+        mArticle = getArticle(articleID);
 
         // article is loaded - update menu
         invalidateOptionsMenu();
 
         if(mArticle == null) {
-            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleId + ". Thus we" +
+            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleID + ". Thus we" +
                     " are not able to create this activity. Finish.");
             finish();
             return;
@@ -638,8 +638,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
-            mArticle.setArticleProgress(getReadingPosition());
-            mArticleDao.update(mArticle);
+            Article article = getArticle(articleID);
+            if(article != null) {
+                article.setArticleProgress(getReadingPosition());
+                mArticleDao.update(article);
+            }
         }
         super.onStop();
     }
@@ -788,6 +791,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return result;
     }
 
+
+    private Article getArticle(long articleID) {
+        return mArticleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleID)).unique();
+    }
 
     private Long getAdjacentArticle(boolean previous) {
         QueryBuilder<Article> qb = mArticleDao.queryBuilder();
