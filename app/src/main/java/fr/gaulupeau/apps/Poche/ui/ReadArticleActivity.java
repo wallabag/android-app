@@ -73,7 +73,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private LinearLayout bottomTools;
     private View hrBar;
     private TtsFragment ttsFragment;
-    private MenuItem menuTTS;
 
     private Article mArticle;
     private ArticleDao mArticleDao;
@@ -125,6 +124,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         mArticleDao = session.getArticleDao();
         mArticle = mArticleDao.queryBuilder()
                 .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
+
+        // article is loaded - update menu
+        invalidateOptionsMenu();
 
         if(mArticle == null) {
             Log.e(TAG, "onCreate() Did not find article with articleId=" + articleId + ". Thus we" +
@@ -569,22 +571,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_article, menu);
 
-        boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
+        if(mArticle != null) {
+            boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
 
-        MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
-        markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
+            MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
+            markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
 
-        boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
+            boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
 
-        MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
-        toggleFavoriteItem.setTitle(
-                favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
-        toggleFavoriteItem.setIcon(getIcon(favorite
-                        ? R.drawable.ic_star_white_24dp
-                        : R.drawable.ic_star_border_white_24dp, null)
-        );
+            MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
+            toggleFavoriteItem.setTitle(
+                    favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
+            toggleFavoriteItem.setIcon(getIcon(favorite
+                    ? R.drawable.ic_star_white_24dp
+                    : R.drawable.ic_star_border_white_24dp, null)
+            );
+        }
 
-        menuTTS = menu.findItem(R.id.menuTTS);
+        MenuItem menuTTS = menu.findItem(R.id.menuTTS);
         menuTTS.setChecked(ttsFragment != null);
 
         return true;
@@ -778,9 +782,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             settings.setTtsVisible(false);
             result = false;
         }
-        if (menuTTS != null) {
-            menuTTS.setChecked(ttsFragment != null);
-        }
+
+        invalidateOptionsMenu();
+
         return result;
     }
 
