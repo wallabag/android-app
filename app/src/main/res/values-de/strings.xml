@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Mit wallabag speichern</string>
@@ -78,7 +78,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menu_readArticle_increaseFontSize">Schrift größer</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift kleiner</string>
     <string name="menuAbout">Über</string>
-    <string name="aboutText">&lt;b>wallabag App für Android&lt;/b>&lt;br />wallabag ist eine selbst gehostete Anwendung die dir ermöglicht nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
+    <string name="aboutText">&lt;b&gt;wallabag App für Android&lt;/b&gt;&lt;br /&gt;wallabag ist eine selbst gehostete Anwendung die dir ermöglicht nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Sprachhöhe</string>
     <string name="readVolume">Leselautstärke</string>
@@ -217,4 +217,13 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="testConnection_errorMessage_noCSRF">Fehler beim Loginformular parsen</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login</string>
     <string name="pref_name_autoSyncQueue_enabled">Gesonderte Synchronisation lokaler Änderungen</string>
-</resources>
+<string name="pref_categoryName_ui_screenScrolling">Bildschirm scrollen</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scrolle mit den Lautstärketasten</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Antippen, um zu scrollen</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Scrolle den Bildschirm durch Antippen der linken und rechten Bildschirmseite</string>
+    <string name="pref_name_ui_screenScrolling_percent">Prozentsatz der Bildschirmhöhe, um zu scrollen</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Nutze sanftes Scrollen</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">Nicht korrekte Verbindungs-URL genutzt</string>
+
+    </resources>
