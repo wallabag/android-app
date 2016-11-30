@@ -26,7 +26,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="bag_page">Отправить в бэг</string>
     <string name="activity_add_label">Отправить в бэг</string>
     <string name="page_url">URL страницы</string>
-    <string name="bag_it">В бэг!</string>
+    <string name="bag_it">В бэг</string>
     <string name="share_article_title">Поделиться статьёй</string>
     <string name="share_text_extra">" через @wallabagapp"</string>
     <string name="positive_answer">Да</string>
@@ -68,8 +68,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="menu_readArticle_decreaseFontSize">Уменьшить размер шрифта</string>
     <string name="menuTTS"> Текст в речь</string>
     <string name="ttsAutoplayNextArticle">Автопереход к следующей статье</string>
-    <string name="ttsLanguage">Выберите язык</string>
-    <string name="ttsVoice">выбрать тембр</string>
+    <string name="ttsLanguage">Выбор языка</string>
+    <string name="ttsVoice">Выбор голоса</string>
     <string name="ttsVolume">Громкость</string>
     <string name="ttsSpeed">Скорость</string>
     <string name="ttsPlayPause">Пуск / Пауза</string>
