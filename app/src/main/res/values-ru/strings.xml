@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">В бэг!</string>
@@ -63,21 +63,21 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="themeName_light_contrast">Светлая (контрастная)</string>
     <string name="themeName_dark">Тёмная</string>
     <string name="themeName_dark_contrast">Тёмная (контрастная)</string>
-    <string name="themeName_solarized">соляризации</string>
+    <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Увеличить размер шрифта</string>
     <string name="menu_readArticle_decreaseFontSize">Уменьшить размер шрифта</string>
     <string name="menuTTS"> Текст в речь</string>
-    <string name="ttsAutoplayNextArticle">Автозапуск Следующая статья</string>
+    <string name="ttsAutoplayNextArticle">Автопереход к следующей статье</string>
     <string name="ttsLanguage">Выберите язык</string>
     <string name="ttsVoice">выбрать тембр</string>
     <string name="ttsVolume">Громкость</string>
     <string name="ttsSpeed">Скорость</string>
     <string name="ttsPlayPause">Пуск / Пауза</string>
     <string name="ttsPitch">Тембр</string>
-    <string name="ttsOptions">опции</string>
+    <string name="ttsOptions">Опции</string>
     <string name="ttsFastRewind">Назад</string>
     <string name="ttsFastForward">Далее</string>
-    <string name="ttsError">Текст в речь ошибки</string>
+    <string name="ttsError">Ошибка генерации речи</string>
 
     <string name="notification_error">Ошибка</string>
 
@@ -95,10 +95,10 @@ GAULUPEAU Jonathan — 2013-2015
 
     <string name="pref_name_connection_advanced_acceptAllCertificates">Принимать все сертификаты SSL</string>
     <string name="pref_desc_connection_advanced_acceptAllCertificates">Может потребоваться перезапуск; небезопасно; импортируйте самоподписанный сертификат в систему, если это возможно.</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Простая HTTP-авторизация</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Простая HTTP-аутентификация</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Если вы не знаете, что это, оставьте поля пустыми</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">Имя пользователя для HTTP-авторизации</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-авторизации</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Имя пользователя для HTTP-аутентификации</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-аутентификации</string>
 
     <string name="pref_name_ui_theme">Тема приложения</string>
     <string name="pref_name_ui_article_fontSize">Размер шрифта статей (%)</string>
@@ -109,4 +109,128 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_wipeDB">Очистить базу данных</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Удалить данные?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Вы уверены, что хотите очистить базу данных?</string>
+<string name="menu_syncLocalChanges">Синхронизировать локальные изменения</string>
+    <string name="d_configurationChanged_title">Параметры изменены</string>
+    <string name="d_configurationChanged_message">Похоже, некоторые параметры были изменены. Рекомендуется выполнить проверку подключения.</string>
+    <string name="d_configurationChanged_answer_decline">Не сейчас</string>
+    <string name="d_configurationIsQuestionable_title">Обнаружена неполадка</string>
+    <string name="d_configurationIsQuestionable_message">Недавно была ошибка подключения. Рекомендуется выполнить проверку подключения.</string>
+    <string name="settings_parametersAreOk">Параметры в порядке</string>
+    <string name="settings_parametersAutofilled">Параметры заполнены</string>
+    <string name="testConnection_errorMessage_incorrectServerVersion">Выбрана неверная версия сервера</string>
+    <string name="testConnection_errorMessage_httpAuth">Ошибка HTTP-аутентификации</string>
+    <string name="testConnection_errorMessage_noCSRF">Ошибка разбора формы входа</string>
+    <string name="testConnection_errorMessage_authProblems">Проблемы, связанные с авторизацией. Обычно это вызвано HTTP-перенаправлениями.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Неизвестная страница после входа</string>
+    <string name="d_testConnection_urlSuggestion_title">Измените URL</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Использовать предложенный</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Использовать свой</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
+    <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
+    <string name="getFeedsCredentials_progressDialogMessage">Настройка лент…</string>
+    <string name="d_getFeedsCredentials_title_fail">Не удалось настроить ленты</string>
+    <string name="d_getFeedsCredentials_title_message">Что-то пошло не так. Проверьте подключение к интернету и повторите попытку.</string>
+    <string name="checkFeeds_progressDialogMessage">Проверка лент…</string>
+    <string name="d_checkFeeds_title_fail">Ошибка проверки лент</string>
+    <string name="d_checkFeeds_errorMessage_notFound">Ленты не найдены</string>
+    <string name="d_checkFeeds_errorMessage_noAccess">Нет доступа к лентам</string>
+    <string name="d_checkFeeds_errorMessage_unknown">Неизвестная ошибка</string>
+    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
+    <string name="downloadPdf_noInternetConnection">Не удалось загрузить статью: нет подключения к интернету</string>
+    <string name="menuAbout">О приложении</string>
+    <string name="aboutText"><b>Приложение wallabag для Android</b><br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
+    <string name="readSpeed">Скорость чтения</string>
+    <string name="voiceHeight">Высота голоса</string>
+    <string name="readVolume">Громкость чтения</string>
+    <string name="menuDownloadPdf">Скачать в формате PDF</string>
+    <string name="downloadPdfPathStart">Загрузка статьи</string>
+    <string name="downloadPdfArticleDownloaded">Статья загружена</string>
+    <string name="downloadPdfArticleDownloadedDetail">Статья %s загружена</string>
+    <string name="downloadPdfTouchToOpen">Коснитесь, чтобы открыть</string>
+    <string name="downloadPdfProgressDetail">wallabag загружает вашу статью %s в PDF</string>
+    <string name="downloadPdfProgress">wallabag загружает вашу статью в PDF</string>
+    <string name="notification_updatingFeeds">Обновление лент</string>
+    <string name="notification_updatingAllFeeds">Обновление всех лент</string>
+    <string name="notification_updatingSpecificFeed">Обновление ленты: %s</string>
+    <string name="notification_syncingQueue">Синхронизация локальных изменений</string>
+    <string name="notification_incorrectCredentials">Неправильные данные учётной записи</string>
+    <string name="notification_incorrectConfiguration">Неправильная конфигурация</string>
+    <string name="notification_unknownError">Неизвестная ошибка</string>
+    <string name="notification_expandedError">Ошибка: %s</string>
+
+    <string name="pref_name_runConnectionWizard">Запустить мастер подключения</string>
+    <string name="pref_desc_runConnectionWizard">Мастер подключения поможет вам настроить основные параметры подключения</string>
+
+    <string name="pref_categoryName_connection">Подключение</string>
+    <string name="pref_name_connection_autofill">Автозаполнение</string>
+    <string name="pref_desc_connection_autofill">Проверить соединение и заполнить версию сервера, ID пользователя и токен</string>
+    <string name="pref_name_connection_serverVersion">Версия сервера Wallabag</string>
+    <string name="pref_categoryName_connection_advanced">Расширенные параметры подключения</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Особые параметры SSL</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Отключает SSL на всех устройствах, включает TLS 1.1 и TLS 1.2 на Android 4.1–4.4</string>
+    <string name="pref_name_connection_advanced_clearCookies">Очистить куки</string>
+    <string name="pref_desc_connection_advanced_clearCookies">Сбрасывает установленную сессию (если она есть)</string>
+    <string name="pref_toast_connection_advanced_clearCookies">Куки очищены</string>
+
+    <string name="pref_categoryName_ui">Пользовательский интерфейс</string>
+    <string name="pref_categoryName_ui_screenScrolling">Прокрутка экрана</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Прокрутка клавишами громкости</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Прокрутка нажатием</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Прокручивайте экран нажимая на левую или правую сторону экрана</string>
+    <string name="pref_name_ui_screenScrolling_percent">Процент высоты экрана для прокрутки</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Использовать плавную прокрутку</string>
+
+    <string name="pref_categoryName_autoSync">Автоматическая синхронизация</string>
+    <string name="pref_name_autoSync_enabled">Включить автоматическую синхронизацию</string>
+    <string name="pref_desc_autoSync_enabled">Это обеспечивает автоматическую синхронизацию локальных изменений (добавленные ссылки, архивированные статьи и т.п.) и загрузку новых статей по расписанию</string>
+    <string name="pref_name_autoSync_interval">Интервал автоматической синхронизации</string>
+    <string name="pref_option_autoSync_interval_15m">15 минут</string>
+    <string name="pref_option_autoSync_interval_30m">30 минут</string>
+    <string name="pref_option_autoSync_interval_1h">1 час</string>
+    <string name="pref_option_autoSync_interval_12h">12 часов</string>
+    <string name="pref_option_autoSync_interval_24h">24 часа</string>
+    <string name="pref_name_autoSync_type">Тип автоматической синхронизации</string>
+    <string name="pref_name_autoSyncQueue_enabled">Отдельная автоматическая синхронизация для локальных изменений</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным</string>
+    <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
+    <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
+
+    <string name="pref_categoryName_miscellaneous">Прочее</string>
+    <string name="pref_name_misc_handleHttpScheme">Обрабатывать HTTP-схему</string>
+    <string name="pref_desc_misc_handleHttpScheme">Показывать Wallabag в списке веб-браузеров</string>
+    <string name="pref_desc_misc_wipeDB">Стирает все статьи из локальной базы данных, также удаляет все не синхронизированные локальные изменения и добавленные URL-адреса</string>
+    <string name="connectionWizard_misc_incorrectConnectionURI">Использован неправильный URI подключения</string>
+
+    <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в Wallabag!</string>
+    <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать Wallabag, необходимо настроить соединение. Мастер подключения попытается помочь вам с этим.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Вы всегда можете повторно запустить мастер подключения с экрана Настроек.</string>
+    <string name="connectionWizard_welcome_prev">Пропустить</string>
+    <string name="connectionWizard_welcome_next">Дальше</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Выберите поставщика Wallabag</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Выберите этот вариант, если у вас есть аккаунт на https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Выберите этот вариант, если у вас есть аккаунт на https://framabag.org</string>
+    <string name="connectionWizard_providerSelection_prev">Пропустить</string>
+    <string name="connectionWizard_providerSelection_next">Дальше</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Основные параметры</string>
+    <string name="connectionWizard_provider_general_prev">Назад</string>
+    <string name="connectionWizard_provider_general_next">Подключиться</string>
+
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Настройка v2.wallabag.org</string>
+    <string name="connectionWizard_provider_v2wallabagorg_prev">Назад</string>
+    <string name="connectionWizard_provider_v2wallabagorg_next">Подключиться</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Настройка Framabag</string>
+    <string name="connectionWizard_provider_framabag_prev">Назад</string>
+    <string name="connectionWizard_provider_framabag_next">Подключиться</string>
+
+    <string name="connectionWizard_summary_titleMessage">Готово!</string>
+    <string name="connectionWizard_summary_text">Нажмите на кнопку, чтобы сохранить настройки и перейти к главному экрану.</string>
+    <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
+    <string name="connectionWizard_summary_prev">Назад</string>
+    <string name="connectionWizard_summary_next">Сохранить настройки</string>
 </resources>
