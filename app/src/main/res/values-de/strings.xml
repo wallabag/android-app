@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="label_name">Mit wallabag speichern</string>
+    <string name="label_name">Mit wallabag speichern!</string>
 <!--    <string name="author">
 GAULUPEAU Jonathan — 2013-2015
 \nVictor Häggqvist — 2015
@@ -144,9 +144,9 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="connectionWizard_provider_v2wallabagorg_titleMessage">v2.wallabag.org Einstellungen</string>
     <string name="connectionWizard_summary_next">Einstellungen speichern</string>
     <string name="connectionWizard_summary_prev">Zurück</string>
-    <string name="connectionWizard_summary_text">Einstellungen speichern und zum Hauptbildschirm gelangen</string>
+    <string name="connectionWizard_summary_text">Einstellungen speichern und zum Hauptbildschirm gelangen.</string>
     <string name="connectionWizard_summary_titleMessage">Wir sind fertig!</string>
-    <string name="connectionWizard_summary_toastMessage">Das Setup ist vollständig.</string>
+    <string name="connectionWizard_summary_toastMessage">Das Setup ist vollständig</string>
     <string name="connectionWizard_welcome_next">Weiter</string>
     <string name="connectionWizard_welcome_prev">Überspringen</string>
     <string name="connectionWizard_welcome_rerunNotice">Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.</string>
@@ -168,7 +168,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="d_testConnection_urlSuggestion_cancelButton">Abbrechen</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Nutze eigene</string>
     <string name="d_testConnection_urlSuggestion_message">Es ist empfohlen, die URL zu \"%s\" zu ändern. Aber du kannst auch die eingegebene verwenden.</string>
-    <string name="d_testConnection_urlSuggestion_message_mandatory">Es ist empfohlen, die URL zu \"%s\" zu ändern.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Es ist empfohlen, die URL zu \"%s\" zu ändern</string>
     <string name="d_testConnection_urlSuggestion_title">Erwäge die URL zu ändern</string>
     <string name="getFeedsCredentials_progressDialogMessage">Einrichten der Feeds…</string>
     <string name="menu_syncLocalChanges">Synchronisiere lokale Änderungen</string>
@@ -186,8 +186,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_categoryName_miscellaneous">Sonstiges</string>
     <string name="pref_categoryName_ui">Benutzeroberfläche</string>
     <string name="pref_desc_autoDlNew_enabled">Lade neue Artikel automatisch herunter sobald sie mit der App hinzugefügt wurden. Beachte: Der Download findet nicht statt, wenn du ausstehende unsynchronisierte Änderungen hast.</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren sobald die Internetverbindung verfügbar wird.</string>
-    <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren sobald die Internetverbindung verfügbar wird</string>
+    <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter</string>
     <string name="pref_desc_connection_advanced_clearCookies">Setzt eine bestehende Anmeldesitzung zurück (falls eine besteht)</string>
     <string name="pref_desc_connection_autofill">Testet die Verbindung zu wallabag und füllt die Felder Server Version, Benutzer ID und den Token automatisch aus</string>
     <string name="pref_desc_misc_wipeDB">Löscht alle Artikel vom Gerät, löscht auch alle nicht synchronisierten lokalen Änderungen und URLs</string>
