@@ -20,7 +20,7 @@ wallabag app for Android is a companion app for [wallabag](https://www.wallabag.
 
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here's a few ways you can help:
  * [Report bugs and make suggestions.](https://github.com/wallabag/android-app/issues)
- * Translate the app.
+ * [Translate the app](https://hosted.weblate.org/projects/wallabag/android-app/) (you don't have to create an account).
  * Write some code. Please follow the code style used in the project to make a review process faster.
 
 
