@@ -2,12 +2,6 @@
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
-<!--
-    <string name="author">
-GAULUPEAU Jonathan — 2013-2015
-\nVictor Häggqvist — 2015
-</string>
--->
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnMarkUnread">Mark as Unread</string>
     <string name="btnSettings">Settings</string>
@@ -28,7 +22,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="ttsError">Text To Speech Error</string>
     <string name="ttsFastRewind">Fast Rewind</string>
     <string name="ttsPlayPause">Play / Pause</string>
-    <string name="ttsFastForward">Schnellvorlauf</string>
+    <string name="ttsFastForward">Fast Forward</string>
     <string name="ttsOptions">Options</string>
     <string name="menu_open_random_article">Open random article</string>
     <string name="menu_syncLocalChanges">Sync local changes</string>
@@ -64,7 +58,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="testConnection_progressDialogMessage">Testing connection…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Incorrect URL</string>
     <string name="testConnection_errorMessage_incorrectServerVersion">Incorrect server version selected</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">Wallabag service not found — check URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag service not found — check URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP Authentication failed</string>
     <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Can\'t login — check username and password</string>
@@ -117,8 +111,8 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="downloadPdfArticleDownloaded">Article downloaded</string>
     <string name="downloadPdfArticleDownloadedDetail">Article %s downloaded</string>
     <string name="downloadPdfTouchToOpen">Touch to open</string>
-    <string name="downloadPdfProgressDetail">wallabag downloads your article %s en PDF</string>
-    <string name="downloadPdfProgress">wallabag downloads your article en PDF</string>
+    <string name="downloadPdfProgressDetail">wallabag downloads your article %s in PDF</string>
+    <string name="downloadPdfProgress">wallabag downloads your article in PDF</string>
     <string name="notification_updatingFeeds">Updating feeds</string>
     <string name="notification_updatingAllFeeds">Updating all feeds</string>
     <string name="notification_updatingSpecificFeed">Updating %s feed</string>
@@ -133,7 +127,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
 
     <string name="pref_categoryName_connection">Connection</string>
-    <string name="pref_name_connection_url">Wallabag URL</string>
+    <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
         Examples:\n
         <i>https://wallabag.example.com</i>\n
@@ -144,7 +138,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_autofill">Autofill</string>
     <string name="pref_desc_connection_autofill">Test connection and fill in server version, user ID, and Token</string>
-    <string name="pref_name_connection_serverVersion">Wallabag server version</string>
+    <string name="pref_name_connection_serverVersion">wallabag server version</string>
     <string-array name="pref_option_connection_serverVersion">
         <item>v1.9</item>
         <item>v2</item>
@@ -208,7 +202,7 @@ GAULUPEAU Jonathan — 2013-2015
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
-    <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
+    <string name="pref_desc_misc_handleHttpScheme">Show wallabag in the list of web browsers</string>
     <string name="pref_name_misc_wipeDB">Wipe Database</string>
     <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
@@ -216,13 +210,13 @@ GAULUPEAU Jonathan — 2013-2015
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag!</string>
-    <string name="connectionWizard_welcome_text">Before you can use Wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
+    <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag!</string>
+    <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
     <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from the Settings screen.</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 
-    <string name="connectionWizard_providerSelection_titleMessage">Select Wallabag provider</string>
+    <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>

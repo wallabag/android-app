@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Sauvegarder</string>
@@ -73,7 +73,7 @@
     <string name="ttsOptions">Options</string>
     <string name="ttsError">Erreur de Synthèse Vocale</string>
     <string name="menuAbout">À propos</string>
-    <string name="aboutText">&lt;b>Application wallabag pour Android&lt;/b>&lt;br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
@@ -119,7 +119,7 @@
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
-    <string name="checkFeeds_progressDialogMessage">Vérification des flux</string>
+    <string name="checkFeeds_progressDialogMessage">Vérification des flux…</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
@@ -138,12 +138,12 @@
     <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Configuration de v2.wallabag.org</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
     <string name="connectionWizard_summary_prev">Retour</string>
-    <string name="connectionWizard_summary_text">Appuyez sur le bouton pour sauvegarder les paramètres et aller à l\'écran principal</string>
+    <string name="connectionWizard_summary_text">Appuyez sur le bouton pour sauvegarder les paramètres et aller à l\'écran principal.</string>
     <string name="connectionWizard_summary_titleMessage">C\'est fini !</string>
     <string name="connectionWizard_summary_toastMessage">La configuration est achevée</string>
     <string name="connectionWizard_welcome_next">Suivant</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
-    <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application</string>
+    <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
     <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l\'application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag !</string>
     <string name="d_checkFeeds_errorMessage_noAccess">Aucun accès aux flux</string>
@@ -179,7 +179,7 @@
     <string name="pref_categoryName_connection_advanced">Paramètres de connexion avancés</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_categoryName_ui">Interface</string>
-    <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles directement après leur ajout par l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés</string>
+    <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles directement après leur ajout par l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
     <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
     <string name="pref_desc_connection_advanced_clearCookies">Réinitialise la session en cours (si elle existe)</string>
@@ -202,7 +202,7 @@
     <string name="pref_toast_connection_advanced_clearCookies">Cookies nettoyés</string>
     <string name="settings_parametersAreOk">Les paramètres sont corrects</string>
     <string name="settings_parametersAutofilled">Paramètres récupérés</string>
-    <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP</string>
+    <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP.</string>
     <string name="testConnection_errorMessage_httpAuth">Échec de l\'authentification HTTP</string>
     <string name="testConnection_errorMessage_incorrectServerVersion">Version du serveur choisie incorrecte</string>
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
