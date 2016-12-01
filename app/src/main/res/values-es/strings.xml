@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<!--
-    <string name="author">
-GAULUPEAU Jonathan — 2013-2015
-\nVictor Häggqvist — 2015
-</string>
--->
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
     <string name="btnSettings">Configuración</string>

@@ -2,12 +2,6 @@
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">В бэг!</string>
-<!--
-    <string name="author">
-GAULUPEAU Jonathan — 2013-2015
-\nVictor Häggqvist — 2015
-</string>
--->
     <string name="btnMarkRead">Прочитано</string>
     <string name="btnMarkUnread">Не прочитано</string>
     <string name="btnSettings">Настройки</string>
@@ -109,7 +103,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="pref_name_misc_wipeDB">Очистить базу данных</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Удалить данные?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Вы уверены, что хотите очистить базу данных?</string>
-<string name="menu_syncLocalChanges">Синхронизировать локальные изменения</string>
+    <string name="menu_syncLocalChanges">Синхронизировать локальные изменения</string>
     <string name="d_configurationChanged_title">Параметры изменены</string>
     <string name="d_configurationChanged_message">Похоже, некоторые параметры были изменены. Рекомендуется выполнить проверку подключения.</string>
     <string name="d_configurationChanged_answer_decline">Не сейчас</string>

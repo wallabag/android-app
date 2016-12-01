@@ -2,10 +2,6 @@
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Mit wallabag speichern!</string>
-<!--    <string name="author">
-GAULUPEAU Jonathan — 2013-2015
-\nVictor Häggqvist — 2015
-</string>-->
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnMarkUnread">Als ungelesen markieren</string>
     <string name="btnSettings">Einstellungen</string>
@@ -217,7 +213,7 @@ GAULUPEAU Jonathan — 2013-2015
     <string name="testConnection_errorMessage_noCSRF">Fehler beim Loginformular parsen</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login</string>
     <string name="pref_name_autoSyncQueue_enabled">Gesonderte Synchronisation lokaler Änderungen</string>
-<string name="pref_categoryName_ui_screenScrolling">Bildschirm scrollen</string>
+    <string name="pref_categoryName_ui_screenScrolling">Bildschirm scrollen</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scrolle mit den Lautstärketasten</string>
     <string name="pref_name_ui_tapToScroll_enabled">Antippen, um zu scrollen</string>
     <string name="pref_desc_ui_tapToScroll_enabled">Scrolle den Bildschirm durch Antippen der linken und rechten Bildschirmseite</string>
@@ -226,4 +222,4 @@ GAULUPEAU Jonathan — 2013-2015
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Nicht korrekte Verbindungs-URL genutzt</string>
 
-    </resources>
+</resources>
