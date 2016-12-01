@@ -75,7 +75,7 @@
 
     <string name="notification_error">Ошибка</string>
 
-    <string name="pref_name_connection_url">Wallabag URL</string>
+    <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
         Например:\n
         <i>https://wallabag.example.com</i>\n
@@ -159,7 +159,7 @@
     <string name="pref_categoryName_connection">Подключение</string>
     <string name="pref_name_connection_autofill">Автозаполнение</string>
     <string name="pref_desc_connection_autofill">Проверить соединение и заполнить версию сервера, ID пользователя и токен</string>
-    <string name="pref_name_connection_serverVersion">Версия сервера Wallabag</string>
+    <string name="pref_name_connection_serverVersion">Версия сервера wallabag</string>
     <string name="pref_categoryName_connection_advanced">Расширенные параметры подключения</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Особые параметры SSL</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Отключает SSL на всех устройствах, включает TLS 1.1 и TLS 1.2 на Android 4.1–4.4</string>
@@ -192,17 +192,17 @@
 
     <string name="pref_categoryName_miscellaneous">Прочее</string>
     <string name="pref_name_misc_handleHttpScheme">Обрабатывать HTTP-схему</string>
-    <string name="pref_desc_misc_handleHttpScheme">Показывать Wallabag в списке веб-браузеров</string>
+    <string name="pref_desc_misc_handleHttpScheme">Показывать wallabag в списке веб-браузеров</string>
     <string name="pref_desc_misc_wipeDB">Стирает все статьи из локальной базы данных, также удаляет все не синхронизированные локальные изменения и добавленные URL-адреса</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Использован неправильный URI подключения</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в Wallabag!</string>
-    <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать Wallabag, необходимо настроить соединение. Мастер подключения попытается помочь вам с этим.</string>
+    <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в wallabag!</string>
+    <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать wallabag, необходимо настроить соединение. Мастер подключения попытается помочь вам с этим.</string>
     <string name="connectionWizard_welcome_rerunNotice">Вы всегда можете повторно запустить мастер подключения с экрана Настроек.</string>
     <string name="connectionWizard_welcome_prev">Пропустить</string>
     <string name="connectionWizard_welcome_next">Дальше</string>
 
-    <string name="connectionWizard_providerSelection_titleMessage">Выберите поставщика Wallabag</string>
+    <string name="connectionWizard_providerSelection_titleMessage">Выберите поставщика wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Выберите этот вариант, если у вас есть аккаунт на https://v2.wallabag.org</string>

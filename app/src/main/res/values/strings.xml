@@ -58,7 +58,7 @@
     <string name="testConnection_progressDialogMessage">Testing connection…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Incorrect URL</string>
     <string name="testConnection_errorMessage_incorrectServerVersion">Incorrect server version selected</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">Wallabag service not found — check URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag service not found — check URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP Authentication failed</string>
     <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Can\'t login — check username and password</string>
@@ -127,7 +127,7 @@
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
 
     <string name="pref_categoryName_connection">Connection</string>
-    <string name="pref_name_connection_url">Wallabag URL</string>
+    <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
         Examples:\n
         <i>https://wallabag.example.com</i>\n
@@ -138,7 +138,7 @@
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_autofill">Autofill</string>
     <string name="pref_desc_connection_autofill">Test connection and fill in server version, user ID, and Token</string>
-    <string name="pref_name_connection_serverVersion">Wallabag server version</string>
+    <string name="pref_name_connection_serverVersion">wallabag server version</string>
     <string-array name="pref_option_connection_serverVersion">
         <item>v1.9</item>
         <item>v2</item>
@@ -202,7 +202,7 @@
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
-    <string name="pref_desc_misc_handleHttpScheme">Show Wallabag in the list of web browsers</string>
+    <string name="pref_desc_misc_handleHttpScheme">Show wallabag in the list of web browsers</string>
     <string name="pref_name_misc_wipeDB">Wipe Database</string>
     <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
@@ -210,13 +210,13 @@
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Welcome to Wallabag!</string>
-    <string name="connectionWizard_welcome_text">Before you can use Wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
+    <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag!</string>
+    <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
     <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from the Settings screen.</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 
-    <string name="connectionWizard_providerSelection_titleMessage">Select Wallabag provider</string>
+    <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
     <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
