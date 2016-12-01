@@ -73,8 +73,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private LinearLayout bottomTools;
     private View hrBar;
     private TtsFragment ttsFragment;
-    private MenuItem menuTTS;
 
+    private long articleID;
     private Article mArticle;
     private ArticleDao mArticleDao;
 
@@ -112,8 +112,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setContentView(R.layout.article);
 
         Intent intent = getIntent();
-        long articleId = intent.getLongExtra(EXTRA_ID, -1);
-        Log.d(TAG, "onCreate() articleId=" + articleId);
+        articleID = intent.getLongExtra(EXTRA_ID, -1);
+        Log.d(TAG, "onCreate() articleId=" + articleID);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
         }
@@ -123,11 +123,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         DaoSession session = DbConnection.getSession();
         mArticleDao = session.getArticleDao();
-        mArticle = mArticleDao.queryBuilder()
-                .where(ArticleDao.Properties.Id.eq(articleId)).build().unique();
+        mArticle = getArticle(articleID);
+
+        // article is loaded - update menu
+        invalidateOptionsMenu();
 
         if(mArticle == null) {
-            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleId + ". Thus we" +
+            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleID + ". Thus we" +
                     " are not able to create this activity. Finish.");
             finish();
             return;
@@ -569,22 +571,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_article, menu);
 
-        boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
+        if(mArticle != null) {
+            boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
 
-        MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
-        markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
+            MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
+            markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
 
-        boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
+            boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
 
-        MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
-        toggleFavoriteItem.setTitle(
-                favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
-        toggleFavoriteItem.setIcon(getIcon(favorite
-                        ? R.drawable.ic_star_white_24dp
-                        : R.drawable.ic_star_border_white_24dp, null)
-        );
+            MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
+            toggleFavoriteItem.setTitle(
+                    favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
+            toggleFavoriteItem.setIcon(getIcon(favorite
+                    ? R.drawable.ic_star_white_24dp
+                    : R.drawable.ic_star_border_white_24dp, null)
+            );
+        }
 
-        menuTTS = menu.findItem(R.id.menuTTS);
+        MenuItem menuTTS = menu.findItem(R.id.menuTTS);
         menuTTS.setChecked(ttsFragment != null);
 
         return true;
@@ -634,8 +638,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
-            mArticle.setArticleProgress(getReadingPosition());
-            mArticleDao.update(mArticle);
+            Article article = getArticle(articleID);
+            if(article != null) {
+                article.setArticleProgress(getReadingPosition());
+                mArticleDao.update(article);
+            }
         }
         super.onStop();
     }
@@ -778,12 +785,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             settings.setTtsVisible(false);
             result = false;
         }
-        if (menuTTS != null) {
-            menuTTS.setChecked(ttsFragment != null);
-        }
+
+        invalidateOptionsMenu();
+
         return result;
     }
 
+
+    private Article getArticle(long articleID) {
+        return mArticleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleID)).unique();
+    }
 
     private Long getAdjacentArticle(boolean previous) {
         QueryBuilder<Article> qb = mArticleDao.queryBuilder();
