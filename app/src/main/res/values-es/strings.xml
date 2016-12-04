@@ -217,7 +217,7 @@
     <string name="connectionWizard_providerSelection_titleMessage">Selecciona un proveedor de wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir los ajustes requeridos manualmente</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Selecciona esta opción si tienes una cuenta en https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Selecciona esta opción si tienes una cuenta en https://www.wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecciona esta opción si tienes una cuenta en https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Saltar</string>
     <string name="connectionWizard_providerSelection_next">Siguiente</string>
@@ -226,7 +226,7 @@
     <string name="connectionWizard_provider_general_prev">Volver</string>
     <string name="connectionWizard_provider_general_next">Conectar</string>
 
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Configuración para v2.wallabag.org</string>
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Configuración para wallabag.it</string>
     <string name="connectionWizard_provider_v2wallabagorg_prev">Volver</string>
     <string name="connectionWizard_provider_v2wallabagorg_next">Conectar</string>
 
