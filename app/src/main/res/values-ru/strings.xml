@@ -205,7 +205,7 @@
     <string name="connectionWizard_providerSelection_titleMessage">Выберите поставщика wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Выберите этот вариант, если у вас есть аккаунт на https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Выберите этот вариант, если у вас есть аккаунт на https://app.wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Выберите этот вариант, если у вас есть аккаунт на https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Пропустить</string>
     <string name="connectionWizard_providerSelection_next">Дальше</string>
@@ -214,7 +214,7 @@
     <string name="connectionWizard_provider_general_prev">Назад</string>
     <string name="connectionWizard_provider_general_next">Подключиться</string>
 
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Настройка v2.wallabag.org</string>
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Настройка app.wallabag.it</string>
     <string name="connectionWizard_provider_v2wallabagorg_prev">Назад</string>
     <string name="connectionWizard_provider_v2wallabagorg_next">Подключиться</string>
 

@@ -24,7 +24,7 @@
     <string name="ttsPlayPause">Wiedergabe / Pause</string>
     <string name="ttsFastForward">Rücklauf</string>
     <string name="ttsOptions">Optionen</string>
-    <string name="menu_open_random_article">Zufälligen Artikel öffnen</string>    
+    <string name="menu_open_random_article">Zufälligen Artikel öffnen</string>
     <string name="d_deleteArticle_title">Artikel entfernen?</string>
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
     <string name="txtNetOffline">Prüfe deine Internetverbindung!</string>
@@ -127,7 +127,7 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Anderer</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Wähle diese Option, wenn du einen Account auf https://framabag.org hast</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Wähle diese Option, um die Einstellungen manuell einzugeben</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Wähle diese Option, wenn du einen Account auf https://v2.wallabag.org hast</string>
+    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Wähle diese Option, wenn du einen Account auf https://app.wallabag.it hast</string>
     <string name="connectionWizard_providerSelection_titleMessage">Wähle deinen wallabag Anbieter</string>
     <string name="connectionWizard_provider_framabag_next">Verbinden</string>
     <string name="connectionWizard_provider_framabag_prev">Zurück</string>
@@ -137,7 +137,7 @@
     <string name="connectionWizard_provider_general_titleMessage">Grundlegende Einstellungen</string>
     <string name="connectionWizard_provider_v2wallabagorg_next">Verbinden</string>
     <string name="connectionWizard_provider_v2wallabagorg_prev">Zurück</string>
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">v2.wallabag.org Einstellungen</string>
+    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">app.wallabag.it Einstellungen</string>
     <string name="connectionWizard_summary_next">Einstellungen speichern</string>
     <string name="connectionWizard_summary_prev">Zurück</string>
     <string name="connectionWizard_summary_text">Einstellungen speichern und zum Hauptbildschirm gelangen.</string>

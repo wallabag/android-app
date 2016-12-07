@@ -489,7 +489,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             username = usernameEditText.getText().toString();
             password = passwordEditText.getText().toString();
 
-            url = "https://v2.wallabag.org";
+            url = "https://app.wallabag.it";
             wallabagServerVersion = 2;
 
             tryPossibleURLs = false;
