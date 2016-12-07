@@ -131,6 +131,7 @@ public class ImageCacheUtils {
         try {
             response = okHttpClient.newCall(request).execute();
         } catch (IOException e) {
+            Log.d(TAG, "IOException while requesting imageURL=" + imageURL + " in articleID=" + articleId);
             e.printStackTrace();
         }
 
@@ -152,6 +153,7 @@ public class ImageCacheUtils {
                 response.close();
             }
         } catch (IOException e) {
+            Log.d(TAG, "IOException while downloading imageURL=" + imageURL + " in articleID=" + articleId);
             e.printStackTrace();
         }
         Log.d(TAG, "downloadImageToCache: function finished for imageURL=" + imageURL + " destination=" + destination);
