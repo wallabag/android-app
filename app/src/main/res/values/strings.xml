@@ -218,9 +218,9 @@
 
     <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">app.wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Select this option if you have an account on https://app.wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
@@ -230,9 +230,9 @@
     <string name="connectionWizard_provider_general_prev">Back</string>
     <string name="connectionWizard_provider_general_next">Connect</string>
 
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">app.wallabag.it configuration</string>
-    <string name="connectionWizard_provider_v2wallabagorg_prev">Back</string>
-    <string name="connectionWizard_provider_v2wallabagorg_next">Connect</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Back</string>
+    <string name="connectionWizard_provider_wallabagit_next">Connect</string>
 
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
     <string name="connectionWizard_provider_framabag_prev">Back</string>

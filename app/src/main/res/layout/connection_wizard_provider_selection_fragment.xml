@@ -32,15 +32,15 @@
                 android:layout_height="wrap_content" >
 
                 <RadioButton
-                    android:id="@+id/providerV2WallabagOrg"
+                    android:id="@+id/providerWallabagIt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/connectionWizard_providerSelection_provider_v2wallabagorg_name"
+                    android:text="@string/connectionWizard_providerSelection_provider_wallabagit_name"
                     android:checked="true" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/connectionWizard_providerSelection_provider_v2wallabagorg_desc" />
+                    android:text="@string/connectionWizard_providerSelection_provider_wallabagit_desc" />
 
                 <RadioButton
                     android:id="@+id/providerFramabag"
