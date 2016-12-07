@@ -149,6 +149,7 @@ public class ImageCacheUtils {
             } else {
                 sink.writeAll(response.body().source());
                 sink.close();
+                response.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
