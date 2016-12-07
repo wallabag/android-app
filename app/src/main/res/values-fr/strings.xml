@@ -122,10 +122,10 @@
     <string name="checkFeeds_progressDialogMessage">Vérification des flux…</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres requis manuellement</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Choisissez cette option si vous avez un compte sur https://app.wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres requis manuellement</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Choisissez cette option si vous avez un compte sur https://app.wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
     <string name="connectionWizard_providerSelection_titleMessage">Choisissez votre fournisseur de wallabag</string>
     <string name="connectionWizard_provider_framabag_next">Connecter</string>
     <string name="connectionWizard_provider_framabag_prev">Retour</string>
@@ -133,9 +133,9 @@
     <string name="connectionWizard_provider_general_next">Connecter</string>
     <string name="connectionWizard_provider_general_prev">Retour</string>
     <string name="connectionWizard_provider_general_titleMessage">Configuration de base</string>
-    <string name="connectionWizard_provider_v2wallabagorg_next">Connecter</string>
-    <string name="connectionWizard_provider_v2wallabagorg_prev">Retour</string>
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">Configuration de app.wallabag.it</string>
+    <string name="connectionWizard_provider_wallabagit_next">Connecter</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Retour</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">Configuration de app.wallabag.it</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
     <string name="connectionWizard_summary_prev">Retour</string>
     <string name="connectionWizard_summary_text">Appuyez sur le bouton pour sauvegarder les paramètres et aller à l\'écran principal.</string>

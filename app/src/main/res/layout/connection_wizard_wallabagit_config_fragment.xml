@@ -34,7 +34,7 @@
                 android:gravity="center_horizontal"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="@string/connectionWizard_provider_v2wallabagorg_titleMessage"/>
+                android:text="@string/connectionWizard_provider_wallabagit_titleMessage"/>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -81,7 +81,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/connectionWizard_provider_v2wallabagorg_prev" />
+            android:text="@string/connectionWizard_provider_wallabagit_prev" />
 
         <View android:layout_width="1dp"
             android:layout_height="fill_parent"
@@ -93,7 +93,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="@string/connectionWizard_provider_v2wallabagorg_next" />
+            android:text="@string/connectionWizard_provider_wallabagit_next" />
 
     </LinearLayout>
 
