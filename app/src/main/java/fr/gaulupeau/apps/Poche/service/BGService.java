@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
-import org.greenrobot.greendao.query.LazyList;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -487,25 +486,26 @@ public class BGService extends IntentService {
         // TODO: probably need to save results in a separate transaction
 
         ArticleDao articleDao = getDaoSession().getArticleDao();
-        LazyList<Article> articleList = articleDao.queryBuilder()
+        List<Article> articleList = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
-                .orderAsc(ArticleDao.Properties.ArticleId).listLazyUncached();
+                .orderAsc(ArticleDao.Properties.ArticleId).list();
 
-        for(Article article: articleList) {
-            if(checkPriorityAndReschedule(actionRequest)) {
+        Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
+        int i = 0;
+        for (Article article : articleList) {
+            if (checkPriorityAndReschedule(actionRequest)) {
                 Log.i(TAG, "fetchImages() has higher priority work, rescheduled");
                 break;
             }
 
-            Log.d(TAG, "fetchImages() processing article " + article.getArticleId());
+            Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
 
             ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
 
             article.setImagesDownloaded(true);
             articleDao.update(article);
+            Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
         }
-
-        articleList.close();
 
         Log.d(TAG, "fetchImages() finished");
     }
