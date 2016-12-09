@@ -44,7 +44,7 @@
     <string name="update_allFeeds">Mettre à jour tous les flux</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l\'URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Impossible de se connecter — vérifiez votre identifiant et votre mot de passe</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue: %s</string>
@@ -115,7 +115,7 @@
     <string name="pref_name_ui_lists_limit">Limitation du nombre d\'articles dans la liste</string>
 
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
-    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste de navigateurs</string>
+    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
@@ -144,7 +144,7 @@
     <string name="connectionWizard_welcome_next">Suivant</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
     <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
-    <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l\'application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
+    <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l’application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag !</string>
     <string name="d_checkFeeds_errorMessage_noAccess">Aucun accès aux flux</string>
     <string name="d_checkFeeds_errorMessage_notFound">Flux non trouvés</string>
