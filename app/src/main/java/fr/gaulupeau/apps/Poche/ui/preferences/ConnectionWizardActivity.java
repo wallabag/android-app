@@ -89,8 +89,15 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 try {
                     ConnectionData connectionData = parseLoginData(dataString);
 
-                    bundle.putString(DATA_URL, connectionData.mUrl);
-                    bundle.putString(DATA_USERNAME, connectionData.mUsername);
+                    if(connectionData.username != null) {
+                        bundle.putString(DATA_USERNAME, connectionData.username);
+                    }
+
+                    if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(connectionData.url)) {
+                        bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
+                    } else if(connectionData.url != null) {
+                        bundle.putString(DATA_URL, connectionData.url);
+                    }
 
                     currentPage = PAGE_PROVIDER_SELECTION;
                 } catch(IllegalArgumentException e) {
@@ -473,6 +480,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             return PAGE_CONFIG_WALLABAG_IT;
         }
 
+        static final String WALLABAG_IT_HOSTNAME = "app.wallabag.it";
+
         @Override
         protected int getLayoutResourceID() {
             return R.layout.connection_wizard_wallabagit_config_fragment;
@@ -489,7 +498,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             username = usernameEditText.getText().toString();
             password = passwordEditText.getText().toString();
 
-            url = "https://app.wallabag.it";
+            url = "https://" + WALLABAG_IT_HOSTNAME;
             wallabagServerVersion = 2;
 
             tryPossibleURLs = false;
@@ -602,12 +611,12 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     private class ConnectionData {
-        String mUsername;
-        String mUrl;
+        String username;
+        String url;
 
-        public ConnectionData(String username, String url) {
-            mUsername = username;
-            mUrl = url;
+        ConnectionData(String username, String url) {
+            this.username = username;
+            this.url = url;
         }
     }
 }
