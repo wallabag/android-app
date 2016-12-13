@@ -22,7 +22,7 @@
     <string name="ttsError">Sprachsynthese Fehler</string>
     <string name="ttsFastRewind">Vorlauf</string>
     <string name="ttsPlayPause">Wiedergabe / Pause</string>
-    <string name="ttsFastForward">Rücklauf</string>
+    <string name="ttsFastForward">Schnellvorlauf</string>
     <string name="ttsOptions">Optionen</string>
     <string name="menu_open_random_article">Zufälligen Artikel öffnen</string>
     <string name="d_deleteArticle_title">Artikel entfernen?</string>
@@ -49,7 +49,7 @@
     <string name="addLink_success_text">Hinzugefügt</string>
     <string name="testConnection_progressDialogMessage">Verbindung wird überprüft…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Falsche URL</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag Dienst nicht gefunden — überprüfe bitte die wallabag URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-Dienst nicht gefunden – überprüfe bitte die wallabag-URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Anmeldung fehlgeschlagen — überprüfe bitte Benutzername und Passwort</string>
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
@@ -88,7 +88,7 @@
 
     <string name="notification_error">Fehler</string>
 
-    <string name="pref_name_connection_url">wallabag URL</string>
+    <string name="pref_name_connection_url">wallabag-URL</string>
     <string name="pref_desc_connection_url">
         Beispiele:\n
         <i>https://wallabag.example.com</i>\n
@@ -97,7 +97,7 @@
     </string>
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>
-    <string name="pref_name_connection_serverVersion">wallabag Server Version</string>
+    <string name="pref_name_connection_serverVersion">wallabag-Server-Version</string>
     <string name="pref_name_connection_feedsUserID">Deine Benutzer ID</string>
     <string name="pref_name_connection_feedsToken">Dein Token</string>
 
@@ -117,7 +117,7 @@
     <string name="pref_name_ui_lists_limit">Limit für Artikelliste</string>
 
     <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
-    <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste von Webbrowsern</string>
+    <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste der Webbrowser</string>
     <string name="pref_name_misc_wipeDB">Datenbank leeren</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Datenbank leeren?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Möchtest du die Datenbank wirklich leeren?</string>
@@ -128,7 +128,7 @@
     <string name="connectionWizard_providerSelection_provider_general_desc">Wähle diese Option, um die Einstellungen manuell einzugeben</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Wähle diese Option, wenn du einen Account auf https://framabag.org hast</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Wähle diese Option, wenn du einen Account auf https://wallabag.it hast</string>
-    <string name="connectionWizard_providerSelection_titleMessage">Wähle deinen wallabag Anbieter</string>
+    <string name="connectionWizard_providerSelection_titleMessage">Wähle deinen wallabag-Anbieter</string>
     <string name="connectionWizard_provider_framabag_next">Verbinden</string>
     <string name="connectionWizard_provider_framabag_prev">Zurück</string>
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag Einstellungen</string>
@@ -146,7 +146,7 @@
     <string name="connectionWizard_welcome_next">Weiter</string>
     <string name="connectionWizard_welcome_prev">Überspringen</string>
     <string name="connectionWizard_welcome_rerunNotice">Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.</string>
-    <string name="connectionWizard_welcome_text">Bevor du die wallabag App nutzen kannst, musst du die Verbindung zu deinem wallabag Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
+    <string name="connectionWizard_welcome_text">Bevor du die wallabag-App nutzen kannst, musst du die Verbindung zu deinem wallabag-Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
     <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag!</string>
     <string name="d_checkFeeds_errorMessage_noAccess">Kein Zugriff auf die Feeds erlaubt</string>
     <string name="d_checkFeeds_errorMessage_notFound">Feeds nicht gefunden</string>
@@ -182,7 +182,7 @@
     <string name="pref_categoryName_miscellaneous">Sonstiges</string>
     <string name="pref_categoryName_ui">Benutzeroberfläche</string>
     <string name="pref_desc_autoDlNew_enabled">Lade neue Artikel automatisch herunter sobald sie mit der App hinzugefügt wurden. Beachte: Der Download findet nicht statt, wenn du ausstehende unsynchronisierte Änderungen hast.</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren sobald die Internetverbindung verfügbar wird</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt, lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren, sobald die Internetverbindung verfügbar wird.</string>
     <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter</string>
     <string name="pref_desc_connection_advanced_clearCookies">Setzt eine bestehende Anmeldesitzung zurück (falls eine besteht)</string>
     <string name="pref_desc_connection_autofill">Testet die Verbindung zu wallabag und füllt die Felder Server Version, Benutzer ID und den Token automatisch aus</string>
