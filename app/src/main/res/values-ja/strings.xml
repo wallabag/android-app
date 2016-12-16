@@ -28,7 +28,7 @@
     <string name="d_deleteArticle_title">記事を削除しますか?</string>
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
     <string name="txtNetOffline">インターネット接続を確認してください!</string>
-    <string name="txtConfigNotSet">同期の前に、アプリを設定してください!</string>
+    <string name="txtConfigNotSet">同期の前に、アプリを構成してください!</string>
     <string name="bag_page">バッグのページ</string>
     <string name="activity_add_label">バッグのページ</string>
     <string name="page_url">ページ URL</string>
@@ -119,7 +119,7 @@
     <string name="notification_syncingQueue">ローカルの変更を同期中</string>
     <string name="notification_error">エラー</string>
     <string name="notification_incorrectCredentials">資格情報が正しくありません</string>
-    <string name="notification_incorrectConfiguration">設定が正しくありません</string>
+    <string name="notification_incorrectConfiguration">構成が正しくありません</string>
     <string name="notification_unknownError">不明なエラー</string>
     <string name="notification_expandedError">エラー: %s</string>
 
@@ -215,7 +215,7 @@
     <string name="connectionWizard_provider_general_prev">戻る</string>
     <string name="connectionWizard_provider_general_next">接続</string>
 
-    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 構成</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it の構成</string>
     <string name="connectionWizard_provider_wallabagit_prev">戻る</string>
     <string name="connectionWizard_provider_wallabagit_next">接続</string>
 
