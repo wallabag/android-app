@@ -70,7 +70,7 @@
     <string name="ttsPitch">Тембр</string>
     <string name="ttsOptions">Опции</string>
     <string name="ttsFastRewind">Назад</string>
-    <string name="ttsFastForward">Далее</string>
+    <string name="ttsFastForward">Вперёд</string>
     <string name="ttsError">Ошибка генерации речи</string>
 
     <string name="notification_error">Ошибка</string>
@@ -186,7 +186,7 @@
     <string name="pref_option_autoSync_interval_24h">24 часа</string>
     <string name="pref_name_autoSync_type">Тип автоматической синхронизации</string>
     <string name="pref_name_autoSyncQueue_enabled">Отдельная автоматическая синхронизация для локальных изменений</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
     <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
 
