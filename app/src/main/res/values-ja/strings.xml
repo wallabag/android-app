@@ -102,7 +102,7 @@
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
     <string name="menuAbout">アプリについて</string>
-    <string name="aboutText"><b>Android 用 wallabag アプリ</b> <br/> wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
+    <string name="aboutText">&lt;b>Android 用 wallabag アプリ&lt;/b>&lt;br/> wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声の高さ</string>
     <string name="readVolume">読む音量</string>

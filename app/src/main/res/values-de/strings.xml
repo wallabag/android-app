@@ -74,7 +74,7 @@
     <string name="menu_readArticle_increaseFontSize">Schrift größer</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift kleiner</string>
     <string name="menuAbout">Über</string>
-    <string name="aboutText"><b>wallabag-App für Android</b><br/>wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
+    <string name="aboutText">&lt;b>wallabag-App für Android&lt;/b>&lt;br/>wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Sprachhöhe</string>
     <string name="readVolume">Leselautstärke</string>
