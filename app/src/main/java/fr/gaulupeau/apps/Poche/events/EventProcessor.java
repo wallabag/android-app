@@ -152,11 +152,11 @@ public class EventProcessor {
         Context context = getContext();
 
         FeedUpdater.FeedType feedType = event.getFeedType();
-        String detailedMessage;
+        String detailedMessage = context.getString(R.string.app_name) + " ";
         if(feedType == null) {
-            detailedMessage = context.getString(R.string.notification_updatingAllFeeds);
+            detailedMessage += context.getString(R.string.notification_updatingAllFeeds);
         } else {
-            detailedMessage = context.getString(R.string.notification_updatingSpecificFeed,
+            detailedMessage += context.getString(R.string.notification_updatingSpecificFeed,
                     context.getString(feedType.getLocalizedResourceID()));
         }
 
@@ -237,6 +237,7 @@ public class EventProcessor {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
                     .setSmallIcon(R.drawable.ic_action_refresh)
                     .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
+                    .setContentText(context.getString(R.string.app_name))
                     .setOngoing(true);
 
             getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
@@ -397,7 +398,7 @@ public class EventProcessor {
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(context.getString(R.string.notification_unknownError));
+                                        .setContentText(context.getString(R.string.app_name) + " " + context.getString(R.string.notification_unknownError));
 
                         if(result.getMessage() != null) {
                             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
