@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,6 +29,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
@@ -363,10 +362,10 @@ public class BGService extends IntentService {
                 event = feedUpdater.update(feedType, updateType);
 
                 daoSession.getDatabase().setTransactionSuccessful();
-            } catch(XmlPullParserException e) {
-                Log.e(TAG, "updateFeed() XmlPullParserException", e);
+            } catch(IncorrectFeedException e) {
+                Log.e(TAG, "updateFeed() IncorrectFeedException", e);
                 result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage("Error while parsing feed"); // TODO: string resource
+                result.setMessage("Error while parsing feed: " + e.getMessage()); // TODO: string resource
             } catch(RequestException | IOException e) {
                 ActionResult r = processException(e, "updateFeed()");
                 if(!r.isSuccess()) result = r;
