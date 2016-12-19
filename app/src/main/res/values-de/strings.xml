@@ -72,7 +72,7 @@
     <string name="menu_readArticle_increaseFontSize">Schrift größer</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift kleiner</string>
     <string name="menuAbout">Über</string>
-    <string name="aboutText">&lt;b>wallabag-App für Android&lt;/b>&lt;br/>wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
+    <string name="aboutText">&lt;b&gt;wallabag-App für Android&lt;/b&gt;&lt;br/&gt;wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Sprachhöhe</string>
     <string name="readVolume">Leselautstärke</string>
@@ -106,7 +106,7 @@
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP-Basis-Authentifizierung</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierungs-Benutzername</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierungs-Passwort</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierungspasswort</string>
 
     <string name="pref_name_ui_theme">Thema</string>
     <string name="pref_name_ui_article_fontSize">Schriftgröße für Artikel (in %)</string>
