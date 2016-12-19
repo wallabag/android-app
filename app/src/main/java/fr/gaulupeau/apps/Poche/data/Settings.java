@@ -368,7 +368,7 @@ public class Settings {
             } catch(IllegalArgumentException ignored) {}
         }
 
-        return theme != null ? theme : Themes.Theme.Light;
+        return theme != null ? theme : Themes.Theme.Dark;
     }
 
     public void setTheme(Themes.Theme theme) {
