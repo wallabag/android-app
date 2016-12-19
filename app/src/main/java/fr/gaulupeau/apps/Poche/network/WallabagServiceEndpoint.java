@@ -2,11 +2,10 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.util.Log;
 
-import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import fr.gaulupeau.apps.Poche.network.exceptions.UnsuccessfulResponseException;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -120,11 +119,19 @@ public abstract class WallabagServiceEndpoint {
         if(!response.isSuccessful()) {
             Log.w(TAG, "checkResponse() response is not OK; response code: " + response.code()
                     + ", response message: " + response.message());
-            if(throwException) // TODO: throw multiple more specific exceptions
-                throw new RequestException(String.format(
-                        App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),
-                        response.code(), response.message()
-                ));
+            if(throwException) { // TODO: throw multiple more specific exceptions?
+                String responseBody = null;
+                try {
+                    responseBody = response.body().string();
+                    Log.w(TAG, "checkResponse() response body: " + responseBody);
+                } catch(IOException e) {
+                    Log.d(TAG, "checkResponse() failed to get response body", e);
+                }
+
+                throw new UnsuccessfulResponseException(
+                        response.code(), response.message(),
+                        responseBody, response.request().url().toString());
+            }
 
             return false;
         }

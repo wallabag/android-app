@@ -9,6 +9,7 @@ import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationExceptio
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
 import fr.gaulupeau.apps.Poche.network.exceptions.NotAuthorizedException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import fr.gaulupeau.apps.Poche.network.exceptions.UnsuccessfulResponseException;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -276,7 +277,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         HttpUrl url = getHttpURL(endpoint + "/archive/" + articleId)
                 .newBuilder()
                 .build();
-        return executeRequest(getRequest(url));
+        return executeRequestIgnoringNotFound(getRequest(url));
     }
 
     public boolean toggleFavorite(int articleId) throws RequestException, IOException {
@@ -284,7 +285,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         HttpUrl url = getHttpURL(endpoint + "/star/" + articleId)
                 .newBuilder()
                 .build();
-        return executeRequest(getRequest(url));
+        return executeRequestIgnoringNotFound(getRequest(url));
     }
 
     public boolean deleteArticle(int articleId) throws RequestException, IOException {
@@ -292,7 +293,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         HttpUrl url = getHttpURL(endpoint + "/delete/" + articleId)
                 .newBuilder()
                 .build();
-        return executeRequest(getRequest(url));
+        return executeRequestIgnoringNotFound(getRequest(url));
     }
 
     public String getExportUrl(long articleId, String exportType) {
@@ -308,6 +309,21 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
                 .build();
         Log.d(TAG, "getGenerateTokenRequest() url: " + url.toString());
         return getRequest(url);
+    }
+
+    // workaround for deleted articles
+    private boolean executeRequestIgnoringNotFound(Request request)
+            throws RequestException, IOException {
+        try {
+            return executeRequest(request);
+        } catch(UnsuccessfulResponseException e) {
+            if(e.getResponseCode() == 404) {
+                Log.i(TAG, "executeRequestIgnoringNotFound() ignoring HTTP 404 for: " + request.url());
+                return true;
+            }
+
+            throw e;
+        }
     }
 
 }
