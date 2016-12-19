@@ -93,7 +93,7 @@
             android:key="@string/pref_key_ui_lists_limit"
             android:title="@string/pref_name_ui_lists_limit"
             android:inputType="number"
-            android:defaultValue="50" />
+            android:defaultValue="100" />
       </PreferenceCategory>
         <PreferenceCategory android:title="@string/pref_categoryName_ui_screenScrolling">
             <CheckBoxPreference
