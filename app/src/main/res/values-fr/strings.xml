@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="label_name">Sauvegarder</string>
+    <string name="label_name">Sauvegarder !</string>
     <string name="btnMarkRead">Marquer comme lu</string>
     <string name="btnMarkUnread">Marquer comme non lu</string>
     <string name="btnSettings">Paramètres</string>
@@ -44,7 +44,7 @@
     <string name="update_allFeeds">Mettre à jour tous les flux</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l\'URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Impossible de se connecter — vérifiez votre identifiant et votre mot de passe</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue: %s</string>
@@ -73,7 +73,7 @@
     <string name="ttsOptions">Options</string>
     <string name="ttsError">Erreur de Synthèse Vocale</string>
     <string name="menuAbout">À propos</string>
-    <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="aboutText">&lt;b>Application wallabag pour Android&lt;/b>&lt;br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
@@ -115,7 +115,7 @@
     <string name="pref_name_ui_lists_limit">Limitation du nombre d\'articles dans la liste</string>
 
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
-    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste de navigateurs</string>
+    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
@@ -144,7 +144,7 @@
     <string name="connectionWizard_welcome_next">Suivant</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
     <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
-    <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l\'application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
+    <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l’application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag !</string>
     <string name="d_checkFeeds_errorMessage_noAccess">Aucun accès aux flux</string>
     <string name="d_checkFeeds_errorMessage_notFound">Flux non trouvés</string>
@@ -184,7 +184,7 @@
     <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
     <string name="pref_desc_connection_advanced_clearCookies">Réinitialise la session en cours (si elle existe)</string>
     <string name="pref_desc_connection_autofill">Tester la connexion et remplir les informations de version de serveur, l\'ID utilisateur et le token</string>
-    <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, et enlève également tous les changements et URL non synchronisés.</string>
+    <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
     <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
     <string name="pref_name_autoDlNew_enabled">Télécharger les nouveaux articles</string>
     <string name="pref_name_autoSync_enabled">Activer la synchronisation automatique</string>

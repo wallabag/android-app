@@ -70,7 +70,7 @@
     <string name="ttsPitch">Тембр</string>
     <string name="ttsOptions">Опции</string>
     <string name="ttsFastRewind">Назад</string>
-    <string name="ttsFastForward">Далее</string>
+    <string name="ttsFastForward">Вперёд</string>
     <string name="ttsError">Ошибка генерации речи</string>
 
     <string name="notification_error">Ошибка</string>
@@ -133,7 +133,7 @@
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="downloadPdf_noInternetConnection">Не удалось загрузить статью: нет подключения к интернету</string>
     <string name="menuAbout">О приложении</string>
-    <string name="aboutText"><b>Приложение wallabag для Android</b><br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
+    <string name="aboutText">&lt;b>Приложение wallabag для Android&lt;/b>&lt;br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>
     <string name="readVolume">Громкость чтения</string>
@@ -186,7 +186,7 @@
     <string name="pref_option_autoSync_interval_24h">24 часа</string>
     <string name="pref_name_autoSync_type">Тип автоматической синхронизации</string>
     <string name="pref_name_autoSyncQueue_enabled">Отдельная автоматическая синхронизация для локальных изменений</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
     <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
 
