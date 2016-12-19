@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
     <string name="label_name">Bag it!</string>
@@ -197,7 +197,7 @@
         <item>1</item>
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
-    <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available</string>
+    <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
     <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
     <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
     <string name="pref_name_imageCache_enabled">Cache in article embedded images</string>
@@ -221,9 +221,9 @@
 
     <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_name" translatable="false">v2.wallabag.org</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
-    <string name="connectionWizard_providerSelection_provider_v2wallabagorg_desc">Select this option if you have an account on https://v2.wallabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
@@ -233,9 +233,9 @@
     <string name="connectionWizard_provider_general_prev">Back</string>
     <string name="connectionWizard_provider_general_next">Connect</string>
 
-    <string name="connectionWizard_provider_v2wallabagorg_titleMessage">v2.wallabag.org configuration</string>
-    <string name="connectionWizard_provider_v2wallabagorg_prev">Back</string>
-    <string name="connectionWizard_provider_v2wallabagorg_next">Connect</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Back</string>
+    <string name="connectionWizard_provider_wallabagit_next">Connect</string>
 
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
     <string name="connectionWizard_provider_framabag_prev">Back</string>

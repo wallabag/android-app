@@ -47,7 +47,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String DATA_FEEDS_TOKEN = "feeds_token";
 
     private static final int PROVIDER_NO = -1;
-    private static final int PROVIDER_V2_WALLABAG_ORG = 0;
+    private static final int PROVIDER_WALLABAG_IT = 0;
     private static final int PROVIDER_FRAMABAG = 1;
 
     private static final String PAGE_NONE = "";
@@ -55,7 +55,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     private static final String PAGE_PROVIDER_SELECTION = "provider_selection";
     private static final String PAGE_CONFIG_GENERIC = "config_generic";
     private static final String PAGE_CONFIG_FRAMABAG = "config_framabag";
-    private static final String PAGE_CONFIG_V2_WALLABAG_ORG = "config_v2_wallabag_org";
+    private static final String PAGE_CONFIG_WALLABAG_IT = "config_wallabag_it";
     private static final String PAGE_SUMMARY = "summary";
 
     public static void runWizard(Context context, boolean skipWelcome) {
@@ -89,8 +89,15 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 try {
                     ConnectionData connectionData = parseLoginData(dataString);
 
-                    bundle.putString(DATA_URL, connectionData.mUrl);
-                    bundle.putString(DATA_USERNAME, connectionData.mUsername);
+                    if(connectionData.username != null) {
+                        bundle.putString(DATA_USERNAME, connectionData.username);
+                    }
+
+                    if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(connectionData.url)) {
+                        bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
+                    } else if(connectionData.url != null) {
+                        bundle.putString(DATA_URL, connectionData.url);
+                    }
 
                     currentPage = PAGE_PROVIDER_SELECTION;
                 } catch(IllegalArgumentException e) {
@@ -169,8 +176,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             case PAGE_PROVIDER_SELECTION:
                 int provider = bundle.getInt(DATA_PROVIDER, PROVIDER_NO);
                 switch(provider) {
-                    case PROVIDER_V2_WALLABAG_ORG:
-                        goToFragment = new V2WallabagOrgConfigFragment();
+                    case PROVIDER_WALLABAG_IT:
+                        goToFragment = new WallabagItConfigFragment();
                         break;
 
                     case PROVIDER_FRAMABAG:
@@ -185,7 +192,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
             case PAGE_CONFIG_GENERIC:
             case PAGE_CONFIG_FRAMABAG:
-            case PAGE_CONFIG_V2_WALLABAG_ORG:
+            case PAGE_CONFIG_WALLABAG_IT:
                 goToFragment = new SummaryFragment();
                 break;
 
@@ -314,8 +321,8 @@ public class ConnectionWizardActivity extends AppCompatActivity {
                 RadioGroup radioGroup = (RadioGroup)view.findViewById(R.id.providerRadioGroup);
                 int provider;
                 switch(radioGroup.getCheckedRadioButtonId()) {
-                    case R.id.providerV2WallabagOrg:
-                        provider = PROVIDER_V2_WALLABAG_ORG;
+                    case R.id.providerWallabagIt:
+                        provider = PROVIDER_WALLABAG_IT;
                         break;
 
                     case R.id.providerFramabag:
@@ -467,15 +474,17 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     }
 
-    public static class V2WallabagOrgConfigFragment extends GenericConfigFragment {
+    public static class WallabagItConfigFragment extends GenericConfigFragment {
 
         public String getPageName() {
-            return PAGE_CONFIG_V2_WALLABAG_ORG;
+            return PAGE_CONFIG_WALLABAG_IT;
         }
+
+        static final String WALLABAG_IT_HOSTNAME = "app.wallabag.it";
 
         @Override
         protected int getLayoutResourceID() {
-            return R.layout.connection_wizard_v2wallabagorg_config_fragment;
+            return R.layout.connection_wizard_wallabagit_config_fragment;
         }
 
         @Override
@@ -489,7 +498,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
             username = usernameEditText.getText().toString();
             password = passwordEditText.getText().toString();
 
-            url = "https://v2.wallabag.org";
+            url = "https://" + WALLABAG_IT_HOSTNAME;
             wallabagServerVersion = 2;
 
             tryPossibleURLs = false;
@@ -602,12 +611,12 @@ public class ConnectionWizardActivity extends AppCompatActivity {
     }
 
     private class ConnectionData {
-        String mUsername;
-        String mUrl;
+        String username;
+        String url;
 
-        public ConnectionData(String username, String url) {
-            mUsername = username;
-            mUrl = url;
+        ConnectionData(String username, String url) {
+            this.username = username;
+            this.url = url;
         }
     }
 }

@@ -23,6 +23,8 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedItemException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -89,7 +91,7 @@ public class FeedUpdater {
     }
 
     public ArticlesChangedEvent update(FeedType feedType, UpdateType updateType)
-            throws XmlPullParserException, RequestException, IOException {
+            throws IncorrectFeedException, RequestException, IOException {
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
         if(feedType == null && updateType == null) {
@@ -110,7 +112,7 @@ public class FeedUpdater {
         return event;
     }
 
-    private void updateAllFeeds() throws XmlPullParserException, RequestException, IOException {
+    private void updateAllFeeds() throws IncorrectFeedException, RequestException, IOException {
         Log.i(TAG, "updateAllFeeds() started");
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -132,7 +134,7 @@ public class FeedUpdater {
 
     private void updateInternal(
             FeedType feedType, UpdateType updateType, ArticlesChangedEvent event)
-            throws XmlPullParserException, RequestException, IOException {
+            throws IncorrectFeedException, RequestException, IOException {
         Log.i(TAG, String.format("updateInternal(%s, %s) started", feedType, updateType));
 
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
@@ -157,7 +159,7 @@ public class FeedUpdater {
 
     private void updateByFeed(ArticleDao articleDao, FeedType feedType, UpdateType updateType,
                               Integer id, ArticlesChangedEvent event)
-            throws XmlPullParserException, RequestException, IOException {
+            throws IncorrectFeedException, RequestException, IOException {
         Log.d(TAG, "updateByFeed() started");
 
         InputStream is = null;
@@ -165,7 +167,13 @@ public class FeedUpdater {
             is = getInputStream(getFeedUrl(feedType));
 
             Log.d(TAG, "updateByFeed() got input stream; processing feed");
-            processFeed(articleDao, is, feedType, updateType, id, event);
+            try {
+                processFeed(articleDao, is, feedType, updateType, id, event);
+            } catch(XmlPullParserException e) {
+                String feedInfo = "feedType: " + feedType + ", updateType: " + updateType;
+                Log.e(TAG, "XmlPullParserException on " + feedInfo);
+                throw new IncorrectFeedException("Unknown error on " + feedInfo, e);
+            }
 
             Log.d(TAG, "updateByFeed() finished successfully");
         } finally {
@@ -223,7 +231,7 @@ public class FeedUpdater {
     private void processFeed(ArticleDao articleDao, InputStream is,
                              FeedType feedType, UpdateType updateType, Integer latestID,
                              ArticlesChangedEvent event)
-            throws XmlPullParserException, IOException {
+            throws IncorrectFeedItemException, XmlPullParserException, IOException {
         Log.d(TAG, "processFeed() latestID=" + latestID);
         // TODO: use parser.require() all over the place?
 
@@ -383,37 +391,42 @@ public class FeedUpdater {
         }
     }
 
-    private static Item parseItem(XmlPullParser parser) throws XmlPullParserException, IOException {
+    private static Item parseItem(XmlPullParser parser)
+            throws IncorrectFeedItemException, IOException {
         Item item = new Item();
 
-        while(parser.next() != XmlPullParser.END_TAG) {
-            if(parser.getEventType() != XmlPullParser.START_TAG) {
-                continue;
-            }
+        try {
+            while(parser.next() != XmlPullParser.END_TAG) {
+                if(parser.getEventType() != XmlPullParser.START_TAG) {
+                    continue;
+                }
 
-            switch (parser.getName()) {
-                case "title":
-                    item.title = cleanString(parseNextText(parser));
-                    break;
-                case "source":
-                    String sourceUrl = parser.getAttributeValue(null, "url");
-                    parseNextText(parser); // ignore "empty" element
-                    item.sourceUrl = sourceUrl;
-                    break;
-                case "link":
-                    item.link = parseNextText(parser);
-                    break;
-                case "pubDate":
-                    item.pubDate = parseNextText(parser);
-                    break;
-                case "description":
-                    item.description = parseNextText(parser);
-                    break;
+                switch(parser.getName()) {
+                    case "title":
+                        item.title = cleanString(parseNextText(parser));
+                        break;
+                    case "source":
+                        String sourceUrl = parser.getAttributeValue(null, "url");
+                        parseNextText(parser); // ignore "empty" element
+                        item.sourceUrl = sourceUrl;
+                        break;
+                    case "link":
+                        item.link = parseNextText(parser);
+                        break;
+                    case "pubDate":
+                        item.pubDate = parseNextText(parser);
+                        break;
+                    case "description":
+                        item.description = parseNextText(parser);
+                        break;
 
-                default:
-                    skipElement(parser);
-                    break;
+                    default:
+                        skipElement(parser);
+                        break;
+                }
             }
+        } catch(XmlPullParserException e) {
+            throw new IncorrectFeedItemException(item, e);
         }
 
         return item;
@@ -493,12 +506,12 @@ public class FeedUpdater {
         return s;
     }
 
-    private static class Item {
-        String title;
-        String sourceUrl;
-        String link;
-        String pubDate;
-        String description;
+    public static class Item {
+        public String title;
+        public String sourceUrl;
+        public String link;
+        public String pubDate;
+        public String description;
     }
 
 }
