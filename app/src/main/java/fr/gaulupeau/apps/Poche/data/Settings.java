@@ -351,7 +351,7 @@ public class Settings {
     }
 
     public int getArticlesListLimit() {
-        return getInt(R.string.pref_key_ui_lists_limit, 50);
+        return getInt(R.string.pref_key_ui_lists_limit, 100);
     }
 
     public void setArticlesListLimit(int limit) {
