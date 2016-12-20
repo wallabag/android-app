@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -124,7 +126,7 @@ public class ConfigurationTestHelper
     public void cancel() {
         canceled = true;
 
-        if(progressDialog != null) progressDialog.dismiss();
+        dismissDialog(progressDialog);
 
         cancelTasks();
     }
@@ -139,7 +141,7 @@ public class ConfigurationTestHelper
 
     @Override
     public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
-        if(progressDialog != null) progressDialog.dismiss();
+        dismissDialog(progressDialog);
 
         if(canceled) return;
 
@@ -304,7 +306,7 @@ public class ConfigurationTestHelper
     public void handleGetCredentialsResult(boolean success,
                                            FeedsCredentials credentials,
                                            int wallabagVersion) {
-        progressDialog.dismiss();
+        dismissDialog(progressDialog);
 
         if(canceled) return;
 
@@ -343,7 +345,7 @@ public class ConfigurationTestHelper
 
     @Override
     public void testFeedsTaskOnResult(TestFeedsTask.Result result, String details) {
-        if(progressDialog != null) progressDialog.dismiss();
+        dismissDialog(progressDialog);
 
         if(canceled) return;
 
@@ -404,6 +406,18 @@ public class ConfigurationTestHelper
 
     private void cancelTask(AsyncTask task) {
         if(task != null) task.cancel(true);
+    }
+
+    private void dismissDialog(Dialog dialog) {
+        if(dialog == null || !dialog.isShowing()) return;
+
+        if(context instanceof Activity) {
+            if(!((Activity)context).isFinishing()) {
+                dialog.dismiss();
+            }
+        } else {
+            dialog.dismiss();
+        }
     }
 
 }
