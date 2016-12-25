@@ -33,8 +33,14 @@ This application was originally created by Jonathan GAULUPEAU and released under
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
 ## Screenshots
-
-
+<img src="https://github.com/Lokesh-Krishna/android-app/blob/master/Wallabag%20Reading%20List.png" align="left"
+width="200"
+    hspace="10" vspace="10">
+<img src="https://github.com/Lokesh-Krishna/android-app/blob/master/Wallabag%20Article%20View.png" align="center"
+width="200"
+    hspace="10" vspace="10">
+  
+    
 ## Contributing
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
  * [Report bugs and make suggestions.](https://github.com/wallabag/android-app/issues)
