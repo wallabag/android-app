@@ -23,14 +23,17 @@ wallabag is available on the Google Play Store and F-Droid.
      
 ## About
   
-It's made for you to comfortably read and archive your articles.
+Wallabag has been made for you to comfortably read and archive your articles.
 
 You can download wallabag on wallabag.org and follow the instructions to install it on your own server, or you can directly sign up on framabag.org
 
-This android application allows you to put a link in your wallabag instance. You can now read your wallabag links offline.
+This android application allows you to put a link in your wallabag instance, letting you can read your wallabag links offline.
 
 This application was originally created by Jonathan GAULUPEAU and released under the GPL licence.
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
+
+## Screenshots
+
 
 ## Contributing
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
