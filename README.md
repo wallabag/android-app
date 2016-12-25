@@ -34,10 +34,12 @@ wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
 ## Features  
 The android app lets you   
-- Connect to your self hosted wallabag instance or connect to your Framabag.  
+- Connect to your self hosted wallabag instance or connect to your Framabag. 
+- Supports wallabag 2.0
+- Completely ad-free
 - Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
 - Switch between numerous themes.  
-- Needs no special permissions.
+- Needs no special permissions on Android 6.0+
 
 There are a lot more feautures that we are working on currently and we are looking forward to bringing them to you, including complete support for wallabag 2.0 and a redesign of the app to bring it even more in alignment with Google's Material Design guidelines.
 
@@ -48,14 +50,21 @@ width="200"
 [<img src="Wallabag%20Article%20View.png" align="center"
 width="200"
     hspace="10" vspace="10">](Wallabag%20Article%20View.png)
-  
-    
+
+## Permissions
+
+On Android versions prior to Android 6.0, wallabag required the following:
+- Full Network Access
+- View Network Connections
+- Run at startup  
+
+The "Run at startup" permission was only used if Auto-Sync was enabled and was not utilised when Auto-Sync was disabled. The other two permissions were made use of for downloading content for viewing offline.
+   
 ## Contributing
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
  * [Report bugs and make suggestions.](https://github.com/wallabag/android-app/issues)
  * [Translate the app](https://hosted.weblate.org/projects/wallabag/android-app/) (you don't have to create an account).
  * Write some code. Please follow the code style used in the project to make a review process faster.
-
 
 ## License
 
