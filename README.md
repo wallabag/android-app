@@ -19,6 +19,8 @@ wallabag is available on the Google Play Store and F-Droid.
         src="https://f-droid.org/badge/get-it-on.png" />
 
 
+
+
 ## Contributing
 
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here's a few ways you can help:
