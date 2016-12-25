@@ -1,7 +1,7 @@
 # wallabag - Android App [![Build Status](https://travis-ci.org/wallabag/android-app.svg?branch=master)](https://travis-ci.org/wallabag/android-app)
 
 <img src="unnamed.png" align="left"
-width="300"
+width="250"
     hspace="10" vspace="10">
 
 wallabag is a self hosted read-it-later app. Unlike other services, wallabag is free and open source.
@@ -17,8 +17,6 @@ wallabag is available on the Google Play Store and F-Droid.
     <img alt="Get it on F-Droid"
         height="80"
         src="https://f-droid.org/badge/get-it-on.png" />
-
-
 
 
 ## Contributing
