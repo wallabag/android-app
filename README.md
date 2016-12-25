@@ -4,6 +4,8 @@
 width="200"
     hspace="10" vspace="10">
 
+wallabag is a self hosted read-it-later app.  
+Unlike other services, wallabag is free and open source.  
 wallabag for Android is a companion app for [wallabag](https://www.wallabag.org).  
 wallabag is available on the Google Play Store and F-Droid.
 
@@ -18,12 +20,11 @@ wallabag is available on the Google Play Store and F-Droid.
         height="80"
         src="https://f-droid.org/badge/get-it-on.png" />
  </p>    
-
-
+     
 ## About
-wallabag is a self hosted read-it-later app.  
+  
 It's made for you to comfortably read and archive your articles.
-Unlike other services, wallabag is free and open source.
+
 You can download wallabag on wallabag.org and follow the instructions to install it on your own server, or you can directly sign up on framabag.org
 
 This android application allows you to put a link in your wallabag instance. You can now read your wallabag links offline.
