@@ -1,12 +1,13 @@
 # wallabag - Android App [![Build Status](https://travis-ci.org/wallabag/android-app.svg?branch=master)](https://travis-ci.org/wallabag/android-app)
 
 <img src="unnamed.png" align="left"
-width="250"
+width="200"
     hspace="10" vspace="10">
 
 wallabag for Android is a companion app for [wallabag](https://www.wallabag.org).
 wallabag is available on the Google Play Store and F-Droid.
 
+<p align="center">
 <a href="https://play.google.com/store/apps/details?id=fr.gaulupeau.apps.InThePoche">
     <img alt="Get it on Google Play"
         height="80"
@@ -16,6 +17,8 @@ wallabag is available on the Google Play Store and F-Droid.
     <img alt="Get it on F-Droid"
         height="80"
         src="https://f-droid.org/badge/get-it-on.png" />
+ </p>  
+
 
 
 ## About
@@ -24,9 +27,7 @@ It's made for you to comfortably read and archive your articles.
 Unlike other services, wallabag is free and open source.
 
 ## Contributing
-
-
-wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here's a few ways you can help:
+wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
  * [Report bugs and make suggestions.](https://github.com/wallabag/android-app/issues)
  * [Translate the app](https://hosted.weblate.org/projects/wallabag/android-app/) (you don't have to create an account).
  * Write some code. Please follow the code style used in the project to make a review process faster.
