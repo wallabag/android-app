@@ -9,7 +9,7 @@ Unlike other services, wallabag is free and open source.
 wallabag for Android is a companion app for [wallabag](https://www.wallabag.org).  
 wallabag is available on the Google Play Store and F-Droid.
 
-<p align="center">
+<p align="left">
 <a href="https://play.google.com/store/apps/details?id=fr.gaulupeau.apps.InThePoche">
     <img alt="Get it on Google Play"
         height="80"
@@ -29,7 +29,7 @@ You can download wallabag on wallabag.org and follow the instructions to install
 
 This android application allows you to put a link in your wallabag instance, letting you can read your wallabag links offline.
 
-This application was originally created by Jonathan GAULUPEAU and released under the GPL licence.
+This application was originally created by Jonathan GAULUPEAU and released under the GNU GPLv3 licence.
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
 ## Features  
@@ -39,15 +39,15 @@ The android app lets you
 - Switch between numerous themes.  
 - Needs no special permissions.
 
-There are a lot more feautures that we are working on currently and we are looking forward to bringing them to you, including support for wallabag 2.0 and a redesign of the app to bring it even more in alignment with Google's Material Design language.
+There are a lot more feautures that we are working on currently and we are looking forward to bringing them to you, including complete support for wallabag 2.0 and a redesign of the app to bring it even more in alignment with Google's Material Design guidelines.
 
 ## Screenshots
-<img src="https://github.com/Lokesh-Krishna/android-app/blob/master/Wallabag%20Reading%20List.png" align="left"
+[<img src="Wallabag%20Reading%20List.png" align="left"
 width="200"
-    hspace="10" vspace="10">
-<img src="https://github.com/Lokesh-Krishna/android-app/blob/master/Wallabag%20Article%20View.png" align="center"
+    hspace="10" vspace="10">](Wallabag%20Reading%20List.png)
+[<img src="Wallabag%20Article%20View.png" align="center"
 width="200"
-    hspace="10" vspace="10">
+    hspace="10" vspace="10">](Wallabag%20Article%20View.png)
   
     
 ## Contributing
