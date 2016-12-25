@@ -9,7 +9,7 @@ Unlike other services, wallabag is free and open source.
 wallabag for Android is a companion app for [wallabag](https://www.wallabag.org).  
 wallabag is available on the Google Play Store and F-Droid.
 
-<p align="center">
+<p align="left">
 <a href="https://play.google.com/store/apps/details?id=fr.gaulupeau.apps.InThePoche">
     <img alt="Get it on Google Play"
         height="80"
