@@ -33,7 +33,7 @@ This application was originally created by Jonathan GAULUPEAU and released under
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
 ## Features  
-The android app lets you  
+The android app lets you   
 - Connect to your self hosted wallabag instance or connect to your Framabag.  
 - Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
 - Switch between numerous themes.  
