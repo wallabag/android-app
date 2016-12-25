@@ -32,6 +32,13 @@ This android application allows you to put a link in your wallabag instance, let
 This application was originally created by Jonathan GAULUPEAU and released under the GPL licence.
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
+## Features  
+The android app lets you  
+- Connect to your self hosted wallabag instance or connect to your Framabag.  
+- Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
+- Switch between numerous themes.  
+There are a lot more feautures that we are working on currently and we are looking forward to bringing them to you, including support for wallabag 2.0 and a redesign of the app to bring it even more in alignment with Google's Material Design language.
+
 ## Screenshots
 <img src="https://github.com/Lokesh-Krishna/android-app/blob/master/Wallabag%20Reading%20List.png" align="left"
 width="200"
