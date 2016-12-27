@@ -1,10 +1,9 @@
 # wallabag - Android App [![Build Status](https://travis-ci.org/wallabag/android-app.svg?branch=master)](https://travis-ci.org/wallabag/android-app)
 
-<img src="unnamed.png" align="left"
-width="200"
-    hspace="10" vspace="10">
+<img src="/readme/wallabag logo.png" align="left"
+width="200" hspace="10" vspace="10">
 
-wallabag is a self hosted read-it-later app.  
+wallabag is a self-hosted read-it-later app.  
 Unlike other services, wallabag is free and open source.  
 wallabag for Android is a companion app for [wallabag](https://www.wallabag.org).  
 wallabag is available on the Google Play Store and F-Droid.
@@ -23,9 +22,9 @@ wallabag is available on the Google Play Store and F-Droid.
      
 ## About
   
-Wallabag has been made for you to comfortably read and archive your articles.
-You can download wallabag on wallabag.org and follow the instructions to install it on your own server.
-Alternatively, you can directly sign up on wallabag.it or on Framabag.
+wallabag has been made for you to comfortably read and archive your articles.
+You can download wallabag from wallabag.org and follow the instructions to install it on your own server.
+Alternatively, you can directly sign up for [wallabag.it](https://www.wallabag.it/en) or [Framabag](https://www.framabag.org/).
 
 This android application allows you to put a link in your wallabag instance, letting you can read your wallabag links offline.
 
@@ -34,31 +33,31 @@ wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
 
 ## Features  
 The android app lets you   
-- Connect to your self hosted wallabag instance or connect to your wallabag.it account or Framabag account. 
-- Supports wallabag 2.0
+- Connect to your self-hosted wallabag instance or connect to your wallabag.it account or Framabag account 
+- Supports wallabag 2.0 and higher
 - Completely ad-free
-- Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
-- Switch between numerous themes.  
+- Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience
+- Switch between numerous themes  
 - Needs no special permissions on Android 6.0+
 
-There are a lot more feautures that we are working on currently and we are looking forward to bringing them to you, including complete support for wallabag 2.0 and a redesign of the app to bring it even more in alignment with Google's Material Design guidelines.
+There are a lot more features that we are working on currently and we are looking forward to bringing them to you, including complete support for wallabag 2 and a redesign of the app to bring it even more in alignment with Google's Material Design guidelines.
 
 ## Screenshots
-[<img src="Wallabag%20Reading%20List.png" align="left"
+[<img src="/readme/Wallabag%20Reading%20List.png" align="left"
 width="200"
-    hspace="10" vspace="10">](Wallabag%20Reading%20List.png)
-[<img src="Wallabag%20Article%20View.png" align="center"
+    hspace="10" vspace="10">](/readmeWallabag%20Reading%20List.png)
+[<img src="/readme/Wallabag%20Article%20View.png" align="center"
 width="200"
-    hspace="10" vspace="10">](Wallabag%20Article%20View.png)
+    hspace="10" vspace="10">](/readme/Wallabag%20Article%20View.png)
 
 ## Permissions
 
-On Android versions prior to Android 6.0, wallabag required the following:
+On Android versions prior to Android 6.0, wallabag requires the following permissions:
 - Full Network Access
 - View Network Connections
 - Run at startup  
 
-The "Run at startup" permission was only used if Auto-Sync was enabled and was not utilised when Auto-Sync was disabled. The other two permissions were made use of for downloading content for viewing offline.
+The "Run at startup" permission is only used if Auto-Sync is enabled and is not utilised when Auto-Sync is disabled. The other two permissions are made use of for downloading content for viewing offline.
    
 ## Contributing
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
