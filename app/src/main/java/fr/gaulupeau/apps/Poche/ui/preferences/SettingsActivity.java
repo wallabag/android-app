@@ -251,7 +251,7 @@ public class SettingsActivity extends AppCompatActivity {
                         && (settings.getUsername() == null || settings.getUsername().isEmpty())) {
                     clearSession = true;
                     wipeDB = true;
-                } else if(TextUtils.equals(settings.getFeedsUserID(), oldFeedsUserID)) {
+                } else if(!TextUtils.equals(settings.getFeedsUserID(), oldFeedsUserID)) {
                     wipeDB = true;
                 }
 
