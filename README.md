@@ -27,7 +27,7 @@ wallabag has been made for you to comfortably read and archive your articles.
 You can download wallabag from wallabag.org and follow the instructions to install it on your own server.
 Alternatively, you can directly sign up for [wallabag.it](https://www.wallabag.it/en) or [Framabag](https://www.framabag.org/).
 
-This android application allows you to put a link in your wallabag instance, letting you can read your wallabag links offline.
+This android application allows you to put a link in your wallabag instance, letting you read your wallabag links offline.
 
 This application was originally created by Jonathan GAULUPEAU and released under the GNU GPLv3 licence.
 wallabag is a creation from Nicolas Lœuillet released under the MIT licence.
