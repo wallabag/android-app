@@ -18,7 +18,8 @@ wallabag is available on the Google Play Store and F-Droid.
     <img alt="Get it on F-Droid"
         height="80"
         src="https://f-droid.org/badge/get-it-on.png" />
- </p>    
+        </a>  
+        </p>    
      
 ## About
   
