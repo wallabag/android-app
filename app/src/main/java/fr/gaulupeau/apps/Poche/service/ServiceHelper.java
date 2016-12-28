@@ -126,11 +126,18 @@ public class ServiceHelper {
         Log.d(TAG, "updateFeed() finished");
     }
 
-    public static void downloadArticle(Context context, int articleID, Long operationID) {
-        Log.d(TAG, "downloadArticle() started");
+    public static void downloadArticleAsPDF(Context context, int articleID, Long operationID) {
+        downloadArticleAsFile(context, articleID, ActionRequest.DownloadFormat.PDF, operationID);
+    }
+
+    public static void downloadArticleAsFile(Context context, int articleID,
+                                             ActionRequest.DownloadFormat downloadFormat,
+                                             Long operationID) {
+        Log.d(TAG, "downloadArticleAsFile() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.DownloadAsFile);
         request.setArticleID(articleID);
+        request.setDownloadFormat(downloadFormat);
         request.setOperationID(operationID);
 
         Intent intent = new Intent(context, SecondaryService.class);
@@ -138,7 +145,7 @@ public class ServiceHelper {
 
         context.startService(intent);
 
-        Log.d(TAG, "downloadArticle() finished");
+        Log.d(TAG, "downloadArticleAsFile() finished");
     }
 
 }

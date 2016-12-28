@@ -147,7 +147,7 @@ public class SecondaryService extends IntentServiceBase {
             }
 
             String articleTitle = article.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");
-            String exportType = "pdf";
+            String exportType = actionRequest.getDownloadFormat().asString();
             String exportUrl = service.getExportUrl(articleID, exportType);
             Log.d(TAG, "downloadAsFile() exportUrl=" + exportUrl);
             String exportFileName = articleTitle + "." + exportType;

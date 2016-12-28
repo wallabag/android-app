@@ -516,7 +516,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean downloadPdf() {
         Log.d(TAG, "downloadPdf()");
 
-        ServiceHelper.downloadArticle(getApplicationContext(), mArticle.getArticleId(), null);
+        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), mArticle.getArticleId(), null);
 
         return true;
     }

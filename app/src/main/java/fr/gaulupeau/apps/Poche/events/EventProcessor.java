@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -233,7 +234,10 @@ public class EventProcessor {
         if(result == null || result.isSuccess()) {
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.fromFile(event.getFile()), "application/pdf");
+            Uri uri = Uri.fromFile(event.getFile());
+            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    event.getRequest().getDownloadFormat().asString());
+            intent.setDataAndType(uri, mimeType);
 
             Context context = getContext();
 
