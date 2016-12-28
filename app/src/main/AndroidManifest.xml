@@ -134,7 +134,11 @@
             android:exported="true" />
 
         <service
-            android:name="fr.gaulupeau.apps.Poche.service.BGService"
+            android:name="fr.gaulupeau.apps.Poche.service.MainService"
+            android:exported="false" />
+
+        <service
+            android:name="fr.gaulupeau.apps.Poche.service.SecondaryService"
             android:exported="false" />
 
     </application>

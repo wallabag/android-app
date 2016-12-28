@@ -38,10 +38,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
-import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -518,13 +516,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean downloadPdf() {
         Log.d(TAG, "downloadPdf()");
 
-        File exportDir = getExternalFilesDir(null);
-        if(exportDir != null) {
-            new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
-                    mArticle, exportDir.getAbsolutePath()).execute();
-        } else {
-            Log.w(TAG, "downloadPdf() exportDir is null");
-        }
+        ServiceHelper.downloadArticle(getApplicationContext(), mArticle.getArticleId(), null);
 
         return true;
     }

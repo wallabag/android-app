@@ -9,7 +9,8 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed
+        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed,
+        DownloadAsFile
     }
 
     public enum RequestType {

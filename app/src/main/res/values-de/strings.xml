@@ -43,7 +43,6 @@
     <string name="d_urlAction_openInBrowser">Im Browser öffnen</string>
     <string name="d_urlAction_addToWallabag">Zu wallabag hinzufügen</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">Verbindung fehlgeschlagen</string>
     <string name="d_bag_fail_title">Fehlgeschlagen</string>
     <string name="d_bag_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>
     <string name="addLink_success_text">Hinzugefügt</string>
@@ -54,7 +53,6 @@
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
-    <string name="downloadPdf_noInternetConnection">Konnte Artikel nicht herunterladen: keine Internetverbindung</string>
     <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
     <string name="update_allFeeds">Alle Feeds aktualisiert</string>

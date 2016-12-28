@@ -44,7 +44,6 @@
     <string name="d_urlAction_openInBrowser">Open in browser</string>
     <string name="d_urlAction_addToWallabag">Add to wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">Connection Failure</string>
     <string name="d_bag_fail_title">Fail</string>
     <string name="d_bag_fail_text">Couldn\'t find a URL in share string:\n</string>
     <string name="d_configurationChanged_title">Parameters changed</string>
@@ -82,7 +81,6 @@
     <string name="d_checkFeeds_errorMessage_noAccess">No access to feeds</string>
     <string name="d_checkFeeds_errorMessage_unknown">Unknown error</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Unknown error: %s</string>
-    <string name="downloadPdf_noInternetConnection">Couldn\'t download article: no internet connection</string>
     <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t login: probably wrong username or password</string>
     <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
     <string name="update_allFeeds">Update all feeds</string>

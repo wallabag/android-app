@@ -1,0 +1,201 @@
+package fr.gaulupeau.apps.Poche.service;
+
+import android.content.Intent;
+import android.os.Process;
+import android.util.Log;
+import android.util.Pair;
+
+import org.greenrobot.greendao.DaoException;
+
+import java.io.File;
+import java.io.IOException;
+
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
+import fr.gaulupeau.apps.Poche.events.DownloadFileFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.DownloadFileStartedEvent;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import okhttp3.Headers;
+import okhttp3.Request;
+import okhttp3.Response;
+import okio.BufferedSink;
+import okio.Okio;
+
+import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
+
+public class SecondaryService extends IntentServiceBase {
+
+    private static final String TAG = SecondaryService.class.getSimpleName();
+
+    public SecondaryService() {
+        super(SecondaryService.class.getSimpleName());
+        setIntentRedelivery(true);
+
+        Log.d(TAG, "SecondaryService() created");
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        Log.d(TAG, "onHandleIntent() started");
+
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+
+        ActionRequest actionRequest = ActionRequest.fromIntent(intent);
+        ActionResult result = null;
+
+        switch(actionRequest.getAction()) {
+            case DownloadAsFile: {
+                result = downloadAsFile(actionRequest);
+                break;
+            }
+
+            default:
+                Log.w(TAG, "Unknown action requested: " + actionRequest.getAction());
+                break;
+        }
+
+        if(result != null) {
+            postEvent(new ActionResultEvent(actionRequest, result));
+        }
+
+        Log.d(TAG, "onHandleIntent() finished");
+    }
+
+    private ActionResult downloadAsFile(ActionRequest actionRequest) {
+        Article article = null;
+        try {
+            article = getDaoSession().getArticleDao().queryBuilder()
+                    .where(ArticleDao.Properties.ArticleId.eq(actionRequest.getArticleID()))
+                    .build().unique();
+        } catch(DaoException e) {
+            Log.w(TAG, "onHandleIntent()", e);
+        }
+
+        if(article == null) {
+            return new ActionResult(ActionResult.ErrorType.Unknown, "Couldn't find the article"); // TODO: string
+        }
+
+        ActionResult result = null;
+
+        DownloadFileStartedEvent startEvent = new DownloadFileStartedEvent(actionRequest, article);
+        postStickyEvent(startEvent);
+
+        Pair<ActionResult, File> downloadResult = null;
+        try {
+            downloadResult = downloadAsFile(actionRequest, article);
+            result = downloadResult.first;
+        } finally {
+            removeStickyEvent(startEvent);
+
+            if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+
+            postEvent(new DownloadFileFinishedEvent(actionRequest, result, article,
+                    downloadResult != null ? downloadResult.second : null));
+        }
+
+        return result;
+    }
+
+    private Pair<ActionResult, File> downloadAsFile(ActionRequest actionRequest, Article article) {
+        Log.d(TAG, String.format("downloadAsFile() started; action: %s, articleID: %s",
+                actionRequest.getAction(), actionRequest.getArticleID()));
+
+        int articleID = actionRequest.getArticleID();
+
+        if(!WallabagConnection.isNetworkAvailable()) {
+            Log.i(TAG, "downloadAsFile() not on-line; exiting");
+            return new Pair<>(new ActionResult(ActionResult.ErrorType.NoNetwork), null);
+        }
+
+        WallabagService service = getWallabagService();
+
+        File resultFile = null;
+        try {
+            WallabagServiceEndpoint.ConnectionTestResult connectionTestResult
+                    = service.testConnection();
+            Log.d(TAG, "downloadAsFile() connectionTestResult: " + connectionTestResult);
+            if(connectionTestResult != WallabagServiceEndpoint.ConnectionTestResult.OK) {
+                Log.w(TAG, "downloadAsFile() testing connection failed with value "
+                        + connectionTestResult);
+
+                ActionResult.ErrorType errorType;
+                switch(connectionTestResult) {
+                    case IncorrectURL:
+                    case IncorrectServerVersion:
+                    case WallabagNotFound:
+                        errorType = ActionResult.ErrorType.IncorrectConfiguration;
+                        break;
+
+                    case AuthProblem:
+                    case HTTPAuth:
+                    case IncorrectCredentials:
+                        errorType = ActionResult.ErrorType.IncorrectCredentials;
+                        break;
+
+                    default:
+                        errorType = ActionResult.ErrorType.Unknown;
+                        break;
+                }
+
+                return new Pair<>(new ActionResult(errorType), null);
+            }
+
+            String articleTitle = article.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");
+            String exportType = "pdf";
+            String exportUrl = service.getExportUrl(articleID, exportType);
+            Log.d(TAG, "downloadAsFile() exportUrl=" + exportUrl);
+            String exportFileName = articleTitle + "." + exportType;
+
+            Request request = new Request.Builder()
+                    .url(exportUrl)
+                    .build();
+
+            Response response = service.getClient().newCall(request).execute();
+
+            if(!response.isSuccessful()) {
+                return new Pair<>(new ActionResult(ActionResult.ErrorType.Unknown,
+                        "Response code: " + response.code()
+                                + ", response message: " + response.message()), null);
+            }
+
+            // do we need it?
+            if(Log.isLoggable(TAG, Log.DEBUG)) {
+                Headers responseHeaders = response.headers();
+                for (int i = 0, size = responseHeaders.size(); i < size; i++) {
+                    Log.d(TAG, responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                }
+            }
+
+            File exportDir = getExternalFilesDir(null); // TODO: check
+            File file = new File(exportDir, exportFileName);
+            Log.d(TAG, "Saving file " + file.getAbsolutePath());
+
+            BufferedSink sink = null;
+            try {
+                sink = Okio.buffer(Okio.sink(file));
+                sink.writeAll(response.body().source());
+            } finally {
+                if(sink != null) {
+                    try {
+                        sink.close();
+                    } catch(IOException ignored) {}
+                }
+                response.body().close();
+            }
+
+            resultFile = file;
+        } catch(IncorrectConfigurationException | IOException e) {
+            ActionResult r = processException(e, "downloadAsFile()");
+            if(!r.isSuccess()) return new Pair<>(r, null);
+        }
+
+        return new Pair<>(new ActionResult(), resultFile);
+    }
+
+}

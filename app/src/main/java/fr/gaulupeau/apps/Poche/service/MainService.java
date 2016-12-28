@@ -1,7 +1,7 @@
 package fr.gaulupeau.apps.Poche.service;
 
-import android.app.IntentService;
 import android.content.Intent;
+import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -26,9 +25,6 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
@@ -36,28 +32,22 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class BGService extends IntentService {
+public class MainService extends IntentServiceBase {
 
-    private static final String TAG = BGService.class.getSimpleName();
+    private static final String TAG = MainService.class.getSimpleName();
 
-    // TODO: rename these so it is obvious to use getters instead?
-    private Settings settings;
-
-    private DaoSession daoSession;
-    private WallabagService wallabagService;
-
-    public BGService() {
-        super(BGService.class.getSimpleName());
+    public MainService() {
+        super(MainService.class.getSimpleName());
         setIntentRedelivery(true);
 
-        Log.d(TAG, "BGService() created");
+        Log.d(TAG, "MainService() created");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
 
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
         ActionRequest actionRequest = ActionRequest.fromIntent(intent);
         ActionResult result = null;
@@ -382,75 +372,6 @@ public class BGService extends IntentService {
 
         Log.d(TAG, "updateFeed() finished");
         return result;
-    }
-
-    private ActionResult processException(Exception e, String scope) {
-        ActionResult result = new ActionResult();
-
-        Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
-
-        if(e instanceof RequestException) {
-            if(e instanceof IncorrectCredentialsException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectCredentials);
-            } else if(e instanceof IncorrectConfigurationException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectConfiguration);
-            } else {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage(e.getMessage());
-            }
-        } else if(e instanceof IOException) {
-            boolean handled = false;
-
-            if(getSettings().isConfigurationOk()) {
-                if(e instanceof java.net.UnknownHostException
-                        || e instanceof java.net.ConnectException // TODO: maybe filter by message
-                        || e instanceof java.net.SocketTimeoutException) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
-                    handled = true;
-                } else if(e instanceof javax.net.ssl.SSLException
-                        && e.getMessage() != null
-                        && e.getMessage().contains("Connection timed out")) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
-                    handled = true;
-                }
-            }
-
-            if(!handled) {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage(e.toString());
-            }
-            // IOExceptions in most cases mean temporary error,
-            // in some cases may mean that the action was completed anyway.
-        } else { // other exceptions meant to be handled outside
-            result.setErrorType(ActionResult.ErrorType.Unknown);
-        }
-
-        return result;
-    }
-
-    private Settings getSettings() {
-        if(settings == null) {
-            settings = new Settings(this);
-        }
-
-        return settings;
-    }
-
-    private DaoSession getDaoSession() {
-        if(daoSession == null) {
-            daoSession = DbConnection.getSession();
-        }
-
-        return daoSession;
-    }
-
-    private WallabagService getWallabagService() {
-        if(wallabagService == null) {
-            Settings settings = getSettings();
-            wallabagService = WallabagService.fromSettings(settings);
-        }
-
-        return wallabagService;
     }
 
 }

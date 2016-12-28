@@ -29,7 +29,7 @@ public class ServiceHelper {
         else if(byOperation) request.setRequestType(ActionRequest.RequestType.ManualByOperation);
         if(queueLength != null) request.setQueueLength(queueLength);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
@@ -48,7 +48,7 @@ public class ServiceHelper {
         request.setLink(link);
         request.setOperationID(operationID);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
@@ -63,7 +63,7 @@ public class ServiceHelper {
                 archive ? ActionRequest.Action.Archive : ActionRequest.Action.Unarchive);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
@@ -78,7 +78,7 @@ public class ServiceHelper {
                 favorite ? ActionRequest.Action.Favorite : ActionRequest.Action.Unfavorite);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
@@ -92,7 +92,7 @@ public class ServiceHelper {
         ActionRequest request = new ActionRequest(ActionRequest.Action.Delete);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
@@ -118,12 +118,27 @@ public class ServiceHelper {
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
 
-        Intent intent = new Intent(context, BGService.class);
+        Intent intent = new Intent(context, MainService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
 
         Log.d(TAG, "updateFeed() finished");
+    }
+
+    public static void downloadArticle(Context context, int articleID, Long operationID) {
+        Log.d(TAG, "downloadArticle() started");
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.DownloadAsFile);
+        request.setArticleID(articleID);
+        request.setOperationID(operationID);
+
+        Intent intent = new Intent(context, SecondaryService.class);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
+
+        context.startService(intent);
+
+        Log.d(TAG, "downloadArticle() finished");
     }
 
 }
