@@ -310,6 +310,7 @@ public class FeedUpdater {
                         article.setArchive(feedType == FeedType.Archive);
                         article.setFavorite(feedType == FeedType.Favorite);
                     }
+                    article.setImagesDownloaded(false);
 
                     if(event != null) {
                         ArticlesChangedEvent.ChangeType changeType = existing

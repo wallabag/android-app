@@ -9,12 +9,16 @@ import org.greenrobot.greendao.DaoException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileStartedEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
@@ -52,6 +56,18 @@ public class SecondaryService extends IntentServiceBase {
         switch(actionRequest.getAction()) {
             case DownloadAsFile: {
                 result = downloadAsFile(actionRequest);
+                break;
+            }
+
+            case FetchImages: {
+                FetchImagesStartedEvent startEvent = new FetchImagesStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    fetchImages(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    postEvent(new FetchImagesFinishedEvent(actionRequest));
+                }
                 break;
             }
 
@@ -196,6 +212,37 @@ public class SecondaryService extends IntentServiceBase {
         }
 
         return new Pair<>(new ActionResult(), resultFile);
+    }
+
+    private void fetchImages(ActionRequest actionRequest) {
+        Log.d(TAG, "fetchImages() started");
+
+        if(!ImageCacheUtils.isExternalStorageWritable()) {
+            Log.w(TAG, "fetchImages() external storage is not writable");
+            return;
+        }
+
+        // TODO: probably need to save results in a separate transaction
+
+        ArticleDao articleDao = getDaoSession().getArticleDao();
+        List<Article> articleList = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
+                .orderAsc(ArticleDao.Properties.ArticleId).list(); // TODO: lazyList
+
+        Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
+        int i = 0;
+        for(Article article: articleList) {
+            Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
+
+            ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
+
+            article.setImagesDownloaded(true);
+            articleDao.update(article);
+
+            Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
+        }
+
+        Log.d(TAG, "fetchImages() finished");
     }
 
 }

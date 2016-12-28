@@ -148,4 +148,17 @@ public class ServiceHelper {
         Log.d(TAG, "downloadArticleAsFile() finished");
     }
 
+    public static void fetchImages(Context context) {
+        Log.d(TAG, "fetchImages() started");
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.FetchImages);
+
+        Intent intent = new Intent(context, SecondaryService.class);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
+
+        context.startService(intent);
+
+        Log.d(TAG, "fetchImages() finished");
+    }
+
 }

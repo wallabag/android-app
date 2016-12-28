@@ -10,7 +10,7 @@ public class ActionRequest implements Parcelable {
 
     public enum Action {
         AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed,
-        DownloadAsFile
+        DownloadAsFile, FetchImages
     }
 
     public enum RequestType {

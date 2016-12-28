@@ -35,6 +35,7 @@ public class EventProcessor {
     private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
     private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
     private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 3;
+    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 4;
 
     private Context context;
     private Settings settings;
@@ -168,9 +169,39 @@ public class EventProcessor {
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
 
-        if(event.getResult().isSuccess() && !getSettings().isFirstSyncDone()) {
-            getSettings().setFirstSyncDone(true);
+        Settings settings = getSettings();
+
+        if(event.getResult().isSuccess()) {
+            if(!getSettings().isFirstSyncDone()) {
+                settings.setFirstSyncDone(true);
+            }
+
+            if(settings.isImageCacheEnabled()) {
+                ServiceHelper.fetchImages(getContext());
+            }
         }
+    }
+
+    @Subscribe(sticky = true)
+    public void onFetchImagesStartedEvent(FetchImagesStartedEvent event) {
+        Log.d(TAG, "onFetchImagesStartedEvent() started");
+
+        Context context = getContext();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                .setOngoing(true);
+
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
+                notificationBuilder.setProgress(0, 0, true).build());
+    }
+
+    @Subscribe
+    public void onFetchImagesFinishedEvent(FetchImagesFinishedEvent event) {
+        Log.d(TAG, "onFetchImagesFinishedEvent() started");
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING);
     }
 
     @Subscribe(sticky = true)
