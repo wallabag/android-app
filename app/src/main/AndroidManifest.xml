@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="fr.gaulupeau.apps.Poche.App"
@@ -134,7 +135,11 @@
             android:exported="true" />
 
         <service
-            android:name="fr.gaulupeau.apps.Poche.service.BGService"
+            android:name="fr.gaulupeau.apps.Poche.service.MainService"
+            android:exported="false" />
+
+        <service
+            android:name="fr.gaulupeau.apps.Poche.service.SecondaryService"
             android:exported="false" />
 
     </application>

@@ -9,11 +9,21 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed
+        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed,
+        DownloadAsFile, FetchImages
     }
 
     public enum RequestType {
         Auto, Manual, ManualByOperation
+    }
+
+    public enum DownloadFormat {
+        EPUB, MOBI, PDF, CSV, JSON, TXT, XML;
+
+        public String asString() {
+            return name().toLowerCase();
+        }
+
     }
 
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
@@ -27,6 +37,7 @@ public class ActionRequest implements Parcelable {
     private Long queueLength;
     private FeedUpdater.FeedType feedUpdateFeedType;
     private FeedUpdater.UpdateType feedUpdateUpdateType;
+    private DownloadFormat downloadFormat;
 
     public static ActionRequest fromIntent(Intent intent) {
         return intent.getParcelableExtra(ACTION_REQUEST);
@@ -100,6 +111,14 @@ public class ActionRequest implements Parcelable {
         this.feedUpdateUpdateType = feedUpdateUpdateType;
     }
 
+    public DownloadFormat getDownloadFormat() {
+        return downloadFormat;
+    }
+
+    public void setDownloadFormat(DownloadFormat downloadFormat) {
+        this.downloadFormat = downloadFormat;
+    }
+
 // Parcelable implementation
 
     @Override
@@ -118,6 +137,7 @@ public class ActionRequest implements Parcelable {
         writeLong(queueLength, out);
         writeInteger(this.feedUpdateFeedType != null ? this.feedUpdateFeedType.ordinal() : null, out);
         writeInteger(this.feedUpdateUpdateType != null ? this.feedUpdateUpdateType.ordinal() : null, out);
+        writeInteger(this.downloadFormat != null ? this.downloadFormat.ordinal() : null, out);
     }
 
     private ActionRequest(Parcel in) {
@@ -135,6 +155,10 @@ public class ActionRequest implements Parcelable {
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
             feedUpdateUpdateType = FeedUpdater.UpdateType.values()[feedUpdateUpdateTypeInteger];
+        }
+        Integer downloadFormatInteger = readInteger(in);
+        if(downloadFormatInteger != null) {
+            downloadFormat = DownloadFormat.values()[downloadFormatInteger];
         }
     }
 

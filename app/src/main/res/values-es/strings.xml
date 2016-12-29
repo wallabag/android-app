@@ -42,7 +42,6 @@
     <string name="d_urlAction_openInBrowser">Abrir en el navegador</string>
     <string name="d_urlAction_addToWallabag">Añadir a wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">Fallo de conexión</string>
     <string name="d_bag_fail_title">Fallido</string>
     <string name="d_bag_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
     <string name="d_configurationChanged_title">Parámetros alterados</string>
@@ -80,7 +79,6 @@
     <string name="d_checkFeeds_errorMessage_noAccess">No se pudo acceder a las fuentes</string>
     <string name="d_checkFeeds_errorMessage_unknown">Error desconocido</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Error desconocido: %s</string>
-    <string name="downloadPdf_noInternetConnection">No se pudo descargar el artículo: sin conexión a internet</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña equivocada</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuestas: %2$s"</string>
     <string name="update_allFeeds">Actualizar todas las fuentes</string>

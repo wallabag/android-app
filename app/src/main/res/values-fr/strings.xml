@@ -30,11 +30,9 @@
     <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
     <string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">Erreur de connexion</string>
     <string name="d_bag_fail_title">Échec</string>
     <string name="d_bag_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
     <string name="addLink_success_text">Ajouté</string>
-    <string name="downloadPdf_noInternetConnection">Impossible de télécharger l\'article : pas de connexion internet</string>
     <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
     <string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
     <string name="feedName_archived">Archivés</string>

@@ -5,9 +5,11 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,13 +34,13 @@ public class EventProcessor {
     private static final int NOTIFICATION_ID_OTHER = 0;
     private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
     private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
+    private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 3;
+    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 4;
 
     private Context context;
     private Settings settings;
     private Handler mainHandler;
     private NotificationManager notificationManager;
-
-    private Long currentOperationID; // TODO: replace with ActionRequest?
 
     private boolean delayedNetworkChangedTask;
 
@@ -140,8 +142,6 @@ public class EventProcessor {
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "onUpdateFeedsStartedEvent() started");
 
-        setOperationID(event);
-
         Context context = getContext();
 
         FeedUpdater.FeedType feedType = event.getFeedType();
@@ -167,22 +167,46 @@ public class EventProcessor {
     public void onUpdateFeedsFinishedEvent(UpdateFeedsFinishedEvent event) {
         Log.d(TAG, "onUpdateFeedsFinishedEvent() started");
 
-        checkOperationID(event);
-
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
 
-        if(event.getResult().isSuccess() && !getSettings().isFirstSyncDone()) {
-            getSettings().setFirstSyncDone(true);
-        }
+        Settings settings = getSettings();
 
-        emptyOperationID();
+        if(event.getResult().isSuccess()) {
+            if(!getSettings().isFirstSyncDone()) {
+                settings.setFirstSyncDone(true);
+            }
+
+            if(settings.isImageCacheEnabled()) {
+                ServiceHelper.fetchImages(getContext());
+            }
+        }
+    }
+
+    @Subscribe(sticky = true)
+    public void onFetchImagesStartedEvent(FetchImagesStartedEvent event) {
+        Log.d(TAG, "onFetchImagesStartedEvent() started");
+
+        Context context = getContext();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                .setOngoing(true);
+
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
+                notificationBuilder.setProgress(0, 0, true).build());
+    }
+
+    @Subscribe
+    public void onFetchImagesFinishedEvent(FetchImagesFinishedEvent event) {
+        Log.d(TAG, "onFetchImagesFinishedEvent() started");
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING);
     }
 
     @Subscribe(sticky = true)
     public void onSyncQueueStartedEvent(SyncQueueStartedEvent event) {
         Log.d(TAG, "onSyncQueueStartedEvent() started");
-
-        setOperationID(event);
 
         ActionRequest request = event.getRequest();
         if(request.getRequestType() != ActionRequest.RequestType.ManualByOperation
@@ -201,8 +225,6 @@ public class EventProcessor {
     public void onSyncQueueFinishedEvent(SyncQueueFinishedEvent event) {
         Log.d(TAG, "onSyncQueueFinishedEvent() started");
 
-        checkOperationID(event);
-
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
 
         ActionResult result = event.getResult();
@@ -210,8 +232,66 @@ public class EventProcessor {
                 || (event.getQueueLength() == null || event.getQueueLength() > 0)) {
             enableConnectivityChangeReceiver(true);
         }
+    }
 
-        emptyOperationID();
+    // TODO: better downloading notification
+    @Subscribe(sticky = true)
+    public void onDownloadFileStartedEvent(DownloadFileStartedEvent event) {
+        Log.d(TAG, "onDownloadFileStartedEvent() started");
+
+        Context context = getContext();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setContentTitle(context.getString(R.string.downloadPdfPathStart))
+                .setContentText(context.getString(R.string.downloadPdfProgress))
+                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setOngoing(true);
+
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+        inboxStyle.setBigContentTitle(
+                context.getString(R.string.downloadPdfProgressDetail,
+                        event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
+        notificationBuilder.setStyle(inboxStyle);
+
+        getNotificationManager().notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
+                notificationBuilder.setProgress(1, 0, true).build());
+    }
+
+    @Subscribe
+    public void onDownloadFileFinishedEvent(DownloadFileFinishedEvent event) {
+        Log.d(TAG, "onDownloadFileFinishedEvent() started");
+
+        ActionResult result = event.getResult();
+        if(result == null || result.isSuccess()) {
+            Intent intent = new Intent();
+            intent.setAction(android.content.Intent.ACTION_VIEW);
+            Uri uri = Uri.fromFile(event.getFile());
+            String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+                    event.getRequest().getDownloadFormat().asString());
+            intent.setDataAndType(uri, mimeType);
+
+            Context context = getContext();
+
+            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded))
+                    .setContentText(context.getString(R.string.downloadPdfTouchToOpen))
+                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setContentIntent(contentIntent)
+                    .setProgress(0, 0, false);
+
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle(
+                    context.getString(R.string.downloadPdfArticleDownloadedDetail,
+                            event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
+            notificationBuilder.setStyle(inboxStyle);
+
+            getNotificationManager().notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
+                    notificationBuilder.build());
+        } else {
+            getNotificationManager().cancel(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING);
+        }
     }
 
     @Subscribe
@@ -413,39 +493,6 @@ public class EventProcessor {
                 Toast.makeText(getContext(), text, duration).show();
             }
         });
-    }
-
-    private void setOperationID(BackgroundOperationEvent bgEvent) {
-        setOperationID(bgEvent.getOperationID());
-    }
-
-    private void setOperationID(Long operationID) {
-        if(currentOperationID != null) {
-            throw new RuntimeException("currentOperationID was not reset");
-        }
-
-        currentOperationID = operationID;
-    }
-
-    private void checkOperationID(BackgroundOperationEvent bgEvent) {
-        checkOperationID(bgEvent.getOperationID());
-    }
-
-    private void checkOperationID(ActionRequest actionRequest) {
-        checkOperationID(actionRequest.getOperationID());
-    }
-
-    private void checkOperationID(Long operationID) {
-        if(currentOperationID == null && operationID == null) return;
-
-        if((currentOperationID == null) != (operationID == null)
-                || !currentOperationID.equals(operationID)) {
-            throw new RuntimeException("operationID does not match currentOperationID");
-        }
-    }
-
-    private void emptyOperationID() {
-        currentOperationID = null;
     }
 
 }

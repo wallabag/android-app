@@ -43,7 +43,6 @@
     <string name="d_urlAction_openInBrowser">ブラウザーで開く</string>
     <string name="d_urlAction_addToWallabag">Wallabag に追加</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">接続に失敗しました</string>
     <string name="d_bag_fail_title">失敗</string>
     <string name="d_bag_fail_text">共有文字列で URL を見つけることができませんでした:
 </string>
@@ -82,7 +81,6 @@
     <string name="d_checkFeeds_errorMessage_noAccess">フィードにアクセスできません</string>
     <string name="d_checkFeeds_errorMessage_unknown">不明なエラー</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">原因不明のエラー: %s</string>
-    <string name="downloadPdf_noInternetConnection">記事をダウンロードできませんでした: インターネット接続がありません</string>
     <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
     <string name="unsuccessfulRequest_errorMessage">要求が失敗しました。レスポンスコード: %1$d、レスポンスメッセージ: %2$s</string>
     <string name="update_allFeeds">すべてのフィードを更新</string>
