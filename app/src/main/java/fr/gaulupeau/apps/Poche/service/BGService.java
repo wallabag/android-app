@@ -5,18 +5,25 @@ import android.content.Intent;
 import android.util.Log;
 import android.util.Pair;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
@@ -25,6 +32,7 @@ import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
@@ -38,7 +46,59 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
 public class BGService extends IntentService {
 
+    private static class RequestQueueState {
+
+        private LinkedHashMap<Intent, ActionRequest> queue = new LinkedHashMap<>(1);
+
+        private Integer topPriority;
+
+        RequestQueueState() {}
+
+        synchronized void add(Intent intent, ActionRequest request) {
+            if(queue.put(intent, request) == null) {
+                int requestPriority = request.getPriority();
+                if(topPriority == null || requestPriority > topPriority) {
+                    topPriority = requestPriority;
+                }
+            } else {
+                Log.w(TAG, "RequestQueueState.add() already contained the intent!");
+            }
+        }
+
+        synchronized ActionRequest remove(Intent intent) {
+            ActionRequest actionRequest = queue.remove(intent);
+            if(actionRequest != null) {
+                updateState();
+            }
+
+            return actionRequest;
+        }
+
+        synchronized boolean hasHigherPriorityRequests(int priority) {
+            return topPriority != null && priority < topPriority;
+        }
+
+        private void updateState() {
+            if(queue.isEmpty()) {
+                topPriority = null;
+                return;
+            }
+
+            int priority = Integer.MIN_VALUE;
+            for(ActionRequest request: queue.values()) {
+                if(request.getPriority() > priority) {
+                    priority = request.getPriority();
+                }
+            }
+
+            topPriority = priority;
+        }
+
+    }
+
     private static final String TAG = BGService.class.getSimpleName();
+
+    private final RequestQueueState queueState = new RequestQueueState();
 
     // TODO: rename these so it is obvious to use getters instead?
     private Settings settings;
@@ -54,12 +114,28 @@ public class BGService extends IntentService {
     }
 
     @Override
+    public void onStart(Intent intent, int startId) {
+        Log.d(TAG, "onStart() started");
+
+        queueState.add(intent, ActionRequest.fromIntent(intent));
+
+        super.onStart(intent, startId);
+
+        Log.d(TAG, "onStart() finished");
+    }
+
+    @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
 
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-        ActionRequest actionRequest = ActionRequest.fromIntent(intent);
+        handle(queueState.remove(intent));
+
+        Log.d(TAG, "onHandleIntent() finished");
+    }
+
+    private void handle(ActionRequest actionRequest) {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
@@ -104,6 +180,18 @@ public class BGService extends IntentService {
                 break;
             }
 
+            case FetchImages: {
+                FetchImagesStartedEvent startEvent = new FetchImagesStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    fetchImages(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    postEvent(new FetchImagesFinishedEvent(actionRequest));
+                }
+                break;
+            }
+
             default:
                 Log.w(TAG, "Unknown action requested: " + actionRequest.getAction());
                 break;
@@ -112,8 +200,6 @@ public class BGService extends IntentService {
         if(result != null) {
             postEvent(new ActionResultEvent(actionRequest, result));
         }
-
-        Log.d(TAG, "onHandleIntent() finished");
     }
 
     private Long serveSimpleRequest(ActionRequest actionRequest) {
@@ -382,6 +468,63 @@ public class BGService extends IntentService {
 
         Log.d(TAG, "updateFeed() finished");
         return result;
+    }
+
+    private void fetchImages(ActionRequest actionRequest) {
+        Log.d(TAG, "fetchImages() started");
+
+        if(!ImageCacheUtils.isExternalStorageWritable()) {
+            Log.w(TAG, "fetchImages() external storage is not writable");
+            return;
+        }
+
+        if(checkPriorityAndReschedule(actionRequest)) {
+            Log.i(TAG, "fetchImages() has higher priority work, rescheduled");
+            return;
+        }
+
+        // TODO: probably need to save results in a separate transaction
+
+        ArticleDao articleDao = getDaoSession().getArticleDao();
+        List<Article> articleList = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
+                .orderAsc(ArticleDao.Properties.ArticleId).list();
+
+        Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
+        int i = 0;
+        for (Article article : articleList) {
+            if (checkPriorityAndReschedule(actionRequest)) {
+                Log.i(TAG, "fetchImages() has higher priority work, rescheduled");
+                break;
+            }
+
+            Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
+
+            ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
+
+            article.setImagesDownloaded(true);
+            articleDao.update(article);
+            Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
+        }
+
+        Log.d(TAG, "fetchImages() finished");
+    }
+
+    private boolean checkPriorityAndReschedule(ActionRequest actionRequest) {
+        if(hasHigherPriorityRequests(actionRequest.getPriority())) {
+            rescheduleRequest(actionRequest);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean hasHigherPriorityRequests(int priority) {
+        return queueState.hasHigherPriorityRequests(priority);
+    }
+
+    private void rescheduleRequest(ActionRequest request) {
+        ServiceHelper.startService(getApplicationContext(), request);
     }
 
     private ActionResult processException(Exception e, String scope) {

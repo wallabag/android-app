@@ -116,6 +116,7 @@
     <string name="notification_updatingFeeds">Updating feeds</string>
     <string name="notification_updatingAllFeeds">Updating all feeds</string>
     <string name="notification_updatingSpecificFeed">Updating %s feed</string>
+    <string name="notification_downloadingImages">Downloading images</string>
     <string name="notification_syncingQueue">Synchronizing local changes</string>
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Incorrect credentials</string>
@@ -199,6 +200,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
     <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
     <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
+    <string name="pref_name_imageCache_enabled">Cache in article embedded images</string>
+    <string name="pref_desc_imageCache_enabled">Automatically downloads all images in every article and saves them to the device. Depending on the length of your wallabag article list this can take very long and consume a lot of space.</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>

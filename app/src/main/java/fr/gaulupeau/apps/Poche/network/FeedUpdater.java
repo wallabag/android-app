@@ -277,7 +277,10 @@ public class FeedUpdater {
                         continue;
                     }
 
-                    if(updateType == UpdateType.Fast && latestID != null && latestID >= id) break;
+                    if(updateType == UpdateType.Fast && latestID != null && latestID >= id) {
+                        Log.d(TAG, "processFeed(): update type fast, everything up to date");
+                        break;
+                    }
 
                     Article article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
@@ -307,6 +310,7 @@ public class FeedUpdater {
                         article.setArchive(feedType == FeedType.Archive);
                         article.setFavorite(feedType == FeedType.Favorite);
                     }
+                    article.setImagesDownloaded(false);
 
                     if(event != null) {
                         ArticlesChangedEvent.ChangeType changeType = existing

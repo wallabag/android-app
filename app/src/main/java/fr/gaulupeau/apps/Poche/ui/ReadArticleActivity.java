@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -38,15 +39,23 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.zip.CRC32;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -129,7 +138,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         invalidateOptionsMenu();
 
         if(mArticle == null) {
-            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleID + ". Thus we" +
+            Log.e(TAG, "onCreate: Did not find article with articleId=" + articleID + ". Thus we" +
                     " are not able to create this activity. Finish.");
             finish();
             return;
@@ -146,6 +155,48 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setTitle(titleText);
 
         settings = App.getInstance().getSettings();
+
+        Log.d(TAG, "onCreate: isImageCacheEnabled=" + settings.isImageCacheEnabled());
+        if(settings.isImageCacheEnabled()) {
+            String newHTMLcontent = htmlContent;
+
+            String extStorage = ImageCacheUtils.getExternalStoragePath();
+            if(extStorage == null) {
+                Log.w(TAG, "onCreate: did not find extStorage path");
+            }
+            else {
+                Log.d(TAG, "onCreate: looking up local cached images in folder and replacing them in htmlContent");
+                List<String> imageURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
+                Log.d(TAG, "onCreate: imageURLs=" + imageURLs);
+
+                for (int i = 0; i < imageURLs.size(); i++) {
+                    String imageURL = imageURLs.get(i);
+                    // localImageName = hash + file extension
+                    String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage, mArticle.getArticleId().longValue(), imageURL);
+                    if (localImagePath == null){
+                        continue;
+                    }
+                    File image = new File(localImagePath);
+                    if(image != null && image.exists() && image.canRead()) {
+                        Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
+                        newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(newHTMLcontent, imageURL, localImagePath);
+                    }
+                    else {
+                        Log.d(TAG, "onCreate: no cached version of " + imageURL + " found at path " + localImagePath);
+                    }
+                }
+                if(htmlContent.equals(newHTMLcontent)) {
+                    Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced to cache");
+                } else {
+                    Log.d(TAG, "onCreate: newHTMLcontent before removing responsive image params:\n" + newHTMLcontent);
+                    newHTMLcontent = newHTMLcontent.replaceAll("srcset=\".*\"", "");
+                    newHTMLcontent = newHTMLcontent.replaceAll("sizes=\".*\"", "");
+                    newHTMLcontent = newHTMLcontent.replaceAll("data-zoom-src=\".*\"", "");
+                    htmlContent = newHTMLcontent;
+                    Log.d(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+                }
+            }
+        } // else nothing to do, because image links to the web in the html content are user's wish
 
         acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
@@ -933,6 +984,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             setFontSizeOld(view, size);
         }
     }
+
+
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setFontSizeNew(WebView view, int size) {
