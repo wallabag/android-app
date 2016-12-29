@@ -89,9 +89,15 @@ public class WallabagConnection {
     }
 
     public static OkHttpClient createClient() {
+        return createClient(true);
+    }
+
+    public static OkHttpClient createClient(boolean persistentCookies) {
         Settings settings = App.getInstance().getSettings();
 
-        return createClient(true, settings.isCustomSSLSettings(), settings.isAcceptAllCertificates());
+        return createClient(persistentCookies,
+                settings.isCustomSSLSettings(),
+                settings.isAcceptAllCertificates());
     }
 
     public static OkHttpClient createClient(

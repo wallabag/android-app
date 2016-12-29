@@ -20,185 +20,257 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
+import okio.BufferedSource;
 import okio.Okio;
 
-/**
- * Created by strubbl on 04.11.16.
- */
-
-
 public class ImageCacheUtils {
+
     private static final String TAG = ImageCacheUtils.class.getSimpleName();
+
     private static final String IMAGE_CACHE_DIR = "imagecache";
     private static final int MAXIMUM_FILE_EXT_LENGTH = 5; // incl. the dot
 
-    private static OkHttpClient okHttpClient = null;
-    private static String externalStoragePath = null;
+    private static final Pattern IMG_URL_PATTERN
+            = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
 
-    public static void cacheImages(Long articleId, String articleContent) {
-        Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty=" + articleContent.isEmpty());
+    private static OkHttpClient okHttpClient;
+    private static String externalStoragePath;
+
+    public static String replaceImagesInHtmlContent(String htmlContent, long articleId) {
+        String newHtmlContent = htmlContent;
+
+        String extStorage = getExternalStoragePath();
+        if(!ImageCacheUtils.isExternalStorageReadable()) {
+            Log.w(TAG, "replaceImagesInHtmlContent: extStorage path is not readable");
+            return htmlContent;
+        }
+
+        Log.d(TAG, "replaceImagesInHtmlContent: looking up local cached images in folder" +
+                " and replacing them in htmlContent");
+        List<String> imageURLs = findImageUrlsInHtml(htmlContent);
+        Log.d(TAG, "replaceImagesInHtmlContent: imageURLs=" + imageURLs);
+
+        if(imageURLs.isEmpty()) {
+            Log.d(TAG, "replaceImagesInHtmlContent: no images found");
+            return htmlContent;
+        }
+
+        String articleCachePath = getArticleCachePath(extStorage, articleId);
+        for(String imageURL: imageURLs) {
+            String localImagePath = getCacheImagePath(articleCachePath, imageURL);
+            if(localImagePath == null){
+                continue;
+            }
+            File image = new File(localImagePath);
+            if(image.exists() && image.canRead()) {
+                Log.d(TAG, "replaceImagesInHtmlContent: replacing image " + imageURL
+                        + " -> " + localImagePath);
+                newHtmlContent = newHtmlContent.replaceAll(imageURL, localImagePath);
+            } else {
+                Log.d(TAG, "replaceImagesInHtmlContent: no cached version of " + imageURL
+                        + " found at path " + localImagePath);
+            }
+        }
+
+        if(htmlContent.equals(newHtmlContent)) {
+            Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced");
+            return htmlContent;
+        }
+
+        Log.v(TAG, "onCreate: newHtmlContent before removing responsive image params:\n"
+                + newHtmlContent);
+        newHtmlContent = newHtmlContent.replaceAll("srcset=\".*\"", "");
+        newHtmlContent = newHtmlContent.replaceAll("sizes=\".*\"", "");
+        newHtmlContent = newHtmlContent.replaceAll("data-zoom-src=\".*\"", "");
+        htmlContent = newHtmlContent;
+        Log.v(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+
+        return htmlContent;
+    }
+
+    public static void cacheImages(long articleId, String articleContent) {
+        Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty="
+                + (articleContent == null || articleContent.isEmpty()));
         String extStoragePath = getExternalStoragePath();
         Log.d(TAG, "cacheImages: extStoragePath=" + extStoragePath);
 
-        if(articleId == null || articleContent == null || extStoragePath == null || extStoragePath.isEmpty()) {
-            Log.d(TAG, "cacheImages: returning, because an essential var is null, see previous debug messages");
-            // TODO: fresh articles always have null as id, therefore image caching currently only works on second full update
+        if(articleContent == null || extStoragePath == null || extStoragePath.isEmpty()) {
+            Log.d(TAG, "cacheImages: returning, because an essential var is null");
             return;
         }
         // TODO: collect them all and process them in a thread with progress showing in status bar as notification
         List<String> imageURLs = findImageUrlsInHtml(articleContent);
-        for(int i = 0; i < imageURLs.size(); i++) {
-            String imageURL = imageURLs.get(i);
+        if(imageURLs.isEmpty()) return;
+
+        String articleCachePath = getArticleCachePath(extStoragePath, articleId);
+        if(!createArticleCacheDir(articleCachePath)) {
+            Log.i(TAG, "cacheImages: couldn't create article cache dir");
+            return;
+        }
+
+        for(String imageURL: imageURLs) {
             Log.d(TAG, "cacheImages: downloading " + imageURL);
-            String destinationPath = getCacheImagePath(extStoragePath, articleId, imageURL);
+            String destinationPath = getCacheImagePath(articleCachePath, imageURL);
             if(destinationPath == null) {
                 Log.d(TAG, "cacheImages: destinationPath is null, skip downloading " + imageURL);
                 continue;
             }
-            else {
-                downloadImageToCache(imageURL, destinationPath, articleId);
-            }
+
+            downloadImageToCache(imageURL, destinationPath, articleId);
         }
     }
 
     public static List<String> findImageUrlsInHtml(String htmlContent) {
         List<String> imageURLs = new ArrayList<>();
-        Pattern pattern = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
-        Matcher matcher = pattern.matcher(htmlContent);
-        while (matcher.find()) {
-            imageURLs.add(matcher.group(1)); //group(0) is the whole tag, 1 only the image URL
-            Log.d(TAG, "findImageUrlsInHtml: found image URL " + matcher.group(1));
+        Matcher matcher = IMG_URL_PATTERN.matcher(htmlContent);
+        while(matcher.find()) {
+            String url = matcher.group(1);
+            imageURLs.add(url);
+            Log.d(TAG, "findImageUrlsInHtml: found image URL " + url);
         }
         return imageURLs;
     }
 
-    public static String replaceImageWithCachedVersion(String htmlContent, String imageURL, String imageCachePath) {
-        Log.d(TAG, "replaceImageWithCachedVersion: trying to replace " + imageURL + " --> " + imageCachePath);
-        return htmlContent.replaceAll(imageURL, imageCachePath);
+    public static String getArticleCachePath(String extStoragePath, long articleId) {
+        Log.d(TAG, "getCacheArticlePath: articleId=" + articleId);
+        String localArticlePath = extStoragePath + "/" + IMAGE_CACHE_DIR
+                + "/" + articleId + "/";
+        Log.d(TAG, "getCacheArticlePath: localArticlePath=" + localArticlePath);
+        return localArticlePath;
     }
 
-    public static String getCacheImagePath(String extStoragePath, Long articleId, String imageURL) {
-        Log.d(TAG, "getCacheImagePath: articleId=" + articleId);
-        int fileExt = imageURL.lastIndexOf(".");
-
-        if (fileExt < 0) {
-            Log.d(TAG, "getCacheImagePath: no valid file extension found, returning null");
-            return null;
-        }
-        String fileExtName = imageURL.substring(fileExt);
-        if (fileExtName.contains("/") || fileExtName.length() > MAXIMUM_FILE_EXT_LENGTH) {
-            Log.d(TAG, "getCacheImagePath: suspicious file extension in image URL " + imageURL + ", returning null");
-            return null;
-        }
-
-        String localImageName = ImageCacheUtils.md5(imageURL) + fileExtName;
+    public static String getCacheImagePath(String articleCachePath, String imageURL) {
+        String localImageName = getCacheImageName(imageURL);
         Log.d(TAG, "getCacheImagePath: localImageName=" + localImageName + " for URL " + imageURL);
-        String localImagePath = extStoragePath + "/" + IMAGE_CACHE_DIR + "/" + articleId + "/" + localImageName;
+        if(localImageName == null) return null;
+        String localImagePath = articleCachePath + localImageName;
         Log.d(TAG, "getCacheImagePath: localImagePath=" + localImagePath);
         return localImagePath;
     }
 
-    public static boolean doesImageCacheDirExistElseCreate(Long articleId) {
-        String articleImageCacheDirName = getExternalStoragePath() + "/" + IMAGE_CACHE_DIR + "/" + articleId.toString();
-        Log.d(TAG, "doesImageCacheDirExistElseCreate: articleImageCacheDirName=" + articleImageCacheDirName);
-        File f = new File(articleImageCacheDirName);
-        if (f.exists() && f.isDirectory()) {
-            Log.d(TAG, "doesImageCacheDirExistElseCreate: image cache dir for articleId=" + articleId + " already exists");
+    public static String getCacheImageName(String imageURL) {
+        Log.d(TAG, "getCacheImageName: imageURL=" + imageURL);
+        int fileExt = imageURL.lastIndexOf(".");
+
+        if(fileExt < 0) {
+            Log.d(TAG, "getCacheImageName: no valid file extension found, returning null");
+            return null;
+        }
+        String fileExtName = imageURL.substring(fileExt);
+        if(fileExtName.contains("/") || fileExtName.length() > MAXIMUM_FILE_EXT_LENGTH) {
+            Log.d(TAG, "getCacheImageName: suspicious file extension in image URL " + imageURL
+                    + ", returning null");
+            return null;
+        }
+
+        String localImageName = ImageCacheUtils.md5(imageURL) + fileExtName;
+        Log.d(TAG, "getCacheImageName: localImageName=" + localImageName + " for URL " + imageURL);
+        return localImageName;
+    }
+
+    public static boolean createArticleCacheDir(String articleCacheDir) {
+        Log.d(TAG, "createArticleCacheDir: articleImageCacheDirName=" + articleCacheDir);
+        File f = new File(articleCacheDir);
+        if(f.exists() && f.isDirectory()) {
+            Log.d(TAG, "createArticleCacheDir: image cache dir already exists");
             return true;
         } else {
-            boolean isDirCreated = new File(articleImageCacheDirName).mkdirs();
-            Log.d(TAG, "doesImageCacheDirExistElseCreate: isDirCreated=" + isDirCreated);
+            boolean isDirCreated = new File(articleCacheDir).mkdirs();
+            Log.d(TAG, "createArticleCacheDir: isDirCreated=" + isDirCreated);
             return isDirCreated;
         }
     }
 
-    public static void downloadImageToCache(String imageURL, String destination, Long articleId) {
+    public static void downloadImageToCache(String imageURL, String destination, long articleId) {
         Log.d(TAG, "downloadImageToCache: imageURL=" + imageURL + " destination=" + destination);
 
         File dest = new File(destination);
-        if (dest.exists()) {
+        if(dest.exists()) {
             Log.d(TAG, "downloadImageToCache: file already exists, skipping");
             return;
         }
 
-        doesImageCacheDirExistElseCreate(articleId);
-
-        if (okHttpClient == null) {
-            okHttpClient = new OkHttpClient();
+        if(okHttpClient == null) {
+            okHttpClient = WallabagConnection.createClient(false);
         }
+
         Request request = new Request.Builder().url(imageURL).build();
-        Response response = null;
+        Response response;
         try {
             response = okHttpClient.newCall(request).execute();
-        } catch (IOException e) {
-            Log.d(TAG, "IOException while requesting imageURL=" + imageURL + " in articleID=" + articleId);
-            e.printStackTrace();
+        } catch(IOException e) {
+            Log.d(TAG, "IOException while requesting imageURL=" + imageURL
+                    + " in articleID=" + articleId, e);
+            return;
         }
 
         File downloadFile = new File(destination);
+
+        BufferedSource source = response.body().source();
         BufferedSink sink = null;
         try {
             sink = Okio.buffer(Okio.sink(downloadFile));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            sink.writeAll(source);
+        } catch(FileNotFoundException e) {
+            Log.d(TAG, "downloadImageToCache: FileNotFoundException", e);
             return;
-        }
-        try {
-            if (response == null) {
-                sink.close();
-                return;
-            } else {
-                sink.writeAll(response.body().source());
-                sink.close();
-                response.close();
+        } catch(IOException e) {
+            Log.d(TAG, "downloadImageToCache: IOException while downloading imageURL=" + imageURL
+                    + " in articleID=" + articleId, e);
+        } finally {
+            if(sink != null) {
+                try {
+                    sink.close();
+                } catch(IOException e) {
+                    Log.w(TAG, "downloadImageToCache: IOException while closing sink", e);
+                }
             }
-        } catch (IOException e) {
-            Log.d(TAG, "IOException while downloading imageURL=" + imageURL + " in articleID=" + articleId);
-            e.printStackTrace();
+            if(source != null) {
+                try {
+                    source.close();
+                } catch(IOException ignored) {}
+            }
         }
-        Log.d(TAG, "downloadImageToCache: function finished for imageURL=" + imageURL + " destination=" + destination);
+
+        Log.d(TAG, "downloadImageToCache: function finished for imageURL=" + imageURL
+                + " destination=" + destination);
     }
 
     public static String getExternalStoragePath() {
-        if (externalStoragePath == null) {
+        if(externalStoragePath == null) {
             String returnPath = null;
             File[] extStorage = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            if (extStorage == null) {
+            if(extStorage == null) {
                 Log.w(TAG, "onCreate: getExternalFilesDirs() returned null or is not readable");
             } else {
-                for (int i = 0; i < extStorage.length; i++) {
-                    Log.d(TAG, "getExternalStoragePath: extStorage[i].getPath()=" + extStorage[i].getPath());
-                    returnPath = extStorage[i].getPath(); // TODO uses the last path in the array, which is USUALLY the sd card
+                // TODO: better SD Card detection
+                for(File extStorageDir: extStorage) {
+                    Log.d(TAG, "getExternalStoragePath: extStorageDir.getPath()="
+                            + extStorageDir.getPath());
+                    returnPath = extStorageDir.getPath();
                 }
             }
             Log.d(TAG, "getExternalStoragePath: returnPath=" + returnPath);
-            externalStoragePath = returnPath;
-            return returnPath;
-        } else {
-            return externalStoragePath;
+            return externalStoragePath = returnPath;
         }
+
+        return externalStoragePath;
     }
 
     public static boolean isExternalStorageReadable() {
-        if(externalStoragePath==null) {
-            getExternalStoragePath();
-        }
-        // now, if it is still null, return false
+        String externalStoragePath = getExternalStoragePath();
         if(externalStoragePath == null) return false;
 
         File f = new File(externalStoragePath);
-        return f != null && f.exists() && f.canRead();
+        return f.exists() && f.canRead();
     }
 
     public static boolean isExternalStorageWritable() {
-        if(externalStoragePath==null) {
-            getExternalStoragePath();
-        }
-        // now, if it is still null, return false
+        String externalStoragePath = getExternalStoragePath();
         if(externalStoragePath == null) return false;
 
         File f = new File(externalStoragePath);
-        return f != null && f.exists() && f.canWrite();
+        return f.exists() && f.canWrite();
     }
 
     /**
@@ -213,10 +285,11 @@ public class ImageCacheUtils {
             BigInteger bi = new BigInteger(1, magnitude);
             String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
             return hash;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+        } catch(NoSuchAlgorithmException e) {
+            Log.e(TAG, "md5() NoSuchAlgorithmException", e);
         }
         Log.w(TAG, "md5: failed to calc md5 for " + s + ", returning empty string");
         return "";
     }
+
 }

@@ -41,7 +41,6 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -147,47 +146,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         settings = App.getInstance().getSettings();
 
-        Log.d(TAG, "onCreate: isImageCacheEnabled=" + settings.isImageCacheEnabled());
         if(settings.isImageCacheEnabled()) {
-            String newHTMLcontent = htmlContent;
-
-            String extStorage = ImageCacheUtils.getExternalStoragePath();
-            if(extStorage == null) {
-                Log.w(TAG, "onCreate: did not find extStorage path");
-            }
-            else {
-                Log.d(TAG, "onCreate: looking up local cached images in folder and replacing them in htmlContent");
-                List<String> imageURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
-                Log.d(TAG, "onCreate: imageURLs=" + imageURLs);
-
-                for (int i = 0; i < imageURLs.size(); i++) {
-                    String imageURL = imageURLs.get(i);
-                    // localImageName = hash + file extension
-                    String localImagePath = ImageCacheUtils.getCacheImagePath(extStorage, mArticle.getArticleId().longValue(), imageURL);
-                    if (localImagePath == null){
-                        continue;
-                    }
-                    File image = new File(localImagePath);
-                    if(image != null && image.exists() && image.canRead()) {
-                        Log.d(TAG, "onCreate: replacing image " + imageURL + " -> " + localImagePath);
-                        newHTMLcontent = ImageCacheUtils.replaceImageWithCachedVersion(newHTMLcontent, imageURL, localImagePath);
-                    }
-                    else {
-                        Log.d(TAG, "onCreate: no cached version of " + imageURL + " found at path " + localImagePath);
-                    }
-                }
-                if(htmlContent.equals(newHTMLcontent)) {
-                    Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced to cache");
-                } else {
-                    Log.d(TAG, "onCreate: newHTMLcontent before removing responsive image params:\n" + newHTMLcontent);
-                    newHTMLcontent = newHTMLcontent.replaceAll("srcset=\".*\"", "");
-                    newHTMLcontent = newHTMLcontent.replaceAll("sizes=\".*\"", "");
-                    newHTMLcontent = newHTMLcontent.replaceAll("data-zoom-src=\".*\"", "");
-                    htmlContent = newHTMLcontent;
-                    Log.d(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
-                }
-            }
-        } // else nothing to do, because image links to the web in the html content are user's wish
+            Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
+            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
+                    htmlContent, mArticle.getArticleId().longValue());
+        }
 
         acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
