@@ -43,17 +43,6 @@
                     android:text="@string/connectionWizard_providerSelection_provider_wallabagit_desc" />
 
                 <RadioButton
-                    android:id="@+id/providerFramabag"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/connectionWizard_providerSelection_provider_framabag_name"
-                    android:checked="false" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/connectionWizard_providerSelection_provider_framabag_desc" />
-
-                <RadioButton
                     android:id="@+id/providerOther"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

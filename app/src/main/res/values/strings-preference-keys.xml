@@ -5,18 +5,14 @@
     <string name="pref_key_connection" translatable="false">connection</string>
     <string name="pref_key_connection_category" translatable="false">connection.category</string>
     <string name="pref_key_connection_url" translatable="false">connection.url</string>
-    <string name="pref_key_connection_serverVersion" translatable="false">connection.serverVersion</string>
     <string name="pref_key_connection_username" translatable="false">connection.username</string>
     <string name="pref_key_connection_password" translatable="false">connection.password</string>
     <string name="pref_key_connection_api_clientID" translatable="false">connection.api.clientID</string>
     <string name="pref_key_connection_api_clientSecret" translatable="false">connection.api.clientSecret</string>
     <string name="pref_key_connection_api_refreshToken" translatable="false">connection.api.refreshToken</string>
     <string name="pref_key_connection_api_accessToken" translatable="false">connection.api.accessToken</string>
-    <string name="pref_key_connection_feedsUserID" translatable="false">connection.feedsUserID</string>
-    <string name="pref_key_connection_feedsToken" translatable="false">connection.feedsToken</string>
     <string name="pref_key_connection_advanced" translatable="false">connection.advanced</string>
     <string name="pref_key_connection_advanced_category" translatable="false">connection.advanced.category</string>
-    <string name="pref_key_connection_advanced_acceptAllCertificates" translatable="false">connection.advanced.acceptAllCertificates</string>
     <string name="pref_key_connection_advanced_customSSLSettings" translatable="false">connection.advanced.customSSLSettings</string>
     <string name="pref_key_connection_advanced_httpAuth_category" translatable="false">connection.advanced.httpAuth.category</string>
     <string name="pref_key_connection_advanced_httpAuthUsername" translatable="false">connection.advanced.httpAuthUsername</string>
@@ -66,5 +62,4 @@
 
     <string name="pref_key_connection_wizard" translatable="false">connection.wizard</string>
     <string name="pref_key_connection_autofill" translatable="false">connection.autofill</string>
-    <string name="pref_key_connection_advanced_clearCookies" translatable="false">connection.advanced.clearCookies</string>
 </resources>

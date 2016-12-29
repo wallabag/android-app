@@ -18,10 +18,10 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.ClientCredentials;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
-import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
@@ -51,17 +51,14 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         private static final int[] SUMMARIES_TO_INITIATE = {
                 R.string.pref_key_connection_url,
+                R.string.pref_key_connection_advanced_httpAuthUsername,
+                R.string.pref_key_connection_advanced_httpAuthPassword,
                 R.string.pref_key_connection_username,
                 R.string.pref_key_connection_password,
                 R.string.pref_key_connection_api_clientID,
                 R.string.pref_key_connection_api_clientSecret,
-                R.string.pref_key_connection_api_refreshToken,
-                R.string.pref_key_connection_api_accessToken,
-                R.string.pref_key_connection_serverVersion,
-                R.string.pref_key_connection_feedsUserID,
-                R.string.pref_key_connection_feedsToken,
-                R.string.pref_key_connection_advanced_httpAuthUsername,
-                R.string.pref_key_connection_advanced_httpAuthPassword,
+                R.string.pref_key_connection_api_refreshToken, // TODO: remove: debug
+                R.string.pref_key_connection_api_accessToken, // TODO: remove: debug
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
@@ -80,12 +77,12 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         private boolean checkUserChanged;
         private String oldUrl;
-        private String oldUsername;
         private String oldHttpAuthUsername;
-        private String oldFeedsUserID;
+        private String oldUsername;
+        private String oldApiClientID;
 
         private boolean invalidateConfiguration;
-        private boolean httpClientReinitializationNeeded;
+        private boolean serviceWrapperReinitializationNeeded;
 
         private boolean imageCachingChanged;
         private boolean oldImageCacheEnabled;
@@ -104,7 +101,6 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
-            setOnClickListener(R.string.pref_key_connection_advanced_clearCookies);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
@@ -193,9 +189,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             checkUserChanged = false;
             oldUrl = settings.getUrl();
-            oldUsername = settings.getUsername();
             oldHttpAuthUsername = settings.getHttpAuthUsername();
-            oldFeedsUserID = settings.getFeedsUserID();
+            oldUsername = settings.getUsername();
+            oldApiClientID = settings.getApiClientID();
 
             imageCachingChanged = false;
             oldImageCacheEnabled = settings.isImageCacheEnabled();
@@ -242,24 +238,20 @@ public class SettingsActivity extends BaseActionBarActivity {
             if(checkUserChanged) {
                 checkUserChanged = false;
 
-                boolean clearSession = false;
-                boolean wipeDB = false;
+                boolean userChanged = false;
                 if(!TextUtils.equals(settings.getUrl(), oldUrl)
-                        || !TextUtils.equals(settings.getUsername(), oldUsername)) {
-                    clearSession = true;
-                    wipeDB = true;
+                        || !TextUtils.equals(settings.getUsername(), oldUsername)
+                        || !TextUtils.equals(settings.getApiClientID(), oldApiClientID)) {
+                    userChanged = true;
                 } else if(!TextUtils.equals(settings.getHttpAuthUsername(), oldHttpAuthUsername)
                         && (settings.getUsername() == null || settings.getUsername().isEmpty())) {
-                    clearSession = true;
-                    wipeDB = true;
-                } else if(!TextUtils.equals(settings.getFeedsUserID(), oldFeedsUserID)) {
-                    wipeDB = true;
+                    userChanged = true;
                 }
 
-                if(clearSession) {
-                    WallabagConnection.clearCookies(getActivity());
-                }
-                if(wipeDB) {
+                if(userChanged) {
+                    settings.setApiRefreshToken("");
+                    settings.setApiAccessToken("");
+
                     OperationsHelper.wipeDB(settings);
                 }
             }
@@ -271,11 +263,10 @@ public class SettingsActivity extends BaseActionBarActivity {
                 settings.setConfigurationOk(false);
             }
 
-            if(httpClientReinitializationNeeded) {
-                httpClientReinitializationNeeded = false;
+            if(serviceWrapperReinitializationNeeded) {
+                serviceWrapperReinitializationNeeded = false;
 
-                Log.i(TAG, "applyChanges() calling WallabagConnection.replaceClient()");
-                WallabagConnection.replaceClient();
+                Log.i(TAG, "applyChanges() calling WallabagServiceWrapper.resetInstance()");
                 WallabagServiceWrapper.resetInstance();
             }
 
@@ -324,20 +315,16 @@ public class SettingsActivity extends BaseActionBarActivity {
                     autoSyncQueueChanged = true;
                     break;
 
-                case R.string.pref_key_connection_advanced_acceptAllCertificates:
                 case R.string.pref_key_connection_advanced_customSSLSettings:
-                case R.string.pref_key_connection_api_clientID:
-                case R.string.pref_key_connection_api_clientSecret:
-                    Log.d(TAG, "onSharedPreferenceChanged() httpClientReinitializationNeeded");
-                    httpClientReinitializationNeeded = true;
                 case R.string.pref_key_connection_url:
-                case R.string.pref_key_connection_username:
-                case R.string.pref_key_connection_password:
-                case R.string.pref_key_connection_serverVersion:
+                    Log.d(TAG, "onSharedPreferenceChanged() serviceWrapperReinitializationNeeded");
+                    serviceWrapperReinitializationNeeded = true;
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
-                case R.string.pref_key_connection_feedsUserID:
-                case R.string.pref_key_connection_feedsToken:
+                case R.string.pref_key_connection_username:
+                case R.string.pref_key_connection_password:
+                case R.string.pref_key_connection_api_clientID:
+                case R.string.pref_key_connection_api_clientSecret:
                     Log.i(TAG, "onSharedPreferenceChanged() invalidateConfiguration");
                     invalidateConfiguration = true;
                     break;
@@ -349,9 +336,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             switch(keyResID) {
                 case R.string.pref_key_connection_url:
-                case R.string.pref_key_connection_username:
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
-                case R.string.pref_key_connection_feedsUserID:
+                case R.string.pref_key_connection_username:
+                case R.string.pref_key_connection_api_clientID:
                     checkUserChanged = true;
                     break;
             }
@@ -384,20 +371,8 @@ public class SettingsActivity extends BaseActionBarActivity {
                 }
                 case R.string.pref_key_connection_autofill: {
                     configurationTestHelper = new ConfigurationTestHelper(
-                            getActivity(), this, this, settings, true, false);
+                            getActivity(), this, this, settings, false);
                     configurationTestHelper.test();
-
-                    return true;
-                }
-                case R.string.pref_key_connection_advanced_clearCookies: {
-                    Activity activity = getActivity();
-                    if(activity != null) {
-                        WallabagConnection.clearCookies(getActivity());
-
-                        Toast.makeText(activity,
-                                R.string.pref_toast_connection_advanced_clearCookies,
-                                Toast.LENGTH_SHORT).show();
-                    }
 
                     return true;
                 }
@@ -424,28 +399,22 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public void onGetCredentialsResult(String feedsUserID, String feedsToken) {
-            setTextPreference(R.string.pref_key_connection_feedsUserID, feedsUserID);
-            setTextPreference(R.string.pref_key_connection_feedsToken, feedsToken);
+        public void onGetCredentialsResult(ClientCredentials clientCredentials) {
+            setTextPreference(R.string.pref_key_connection_api_clientID,
+                    clientCredentials.clientID);
+            setTextPreference(R.string.pref_key_connection_api_clientSecret,
+                    clientCredentials.clientSecret);
         }
 
         @Override
         public void onGetCredentialsFail() {}
 
         @Override
-        public void onConfigurationTestSuccess(String url, Integer serverVersion) {
-            Log.d(TAG, String.format("onConfigurationTestSuccess(%s, %s)", url, serverVersion));
+        public void onConfigurationTestSuccess(String url) {
+            Log.d(TAG, String.format("onConfigurationTestSuccess(%s)", url));
 
             if(url != null) {
                 setTextPreference(R.string.pref_key_connection_url, url);
-            }
-            if(serverVersion != null) {
-                ListPreference serverVersionPreference = (ListPreference)findPreference(
-                        getString(R.string.pref_key_connection_serverVersion));
-
-                if(serverVersionPreference != null) {
-                    serverVersionPreference.setValue(String.valueOf(serverVersion));
-                }
             }
 
             settings.setConfigurationOk(true);
@@ -458,11 +427,11 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public void onConnectionTestFail(WallabagServiceEndpoint.ConnectionTestResult result,
+        public void onConnectionTestFail(WallabagWebService.ConnectionTestResult result,
                                          String details) {}
 
         @Override
-        public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
+        public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {}
 
         private void setOnClickListener(int keyResID) {
             Preference preference = findPreference(getString(keyResID));
@@ -496,17 +465,12 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 case R.string.pref_key_connection_username:
                 case R.string.pref_key_connection_api_clientID:
-                case R.string.pref_key_connection_api_clientSecret:
-                case R.string.pref_key_connection_api_refreshToken:
-                case R.string.pref_key_connection_api_accessToken:
-                case R.string.pref_key_connection_feedsUserID:
                 case R.string.pref_key_connection_advanced_httpAuthUsername:
                 case R.string.pref_key_ui_article_fontSize:
                 case R.string.pref_key_ui_screenScrolling_percent:
                     setEditTextSummaryFromContent(key);
                     break;
 
-                case R.string.pref_key_connection_serverVersion:
                 case R.string.pref_key_ui_theme:
                 case R.string.pref_key_autoSync_interval:
                 case R.string.pref_key_autoSync_type:
@@ -514,7 +478,9 @@ public class SettingsActivity extends BaseActionBarActivity {
                     break;
 
                 case R.string.pref_key_connection_password:
-                case R.string.pref_key_connection_feedsToken:
+                case R.string.pref_key_connection_api_clientSecret:
+                case R.string.pref_key_connection_api_refreshToken: // TODO: remove: debug
+                case R.string.pref_key_connection_api_accessToken: // TODO: remove: debug
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                     setPasswordSummary(key);
                     break;

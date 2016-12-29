@@ -56,7 +56,6 @@
     <string name="settings_parametersAutofilled">Parámetros rellenados</string>
     <string name="testConnection_progressDialogMessage">Probando conexión…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorrecta</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Versión del servidor seleccionada incorrecta</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Servicio de wallabag no encontrado — revisa la URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticación por HTTP fallida</string>
     <string name="testConnection_errorMessage_noCSRF">Error al parsear el formulario de login</string>
@@ -72,15 +71,6 @@
     <string name="d_testConnection_urlSuggestion_message">Se recomienda cambiar la URL a: "%s". Pero también puedes usar la que escribiste.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Se recomienda cambiar la URL a: "%s"</string>
     <string name="d_testConnection_fail_title">Prueba de conexión fallida</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Preparando fuentes…</string>
-    <string name="d_getFeedsCredentials_title_fail">No se pudieron configurar las fuentes</string>
-    <string name="d_getFeedsCredentials_title_message">Algo salió mal. Verifica tu conexión a Internet e inténtalo de nuevo.</string>
-    <string name="checkFeeds_progressDialogMessage">Revisando fuentes…</string>
-    <string name="d_checkFeeds_title_fail">Revisión de fuentes fallida</string>
-    <string name="d_checkFeeds_errorMessage_notFound">Fuentes no encontradas</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">No se pudo acceder a las fuentes</string>
-    <string name="d_checkFeeds_errorMessage_unknown">Error desconocido</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña incorrecta</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
     <string name="update_allFeeds">Actualizar todas las fuentes</string>
@@ -140,31 +130,14 @@
     <string name="pref_name_connection_password">Contraseña</string>
     <string name="pref_name_connection_autofill">Autorellenar</string>
     <string name="pref_desc_connection_autofill">Probar conexión y rellenar versión del servidor, ID de usuario y Token</string>
-    <string name="pref_name_connection_serverVersion">Versión del servidor de wallabag</string>
-    <string-array name="pref_option_connection_serverVersion">
-        <item>v1.9</item>
-        <item>v2</item>
-    </string-array>
-    <string-array name="pref_option_connection_serverVersion_values">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string name="pref_name_connection_feedsUserID">ID de usuario</string>
-    <string name="pref_name_connection_feedsToken">Token</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Aceptar todos los certificados SSL</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">Puede necesitar un reinicio; inseguro; considera importar certificados autofirmados al sistema.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizadas</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Desactiva SSL en todos los dispositivos, activa TLS 1.1 y TLS 1.2 en Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Autenticación básica HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes qué es, déjalo vacío</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Usuario HTTP</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Contraseña HTTP</string>
-
-    <string name="pref_name_connection_advanced_clearCookies">Limpiar cookies</string>
-    <string name="pref_desc_connection_advanced_clearCookies">Reinicia la sesión configurada (si la hay)</string>
-    <string name="pref_toast_connection_advanced_clearCookies">Cookies limpiadas</string>
 
     <string name="pref_categoryName_ui">Interfaz</string>
     <string name="pref_name_ui_theme">Tema de la aplicación</string>
@@ -223,7 +196,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir los ajustes requeridos manualmente</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecciona esta opción si tienes una cuenta en https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecciona esta opción si tienes una cuenta en https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Saltar</string>
     <string name="connectionWizard_providerSelection_next">Siguiente</string>
 
@@ -234,10 +206,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">Configuración de wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Volver</string>
     <string name="connectionWizard_provider_wallabagit_next">Conectar</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Configuración de Framabag</string>
-    <string name="connectionWizard_provider_framabag_prev">Volver</string>
-    <string name="connectionWizard_provider_framabag_next">Conectar</string>
 
     <string name="connectionWizard_summary_titleMessage">¡Todo listo!</string>
     <string name="connectionWizard_summary_text">Presiona el botón para guardar los ajustes e ir a la pantalla principal.</string>

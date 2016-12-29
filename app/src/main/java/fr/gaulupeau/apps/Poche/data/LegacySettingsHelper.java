@@ -11,9 +11,6 @@ class LegacySettingsHelper {
     static final String PREFS_NAME = "InThePoche";
 
     static final String URL = "pocheUrl";
-    static final String USER_ID = "APIUsername";
-    static final String TOKEN = "APIToken";
-    static final String ALL_CERTS = "all_certs";
     static final String CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
     static final String FONT_SIZE = "font_size";
     static final String SERIF_FONT = "serif_font";
@@ -22,7 +19,6 @@ class LegacySettingsHelper {
     static final String HTTP_AUTH_USERNAME = "http_auth_username";
     static final String HTTP_AUTH_PASSWORD = "http_auth_password";
     static final String THEME = "theme";
-    static final String WALLABAG_VERSION = "wallabag_version";
     static final String TTS_VISIBLE = "tts.visible";
     static final String TTS_OPTIONS_VISIBLE = "tts.options.visible";
     static final String TTS_SPEED = "tts.speed";
@@ -49,20 +45,14 @@ class LegacySettingsHelper {
 
         SharedPreferences.Editor prefEditor = pref.edit();
         migrateStringPref(cx, URL, R.string.pref_key_connection_url, legacyPref, prefEditor);
-        migrateIntPref(cx, WALLABAG_VERSION,
-                R.string.pref_key_connection_serverVersion, legacyPref, prefEditor, -1);
         migrateStringPref(cx, USERNAME, R.string.pref_key_connection_username, legacyPref, prefEditor);
         migrateStringPref(cx, PASSWORD, R.string.pref_key_connection_password, legacyPref, prefEditor);
-        migrateStringPref(cx, USER_ID, R.string.pref_key_connection_feedsUserID, legacyPref, prefEditor);
-        migrateStringPref(cx, TOKEN, R.string.pref_key_connection_feedsToken, legacyPref, prefEditor);
 
         migrateStringPref(cx, HTTP_AUTH_USERNAME,
                 R.string.pref_key_connection_advanced_httpAuthUsername, legacyPref, prefEditor);
         migrateStringPref(cx, HTTP_AUTH_PASSWORD,
                 R.string.pref_key_connection_advanced_httpAuthPassword, legacyPref, prefEditor);
 
-        migrateBooleanPref(cx, ALL_CERTS,
-                R.string.pref_key_connection_advanced_acceptAllCertificates, legacyPref, prefEditor);
         migrateBooleanPref(cx, CUSTOM_SSL_SETTINGS,
                 R.string.pref_key_connection_advanced_customSSLSettings, legacyPref, prefEditor);
 

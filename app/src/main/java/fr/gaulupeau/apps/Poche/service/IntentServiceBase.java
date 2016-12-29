@@ -11,7 +11,7 @@ import java.io.IOException;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
@@ -22,7 +22,7 @@ public abstract class IntentServiceBase extends IntentService {
     private Settings settings;
 
     private DaoSession daoSession;
-    private WallabagService wallabagService;
+    private WallabagWebService wallabagWebService;
 
     public IntentServiceBase(String name) {
         super(name);
@@ -89,13 +89,13 @@ public abstract class IntentServiceBase extends IntentService {
         return daoSession;
     }
 
-    protected WallabagService getWallabagService() {
-        if(wallabagService == null) {
+    protected WallabagWebService getWallabagWebService() {
+        if(wallabagWebService == null) {
             Settings settings = getSettings();
-            wallabagService = WallabagService.fromSettings(settings);
+            wallabagWebService = WallabagWebService.fromSettings(settings);
         }
 
-        return wallabagService;
+        return wallabagWebService;
     }
 
     protected WallabagServiceWrapper getWallabagServiceWrapper()

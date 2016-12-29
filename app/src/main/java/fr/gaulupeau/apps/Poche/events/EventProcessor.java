@@ -430,7 +430,7 @@ public class EventProcessor {
                     }
 
                     case NOT_FOUND:
-                        Log.w(TAG, "onActionResultEvent() got a NotFound");
+                        Log.w(TAG, "onActionResultEvent() got a NOT_FOUND");
                         break;
 
                     case NEGATIVE_RESPONSE:

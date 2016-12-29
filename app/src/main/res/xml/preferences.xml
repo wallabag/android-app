@@ -31,6 +31,11 @@
                 android:title="@string/pref_name_connection_password"
                 android:inputType="textPassword"
                 android:defaultValue=""/>
+            <Preference
+                android:key="@string/pref_key_connection_autofill"
+                android:title="@string/pref_name_connection_autofill"
+                android:summary="@string/pref_desc_connection_autofill"
+                android:persistent="false"/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_api_clientID"
                 android:title="@string/pref_name_connection_api_clientID"
@@ -39,6 +44,7 @@
                 android:key="@string/pref_key_connection_api_clientSecret"
                 android:title="@string/pref_name_connection_api_clientSecret"
                 android:defaultValue=""/>
+            <!-- TODO: remove: debug -->
             <EditTextPreference
                 android:key="@string/pref_key_connection_api_refreshToken"
                 android:title="Refresh token"
@@ -46,26 +52,6 @@
             <EditTextPreference
                 android:key="@string/pref_key_connection_api_accessToken"
                 android:title="Access token"
-                android:defaultValue=""/>
-            <Preference
-                android:key="@string/pref_key_connection_autofill"
-                android:title="@string/pref_name_connection_autofill"
-                android:summary="@string/pref_desc_connection_autofill"
-                android:persistent="false"/>
-            <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
-                android:key="@string/pref_key_connection_serverVersion"
-                android:title="@string/pref_name_connection_serverVersion"
-                android:dialogTitle="@string/pref_name_connection_serverVersion"
-                android:entries="@array/pref_option_connection_serverVersion"
-                android:entryValues="@array/pref_option_connection_serverVersion_values"
-                android:defaultValue="-1"/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_feedsUserID"
-                android:title="@string/pref_name_connection_feedsUserID"
-                android:defaultValue=""/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_feedsToken"
-                android:title="@string/pref_name_connection_feedsToken"
                 android:defaultValue=""/>
         </PreferenceCategory>
         <PreferenceScreen
@@ -77,20 +63,10 @@
                 android:title="@string/pref_categoryName_connection_advanced"
                 android:persistent="false">
                 <CheckBoxPreference
-                    android:key="@string/pref_key_connection_advanced_acceptAllCertificates"
-                    android:title="@string/pref_name_connection_advanced_acceptAllCertificates"
-                    android:summary="@string/pref_desc_connection_advanced_acceptAllCertificates"
-                    android:defaultValue="false"/>
-                <CheckBoxPreference
                     android:key="@string/pref_key_connection_advanced_customSSLSettings"
                     android:title="@string/pref_name_connection_advanced_customSSLSettings"
                     android:summary="@string/pref_desc_connection_advanced_customSSLSettings"
                     android:defaultValue="false"/>
-                <Preference
-                    android:key="@string/pref_key_connection_advanced_clearCookies"
-                    android:title="@string/pref_name_connection_advanced_clearCookies"
-                    android:summary="@string/pref_desc_connection_advanced_clearCookies"
-                    android:persistent="false"/>
             </PreferenceCategory>
             <PreferenceCategory
                 android:key="@string/pref_key_connection_advanced_httpAuth_category"

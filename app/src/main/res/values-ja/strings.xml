@@ -56,7 +56,6 @@
     <string name="settings_parametersAutofilled">パラメーターを入力しました</string>
     <string name="testConnection_progressDialogMessage">接続のテスト中…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL が正しくありません</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">選択されたサーバー バージョンが正しくありません</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag サービスが見つかりません - URL を確認してください</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP 認証に失敗しました</string>
     <string name="testConnection_errorMessage_noCSRF">ログイン フォーム解析エラー</string>
@@ -72,15 +71,6 @@
     <string name="d_testConnection_urlSuggestion_message">URL を変更することをお勧めします: %s。入力したものを使用することもできます。</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">URL を変更することをお勧めします: %s</string>
     <string name="d_testConnection_fail_title">接続テストに失敗しました</string>
-    <string name="getFeedsCredentials_progressDialogMessage">フィードの設定中…</string>
-    <string name="d_getFeedsCredentials_title_fail">フィードを設定できませんでした</string>
-    <string name="d_getFeedsCredentials_title_message">何か問題があります。インターネット接続を確認して、もう一度やり直してください。</string>
-    <string name="checkFeeds_progressDialogMessage">フィードを確認中…</string>
-    <string name="d_checkFeeds_title_fail">フィードのテストに失敗しました</string>
-    <string name="d_checkFeeds_errorMessage_notFound">フィードが見つかりません</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">フィードにアクセスできません</string>
-    <string name="d_checkFeeds_errorMessage_unknown">不明なエラー</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">原因不明のエラー: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
     <string name="unsuccessfulRequest_errorMessage">要求が失敗しました。レスポンスコード: %1$d、レスポンスメッセージ: %2$s</string>
     <string name="update_allFeeds">すべてのフィードを更新</string>
@@ -143,23 +133,14 @@
     <string name="pref_name_connection_password">パスワード</string>
     <string name="pref_name_connection_autofill">オートフィル</string>
     <string name="pref_desc_connection_autofill">接続をテストして、サーバーのバージョン、ユーザー ID、トークンを入力します</string>
-    <string name="pref_name_connection_serverVersion">wallabag サーバーのバージョン</string>
-    <string name="pref_name_connection_feedsUserID">ユーザー ID</string>
-    <string name="pref_name_connection_feedsToken">トークン</string>
 
     <string name="pref_categoryName_connection_advanced">高度な接続設定</string>
-    <string name="pref_name_connection_advanced_acceptAllCertificates">すべての SSL 証明書を受け入れる</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">再起動が必要な場合があります。安全ではありません。自己署名証明書をシステムにインポートすることを検討してください。</string>
     <string name="pref_name_connection_advanced_customSSLSettings">カスタム SSL 設定</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">すべてのデバイスで、SSL を無効にし、Android 4.1–4.4 では TLS 1.1 および TLS 1.2 を有効にします</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP ベーシック認証</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">何かわからない場合は、空のままにしてください</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 認証ユーザー名</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 認証パスワード</string>
-
-    <string name="pref_name_connection_advanced_clearCookies">クッキーをクリア</string>
-    <string name="pref_desc_connection_advanced_clearCookies">確立されたログイン セッションをリセットします (もしあれば)</string>
-    <string name="pref_toast_connection_advanced_clearCookies">クッキーをクリアしました</string>
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">アプリケーション テーマ</string>
@@ -210,7 +191,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">その他</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">このオプションを選択すると、必要な設定を手動で入力します</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択します</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択します</string>
     <string name="connectionWizard_providerSelection_prev">スキップ</string>
     <string name="connectionWizard_providerSelection_next">次へ</string>
 
@@ -221,10 +201,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it の構成</string>
     <string name="connectionWizard_provider_wallabagit_prev">戻る</string>
     <string name="connectionWizard_provider_wallabagit_next">接続</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag の構成</string>
-    <string name="connectionWizard_provider_framabag_prev">戻る</string>
-    <string name="connectionWizard_provider_framabag_next">接続</string>
 
     <string name="connectionWizard_summary_titleMessage">すべて完了しました!</string>
     <string name="connectionWizard_summary_text">ボタンを押すと、設定を保存し、メイン画面に移動します。</string>

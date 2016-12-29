@@ -56,7 +56,7 @@
     <string name="settings_parametersAutofilled">Parameters filled</string>
     <string name="testConnection_progressDialogMessage">Testing connection…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Incorrect URL</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Incorrect server version selected</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Unsupported server version detected</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag service not found — check URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP Authentication failed</string>
     <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
@@ -72,15 +72,17 @@
     <string name="d_testConnection_urlSuggestion_message">It is recommended to change URL to: "%s". But you may use the entered one too.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">It is suggested to change URL to: "%s"</string>
     <string name="d_testConnection_fail_title">Connection test failed</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Setting up feeds…</string>
-    <string name="d_getFeedsCredentials_title_fail">Couldn\'t set up feeds</string>
-    <string name="d_getFeedsCredentials_title_message">Something went wrong. Check your internet connection and try again.</string>
-    <string name="checkFeeds_progressDialogMessage">Checking feeds…</string>
-    <string name="d_checkFeeds_title_fail">Feeds test failed</string>
-    <string name="d_checkFeeds_errorMessage_notFound">Feeds not found</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">No access to feeds</string>
-    <string name="d_checkFeeds_errorMessage_unknown">Unknown error</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Unknown error: %s</string>
+    <string name="getCredentials_progressDialogMessage">Getting API credentials…</string>
+    <string name="d_getCredentials_title_fail">Couldn\'t get API credentials</string>
+    <string name="d_getCredentials_title_message">Something went wrong. Check your internet connection and try again.</string>
+    <string name="checkCredentials_progressDialogMessage">Testing API access…</string>
+    <string name="d_checkCredentials_title_fail">API access test failed</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API not found</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API not found: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">No access to API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">No access to API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Unknown error</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Unknown error: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t login: probably wrong username or password</string>
     <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
     <string name="update_allFeeds">Update all feeds</string>
@@ -142,31 +144,14 @@
     <string name="pref_name_connection_api_clientSecret">Client secret</string>
     <string name="pref_name_connection_autofill">Autofill</string>
     <string name="pref_desc_connection_autofill">Test connection and fill in server version, user ID, and Token</string>
-    <string name="pref_name_connection_serverVersion">wallabag server version</string>
-    <string-array name="pref_option_connection_serverVersion">
-        <item>v1.9</item>
-        <item>v2</item>
-    </string-array>
-    <string-array name="pref_option_connection_serverVersion_values">
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string name="pref_name_connection_feedsUserID">User ID</string>
-    <string name="pref_name_connection_feedsToken">Token</string>
 
     <string name="pref_categoryName_connection_advanced">Advanced connection settings</string>
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Accept all SSL certificates</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">May require restart; insecure; consider importing self-signed certificates into system.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Disables SSL on all devices, enables TLS 1.1 and TLS 1.2 on Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basic Authentication</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
-
-    <string name="pref_name_connection_advanced_clearCookies">Clear cookies</string>
-    <string name="pref_desc_connection_advanced_clearCookies">Resets the established login session (if any)</string>
-    <string name="pref_toast_connection_advanced_clearCookies">Cookies cleared</string>
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Application theme</string>
@@ -226,8 +211,6 @@
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag.org</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>
 
@@ -238,10 +221,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
     <string name="connectionWizard_provider_wallabagit_prev">Back</string>
     <string name="connectionWizard_provider_wallabagit_next">Connect</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
-    <string name="connectionWizard_provider_framabag_prev">Back</string>
-    <string name="connectionWizard_provider_framabag_next">Connect</string>
 
     <string name="connectionWizard_summary_titleMessage">We\'re all done!</string>
     <string name="connectionWizard_summary_text">Press the button to save settings and go to the main screen.</string>

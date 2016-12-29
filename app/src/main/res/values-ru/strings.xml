@@ -83,11 +83,7 @@
     </string>
     <string name="pref_name_connection_username">Имя пользователя</string>
     <string name="pref_name_connection_password">Пароль</string>
-    <string name="pref_name_connection_feedsUserID">ID пользователя</string>
-    <string name="pref_name_connection_feedsToken">Токен ленты</string>
 
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Принимать все сертификаты SSL</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">Может потребоваться перезапуск; небезопасно; импортируйте самоподписанный сертификат в систему, если это возможно.</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Простая HTTP-аутентификация</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Если вы не знаете, что это, оставьте поля пустыми</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Имя пользователя для HTTP-аутентификации</string>
@@ -109,7 +105,6 @@
     <string name="d_configurationIsQuestionable_message">Недавно была ошибка подключения. Рекомендуется выполнить проверку подключения.</string>
     <string name="settings_parametersAreOk">Параметры в порядке</string>
     <string name="settings_parametersAutofilled">Параметры заполнены</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Выбрана неверная версия сервера</string>
     <string name="testConnection_errorMessage_httpAuth">Ошибка HTTP-аутентификации</string>
     <string name="testConnection_errorMessage_noCSRF">Ошибка разбора формы входа</string>
     <string name="testConnection_errorMessage_authProblems">Проблемы, связанные с авторизацией. Обычно это вызвано HTTP-перенаправлениями.</string>
@@ -120,15 +115,6 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
     <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Настройка лент…</string>
-    <string name="d_getFeedsCredentials_title_fail">Не удалось настроить ленты</string>
-    <string name="d_getFeedsCredentials_title_message">Что-то пошло не так. Проверьте подключение к интернету и повторите попытку.</string>
-    <string name="checkFeeds_progressDialogMessage">Проверка лент…</string>
-    <string name="d_checkFeeds_title_fail">Ошибка проверки лент</string>
-    <string name="d_checkFeeds_errorMessage_notFound">Ленты не найдены</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">Нет доступа к лентам</string>
-    <string name="d_checkFeeds_errorMessage_unknown">Неизвестная ошибка</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="menuAbout">О приложении</string>
     <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
     <string name="readSpeed">Скорость чтения</string>
@@ -160,13 +146,9 @@
     <string name="pref_categoryName_connection">Подключение</string>
     <string name="pref_name_connection_autofill">Автозаполнение</string>
     <string name="pref_desc_connection_autofill">Проверить соединение и заполнить версию сервера, ID пользователя и токен</string>
-    <string name="pref_name_connection_serverVersion">Версия сервера wallabag</string>
     <string name="pref_categoryName_connection_advanced">Расширенные параметры подключения</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Особые параметры SSL</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Отключает SSL на всех устройствах, включает TLS 1.1 и TLS 1.2 на Android 4.1–4.4</string>
-    <string name="pref_name_connection_advanced_clearCookies">Очистить куки</string>
-    <string name="pref_desc_connection_advanced_clearCookies">Сбрасывает установленную сессию (если она есть)</string>
-    <string name="pref_toast_connection_advanced_clearCookies">Куки очищены</string>
 
     <string name="pref_categoryName_ui">Пользовательский интерфейс</string>
     <string name="pref_categoryName_ui_screenScrolling">Прокрутка экрана</string>
@@ -209,7 +191,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Выберите этот вариант, если у вас есть аккаунт на https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Выберите этот вариант, если у вас есть аккаунт на https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Пропустить</string>
     <string name="connectionWizard_providerSelection_next">Дальше</string>
 
@@ -220,10 +201,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">Настройка wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Назад</string>
     <string name="connectionWizard_provider_wallabagit_next">Подключиться</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Настройка Framabag</string>
-    <string name="connectionWizard_provider_framabag_prev">Назад</string>
-    <string name="connectionWizard_provider_framabag_next">Подключиться</string>
 
     <string name="connectionWizard_summary_titleMessage">Готово!</string>
     <string name="connectionWizard_summary_text">Нажмите на кнопку, чтобы сохранить настройки и перейти к главному экрану.</string>

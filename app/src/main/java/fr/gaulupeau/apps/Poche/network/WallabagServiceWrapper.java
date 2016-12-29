@@ -78,7 +78,7 @@ public class WallabagServiceWrapper {
                 if(token.refreshToken != null) settings.setApiRefreshToken(token.refreshToken);
                 settings.setApiAccessToken(token.accessToken);
             }
-        });
+        }, WallabagConnection.createClient(false, settings.isCustomSSLSettings()));
     }
 
     public Article addArticle(String url) throws UnsuccessfulResponseException, IOException {

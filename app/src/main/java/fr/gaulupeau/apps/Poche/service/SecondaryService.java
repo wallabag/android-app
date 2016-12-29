@@ -22,8 +22,7 @@ import fr.gaulupeau.apps.Poche.events.FetchImagesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -131,21 +130,21 @@ public class SecondaryService extends IntentServiceBase {
             return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
 
-        WallabagService service = getWallabagService();
+        WallabagWebService service = getWallabagWebService();
 
         File resultFile = null;
         try {
-            WallabagServiceEndpoint.ConnectionTestResult connectionTestResult
+            WallabagWebService.ConnectionTestResult connectionTestResult
                     = service.testConnection();
             Log.d(TAG, "downloadAsFile() connectionTestResult: " + connectionTestResult);
-            if(connectionTestResult != WallabagServiceEndpoint.ConnectionTestResult.OK) {
+            if(connectionTestResult != WallabagWebService.ConnectionTestResult.OK) {
                 Log.w(TAG, "downloadAsFile() testing connection failed with value "
                         + connectionTestResult);
 
                 ActionResult.ErrorType errorType;
                 switch(connectionTestResult) {
                     case INCORRECT_URL:
-                    case INCORRECT_SERVER_VERSION:
+                    case UNSUPPORTED_SERVER_VERSION:
                     case WALLABAG_NOT_FOUND:
                         errorType = ActionResult.ErrorType.INCORRECT_CONFIGURATION;
                         break;
@@ -166,7 +165,7 @@ public class SecondaryService extends IntentServiceBase {
 
             String articleTitle = article.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");
             String exportType = actionRequest.getDownloadFormat().asString();
-            String exportUrl = service.getExportUrl(articleID, exportType);
+            String exportUrl = getSettings().getUrl() + "/export/" + articleID + "." + exportType;
             Log.d(TAG, "downloadAsFile() exportUrl=" + exportUrl);
             String exportFileName = articleTitle + "." + exportType;
 

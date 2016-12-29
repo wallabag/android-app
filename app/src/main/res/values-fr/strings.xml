@@ -98,12 +98,7 @@
     </string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
-    <string name="pref_name_connection_serverVersion">Version du serveur wallabag</string>
-    <string name="pref_name_connection_feedsUserID">ID Utilisateur</string>
-    <string name="pref_name_connection_feedsToken">Jeton (token) de Flux RSS</string>
 
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Accepter tous les certificats SSL</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">Peut nécessiter un redémarrage. Non sécurisé. Vous devriez plutôt ajouter vos certificats personnels au système.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Paramètres SSL personnalisés</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Désactive SSL sur tous les appareils, active TLS 1.1 et TLS 1.2 sur Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Authentification HTTP Basique</string>
@@ -120,17 +115,12 @@
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
-    <string name="checkFeeds_progressDialogMessage">Vérification des flux…</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres requis manuellement</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Choisissez cette option si vous avez un compte sur https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
     <string name="connectionWizard_providerSelection_titleMessage">Choisissez votre fournisseur de wallabag</string>
-    <string name="connectionWizard_provider_framabag_next">Connecter</string>
-    <string name="connectionWizard_provider_framabag_prev">Retour</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Configuration de Framabag</string>
     <string name="connectionWizard_provider_general_next">Connecter</string>
     <string name="connectionWizard_provider_general_prev">Retour</string>
     <string name="connectionWizard_provider_general_titleMessage">Configuration de base</string>
@@ -147,25 +137,17 @@
     <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
     <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l’application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag !</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">Aucun accès aux flux</string>
-    <string name="d_checkFeeds_errorMessage_notFound">Flux non trouvés</string>
-    <string name="d_checkFeeds_errorMessage_unknown">Erreur inconnue</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
-    <string name="d_checkFeeds_title_fail">Échec du test des flux</string>
     <string name="d_configurationChanged_answer_decline">Pas maintenant</string>
     <string name="d_configurationChanged_message">Il semble que certains paramètres aient été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationChanged_title">Paramètres modifiés</string>
     <string name="d_configurationIsQuestionable_message">Il y a eu une erreur de connexion récemment. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationIsQuestionable_title">Problème détecté</string>
-    <string name="d_getFeedsCredentials_title_fail">Impossible de configurer les flux</string>
-    <string name="d_getFeedsCredentials_title_message">Quelque chose s\'est mal passé. Vérifiez votre connexion internet et essayez à nouveau.</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
     <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Configuration des flux…</string>
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
     <string name="notification_expandedError">Erreur : %s</string>
     <string name="notification_incorrectConfiguration">Configuration incorrecte</string>
@@ -183,7 +165,6 @@
     <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles directement après leur ajout par l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
     <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
-    <string name="pref_desc_connection_advanced_clearCookies">Réinitialise la session en cours (si elle existe)</string>
     <string name="pref_desc_connection_autofill">Tester la connexion et remplir les informations de version de serveur, l\'ID utilisateur et le token</string>
     <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
     <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
@@ -191,7 +172,6 @@
     <string name="pref_name_autoSync_enabled">Activer la synchronisation automatique</string>
     <string name="pref_name_autoSync_interval">Intervalle de synchronisation automatique</string>
     <string name="pref_name_autoSync_type">Type de synchronisation automatique</string>
-    <string name="pref_name_connection_advanced_clearCookies">Nettoyer les cookies</string>
     <string name="pref_name_connection_autofill">Remplir automatiquement</string>
     <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
     <string name="pref_name_ui_article_fontSerif">Police avec Serif</string>
@@ -200,12 +180,10 @@
     <string name="pref_option_autoSync_interval_1h">1 heure</string>
     <string name="pref_option_autoSync_interval_24h">24 heures</string>
     <string name="pref_option_autoSync_interval_30m">30 minutes</string>
-    <string name="pref_toast_connection_advanced_clearCookies">Cookies nettoyés</string>
     <string name="settings_parametersAreOk">Les paramètres sont corrects</string>
     <string name="settings_parametersAutofilled">Paramètres récupérés</string>
     <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP.</string>
     <string name="testConnection_errorMessage_httpAuth">Échec de l\'authentification HTTP</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Version du serveur choisie incorrecte</string>
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion</string>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>

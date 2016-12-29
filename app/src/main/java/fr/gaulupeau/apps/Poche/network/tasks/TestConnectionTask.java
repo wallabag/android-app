@@ -10,23 +10,21 @@ import java.util.Locale;
 
 import fr.gaulupeau.apps.Poche.network.RequestCreator;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV2.WALLABAG_LOGIN_FORM_V2;
+import static fr.gaulupeau.apps.Poche.network.WallabagWebService.WALLABAG_LOGIN_FORM_V2;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectionTask.TestResult>> {
 
     public static class TestResult {
         public String url;
-        public WallabagServiceEndpoint.ConnectionTestResult result;
+        public WallabagWebService.ConnectionTestResult result;
         public String errorMessage;
-        public int wallabagServerVersion = -1;
     }
 
     private static final String TAG = TestConnectionTask.class.getSimpleName();
@@ -40,16 +38,13 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
     private String httpAuthUsername;
     private String httpAuthPassword;
     private boolean customSSLSettings;
-    private boolean acceptAllCertificates;
-    private int wallabagServerVersion = -1;
     private boolean tryPossibleURLs;
 
     private ResultHandler resultHandler;
 
     public TestConnectionTask(String endpointUrl, String username, String password,
                               String httpAuthUsername, String httpAuthPassword,
-                              boolean customSSLSettings, boolean acceptAllCertificates,
-                              int wallabagServerVersion, boolean tryPossibleURLs,
+                              boolean customSSLSettings, boolean tryPossibleURLs,
                               ResultHandler resultHandler) {
         this.endpointUrl = endpointUrl;
         this.username = username;
@@ -57,8 +52,6 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
         this.customSSLSettings = customSSLSettings;
-        this.acceptAllCertificates = acceptAllCertificates;
-        this.wallabagServerVersion = wallabagServerVersion;
         this.tryPossibleURLs = tryPossibleURLs;
         this.resultHandler = resultHandler;
     }
@@ -112,18 +105,17 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
             TestResult testResult = new TestResult();
             testResult.url = url;
 
-            WallabagService service = new WallabagService(url, username, password,
-                    httpAuthUsername, httpAuthPassword, wallabagServerVersion,
-                    WallabagConnection.createClient(false, customSSLSettings, acceptAllCertificates));
+            WallabagWebService service = new WallabagWebService(url, username, password,
+                    httpAuthUsername, httpAuthPassword,
+                    WallabagConnection.createClient(true, customSSLSettings));
 
             try {
                 testResult.result = service.testConnection();
-                testResult.wallabagServerVersion = service.getWallabagVersionWithoutDetection();
 
                 Log.d(TAG, "Connection test result: " + testResult.result);
             } catch(IncorrectConfigurationException e) {
                 Log.d(TAG, "Connection test: Exception", e);
-                testResult.result = WallabagServiceEndpoint.ConnectionTestResult.INCORRECT_URL;
+                testResult.result = WallabagWebService.ConnectionTestResult.INCORRECT_URL;
             } catch(IOException e) {
                 Log.d(TAG, "Connection test: Exception", e);
                 testResult.errorMessage = e.getLocalizedMessage();
@@ -142,8 +134,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
     // well, it's a mess
     private String detectRedirection(String url) throws IOException {
-        OkHttpClient client = WallabagConnection.createClient(
-                false, customSSLSettings, acceptAllCertificates);
+        OkHttpClient client = WallabagConnection.createClient(true, customSSLSettings);
 
         HttpUrl httpUrl = HttpUrl.parse(url + "/");
         if(httpUrl == null) {

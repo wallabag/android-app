@@ -263,14 +263,6 @@ public class Settings {
         setString(R.string.pref_key_connection_url, url);
     }
 
-    public int getWallabagServerVersion() {
-        return getInt(R.string.pref_key_connection_serverVersion, -1);
-    }
-
-    public void setWallabagServerVersion(int version) {
-        setInt(R.string.pref_key_connection_serverVersion, version);
-    }
-
     public String getUsername() {
         return getString(R.string.pref_key_connection_username);
     }
@@ -317,30 +309,6 @@ public class Settings {
 
     public void setApiAccessToken(String apiAccessToken) {
         setString(R.string.pref_key_connection_api_accessToken, apiAccessToken);
-    }
-
-    public String getFeedsUserID() {
-        return getString(R.string.pref_key_connection_feedsUserID);
-    }
-
-    public void setFeedsUserID(String feedsUserID) {
-        setString(R.string.pref_key_connection_feedsUserID, feedsUserID);
-    }
-
-    public String getFeedsToken() {
-        return getString(R.string.pref_key_connection_feedsToken);
-    }
-
-    public void setFeedsToken(String feedsToken) {
-        setString(R.string.pref_key_connection_feedsToken, feedsToken);
-    }
-
-    public boolean isAcceptAllCertificates() {
-        return getBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, false);
-    }
-
-    public void setAcceptAllCertificates(boolean value) {
-        setBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, value);
     }
 
     public boolean isCustomSSLSettings() {

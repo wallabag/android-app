@@ -36,8 +36,8 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
-import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
+import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
@@ -630,17 +630,17 @@ public class ArticlesListActivity extends BaseActionBarActivity
         configurationTestHelper = new ConfigurationTestHelper(
                 this, new ConfigurationTestHelper.ResultHandler() {
             @Override
-            public void onConfigurationTestSuccess(String url, Integer serverVersion) {
+            public void onConfigurationTestSuccess(String url) {
                 updateAllFeedsIfDbIsEmpty();
             }
 
             @Override
             public void onConnectionTestFail(
-                    WallabagServiceEndpoint.ConnectionTestResult result, String details) {}
+                    WallabagWebService.ConnectionTestResult result, String details) {}
 
             @Override
-            public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
-        }, null, settings, false, true);
+            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {}
+        }, null, settings, true);
 
         configurationTestHelper.test();
     }
