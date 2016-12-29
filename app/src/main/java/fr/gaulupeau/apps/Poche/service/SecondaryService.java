@@ -5,6 +5,10 @@ import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+
 import org.greenrobot.greendao.DaoException;
 
 import java.io.File;
@@ -24,10 +28,10 @@ import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
-import okhttp3.Headers;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;
+import okio.BufferedSource;
 import okio.Okio;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
@@ -130,64 +134,108 @@ public class SecondaryService extends IntentServiceBase {
             return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
 
-        WallabagWebService service = getWallabagWebService();
-
+        BufferedSource source = null;
         File resultFile = null;
         try {
-            WallabagWebService.ConnectionTestResult connectionTestResult
-                    = service.testConnection();
-            Log.d(TAG, "downloadAsFile() connectionTestResult: " + connectionTestResult);
-            if(connectionTestResult != WallabagWebService.ConnectionTestResult.OK) {
-                Log.w(TAG, "downloadAsFile() testing connection failed with value "
-                        + connectionTestResult);
+            WallabagService.ResponseFormat responseFormat;
+            ActionRequest.DownloadFormat downloadFormat = actionRequest.getDownloadFormat();
+            // TODO: use WallabagService.ResponseFormat instead of ActionRequest.DownloadFormat
+            switch(downloadFormat) {
+                case PDF:
+                    responseFormat = WallabagService.ResponseFormat.PDF;
+                    break;
 
-                ActionResult.ErrorType errorType;
-                switch(connectionTestResult) {
-                    case INCORRECT_URL:
-                    case UNSUPPORTED_SERVER_VERSION:
-                    case WALLABAG_NOT_FOUND:
-                        errorType = ActionResult.ErrorType.INCORRECT_CONFIGURATION;
-                        break;
+                case CSV:
+                    responseFormat = WallabagService.ResponseFormat.CSV;
+                    break;
 
-                    case AUTH_PROBLEM:
-                    case HTTP_AUTH:
-                    case INCORRECT_CREDENTIALS:
-                        errorType = ActionResult.ErrorType.INCORRECT_CREDENTIALS;
-                        break;
+                case EPUB:
+                    responseFormat = WallabagService.ResponseFormat.EPUB;
+                    break;
 
-                    default:
-                        errorType = ActionResult.ErrorType.UNKNOWN;
-                        break;
+                case JSON:
+                    responseFormat = WallabagService.ResponseFormat.JSON;
+                    break;
+
+                case MOBI:
+                    responseFormat = WallabagService.ResponseFormat.MOBI;
+                    break;
+
+                case TXT:
+                    responseFormat = WallabagService.ResponseFormat.TXT;
+                    break;
+
+                case XML:
+                    responseFormat = WallabagService.ResponseFormat.XML;
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Unsupported format: " + downloadFormat);
+            }
+
+            try {
+                // TODO: fix: not synchronized
+                source = getWallabagServiceWrapper().getWallabagService()
+                        .exportArticle(articleID, responseFormat).source();
+            } catch(NotFoundException e) {
+                Log.d(TAG, "downloadAsFile() NotFoundException, probably old API", e);
+            }
+
+            String fileExt = actionRequest.getDownloadFormat().asString();
+
+            // TODO: remove fallback
+            if(source == null) {
+                Log.i(TAG, "Failed to get article via API, falling back to plain URL");
+
+                WallabagWebService service = getWallabagWebService();
+                WallabagWebService.ConnectionTestResult connectionTestResult
+                        = service.testConnection();
+                Log.d(TAG, "downloadAsFile() connectionTestResult: " + connectionTestResult);
+                if(connectionTestResult != WallabagWebService.ConnectionTestResult.OK) {
+                    Log.w(TAG, "downloadAsFile() testing connection failed with value "
+                            + connectionTestResult);
+
+                    ActionResult.ErrorType errorType;
+                    switch(connectionTestResult) {
+                        case INCORRECT_URL:
+                        case UNSUPPORTED_SERVER_VERSION:
+                        case WALLABAG_NOT_FOUND:
+                            errorType = ActionResult.ErrorType.INCORRECT_CONFIGURATION;
+                            break;
+
+                        case AUTH_PROBLEM:
+                        case HTTP_AUTH:
+                        case INCORRECT_CREDENTIALS:
+                            errorType = ActionResult.ErrorType.INCORRECT_CREDENTIALS;
+                            break;
+
+                        default:
+                            errorType = ActionResult.ErrorType.UNKNOWN;
+                            break;
+                    }
+
+                    return new Pair<>(new ActionResult(errorType), null);
                 }
 
-                return new Pair<>(new ActionResult(errorType), null);
+                String exportUrl = getSettings().getUrl() + "/export/" + articleID + "." + fileExt;
+                Log.d(TAG, "downloadAsFile() exportUrl=" + exportUrl);
+                Request request = new Request.Builder()
+                        .url(exportUrl)
+                        .build();
+
+                Response response = service.getClient().newCall(request).execute();
+
+                if(!response.isSuccessful()) {
+                    return new Pair<>(new ActionResult(ActionResult.ErrorType.UNKNOWN,
+                            "Response code: " + response.code()
+                                    + ", response message: " + response.message()), null);
+                }
+
+                source = response.body().source();
             }
 
             String articleTitle = article.getTitle().replaceAll("[^a-zA-Z0-9.-]", "_");
-            String exportType = actionRequest.getDownloadFormat().asString();
-            String exportUrl = getSettings().getUrl() + "/export/" + articleID + "." + exportType;
-            Log.d(TAG, "downloadAsFile() exportUrl=" + exportUrl);
-            String exportFileName = articleTitle + "." + exportType;
-
-            Request request = new Request.Builder()
-                    .url(exportUrl)
-                    .build();
-
-            Response response = service.getClient().newCall(request).execute();
-
-            if(!response.isSuccessful()) {
-                return new Pair<>(new ActionResult(ActionResult.ErrorType.UNKNOWN,
-                        "Response code: " + response.code()
-                                + ", response message: " + response.message()), null);
-            }
-
-            // do we need it?
-            if(Log.isLoggable(TAG, Log.DEBUG)) {
-                Headers responseHeaders = response.headers();
-                for (int i = 0, size = responseHeaders.size(); i < size; i++) {
-                    Log.d(TAG, responseHeaders.name(i) + ": " + responseHeaders.value(i));
-                }
-            }
+            String exportFileName = articleTitle + "." + fileExt;
 
             File exportDir = getExternalFilesDir(null); // TODO: check
             File file = new File(exportDir, exportFileName);
@@ -196,20 +244,27 @@ public class SecondaryService extends IntentServiceBase {
             BufferedSink sink = null;
             try {
                 sink = Okio.buffer(Okio.sink(file));
-                sink.writeAll(response.body().source());
+                sink.writeAll(source);
             } finally {
                 if(sink != null) {
                     try {
                         sink.close();
-                    } catch(IOException ignored) {}
+                    } catch(IOException e) {
+                        Log.w(TAG, "downloadAsFile() IOException while closing sink", e);
+                    }
                 }
-                response.body().close();
             }
 
             resultFile = file;
-        } catch(IncorrectConfigurationException | IOException e) {
+        } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
             ActionResult r = processException(e, "downloadAsFile()");
             if(!r.isSuccess()) return new Pair<>(r, null);
+        } finally {
+            if(source != null) {
+                try {
+                    source.close();
+                } catch(IOException ignored) {}
+            }
         }
 
         return new Pair<>(new ActionResult(), resultFile);
