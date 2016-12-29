@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -305,23 +304,18 @@ public class ImageCacheUtils {
         return f.exists() && f.canWrite();
     }
 
-    /**
-     * http://stackoverflow.com/a/6847711/709697
-     */
     public static String md5(String s) {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes(Charset.forName("US-ASCII")), 0, s.length());
-            byte[] magnitude = digest.digest();
-            BigInteger bi = new BigInteger(1, magnitude);
-            String hash = String.format("%0" + (magnitude.length << 1) + "x", bi);
-            return hash;
         } catch(NoSuchAlgorithmException e) {
-            Log.e(TAG, "md5() NoSuchAlgorithmException", e);
+            Log.d(TAG, "md5: NoSuchAlgorithmException", e);
+            Log.w(TAG, "md5: failed to calc md5 for " + s + ", returning empty string");
+            return "";
         }
-        Log.w(TAG, "md5: failed to calc md5 for " + s + ", returning empty string");
-        return "";
+
+        digest.update(s.getBytes());
+        return new BigInteger(1, digest.digest()).toString(16);
     }
 
 }
