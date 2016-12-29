@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.network;
 
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,12 +35,16 @@ public class ImageCacheUtils {
     private static final Pattern IMG_URL_PATTERN
             = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
 
+    private static final Pattern[] responsiveParametersPatterns = {
+            Pattern.compile("srcset=\".*\""),
+            Pattern.compile("sizes=\".*\""),
+            Pattern.compile("data-zoom-src=\".*\""),
+    };
+
     private static OkHttpClient okHttpClient;
     private static String externalStoragePath;
 
     public static String replaceImagesInHtmlContent(String htmlContent, long articleId) {
-        String newHtmlContent = htmlContent;
-
         String extStorage = getExternalStoragePath();
         if(!ImageCacheUtils.isExternalStorageReadable()) {
             Log.w(TAG, "replaceImagesInHtmlContent: extStorage path is not readable");
@@ -55,6 +61,8 @@ public class ImageCacheUtils {
             return htmlContent;
         }
 
+        StringBuilder sb = new StringBuilder(htmlContent);
+
         String articleCachePath = getArticleCachePath(extStorage, articleId);
         for(String imageURL: imageURLs) {
             String localImagePath = getCacheImagePath(articleCachePath, imageURL);
@@ -65,27 +73,51 @@ public class ImageCacheUtils {
             if(image.exists() && image.canRead()) {
                 Log.d(TAG, "replaceImagesInHtmlContent: replacing image " + imageURL
                         + " -> " + localImagePath);
-                newHtmlContent = newHtmlContent.replaceAll(imageURL, localImagePath);
+                replaceAllInStringBuilder(sb, imageURL, localImagePath);
             } else {
                 Log.d(TAG, "replaceImagesInHtmlContent: no cached version of " + imageURL
                         + " found at path " + localImagePath);
             }
         }
 
-        if(htmlContent.equals(newHtmlContent)) {
+        if(TextUtils.equals(sb, htmlContent)) {
             Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced");
             return htmlContent;
         }
 
-        Log.v(TAG, "onCreate: newHtmlContent before removing responsive image params:\n"
-                + newHtmlContent);
-        newHtmlContent = newHtmlContent.replaceAll("srcset=\".*\"", "");
-        newHtmlContent = newHtmlContent.replaceAll("sizes=\".*\"", "");
-        newHtmlContent = newHtmlContent.replaceAll("data-zoom-src=\".*\"", "");
-        htmlContent = newHtmlContent;
-        Log.v(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+        if(BuildConfig.DEBUG) {
+            Log.v(TAG, "onCreate: htmlContent before removing responsive image params:\n" + sb);
+        }
+
+        htmlContent = removeResponsiveParameters(sb);
+
+        if(BuildConfig.DEBUG) {
+            Log.v(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+        }
 
         return htmlContent;
+    }
+
+    private static StringBuilder replaceAllInStringBuilder(
+            StringBuilder sb, String src, String replacement) {
+        int offset = 0;
+        while((offset = sb.indexOf(src, offset)) != -1) {
+            sb.replace(offset, offset + src.length(), replacement);
+            offset += replacement.length();
+        }
+        return sb;
+    }
+
+    private static String removeResponsiveParameters(CharSequence source) {
+        for(Pattern pattern: responsiveParametersPatterns) {
+            Matcher m = pattern.matcher(source);
+
+            if(!m.find()) continue; // don't allocate a new string if there are no matches
+
+            source = m.replaceAll("");
+        }
+
+        return source.toString();
     }
 
     public static void cacheImages(long articleId, String articleContent) {

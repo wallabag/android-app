@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
@@ -138,7 +139,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         originalUrlText = mArticle.getUrl();
         Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
         String htmlContent = mArticle.getContent();
-        Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
+        if(BuildConfig.DEBUG) Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
         positionToRestore = mArticle.getArticleProgress();
         Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
