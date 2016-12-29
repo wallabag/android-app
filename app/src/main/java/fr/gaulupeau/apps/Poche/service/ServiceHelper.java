@@ -10,8 +10,6 @@ public class ServiceHelper {
 
     private static final String TAG = ServiceHelper.class.getSimpleName();
 
-    // TODO: reuse code
-
     public static void syncQueue(Context context) {
         syncQueue(context, false, false, null);
     }
@@ -29,10 +27,7 @@ public class ServiceHelper {
         else if(byOperation) request.setRequestType(ActionRequest.RequestType.ManualByOperation);
         if(queueLength != null) request.setQueueLength(queueLength);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, true);
 
         Log.d(TAG, "syncQueue() finished");
     }
@@ -42,18 +37,15 @@ public class ServiceHelper {
     }
 
     public static void addLink(Context context, String link, Long operationID) {
-        Log.d(TAG, "archiveArticle() started");
+        Log.d(TAG, "addLink() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.AddLink);
         request.setLink(link);
         request.setOperationID(operationID);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
+        startService(context, request, true);
 
-        context.startService(intent);
-
-        Log.d(TAG, "archiveArticle() finished");
+        Log.d(TAG, "addLink() finished");
     }
 
     public static void archiveArticle(Context context, int articleID, boolean archive) {
@@ -63,10 +55,7 @@ public class ServiceHelper {
                 archive ? ActionRequest.Action.Archive : ActionRequest.Action.Unarchive);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, true);
 
         Log.d(TAG, "archiveArticle() finished");
     }
@@ -78,10 +67,7 @@ public class ServiceHelper {
                 favorite ? ActionRequest.Action.Favorite : ActionRequest.Action.Unfavorite);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, true);
 
         Log.d(TAG, "favoriteArticle() finished");
     }
@@ -92,10 +78,7 @@ public class ServiceHelper {
         ActionRequest request = new ActionRequest(ActionRequest.Action.Delete);
         request.setArticleID(articleID);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, true);
 
         Log.d(TAG, "deleteArticle() finished");
     }
@@ -118,10 +101,7 @@ public class ServiceHelper {
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.Auto);
 
-        Intent intent = new Intent(context, MainService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, true);
 
         Log.d(TAG, "updateFeed() finished");
     }
@@ -140,10 +120,7 @@ public class ServiceHelper {
         request.setDownloadFormat(downloadFormat);
         request.setOperationID(operationID);
 
-        Intent intent = new Intent(context, SecondaryService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        startService(context, request, false);
 
         Log.d(TAG, "downloadArticleAsFile() finished");
     }
@@ -151,14 +128,16 @@ public class ServiceHelper {
     public static void fetchImages(Context context) {
         Log.d(TAG, "fetchImages() started");
 
-        ActionRequest request = new ActionRequest(ActionRequest.Action.FetchImages);
+        startService(context, new ActionRequest(ActionRequest.Action.FetchImages), false);
 
-        Intent intent = new Intent(context, SecondaryService.class);
+        Log.d(TAG, "fetchImages() finished");
+    }
+
+    private static void startService(Context context, ActionRequest request, boolean mainService) {
+        Intent intent = new Intent(context, mainService ? MainService.class : SecondaryService.class);
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
-
-        Log.d(TAG, "fetchImages() finished");
     }
 
 }
