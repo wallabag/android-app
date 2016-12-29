@@ -9,6 +9,7 @@ import org.greenrobot.greendao.DaoException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -222,12 +223,12 @@ public class SecondaryService extends IntentServiceBase {
             return;
         }
 
-        // TODO: probably need to save results in a separate transaction
-
         ArticleDao articleDao = getDaoSession().getArticleDao();
         List<Article> articleList = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
                 .orderAsc(ArticleDao.Properties.ArticleId).list(); // TODO: lazyList
+
+        List<Integer> updatedArticles = new ArrayList<>(articleList.size());
 
         Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
         int i = 0;
@@ -236,10 +237,22 @@ public class SecondaryService extends IntentServiceBase {
 
             ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
 
-            article.setImagesDownloaded(true);
-            articleDao.update(article);
+            updatedArticles.add(article.getArticleId());
 
             Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
+        }
+
+        // TODO: update in bulk
+        for(Integer articleID: updatedArticles) {
+            try {
+                Article article = articleDao.queryBuilder()
+                        .where(ArticleDao.Properties.ArticleId.eq(articleID))
+                        .unique();
+                article.setImagesDownloaded(true);
+                articleDao.update(article);
+            } catch(DaoException e) {
+                Log.e(TAG, "fetchImages() Exception while updating articles", e);
+            }
         }
 
         Log.d(TAG, "fetchImages() finished");
