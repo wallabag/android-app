@@ -5,6 +5,8 @@ import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
@@ -25,8 +26,6 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
-import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
@@ -205,8 +204,9 @@ public class MainService extends IntentServiceBase {
                     case QueueHelper.QI_ACTION_UNARCHIVE: {
                         articleItem = true;
 
-                        if(!getWallabagService().toggleArchive(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
+                        if(getWallabagServiceWrapper().archiveArticle(
+                                articleID, action == QueueHelper.QI_ACTION_ARCHIVE) == null) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
                     }
@@ -215,8 +215,9 @@ public class MainService extends IntentServiceBase {
                     case QueueHelper.QI_ACTION_UNFAVORITE: {
                         articleItem = true;
 
-                        if(!getWallabagService().toggleFavorite(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
+                        if(getWallabagServiceWrapper().favoriteArticle(articleID,
+                                action == QueueHelper.QI_ACTION_FAVORITE) == null) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
                     }
@@ -224,8 +225,8 @@ public class MainService extends IntentServiceBase {
                     case QueueHelper.QI_ACTION_DELETE: {
                         articleItem = true;
 
-                        if(!getWallabagService().deleteArticle(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
+                        if(getWallabagServiceWrapper().deleteArticle(articleID) == null) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
                     }
@@ -233,7 +234,7 @@ public class MainService extends IntentServiceBase {
                     case QueueHelper.QI_ACTION_ADD_LINK: {
                         String link = item.getExtra();
                         if(link != null && !link.isEmpty()) {
-                            if(!getWallabagService().addLink(link)) {
+                            if(getWallabagServiceWrapper().addArticle(link) == null) {
                                 itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                             }
                             if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
@@ -246,7 +247,7 @@ public class MainService extends IntentServiceBase {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + action);
                 }
-            } catch(RequestException | IOException e) {
+            } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
                 if(!r.isSuccess()) itemResult = r;
             } catch(Exception e) {
@@ -337,28 +338,20 @@ public class MainService extends IntentServiceBase {
         ArticlesChangedEvent event = null;
 
         if(WallabagConnection.isNetworkAvailable()) {
-            Settings settings = getSettings();
-            FeedUpdater feedUpdater = new FeedUpdater(
-                    settings.getUrl(),
-                    settings.getFeedsUserID(),
-                    settings.getFeedsToken(),
-                    settings.getHttpAuthUsername(),
-                    settings.getHttpAuthPassword(),
-                    settings.getWallabagServerVersion());
-
             DaoSession daoSession = getDaoSession();
             daoSession.getDatabase().beginTransaction();
             try {
-                event = feedUpdater.update(feedType, updateType);
+                event = new FeedUpdater(getWallabagServiceWrapper()).update(feedType, updateType);
 
                 daoSession.getDatabase().setTransactionSuccessful();
-            } catch(IncorrectFeedException e) {
-                Log.e(TAG, "updateFeed() IncorrectFeedException", e);
-                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
-                result.setMessage("Error while parsing feed: " + e.getMessage()); // TODO: string resource
-            } catch(RequestException | IOException e) {
+            } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateFeed()");
-                if(!r.isSuccess()) result = r;
+                result.updateWith(r);
+            } catch(Exception e) {
+                Log.e(TAG, "updateFeed() exception", e);
+
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
+                result.setMessage(e.toString());
             } finally {
                 daoSession.getDatabase().endTransaction();
             }

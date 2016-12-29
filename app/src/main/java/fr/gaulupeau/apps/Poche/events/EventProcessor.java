@@ -429,6 +429,10 @@ public class EventProcessor {
                         break;
                     }
 
+                    case NOT_FOUND:
+                        Log.w(TAG, "onActionResultEvent() got a NotFound");
+                        break;
+
                     case NEGATIVE_RESPONSE:
                         // server acknowledged the operation but failed/refused to performed it;
                         // detection of such response is not implemented on client yet

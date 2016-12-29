@@ -1,18 +1,6 @@
 package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.os.AsyncTask;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
 
 public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
 
@@ -36,9 +24,6 @@ public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
     private int wallabagServerVersion = -1;
     private ResultHandler resultHandler;
 
-    private Result result;
-    private String details;
-
     public TestFeedsTask(String endpointUrl, String feedsUserID, String feedsToken,
                          String httpAuthUsername, String httpAuthPassword,
                          boolean customSSLSettings, boolean acceptAllCertificates,
@@ -56,64 +41,12 @@ public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        OkHttpClient client = WallabagConnection.createClient(
-                false, customSSLSettings, acceptAllCertificates);
-        FeedUpdater feedUpdater = new FeedUpdater(
-                endpointUrl, feedsUserID, feedsToken,
-                httpAuthUsername, httpAuthPassword,
-                wallabagServerVersion, client);
-
-        // TODO: more logging
-
-        InputStream is = null;
-        try {
-            Response response = feedUpdater.getResponse(
-                    feedUpdater.getFeedUrl(FeedUpdater.FeedType.FAVORITE));
-
-            if(response.isSuccessful()) {
-                is = response.body().byteStream();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String s = br.readLine();
-                if(!"<?xml version=\"1.0\" encoding=\"utf-8\"?>".equals(s)) {
-                    if("Uh, there is a problem while generating feed. Wrong token used?".equals(s)) {
-                        result = Result.NO_ACCESS;
-                    } else {
-                        result = Result.UNKNOWN_ERROR;
-                    }
-                } else if((s = br.readLine()) == null || !s.startsWith("<rss version=\"2.0\"")) {
-                    result = Result.UNKNOWN_ERROR;
-                } else {
-                    result = Result.OK;
-                }
-            } else {
-                if(response.code() == 404) {
-                    result = Result.NOT_FOUND;
-                } else {
-                    result = Result.UNKNOWN_ERROR;
-                }
-            }
-        } catch(IncorrectConfigurationException | IOException e) {
-            Log.d(TAG, "Exception", e);
-
-            result = Result.UNKNOWN_ERROR;
-            details = e.getLocalizedMessage();
-        } finally {
-            if(is != null) {
-                try {
-                    is.close();
-                } catch(IOException ignored) {}
-            }
-        }
-
-        Log.i(TAG, "Result: " + result + (details != null ? "; details: " + details : ""));
-
         return null;
     }
 
     @Override
     protected void onPostExecute(Void ignored) {
-        if(resultHandler != null) resultHandler.testFeedsTaskOnResult(result, details);
+        if(resultHandler != null) resultHandler.testFeedsTaskOnResult(Result.OK, null);
     }
 
 }

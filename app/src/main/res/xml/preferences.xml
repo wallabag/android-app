@@ -31,6 +31,22 @@
                 android:title="@string/pref_name_connection_password"
                 android:inputType="textPassword"
                 android:defaultValue=""/>
+            <EditTextPreference
+                android:key="@string/pref_key_connection_api_clientID"
+                android:title="@string/pref_name_connection_api_clientID"
+                android:defaultValue=""/>
+            <EditTextPreference
+                android:key="@string/pref_key_connection_api_clientSecret"
+                android:title="@string/pref_name_connection_api_clientSecret"
+                android:defaultValue=""/>
+            <EditTextPreference
+                android:key="@string/pref_key_connection_api_refreshToken"
+                android:title="Refresh token"
+                android:defaultValue=""/>
+            <EditTextPreference
+                android:key="@string/pref_key_connection_api_accessToken"
+                android:title="Access token"
+                android:defaultValue=""/>
             <Preference
                 android:key="@string/pref_key_connection_autofill"
                 android:title="@string/pref_name_connection_autofill"

@@ -3,6 +3,7 @@
     <!-- Workaround for https://github.com/square/okio/issues/58 -->
     <issue id="InvalidPackage">
         <ignore regexp="okio-.*\.jar" />
+        <ignore regexp="retrofit-.*\.jar" />
     </issue>
 
     <!-- Consider localization issues as Warnings -->

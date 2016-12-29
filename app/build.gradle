@@ -55,4 +55,6 @@ dependencies {
     compile 'com.facebook.stetho:stetho:1.4.2'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
     compile 'com.mikepenz:aboutlibraries:5.7.3'
+    compile 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:eafad99'
+    compile 'org.slf4j:slf4j-android:1.7.22'
 }

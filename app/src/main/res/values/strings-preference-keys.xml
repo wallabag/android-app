@@ -8,6 +8,10 @@
     <string name="pref_key_connection_serverVersion" translatable="false">connection.serverVersion</string>
     <string name="pref_key_connection_username" translatable="false">connection.username</string>
     <string name="pref_key_connection_password" translatable="false">connection.password</string>
+    <string name="pref_key_connection_api_clientID" translatable="false">connection.api.clientID</string>
+    <string name="pref_key_connection_api_clientSecret" translatable="false">connection.api.clientSecret</string>
+    <string name="pref_key_connection_api_refreshToken" translatable="false">connection.api.refreshToken</string>
+    <string name="pref_key_connection_api_accessToken" translatable="false">connection.api.accessToken</string>
     <string name="pref_key_connection_feedsUserID" translatable="false">connection.feedsUserID</string>
     <string name="pref_key_connection_feedsToken" translatable="false">connection.feedsToken</string>
     <string name="pref_key_connection_advanced" translatable="false">connection.advanced</string>

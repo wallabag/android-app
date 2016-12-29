@@ -287,6 +287,38 @@ public class Settings {
         setString(R.string.pref_key_connection_password, password);
     }
 
+    public String getApiClientID() {
+        return getString(R.string.pref_key_connection_api_clientID);
+    }
+
+    public void setApiClientID(String apiClientID) {
+        setString(R.string.pref_key_connection_api_clientID, apiClientID);
+    }
+
+    public String getApiClientSecret() {
+        return getString(R.string.pref_key_connection_api_clientSecret);
+    }
+
+    public void setApiClientSecret(String apiClientSecret) {
+        setString(R.string.pref_key_connection_api_clientSecret, apiClientSecret);
+    }
+
+    public String getApiRefreshToken() {
+        return getString(R.string.pref_key_connection_api_refreshToken);
+    }
+
+    public void setApiRefreshToken(String apiRefreshToken) {
+        setString(R.string.pref_key_connection_api_refreshToken, apiRefreshToken);
+    }
+
+    public String getApiAccessToken() {
+        return getString(R.string.pref_key_connection_api_accessToken);
+    }
+
+    public void setApiAccessToken(String apiAccessToken) {
+        setString(R.string.pref_key_connection_api_accessToken, apiAccessToken);
+    }
+
     public String getFeedsUserID() {
         return getString(R.string.pref_key_connection_feedsUserID);
     }
