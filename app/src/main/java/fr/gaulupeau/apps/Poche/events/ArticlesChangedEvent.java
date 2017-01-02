@@ -8,7 +8,7 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 public class ArticlesChangedEvent extends FeedsChangedEvent {
 
     public enum ChangeType {
-        Archived, Unarchived, Favorited, Unfavorited, Added, Deleted, Unspecified
+        ARCHIVED, UNARCHIVED, FAVORITED, UNFAVORITED, ADDED, DELETED, UNSPECIFIED
     }
 
     public static class ArticleEntry {
@@ -57,7 +57,7 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
     }
 
     public ChangeType getArticleChangeType(Integer articleID) {
-        if(isInvalidateAll()) return ChangeType.Unspecified;
+        if(isInvalidateAll()) return ChangeType.UNSPECIFIED;
 
         if(getChangedArticles() == null) return null;
 

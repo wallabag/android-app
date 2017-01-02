@@ -276,8 +276,8 @@ public class ArticlesListActivity extends AppCompatActivity
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
-                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.MAIN
+                ? FeedUpdater.UpdateType.FAST : FeedUpdater.UpdateType.FULL;
 
         if(!updateFeed(true, feedType, updateType)) {
             setRefreshingUI(false);
@@ -350,13 +350,13 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private void invalidateLists(FeedsChangedEvent event) {
         if(event.isMainFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Main));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.MAIN));
         }
         if(event.isFavoriteFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Favorite));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.FAVORITE));
         }
         if(event.isArchiveFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Archive));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.ARCHIVE));
         }
     }
 
@@ -523,11 +523,11 @@ public class ArticlesListActivity extends AppCompatActivity
         public static FeedUpdater.FeedType getFeedType(int position) {
             switch(PAGES[position]) {
                 case LIST_TYPE_FAVORITES:
-                    return FeedUpdater.FeedType.Favorite;
+                    return FeedUpdater.FeedType.FAVORITE;
                 case LIST_TYPE_ARCHIVED:
-                    return FeedUpdater.FeedType.Archive;
+                    return FeedUpdater.FeedType.ARCHIVE;
                 default:
-                    return FeedUpdater.FeedType.Main;
+                    return FeedUpdater.FeedType.MAIN;
             }
         }
 
@@ -536,10 +536,10 @@ public class ArticlesListActivity extends AppCompatActivity
 
             int listType;
             switch(feedType) {
-                case Favorite:
+                case FAVORITE:
                     listType = LIST_TYPE_FAVORITES;
                     break;
-                case Archive:
+                case ARCHIVE:
                     listType = LIST_TYPE_ARCHIVED;
                     break;
                 default:

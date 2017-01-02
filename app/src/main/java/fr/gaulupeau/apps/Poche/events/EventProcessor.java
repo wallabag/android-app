@@ -90,8 +90,8 @@ public class EventProcessor {
         }
 
         int updateTypeVal = settings.getAutoSyncType();
-        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.Main : null;
-        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.Fast : null;
+        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.MAIN : null;
+        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.FAST : null;
 
         Context context = getContext();
         // TODO: if the queue sync operation fails, the update feed operation should not be started
@@ -209,7 +209,7 @@ public class EventProcessor {
         Log.d(TAG, "onSyncQueueStartedEvent() started");
 
         ActionRequest request = event.getRequest();
-        if(request.getRequestType() != ActionRequest.RequestType.ManualByOperation
+        if(request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION
                 || (request.getQueueLength() != null && request.getQueueLength() > 1)) {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
                     .setSmallIcon(R.drawable.ic_action_refresh)
@@ -317,15 +317,15 @@ public class EventProcessor {
                 Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
 
                 switch(errorType) {
-                    case Temporary:
-                    case NoNetwork:
+                    case TEMPORARY:
+                    case NO_NETWORK:
                         // don't show it to user at all or make it suppressible
                         // optionally schedule auto-retry
                         // TODO: not important: implement
                         break;
 
-                    case IncorrectConfiguration:
-                    case IncorrectCredentials: {
+                    case INCORRECT_CONFIGURATION:
+                    case INCORRECT_CREDENTIALS: {
                         // notify user -- user must fix something before retry
                         // maybe suppress notification if:
                         //  - the action was not requested by user (that probably implies the second case), or
@@ -339,7 +339,7 @@ public class EventProcessor {
                             settings.setConfigurationOk(false);
                         }
 
-                        if(request.getRequestType() != ActionRequest.RequestType.Auto
+                        if(request.getRequestType() != ActionRequest.RequestType.AUTO
                                 || !settings.isConfigurationErrorShown()) {
                             settings.setConfigurationErrorShown(true);
 
@@ -354,7 +354,7 @@ public class EventProcessor {
                                             .setSmallIcon(R.drawable.ic_warning_24dp)
                                             .setContentTitle(context.getString(R.string.notification_error))
                                             .setContentText(context.getString(
-                                                    errorType == ActionResult.ErrorType.IncorrectCredentials
+                                                    errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
                                                             ? R.string.notification_incorrectCredentials
                                                             : R.string.notification_incorrectConfiguration))
                                             .setContentIntent(contentIntent);
@@ -364,7 +364,7 @@ public class EventProcessor {
                         break;
                     }
 
-                    case Unknown: {
+                    case UNKNOWN: {
                         // this is undecided yet
                         // show notification + schedule auto-retry
                         // TODO: decide on behavior
@@ -386,10 +386,10 @@ public class EventProcessor {
                         break;
                     }
 
-                    case NegativeResponse:
+                    case NEGATIVE_RESPONSE:
                         // server acknowledged the operation but failed/refused to performed it;
                         // detection of such response is not implemented on client yet
-                        Log.w(TAG, "onActionResultEvent() got a NegativeResponse; that was not expected");
+                        Log.w(TAG, "onActionResultEvent() got a NEGATIVE_RESPONSE; that was not expected");
                         break;
                 }
             }
@@ -417,7 +417,7 @@ public class EventProcessor {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
                 ServiceHelper.updateFeed(getContext(),
-                        FeedUpdater.FeedType.Main, FeedUpdater.UpdateType.Fast, null, true);
+                        FeedUpdater.FeedType.MAIN, FeedUpdater.UpdateType.FAST, null, true);
             }
         }
     }

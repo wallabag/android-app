@@ -17,7 +17,7 @@ import okhttp3.Response;
 public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
 
     public enum Result {
-        OK, NotFound, NoAccess, UnknownError
+        OK, NOT_FOUND, NO_ACCESS, UNKNOWN_ERROR
     }
 
     public interface ResultHandler {
@@ -68,7 +68,7 @@ public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
         InputStream is = null;
         try {
             Response response = feedUpdater.getResponse(
-                    feedUpdater.getFeedUrl(FeedUpdater.FeedType.Favorite));
+                    feedUpdater.getFeedUrl(FeedUpdater.FeedType.FAVORITE));
 
             if(response.isSuccessful()) {
                 is = response.body().byteStream();
@@ -77,26 +77,26 @@ public class TestFeedsTask extends AsyncTask<Void, Void, Void> {
                 String s = br.readLine();
                 if(!"<?xml version=\"1.0\" encoding=\"utf-8\"?>".equals(s)) {
                     if("Uh, there is a problem while generating feed. Wrong token used?".equals(s)) {
-                        result = Result.NoAccess;
+                        result = Result.NO_ACCESS;
                     } else {
-                        result = Result.UnknownError;
+                        result = Result.UNKNOWN_ERROR;
                     }
                 } else if((s = br.readLine()) == null || !s.startsWith("<rss version=\"2.0\"")) {
-                    result = Result.UnknownError;
+                    result = Result.UNKNOWN_ERROR;
                 } else {
                     result = Result.OK;
                 }
             } else {
                 if(response.code() == 404) {
-                    result = Result.NotFound;
+                    result = Result.NOT_FOUND;
                 } else {
-                    result = Result.UnknownError;
+                    result = Result.UNKNOWN_ERROR;
                 }
             }
         } catch(IncorrectConfigurationException | IOException e) {
             Log.d(TAG, "Exception", e);
 
-            result = Result.UnknownError;
+            result = Result.UNKNOWN_ERROR;
             details = e.getLocalizedMessage();
         } finally {
             if(is != null) {

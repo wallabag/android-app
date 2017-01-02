@@ -55,12 +55,12 @@ public class SecondaryService extends IntentServiceBase {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case DownloadAsFile: {
+            case DOWNLOAD_AS_FILE: {
                 result = downloadAsFile(actionRequest);
                 break;
             }
 
-            case FetchImages: {
+            case FETCH_IMAGES: {
                 FetchImagesStartedEvent startEvent = new FetchImagesStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
@@ -95,7 +95,7 @@ public class SecondaryService extends IntentServiceBase {
         }
 
         if(article == null) {
-            return new ActionResult(ActionResult.ErrorType.Unknown, "Couldn't find the article"); // TODO: string
+            return new ActionResult(ActionResult.ErrorType.UNKNOWN, "Couldn't find the article"); // TODO: string
         }
 
         ActionResult result = null;
@@ -110,7 +110,7 @@ public class SecondaryService extends IntentServiceBase {
         } finally {
             removeStickyEvent(startEvent);
 
-            if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+            if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
 
             postEvent(new DownloadFileFinishedEvent(actionRequest, result, article,
                     downloadResult != null ? downloadResult.second : null));
@@ -127,7 +127,7 @@ public class SecondaryService extends IntentServiceBase {
 
         if(!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "downloadAsFile() not on-line; exiting");
-            return new Pair<>(new ActionResult(ActionResult.ErrorType.NoNetwork), null);
+            return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
 
         WallabagService service = getWallabagService();
@@ -143,20 +143,20 @@ public class SecondaryService extends IntentServiceBase {
 
                 ActionResult.ErrorType errorType;
                 switch(connectionTestResult) {
-                    case IncorrectURL:
-                    case IncorrectServerVersion:
-                    case WallabagNotFound:
-                        errorType = ActionResult.ErrorType.IncorrectConfiguration;
+                    case INCORRECT_URL:
+                    case INCORRECT_SERVER_VERSION:
+                    case WALLABAG_NOT_FOUND:
+                        errorType = ActionResult.ErrorType.INCORRECT_CONFIGURATION;
                         break;
 
-                    case AuthProblem:
-                    case HTTPAuth:
-                    case IncorrectCredentials:
-                        errorType = ActionResult.ErrorType.IncorrectCredentials;
+                    case AUTH_PROBLEM:
+                    case HTTP_AUTH:
+                    case INCORRECT_CREDENTIALS:
+                        errorType = ActionResult.ErrorType.INCORRECT_CREDENTIALS;
                         break;
 
                     default:
-                        errorType = ActionResult.ErrorType.Unknown;
+                        errorType = ActionResult.ErrorType.UNKNOWN;
                         break;
                 }
 
@@ -176,7 +176,7 @@ public class SecondaryService extends IntentServiceBase {
             Response response = service.getClient().newCall(request).execute();
 
             if(!response.isSuccessful()) {
-                return new Pair<>(new ActionResult(ActionResult.ErrorType.Unknown,
+                return new Pair<>(new ActionResult(ActionResult.ErrorType.UNKNOWN,
                         "Response code: " + response.code()
                                 + ", response message: " + response.message()), null);
             }

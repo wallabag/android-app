@@ -33,11 +33,11 @@ public abstract class IntentServiceBase extends IntentService {
 
         if(e instanceof RequestException) {
             if(e instanceof IncorrectCredentialsException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectCredentials);
+                result.setErrorType(ActionResult.ErrorType.INCORRECT_CREDENTIALS);
             } else if(e instanceof IncorrectConfigurationException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectConfiguration);
+                result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
             } else {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.getMessage());
             }
         } else if(e instanceof IOException) {
@@ -47,24 +47,24 @@ public abstract class IntentServiceBase extends IntentService {
                 if(e instanceof java.net.UnknownHostException
                         || e instanceof java.net.ConnectException // TODO: maybe filter by message
                         || e instanceof java.net.SocketTimeoutException) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
+                    result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
                 } else if(e instanceof javax.net.ssl.SSLException
                         && e.getMessage() != null
                         && e.getMessage().contains("Connection timed out")) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
+                    result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
                 }
             }
 
             if(!handled) {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
             }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
         } else { // other exceptions meant to be handled outside
-            result.setErrorType(ActionResult.ErrorType.Unknown);
+            result.setErrorType(ActionResult.ErrorType.UNKNOWN);
         }
 
         return result;

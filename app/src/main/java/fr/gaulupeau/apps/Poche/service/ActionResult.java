@@ -3,9 +3,9 @@ package fr.gaulupeau.apps.Poche.service;
 public class ActionResult {
 
     public enum ErrorType {
-        Temporary, NoNetwork,
-        IncorrectConfiguration, IncorrectCredentials,
-        NegativeResponse, Unknown
+        TEMPORARY, NO_NETWORK,
+        INCORRECT_CONFIGURATION, INCORRECT_CREDENTIALS,
+        NEGATIVE_RESPONSE, UNKNOWN
     }
 
     private boolean success = true;

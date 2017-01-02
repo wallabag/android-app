@@ -44,14 +44,14 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         HttpUrl httpUrl = HttpUrl.parse(endpoint + "/?view=about");
         if(httpUrl == null) {
-            return ConnectionTestResult.IncorrectURL;
+            return ConnectionTestResult.INCORRECT_URL;
         }
         Request testRequest = getRequest(httpUrl);
 
         Response response = exec(testRequest);
         if(response.code() == 401) {
             // fail because of HTTP Auth
-            return ConnectionTestResult.HTTPAuth;
+            return ConnectionTestResult.HTTP_AUTH;
         }
 
         String body = response.body().string();
@@ -62,10 +62,10 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         if(!isLoginPage(body)) {
             if(isLoginPageOfDifferentVersion(body)) {
-                return ConnectionTestResult.IncorrectServerVersion;
+                return ConnectionTestResult.INCORRECT_SERVER_VERSION;
             } else {
                 // it's not even wallabag login page: probably something wrong with the URL
-                return ConnectionTestResult.WallabagNotFound;
+                return ConnectionTestResult.WALLABAG_NOT_FOUND;
             }
         }
 
@@ -77,7 +77,7 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
         if(isLoginPage(body)) {
 //            if(body.contains("div class='messages error'"))
             // still login page: probably wrong username or password
-            return ConnectionTestResult.IncorrectCredentials;
+            return ConnectionTestResult.INCORRECT_CREDENTIALS;
         }
 
         response = exec(testRequest);
@@ -85,12 +85,12 @@ public class WallabagServiceEndpointV1 extends WallabagServiceEndpoint {
 
         if(isLoginPage(body)) {
             // login page AGAIN: weird, probably authorization problems (maybe cookies expire)
-            return ConnectionTestResult.AuthProblem;
+            return ConnectionTestResult.AUTH_PROBLEM;
         }
 
         if(!isRegularPage(body)) {
             // unexpected content: expected to find "log out" button
-            return ConnectionTestResult.UnknownPageAfterLogin;
+            return ConnectionTestResult.UNKNOWN_PAGE_AFTER_LOGIN;
         }
 
         return ConnectionTestResult.OK;

@@ -22,9 +22,9 @@ public abstract class WallabagServiceEndpoint {
     private static final String TAG = WallabagServiceEndpoint.class.getSimpleName();
 
     public enum ConnectionTestResult {
-        OK, IncorrectURL, IncorrectServerVersion, WallabagNotFound,
-        HTTPAuth, NoCSRF, IncorrectCredentials,
-        AuthProblem, UnknownPageAfterLogin
+        OK, INCORRECT_URL, INCORRECT_SERVER_VERSION, WALLABAG_NOT_FOUND,
+        HTTP_AUTH, NO_CSRF, INCORRECT_CREDENTIALS,
+        AUTH_PROBLEM, UNKNOWN_PAGE_AFTER_LOGIN
     }
 
     protected String endpoint;

@@ -9,12 +9,12 @@ import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        AddLink, Archive, Unarchive, Favorite, Unfavorite, Delete, SyncQueue, UpdateFeed,
-        DownloadAsFile, FetchImages
+        ADD_LINK, ARCHIVE, UNARCHIVE, FAVORITE, UNFAVORITE, DELETE, SYNC_QUEUE, UPDATE_FEED,
+        DOWNLOAD_AS_FILE, FETCH_IMAGES
     }
 
     public enum RequestType {
-        Auto, Manual, ManualByOperation
+        AUTO, MANUAL, MANUAL_BY_OPERATION
     }
 
     public enum DownloadFormat {
@@ -29,7 +29,7 @@ public class ActionRequest implements Parcelable {
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
 
     private Action action;
-    private RequestType requestType = RequestType.Manual;
+    private RequestType requestType = RequestType.MANUAL;
     private Long operationID;
 
     private Integer articleID;

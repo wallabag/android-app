@@ -53,19 +53,19 @@ public class MainService extends IntentServiceBase {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case Archive:
-            case Unarchive:
-            case Favorite:
-            case Unfavorite:
-            case Delete:
-            case AddLink:
+            case ARCHIVE:
+            case UNARCHIVE:
+            case FAVORITE:
+            case UNFAVORITE:
+            case DELETE:
+            case ADD_LINK:
                 Long queueChangedLength = serveSimpleRequest(actionRequest);
                 if(queueChangedLength != null) {
                     postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
                 }
                 break;
 
-            case SyncQueue: {
+            case SYNC_QUEUE: {
                 SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 Pair<ActionResult, Long> syncResult = null;
@@ -74,21 +74,21 @@ public class MainService extends IntentServiceBase {
                     result = syncResult.first;
                 } finally {
                     removeStickyEvent(startEvent);
-                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
                     postEvent(new SyncQueueFinishedEvent(actionRequest, result,
                             syncResult != null ? syncResult.second : null));
                 }
                 break;
             }
 
-            case UpdateFeed: {
+            case UPDATE_FEED: {
                 UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
                     result = updateFeed(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
-                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
                     postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
                 }
                 break;
@@ -119,29 +119,29 @@ public class MainService extends IntentServiceBase {
 
             ActionRequest.Action action = actionRequest.getAction();
             switch(action) {
-                case Archive:
-                case Unarchive:
+                case ARCHIVE:
+                case UNARCHIVE:
                     if(queueHelper.archiveArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.Archive)) {
+                            action == ActionRequest.Action.ARCHIVE)) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case Favorite:
-                case Unfavorite:
+                case FAVORITE:
+                case UNFAVORITE:
                     if(queueHelper.favoriteArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.Favorite)) {
+                            action == ActionRequest.Action.FAVORITE)) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case Delete:
+                case DELETE:
                     if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case AddLink:
+                case ADD_LINK:
                     if(queueHelper.addLink(actionRequest.getLink())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
@@ -166,7 +166,7 @@ public class MainService extends IntentServiceBase {
 
         if(!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
-            return new Pair<>(new ActionResult(ActionResult.ErrorType.NoNetwork), null);
+            return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
 
         ActionResult result = new ActionResult();
@@ -206,7 +206,7 @@ public class MainService extends IntentServiceBase {
                         articleItem = true;
 
                         if(!getWallabagService().toggleArchive(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -216,7 +216,7 @@ public class MainService extends IntentServiceBase {
                         articleItem = true;
 
                         if(!getWallabagService().toggleFavorite(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -225,7 +225,7 @@ public class MainService extends IntentServiceBase {
                         articleItem = true;
 
                         if(!getWallabagService().deleteArticle(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -234,7 +234,7 @@ public class MainService extends IntentServiceBase {
                         String link = item.getExtra();
                         if(link != null && !link.isEmpty()) {
                             if(!getWallabagService().addLink(link)) {
-                                itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                                itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                             }
                             if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
                         } else {
@@ -253,7 +253,7 @@ public class MainService extends IntentServiceBase {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
                 itemResult = new ActionResult();
-                itemResult.setErrorType(ActionResult.ErrorType.Unknown);
+                itemResult.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 itemResult.setMessage(e.toString());
             }
 
@@ -267,18 +267,18 @@ public class MainService extends IntentServiceBase {
                 boolean stop = false;
                 boolean mask = false; // it seems masking is not used
                 switch(itemError) {
-                    case Temporary:
-                    case NoNetwork:
+                    case TEMPORARY:
+                    case NO_NETWORK:
                         stop = true;
                         break;
-                    case IncorrectConfiguration:
-                    case IncorrectCredentials:
+                    case INCORRECT_CONFIGURATION:
+                    case INCORRECT_CREDENTIALS:
                         stop = true;
                         break;
-                    case Unknown:
+                    case UNKNOWN:
                         stop = true;
                         break;
-                    case NegativeResponse:
+                    case NEGATIVE_RESPONSE:
                         mask = true; // ?
                         break;
                 }
@@ -354,7 +354,7 @@ public class MainService extends IntentServiceBase {
                 daoSession.getDatabase().setTransactionSuccessful();
             } catch(IncorrectFeedException e) {
                 Log.e(TAG, "updateFeed() IncorrectFeedException", e);
-                result.setErrorType(ActionResult.ErrorType.Unknown);
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage("Error while parsing feed: " + e.getMessage()); // TODO: string resource
             } catch(RequestException | IOException e) {
                 ActionResult r = processException(e, "updateFeed()");
@@ -363,7 +363,7 @@ public class MainService extends IntentServiceBase {
                 daoSession.getDatabase().endTransaction();
             }
         } else {
-            result.setErrorType(ActionResult.ErrorType.NoNetwork);
+            result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
         }
 
         if(event != null && event.isAnythingChanged()) {

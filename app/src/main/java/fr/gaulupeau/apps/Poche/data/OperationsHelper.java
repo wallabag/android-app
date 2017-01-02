@@ -43,8 +43,8 @@ public class OperationsHelper {
             Log.v(TAG, "archiveArticle() after getArticleDao().update()");
 
             ArticlesChangedEvent.ChangeType changeType = archive
-                    ? ArticlesChangedEvent.ChangeType.Archived
-                    : ArticlesChangedEvent.ChangeType.Unarchived;
+                    ? ArticlesChangedEvent.ChangeType.ARCHIVED
+                    : ArticlesChangedEvent.ChangeType.UNARCHIVED;
 
             Log.v(TAG, "archiveArticle() before notifyAboutArticleChange()");
             notifyAboutArticleChange(article, changeType);
@@ -82,8 +82,8 @@ public class OperationsHelper {
             articleDao.update(article);
 
             ArticlesChangedEvent.ChangeType changeType = favorite
-                    ? ArticlesChangedEvent.ChangeType.Favorited
-                    : ArticlesChangedEvent.ChangeType.Unfavorited;
+                    ? ArticlesChangedEvent.ChangeType.FAVORITED
+                    : ArticlesChangedEvent.ChangeType.UNFAVORITED;
 
             notifyAboutArticleChange(article, changeType);
 
@@ -112,7 +112,7 @@ public class OperationsHelper {
 
         articleDao.delete(article);
 
-        notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.Deleted);
+        notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.DELETED);
 
         Log.d(TAG, "deleteArticle() article object deleted");
 

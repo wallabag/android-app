@@ -163,20 +163,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String cssName;
         boolean highContrast = false;
         switch(Themes.getCurrentTheme()) {
-            case LightContrast:
+            case LIGHT_CONTRAST:
                 highContrast = true;
-            case Light:
+            case LIGHT:
             default:
                 cssName = "main";
                 break;
 
-            case DarkContrast:
+            case DARK_CONTRAST:
                 highContrast = true;
-            case Dark:
+            case DARK:
                 cssName = "dark";
                 break;
 
-            case Solarized:
+            case SOLARIZED:
                 cssName = "solarized";
                 highContrast = false;
                 break;
@@ -689,11 +689,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
 
         switch(changeType) {
-            case Favorited:
-            case Unfavorited:
-            case Archived:
-            case Unarchived:
-            case Unspecified:
+            case FAVORITED:
+            case UNFAVORITED:
+            case ARCHIVED:
+            case UNARCHIVED:
+            case UNSPECIFIED:
                 Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
                 invalidateOptionsMenu();
                 break;

@@ -32,12 +32,12 @@ import okhttp3.Response;
 
 public class FeedUpdater {
 
-    public enum UpdateType { Full, Fast }
+    public enum UpdateType { FULL, FAST }
 
     public enum FeedType {
-        Main("home", "unread.xml", R.string.feedName_unread),
-        Favorite("fav", "starred.xml", R.string.feedName_favorites),
-        Archive("archive", "archive.xml", R.string.feedName_archived);
+        MAIN("home", "unread.xml", R.string.feedName_unread),
+        FAVORITE("fav", "starred.xml", R.string.feedName_favorites),
+        ARCHIVE("archive", "archive.xml", R.string.feedName_archived);
 
         String urlPartV1, urlPartV2;
         int nameResID;
@@ -103,7 +103,7 @@ public class FeedUpdater {
                 throw new IllegalArgumentException("If updateType is set, feedType must be set too");
             }
             if(updateType == null) {
-                updateType = UpdateType.Full;
+                updateType = UpdateType.FULL;
             }
 
             updateInternal(feedType, updateType, event);
@@ -120,14 +120,14 @@ public class FeedUpdater {
         Log.d(TAG, "updateAllFeeds() deleting old articles");
         articleDao.deleteAll();
 
-        Log.d(TAG, "updateAllFeeds() updating Main feed");
-        updateByFeed(articleDao, FeedType.Main, UpdateType.Full, 0, null);
+        Log.d(TAG, "updateAllFeeds() updating MAIN feed");
+        updateByFeed(articleDao, FeedType.MAIN, UpdateType.FULL, 0, null);
 
-        Log.d(TAG, "updateAllFeeds() updating Archive feed");
-        updateByFeed(articleDao, FeedType.Archive, UpdateType.Full, 0, null);
+        Log.d(TAG, "updateAllFeeds() updating ARCHIVE feed");
+        updateByFeed(articleDao, FeedType.ARCHIVE, UpdateType.FULL, 0, null);
 
-        Log.d(TAG, "updateAllFeeds() updating Favorite feed");
-        updateByFeed(articleDao, FeedType.Favorite, UpdateType.Fast, 0, null);
+        Log.d(TAG, "updateAllFeeds() updating FAVORITE feed");
+        updateByFeed(articleDao, FeedType.FAVORITE, UpdateType.FAST, 0, null);
 
         Log.d(TAG, "updateAllFeeds() finished");
     }
@@ -140,8 +140,8 @@ public class FeedUpdater {
         ArticleDao articleDao = DbConnection.getSession().getArticleDao();
 
         Integer latestID = null;
-        if(feedType == FeedType.Main || feedType == FeedType.Archive) {
-            WhereCondition cond = feedType == FeedType.Main
+        if(feedType == FeedType.MAIN || feedType == FeedType.ARCHIVE) {
+            WhereCondition cond = feedType == FeedType.MAIN
                     ? ArticleDao.Properties.Archive.notEq(true)
                     : ArticleDao.Properties.Archive.eq(true);
             List<Article> l = articleDao.queryBuilder().where(cond)
@@ -263,11 +263,11 @@ public class FeedUpdater {
 
             Log.v(TAG, "processFeed() parser.getName()=" + parser.getName());
             if ("item".equals(parser.getName())) {
-                if(feedType == FeedType.Main || feedType == FeedType.Archive
-                        || (feedType == FeedType.Favorite && updateType == UpdateType.Full)) {
-                    // Main: Full, Fast
-                    // Archive: Full, Fast
-                    // Favorite: Full
+                if(feedType == FeedType.MAIN || feedType == FeedType.ARCHIVE
+                        || (feedType == FeedType.FAVORITE && updateType == UpdateType.FULL)) {
+                    // MAIN: FULL, FAST
+                    // ARCHIVE: FULL, FAST
+                    // FAVORITE: FULL
 
                     Item item = parseItem(parser);
 
@@ -277,7 +277,7 @@ public class FeedUpdater {
                         continue;
                     }
 
-                    if(updateType == UpdateType.Fast && latestID != null && latestID >= id) {
+                    if(updateType == UpdateType.FAST && latestID != null && latestID >= id) {
                         Log.d(TAG, "processFeed(): update type fast, everything up to date");
                         break;
                     }
@@ -301,30 +301,30 @@ public class FeedUpdater {
                         e.printStackTrace();
                     }
                     if(existing) {
-                        if(feedType == FeedType.Archive) {
+                        if(feedType == FeedType.ARCHIVE) {
                             article.setArchive(true);
-                        } else if(feedType == FeedType.Favorite) {
+                        } else if(feedType == FeedType.FAVORITE) {
                             article.setFavorite(true);
                         }
                     } else {
-                        article.setArchive(feedType == FeedType.Archive);
-                        article.setFavorite(feedType == FeedType.Favorite);
+                        article.setArchive(feedType == FeedType.ARCHIVE);
+                        article.setFavorite(feedType == FeedType.FAVORITE);
                     }
                     article.setImagesDownloaded(false);
 
                     if(event != null) {
                         ArticlesChangedEvent.ChangeType changeType = existing
-                                ? ArticlesChangedEvent.ChangeType.Unspecified
-                                : ArticlesChangedEvent.ChangeType.Added;
+                                ? ArticlesChangedEvent.ChangeType.UNSPECIFIED
+                                : ArticlesChangedEvent.ChangeType.ADDED;
 
                         event.setChangedByFeedType(feedType);
                         event.addChangedArticle(article, changeType);
                     }
 
                     articleDao.insertOrReplace(article);
-                } else if(feedType == FeedType.Favorite) {
-                    // Favorite: Fast (ONLY applicable if Main and Archive feeds are up to date)
-                    // probably a bit faster then "Favorite: Full"
+                } else if(feedType == FeedType.FAVORITE) {
+                    // FAVORITE: FAST (ONLY applicable if MAIN and ARCHIVE feeds are up to date)
+                    // probably a bit faster then "FAVORITE: FULL"
 
                     Integer id = parseItemID(parser);
                     if(id == null) continue;
@@ -333,7 +333,7 @@ public class FeedUpdater {
                             .where(ArticleDao.Properties.ArticleId.eq(id))
                             .build().unique();
                     if(article == null) {
-                        Log.w(TAG, "processFeed() Favorite: Fast; couldn't find article with ID: "
+                        Log.w(TAG, "processFeed() FAVORITE: FAST; couldn't find article with ID: "
                                 + id);
                         continue;
                     }
@@ -352,7 +352,7 @@ public class FeedUpdater {
                             }
 
                             event.addChangedArticle(article,
-                                    ArticlesChangedEvent.ChangeType.Favorited);
+                                    ArticlesChangedEvent.ChangeType.FAVORITED);
                         }
                     }
                 }

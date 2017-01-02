@@ -122,7 +122,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
                 Log.d(TAG, "Connection test result: " + testResult.result);
             } catch(IncorrectConfigurationException e) {
                 Log.d(TAG, "Connection test: Exception", e);
-                testResult.result = WallabagServiceEndpoint.ConnectionTestResult.IncorrectURL;
+                testResult.result = WallabagServiceEndpoint.ConnectionTestResult.INCORRECT_URL;
             } catch(IOException e) {
                 Log.d(TAG, "Connection test: Exception", e);
                 testResult.errorMessage = e.getLocalizedMessage();

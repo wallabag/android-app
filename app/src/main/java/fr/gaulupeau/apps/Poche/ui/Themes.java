@@ -30,31 +30,31 @@ public class Themes {
     }
 
     public enum Theme {
-        Light(
+        LIGHT(
                 R.string.themeName_light,
                 R.style.LightTheme,
                 R.style.ProxyTheme
         ),
 
-        LightContrast(
+        LIGHT_CONTRAST(
                 R.string.themeName_light_contrast,
                 R.style.LightThemeContrast,
                 R.style.ProxyTheme
         ),
 
-        Dark(
+        DARK(
                 R.string.themeName_dark,
                 R.style.DarkTheme,
                 R.style.ProxyThemeDark
         ),
 
-        DarkContrast(
+        DARK_CONTRAST(
                 R.string.themeName_dark_contrast,
                 R.style.DarkThemeContrast,
                 R.style.ProxyThemeDark
         ),
 
-        Solarized(
+        SOLARIZED(
                 R.string.themeName_solarized,
                 R.style.SolarizedTheme,
                 R.style.ProxyTheme
