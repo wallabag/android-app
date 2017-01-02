@@ -23,9 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -494,7 +491,7 @@ public class ArticlesListActivity extends AppCompatActivity
                 LIST_TYPE_ARCHIVED
         };
 
-        private Map<Integer, ArticlesListFragment> fragments = new WeakHashMap<>(3);
+        private ArticlesListFragment[] fragments = new ArticlesListFragment[PAGES.length];
 
         public ArticlesListPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -524,7 +521,7 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         public static FeedUpdater.FeedType getFeedType(int position) {
-            switch(ArticlesListPagerAdapter.PAGES[position]) {
+            switch(PAGES[position]) {
                 case LIST_TYPE_FAVORITES:
                     return FeedUpdater.FeedType.Favorite;
                 case LIST_TYPE_ARCHIVED:
@@ -558,16 +555,16 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         public ArticlesListFragment getCachedFragment(int position) {
-            return fragments.get(position);
+            return fragments[position];
         }
 
         private ArticlesListFragment getFragment(int position) {
             Log.d(TAG, "getFragment " + position);
-            ArticlesListFragment f = fragments.get(position);
+
+            ArticlesListFragment f = fragments[position];
             if(f == null) {
                 Log.d(TAG, "creating new instance");
-                f = ArticlesListFragment.newInstance(PAGES[position]);
-                fragments.put(position, f);
+                fragments[position] = f = ArticlesListFragment.newInstance(PAGES[position]);
             }
 
             return f;
