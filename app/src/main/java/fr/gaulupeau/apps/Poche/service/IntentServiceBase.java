@@ -65,6 +65,7 @@ public abstract class IntentServiceBase extends IntentService {
             // in some cases may mean that the action was completed anyway.
         } else { // other exceptions meant to be handled outside
             result.setErrorType(ActionResult.ErrorType.UNKNOWN);
+            result.setMessage(e.toString());
         }
 
         return result;

@@ -284,7 +284,7 @@ public class MainService extends IntentServiceBase {
                 }
 
                 if(stop) {
-                    result.setErrorType(itemError);
+                    result.updateWith(itemResult);
                     Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                     break;
                 }
