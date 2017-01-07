@@ -105,6 +105,11 @@ public class EventProcessor {
     public void onConnectivityChangedEvent(ConnectivityChangedEvent event) {
         Log.d(TAG, "onConnectivityChangedEvent() started");
 
+        if(event.isNoConnectivity()) {
+            Log.d(TAG, "onConnectivityChangedEvent() isNoConnectivity is true; ignoring event");
+            return;
+        }
+
         networkChanged(false);
     }
 
