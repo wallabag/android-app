@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Locale;
+
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 
 public class ActionRequest implements Parcelable {
@@ -21,7 +23,7 @@ public class ActionRequest implements Parcelable {
         EPUB, MOBI, PDF, CSV, JSON, TXT, XML;
 
         public String asString() {
-            return name().toLowerCase();
+            return name().toLowerCase(Locale.US);
         }
 
     }

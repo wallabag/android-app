@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import fr.gaulupeau.apps.Poche.network.RequestCreator;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
@@ -70,7 +71,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
         List<String> urls = new ArrayList<>();
         if(tryPossibleURLs) {
-            boolean httpsOnly = srcUrl.toLowerCase().startsWith(PROTO_HTTPS);
+            boolean httpsOnly = srcUrl.toLowerCase(Locale.US).startsWith(PROTO_HTTPS);
 
             String urlWithoutProto = removeProto(srcUrl);
             if(urlWithoutProto == null) urlWithoutProto = srcUrl;
@@ -204,9 +205,9 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
     }
 
     private static String removeProto(String s) {
-        if(s.toLowerCase().startsWith(PROTO_HTTP)) {
+        if(s.toLowerCase(Locale.US).startsWith(PROTO_HTTP)) {
             return s.substring(PROTO_HTTP.length());
-        } else if(s.toLowerCase().startsWith(PROTO_HTTPS)) {
+        } else if(s.toLowerCase(Locale.US).startsWith(PROTO_HTTPS)) {
             return s.substring(PROTO_HTTPS.length());
         } else {
             return null;
