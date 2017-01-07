@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -447,6 +448,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
         TextView tv = (TextView) v.findViewById(R.id.tv_dialog_title_url);
         tv.setText(url);
