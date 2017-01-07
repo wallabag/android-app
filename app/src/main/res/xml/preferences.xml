@@ -78,7 +78,7 @@
             android:key="@string/pref_key_ui_theme"
             android:title="@string/pref_name_ui_theme"
             android:dialogTitle="@string/pref_name_ui_theme"
-            android:defaultValue="Light" />
+            android:defaultValue="Dark" />
         <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
             android:key="@string/pref_key_ui_article_fontSize"
             android:title="@string/pref_name_ui_article_fontSize"
