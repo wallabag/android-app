@@ -44,6 +44,8 @@ public class EventProcessor {
 
     private boolean delayedNetworkChangedTask;
 
+    private NotificationCompat.Builder fetchImagesNotificationBuilder;
+
     public EventProcessor(Context context) {
         this.context = context;
     }
@@ -200,6 +202,20 @@ public class EventProcessor {
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
+
+        fetchImagesNotificationBuilder = notificationBuilder;
+    }
+
+    @Subscribe
+    public void onFetchImagesProgressEvent(FetchImagesProgressEvent event) {
+        Log.d(TAG, "onFetchImagesProgressEvent() started");
+
+        if(fetchImagesNotificationBuilder == null) return;
+
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
+                fetchImagesNotificationBuilder
+                        .setProgress(event.getTotal(), event.getCurrent(), false)
+                        .build());
     }
 
     @Subscribe
@@ -207,6 +223,8 @@ public class EventProcessor {
         Log.d(TAG, "onFetchImagesFinishedEvent() started");
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING);
+
+        fetchImagesNotificationBuilder = null;
     }
 
     @Subscribe(sticky = true)

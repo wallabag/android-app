@@ -18,6 +18,7 @@ import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileStartedEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.FetchImagesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
@@ -231,9 +232,10 @@ public class SecondaryService extends IntentServiceBase {
         List<Integer> updatedArticles = new ArrayList<>(articleList.size());
 
         Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
-        int i = 0;
+        int i = 0, totalNumber = articleList.size();
         for(Article article: articleList) {
             Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
+            postEvent(new FetchImagesProgressEvent(actionRequest, i, totalNumber));
 
             ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
 
