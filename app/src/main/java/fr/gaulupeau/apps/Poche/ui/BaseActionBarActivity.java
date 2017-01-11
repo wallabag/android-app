@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
-public class BaseActionBarActivity extends AppCompatActivity {
+public abstract class BaseActionBarActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActionBarActivity.class.getSimpleName();
 

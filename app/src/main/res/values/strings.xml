@@ -44,7 +44,6 @@
     <string name="d_urlAction_openInBrowser">Open in browser</string>
     <string name="d_urlAction_addToWallabag">Add to wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_connectionFail_title">Connection Failure</string>
     <string name="d_bag_fail_title">Fail</string>
     <string name="d_bag_fail_text">Couldn\'t find a URL in share string:\n</string>
     <string name="d_configurationChanged_title">Parameters changed</string>
@@ -82,7 +81,6 @@
     <string name="d_checkFeeds_errorMessage_noAccess">No access to feeds</string>
     <string name="d_checkFeeds_errorMessage_unknown">Unknown error</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Unknown error: %s</string>
-    <string name="downloadPdf_noInternetConnection">Couldn\'t download article: no internet connection</string>
     <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t login: probably wrong username or password</string>
     <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
     <string name="update_allFeeds">Update all feeds</string>
@@ -116,6 +114,7 @@
     <string name="notification_updatingFeeds">Updating feeds</string>
     <string name="notification_updatingAllFeeds">Updating all feeds</string>
     <string name="notification_updatingSpecificFeed">Updating %s feed</string>
+    <string name="notification_downloadingImages">Downloading images</string>
     <string name="notification_syncingQueue">Synchronizing local changes</string>
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Incorrect credentials</string>
@@ -199,6 +198,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
     <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
     <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
+    <string name="pref_name_imageCache_enabled">Cache in article embedded images</string>
+    <string name="pref_desc_imageCache_enabled">Automatically downloads all images in every article and saves them to the device. Depending on the length of your wallabag article list this can take very long and consume a lot of space.</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>

@@ -233,28 +233,28 @@ public class ConfigurationTestHelper
         String errorStr;
         if(error != null) {
             switch(error) {
-                case IncorrectURL:
+                case INCORRECT_URL:
                     errorStr = context.getString(R.string.testConnection_errorMessage_incorrectUrl);
                     break;
-                case IncorrectServerVersion:
+                case INCORRECT_SERVER_VERSION:
                     errorStr = context.getString(R.string.testConnection_errorMessage_incorrectServerVersion);
                     break;
-                case WallabagNotFound:
+                case WALLABAG_NOT_FOUND:
                     errorStr = context.getString(R.string.testConnection_errorMessage_wallabagNotFound);
                     break;
-                case HTTPAuth:
+                case HTTP_AUTH:
                     errorStr = context.getString(R.string.testConnection_errorMessage_httpAuth);
                     break;
-                case NoCSRF:
+                case NO_CSRF:
                     errorStr = context.getString(R.string.testConnection_errorMessage_noCSRF);
                     break;
-                case IncorrectCredentials:
+                case INCORRECT_CREDENTIALS:
                     errorStr = context.getString(R.string.testConnection_errorMessage_incorrectCredentials);
                     break;
-                case AuthProblem:
+                case AUTH_PROBLEM:
                     errorStr = context.getString(R.string.testConnection_errorMessage_authProblems);
                     break;
-                case UnknownPageAfterLogin:
+                case UNKNOWN_PAGE_AFTER_LOGIN:
                     errorStr = context.getString(R.string.testConnection_errorMessage_unknownPageAfterLogin);
                     break;
                 default:
@@ -369,10 +369,10 @@ public class ConfigurationTestHelper
                 String errorMessage;
                 if(result != null) {
                     switch(result) {
-                        case NotFound:
+                        case NOT_FOUND:
                             errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_notFound);
                             break;
-                        case NoAccess:
+                        case NO_ACCESS:
                             errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_noAccess);
                             break;
                         default:

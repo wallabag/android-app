@@ -133,7 +133,7 @@ public class Settings {
                 }
 
                 Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
-                        ? Themes.Theme.LightContrast : Themes.Theme.Light;
+                        ? Themes.Theme.LIGHT_CONTRAST : Themes.Theme.LIGHT;
                 pref.edit().putString(context.getString(R.string.pref_key_ui_theme), theme.toString())
                         .apply();
             }
@@ -368,7 +368,7 @@ public class Settings {
             } catch(IllegalArgumentException ignored) {}
         }
 
-        return theme != null ? theme : Themes.Theme.Light;
+        return theme != null ? theme : Themes.Theme.LIGHT;
     }
 
     public void setTheme(Themes.Theme theme) {
@@ -509,6 +509,14 @@ public class Settings {
 
     public void setAutoDownloadNewArticlesEnabled(boolean value) {
         setBoolean(R.string.pref_key_autoDlNew_enabled, value);
+    }
+
+    public boolean isImageCacheEnabled() {
+        return getBoolean(R.string.pref_key_imageCache_enabled, false);
+    }
+
+    public void setImageCacheEnabled(boolean value) {
+        setBoolean(R.string.pref_key_imageCache_enabled, value);
     }
 
     public boolean isFirstRun() {

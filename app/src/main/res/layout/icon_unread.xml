@@ -44,6 +44,6 @@
         android:shadowColor="#000000"
         android:shadowDy="1"
         android:shadowRadius="4"
-        android:singleLine="true"
+        android:maxLines="1"
         android:textColor="#ffffff" />
 </LinearLayout>

@@ -23,9 +23,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -279,8 +276,8 @@ public class ArticlesListActivity extends AppCompatActivity
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.Main
-                ? FeedUpdater.UpdateType.Fast : FeedUpdater.UpdateType.Full;
+        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.MAIN
+                ? FeedUpdater.UpdateType.FAST : FeedUpdater.UpdateType.FULL;
 
         if(!updateFeed(true, feedType, updateType)) {
             setRefreshingUI(false);
@@ -353,13 +350,13 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private void invalidateLists(FeedsChangedEvent event) {
         if(event.isMainFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Main));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.MAIN));
         }
         if(event.isFavoriteFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Favorite));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.FAVORITE));
         }
         if(event.isArchiveFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.Archive));
+            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.ARCHIVE));
         }
     }
 
@@ -494,7 +491,7 @@ public class ArticlesListActivity extends AppCompatActivity
                 LIST_TYPE_ARCHIVED
         };
 
-        private Map<Integer, ArticlesListFragment> fragments = new WeakHashMap<>(3);
+        private ArticlesListFragment[] fragments = new ArticlesListFragment[PAGES.length];
 
         public ArticlesListPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -524,13 +521,13 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         public static FeedUpdater.FeedType getFeedType(int position) {
-            switch(ArticlesListPagerAdapter.PAGES[position]) {
+            switch(PAGES[position]) {
                 case LIST_TYPE_FAVORITES:
-                    return FeedUpdater.FeedType.Favorite;
+                    return FeedUpdater.FeedType.FAVORITE;
                 case LIST_TYPE_ARCHIVED:
-                    return FeedUpdater.FeedType.Archive;
+                    return FeedUpdater.FeedType.ARCHIVE;
                 default:
-                    return FeedUpdater.FeedType.Main;
+                    return FeedUpdater.FeedType.MAIN;
             }
         }
 
@@ -539,10 +536,10 @@ public class ArticlesListActivity extends AppCompatActivity
 
             int listType;
             switch(feedType) {
-                case Favorite:
+                case FAVORITE:
                     listType = LIST_TYPE_FAVORITES;
                     break;
-                case Archive:
+                case ARCHIVE:
                     listType = LIST_TYPE_ARCHIVED;
                     break;
                 default:
@@ -558,16 +555,16 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         public ArticlesListFragment getCachedFragment(int position) {
-            return fragments.get(position);
+            return fragments[position];
         }
 
         private ArticlesListFragment getFragment(int position) {
             Log.d(TAG, "getFragment " + position);
-            ArticlesListFragment f = fragments.get(position);
+
+            ArticlesListFragment f = fragments[position];
             if(f == null) {
                 Log.d(TAG, "creating new instance");
-                f = ArticlesListFragment.newInstance(PAGES[position]);
-                fragments.put(position, f);
+                fragments[position] = f = ArticlesListFragment.newInstance(PAGES[position]);
             }
 
             return f;

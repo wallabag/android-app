@@ -25,20 +25,20 @@ public class EventHelper {
         boolean favoriteUpdated = false;
 
         switch(changeType) {
-            case Archived:
-            case Unarchived:
+            case ARCHIVED:
+            case UNARCHIVED:
                 mainUpdated = archiveUpdated = true;
                 if(article.getFavorite()) favoriteUpdated = true;
                 break;
 
-            case Favorited:
-            case Unfavorited:
+            case FAVORITED:
+            case UNFAVORITED:
                 favoriteUpdated = true;
                 if(article.getArchive()) archiveUpdated = true;
                 else mainUpdated = true;
                 break;
 
-            case Deleted:
+            case DELETED:
                 if(article.getArchive()) archiveUpdated = true;
                 else mainUpdated = true;
                 if(article.getFavorite()) favoriteUpdated = true;

@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,11 +38,11 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
-import fr.gaulupeau.apps.Poche.network.tasks.DownloadPdfTask;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -129,7 +130,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         invalidateOptionsMenu();
 
         if(mArticle == null) {
-            Log.e(TAG, "onCreate() Did not find article with articleId=" + articleID + ". Thus we" +
+            Log.e(TAG, "onCreate: Did not find article with articleId=" + articleID + ". Thus we" +
                     " are not able to create this activity. Finish.");
             finish();
             return;
@@ -139,13 +140,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         originalUrlText = mArticle.getUrl();
         Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
         String htmlContent = mArticle.getContent();
-        Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
+        if(BuildConfig.DEBUG) Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
         positionToRestore = mArticle.getArticleProgress();
         Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
         setTitle(titleText);
 
         settings = App.getInstance().getSettings();
+
+        if(settings.isImageCacheEnabled()) {
+            Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
+            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
+                    htmlContent, mArticle.getArticleId().longValue());
+        }
 
         acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
@@ -157,20 +164,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String cssName;
         boolean highContrast = false;
         switch(Themes.getCurrentTheme()) {
-            case LightContrast:
+            case LIGHT_CONTRAST:
                 highContrast = true;
-            case Light:
+            case LIGHT:
             default:
                 cssName = "main";
                 break;
 
-            case DarkContrast:
+            case DARK_CONTRAST:
                 highContrast = true;
-            case Dark:
+            case DARK:
                 cssName = "dark";
                 break;
 
-            case Solarized:
+            case SOLARIZED:
                 cssName = "solarized";
                 highContrast = false;
                 break;
@@ -441,6 +448,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
         TextView tv = (TextView) v.findViewById(R.id.tv_dialog_title_url);
         tv.setText(url);
@@ -518,13 +526,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean downloadPdf() {
         Log.d(TAG, "downloadPdf()");
 
-        File exportDir = getExternalFilesDir(null);
-        if(exportDir != null) {
-            new DownloadPdfTask(getApplicationContext(), mArticle.getArticleId(),
-                    mArticle, exportDir.getAbsolutePath()).execute();
-        } else {
-            Log.w(TAG, "downloadPdf() exportDir is null");
-        }
+        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), mArticle.getArticleId(), null);
 
         return true;
     }
@@ -689,11 +691,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
 
         switch(changeType) {
-            case Favorited:
-            case Unfavorited:
-            case Archived:
-            case Unarchived:
-            case Unspecified:
+            case FAVORITED:
+            case UNFAVORITED:
+            case ARCHIVED:
+            case UNARCHIVED:
+            case UNSPECIFIED:
                 Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
                 invalidateOptionsMenu();
                 break;

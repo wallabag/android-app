@@ -38,14 +38,14 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
         HttpUrl httpUrl = HttpUrl.parse(endpoint + "/");
         if(httpUrl == null) {
-            return ConnectionTestResult.IncorrectURL;
+            return ConnectionTestResult.INCORRECT_URL;
         }
         Request testRequest = getRequest(httpUrl);
 
         Response response = exec(testRequest);
         if(response.code() == 401) {
             // fail because of HTTP Auth
-            return ConnectionTestResult.HTTPAuth;
+            return ConnectionTestResult.HTTP_AUTH;
         }
 
         String body = response.body().string();
@@ -56,17 +56,17 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
         if(!isLoginPage(body)) {
             if(isLoginPageOfDifferentVersion(body)) {
-                return ConnectionTestResult.IncorrectServerVersion;
+                return ConnectionTestResult.INCORRECT_SERVER_VERSION;
             } else {
                 // it's not even wallabag login page: probably something wrong with the URL
-                return ConnectionTestResult.WallabagNotFound;
+                return ConnectionTestResult.WALLABAG_NOT_FOUND;
             }
         }
 
         String csrfToken = getCsrfToken(body);
         if(csrfToken == null){
             // cannot find csrf string in the login page
-            return ConnectionTestResult.NoCSRF;
+            return ConnectionTestResult.NO_CSRF;
         }
 
         Request loginRequest = getLoginRequest(csrfToken);
@@ -77,7 +77,7 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
         if(isLoginPage(body)) {
 //            if(body.contains("div class='messages error'"))
             // still login page: probably wrong username or password
-            return ConnectionTestResult.IncorrectCredentials;
+            return ConnectionTestResult.INCORRECT_CREDENTIALS;
         }
 
         response = exec(testRequest);
@@ -88,12 +88,12 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
             // usually caused by redirects:
             // HTTP -> HTTPS -- guaranteed
             // other (hostname -> www.hostname) -- maybe
-            return ConnectionTestResult.AuthProblem;
+            return ConnectionTestResult.AUTH_PROBLEM;
         }
 
         if(!isRegularPage(body)) {
             // unexpected content: expected to find "log out" button
-            return ConnectionTestResult.UnknownPageAfterLogin;
+            return ConnectionTestResult.UNKNOWN_PAGE_AFTER_LOGIN;
         }
 
         return ConnectionTestResult.OK;

@@ -57,15 +57,15 @@ public class FeedsChangedEvent {
         if(feedType == null) return;
 
         switch(feedType) {
-            case Main:
+            case MAIN:
                 mainFeedChanged = true;
                 break;
 
-            case Favorite:
+            case FAVORITE:
                 favoriteFeedChanged = true;
                 break;
 
-            case Archive:
+            case ARCHIVE:
                 archiveFeedChanged = true;
                 break;
         }

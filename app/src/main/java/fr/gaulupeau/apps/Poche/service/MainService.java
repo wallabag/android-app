@@ -1,7 +1,7 @@
 package fr.gaulupeau.apps.Poche.service;
 
-import android.app.IntentService;
 import android.content.Intent;
+import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
@@ -11,7 +11,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -26,9 +25,6 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.FeedUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
@@ -36,46 +32,40 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class BGService extends IntentService {
+public class MainService extends IntentServiceBase {
 
-    private static final String TAG = BGService.class.getSimpleName();
+    private static final String TAG = MainService.class.getSimpleName();
 
-    // TODO: rename these so it is obvious to use getters instead?
-    private Settings settings;
-
-    private DaoSession daoSession;
-    private WallabagService wallabagService;
-
-    public BGService() {
-        super(BGService.class.getSimpleName());
+    public MainService() {
+        super(MainService.class.getSimpleName());
         setIntentRedelivery(true);
 
-        Log.d(TAG, "BGService() created");
+        Log.d(TAG, "MainService() created");
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.d(TAG, "onHandleIntent() started");
 
-        android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+        Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
 
         ActionRequest actionRequest = ActionRequest.fromIntent(intent);
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case Archive:
-            case Unarchive:
-            case Favorite:
-            case Unfavorite:
-            case Delete:
-            case AddLink:
+            case ARCHIVE:
+            case UNARCHIVE:
+            case FAVORITE:
+            case UNFAVORITE:
+            case DELETE:
+            case ADD_LINK:
                 Long queueChangedLength = serveSimpleRequest(actionRequest);
                 if(queueChangedLength != null) {
                     postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
                 }
                 break;
 
-            case SyncQueue: {
+            case SYNC_QUEUE: {
                 SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 Pair<ActionResult, Long> syncResult = null;
@@ -84,21 +74,21 @@ public class BGService extends IntentService {
                     result = syncResult.first;
                 } finally {
                     removeStickyEvent(startEvent);
-                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
                     postEvent(new SyncQueueFinishedEvent(actionRequest, result,
                             syncResult != null ? syncResult.second : null));
                 }
                 break;
             }
 
-            case UpdateFeed: {
+            case UPDATE_FEED: {
                 UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
                     result = updateFeed(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
-                    if(result == null) result = new ActionResult(ActionResult.ErrorType.Unknown);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
                     postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
                 }
                 break;
@@ -129,29 +119,29 @@ public class BGService extends IntentService {
 
             ActionRequest.Action action = actionRequest.getAction();
             switch(action) {
-                case Archive:
-                case Unarchive:
+                case ARCHIVE:
+                case UNARCHIVE:
                     if(queueHelper.archiveArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.Archive)) {
+                            action == ActionRequest.Action.ARCHIVE)) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case Favorite:
-                case Unfavorite:
+                case FAVORITE:
+                case UNFAVORITE:
                     if(queueHelper.favoriteArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.Favorite)) {
+                            action == ActionRequest.Action.FAVORITE)) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case Delete:
+                case DELETE:
                     if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case AddLink:
+                case ADD_LINK:
                     if(queueHelper.addLink(actionRequest.getLink())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
@@ -176,7 +166,7 @@ public class BGService extends IntentService {
 
         if(!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
-            return new Pair<>(new ActionResult(ActionResult.ErrorType.NoNetwork), null);
+            return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
 
         ActionResult result = new ActionResult();
@@ -216,7 +206,7 @@ public class BGService extends IntentService {
                         articleItem = true;
 
                         if(!getWallabagService().toggleArchive(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -226,7 +216,7 @@ public class BGService extends IntentService {
                         articleItem = true;
 
                         if(!getWallabagService().toggleFavorite(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -235,7 +225,7 @@ public class BGService extends IntentService {
                         articleItem = true;
 
                         if(!getWallabagService().deleteArticle(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                         }
                         break;
                     }
@@ -244,7 +234,7 @@ public class BGService extends IntentService {
                         String link = item.getExtra();
                         if(link != null && !link.isEmpty()) {
                             if(!getWallabagService().addLink(link)) {
-                                itemResult = new ActionResult(ActionResult.ErrorType.NegativeResponse);
+                                itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                             }
                             if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
                         } else {
@@ -263,7 +253,7 @@ public class BGService extends IntentService {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
                 itemResult = new ActionResult();
-                itemResult.setErrorType(ActionResult.ErrorType.Unknown);
+                itemResult.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 itemResult.setMessage(e.toString());
             }
 
@@ -277,24 +267,24 @@ public class BGService extends IntentService {
                 boolean stop = false;
                 boolean mask = false; // it seems masking is not used
                 switch(itemError) {
-                    case Temporary:
-                    case NoNetwork:
+                    case TEMPORARY:
+                    case NO_NETWORK:
                         stop = true;
                         break;
-                    case IncorrectConfiguration:
-                    case IncorrectCredentials:
+                    case INCORRECT_CONFIGURATION:
+                    case INCORRECT_CREDENTIALS:
                         stop = true;
                         break;
-                    case Unknown:
+                    case UNKNOWN:
                         stop = true;
                         break;
-                    case NegativeResponse:
+                    case NEGATIVE_RESPONSE:
                         mask = true; // ?
                         break;
                 }
 
                 if(stop) {
-                    result.setErrorType(itemError);
+                    result.updateWith(itemResult);
                     Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                     break;
                 }
@@ -364,7 +354,7 @@ public class BGService extends IntentService {
                 daoSession.getDatabase().setTransactionSuccessful();
             } catch(IncorrectFeedException e) {
                 Log.e(TAG, "updateFeed() IncorrectFeedException", e);
-                result.setErrorType(ActionResult.ErrorType.Unknown);
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage("Error while parsing feed: " + e.getMessage()); // TODO: string resource
             } catch(RequestException | IOException e) {
                 ActionResult r = processException(e, "updateFeed()");
@@ -373,7 +363,7 @@ public class BGService extends IntentService {
                 daoSession.getDatabase().endTransaction();
             }
         } else {
-            result.setErrorType(ActionResult.ErrorType.NoNetwork);
+            result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
         }
 
         if(event != null && event.isAnythingChanged()) {
@@ -382,75 +372,6 @@ public class BGService extends IntentService {
 
         Log.d(TAG, "updateFeed() finished");
         return result;
-    }
-
-    private ActionResult processException(Exception e, String scope) {
-        ActionResult result = new ActionResult();
-
-        Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
-
-        if(e instanceof RequestException) {
-            if(e instanceof IncorrectCredentialsException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectCredentials);
-            } else if(e instanceof IncorrectConfigurationException) {
-                result.setErrorType(ActionResult.ErrorType.IncorrectConfiguration);
-            } else {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage(e.getMessage());
-            }
-        } else if(e instanceof IOException) {
-            boolean handled = false;
-
-            if(getSettings().isConfigurationOk()) {
-                if(e instanceof java.net.UnknownHostException
-                        || e instanceof java.net.ConnectException // TODO: maybe filter by message
-                        || e instanceof java.net.SocketTimeoutException) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
-                    handled = true;
-                } else if(e instanceof javax.net.ssl.SSLException
-                        && e.getMessage() != null
-                        && e.getMessage().contains("Connection timed out")) {
-                    result.setErrorType(ActionResult.ErrorType.Temporary);
-                    handled = true;
-                }
-            }
-
-            if(!handled) {
-                result.setErrorType(ActionResult.ErrorType.Unknown);
-                result.setMessage(e.toString());
-            }
-            // IOExceptions in most cases mean temporary error,
-            // in some cases may mean that the action was completed anyway.
-        } else { // other exceptions meant to be handled outside
-            result.setErrorType(ActionResult.ErrorType.Unknown);
-        }
-
-        return result;
-    }
-
-    private Settings getSettings() {
-        if(settings == null) {
-            settings = new Settings(this);
-        }
-
-        return settings;
-    }
-
-    private DaoSession getDaoSession() {
-        if(daoSession == null) {
-            daoSession = DbConnection.getSession();
-        }
-
-        return daoSession;
-    }
-
-    private WallabagService getWallabagService() {
-        if(wallabagService == null) {
-            Settings settings = getSettings();
-            wallabagService = WallabagService.fromSettings(settings);
-        }
-
-        return wallabagService;
     }
 
 }
