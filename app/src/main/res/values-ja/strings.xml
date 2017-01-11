@@ -100,7 +100,7 @@
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
     <string name="menuAbout">アプリについて</string>
-    <string name="aboutText">&lt;b>Android 用 wallabag アプリ&lt;/b>&lt;br/> wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
+    <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声の高さ</string>
     <string name="readVolume">読む音量</string>
@@ -226,4 +226,8 @@
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>
     <string name="connectionWizard_summary_prev">戻る</string>
     <string name="connectionWizard_summary_next">設定を保存</string>
-</resources>
+<string name="notification_downloadingImages">画像のダウンロード中</string>
+    <string name="pref_name_imageCache_enabled">記事に埋め込まれた画像をキャッシュ</string>
+    <string name="pref_desc_imageCache_enabled">自動的にすべての記事のすべての画像をダウンロードし、デバイスに保存します。Wallabag の記事リストの長さによって、これは非常に長い時間がかかることや、多くの容量を消費することがあります。</string>
+
+    </resources>
