@@ -152,7 +152,7 @@ public class EventProcessor {
         Context context = getContext();
 
         FeedUpdater.FeedType feedType = event.getFeedType();
-        String detailedMessage = context.getString(R.string.app_name) + " ";
+        String detailedMessage = context.getString(R.string.app_name) + " · ";
         if(feedType == null) {
             detailedMessage += context.getString(R.string.notification_updatingAllFeeds);
         } else {
@@ -198,6 +198,7 @@ public class EventProcessor {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
                 .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                .setContentText(context.getString(R.string.app_name))
                 .setOngoing(true);
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
@@ -377,7 +378,7 @@ public class EventProcessor {
                                     new NotificationCompat.Builder(context)
                                             .setSmallIcon(R.drawable.ic_warning_24dp)
                                             .setContentTitle(context.getString(R.string.notification_error))
-                                            .setContentText(context.getString(
+                                            .setContentText(context.getString(R.string.app_name) + " · " + context.getString(
                                                     errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
                                                             ? R.string.notification_incorrectCredentials
                                                             : R.string.notification_incorrectConfiguration))
@@ -398,7 +399,7 @@ public class EventProcessor {
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(context.getString(R.string.app_name) + " " + context.getString(R.string.notification_unknownError));
+                                        .setContentText(context.getString(R.string.app_name) + " · " + context.getString(R.string.notification_unknownError));
 
                         if(result.getMessage() != null) {
                             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
