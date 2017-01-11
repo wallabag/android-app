@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -152,7 +153,12 @@ public class EventProcessor {
         Context context = getContext();
 
         FeedUpdater.FeedType feedType = event.getFeedType();
-        String detailedMessage = context.getString(R.string.app_name) + " · ";
+        String detailedMessage = "";
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // notifications in Android before Android Nougat do not contain their source app,
+            // therefore we add it here manually
+            detailedMessage = context.getString(R.string.app_name) + " · ";
+        }
         if(feedType == null) {
             detailedMessage += context.getString(R.string.notification_updatingAllFeeds);
         } else {
@@ -198,8 +204,11 @@ public class EventProcessor {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
                 .setContentTitle(context.getString(R.string.notification_downloadingImages))
-                .setContentText(context.getString(R.string.app_name))
                 .setOngoing(true);
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            notificationBuilder.setContentText(context.getString(R.string.app_name));
+        }
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
@@ -238,8 +247,11 @@ public class EventProcessor {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
                     .setSmallIcon(R.drawable.ic_action_refresh)
                     .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
-                    .setContentText(context.getString(R.string.app_name))
                     .setOngoing(true);
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                notificationBuilder.setContentText(context.getString(R.string.app_name));
+            }
 
             getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
                     notificationBuilder.setProgress(0, 0, true).build());
@@ -374,11 +386,16 @@ public class EventProcessor {
                             PendingIntent contentIntent = PendingIntent.getActivity(
                                     context, 0, intent, 0);
 
+                            String detailedText = "";
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                                detailedText = context.getString(R.string.app_name) + " · ";
+                            }
+
                             NotificationCompat.Builder notificationBuilder =
                                     new NotificationCompat.Builder(context)
                                             .setSmallIcon(R.drawable.ic_warning_24dp)
                                             .setContentTitle(context.getString(R.string.notification_error))
-                                            .setContentText(context.getString(R.string.app_name) + " · " + context.getString(
+                                            .setContentText(detailedText + context.getString(
                                                     errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
                                                             ? R.string.notification_incorrectCredentials
                                                             : R.string.notification_incorrectConfiguration))
@@ -395,11 +412,15 @@ public class EventProcessor {
                         // TODO: decide on behavior
 
                         Context context = getContext();
+                        String detailedText = "";
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                            detailedText = context.getString(R.string.app_name) + " · ";
+                        }
                         NotificationCompat.Builder notificationBuilder =
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(context.getString(R.string.app_name) + " · " + context.getString(R.string.notification_unknownError));
+                                        .setContentText(detailedText + context.getString(R.string.notification_unknownError));
 
                         if(result.getMessage() != null) {
                             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
