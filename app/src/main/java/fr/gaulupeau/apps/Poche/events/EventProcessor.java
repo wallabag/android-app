@@ -152,19 +152,15 @@ public class EventProcessor {
 
         Context context = getContext();
 
+        String detailedMessage;
         FeedUpdater.FeedType feedType = event.getFeedType();
-        String detailedMessage = "";
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            // notifications in Android before Android Nougat do not contain their source app,
-            // therefore we add it here manually
-            detailedMessage = context.getString(R.string.app_name) + " · ";
-        }
         if(feedType == null) {
-            detailedMessage += context.getString(R.string.notification_updatingAllFeeds);
+            detailedMessage = context.getString(R.string.notification_updatingAllFeeds);
         } else {
-            detailedMessage += context.getString(R.string.notification_updatingSpecificFeed,
+            detailedMessage = context.getString(R.string.notification_updatingSpecificFeed,
                     context.getString(feedType.getLocalizedResourceID()));
         }
+        detailedMessage = prependAppName(detailedMessage);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
@@ -206,7 +202,7 @@ public class EventProcessor {
                 .setContentTitle(context.getString(R.string.notification_downloadingImages))
                 .setOngoing(true);
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             notificationBuilder.setContentText(context.getString(R.string.app_name));
         }
 
@@ -244,12 +240,14 @@ public class EventProcessor {
         ActionRequest request = event.getRequest();
         if(request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION
                 || (request.getQueueLength() != null && request.getQueueLength() > 1)) {
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(getContext())
+            Context context = getContext();
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_action_refresh)
                     .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
                     .setOngoing(true);
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 notificationBuilder.setContentText(context.getString(R.string.app_name));
             }
 
@@ -386,19 +384,18 @@ public class EventProcessor {
                             PendingIntent contentIntent = PendingIntent.getActivity(
                                     context, 0, intent, 0);
 
-                            String detailedText = "";
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                                detailedText = context.getString(R.string.app_name) + " · ";
-                            }
+                            String detailedText = context.getString(
+                                    errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
+                                            ? R.string.notification_incorrectCredentials
+                                            : R.string.notification_incorrectConfiguration);
+
+                            detailedText = prependAppName(detailedText);
 
                             NotificationCompat.Builder notificationBuilder =
                                     new NotificationCompat.Builder(context)
                                             .setSmallIcon(R.drawable.ic_warning_24dp)
                                             .setContentTitle(context.getString(R.string.notification_error))
-                                            .setContentText(detailedText + context.getString(
-                                                    errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
-                                                            ? R.string.notification_incorrectCredentials
-                                                            : R.string.notification_incorrectConfiguration))
+                                            .setContentText(detailedText)
                                             .setContentIntent(contentIntent);
 
                             notification = notificationBuilder.build();
@@ -412,15 +409,15 @@ public class EventProcessor {
                         // TODO: decide on behavior
 
                         Context context = getContext();
-                        String detailedText = "";
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                            detailedText = context.getString(R.string.app_name) + " · ";
-                        }
+
+                        String detailedText = context.getString(R.string.notification_unknownError);
+                        detailedText = prependAppName(detailedText);
+
                         NotificationCompat.Builder notificationBuilder =
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(detailedText + context.getString(R.string.notification_unknownError));
+                                        .setContentText(detailedText);
 
                         if(result.getMessage() != null) {
                             notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
@@ -501,6 +498,16 @@ public class EventProcessor {
 
             Settings.enableConnectivityChangeReceiver(getContext(), enable);
         }
+    }
+
+    private String prependAppName(String s) {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            // notifications in Android before Android Nougat do not contain their source app,
+            // therefore we add it here manually
+            s = getContext().getString(R.string.app_name) + " · " + s;
+        }
+
+        return s;
     }
 
     private Context getContext() {
