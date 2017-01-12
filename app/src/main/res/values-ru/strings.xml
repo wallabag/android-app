@@ -145,6 +145,7 @@
     <string name="notification_updatingFeeds">Обновление лент</string>
     <string name="notification_updatingAllFeeds">Обновление всех лент</string>
     <string name="notification_updatingSpecificFeed">Обновление ленты: %s</string>
+    <string name="notification_downloadingImages">Загружаются изображения</string>
     <string name="notification_syncingQueue">Синхронизация локальных изменений</string>
     <string name="notification_incorrectCredentials">Неправильные данные учётной записи</string>
     <string name="notification_incorrectConfiguration">Неправильная конфигурация</string>
@@ -187,6 +188,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
     <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
+    <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
+    <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
 
     <string name="pref_categoryName_miscellaneous">Прочее</string>
     <string name="pref_name_misc_handleHttpScheme">Обрабатывать HTTP-схему</string>
@@ -225,8 +228,4 @@
     <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
     <string name="connectionWizard_summary_prev">Назад</string>
     <string name="connectionWizard_summary_next">Сохранить настройки</string>
-<string name="notification_downloadingImages">Загружаются изображения</string>
-    <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
-    <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
-
-    </resources>
+</resources>

@@ -114,6 +114,7 @@
     <string name="notification_updatingFeeds">フィードの更新中</string>
     <string name="notification_updatingAllFeeds">すべてのフィードを更新中</string>
     <string name="notification_updatingSpecificFeed">%s フィードを更新中</string>
+    <string name="notification_downloadingImages">画像のダウンロード中</string>
     <string name="notification_syncingQueue">ローカルの変更を同期中</string>
     <string name="notification_error">エラー</string>
     <string name="notification_incorrectCredentials">資格情報が正しくありません</string>
@@ -184,6 +185,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">これは、ネットワークが利用可能になるとすぐにローカルの変更 (追加されたリンク、アーカイブされた記事等) をサーバーに同期することができます。</string>
     <string name="pref_name_autoDlNew_enabled">追加で新しい記事をダウンロード</string>
     <string name="pref_desc_autoDlNew_enabled">アプリ経由で追加された記事をすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、ダウンロードは行われません。</string>
+    <string name="pref_name_imageCache_enabled">記事に埋め込まれた画像をキャッシュ</string>
+    <string name="pref_desc_imageCache_enabled">自動的にすべての記事のすべての画像をダウンロードし、デバイスに保存します。Wallabag の記事リストの長さによって、これは非常に長い時間がかかることや、多くの容量を消費することがあります。</string>
 
     <string name="pref_categoryName_miscellaneous">その他</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP スキームの処理</string>
@@ -226,8 +229,4 @@
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>
     <string name="connectionWizard_summary_prev">戻る</string>
     <string name="connectionWizard_summary_next">設定を保存</string>
-<string name="notification_downloadingImages">画像のダウンロード中</string>
-    <string name="pref_name_imageCache_enabled">記事に埋め込まれた画像をキャッシュ</string>
-    <string name="pref_desc_imageCache_enabled">自動的にすべての記事のすべての画像をダウンロードし、デバイスに保存します。Wallabag の記事リストの長さによって、これは非常に長い時間がかかることや、多くの容量を消費することがあります。</string>
-
-    </resources>
+</resources>
