@@ -131,7 +131,7 @@
     <string name="d_checkFeeds_errorMessage_unknown">Неизвестная ошибка</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="menuAbout">О приложении</string>
-    <string name="aboutText">&lt;b>Приложение wallabag для Android&lt;/b>&lt;br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
+    <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>
     <string name="readVolume">Громкость чтения</string>
@@ -225,4 +225,8 @@
     <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
     <string name="connectionWizard_summary_prev">Назад</string>
     <string name="connectionWizard_summary_next">Сохранить настройки</string>
-</resources>
+<string name="notification_downloadingImages">Загружаются изображения</string>
+    <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
+    <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
+
+    </resources>
