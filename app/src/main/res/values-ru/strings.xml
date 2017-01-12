@@ -131,7 +131,7 @@
     <string name="d_checkFeeds_errorMessage_unknown">Неизвестная ошибка</string>
     <string name="d_checkFeeds_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="menuAbout">О приложении</string>
-    <string name="aboutText">&lt;b>Приложение wallabag для Android&lt;/b>&lt;br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
+    <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>
     <string name="readVolume">Громкость чтения</string>
@@ -145,6 +145,7 @@
     <string name="notification_updatingFeeds">Обновление лент</string>
     <string name="notification_updatingAllFeeds">Обновление всех лент</string>
     <string name="notification_updatingSpecificFeed">Обновление ленты: %s</string>
+    <string name="notification_downloadingImages">Загружаются изображения</string>
     <string name="notification_syncingQueue">Синхронизация локальных изменений</string>
     <string name="notification_incorrectCredentials">Неправильные данные учётной записи</string>
     <string name="notification_incorrectConfiguration">Неправильная конфигурация</string>
@@ -187,6 +188,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
     <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
+    <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
+    <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
 
     <string name="pref_categoryName_miscellaneous">Прочее</string>
     <string name="pref_name_misc_handleHttpScheme">Обрабатывать HTTP-схему</string>
