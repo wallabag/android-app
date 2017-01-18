@@ -64,6 +64,8 @@ public class DbConnection {
         public void onUpgrade(Database db, int oldVersion, int newVersion) {
             Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
+            boolean recreateTables = true;
+
             List<String> offlineUrls = null;
             if(oldVersion == 2) {
                 Cursor c = null;
@@ -81,7 +83,22 @@ public class DbConnection {
                         c.close();
                     }
                 }
+            } else if(oldVersion == 5) {
+                db.beginTransaction();
+                try {
+                    db.execSQL("ALTER TABLE ARTICLE ADD COLUMN images_downloaded INTEGER DEFAULT 0");
+
+                    db.setTransactionSuccessful();
+
+                    recreateTables = false;
+                } catch(Exception e) {
+                    Log.w(TAG, "Exception while altering table ARTICLE", e);
+                } finally {
+                    db.endTransaction();
+                }
             }
+
+            if(!recreateTables) return;
 
             DaoMaster.dropAllTables(db, true);
             onCreate(db);
