@@ -32,7 +32,6 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListFragment extends Fragment implements ListAdapter.OnItemClickListener {
 
-    // TODO: remove logging
     private static final String TAG = ArticlesListFragment.class.getSimpleName();
 
     private static final String LIST_TYPE_PARAM = "list_type";
@@ -118,7 +117,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onResume() {
         super.onResume();
 
-        Log.d(TAG, "Fragment " + listType + " onResume()");
+        Log.v(TAG, "Fragment " + listType + " onResume()");
 
         if(firstShown) {
             firstShown = false;
@@ -132,7 +131,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onPause() {
         super.onPause();
 
-        Log.d(TAG, "Fragment " + listType + " onPause()");
+        Log.v(TAG, "Fragment " + listType + " onPause()");
 
         if(refreshLayout != null) {
             // http://stackoverflow.com/a/27073879
@@ -146,7 +145,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        Log.d(TAG, "Fragment " + listType + " onAttach()");
+        Log.v(TAG, "Fragment " + listType + " onAttach()");
 
         if(context instanceof OnFragmentInteractionListener) {
             host = (OnFragmentInteractionListener) context;
@@ -157,7 +156,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onDetach() {
         super.onDetach();
 
-        Log.d(TAG, "Fragment " + listType + " onDetach()");
+        Log.v(TAG, "Fragment " + listType + " onDetach()");
 
         host = null;
     }
@@ -169,7 +168,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     }
 
     public void onShow() {
-        Log.d(TAG, "Fragment " + listType + " onShow()");
+        Log.v(TAG, "Fragment " + listType + " onShow()");
 
         checkRefresh();
     }
