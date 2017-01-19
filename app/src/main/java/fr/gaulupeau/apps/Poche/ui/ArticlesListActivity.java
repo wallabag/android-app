@@ -395,19 +395,27 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void updateAllLists() {
+        Log.d(TAG, "updateAllLists() started");
+
         for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
             ArticlesListFragment f = getFragment(i);
             if(f != null) {
                 f.updateList();
+            } else {
+                Log.w(TAG, "updateAllLists() fragment is null; position: " + i);
             }
         }
     }
 
     private void updateList(int position) {
+        Log.d(TAG, "updateList() position: " + position);
+
         if(position != -1) {
             ArticlesListFragment f = getFragment(position);
             if(f != null) {
                 f.updateList();
+            } else {
+                Log.w(TAG, "updateList() fragment is null");
             }
         } else {
             updateAllLists();
