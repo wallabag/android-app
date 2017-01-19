@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +44,8 @@ import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListActivity extends AppCompatActivity
-        implements ArticlesListFragment.OnFragmentInteractionListener {
+        implements ArticlesListFragment.OnFragmentInteractionListener,
+        SearchView.OnQueryTextListener, ViewPager.OnPageChangeListener {
 
     private static final String TAG = ArticlesListActivity.class.getSimpleName();
 
@@ -64,6 +68,8 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean fullUpdateRunning;
     private int refreshingFragment = -1;
 
+    private String searchString;
+
     private ConfigurationTestHelper configurationTestHelper;
 
     @Override
@@ -78,6 +84,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
         viewPager = (ViewPager) findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -173,6 +180,15 @@ public class ArticlesListActivity extends AppCompatActivity
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
 
+        SearchView searchView = (SearchView)menu.findItem(R.id.menuSearch).getActionView();
+        if(searchView != null) {
+            searchView.setSearchableInfo(((SearchManager)getSystemService(Context.SEARCH_SERVICE))
+                    .getSearchableInfo(getComponentName()));
+
+            searchView.setSubmitButtonEnabled(true);
+            searchView.setOnQueryTextListener(this);
+        }
+
         if(!offlineQueuePending) {
             MenuItem menuItem = menu.findItem(R.id.menuSyncQueue);
             if(menuItem != null) {
@@ -213,6 +229,46 @@ public class ArticlesListActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+    @Override
+    public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.v(TAG, "onPageSelected() position: " + position);
+
+        setSearchStringOnFragment(searchString);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.v(TAG, "onQueryTextSubmit() query: " + query);
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.v(TAG, "onQueryTextChange() newText: " + newText);
+
+        setSearchString(newText);
+
+        return true;
+    }
+
+    private void setSearchString(String searchString) {
+        this.searchString = searchString;
+
+        setSearchStringOnFragment(searchString);
+    }
+
+    private void setSearchStringOnFragment(String searchString) {
+        ArticlesListFragment fragment = getCurrentFragment();
+        if(fragment != null) fragment.setSearchString(searchString);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

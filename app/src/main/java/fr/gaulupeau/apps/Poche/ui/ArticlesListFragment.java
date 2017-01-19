@@ -41,6 +41,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
+    private String searchString;
 
     private OnFragmentInteractionListener host;
 
@@ -176,6 +177,13 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         checkRefresh();
     }
 
+    public void setSearchString(String searchString) {
+        String oldSearchString = this.searchString;
+        this.searchString = searchString;
+
+        if(!TextUtils.equals(oldSearchString, searchString)) updateList();
+    }
+
     public void updateList() {
         List<Article> articles = getArticles(0);
 
@@ -265,6 +273,11 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
             default:
                 qb.where(ArticleDao.Properties.Archive.eq(false));
                 break;
+        }
+
+        if(!TextUtils.isEmpty(searchString)) {
+            qb.whereOr(ArticleDao.Properties.Title.like("%" + searchString + "%"),
+                    ArticleDao.Properties.Content.like("%" + searchString + "%"));
         }
 
         qb.orderDesc(ArticleDao.Properties.ArticleId);

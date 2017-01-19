@@ -121,6 +121,8 @@
     <string name="notification_incorrectConfiguration">Incorrect configuration</string>
     <string name="notification_unknownError">Unknown error</string>
     <string name="notification_expandedError">Error: %s</string>
+    <string name="menu_lists_search">Search</string>
+    <string name="other_searchHint">Search by article title or text</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
