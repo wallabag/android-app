@@ -350,14 +350,6 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
 
-    public int getArticlesListLimit() {
-        return getInt(R.string.pref_key_ui_lists_limit, 100);
-    }
-
-    public void setArticlesListLimit(int limit) {
-        setInt(R.string.pref_key_ui_lists_limit, limit);
-    }
-
     public Themes.Theme getTheme() {
         String themeName = getString(R.string.pref_key_ui_theme);
 

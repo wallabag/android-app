@@ -112,7 +112,6 @@
     <string name="pref_name_ui_article_fontSize">Schriftgröße für Artikel (in %)</string>
     <string name="pref_name_ui_article_fontSerif">Serifen-Schrift</string>
     <string name="pref_desc_ui_article_fontSerif">Serifen-Schrift für Artikel</string>
-    <string name="pref_name_ui_lists_limit">Limit für Artikelliste</string>
 
     <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
     <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste der Webbrowser</string>
