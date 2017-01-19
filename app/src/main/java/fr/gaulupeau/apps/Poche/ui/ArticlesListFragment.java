@@ -177,6 +177,10 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         checkRefresh();
     }
 
+    public int getListType() {
+        return listType;
+    }
+
     public void setSearchString(String searchString) {
         String oldSearchString = this.searchString;
         this.searchString = searchString;

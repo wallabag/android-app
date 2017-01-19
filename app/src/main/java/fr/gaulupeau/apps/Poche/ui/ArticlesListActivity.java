@@ -80,7 +80,8 @@ public class ArticlesListActivity extends AppCompatActivity
 
         settings = new Settings(this);
 
-        adapter = new ArticlesListPagerAdapter(getSupportFragmentManager());
+        adapter = new ArticlesListPagerAdapter(
+                getSupportFragmentManager(), savedInstanceState != null);
 
         viewPager = (ViewPager) findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
@@ -557,8 +558,28 @@ public class ArticlesListActivity extends AppCompatActivity
 
         private ArticlesListFragment[] fragments = new ArticlesListFragment[PAGES.length];
 
-        public ArticlesListPagerAdapter(FragmentManager fm) {
+        public ArticlesListPagerAdapter(FragmentManager fm, boolean tryToRestoreFragments) {
             super(fm);
+
+            if(tryToRestoreFragments) {
+                Log.d(TAG, "<init>() trying to restore fragments");
+
+                for(Fragment f: fm.getFragments()) {
+                    if(f instanceof ArticlesListFragment) {
+                        ArticlesListFragment articlesListFragment = (ArticlesListFragment)f;
+                        Log.d(TAG, "<init>() found fragment of type: "
+                                + articlesListFragment.getListType());
+
+                        for(int i = 0; i < PAGES.length; i++) {
+                            if(articlesListFragment.getListType() == PAGES[i]) {
+                                fragments[i] = articlesListFragment;
+
+                                Log.d(TAG, "<init>() restored fragment at position: " + i);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         @Override
