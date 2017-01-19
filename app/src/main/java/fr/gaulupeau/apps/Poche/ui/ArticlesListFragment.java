@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
     private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerView;
+    private LinearLayoutManager recyclerViewLayoutManager;
 
     private List<Article> mArticles;
     private ArticleDao mArticleDao;
@@ -87,10 +90,10 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
         recyclerView = (RecyclerView) view.findViewById(R.id.article_list);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+        scrollListener = new EndlessRecyclerViewScrollListener(recyclerViewLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 loadMore(page, totalItemsCount);
@@ -176,10 +179,24 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void updateList() {
         List<Article> articles = getArticles(0);
 
+        boolean scrollToTop = false;
+        if(recyclerViewLayoutManager != null) {
+            scrollToTop = recyclerViewLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
+        }
+
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                new ArticleListDiffCallback(mArticles, articles));
+
         mArticles.clear();
         mArticles.addAll(articles);
-        mAdapter.notifyDataSetChanged();
-        scrollListener.resetState();
+
+        diffResult.dispatchUpdatesTo(mAdapter);
+
+        if(scrollListener != null) scrollListener.resetState();
+
+        if(scrollToTop && recyclerView != null) {
+            recyclerView.scrollToPosition(0);
+        }
     }
 
     private void loadMore(int page, final int totalItemsCount) {
@@ -230,7 +247,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return qb.list();
+        return detachArticleObjects(qb.list());
     }
 
     private QueryBuilder<Article> getArticlesQueryBuilder() {
@@ -255,6 +272,15 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         return qb;
     }
 
+    // removes articles from cache: necessary for DiffUtil to work
+    private List<Article> detachArticleObjects(List<Article> articles) {
+        for(Article article: articles) {
+            mArticleDao.detach(article);
+        }
+
+        return articles;
+    }
+
     private void openArticle(long id) {
         Activity activity = getActivity();
         if(activity != null) {
@@ -275,6 +301,45 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
             startActivity(intent);
         }
+    }
+
+    private static class ArticleListDiffCallback extends DiffUtil.Callback {
+
+        private List<Article> oldList;
+        private List<Article> newList;
+
+        ArticleListDiffCallback(List<Article> oldList, List<Article> newList) {
+            this.oldList = oldList;
+            this.newList = newList;
+        }
+
+        @Override
+        public int getOldListSize() {
+            return oldList.size();
+        }
+
+        @Override
+        public int getNewListSize() {
+            return newList.size();
+        }
+
+        @Override
+        public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+            return oldList.get(oldItemPosition).getArticleId().equals(
+                    newList.get(newItemPosition).getArticleId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            Article oldArticle = oldList.get(oldItemPosition);
+            Article newArticle = newList.get(newItemPosition);
+
+            return oldArticle.getArchive().equals(newArticle.getArchive())
+                    && oldArticle.getFavorite().equals(newArticle.getFavorite())
+                    && TextUtils.equals(oldArticle.getTitle(), newArticle.getTitle())
+                    && TextUtils.equals(oldArticle.getUrl(), newArticle.getUrl());
+        }
+
     }
 
     public interface OnFragmentInteractionListener {
