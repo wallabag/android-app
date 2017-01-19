@@ -24,7 +24,6 @@ import java.util.Random;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
@@ -38,16 +37,19 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
     private static final String LIST_TYPE_PARAM = "list_type";
 
+    private static final int PER_PAGE_LIMIT = 30;
+
     private int listType;
 
     private OnFragmentInteractionListener host;
 
     private SwipeRefreshLayout refreshLayout;
+    private RecyclerView recyclerView;
 
-    private Settings settings;
     private List<Article> mArticles;
     private ArticleDao mArticleDao;
     private ListAdapter mAdapter;
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     private boolean firstShown = true;
 
@@ -71,8 +73,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
             listType = getArguments().getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
         }
 
-        settings = new Settings(getActivity());
-
         DaoSession daoSession = DbConnection.getSession();
         mArticleDao = daoSession.getArticleDao();
 
@@ -86,12 +86,20 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.list, container, false);
 
-        RecyclerView readList = (RecyclerView) view.findViewById(R.id.article_list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.article_list);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        readList.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
 
-        readList.setAdapter(mAdapter);
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadMore(page, totalItemsCount);
+            }
+        };
+
+        recyclerView.addOnScrollListener(scrollListener);
+        recyclerView.setAdapter(mAdapter);
 
         refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -167,15 +175,31 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     }
 
     public void updateList() {
-        List<Article> articles = getArticles();
+        List<Article> articles = getArticles(0);
 
         mArticles.clear();
         mArticles.addAll(articles);
         mAdapter.notifyDataSetChanged();
+        scrollListener.resetState();
+    }
+
+    private void loadMore(int page, final int totalItemsCount) {
+        Log.d(TAG, String.format("loadMore(page: %d, totalItemsCount: %d)", page, totalItemsCount));
+
+        List<Article> articles = getArticles(page);
+        final int addedItemsCount = articles.size();
+
+        mArticles.addAll(articles);
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyItemRangeInserted(totalItemsCount, addedItemsCount);
+            }
+        });
     }
 
     public void openRandomArticle() {
-        LazyList<Article> articles = getArticlesQueryBuilder(false).listLazyUncached();
+        LazyList<Article> articles = getArticlesQueryBuilder().listLazyUncached();
 
         if(!articles.isEmpty()) {
             long id = articles.get(new Random().nextInt(articles.size())).getId();
@@ -199,11 +223,18 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         }
     }
 
-    private List<Article> getArticles() {
-        return getArticlesQueryBuilder(true).list();
+    private List<Article> getArticles(int page) {
+        QueryBuilder<Article> qb = getArticlesQueryBuilder()
+                .limit(PER_PAGE_LIMIT);
+
+        if(page > 0) {
+            qb.offset(PER_PAGE_LIMIT * page);
+        }
+
+        return qb.list();
     }
 
-    private QueryBuilder<Article> getArticlesQueryBuilder(boolean honorLimit) {
+    private QueryBuilder<Article> getArticlesQueryBuilder() {
         QueryBuilder<Article> qb = mArticleDao.queryBuilder();
 
         switch(listType) {
@@ -221,11 +252,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         }
 
         qb.orderDesc(ArticleDao.Properties.ArticleId);
-
-        if(honorLimit) {
-            int limit = settings.getArticlesListLimit();
-            if(limit > 0) qb.limit(limit);
-        }
 
         return qb;
     }
