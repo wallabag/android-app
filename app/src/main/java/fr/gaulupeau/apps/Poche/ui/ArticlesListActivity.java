@@ -73,6 +73,7 @@ public class ArticlesListActivity extends AppCompatActivity
         setContentView(R.layout.activity_articles_list);
 
         settings = new Settings(this);
+        syncQueue();
 
         adapter = new ArticlesListPagerAdapter(getSupportFragmentManager());
 
@@ -447,6 +448,7 @@ public class ArticlesListActivity extends AppCompatActivity
     private void syncQueue() {
         if(!WallabagConnection.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.prevLoad), Toast.LENGTH_SHORT).show();
             return;
         }
 
