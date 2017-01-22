@@ -245,7 +245,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return detachArticleObjects(qb.list());
+        return removeContent(detachArticleObjects(qb.list()));
     }
 
     private QueryBuilder<Article> getArticlesQueryBuilder() {
@@ -279,6 +279,15 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     private List<Article> detachArticleObjects(List<Article> articles) {
         for(Article article: articles) {
             mArticleDao.detach(article);
+        }
+
+        return articles;
+    }
+
+    // removes content from article objects in order to free memory
+    private List<Article> removeContent(List<Article> articles) {
+        for(Article article: articles) {
+            article.setContent(null);
         }
 
         return articles;
