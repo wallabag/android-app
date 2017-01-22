@@ -128,8 +128,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
             updateList();
         }
-
-        onShow();
     }
 
     public void onPause() {
@@ -169,12 +167,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onItemClick(int position) {
         Article article = mArticles.get(position);
         openArticle(article.getId());
-    }
-
-    public void onShow() {
-        Log.v(TAG, "Fragment " + listType + " onShow()");
-
-        checkRefresh();
     }
 
     public int getListType() {
@@ -242,12 +234,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void setRefreshingUI(boolean refreshing) {
         if(refreshLayout != null) {
             refreshLayout.setRefreshing(refreshing);
-        }
-    }
-
-    private void checkRefresh() {
-        if(host != null) {
-            setRefreshingUI(host.isFullUpdateRunning() || host.isCurrentFeedUpdating());
         }
     }
 
@@ -361,8 +347,6 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
     public interface OnFragmentInteractionListener {
         void updateFeed();
-        boolean isFullUpdateRunning();
-        boolean isCurrentFeedUpdating();
     }
 
 }

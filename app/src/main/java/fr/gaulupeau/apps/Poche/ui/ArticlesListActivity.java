@@ -65,8 +65,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean offlineQueuePending;
 
-    private boolean fullUpdateRunning;
-    private int refreshingFragment = -1;
+    private boolean updateRunning;
 
     private String searchString;
 
@@ -90,13 +89,13 @@ public class ArticlesListActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
-        viewPager.setCurrentItem(1);
-
         firstSyncDone = settings.isFirstSyncDone();
 
         offlineQueuePending = settings.isOfflineQueuePending();
 
         EventBus.getDefault().register(this);
+
+        viewPager.setCurrentItem(1);
     }
 
     @Override
@@ -242,7 +241,9 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onPageSelected(int position) {
         Log.v(TAG, "onPageSelected() position: " + position);
 
-        setSearchStringOnFragment(searchString);
+        ArticlesListFragment fragment = getCurrentFragment();
+        setSearchStringOnFragment(fragment, searchString);
+        setRefreshingUI(fragment, updateRunning);
     }
 
     @Override
@@ -264,11 +265,10 @@ public class ArticlesListActivity extends AppCompatActivity
     private void setSearchString(String searchString) {
         this.searchString = searchString;
 
-        setSearchStringOnFragment(searchString);
+        setSearchStringOnFragment(getCurrentFragment(), searchString);
     }
 
-    private void setSearchStringOnFragment(String searchString) {
-        ArticlesListFragment fragment = getCurrentFragment();
+    private void setSearchStringOnFragment(ArticlesListFragment fragment, String searchString) {
         if(fragment != null) fragment.setSearchString(searchString);
     }
 
@@ -287,7 +287,7 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "Got UpdateFeedsStartedEvent");
 
-        notifyListUpdate(event.getFeedType(), true);
+        updateStateChanged(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -299,7 +299,7 @@ public class ArticlesListActivity extends AppCompatActivity
             tryToUpdateOnResume = false;
         }
 
-        notifyListUpdate(event.getFeedType(), false);
+        updateStateChanged(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
@@ -320,23 +320,14 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean isFullUpdateRunning() {
-        return fullUpdateRunning;
-    }
-
-    @Override
-    public boolean isCurrentFeedUpdating() {
-        return refreshingFragment != -1 && refreshingFragment == viewPager.getCurrentItem();
-    }
-
-    @Override
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.MAIN
                 ? FeedUpdater.UpdateType.FAST : FeedUpdater.UpdateType.FULL;
 
-        if(!updateFeed(true, feedType, updateType)) {
+        if(!updateRunning && !updateFeed(true, feedType, updateType)) {
+            // cancels the refresh animation if the update was not started
             setRefreshingUI(false);
         }
     }
@@ -351,31 +342,12 @@ public class ArticlesListActivity extends AppCompatActivity
         updateFeed(showErrors, null, null);
     }
 
-    private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
-        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
+    private void updateStateChanged(boolean started) {
+        if(started == updateRunning) return;
 
-        if(started) {
-            if(position != -1) {
-                if(refreshingFragment != -1 && refreshingFragment != position) {
-                    setRefreshingUI(false, refreshingFragment); // should not happen
-                }
+        updateRunning = started;
 
-                refreshingFragment = position;
-                setRefreshingUI(true, position);
-            } else {
-                fullUpdateRunning = true;
-                setRefreshingUI(true);
-            }
-        } else {
-            if(refreshingFragment != -1) {
-                setRefreshingUI(false, refreshingFragment);
-                refreshingFragment = -1;
-            }
-            if(fullUpdateRunning) {
-                fullUpdateRunning = false;
-                setRefreshingUI(false);
-            }
-        }
+        setRefreshingUI(started);
     }
 
     private boolean updateFeed(boolean showErrors,
@@ -383,7 +355,7 @@ public class ArticlesListActivity extends AppCompatActivity
                                FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
-        if(fullUpdateRunning || refreshingFragment != -1) {
+        if(updateRunning) {
             if(showErrors) {
                 Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished,
                         Toast.LENGTH_SHORT).show();
@@ -480,17 +452,11 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void setRefreshingUI(boolean refreshing) {
-        ArticlesListFragment f = getCurrentFragment();
-        if(f != null) {
-            f.setRefreshingUI(refreshing);
-        }
+        setRefreshingUI(getCurrentFragment(), refreshing);
     }
 
-    private void setRefreshingUI(boolean refreshing, int position) {
-        ArticlesListFragment f = getFragment(position);
-        if(f != null) {
-            f.setRefreshingUI(refreshing);
-        }
+    private void setRefreshingUI(ArticlesListFragment fragment, boolean refreshing) {
+        if(fragment != null) fragment.setRefreshingUI(refreshing);
     }
 
     private void openRandomArticle() {
