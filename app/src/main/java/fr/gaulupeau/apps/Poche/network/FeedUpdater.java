@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.network;
 
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Xml;
 
@@ -291,6 +292,11 @@ public class FeedUpdater {
                         existing = false;
                     }
 
+                    if(!existing || (article.getImagesDownloaded()
+                            && !TextUtils.equals(article.getContent(), item.description))) {
+                        article.setImagesDownloaded(false);
+                    }
+
                     article.setTitle(Html.fromHtml(item.title).toString());
                     article.setContent(item.description);
                     article.setUrl(item.link);
@@ -310,7 +316,6 @@ public class FeedUpdater {
                         article.setArchive(feedType == FeedType.ARCHIVE);
                         article.setFavorite(feedType == FeedType.FAVORITE);
                     }
-                    article.setImagesDownloaded(false);
 
                     if(event != null) {
                         ArticlesChangedEvent.ChangeType changeType = existing
