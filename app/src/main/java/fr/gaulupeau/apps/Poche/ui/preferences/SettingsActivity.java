@@ -23,6 +23,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
+import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -82,6 +83,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         private boolean invalidateConfiguration;
         private boolean httpClientReinitializationNeeded;
+
+        private boolean imageCachingChanged;
+        private boolean oldImageCacheEnabled;
 
         private ConfigurationTestHelper configurationTestHelper;
 
@@ -191,6 +195,9 @@ public class SettingsActivity extends AppCompatActivity {
             oldUsername = settings.getUsername();
             oldHttpAuthUsername = settings.getHttpAuthUsername();
             oldFeedsUserID = settings.getFeedsUserID();
+
+            imageCachingChanged = false;
+            oldImageCacheEnabled = settings.isImageCacheEnabled();
         }
 
         private void applyChanges() {
@@ -276,6 +283,16 @@ public class SettingsActivity extends AppCompatActivity {
                 Log.i(TAG, "applyChanges() calling WallabagConnection.replaceClient()");
                 WallabagConnection.replaceClient();
             }
+
+            if(imageCachingChanged) {
+                imageCachingChanged = false;
+
+                if(!oldImageCacheEnabled && settings.isImageCacheEnabled()
+                        && settings.isFirstSyncDone()) {
+                    Log.i(TAG, "applyChanges() image caching changed, starting image fetching");
+                    ServiceHelper.fetchImages(App.getInstance());
+                }
+            }
         }
 
         @Override
@@ -324,6 +341,10 @@ public class SettingsActivity extends AppCompatActivity {
                 case R.string.pref_key_connection_feedsToken:
                     Log.i(TAG, "onSharedPreferenceChanged() invalidateConfiguration");
                     invalidateConfiguration = true;
+                    break;
+
+                case R.string.pref_key_imageCache_enabled:
+                    imageCachingChanged = true;
                     break;
             }
 
