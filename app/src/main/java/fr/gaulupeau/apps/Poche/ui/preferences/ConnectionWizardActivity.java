@@ -25,6 +25,7 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
+import fr.gaulupeau.apps.Poche.ui.Themes;
 
 // TODO: split classes?
 public class ConnectionWizardActivity extends AppCompatActivity {
@@ -71,6 +72,7 @@ public class ConnectionWizardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
 
         if(savedInstanceState == null) {
