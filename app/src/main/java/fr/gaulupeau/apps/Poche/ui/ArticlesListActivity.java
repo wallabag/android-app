@@ -67,7 +67,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean updateRunning;
 
-    private ArticlesListFragment.SortOrder sortOrder = ArticlesListFragment.SortOrder.DESC;
+    private ArticlesListFragment.SortOrder sortOrder;
     private String searchString;
 
     private ConfigurationTestHelper configurationTestHelper;
@@ -93,6 +93,8 @@ public class ArticlesListActivity extends AppCompatActivity
         firstSyncDone = settings.isFirstSyncDone();
 
         offlineQueuePending = settings.isOfflineQueuePending();
+
+        sortOrder = settings.getListSortOrder();
 
         EventBus.getDefault().register(this);
 
@@ -297,6 +299,8 @@ public class ArticlesListActivity extends AppCompatActivity
         sortOrder = sortOrder == ArticlesListFragment.SortOrder.DESC
                 ? ArticlesListFragment.SortOrder.ASC
                 : ArticlesListFragment.SortOrder.DESC;
+
+        settings.setListSortOrder(sortOrder);
 
         setSortOrder(getCurrentFragment(), sortOrder);
     }
