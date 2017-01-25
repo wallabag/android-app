@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,7 +44,7 @@ import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
-public class ArticlesListActivity extends AppCompatActivity
+public class ArticlesListActivity extends BaseActionBarActivity
         implements ArticlesListFragment.OnFragmentInteractionListener,
         ViewPager.OnPageChangeListener {
 
@@ -81,8 +80,8 @@ public class ArticlesListActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
+        hideBackButtonFromActionBar();
         setContentView(R.layout.activity_articles_list);
 
         Log.v(TAG, "onCreate()");
