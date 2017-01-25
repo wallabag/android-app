@@ -365,6 +365,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
+            // sync queue before full update
+            if(feedType == null) ServiceHelper.syncQueue(this);
+
             ServiceHelper.updateFeed(this, feedType, updateType);
 
             result = true;
