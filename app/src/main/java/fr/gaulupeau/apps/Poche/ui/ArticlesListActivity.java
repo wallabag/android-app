@@ -67,6 +67,7 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean updateRunning;
 
+    private ArticlesListFragment.SortOrder sortOrder = ArticlesListFragment.SortOrder.DESC;
     private String searchString;
 
     private ConfigurationTestHelper configurationTestHelper;
@@ -208,6 +209,9 @@ public class ArticlesListActivity extends AppCompatActivity
             case R.id.menuSyncQueue:
                 syncQueue();
                 return true;
+            case R.id.menuChangeSortOrder:
+                switchSortOrder();
+                return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 return true;
@@ -232,6 +236,24 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if(adapter == null) {
+            // happens if activity recreated (e.g., on orientation change)
+            Log.v(TAG, "onAttachFragment() activity is not initialized yet; ignoring");
+            return;
+        }
+
+        if(fragment instanceof ArticlesListFragment) {
+            ArticlesListFragment articlesListFragment = (ArticlesListFragment)fragment;
+            Log.v(TAG, "onAttachFragment() listType: " + articlesListFragment.getListType());
+
+            setParametersToFragment(articlesListFragment);
+        }
+    }
+
+    @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
     @Override
@@ -241,7 +263,16 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onPageSelected(int position) {
         Log.v(TAG, "onPageSelected() position: " + position);
 
-        ArticlesListFragment fragment = getCurrentFragment();
+        setParametersToFragment(getCurrentFragment());
+    }
+
+    private void setParametersToFragment(ArticlesListFragment fragment) {
+        Log.v(TAG, "setParametersToFragment() started");
+        if(fragment == null) return;
+
+        Log.v(TAG, "setParametersToFragment() listType: " + fragment.getListType());
+
+        setSortOrder(fragment, sortOrder);
         setSearchStringOnFragment(fragment, searchString);
         setRefreshingUI(fragment, updateRunning);
     }
@@ -260,6 +291,19 @@ public class ArticlesListActivity extends AppCompatActivity
         setSearchString(newText);
 
         return true;
+    }
+
+    private void switchSortOrder() {
+        sortOrder = sortOrder == ArticlesListFragment.SortOrder.DESC
+                ? ArticlesListFragment.SortOrder.ASC
+                : ArticlesListFragment.SortOrder.DESC;
+
+        setSortOrder(getCurrentFragment(), sortOrder);
+    }
+
+    private void setSortOrder(ArticlesListFragment fragment,
+                              ArticlesListFragment.SortOrder sortOrder) {
+        if(fragment != null) fragment.setSortOrder(sortOrder);
     }
 
     private void setSearchString(String searchString) {
@@ -432,7 +476,7 @@ public class ArticlesListActivity extends AppCompatActivity
         for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
             ArticlesListFragment f = getFragment(i);
             if(f != null) {
-                f.updateList();
+                f.invalidateList();
             } else {
                 Log.w(TAG, "updateAllLists() fragment is null; position: " + i);
             }
@@ -445,7 +489,7 @@ public class ArticlesListActivity extends AppCompatActivity
         if(position != -1) {
             ArticlesListFragment f = getFragment(position);
             if(f != null) {
-                f.updateList();
+                f.invalidateList();
             } else {
                 Log.w(TAG, "updateList() fragment is null");
             }

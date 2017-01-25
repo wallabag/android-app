@@ -34,13 +34,21 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListFragment extends Fragment implements ListAdapter.OnItemClickListener {
 
+    public enum SortOrder {
+        DESC, ASC
+    }
+
     private static final String TAG = ArticlesListFragment.class.getSimpleName();
 
     private static final String LIST_TYPE_PARAM = "list_type";
 
+    private static final String SORT_ORDER_STATE = "sort_order";
+    private static final String SEARCH_STRING_STATE = "search_string";
+
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
+    private SortOrder sortOrder = SortOrder.DESC;
     private String searchString;
 
     private OnFragmentInteractionListener host;
@@ -54,7 +62,8 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     private ListAdapter mAdapter;
     private EndlessRecyclerViewScrollListener scrollListener;
 
-    private boolean firstShown = true;
+    private boolean active = false;
+    private boolean invalidList = true;
 
     public static ArticlesListFragment newInstance(int listType) {
         ArticlesListFragment fragment = new ArticlesListFragment();
@@ -72,8 +81,17 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
+        Log.v(TAG, "Fragment " + listType + " onCreate()");
+
+        if(getArguments() != null) {
             listType = getArguments().getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
+        }
+
+        if(savedInstanceState != null) {
+            Log.v(TAG, "Fragment " + listType + " onCreate() restoring state");
+
+            sortOrder = SortOrder.values()[savedInstanceState.getInt(SORT_ORDER_STATE)];
+            searchString = savedInstanceState.getString(SEARCH_STRING_STATE);
         }
 
         DaoSession daoSession = DbConnection.getSession();
@@ -123,17 +141,17 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
 
         Log.v(TAG, "Fragment " + listType + " onResume()");
 
-        if(firstShown) {
-            firstShown = false;
+        active = true;
 
-            updateList();
-        }
+        checkList();
     }
 
     public void onPause() {
         super.onPause();
 
         Log.v(TAG, "Fragment " + listType + " onPause()");
+
+        active = false;
 
         if(refreshLayout != null) {
             // http://stackoverflow.com/a/27073879
@@ -164,6 +182,16 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Log.v(TAG, "Fragment " + listType + " onSaveInstanceState()");
+
+        outState.putInt(SORT_ORDER_STATE, sortOrder.ordinal());
+        outState.putString(SEARCH_STRING_STATE, searchString);
+    }
+
+    @Override
     public void onItemClick(int position) {
         Article article = mArticles.get(position);
         openArticle(article.getId());
@@ -173,14 +201,35 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         return listType;
     }
 
+    public void setSortOrder(SortOrder sortOrder) {
+        SortOrder oldSortOrder = this.sortOrder;
+        this.sortOrder = sortOrder;
+
+        if(sortOrder != oldSortOrder) invalidateList();
+    }
+
     public void setSearchString(String searchString) {
         String oldSearchString = this.searchString;
         this.searchString = searchString;
 
-        if(!TextUtils.equals(oldSearchString, searchString)) updateList();
+        if(!TextUtils.equals(oldSearchString, searchString)) invalidateList();
     }
 
-    public void updateList() {
+    public void invalidateList() {
+        invalidList = true;
+
+        if(active) checkList();
+    }
+
+    public void checkList() {
+        if(invalidList) {
+            invalidList = false;
+
+            resetListContent();
+        }
+    }
+
+    private void resetListContent() {
         List<Article> articles = getArticles(0);
 
         boolean scrollToTop = false;
@@ -270,7 +319,18 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
                     ArticleDao.Properties.Content.like("%" + searchString + "%"));
         }
 
-        qb.orderDesc(ArticleDao.Properties.ArticleId);
+        switch(sortOrder) {
+            case ASC:
+                qb.orderAsc(ArticleDao.Properties.ArticleId);
+                break;
+
+            case DESC:
+                qb.orderDesc(ArticleDao.Properties.ArticleId);
+                break;
+
+            default:
+                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
+        }
 
         return qb;
     }

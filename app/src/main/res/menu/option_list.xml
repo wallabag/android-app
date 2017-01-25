@@ -19,6 +19,8 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
     <item android:id="@+id/menuSyncQueue"
         android:title="@string/menu_syncLocalChanges" />
+    <item android:id="@+id/menuChangeSortOrder"
+        android:title="@string/menu_lists_changeSortOrder" />
     <item android:id="@+id/menuOpenRandomArticle"
         android:title="@string/menu_open_random_article" />
     <item android:id="@+id/menuSettings"
