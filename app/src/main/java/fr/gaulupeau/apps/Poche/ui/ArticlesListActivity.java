@@ -284,9 +284,19 @@ public class ArticlesListActivity extends BaseActionBarActivity
                 openRandomArticle();
                 return true;
             case R.id.menuAbout:
+                Libs.ActivityStyle style;
+                switch(Themes.getCurrentTheme()) {
+                    case DARK:
+                    case DARK_CONTRAST:
+                        style = Libs.ActivityStyle.DARK;
+                        break;
+
+                    default:
+                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
+                        break;
+                }
                 new LibsBuilder()
-                        //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
-                        .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+                        .withActivityStyle(style)
                         .withAboutIconShown(true)
                         .withAboutVersionShown(true)
                         .withAboutDescription(getResources().getString(R.string.aboutText))
