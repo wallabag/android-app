@@ -9,10 +9,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,14 +47,18 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListActivity extends AppCompatActivity
         implements ArticlesListFragment.OnFragmentInteractionListener,
-        SearchView.OnQueryTextListener, ViewPager.OnPageChangeListener {
+        ViewPager.OnPageChangeListener {
 
     private static final String TAG = ArticlesListActivity.class.getSimpleName();
+
+    private static final String SEARCH_QUERY_STATE = "search_query";
 
     private Settings settings;
 
     private ArticlesListPagerAdapter adapter;
     private ViewPager viewPager;
+
+    private MenuItem searchMenuItem;
 
     private boolean isActive;
 
@@ -68,7 +74,8 @@ public class ArticlesListActivity extends AppCompatActivity
     private boolean updateRunning;
 
     private ArticlesListFragment.SortOrder sortOrder;
-    private String searchString;
+    private String searchQuery;
+    private boolean searchUIPending;
 
     private ConfigurationTestHelper configurationTestHelper;
 
@@ -77,6 +84,12 @@ public class ArticlesListActivity extends AppCompatActivity
         Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_articles_list);
+
+        Log.v(TAG, "onCreate()");
+
+        handleIntent(getIntent());
+
+        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         settings = new Settings(this);
 
@@ -96,9 +109,31 @@ public class ArticlesListActivity extends AppCompatActivity
 
         sortOrder = settings.getListSortOrder();
 
+        if(savedInstanceState != null) {
+            Log.v(TAG, "onCreate() restoring state");
+
+            performSearch(savedInstanceState.getString(SEARCH_QUERY_STATE));
+        }
+
         EventBus.getDefault().register(this);
 
         viewPager.setCurrentItem(1);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.v(TAG, "handleIntent() search intent; query: " + query);
+
+            performSearch(query);
+        }
     }
 
     @Override
@@ -179,18 +214,44 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Log.v(TAG, "onSaveInstanceState()");
+
+        outState.putString(SEARCH_QUERY_STATE, searchQuery);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
 
-        SearchView searchView = (SearchView)menu.findItem(R.id.menuSearch).getActionView();
+        searchMenuItem = menu.findItem(R.id.menuSearch);
+        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
         if(searchView != null) {
             searchView.setSearchableInfo(((SearchManager)getSystemService(Context.SEARCH_SERVICE))
                     .getSearchableInfo(getComponentName()));
 
-            searchView.setSubmitButtonEnabled(true);
-            searchView.setOnQueryTextListener(this);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.v(TAG, "onQueryTextSubmit() query: " + query);
+
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Log.v(TAG, "onQueryTextChange() newText: " + newText);
+
+                    setSearchQuery(newText);
+
+                    return true;
+                }
+            });
         }
+        checkPendingSearchUI();
 
         if(!offlineQueuePending) {
             MenuItem menuItem = menu.findItem(R.id.menuSyncQueue);
@@ -268,6 +329,41 @@ public class ArticlesListActivity extends AppCompatActivity
         setParametersToFragment(getCurrentFragment());
     }
 
+    private void performSearch(String query) {
+        setSearchQuery(query);
+
+        if(TextUtils.isEmpty(query)) return;
+
+        searchUIPending = true;
+        checkPendingSearchUI();
+    }
+
+    private void checkPendingSearchUI() {
+        if(searchMenuItem == null) return;
+        if(!searchUIPending) return;
+
+        searchUIPending = false;
+
+        initSearchUI();
+    }
+
+    private void initSearchUI() {
+        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
+        if(searchView == null) return;
+
+        final String searchQueryToRestore = searchQuery;
+
+        MenuItemCompat.expandActionView(searchMenuItem);
+
+        searchView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.v(TAG, "searchView.post() restoring search string: " + searchQueryToRestore);
+                searchView.setQuery(searchQueryToRestore, false);
+            }
+        });
+    }
+
     private void setParametersToFragment(ArticlesListFragment fragment) {
         Log.v(TAG, "setParametersToFragment() started");
         if(fragment == null) return;
@@ -275,24 +371,8 @@ public class ArticlesListActivity extends AppCompatActivity
         Log.v(TAG, "setParametersToFragment() listType: " + fragment.getListType());
 
         setSortOrder(fragment, sortOrder);
-        setSearchStringOnFragment(fragment, searchString);
+        setSearchQueryOnFragment(fragment, searchQuery);
         setRefreshingUI(fragment, updateRunning);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Log.v(TAG, "onQueryTextSubmit() query: " + query);
-
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Log.v(TAG, "onQueryTextChange() newText: " + newText);
-
-        setSearchString(newText);
-
-        return true;
     }
 
     private void switchSortOrder() {
@@ -310,14 +390,14 @@ public class ArticlesListActivity extends AppCompatActivity
         if(fragment != null) fragment.setSortOrder(sortOrder);
     }
 
-    private void setSearchString(String searchString) {
-        this.searchString = searchString;
+    private void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
 
-        setSearchStringOnFragment(getCurrentFragment(), searchString);
+        setSearchQueryOnFragment(getCurrentFragment(), searchQuery);
     }
 
-    private void setSearchStringOnFragment(ArticlesListFragment fragment, String searchString) {
-        if(fragment != null) fragment.setSearchString(searchString);
+    private void setSearchQueryOnFragment(ArticlesListFragment fragment, String searchQuery) {
+        if(fragment != null) fragment.setSearchQuery(searchQuery);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

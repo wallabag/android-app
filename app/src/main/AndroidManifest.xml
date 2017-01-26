@@ -19,6 +19,7 @@
         <activity android:name="fr.gaulupeau.apps.Poche.ui.ArticlesListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

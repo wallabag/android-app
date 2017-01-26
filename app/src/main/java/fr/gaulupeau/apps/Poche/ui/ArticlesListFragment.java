@@ -43,13 +43,13 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     private static final String LIST_TYPE_PARAM = "list_type";
 
     private static final String SORT_ORDER_STATE = "sort_order";
-    private static final String SEARCH_STRING_STATE = "search_string";
+    private static final String SEARCH_QUERY_STATE = "search_query";
 
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
     private SortOrder sortOrder = SortOrder.DESC;
-    private String searchString;
+    private String searchQuery;
 
     private OnFragmentInteractionListener host;
 
@@ -91,7 +91,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
             Log.v(TAG, "Fragment " + listType + " onCreate() restoring state");
 
             sortOrder = SortOrder.values()[savedInstanceState.getInt(SORT_ORDER_STATE)];
-            searchString = savedInstanceState.getString(SEARCH_STRING_STATE);
+            searchQuery = savedInstanceState.getString(SEARCH_QUERY_STATE);
         }
 
         DaoSession daoSession = DbConnection.getSession();
@@ -188,7 +188,7 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         Log.v(TAG, "Fragment " + listType + " onSaveInstanceState()");
 
         outState.putInt(SORT_ORDER_STATE, sortOrder.ordinal());
-        outState.putString(SEARCH_STRING_STATE, searchString);
+        outState.putString(SEARCH_QUERY_STATE, searchQuery);
     }
 
     @Override
@@ -208,11 +208,11 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
         if(sortOrder != oldSortOrder) invalidateList();
     }
 
-    public void setSearchString(String searchString) {
-        String oldSearchString = this.searchString;
-        this.searchString = searchString;
+    public void setSearchQuery(String searchQuery) {
+        String oldSearchQuery = this.searchQuery;
+        this.searchQuery = searchQuery;
 
-        if(!TextUtils.equals(oldSearchString, searchString)) invalidateList();
+        if(!TextUtils.equals(oldSearchQuery, searchQuery)) invalidateList();
     }
 
     public void invalidateList() {
@@ -314,9 +314,9 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
                 break;
         }
 
-        if(!TextUtils.isEmpty(searchString)) {
-            qb.whereOr(ArticleDao.Properties.Title.like("%" + searchString + "%"),
-                    ArticleDao.Properties.Content.like("%" + searchString + "%"));
+        if(!TextUtils.isEmpty(searchQuery)) {
+            qb.whereOr(ArticleDao.Properties.Title.like("%" + searchQuery + "%"),
+                    ArticleDao.Properties.Content.like("%" + searchQuery + "%"));
         }
 
         switch(sortOrder) {
