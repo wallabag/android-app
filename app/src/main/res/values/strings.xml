@@ -121,6 +121,9 @@
     <string name="notification_incorrectConfiguration">Incorrect configuration</string>
     <string name="notification_unknownError">Unknown error</string>
     <string name="notification_expandedError">Error: %s</string>
+    <string name="menu_lists_search">Search</string>
+    <string name="menu_lists_changeSortOrder">Change sort order</string>
+    <string name="other_searchHint">Search by article title or text</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
@@ -168,7 +171,6 @@
     <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif typeface for article fonts</string>
-    <string name="pref_name_ui_lists_limit">Articles list limit</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scroll with volume buttons</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tap-to-scroll</string>

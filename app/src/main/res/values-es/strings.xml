@@ -165,7 +165,6 @@
     <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para contenido del artículo</string>
-    <string name="pref_name_ui_lists_limit">Límite de la lista de artículos</string>
     <string name="pref_categoryName_ui_screenScrolling">Desplazamiento de pantalla</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Desplazar con botones de volumen</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tocar para desplazar</string>

@@ -17,7 +17,6 @@ class LegacySettingsHelper {
     static final String CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
     static final String FONT_SIZE = "font_size";
     static final String SERIF_FONT = "serif_font";
-    static final String LIST_LIMIT = "list_limit";
     static final String USERNAME = "username";
     static final String PASSWORD = "password";
     static final String HTTP_AUTH_USERNAME = "http_auth_username";
@@ -73,8 +72,6 @@ class LegacySettingsHelper {
             prefEditor.putInt(cx.getString(R.string.pref_key_ui_article_fontSize), fontSize);
         }
         migrateBooleanPref(cx, SERIF_FONT, R.string.pref_key_ui_article_fontSerif, legacyPref, prefEditor);
-
-        migrateIntPref(cx, LIST_LIMIT, R.string.pref_key_ui_lists_limit, legacyPref, prefEditor, 50);
 
         migrateStringPref(cx, THEME, R.string.pref_key_ui_theme, legacyPref, prefEditor);
 

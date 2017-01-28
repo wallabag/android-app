@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,9 +9,12 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,14 +46,19 @@ import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ArticlesListActivity extends AppCompatActivity
-        implements ArticlesListFragment.OnFragmentInteractionListener {
+        implements ArticlesListFragment.OnFragmentInteractionListener,
+        ViewPager.OnPageChangeListener {
 
     private static final String TAG = ArticlesListActivity.class.getSimpleName();
+
+    private static final String SEARCH_QUERY_STATE = "search_query";
 
     private Settings settings;
 
     private ArticlesListPagerAdapter adapter;
     private ViewPager viewPager;
+
+    private MenuItem searchMenuItem;
 
     private boolean isActive;
 
@@ -61,8 +71,11 @@ public class ArticlesListActivity extends AppCompatActivity
 
     private boolean offlineQueuePending;
 
-    private boolean fullUpdateRunning;
-    private int refreshingFragment = -1;
+    private boolean updateRunning;
+
+    private ArticlesListFragment.SortOrder sortOrder;
+    private String searchQuery;
+    private boolean searchUIPending;
 
     private ConfigurationTestHelper configurationTestHelper;
 
@@ -72,23 +85,55 @@ public class ArticlesListActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_articles_list);
 
+        Log.v(TAG, "onCreate()");
+
+        handleIntent(getIntent());
+
+        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+
         settings = new Settings(this);
 
-        adapter = new ArticlesListPagerAdapter(getSupportFragmentManager());
+        adapter = new ArticlesListPagerAdapter(
+                getSupportFragmentManager(), savedInstanceState != null);
 
         viewPager = (ViewPager) findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.articles_list_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
-
-        viewPager.setCurrentItem(1);
 
         firstSyncDone = settings.isFirstSyncDone();
 
         offlineQueuePending = settings.isOfflineQueuePending();
 
+        sortOrder = settings.getListSortOrder();
+
+        if(savedInstanceState != null) {
+            Log.v(TAG, "onCreate() restoring state");
+
+            performSearch(savedInstanceState.getString(SEARCH_QUERY_STATE));
+        }
+
         EventBus.getDefault().register(this);
+
+        viewPager.setCurrentItem(1);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            Log.v(TAG, "handleIntent() search intent; query: " + query);
+
+            performSearch(query);
+        }
     }
 
     @Override
@@ -169,9 +214,44 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        Log.v(TAG, "onSaveInstanceState()");
+
+        outState.putString(SEARCH_QUERY_STATE, searchQuery);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option_list, menu);
+
+        searchMenuItem = menu.findItem(R.id.menuSearch);
+        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
+        if(searchView != null) {
+            searchView.setSearchableInfo(((SearchManager)getSystemService(Context.SEARCH_SERVICE))
+                    .getSearchableInfo(getComponentName()));
+
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Log.v(TAG, "onQueryTextSubmit() query: " + query);
+
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Log.v(TAG, "onQueryTextChange() newText: " + newText);
+
+                    setSearchQuery(newText);
+
+                    return true;
+                }
+            });
+        }
+        checkPendingSearchUI();
 
         if(!offlineQueuePending) {
             MenuItem menuItem = menu.findItem(R.id.menuSyncQueue);
@@ -191,6 +271,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 return true;
             case R.id.menuSyncQueue:
                 syncQueue();
+                return true;
+            case R.id.menuChangeSortOrder:
+                switchSortOrder();
                 return true;
             case R.id.menuSettings:
                 startActivity(new Intent(getBaseContext(), SettingsActivity.class));
@@ -215,6 +298,108 @@ public class ArticlesListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if(adapter == null) {
+            // happens if activity recreated (e.g., on orientation change)
+            Log.v(TAG, "onAttachFragment() activity is not initialized yet; ignoring");
+            return;
+        }
+
+        if(fragment instanceof ArticlesListFragment) {
+            ArticlesListFragment articlesListFragment = (ArticlesListFragment)fragment;
+            Log.v(TAG, "onAttachFragment() listType: " + articlesListFragment.getListType());
+
+            setParametersToFragment(articlesListFragment);
+        }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+    @Override
+    public void onPageScrollStateChanged(int state) {}
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.v(TAG, "onPageSelected() position: " + position);
+
+        setParametersToFragment(getCurrentFragment());
+    }
+
+    private void performSearch(String query) {
+        setSearchQuery(query);
+
+        if(TextUtils.isEmpty(query)) return;
+
+        searchUIPending = true;
+        checkPendingSearchUI();
+    }
+
+    private void checkPendingSearchUI() {
+        if(searchMenuItem == null) return;
+        if(!searchUIPending) return;
+
+        searchUIPending = false;
+
+        initSearchUI();
+    }
+
+    private void initSearchUI() {
+        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
+        if(searchView == null) return;
+
+        final String searchQueryToRestore = searchQuery;
+
+        MenuItemCompat.expandActionView(searchMenuItem);
+
+        searchView.post(new Runnable() {
+            @Override
+            public void run() {
+                Log.v(TAG, "searchView.post() restoring search string: " + searchQueryToRestore);
+                searchView.setQuery(searchQueryToRestore, false);
+            }
+        });
+    }
+
+    private void setParametersToFragment(ArticlesListFragment fragment) {
+        Log.v(TAG, "setParametersToFragment() started");
+        if(fragment == null) return;
+
+        Log.v(TAG, "setParametersToFragment() listType: " + fragment.getListType());
+
+        setSortOrder(fragment, sortOrder);
+        setSearchQueryOnFragment(fragment, searchQuery);
+        setRefreshingUI(fragment, updateRunning);
+    }
+
+    private void switchSortOrder() {
+        sortOrder = sortOrder == ArticlesListFragment.SortOrder.DESC
+                ? ArticlesListFragment.SortOrder.ASC
+                : ArticlesListFragment.SortOrder.DESC;
+
+        settings.setListSortOrder(sortOrder);
+
+        setSortOrder(getCurrentFragment(), sortOrder);
+    }
+
+    private void setSortOrder(ArticlesListFragment fragment,
+                              ArticlesListFragment.SortOrder sortOrder) {
+        if(fragment != null) fragment.setSortOrder(sortOrder);
+    }
+
+    private void setSearchQuery(String searchQuery) {
+        this.searchQuery = searchQuery;
+
+        setSearchQueryOnFragment(getCurrentFragment(), searchQuery);
+    }
+
+    private void setSearchQueryOnFragment(ArticlesListFragment fragment, String searchQuery) {
+        if(fragment != null) fragment.setSearchQuery(searchQuery);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
@@ -230,7 +415,7 @@ public class ArticlesListActivity extends AppCompatActivity
     public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
         Log.d(TAG, "Got UpdateFeedsStartedEvent");
 
-        notifyListUpdate(event.getFeedType(), true);
+        updateStateChanged(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -242,7 +427,7 @@ public class ArticlesListActivity extends AppCompatActivity
             tryToUpdateOnResume = false;
         }
 
-        notifyListUpdate(event.getFeedType(), false);
+        updateStateChanged(false);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
@@ -263,23 +448,14 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean isFullUpdateRunning() {
-        return fullUpdateRunning;
-    }
-
-    @Override
-    public boolean isCurrentFeedUpdating() {
-        return refreshingFragment != -1 && refreshingFragment == viewPager.getCurrentItem();
-    }
-
-    @Override
     public void updateFeed() {
         int position = viewPager.getCurrentItem();
         FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
         FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.MAIN
                 ? FeedUpdater.UpdateType.FAST : FeedUpdater.UpdateType.FULL;
 
-        if(!updateFeed(true, feedType, updateType)) {
+        if(!updateRunning && !updateFeed(true, feedType, updateType)) {
+            // cancels the refresh animation if the update was not started
             setRefreshingUI(false);
         }
     }
@@ -294,31 +470,12 @@ public class ArticlesListActivity extends AppCompatActivity
         updateFeed(showErrors, null, null);
     }
 
-    private void notifyListUpdate(FeedUpdater.FeedType feedType, boolean started) {
-        int position = ArticlesListPagerAdapter.positionByFeedType(feedType);
+    private void updateStateChanged(boolean started) {
+        if(started == updateRunning) return;
 
-        if(started) {
-            if(position != -1) {
-                if(refreshingFragment != -1 && refreshingFragment != position) {
-                    setRefreshingUI(false, refreshingFragment); // should not happen
-                }
+        updateRunning = started;
 
-                refreshingFragment = position;
-                setRefreshingUI(true, position);
-            } else {
-                fullUpdateRunning = true;
-                setRefreshingUI(true);
-            }
-        } else {
-            if(refreshingFragment != -1) {
-                setRefreshingUI(false, refreshingFragment);
-                refreshingFragment = -1;
-            }
-            if(fullUpdateRunning) {
-                fullUpdateRunning = false;
-                setRefreshingUI(false);
-            }
-        }
+        setRefreshingUI(started);
     }
 
     private boolean updateFeed(boolean showErrors,
@@ -326,7 +483,7 @@ public class ArticlesListActivity extends AppCompatActivity
                                FeedUpdater.UpdateType updateType) {
         boolean result = false;
 
-        if(fullUpdateRunning || refreshingFragment != -1) {
+        if(updateRunning) {
             if(showErrors) {
                 Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished,
                         Toast.LENGTH_SHORT).show();
@@ -336,6 +493,9 @@ public class ArticlesListActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
+            // sync queue before full update
+            if(feedType == null) ServiceHelper.syncQueue(this);
+
             ServiceHelper.updateFeed(this, feedType, updateType);
 
             result = true;
@@ -395,19 +555,27 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void updateAllLists() {
+        Log.d(TAG, "updateAllLists() started");
+
         for(int i = 0; i < ArticlesListPagerAdapter.PAGES.length; i++) {
             ArticlesListFragment f = getFragment(i);
             if(f != null) {
-                f.updateList();
+                f.invalidateList();
+            } else {
+                Log.w(TAG, "updateAllLists() fragment is null; position: " + i);
             }
         }
     }
 
     private void updateList(int position) {
+        Log.d(TAG, "updateList() position: " + position);
+
         if(position != -1) {
             ArticlesListFragment f = getFragment(position);
             if(f != null) {
-                f.updateList();
+                f.invalidateList();
+            } else {
+                Log.w(TAG, "updateList() fragment is null");
             }
         } else {
             updateAllLists();
@@ -415,17 +583,11 @@ public class ArticlesListActivity extends AppCompatActivity
     }
 
     private void setRefreshingUI(boolean refreshing) {
-        ArticlesListFragment f = getCurrentFragment();
-        if(f != null) {
-            f.setRefreshingUI(refreshing);
-        }
+        setRefreshingUI(getCurrentFragment(), refreshing);
     }
 
-    private void setRefreshingUI(boolean refreshing, int position) {
-        ArticlesListFragment f = getFragment(position);
-        if(f != null) {
-            f.setRefreshingUI(refreshing);
-        }
+    private void setRefreshingUI(ArticlesListFragment fragment, boolean refreshing) {
+        if(fragment != null) fragment.setRefreshingUI(refreshing);
     }
 
     private void openRandomArticle() {
@@ -493,8 +655,28 @@ public class ArticlesListActivity extends AppCompatActivity
 
         private ArticlesListFragment[] fragments = new ArticlesListFragment[PAGES.length];
 
-        public ArticlesListPagerAdapter(FragmentManager fm) {
+        public ArticlesListPagerAdapter(FragmentManager fm, boolean tryToRestoreFragments) {
             super(fm);
+
+            if(tryToRestoreFragments) {
+                Log.d(TAG, "<init>() trying to restore fragments");
+
+                for(Fragment f: fm.getFragments()) {
+                    if(f instanceof ArticlesListFragment) {
+                        ArticlesListFragment articlesListFragment = (ArticlesListFragment)f;
+                        Log.d(TAG, "<init>() found fragment of type: "
+                                + articlesListFragment.getListType());
+
+                        for(int i = 0; i < PAGES.length; i++) {
+                            if(articlesListFragment.getListType() == PAGES[i]) {
+                                fragments[i] = articlesListFragment;
+
+                                Log.d(TAG, "<init>() restored fragment at position: " + i);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         @Override

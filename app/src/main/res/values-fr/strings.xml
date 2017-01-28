@@ -110,7 +110,6 @@
     <string name="pref_name_ui_theme">Thème de l\'application</string>
     <string name="pref_name_ui_article_fontSize">Taille de la police (%)</string>
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (serif)</string>
-    <string name="pref_name_ui_lists_limit">Limitation du nombre d\'articles dans la liste</string>
 
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>

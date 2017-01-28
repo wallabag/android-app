@@ -89,11 +89,6 @@
             android:title="@string/pref_name_ui_article_fontSerif"
             android:summary="@string/pref_desc_ui_article_fontSerif"
             android:defaultValue="false" />
-        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
-            android:key="@string/pref_key_ui_lists_limit"
-            android:title="@string/pref_name_ui_lists_limit"
-            android:inputType="number"
-            android:defaultValue="100" />
       </PreferenceCategory>
         <PreferenceCategory android:title="@string/pref_categoryName_ui_screenScrolling">
             <CheckBoxPreference

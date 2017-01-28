@@ -18,6 +18,7 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.service.WallabagJobService;
+import fr.gaulupeau.apps.Poche.ui.ArticlesListFragment;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
@@ -350,12 +351,21 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
 
-    public int getArticlesListLimit() {
-        return getInt(R.string.pref_key_ui_lists_limit, 100);
+    public ArticlesListFragment.SortOrder getListSortOrder() {
+        String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
+
+        ArticlesListFragment.SortOrder sortOrder = null;
+        if(sortOrderParam != null) {
+            try {
+                sortOrder = ArticlesListFragment.SortOrder.valueOf(sortOrderParam);
+            } catch(IllegalArgumentException ignored) {}
+        }
+
+        return sortOrder != null ? sortOrder : ArticlesListFragment.SortOrder.DESC;
     }
 
-    public void setArticlesListLimit(int limit) {
-        setInt(R.string.pref_key_ui_lists_limit, limit);
+    public void setListSortOrder(ArticlesListFragment.SortOrder sortOrder) {
+        setString(R.string.pref_key_ui_lists_sortOrder, sortOrder.toString());
     }
 
     public Themes.Theme getTheme() {
