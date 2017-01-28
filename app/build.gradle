@@ -9,8 +9,8 @@ android {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 29
-        versionName "1.11.0"
+        versionCode 30
+        versionName "1.12.0"
     }
 
     lintOptions {
