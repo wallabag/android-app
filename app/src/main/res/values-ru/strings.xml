@@ -150,6 +150,9 @@
     <string name="notification_incorrectConfiguration">Неправильная конфигурация</string>
     <string name="notification_unknownError">Неизвестная ошибка</string>
     <string name="notification_expandedError">Ошибка: %s</string>
+    <string name="menu_lists_search">Поиск</string>
+    <string name="menu_lists_changeSortOrder">Изменить порядок сортировки</string>
+    <string name="other_searchHint">Поиск по названию статьи или тексту</string>
 
     <string name="pref_name_runConnectionWizard">Запустить мастер подключения</string>
     <string name="pref_desc_runConnectionWizard">Мастер подключения поможет вам настроить основные параметры подключения</string>
