@@ -32,6 +32,8 @@ public class ImageCacheUtils {
     private static final String IMAGE_CACHE_DIR = "imagecache";
     private static final int MAXIMUM_FILE_EXT_LENGTH = 5; // incl. the dot
 
+    private static final String WALLABAG_RELATIVE_URL_PATH = "/assets/images/";
+
     private static final Pattern IMG_URL_PATTERN
             = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
 
@@ -43,6 +45,7 @@ public class ImageCacheUtils {
 
     private static OkHttpClient okHttpClient;
     private static String externalStoragePath;
+    private static String wallabagUrl;
 
     public static String replaceImagesInHtmlContent(String htmlContent, long articleId) {
         String extStorage = getExternalStoragePath();
@@ -148,7 +151,18 @@ public class ImageCacheUtils {
                 continue;
             }
 
-            downloadImageToCache(imageURL, destinationPath, articleId);
+            if(imageURL.startsWith(WALLABAG_RELATIVE_URL_PATH)) {
+                Log.d(TAG, "cacheImages: found wallabag relative path: " + imageURL);
+                imageURL = getWallabagUrl() + imageURL;
+            }
+
+            HttpUrl url = HttpUrl.parse(imageURL);
+            if(url == null) {
+                Log.w(TAG, "cacheImages: skipping unexpected URL: " + imageURL);
+                continue;
+            }
+
+            downloadImageToCache(url, destinationPath, articleId);
         }
     }
 
@@ -213,7 +227,7 @@ public class ImageCacheUtils {
         }
     }
 
-    public static void downloadImageToCache(String imageURL, String destination, long articleId) {
+    public static void downloadImageToCache(HttpUrl imageURL, String destination, long articleId) {
         Log.d(TAG, "downloadImageToCache: imageURL=" + imageURL + " destination=" + destination);
 
         File dest = new File(destination);
@@ -226,13 +240,7 @@ public class ImageCacheUtils {
             okHttpClient = WallabagConnection.createClient(false);
         }
 
-        HttpUrl url = HttpUrl.parse(imageURL);
-        if(url == null) {
-            Log.w(TAG, "downloadImageToCache: unexpected URL: " + imageURL);
-            return;
-        }
-
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder().url(imageURL).build();
         Response response;
         try {
             response = okHttpClient.newCall(request).execute();
@@ -309,6 +317,14 @@ public class ImageCacheUtils {
 
         File f = new File(externalStoragePath);
         return f.exists() && f.canWrite();
+    }
+
+    private static String getWallabagUrl() {
+        if(wallabagUrl == null) {
+            wallabagUrl = App.getInstance().getSettings().getUrl();
+        }
+
+        return wallabagUrl;
     }
 
     public static String md5(String s) {
