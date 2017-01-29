@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
+import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -225,7 +226,13 @@ public class ImageCacheUtils {
             okHttpClient = WallabagConnection.createClient(false);
         }
 
-        Request request = new Request.Builder().url(imageURL).build();
+        HttpUrl url = HttpUrl.parse(imageURL);
+        if(url == null) {
+            Log.w(TAG, "downloadImageToCache: unexpected URL: " + imageURL);
+            return;
+        }
+
+        Request request = new Request.Builder().url(url).build();
         Response response;
         try {
             response = okHttpClient.newCall(request).execute();
