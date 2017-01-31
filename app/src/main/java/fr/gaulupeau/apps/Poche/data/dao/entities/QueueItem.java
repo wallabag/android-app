@@ -11,11 +11,9 @@ public class QueueItem {
     @Id
     private Long id;
 
-    @Property(nameInDb = "queue_number")
-    private Long queueNumber;
+    private Long queueNumber; // not used
     private int action;
 
-    @Property(nameInDb = "article_id")
     private Integer articleId;
     private String extra;
 

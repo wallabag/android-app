@@ -39,7 +39,7 @@ android {
 }
 
 greendao {
-    schemaVersion 6
+    schemaVersion 7
     daoPackage 'fr.gaulupeau.apps.Poche.data.dao'
 }
 
