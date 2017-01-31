@@ -16,6 +16,7 @@ import java.util.List;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 public class DbConnection {
@@ -111,7 +112,12 @@ public class DbConnection {
                 db.beginTransaction();
                 try {
                     DatabaseStatement stmt = db.compileStatement(
-                            "insert into queue_item(_id, queue_number, action, extra) values(?, ?, ?, ?)");
+                            "insert into " + QueueItemDao.TABLENAME + "("
+                                    + QueueItemDao.Properties.Id.columnName + ", "
+                                    + QueueItemDao.Properties.QueueNumber.columnName + ", "
+                                    + QueueItemDao.Properties.Action.columnName + ", "
+                                    + QueueItemDao.Properties.Extra.columnName
+                                    + ") values(?, ?, ?, ?)");
 
                     int i = 1;
                     for(String url: offlineUrls) {
