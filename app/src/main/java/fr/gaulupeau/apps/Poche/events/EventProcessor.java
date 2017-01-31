@@ -181,32 +181,24 @@ public class EventProcessor {
         }
     }
 
-    @Subscribe(sticky = true)
-    public void onFetchImagesStartedEvent(FetchImagesStartedEvent event) {
-        Log.d(TAG, "onFetchImagesStartedEvent() started");
-
-        Context context = getContext();
-
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(context.getString(R.string.notification_downloadingImages))
-                .setOngoing(true);
-
-        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            notificationBuilder.setContentText(context.getString(R.string.app_name));
-        }
-
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
-                notificationBuilder.setProgress(0, 0, true).build());
-
-        fetchImagesNotificationBuilder = notificationBuilder;
-    }
-
     @Subscribe
     public void onFetchImagesProgressEvent(FetchImagesProgressEvent event) {
         Log.d(TAG, "onFetchImagesProgressEvent() started");
 
-        if(fetchImagesNotificationBuilder == null) return;
+        if(fetchImagesNotificationBuilder == null) {
+            Context context = getContext();
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                    .setOngoing(true);
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                notificationBuilder.setContentText(context.getString(R.string.app_name));
+            }
+
+            fetchImagesNotificationBuilder = notificationBuilder;
+        }
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
                 fetchImagesNotificationBuilder
