@@ -101,9 +101,6 @@
     <string name="downloadPdfTouchToOpen">Toca para abrir</string>
     <string name="downloadPdfProgressDetail">wallabag está descargando tus %s artículo en PDF</string>
     <string name="downloadPdfProgress">wallabag está descargando tu artículo en PDF</string>
-    <string name="notification_updatingFeeds">Actualizando fuentes</string>
-    <string name="notification_updatingAllFeeds">Actualizando todas las fuentes</string>
-    <string name="notification_updatingSpecificFeed">Actualizando fuente %s</string>
     <string name="notification_downloadingImages">Descargando imágenes</string>
     <string name="notification_syncingQueue">Sincronizando cambios locales</string>
     <string name="notification_error">Error</string>

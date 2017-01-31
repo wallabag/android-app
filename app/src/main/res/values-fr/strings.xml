@@ -154,9 +154,6 @@
     <string name="notification_incorrectCredentials">Identifiants incorrects</string>
     <string name="notification_syncingQueue">Synchronisation des changements locaux en cours</string>
     <string name="notification_unknownError">Erreur inconnue</string>
-    <string name="notification_updatingAllFeeds">Mise à jour de tous les flux</string>
-    <string name="notification_updatingFeeds">Mise à jour des flux</string>
-    <string name="notification_updatingSpecificFeed">Mise à jour du flux %s</string>
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_categoryName_connection_advanced">Paramètres de connexion avancés</string>

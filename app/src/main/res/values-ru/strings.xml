@@ -127,9 +127,6 @@
     <string name="downloadPdfTouchToOpen">Коснитесь, чтобы открыть</string>
     <string name="downloadPdfProgressDetail">wallabag загружает вашу статью %s в PDF</string>
     <string name="downloadPdfProgress">wallabag загружает вашу статью в PDF</string>
-    <string name="notification_updatingFeeds">Обновление лент</string>
-    <string name="notification_updatingAllFeeds">Обновление всех лент</string>
-    <string name="notification_updatingSpecificFeed">Обновление ленты: %s</string>
     <string name="notification_downloadingImages">Загружаются изображения</string>
     <string name="notification_syncingQueue">Синхронизация локальных изменений</string>
     <string name="notification_incorrectCredentials">Неправильные данные учётной записи</string>

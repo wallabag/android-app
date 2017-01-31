@@ -52,6 +52,10 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
         getChangedArticles().put(article.getArticleId(), new ArticleEntry(article, changeType));
     }
 
+    public void addChangedArticleID(Article article, ChangeType changeType) {
+        getChangedArticles().put(article.getArticleId(), new ArticleEntry(null, changeType));
+    }
+
     public ChangeType getArticleChangeType(Article article) {
         return getArticleChangeType(article.getArticleId());
     }

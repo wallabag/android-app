@@ -24,7 +24,7 @@ import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
@@ -329,21 +329,16 @@ public class MainService extends IntentServiceBase {
     }
 
     private ActionResult updateFeed(ActionRequest actionRequest) {
-        FeedUpdater.FeedType feedType = actionRequest.getFeedUpdateFeedType();
-        FeedUpdater.UpdateType updateType = actionRequest.getFeedUpdateUpdateType();
-
-        Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
+        Updater.UpdateType updateType = actionRequest.getUpdateType();
+        Log.d(TAG, String.format("updateFeed(%s) started", updateType));
 
         ActionResult result = new ActionResult();
         ArticlesChangedEvent event = null;
 
         if(WallabagConnection.isNetworkAvailable()) {
-            DaoSession daoSession = getDaoSession();
-            daoSession.getDatabase().beginTransaction();
             try {
-                event = new FeedUpdater(getWallabagServiceWrapper()).update(feedType, updateType);
-
-                daoSession.getDatabase().setTransactionSuccessful();
+                event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
+                        .update(updateType);
             } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateFeed()");
                 result.updateWith(r);
@@ -352,8 +347,6 @@ public class MainService extends IntentServiceBase {
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
-            } finally {
-                daoSession.getDatabase().endTransaction();
             }
         } else {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);

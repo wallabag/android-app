@@ -6,7 +6,7 @@ import android.os.Parcelable;
 
 import java.util.Locale;
 
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 
 public class ActionRequest implements Parcelable {
 
@@ -37,8 +37,7 @@ public class ActionRequest implements Parcelable {
     private Integer articleID;
     private String link;
     private Long queueLength;
-    private FeedUpdater.FeedType feedUpdateFeedType;
-    private FeedUpdater.UpdateType feedUpdateUpdateType;
+    private Updater.UpdateType updateType;
     private DownloadFormat downloadFormat;
 
     public static ActionRequest fromIntent(Intent intent) {
@@ -97,20 +96,12 @@ public class ActionRequest implements Parcelable {
         this.queueLength = queueLength;
     }
 
-    public FeedUpdater.FeedType getFeedUpdateFeedType() {
-        return feedUpdateFeedType;
+    public Updater.UpdateType getUpdateType() {
+        return updateType;
     }
 
-    public void setFeedUpdateFeedType(FeedUpdater.FeedType feedUpdateFeedType) {
-        this.feedUpdateFeedType = feedUpdateFeedType;
-    }
-
-    public FeedUpdater.UpdateType getFeedUpdateUpdateType() {
-        return feedUpdateUpdateType;
-    }
-
-    public void setFeedUpdateUpdateType(FeedUpdater.UpdateType feedUpdateUpdateType) {
-        this.feedUpdateUpdateType = feedUpdateUpdateType;
+    public void setUpdateType(Updater.UpdateType updateType) {
+        this.updateType = updateType;
     }
 
     public DownloadFormat getDownloadFormat() {
@@ -137,8 +128,7 @@ public class ActionRequest implements Parcelable {
         writeInteger(articleID, out);
         writeString(link, out);
         writeLong(queueLength, out);
-        writeInteger(this.feedUpdateFeedType != null ? this.feedUpdateFeedType.ordinal() : null, out);
-        writeInteger(this.feedUpdateUpdateType != null ? this.feedUpdateUpdateType.ordinal() : null, out);
+        writeInteger(this.updateType != null ? this.updateType.ordinal() : null, out);
         writeInteger(this.downloadFormat != null ? this.downloadFormat.ordinal() : null, out);
     }
 
@@ -150,13 +140,9 @@ public class ActionRequest implements Parcelable {
         articleID = readInteger(in);
         link = readString(in);
         queueLength = readLong(in);
-        Integer feedUpdateFeedTypeInteger = readInteger(in);
-        if(feedUpdateFeedTypeInteger != null) {
-            feedUpdateFeedType = FeedUpdater.FeedType.values()[feedUpdateFeedTypeInteger];
-        }
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
-            feedUpdateUpdateType = FeedUpdater.UpdateType.values()[feedUpdateUpdateTypeInteger];
+            updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];
         }
         Integer downloadFormatInteger = readInteger(in);
         if(downloadFormatInteger != null) {

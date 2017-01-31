@@ -34,7 +34,7 @@ import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
@@ -458,12 +458,7 @@ public class ArticlesListActivity extends BaseActionBarActivity
 
     @Override
     public void updateFeed() {
-        int position = viewPager.getCurrentItem();
-        FeedUpdater.FeedType feedType = ArticlesListPagerAdapter.getFeedType(position);
-        FeedUpdater.UpdateType updateType = feedType == FeedUpdater.FeedType.MAIN
-                ? FeedUpdater.UpdateType.FAST : FeedUpdater.UpdateType.FULL;
-
-        if(!updateRunning && !updateFeed(true, feedType, updateType)) {
+        if(!updateRunning && !updateFeed(true, Updater.UpdateType.FAST)) {
             // cancels the refresh animation if the update was not started
             setRefreshingUI(false);
         }
@@ -476,7 +471,7 @@ public class ArticlesListActivity extends BaseActionBarActivity
     }
 
     private void updateAllFeeds(boolean showErrors) {
-        updateFeed(showErrors, null, null);
+        updateFeed(showErrors, Updater.UpdateType.FULL);
     }
 
     private void updateStateChanged(boolean started) {
@@ -487,9 +482,7 @@ public class ArticlesListActivity extends BaseActionBarActivity
         setRefreshingUI(started);
     }
 
-    private boolean updateFeed(boolean showErrors,
-                               FeedUpdater.FeedType feedType,
-                               FeedUpdater.UpdateType updateType) {
+    private boolean updateFeed(boolean showErrors, Updater.UpdateType updateType) {
         boolean result = false;
 
         if(updateRunning) {
@@ -502,10 +495,8 @@ public class ArticlesListActivity extends BaseActionBarActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
-            // sync queue before full update
-            if(feedType == null) ServiceHelper.syncQueue(this);
-
-            ServiceHelper.updateFeed(this, feedType, updateType);
+            ServiceHelper.syncQueue(this);
+            ServiceHelper.updateFeed(this, updateType);
 
             result = true;
         } else {
@@ -518,14 +509,23 @@ public class ArticlesListActivity extends BaseActionBarActivity
     }
 
     private void invalidateLists(FeedsChangedEvent event) {
+        if(event.isInvalidateAll()) {
+            invalidateList(-1);
+            return;
+        }
+
+        // TODO: fix: unused
         if(event.isMainFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.MAIN));
+            invalidateList(ArticlesListPagerAdapter
+                    .positionByFeedType(FeedsChangedEvent.FeedType.MAIN));
         }
         if(event.isFavoriteFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.FAVORITE));
+            invalidateList(ArticlesListPagerAdapter
+                    .positionByFeedType(FeedsChangedEvent.FeedType.FAVORITE));
         }
         if(event.isArchiveFeedChanged()) {
-            invalidateList(ArticlesListPagerAdapter.positionByFeedType(FeedUpdater.FeedType.ARCHIVE));
+            invalidateList(ArticlesListPagerAdapter
+                    .positionByFeedType(FeedsChangedEvent.FeedType.ARCHIVE));
         }
     }
 
@@ -711,18 +711,7 @@ public class ArticlesListActivity extends BaseActionBarActivity
             }
         }
 
-        public static FeedUpdater.FeedType getFeedType(int position) {
-            switch(PAGES[position]) {
-                case LIST_TYPE_FAVORITES:
-                    return FeedUpdater.FeedType.FAVORITE;
-                case LIST_TYPE_ARCHIVED:
-                    return FeedUpdater.FeedType.ARCHIVE;
-                default:
-                    return FeedUpdater.FeedType.MAIN;
-            }
-        }
-
-        public static int positionByFeedType(FeedUpdater.FeedType feedType) {
+        public static int positionByFeedType(FeedsChangedEvent.FeedType feedType) {
             if(feedType == null) return -1;
 
             int listType;

@@ -101,9 +101,6 @@
     <string name="downloadPdfTouchToOpen">タップすると開きます</string>
     <string name="downloadPdfProgressDetail">wallabag は記事 %s を PDF でダウンロードします</string>
     <string name="downloadPdfProgress">wallabag はあなたの記事を PDF でダウンロードします</string>
-    <string name="notification_updatingFeeds">フィードの更新中</string>
-    <string name="notification_updatingAllFeeds">すべてのフィードを更新中</string>
-    <string name="notification_updatingSpecificFeed">%s フィードを更新中</string>
     <string name="notification_downloadingImages">画像のダウンロード中</string>
     <string name="notification_syncingQueue">ローカルの変更を同期中</string>
     <string name="notification_error">エラー</string>

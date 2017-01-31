@@ -113,9 +113,9 @@
     <string name="downloadPdfTouchToOpen">Touch to open</string>
     <string name="downloadPdfProgressDetail">wallabag downloads your article %s in PDF</string>
     <string name="downloadPdfProgress">wallabag downloads your article in PDF</string>
-    <string name="notification_updatingFeeds">Updating feeds</string>
-    <string name="notification_updatingAllFeeds">Updating all feeds</string>
-    <string name="notification_updatingSpecificFeed">Updating %s feed</string>
+    <string name="notification_updatingArticles">Updating articles</string>
+    <string name="notification_updatingArticles_full">Performing full update</string>
+    <string name="notification_updatingArticles_fast">Performing fast update</string>
     <string name="notification_downloadingImages">Downloading images</string>
     <string name="notification_syncingQueue">Synchronizing local changes</string>
     <string name="notification_error">Error</string>

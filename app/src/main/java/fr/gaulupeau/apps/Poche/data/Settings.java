@@ -569,6 +569,22 @@ public class Settings {
         setBoolean(R.string.pref_key_internal_offlineQueue_pending, value);
     }
 
+    public long getLatestUpdatedItemTimestamp() {
+        return getLong(R.string.pref_key_internal_update_latestUpdatedItemTimestamp, 0);
+    }
+
+    public void setLatestUpdatedItemTimestamp(long timestamp) {
+        setLong(R.string.pref_key_internal_update_latestUpdatedItemTimestamp, timestamp);
+    }
+
+    public long getLatestUpdateRunTimestamp() {
+        return getLong(R.string.pref_key_internal_update_latestUpdateRunTimestamp, 0);
+    }
+
+    public void setLatestUpdateRunTimestamp(long timestamp) {
+        setLong(R.string.pref_key_internal_update_latestUpdateRunTimestamp, timestamp);
+    }
+
     public boolean isHandlingHttpScheme() {
         return context.getPackageManager()
                 .getComponentEnabledSetting(getHttpSchemeHandlingComponent())

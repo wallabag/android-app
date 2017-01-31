@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 
 public class ServiceHelper {
 
@@ -83,21 +83,17 @@ public class ServiceHelper {
         Log.d(TAG, "deleteArticle() finished");
     }
 
-    public static void updateFeed(Context context,
-                                  FeedUpdater.FeedType feedType,
-                                  FeedUpdater.UpdateType updateType) {
-        updateFeed(context, feedType, updateType, null, false);
+    public static void updateFeed(Context context, Updater.UpdateType updateType) {
+        updateFeed(context, updateType, null, false);
     }
 
     public static void updateFeed(Context context,
-                                  FeedUpdater.FeedType feedType,
-                                  FeedUpdater.UpdateType updateType,
+                                  Updater.UpdateType updateType,
                                   Long operationID, boolean auto) {
         Log.d(TAG, "updateFeed() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_FEED);
-        request.setFeedUpdateFeedType(feedType);
-        request.setFeedUpdateUpdateType(updateType);
+        request.setUpdateType(updateType);
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
 

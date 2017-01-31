@@ -59,6 +59,8 @@
     <string name="pref_key_internal_configurationErrorShown" translatable="false">internal.configurationErrorShown</string>
     <string name="pref_key_internal_firstSyncDone" translatable="false">internal.firstSyncDone</string>
     <string name="pref_key_internal_offlineQueue_pending" translatable="false">internal.offlineQueue.pending</string>
+    <string name="pref_key_internal_update_latestUpdatedItemTimestamp" translatable="false">internal.update.latestUpdatedItemTimestamp</string>
+    <string name="pref_key_internal_update_latestUpdateRunTimestamp" translatable="false">internal.update.latestUpdateRunTimestamp</string>
 
     <string name="pref_key_connection_wizard" translatable="false">connection.wizard</string>
     <string name="pref_key_connection_autofill" translatable="false">connection.autofill</string>

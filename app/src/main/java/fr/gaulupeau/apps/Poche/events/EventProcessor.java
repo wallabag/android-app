@@ -18,7 +18,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
@@ -92,16 +92,15 @@ public class EventProcessor {
             return;
         }
 
-        int updateTypeVal = settings.getAutoSyncType();
-        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.MAIN : null;
-        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.FAST : null;
+        Updater.UpdateType updateType = settings.getAutoSyncType() == 0
+                ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
 
         Context context = getContext();
         // TODO: if the queue sync operation fails, the update feed operation should not be started
         if(settings.isOfflineQueuePending()) {
             ServiceHelper.syncQueue(context, true);
         }
-        ServiceHelper.updateFeed(context, feedType, updateType, null, true);
+        ServiceHelper.updateFeed(context, updateType, null, true);
     }
 
     @Subscribe
@@ -152,19 +151,16 @@ public class EventProcessor {
 
         Context context = getContext();
 
-        String detailedMessage;
-        FeedUpdater.FeedType feedType = event.getFeedType();
-        if(feedType == null) {
-            detailedMessage = context.getString(R.string.notification_updatingAllFeeds);
-        } else {
-            detailedMessage = context.getString(R.string.notification_updatingSpecificFeed,
-                    context.getString(feedType.getLocalizedResourceID()));
-        }
+        String detailedMessage = context.getString(
+                event.getRequest().getUpdateType() != Updater.UpdateType.FAST
+                        ? R.string.notification_updatingArticles_full
+                        : R.string.notification_updatingArticles_fast);
+
         detailedMessage = prependAppName(detailedMessage);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(context.getString(R.string.notification_updatingFeeds))
+                .setContentTitle(context.getString(R.string.notification_updatingArticles))
                 .setContentText(detailedMessage)
                 .setOngoing(true);
 
@@ -178,14 +174,8 @@ public class EventProcessor {
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
 
-        Settings settings = getSettings();
-
         if(event.getResult().isSuccess()) {
-            if(!getSettings().isFirstSyncDone()) {
-                settings.setFirstSyncDone(true);
-            }
-
-            if(settings.isImageCacheEnabled()) {
+            if(getSettings().isImageCacheEnabled()) {
                 ServiceHelper.fetchImages(getContext());
             }
         }
@@ -463,8 +453,7 @@ public class EventProcessor {
                     && !getSettings().isOfflineQueuePending()) {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
-                ServiceHelper.updateFeed(getContext(),
-                        FeedUpdater.FeedType.MAIN, FeedUpdater.UpdateType.FAST, null, true);
+                ServiceHelper.updateFeed(getContext(), Updater.UpdateType.FAST, null, true);
             }
         }
     }
