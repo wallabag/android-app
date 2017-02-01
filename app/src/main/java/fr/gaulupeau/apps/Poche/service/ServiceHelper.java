@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
 
 public class ServiceHelper {
@@ -48,34 +49,26 @@ public class ServiceHelper {
         Log.d(TAG, "addLink() finished");
     }
 
-    public static void archiveArticle(Context context, int articleID, boolean archive) {
-        Log.d(TAG, "archiveArticle() started");
-
-        ActionRequest request = new ActionRequest(
-                archive ? ActionRequest.Action.ARCHIVE : ActionRequest.Action.UNARCHIVE);
-        request.setArticleID(articleID);
-
-        startService(context, request, true);
-
-        Log.d(TAG, "archiveArticle() finished");
+    public static void archiveArticle(Context context, int articleID) {
+        changeArticle(context, articleID, QueueItem.ArticleChangeType.ARCHIVE);
     }
 
-    public static void favoriteArticle(Context context, int articleID, boolean favorite) {
-        Log.d(TAG, "favoriteArticle() started");
+    public static void favoriteArticle(Context context, int articleID) {
+        changeArticle(context, articleID, QueueItem.ArticleChangeType.FAVORITE);
+    }
 
-        ActionRequest request = new ActionRequest(
-                favorite ? ActionRequest.Action.FAVORITE : ActionRequest.Action.UNFAVORITE);
-        request.setArticleID(articleID);
+    public static void changeArticleTitle(Context context, int articleID) {
+        changeArticle(context, articleID, QueueItem.ArticleChangeType.TITLE);
+    }
 
-        startService(context, request, true);
-
-        Log.d(TAG, "favoriteArticle() finished");
+    public static void changeArticleTags(Context context, int articleID) {
+        changeArticle(context, articleID, QueueItem.ArticleChangeType.TAGS);
     }
 
     public static void deleteArticle(Context context, int articleID) {
         Log.d(TAG, "deleteArticle() started");
 
-        ActionRequest request = new ActionRequest(ActionRequest.Action.DELETE);
+        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_DELETE);
         request.setArticleID(articleID);
 
         startService(context, request, true);
@@ -92,7 +85,7 @@ public class ServiceHelper {
                                   Long operationID, boolean auto) {
         Log.d(TAG, "updateFeed() started");
 
-        ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_FEED);
+        ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_ARTICLES);
         request.setUpdateType(updateType);
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
@@ -127,6 +120,19 @@ public class ServiceHelper {
         startService(context, new ActionRequest(ActionRequest.Action.FETCH_IMAGES), false);
 
         Log.d(TAG, "fetchImages() finished");
+    }
+
+    private static void changeArticle(Context context, int articleID,
+                                      QueueItem.ArticleChangeType articleChangeType) {
+        Log.d(TAG, "changeArticle() started; articleChangeType: " + articleChangeType);
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_CHANGE);
+        request.setArticleID(articleID);
+        request.setArticleChangeType(articleChangeType);
+
+        startService(context, request, true);
+
+        Log.d(TAG, "changeArticle() finished");
     }
 
     private static void startService(Context context, ActionRequest request, boolean mainService) {

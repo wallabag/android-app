@@ -81,30 +81,19 @@ public class WallabagServiceWrapper {
         }, WallabagConnection.createClient(false, settings.isCustomSSLSettings()));
     }
 
+    public static Article executeModifyArticleCall(WallabagService.ModifyArticleBuilder builder)
+            throws UnsuccessfulResponseException, IOException {
+        try {
+            return builder.execute();
+        } catch(NotFoundException e) {
+            LOG.info("Ignoring not found exception", e);
+        }
+
+        return null;
+    }
+
     public Article addArticle(String url) throws UnsuccessfulResponseException, IOException {
         return wallabagService.addArticle(url);
-    }
-
-    public Article favoriteArticle(int articleID, boolean favorite)
-            throws UnsuccessfulResponseException, IOException {
-        try {
-            return wallabagService.modifyArticleBuilder(articleID).starred(favorite).execute();
-        } catch(NotFoundException e) {
-            LOG.info("Ignoring not found exception for article ID: " + articleID, e);
-        }
-
-        return null;
-    }
-
-    public Article archiveArticle(int articleID, boolean archive)
-            throws UnsuccessfulResponseException, IOException {
-        try {
-            return wallabagService.modifyArticleBuilder(articleID).archive(archive).execute();
-        } catch(NotFoundException e) {
-            LOG.info("Ignoring not found exception for article ID: " + articleID, e);
-        }
-
-        return null;
     }
 
     public Article deleteArticle(int articleID)

@@ -629,7 +629,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
-            Article article = getArticle(articleID);
+            Article article = getArticle(articleID); // TODO: use "articleId" not "id"
             if(article != null) {
                 article.setArticleProgress(getReadingPosition());
                 mArticleDao.update(article);

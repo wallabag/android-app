@@ -6,13 +6,14 @@ import android.os.Parcelable;
 
 import java.util.Locale;
 
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
 
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        ADD_LINK, ARCHIVE, UNARCHIVE, FAVORITE, UNFAVORITE, DELETE, SYNC_QUEUE, UPDATE_FEED,
-        DOWNLOAD_AS_FILE, FETCH_IMAGES
+        ADD_LINK, ARTICLE_CHANGE, ARTICLE_DELETE, SYNC_QUEUE, UPDATE_ARTICLES, FETCH_IMAGES,
+        DOWNLOAD_AS_FILE
     }
 
     public enum RequestType {
@@ -35,6 +36,7 @@ public class ActionRequest implements Parcelable {
     private Long operationID;
 
     private Integer articleID;
+    private QueueItem.ArticleChangeType articleChangeType;
     private String link;
     private Long queueLength;
     private Updater.UpdateType updateType;
@@ -78,6 +80,14 @@ public class ActionRequest implements Parcelable {
 
     public void setArticleID(Integer articleID) {
         this.articleID = articleID;
+    }
+
+    public QueueItem.ArticleChangeType getArticleChangeType() {
+        return articleChangeType;
+    }
+
+    public void setArticleChangeType(QueueItem.ArticleChangeType articleChangeType) {
+        this.articleChangeType = articleChangeType;
     }
 
     public String getLink() {
@@ -126,10 +136,11 @@ public class ActionRequest implements Parcelable {
         writeLong(operationID, out);
 
         writeInteger(articleID, out);
+        writeInteger(articleChangeType != null ? articleChangeType.ordinal() : null, out);
         writeString(link, out);
         writeLong(queueLength, out);
-        writeInteger(this.updateType != null ? this.updateType.ordinal() : null, out);
-        writeInteger(this.downloadFormat != null ? this.downloadFormat.ordinal() : null, out);
+        writeInteger(updateType != null ? updateType.ordinal() : null, out);
+        writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
     }
 
     private ActionRequest(Parcel in) {
@@ -138,6 +149,10 @@ public class ActionRequest implements Parcelable {
         operationID = readLong(in);
 
         articleID = readInteger(in);
+        Integer articleChangeTypeInteger = readInteger(in);
+        if(articleChangeTypeInteger != null) {
+            articleChangeType = QueueItem.ArticleChangeType.values()[articleChangeTypeInteger];
+        }
         link = readString(in);
         queueLength = readLong(in);
         Integer feedUpdateUpdateTypeInteger = readInteger(in);

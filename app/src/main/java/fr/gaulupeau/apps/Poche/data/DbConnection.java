@@ -17,6 +17,7 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 public class DbConnection {
@@ -124,7 +125,7 @@ public class DbConnection {
                         try {
                             stmt.bindLong(1, i);
                             stmt.bindLong(2, i);
-                            stmt.bindLong(3, QueueHelper.QI_ACTION_ADD_LINK);
+                            stmt.bindLong(3, QueueItem.Action.ADD_LINK.getId());
                             stmt.bindString(4, url);
 
                             stmt.executeInsert();

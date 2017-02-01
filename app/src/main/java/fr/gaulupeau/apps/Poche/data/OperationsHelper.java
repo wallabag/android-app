@@ -61,7 +61,7 @@ public class OperationsHelper {
         Log.d(TAG, "archiveArticle() local changes took (ms): "
                 + (SystemClock.elapsedRealtime() - timestamp));
 
-        ServiceHelper.archiveArticle(context, articleID, archive);
+        ServiceHelper.archiveArticle(context, articleID);
 
         Log.d(TAG, "archiveArticle() finished");
     }
@@ -94,7 +94,7 @@ public class OperationsHelper {
             // TODO: do we need to continue with the sync part? Probably yes
         }
 
-        ServiceHelper.favoriteArticle(context, articleID, favorite);
+        ServiceHelper.favoriteArticle(context, articleID);
 
         Log.d(TAG, "archiveArticle() finished");
     }

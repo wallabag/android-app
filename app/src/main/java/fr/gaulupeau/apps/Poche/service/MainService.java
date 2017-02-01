@@ -5,16 +5,17 @@ import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
@@ -26,6 +27,7 @@ import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
@@ -52,11 +54,8 @@ public class MainService extends IntentServiceBase {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case ARCHIVE:
-            case UNARCHIVE:
-            case FAVORITE:
-            case UNFAVORITE:
-            case DELETE:
+            case ARTICLE_CHANGE:
+            case ARTICLE_DELETE:
             case ADD_LINK:
                 Long queueChangedLength = serveSimpleRequest(actionRequest);
                 if(queueChangedLength != null) {
@@ -80,7 +79,7 @@ public class MainService extends IntentServiceBase {
                 break;
             }
 
-            case UPDATE_FEED: {
+            case UPDATE_ARTICLES: {
                 UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
@@ -118,23 +117,14 @@ public class MainService extends IntentServiceBase {
 
             ActionRequest.Action action = actionRequest.getAction();
             switch(action) {
-                case ARCHIVE:
-                case UNARCHIVE:
-                    if(queueHelper.archiveArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.ARCHIVE)) {
+                case ARTICLE_CHANGE:
+                    if(queueHelper.changeArticle(actionRequest.getArticleID(),
+                            actionRequest.getArticleChangeType())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case FAVORITE:
-                case UNFAVORITE:
-                    if(queueHelper.favoriteArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.FAVORITE)) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case DELETE:
+                case ARTICLE_DELETE:
                     if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
@@ -177,7 +167,6 @@ public class MainService extends IntentServiceBase {
         List<QueueItem> queueItems = queueHelper.getQueueItems();
 
         List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
-        Set<Integer> maskedArticles = new HashSet<>();
 
         for(QueueItem item: queueItems) {
             Integer articleIdInteger = item.getArticleId();
@@ -186,44 +175,59 @@ public class MainService extends IntentServiceBase {
                     "syncOfflineQueue() processing: queue item ID: %d, article ID: \"%s\"",
                     item.getId(), articleIdInteger));
 
-            if(articleIdInteger != null && maskedArticles.contains(articleIdInteger)) {
-                Log.d(TAG, String.format(
-                        "syncOfflineQueue() article with ID: \"%d\" is masked; skipping",
-                        articleIdInteger));
-                continue;
-            }
             int articleID = articleIdInteger != null ? articleIdInteger : -1;
 
-            boolean articleItem = false;
+            boolean canTolerateNotFound = false;
 
             ActionResult itemResult = null;
             try {
-                int action = item.getAction();
+                QueueItem.Action action = item.getAction();
                 switch(action) {
-                    case QueueHelper.QI_ACTION_ARCHIVE:
-                    case QueueHelper.QI_ACTION_UNARCHIVE: {
-                        articleItem = true;
+                    case ARTICLE_CHANGE: {
+                        canTolerateNotFound = true;
 
-                        if(getWallabagServiceWrapper().archiveArticle(
-                                articleID, action == QueueHelper.QI_ACTION_ARCHIVE) == null) {
+                        Article article = daoSession.getArticleDao().queryBuilder()
+                                .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
+
+                        if(article == null) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN,
+                                    "Article is not found locally");
+                            break;
+                        }
+
+                        WallabagService.ModifyArticleBuilder builder
+                                = getWallabagServiceWrapper().getWallabagService()
+                                .modifyArticleBuilder(articleID);
+
+                        for(QueueItem.ArticleChangeType changeType:
+                                QueueItem.ArticleChangeType.stringToEnumSet(item.getExtra())) {
+                            // TODO: implement tags update
+                            switch(changeType) {
+                                case ARCHIVE:
+                                    builder.archive(article.getArchive());
+                                    break;
+
+                                case FAVORITE:
+                                    builder.starred(article.getFavorite());
+                                    break;
+
+                                case TITLE:
+                                    builder.title(article.getTitle());
+                                    break;
+
+                                default:
+                                    throw new IllegalStateException("Change type is not implemented: " + changeType);
+                            }
+                        }
+
+                        if(WallabagServiceWrapper.executeModifyArticleCall(builder) == null) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
                     }
 
-                    case QueueHelper.QI_ACTION_FAVORITE:
-                    case QueueHelper.QI_ACTION_UNFAVORITE: {
-                        articleItem = true;
-
-                        if(getWallabagServiceWrapper().favoriteArticle(articleID,
-                                action == QueueHelper.QI_ACTION_FAVORITE) == null) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
-                        }
-                        break;
-                    }
-
-                    case QueueHelper.QI_ACTION_DELETE: {
-                        articleItem = true;
+                    case ARTICLE_DELETE: {
+                        canTolerateNotFound = true;
 
                         if(getWallabagServiceWrapper().deleteArticle(articleID) == null) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
@@ -231,7 +235,7 @@ public class MainService extends IntentServiceBase {
                         break;
                     }
 
-                    case QueueHelper.QI_ACTION_ADD_LINK: {
+                    case ADD_LINK: {
                         String link = item.getExtra();
                         if(link != null && !link.isEmpty()) {
                             if(getWallabagServiceWrapper().addArticle(link) == null) {
@@ -253,9 +257,13 @@ public class MainService extends IntentServiceBase {
             } catch(Exception e) {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
-                itemResult = new ActionResult();
-                itemResult.setErrorType(ActionResult.ErrorType.UNKNOWN);
-                itemResult.setMessage(e.toString());
+                itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN, e.toString());
+            }
+
+            if(itemResult != null && !itemResult.isSuccess() && canTolerateNotFound
+                    && itemResult.getErrorType() == ActionResult.ErrorType.NOT_FOUND) {
+                Log.i(TAG, "syncOfflineQueue() ignoring NOT_FOUND");
+                itemResult = null;
             }
 
             if(itemResult == null || itemResult.isSuccess()) {
@@ -265,22 +273,10 @@ public class MainService extends IntentServiceBase {
 
                 Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
 
-                boolean stop = false;
-                boolean mask = false; // it seems masking is not used
+                boolean stop = true;
                 switch(itemError) {
-                    case TEMPORARY:
-                    case NO_NETWORK:
-                        stop = true;
-                        break;
-                    case INCORRECT_CONFIGURATION:
-                    case INCORRECT_CREDENTIALS:
-                        stop = true;
-                        break;
-                    case UNKNOWN:
-                        stop = true;
-                        break;
                     case NEGATIVE_RESPONSE:
-                        mask = true; // ?
+                        stop = false;
                         break;
                 }
 
@@ -288,9 +284,6 @@ public class MainService extends IntentServiceBase {
                     result.updateWith(itemResult);
                     Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                     break;
-                }
-                if(mask && articleItem) {
-                    maskedArticles.add(articleID);
                 }
             } else { // should not happen
                 Log.w(TAG, "syncOfflineQueue() errorType is not present in itemResult");
