@@ -83,7 +83,7 @@ public class MainService extends IntentServiceBase {
                 UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
-                    result = updateFeed(actionRequest);
+                    result = updateArticles(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
                     if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
@@ -97,9 +97,7 @@ public class MainService extends IntentServiceBase {
                 break;
         }
 
-        if(result != null) {
-            postEvent(new ActionResultEvent(actionRequest, result));
-        }
+        postEvent(new ActionResultEvent(actionRequest, result));
 
         Log.d(TAG, "onHandleIntent() finished");
     }
@@ -321,9 +319,9 @@ public class MainService extends IntentServiceBase {
         return new Pair<>(result, queueLength);
     }
 
-    private ActionResult updateFeed(ActionRequest actionRequest) {
+    private ActionResult updateArticles(ActionRequest actionRequest) {
         Updater.UpdateType updateType = actionRequest.getUpdateType();
-        Log.d(TAG, String.format("updateFeed(%s) started", updateType));
+        Log.d(TAG, String.format("updateArticles(%s) started", updateType));
 
         ActionResult result = new ActionResult();
         ArticlesChangedEvent event = null;
@@ -333,10 +331,10 @@ public class MainService extends IntentServiceBase {
                 event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
                         .update(updateType);
             } catch(UnsuccessfulResponseException | IOException e) {
-                ActionResult r = processException(e, "updateFeed()");
+                ActionResult r = processException(e, "updateArticles()");
                 result.updateWith(r);
             } catch(Exception e) {
-                Log.e(TAG, "updateFeed() exception", e);
+                Log.e(TAG, "updateArticles() exception", e);
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
@@ -349,7 +347,7 @@ public class MainService extends IntentServiceBase {
             postEvent(event);
         }
 
-        Log.d(TAG, "updateFeed() finished");
+        Log.d(TAG, "updateArticles() finished");
         return result;
     }
 

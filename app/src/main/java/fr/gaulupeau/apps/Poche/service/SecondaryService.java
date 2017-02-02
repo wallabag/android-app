@@ -81,9 +81,7 @@ public class SecondaryService extends IntentServiceBase {
                 break;
         }
 
-        if(result != null) {
-            postEvent(new ActionResultEvent(actionRequest, result));
-        }
+        postEvent(new ActionResultEvent(actionRequest, result));
 
         Log.d(TAG, "onHandleIntent() finished");
     }

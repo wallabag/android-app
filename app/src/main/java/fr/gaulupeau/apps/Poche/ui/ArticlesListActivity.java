@@ -495,8 +495,7 @@ public class ArticlesListActivity extends BaseActionBarActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
-            if(settings.isOfflineQueuePending()) ServiceHelper.syncQueue(this);
-            ServiceHelper.updateFeed(this, updateType);
+            ServiceHelper.syncAndUpdate(this, updateType, false, settings);
 
             result = true;
         } else {

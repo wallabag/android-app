@@ -42,6 +42,8 @@ public class ActionRequest implements Parcelable {
     private Updater.UpdateType updateType;
     private DownloadFormat downloadFormat;
 
+    private ActionRequest nextRequest;
+
     public static ActionRequest fromIntent(Intent intent) {
         return intent.getParcelableExtra(ACTION_REQUEST);
     }
@@ -122,6 +124,14 @@ public class ActionRequest implements Parcelable {
         this.downloadFormat = downloadFormat;
     }
 
+    public ActionRequest getNextRequest() {
+        return nextRequest;
+    }
+
+    public void setNextRequest(ActionRequest nextRequest) {
+        this.nextRequest = nextRequest;
+    }
+
 // Parcelable implementation
 
     @Override
@@ -141,6 +151,7 @@ public class ActionRequest implements Parcelable {
         writeLong(queueLength, out);
         writeInteger(updateType != null ? updateType.ordinal() : null, out);
         writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
+        out.writeParcelable(nextRequest, 0);
     }
 
     private ActionRequest(Parcel in) {
@@ -163,6 +174,7 @@ public class ActionRequest implements Parcelable {
         if(downloadFormatInteger != null) {
             downloadFormat = DownloadFormat.values()[downloadFormatInteger];
         }
+        nextRequest = in.readParcelable(getClass().getClassLoader());
     }
 
     private void writeLong(Long value, Parcel out) {

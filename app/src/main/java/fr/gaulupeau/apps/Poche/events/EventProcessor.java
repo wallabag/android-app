@@ -95,12 +95,7 @@ public class EventProcessor {
         Updater.UpdateType updateType = settings.getAutoSyncType() == 0
                 ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
 
-        Context context = getContext();
-        // TODO: if the queue sync operation fails, the update feed operation should not be started
-        if(settings.isOfflineQueuePending()) {
-            ServiceHelper.syncQueue(context, true);
-        }
-        ServiceHelper.updateFeed(context, updateType, null, true);
+        ServiceHelper.syncAndUpdate(getContext(), updateType, true, settings);
     }
 
     @Subscribe
@@ -324,106 +319,118 @@ public class EventProcessor {
 
         ActionResult result = event.getResult();
 
+        boolean success = true;
+
         if(result != null) {
-            if(result.isSuccess()) {
-                Log.d(TAG, "onActionResultEvent() result is success");
-            } else {
-                ActionResult.ErrorType errorType = result.getErrorType();
+            if(!result.isSuccess()) success = false;
+            Log.d(TAG, "onActionResultEvent() result is success: " + success);
+        } else {
+            Log.d(TAG, "onActionResultEvent() result is null");
+        }
 
-                Log.d(TAG, "onActionResultEvent() result is not success; errorType: " + errorType);
-                Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
+        if(success) {
+            ActionRequest nextRequest = request.getNextRequest();
 
-                switch(errorType) {
-                    case TEMPORARY:
-                    case NO_NETWORK:
-                        // don't show it to user at all or make it suppressible
-                        // optionally schedule auto-retry
-                        // TODO: not important: implement
-                        break;
+            if(nextRequest != null) {
+                Log.d(TAG, "onActionResultEvent() starting nextRequest with action: "
+                        + nextRequest.getAction());
 
-                    case INCORRECT_CONFIGURATION:
-                    case INCORRECT_CREDENTIALS: {
-                        // notify user -- user must fix something before retry
-                        // maybe suppress notification if:
-                        //  - the action was not requested by user (that probably implies the second case), or
-                        //  - notification was already shown in the past
-                        // no auto-retry
+                ServiceHelper.startService(getContext(), nextRequest);
+            }
+        } else {
+            ActionResult.ErrorType errorType = result.getErrorType();
 
-                        Settings settings = getSettings();
-                        if(settings.isConfigurationOk()) {
-                            // TODO: we probably want to automatically test connection
+            Log.d(TAG, "onActionResultEvent() result is not success; errorType: " + errorType);
+            Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
 
-                            settings.setConfigurationOk(false);
-                        }
+            switch(errorType) {
+                case TEMPORARY:
+                case NO_NETWORK:
+                    // don't show it to user at all or make it suppressible
+                    // optionally schedule auto-retry
+                    // TODO: not important: implement
+                    break;
 
-                        if(request.getRequestType() != ActionRequest.RequestType.AUTO
-                                || !settings.isConfigurationErrorShown()) {
-                            settings.setConfigurationErrorShown(true);
+                case INCORRECT_CONFIGURATION:
+                case INCORRECT_CREDENTIALS: {
+                    // notify user -- user must fix something before retry
+                    // maybe suppress notification if:
+                    //  - the action was not requested by user (that probably implies the second case), or
+                    //  - notification was already shown in the past
+                    // no auto-retry
 
-                            Context context = getContext();
+                    Settings settings = getSettings();
+                    if(settings.isConfigurationOk()) {
+                        // TODO: we probably want to automatically test connection
 
-                            Intent intent = new Intent(context, SettingsActivity.class);
-                            PendingIntent contentIntent = PendingIntent.getActivity(
-                                    context, 0, intent, 0);
-
-                            String detailedText = context.getString(
-                                    errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
-                                            ? R.string.notification_incorrectCredentials
-                                            : R.string.notification_incorrectConfiguration);
-
-                            detailedText = prependAppName(detailedText);
-
-                            NotificationCompat.Builder notificationBuilder =
-                                    new NotificationCompat.Builder(context)
-                                            .setSmallIcon(R.drawable.ic_warning_24dp)
-                                            .setContentTitle(context.getString(R.string.notification_error))
-                                            .setContentText(detailedText)
-                                            .setContentIntent(contentIntent);
-
-                            notification = notificationBuilder.build();
-                        }
-                        break;
+                        settings.setConfigurationOk(false);
                     }
 
-                    case UNKNOWN: {
-                        // this is undecided yet
-                        // show notification + schedule auto-retry
-                        // TODO: decide on behavior
+                    if(request.getRequestType() != ActionRequest.RequestType.AUTO
+                            || !settings.isConfigurationErrorShown()) {
+                        settings.setConfigurationErrorShown(true);
 
                         Context context = getContext();
 
-                        String detailedText = context.getString(R.string.notification_unknownError);
+                        Intent intent = new Intent(context, SettingsActivity.class);
+                        PendingIntent contentIntent = PendingIntent.getActivity(
+                                context, 0, intent, 0);
+
+                        String detailedText = context.getString(
+                                errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
+                                        ? R.string.notification_incorrectCredentials
+                                        : R.string.notification_incorrectConfiguration);
+
                         detailedText = prependAppName(detailedText);
 
                         NotificationCompat.Builder notificationBuilder =
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(detailedText);
-
-                        if(result.getMessage() != null) {
-                            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(context.getString(R.string.notification_expandedError,
-                                            result.getMessage())));
-                        }
+                                        .setContentText(detailedText)
+                                        .setContentIntent(contentIntent);
 
                         notification = notificationBuilder.build();
-                        break;
+                    }
+                    break;
+                }
+
+                case UNKNOWN: {
+                    // this is undecided yet
+                    // show notification + schedule auto-retry
+                    // TODO: decide on behavior
+
+                    Context context = getContext();
+
+                    String detailedText = context.getString(R.string.notification_unknownError);
+                    detailedText = prependAppName(detailedText);
+
+                    NotificationCompat.Builder notificationBuilder =
+                            new NotificationCompat.Builder(context)
+                                    .setSmallIcon(R.drawable.ic_warning_24dp)
+                                    .setContentTitle(context.getString(R.string.notification_error))
+                                    .setContentText(detailedText);
+
+                    if(result.getMessage() != null) {
+                        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(context.getString(R.string.notification_expandedError,
+                                        result.getMessage())));
                     }
 
-                    case NOT_FOUND:
-                        Log.w(TAG, "onActionResultEvent() got a NOT_FOUND");
-                        break;
-
-                    case NEGATIVE_RESPONSE:
-                        // server acknowledged the operation but failed/refused to performed it;
-                        // detection of such response is not implemented on client yet
-                        Log.w(TAG, "onActionResultEvent() got a NEGATIVE_RESPONSE; that was not expected");
-                        break;
+                    notification = notificationBuilder.build();
+                    break;
                 }
+
+                case NOT_FOUND:
+                    Log.w(TAG, "onActionResultEvent() got a NOT_FOUND");
+                    break;
+
+                case NEGATIVE_RESPONSE:
+                    // server acknowledged the operation but failed/refused to performed it;
+                    // detection of such response is not implemented on client yet
+                    Log.w(TAG, "onActionResultEvent() got a NEGATIVE_RESPONSE; that was not expected");
+                    break;
             }
-        } else {
-            Log.d(TAG, "onActionResultEvent() result is null");
         }
 
         if(notification != null) {
@@ -445,7 +452,7 @@ public class EventProcessor {
                     && !getSettings().isOfflineQueuePending()) {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
-                ServiceHelper.updateFeed(getContext(), Updater.UpdateType.FAST, null, true);
+                ServiceHelper.updateArticles(getContext(), Updater.UpdateType.FAST, true, null);
             }
         }
     }

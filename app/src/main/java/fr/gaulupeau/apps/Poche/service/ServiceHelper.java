@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
 
@@ -11,42 +12,18 @@ public class ServiceHelper {
 
     private static final String TAG = ServiceHelper.class.getSimpleName();
 
-    public static void syncQueue(Context context) {
-        syncQueue(context, false, false, null);
-    }
-
-    public static void syncQueue(Context context, boolean auto) {
-        syncQueue(context, auto, false, null);
-    }
-
-    public static void syncQueue(Context context, boolean auto,
-                                 boolean byOperation, Long queueLength) {
-        Log.d(TAG, "syncQueue() started");
-
-        ActionRequest request = new ActionRequest(ActionRequest.Action.SYNC_QUEUE);
-        if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
-        else if(byOperation) request.setRequestType(ActionRequest.RequestType.MANUAL_BY_OPERATION);
-        if(queueLength != null) request.setQueueLength(queueLength);
-
-        startService(context, request, true);
-
-        Log.d(TAG, "syncQueue() finished");
-    }
-
     public static void addLink(Context context, String link) {
         addLink(context, link, null);
     }
 
-    public static void addLink(Context context, String link, Long operationID) {
+    private static void addLink(Context context, String link, Long operationID) {
         Log.d(TAG, "addLink() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
         request.setLink(link);
         request.setOperationID(operationID);
 
-        startService(context, request, true);
-
-        Log.d(TAG, "addLink() finished");
+        startService(context, request);
     }
 
     public static void archiveArticle(Context context, int articleID) {
@@ -71,35 +48,83 @@ public class ServiceHelper {
         ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_DELETE);
         request.setArticleID(articleID);
 
-        startService(context, request, true);
-
-        Log.d(TAG, "deleteArticle() finished");
+        startService(context, request);
     }
 
-    public static void updateFeed(Context context, Updater.UpdateType updateType) {
-        updateFeed(context, updateType, null, false);
+    public static void syncAndUpdate(Context context, Updater.UpdateType updateType,
+                                     boolean auto, Settings settings) {
+        syncAndUpdate(context, updateType, auto, settings, null);
     }
 
-    public static void updateFeed(Context context,
-                                  Updater.UpdateType updateType,
-                                  Long operationID, boolean auto) {
-        Log.d(TAG, "updateFeed() started");
+    private static void syncAndUpdate(Context context, Updater.UpdateType updateType,
+                                      boolean auto, Settings settings, Long operationID) {
+        Log.d(TAG, "syncAndUpdate(conditional) started");
 
+        if(settings != null && settings.isOfflineQueuePending()) {
+            syncAndUpdate(context, updateType, null, auto, operationID);
+        } else {
+            updateArticles(context, updateType, auto, operationID);
+        }
+    }
+
+    private static void syncAndUpdate(Context context, Updater.UpdateType updateType,
+                                      Long queueLength, boolean auto, Long operationID) {
+        Log.d(TAG, "syncAndUpdate() started");
+
+        ActionRequest syncRequest = getSyncQueueRequest(auto, false, queueLength);
+        syncRequest.setNextRequest(getUpdateArticlesRequest(updateType, auto, operationID));
+
+        startService(context, syncRequest);
+    }
+
+    public static void syncQueue(Context context) {
+        syncQueue(context, false, false, null);
+    }
+
+    public static void syncQueue(Context context, boolean auto) {
+        syncQueue(context, auto, false, null);
+    }
+
+    public static void syncQueue(Context context, boolean auto,
+                                 boolean byOperation, Long queueLength) {
+        Log.d(TAG, "syncQueue() started");
+
+        startService(context, getSyncQueueRequest(auto, byOperation, queueLength));
+    }
+
+    private static ActionRequest getSyncQueueRequest(boolean auto, boolean byOperation,
+                                                     Long queueLength) {
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SYNC_QUEUE);
+        if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
+        else if(byOperation) request.setRequestType(ActionRequest.RequestType.MANUAL_BY_OPERATION);
+        if(queueLength != null) request.setQueueLength(queueLength);
+
+        return request;
+    }
+
+    public static void updateArticles(Context context,
+                                      Updater.UpdateType updateType,
+                                      boolean auto, Long operationID) {
+        Log.d(TAG, "updateArticles() started");
+
+        startService(context, getUpdateArticlesRequest(updateType, auto, operationID));
+    }
+
+    private static ActionRequest getUpdateArticlesRequest(Updater.UpdateType updateType,
+                                                          boolean auto, Long operationID) {
         ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_ARTICLES);
         request.setUpdateType(updateType);
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
 
-        startService(context, request, true);
-
-        Log.d(TAG, "updateFeed() finished");
+        return request;
     }
 
     public static void downloadArticleAsPDF(Context context, int articleID, Long operationID) {
         downloadArticleAsFile(context, articleID, ActionRequest.DownloadFormat.PDF, operationID);
     }
 
-    public static void downloadArticleAsFile(Context context, int articleID,
+    private static void downloadArticleAsFile(Context context, int articleID,
                                              ActionRequest.DownloadFormat downloadFormat,
                                              Long operationID) {
         Log.d(TAG, "downloadArticleAsFile() started");
@@ -109,17 +134,13 @@ public class ServiceHelper {
         request.setDownloadFormat(downloadFormat);
         request.setOperationID(operationID);
 
-        startService(context, request, false);
-
-        Log.d(TAG, "downloadArticleAsFile() finished");
+        startService(context, request);
     }
 
     public static void fetchImages(Context context) {
         Log.d(TAG, "fetchImages() started");
 
-        startService(context, new ActionRequest(ActionRequest.Action.FETCH_IMAGES), false);
-
-        Log.d(TAG, "fetchImages() finished");
+        startService(context, new ActionRequest(ActionRequest.Action.FETCH_IMAGES));
     }
 
     private static void changeArticle(Context context, int articleID,
@@ -130,9 +151,27 @@ public class ServiceHelper {
         request.setArticleID(articleID);
         request.setArticleChangeType(articleChangeType);
 
-        startService(context, request, true);
+        startService(context, request);
+    }
 
-        Log.d(TAG, "changeArticle() finished");
+    public static void startService(Context context, ActionRequest request) {
+        switch(request.getAction()) {
+            case ADD_LINK:
+            case ARTICLE_CHANGE:
+            case ARTICLE_DELETE:
+            case SYNC_QUEUE:
+            case UPDATE_ARTICLES:
+                startService(context, request, true);
+                break;
+
+            case FETCH_IMAGES:
+            case DOWNLOAD_AS_FILE:
+                startService(context, request, false);
+                break;
+
+            default:
+                throw new IllegalStateException("Action is not implemented: " + request.getAction());
+        }
     }
 
     private static void startService(Context context, ActionRequest request, boolean mainService) {
