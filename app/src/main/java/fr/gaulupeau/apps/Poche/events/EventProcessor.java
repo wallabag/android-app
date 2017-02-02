@@ -45,6 +45,8 @@ public class EventProcessor {
 
     private boolean delayedNetworkChangedTask;
 
+    private NotificationCompat.Builder syncQueueNotificationBuilder;
+    private NotificationCompat.Builder updateArticlesNotificationBuilder;
     private NotificationCompat.Builder fetchImagesNotificationBuilder;
 
     public EventProcessor(Context context) {
@@ -124,7 +126,7 @@ public class EventProcessor {
         settings.setOfflineQueuePending(!queueIsEmpty);
 
         if(event.isTriggeredByOperation() && WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncQueue(getContext(), false, true, queueLength);
+            ServiceHelper.syncQueue(getContext(), false, true);
         } else if(settings.isAutoSyncQueueEnabled()) {
             enableConnectivityChangeReceiver(!queueIsEmpty);
         }
@@ -141,8 +143,8 @@ public class EventProcessor {
     }
 
     @Subscribe(sticky = true)
-    public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
-        Log.d(TAG, "onUpdateFeedsStartedEvent() started");
+    public void onUpdateArticlesStartedEvent(UpdateArticlesStartedEvent event) {
+        Log.d(TAG, "onUpdateArticlesStartedEvent() started");
 
         Context context = getContext();
 
@@ -161,13 +163,29 @@ public class EventProcessor {
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
+
+        updateArticlesNotificationBuilder = notificationBuilder;
     }
 
     @Subscribe
-    public void onUpdateFeedsFinishedEvent(UpdateFeedsFinishedEvent event) {
-        Log.d(TAG, "onUpdateFeedsFinishedEvent() started");
+    public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
+        Log.d(TAG, "onUpdateArticlesProgressEvent() started");
+
+        if(updateArticlesNotificationBuilder != null) {
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING,
+                    updateArticlesNotificationBuilder
+                            .setProgress(event.getTotal(), event.getCurrent(), false)
+                            .build());
+        }
+    }
+
+    @Subscribe
+    public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
+        Log.d(TAG, "onUpdateArticlesFinishedEvent() started");
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
+
+        updateArticlesNotificationBuilder = null;
 
         if(event.getResult().isSuccess()) {
             if(getSettings().isImageCacheEnabled()) {
@@ -210,26 +228,43 @@ public class EventProcessor {
         fetchImagesNotificationBuilder = null;
     }
 
-    @Subscribe(sticky = true)
-    public void onSyncQueueStartedEvent(SyncQueueStartedEvent event) {
-        Log.d(TAG, "onSyncQueueStartedEvent() started");
+    @Subscribe
+    public void onSyncQueueProgressEvent(SyncQueueProgressEvent event) {
+        Log.d(TAG, "onSyncQueueProgressEvent() started");
+
+        boolean showNotification = false;
 
         ActionRequest request = event.getRequest();
-        if(request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION
-                || (request.getQueueLength() != null && request.getQueueLength() > 1)) {
-            Context context = getContext();
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_action_refresh)
-                    .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
-                    .setOngoing(true);
+        int total = event.getTotal();
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                notificationBuilder.setContentText(context.getString(R.string.app_name));
+        if(total > 1) {
+            showNotification = true;
+        } else if(total == 1
+                && request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION) {
+            showNotification = true;
+        }
+
+        if(showNotification) {
+            NotificationCompat.Builder notificationBuilder = syncQueueNotificationBuilder;
+
+            if(notificationBuilder == null) {
+                Context context = getContext();
+
+                notificationBuilder = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_action_refresh)
+                        .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
+                        .setOngoing(true);
+
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    notificationBuilder.setContentText(context.getString(R.string.app_name));
+                }
+
+                syncQueueNotificationBuilder = notificationBuilder;
             }
 
             getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
-                    notificationBuilder.setProgress(0, 0, true).build());
+                    notificationBuilder.setProgress(total, event.getCurrent(), false).build());
         }
     }
 
@@ -238,6 +273,8 @@ public class EventProcessor {
         Log.d(TAG, "onSyncQueueFinishedEvent() started");
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
+
+        syncQueueNotificationBuilder = null;
 
         ActionResult result = event.getResult();
         if((result != null && !result.isSuccess())

@@ -22,9 +22,11 @@ import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueProgressEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesProgressEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
@@ -80,14 +82,14 @@ public class MainService extends IntentServiceBase {
             }
 
             case UPDATE_ARTICLES: {
-                UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
+                UpdateArticlesStartedEvent startEvent = new UpdateArticlesStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
                     result = updateArticles(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
                     if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
-                    postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
+                    postEvent(new UpdateArticlesFinishedEvent(actionRequest, result));
                 }
                 break;
             }
@@ -166,7 +168,11 @@ public class MainService extends IntentServiceBase {
 
         List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
 
+        int counter = 0, totalNumber = queueItems.size();
         for(QueueItem item: queueItems) {
+            Log.d(TAG, "syncOfflineQueue() processing " + counter + " out of " + totalNumber);
+            postEvent(new SyncQueueProgressEvent(actionRequest, counter, totalNumber));
+
             Integer articleIdInteger = item.getArticleId();
 
             Log.d(TAG, String.format(
@@ -319,7 +325,7 @@ public class MainService extends IntentServiceBase {
         return new Pair<>(result, queueLength);
     }
 
-    private ActionResult updateArticles(ActionRequest actionRequest) {
+    private ActionResult updateArticles(final ActionRequest actionRequest) {
         Updater.UpdateType updateType = actionRequest.getUpdateType();
         Log.d(TAG, String.format("updateArticles(%s) started", updateType));
 
@@ -328,8 +334,16 @@ public class MainService extends IntentServiceBase {
 
         if(WallabagConnection.isNetworkAvailable()) {
             try {
+                Updater.ProgressListener progressListener = new Updater.ProgressListener() {
+                    @Override
+                    public void onProgress(int current, int total) {
+                        postEvent(new UpdateArticlesProgressEvent(
+                                actionRequest, current, total));
+                    }
+                };
+
                 event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
-                        .update(updateType);
+                        .update(updateType, progressListener);
             } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateArticles()");
                 result.updateWith(r);

@@ -30,6 +30,10 @@ public class Updater {
 
     public enum UpdateType { FULL, FAST }
 
+    public interface ProgressListener {
+        void onProgress(int current, int total);
+    }
+
     private static final String TAG = Updater.class.getSimpleName();
 
     private final Settings settings;
@@ -43,7 +47,7 @@ public class Updater {
         this.wallabagServiceWrapper = wallabagServiceWrapper;
     }
 
-    public ArticlesChangedEvent update(UpdateType updateType)
+    public ArticlesChangedEvent update(UpdateType updateType, ProgressListener progressListener)
             throws UnsuccessfulResponseException, IOException {
         boolean clean = updateType != UpdateType.FAST;
 
@@ -68,7 +72,8 @@ public class Updater {
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
 
             Log.d(TAG, "update() updating articles");
-            latestUpdatedItemTimestamp = performUpdate(event, clean, latestUpdatedItemTimestamp);
+            latestUpdatedItemTimestamp = performUpdate(
+                    event, clean, latestUpdatedItemTimestamp, progressListener);
             Log.d(TAG, "update() articles updated");
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
 
@@ -87,7 +92,7 @@ public class Updater {
     }
 
     private long performUpdate(ArticlesChangedEvent event, boolean full,
-                               long latestUpdatedItemTimestamp)
+                               long latestUpdatedItemTimestamp, ProgressListener progressListener)
             throws UnsuccessfulResponseException, IOException {
         Log.d(TAG, String.format("performUpdate(full: %s, latestUpdatedItemTimestamp: %d) started",
                 full, latestUpdatedItemTimestamp));
@@ -131,8 +136,10 @@ public class Updater {
                     .since(latestUpdatedItemTimestamp / 1000); // convert milliseconds to seconds
         }
 
+        int perPage = 30;
+
         WallabagService.ArticlesPageIterator pageIterator = articlesQueryBuilder
-                .perPage(30).pageIterator();
+                .perPage(perPage).pageIterator();
 
         List<Article> articlesToUpdate = new ArrayList<>();
         List<Article> articlesToInsert = new ArrayList<>();
@@ -147,6 +154,10 @@ public class Updater {
 
             Log.d(TAG, String.format("performUpdate() page: %d/%d, total articles: %d",
                     articles.page, articles.pages, articles.total));
+
+            if(progressListener != null) {
+                progressListener.onProgress((articles.page - 1) * perPage, articles.total);
+            }
 
             if(articles.embedded.items.isEmpty()) {
                 Log.d(TAG, "performUpdate() no items; skipping");

@@ -38,7 +38,6 @@ public class ActionRequest implements Parcelable {
     private Integer articleID;
     private QueueItem.ArticleChangeType articleChangeType;
     private String link;
-    private Long queueLength;
     private Updater.UpdateType updateType;
     private DownloadFormat downloadFormat;
 
@@ -100,14 +99,6 @@ public class ActionRequest implements Parcelable {
         this.link = link;
     }
 
-    public Long getQueueLength() {
-        return queueLength;
-    }
-
-    public void setQueueLength(Long queueLength) {
-        this.queueLength = queueLength;
-    }
-
     public Updater.UpdateType getUpdateType() {
         return updateType;
     }
@@ -148,7 +139,6 @@ public class ActionRequest implements Parcelable {
         writeInteger(articleID, out);
         writeInteger(articleChangeType != null ? articleChangeType.ordinal() : null, out);
         writeString(link, out);
-        writeLong(queueLength, out);
         writeInteger(updateType != null ? updateType.ordinal() : null, out);
         writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
         out.writeParcelable(nextRequest, 0);
@@ -165,7 +155,6 @@ public class ActionRequest implements Parcelable {
             articleChangeType = QueueItem.ArticleChangeType.values()[articleChangeTypeInteger];
         }
         link = readString(in);
-        queueLength = readLong(in);
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
             updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];

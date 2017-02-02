@@ -61,43 +61,40 @@ public class ServiceHelper {
         Log.d(TAG, "syncAndUpdate(conditional) started");
 
         if(settings != null && settings.isOfflineQueuePending()) {
-            syncAndUpdate(context, updateType, null, auto, operationID);
+            syncAndUpdate(context, updateType, auto, operationID);
         } else {
             updateArticles(context, updateType, auto, operationID);
         }
     }
 
     private static void syncAndUpdate(Context context, Updater.UpdateType updateType,
-                                      Long queueLength, boolean auto, Long operationID) {
+                                      boolean auto, Long operationID) {
         Log.d(TAG, "syncAndUpdate() started");
 
-        ActionRequest syncRequest = getSyncQueueRequest(auto, false, queueLength);
+        ActionRequest syncRequest = getSyncQueueRequest(auto, false);
         syncRequest.setNextRequest(getUpdateArticlesRequest(updateType, auto, operationID));
 
         startService(context, syncRequest);
     }
 
     public static void syncQueue(Context context) {
-        syncQueue(context, false, false, null);
+        syncQueue(context, false, false);
     }
 
     public static void syncQueue(Context context, boolean auto) {
-        syncQueue(context, auto, false, null);
+        syncQueue(context, auto, false);
     }
 
-    public static void syncQueue(Context context, boolean auto,
-                                 boolean byOperation, Long queueLength) {
+    public static void syncQueue(Context context, boolean auto, boolean byOperation) {
         Log.d(TAG, "syncQueue() started");
 
-        startService(context, getSyncQueueRequest(auto, byOperation, queueLength));
+        startService(context, getSyncQueueRequest(auto, byOperation));
     }
 
-    private static ActionRequest getSyncQueueRequest(boolean auto, boolean byOperation,
-                                                     Long queueLength) {
+    private static ActionRequest getSyncQueueRequest(boolean auto, boolean byOperation) {
         ActionRequest request = new ActionRequest(ActionRequest.Action.SYNC_QUEUE);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
         else if(byOperation) request.setRequestType(ActionRequest.RequestType.MANUAL_BY_OPERATION);
-        if(queueLength != null) request.setQueueLength(queueLength);
 
         return request;
     }

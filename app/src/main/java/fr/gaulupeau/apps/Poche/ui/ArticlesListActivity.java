@@ -32,8 +32,8 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
@@ -421,15 +421,15 @@ public class ArticlesListActivity extends BaseActionBarActivity
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
-        Log.d(TAG, "Got UpdateFeedsStartedEvent");
+    public void onUpdateFeedsStartedEvent(UpdateArticlesStartedEvent event) {
+        Log.d(TAG, "Got UpdateArticlesStartedEvent");
 
         updateStateChanged(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateFeedsStoppedEvent(UpdateFeedsFinishedEvent event) {
-        Log.d(TAG, "Got UpdateFeedsFinishedEvent");
+    public void onUpdateFeedsStoppedEvent(UpdateArticlesFinishedEvent event) {
+        Log.d(TAG, "Got UpdateArticlesFinishedEvent");
 
         if(event.getResult().isSuccess()) {
             firstSyncDone = true;
