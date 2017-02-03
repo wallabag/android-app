@@ -17,6 +17,7 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
@@ -191,43 +192,7 @@ public class MainService extends IntentServiceBase {
                     case ARTICLE_CHANGE: {
                         canTolerateNotFound = true;
 
-                        Article article = daoSession.getArticleDao().queryBuilder()
-                                .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
-
-                        if(article == null) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN,
-                                    "Article is not found locally");
-                            break;
-                        }
-
-                        WallabagService.ModifyArticleBuilder builder
-                                = getWallabagServiceWrapper().getWallabagService()
-                                .modifyArticleBuilder(articleID);
-
-                        for(QueueItem.ArticleChangeType changeType:
-                                QueueItem.ArticleChangeType.stringToEnumSet(item.getExtra())) {
-                            // TODO: implement tags update
-                            switch(changeType) {
-                                case ARCHIVE:
-                                    builder.archive(article.getArchive());
-                                    break;
-
-                                case FAVORITE:
-                                    builder.starred(article.getFavorite());
-                                    break;
-
-                                case TITLE:
-                                    builder.title(article.getTitle());
-                                    break;
-
-                                default:
-                                    throw new IllegalStateException("Change type is not implemented: " + changeType);
-                            }
-                        }
-
-                        if(WallabagServiceWrapper.executeModifyArticleCall(builder) == null) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
-                        }
+                        itemResult = syncArticleChange(item, articleID);
                         break;
                     }
 
@@ -324,6 +289,55 @@ public class MainService extends IntentServiceBase {
 
         Log.d(TAG, "syncOfflineQueue() finished");
         return new Pair<>(result, queueLength);
+    }
+
+    private ActionResult syncArticleChange(QueueItem item, int articleID)
+            throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
+        Article article = getDaoSession().getArticleDao().queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
+
+        if(article == null) {
+            return new ActionResult(ActionResult.ErrorType.UNKNOWN, "Article is not found locally");
+        }
+
+        WallabagService.ModifyArticleBuilder builder
+                = getWallabagServiceWrapper().getWallabagService()
+                .modifyArticleBuilder(articleID);
+
+        for(QueueItem.ArticleChangeType changeType:
+                QueueItem.ArticleChangeType.stringToEnumSet(item.getExtra())) {
+            switch(changeType) {
+                case ARCHIVE:
+                    builder.archive(article.getArchive());
+                    break;
+
+                case FAVORITE:
+                    builder.starred(article.getFavorite());
+                    break;
+
+                case TITLE:
+                    builder.title(article.getTitle());
+                    break;
+
+                case TAGS:
+                    // all tags are pushed
+                    for(Tag tag: article.getTags()) {
+                        builder.tag(tag.getLabel());
+                    }
+                    break;
+
+                default:
+                    throw new IllegalStateException("Change type is not implemented: " + changeType);
+            }
+        }
+
+        ActionResult itemResult = null;
+
+        if(WallabagServiceWrapper.executeModifyArticleCall(builder) == null) {
+            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
+        }
+
+        return itemResult;
     }
 
     private ActionResult updateArticles(final ActionRequest actionRequest) {

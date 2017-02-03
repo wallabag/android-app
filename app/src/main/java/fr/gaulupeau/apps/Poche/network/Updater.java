@@ -2,7 +2,6 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseArray;
 
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
@@ -117,8 +116,8 @@ public class Updater {
             tags = tagDao.queryBuilder().list();
         }
 
-        SparseArray<Tag> tagMap = new SparseArray<>(tags.size());
-        for(Tag tag: tags) tagMap.put(tag.getTagId(), tag);
+        Map<String, Tag> tagMap = new HashMap<>(tags.size());
+        for(Tag tag: tags) tagMap.put(tag.getLabel(), tag);
 
         WallabagService.ArticlesQueryBuilder articlesQueryBuilder
                 = wallabagServiceWrapper.getWallabagService().getArticlesBuilder();
@@ -209,15 +208,15 @@ public class Updater {
 
                     for(Tag tag: articleTags) {
                         com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag
-                                = findApiTagByID(tag.getTagId(), apiArticle.tags);
+                                = findApiTagByLabel(tag.getLabel(), apiArticle.tags);
                         apiArticle.tags.remove(apiTag);
 
                         if(apiTag == null) {
                             if(tagJoinsToRemove == null) tagJoinsToRemove = new ArrayList<>();
 
                             tagJoinsToRemove.add(tag);
-                        } else if(!TextUtils.equals(tag.getLabel(), apiTag.label)) {
-                            tag.setLabel(apiTag.label);
+                        } else if(tag.getTagId() == null || tag.getTagId() != apiTag.id) {
+                            tag.setTagId(apiTag.id);
 
                             tagsToUpdate.add(tag);
                         }
@@ -236,15 +235,15 @@ public class Updater {
                     List<Tag> tagJoinsToInsert = new ArrayList<>(apiArticle.tags.size());
 
                     for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag: apiArticle.tags) {
-                        Tag tag = tagMap.get(apiTag.id);
+                        Tag tag = tagMap.get(apiTag.label);
 
                         if(tag == null) {
                             tag = new Tag(null, apiTag.id, apiTag.label);
-                            tagMap.put(tag.getTagId(), tag);
+                            tagMap.put(tag.getLabel(), tag);
 
                             tagsToInsert.add(tag);
-                        } else if(!TextUtils.equals(tag.getLabel(), apiTag.label)) {
-                            tag.setLabel(apiTag.label);
+                        } else if(tag.getTagId() == null || tag.getTagId() != apiTag.id) {
+                            tag.setTagId(apiTag.id);
 
                             tagsToUpdate.add(tag);
                         }
@@ -345,10 +344,10 @@ public class Updater {
         return latestUpdatedItemTimestamp;
     }
 
-    private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByID(
-            int id, List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> tags) {
+    private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByLabel(
+            String label, List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> tags) {
         for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag tag: tags) {
-            if(id == tag.id) return tag;
+            if(TextUtils.equals(tag.label, label)) return tag;
         }
 
         return null;
