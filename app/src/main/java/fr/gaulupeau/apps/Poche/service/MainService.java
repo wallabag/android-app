@@ -24,6 +24,9 @@ import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesProgressEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueProgressEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
@@ -95,6 +98,20 @@ public class MainService extends IntentServiceBase {
                     removeStickyEvent(startEvent);
                     if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
                     postEvent(new UpdateArticlesFinishedEvent(actionRequest, result));
+                }
+                break;
+            }
+
+            case SWEEP_DELETED_ARTICLES: {
+                SweepDeletedArticlesStartedEvent startEvent
+                        = new SweepDeletedArticlesStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    result = sweepDeletedArticles(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+                    postEvent(new SweepDeletedArticlesFinishedEvent(actionRequest, result));
                 }
                 break;
             }
@@ -411,6 +428,45 @@ public class MainService extends IntentServiceBase {
         }
 
         Log.d(TAG, "updateArticles() finished");
+        return result;
+    }
+
+    private ActionResult sweepDeletedArticles(final ActionRequest actionRequest) {
+        Log.d(TAG, "sweepDeletedArticles() started");
+
+        ActionResult result = new ActionResult();
+        ArticlesChangedEvent event = null;
+
+        if(WallabagConnection.isNetworkAvailable()) {
+            try {
+                Updater.ProgressListener progressListener = new Updater.ProgressListener() {
+                    @Override
+                    public void onProgress(int current, int total) {
+                        postEvent(new SweepDeletedArticlesProgressEvent(
+                                actionRequest, current, total));
+                    }
+                };
+
+                event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
+                        .sweepDeletedArticles(progressListener);
+            } catch(UnsuccessfulResponseException | IOException e) {
+                ActionResult r = processException(e, "sweepDeletedArticles()");
+                result.updateWith(r);
+            } catch(Exception e) {
+                Log.e(TAG, "sweepDeletedArticles() exception", e);
+
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
+                result.setMessage(e.toString());
+            }
+        } else {
+            result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
+        }
+
+        if(event != null && event.isAnythingChanged()) {
+            postEvent(event);
+        }
+
+        Log.d(TAG, "sweepDeletedArticles() finished");
         return result;
     }
 

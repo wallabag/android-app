@@ -33,10 +33,11 @@ public class EventProcessor {
     private static final String TAG = EventProcessor.class.getSimpleName();
 
     private static final int NOTIFICATION_ID_OTHER = 0;
-    private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
-    private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
-    private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 3;
-    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 4;
+    private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 1;
+    private static final int NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING = 2;
+    private static final int NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING = 3;
+    private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 4;
+    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 5;
 
     private Context context;
     private Settings settings;
@@ -47,6 +48,7 @@ public class EventProcessor {
 
     private NotificationCompat.Builder syncQueueNotificationBuilder;
     private NotificationCompat.Builder updateArticlesNotificationBuilder;
+    private NotificationCompat.Builder sweepDeletedArticlesNotificationBuilder;
     private NotificationCompat.Builder fetchImagesNotificationBuilder;
 
     public EventProcessor(Context context) {
@@ -161,7 +163,7 @@ public class EventProcessor {
                 .setContentText(detailedMessage)
                 .setOngoing(true);
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING,
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
 
         updateArticlesNotificationBuilder = notificationBuilder;
@@ -172,7 +174,7 @@ public class EventProcessor {
         Log.d(TAG, "onUpdateArticlesProgressEvent() started");
 
         if(updateArticlesNotificationBuilder != null) {
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING,
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                     updateArticlesNotificationBuilder
                             .setProgress(event.getTotal(), event.getCurrent(), false)
                             .build());
@@ -183,15 +185,51 @@ public class EventProcessor {
     public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
         Log.d(TAG, "onUpdateArticlesFinishedEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING);
 
         updateArticlesNotificationBuilder = null;
+    }
 
-        if(event.getResult().isSuccess()) {
-            if(getSettings().isImageCacheEnabled()) {
-                ServiceHelper.fetchImages(getContext());
-            }
+    @Subscribe(sticky = true)
+    public void onSweepDeletedArticlesStartedEvent(SweepDeletedArticlesStartedEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesStartedEvent() started");
+
+        Context context = getContext();
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setContentTitle(context.getString(R.string.notification_sweepingDeletedArticles))
+                .setOngoing(true);
+
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            notificationBuilder.setContentText(context.getString(R.string.app_name));
         }
+
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
+                notificationBuilder.setProgress(0, 0, true).build());
+
+        sweepDeletedArticlesNotificationBuilder = notificationBuilder;
+    }
+
+    @Subscribe
+    public void onSweepDeletedArticlesProgressEvent(SweepDeletedArticlesProgressEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesProgressEvent() started");
+
+        if(sweepDeletedArticlesNotificationBuilder != null) {
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
+                    sweepDeletedArticlesNotificationBuilder
+                            .setProgress(event.getTotal(), event.getCurrent(), false)
+                            .build());
+        }
+    }
+
+    @Subscribe
+    public void onSweepDeletedArticlesFinishedEvent(SweepDeletedArticlesFinishedEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesFinishedEvent() started");
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING);
+
+        sweepDeletedArticlesNotificationBuilder = null;
     }
 
     @Subscribe

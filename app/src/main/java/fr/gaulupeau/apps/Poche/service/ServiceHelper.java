@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.Collection;
 
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
@@ -128,6 +129,22 @@ public class ServiceHelper {
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
 
+        if(updateType == Updater.UpdateType.FAST) {
+            request.setNextRequest(getSweepDeletedArticlesRequest(auto, operationID));
+        }
+
+        if(App.getInstance().getSettings().isImageCacheEnabled()) {
+            addNextRequest(request, getFetchImagesRequest());
+        }
+
+        return request;
+    }
+
+    private static ActionRequest getSweepDeletedArticlesRequest(boolean auto, Long operationID) {
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SWEEP_DELETED_ARTICLES);
+        request.setOperationID(operationID);
+        if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
+
         return request;
     }
 
@@ -151,7 +168,11 @@ public class ServiceHelper {
     public static void fetchImages(Context context) {
         Log.d(TAG, "fetchImages() started");
 
-        startService(context, new ActionRequest(ActionRequest.Action.FETCH_IMAGES));
+        startService(context, getFetchImagesRequest());
+    }
+
+    private static ActionRequest getFetchImagesRequest() {
+        return new ActionRequest(ActionRequest.Action.FETCH_IMAGES);
     }
 
     private static void changeArticle(Context context, int articleID,
@@ -165,6 +186,12 @@ public class ServiceHelper {
         startService(context, request);
     }
 
+    private static void addNextRequest(ActionRequest actionRequest, ActionRequest nextRequest) {
+        while(actionRequest.getNextRequest() != null) actionRequest = actionRequest.getNextRequest();
+
+        actionRequest.setNextRequest(nextRequest);
+    }
+
     public static void startService(Context context, ActionRequest request) {
         switch(request.getAction()) {
             case ADD_LINK:
@@ -173,6 +200,7 @@ public class ServiceHelper {
             case ARTICLE_DELETE:
             case SYNC_QUEUE:
             case UPDATE_ARTICLES:
+            case SWEEP_DELETED_ARTICLES:
                 startService(context, request, true);
                 break;
 

@@ -7,6 +7,8 @@ import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 import com.di72nn.stuff.wallabag.apiwrapper.models.Articles;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +88,28 @@ public class Updater {
         settings.setFirstSyncDone(true);
 
         Log.i(TAG, "update() finished");
+
+        return event;
+    }
+
+    public ArticlesChangedEvent sweepDeletedArticles(ProgressListener progressListener)
+            throws UnsuccessfulResponseException, IOException {
+        Log.i(TAG, "sweepDeletedArticles() started");
+
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+
+        daoSession.getDatabase().beginTransaction();
+        try {
+            Log.d(TAG, "sweepDeletedArticles() sweeping articles");
+            performSweep(event, progressListener);
+            Log.d(TAG, "sweepDeletedArticles() articles sweeping finished");
+
+            daoSession.getDatabase().setTransactionSuccessful();
+        } finally {
+            daoSession.getDatabase().endTransaction();
+        }
+
+        Log.i(TAG, "sweepDeletedArticles() finished");
 
         return event;
     }
@@ -351,6 +375,70 @@ public class Updater {
         }
 
         return null;
+    }
+
+    private void performSweep(ArticlesChangedEvent event, ProgressListener progressListener)
+            throws UnsuccessfulResponseException, IOException {
+        Log.d(TAG, "performSweep() started");
+
+        ArticleDao articleDao = daoSession.getArticleDao();
+
+        int totalNumber = (int)articleDao.queryBuilder().count();
+
+        if(totalNumber == 0) {
+            Log.d(TAG, "performSweep() no articles");
+            return;
+        }
+
+        int perPage = 30;
+
+        QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
+                .orderAsc(ArticleDao.Properties.ArticleId).limit(perPage);
+
+        List<Long> articlesToDelete = new ArrayList<>();
+
+        List<String> articleUrls = new ArrayList<>(perPage);
+
+        int offset = 0;
+        while(offset < totalNumber) {
+            Log.d(TAG, String.format("performSweep() %d/%d", offset, totalNumber));
+
+            if(progressListener != null) {
+                progressListener.onProgress(offset, totalNumber);
+            }
+
+            List<Article> articles = queryBuilder.list();
+
+            articleUrls.clear();
+            for(Article article: articles) {
+                articleUrls.add(article.getUrl());
+            }
+
+            Map<String, Boolean> articlesMap = wallabagServiceWrapper
+                    .getWallabagService().articlesExist(articleUrls);
+
+            for(Article article: articles) {
+                Boolean value = articlesMap.get(article.getUrl());
+                Log.v(TAG, String.format("performSweep() articleID: %d, value: %s",
+                        article.getArticleId(), value));
+
+                if(value != null && !value) {
+                    articlesToDelete.add(article.getId());
+                }
+            }
+
+            offset += perPage;
+
+            queryBuilder.offset(offset);
+        }
+
+        if(!articlesToDelete.isEmpty()) {
+            event.isInvalidateAll();
+
+            Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
+            articleDao.deleteByKeyInTx(articlesToDelete);
+            Log.d(TAG, "performSweep() articles deleted");
+        }
     }
 
 }

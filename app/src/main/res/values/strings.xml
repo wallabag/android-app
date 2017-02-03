@@ -116,6 +116,7 @@
     <string name="notification_updatingArticles">Updating articles</string>
     <string name="notification_updatingArticles_full">Performing full update</string>
     <string name="notification_updatingArticles_fast">Performing fast update</string>
+    <string name="notification_sweepingDeletedArticles">Sweeping deleted articles</string>
     <string name="notification_downloadingImages">Downloading images</string>
     <string name="notification_syncingQueue">Synchronizing local changes</string>
     <string name="notification_error">Error</string>
