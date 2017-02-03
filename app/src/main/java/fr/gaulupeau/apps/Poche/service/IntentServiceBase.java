@@ -42,6 +42,9 @@ public abstract class IntentServiceBase extends IntentService {
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
             }
+        } else if(e instanceof IncorrectConfigurationException) {
+            result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
+            result.setMessage(e.getMessage());
         } else if(e instanceof IOException) {
             boolean handled = false;
 

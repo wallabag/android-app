@@ -30,6 +30,7 @@ import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
@@ -255,7 +256,7 @@ public class MainService extends IntentServiceBase {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + action);
                 }
-            } catch(UnsuccessfulResponseException | IOException e) {
+            } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
                 if(!r.isSuccess()) itemResult = r;
             } catch(Exception e) {
