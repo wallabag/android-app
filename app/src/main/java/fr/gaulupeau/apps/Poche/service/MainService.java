@@ -6,10 +6,12 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
@@ -59,6 +61,7 @@ public class MainService extends IntentServiceBase {
 
         switch(actionRequest.getAction()) {
             case ARTICLE_CHANGE:
+            case ARTICLE_TAGS_DELETE:
             case ARTICLE_DELETE:
             case ADD_LINK:
                 Long queueChangedLength = serveSimpleRequest(actionRequest);
@@ -108,7 +111,7 @@ public class MainService extends IntentServiceBase {
 
     private Long serveSimpleRequest(ActionRequest actionRequest) {
         Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s, link: %s",
-                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getLink()));
+                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getExtra()));
 
         Long queueChangedLength = null;
 
@@ -126,6 +129,13 @@ public class MainService extends IntentServiceBase {
                     }
                     break;
 
+                case ARTICLE_TAGS_DELETE:
+                    if(queueHelper.deleteTagsFromArticle(actionRequest.getArticleID(),
+                            actionRequest.getExtra())) {
+                        queueChangedLength = queueHelper.getQueueLength();
+                    }
+                    break;
+
                 case ARTICLE_DELETE:
                     if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
                         queueChangedLength = queueHelper.getQueueLength();
@@ -133,7 +143,7 @@ public class MainService extends IntentServiceBase {
                     break;
 
                 case ADD_LINK:
-                    if(queueHelper.addLink(actionRequest.getLink())) {
+                    if(queueHelper.addLink(actionRequest.getExtra())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
@@ -193,6 +203,13 @@ public class MainService extends IntentServiceBase {
                         canTolerateNotFound = true;
 
                         itemResult = syncArticleChange(item, articleID);
+                        break;
+                    }
+
+                    case ARTICLE_TAGS_DELETE: {
+                        canTolerateNotFound = true;
+
+                        itemResult = syncDeleteTagsFromArticle(item, articleID);
                         break;
                     }
 
@@ -338,6 +355,23 @@ public class MainService extends IntentServiceBase {
         }
 
         return itemResult;
+    }
+
+    private ActionResult syncDeleteTagsFromArticle(QueueItem item, int articleID)
+            throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
+        WallabagServiceWrapper wallabagServiceWrapper = getWallabagServiceWrapper();
+
+        for(String tag: Arrays.asList(item.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER))) {
+            try {
+                wallabagServiceWrapper.getWallabagService()
+                        .deleteTag(articleID, Integer.parseInt(tag));
+            } catch(NotFoundException e) {
+                Log.w(TAG, String.format("HTTP 404 while removing tag %s from article %d",
+                        tag, articleID));
+            }
+        }
+
+        return null;
     }
 
     private ActionResult updateArticles(final ActionRequest actionRequest) {

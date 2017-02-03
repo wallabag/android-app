@@ -15,7 +15,7 @@ import java.util.Iterator;
 public class QueueItem {
 
     public enum Action {
-        ADD_LINK(1), ARTICLE_DELETE(2), ARTICLE_CHANGE(3);
+        ADD_LINK(1), ARTICLE_DELETE(2), ARTICLE_CHANGE(3), ARTICLE_TAGS_DELETE(4);
 
         private final int id;
 
@@ -61,6 +61,8 @@ public class QueueItem {
         }
 
     }
+
+    public static final String DELETED_TAGS_DELIMITER = ",";
 
     @Id
     private Long id;

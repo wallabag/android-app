@@ -2,7 +2,10 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
+
+import java.util.Collection;
 
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
@@ -20,7 +23,7 @@ public class ServiceHelper {
         Log.d(TAG, "addLink() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
-        request.setLink(link);
+        request.setExtra(link);
         request.setOperationID(operationID);
 
         startService(context, request);
@@ -40,6 +43,17 @@ public class ServiceHelper {
 
     public static void changeArticleTags(Context context, int articleID) {
         changeArticle(context, articleID, QueueItem.ArticleChangeType.TAGS);
+    }
+
+    public static void deleteTagsFromArticle(Context context, int articleID,
+                                             Collection<String> tags) {
+        Log.d(TAG, "deleteTagsFromArticle() started");
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_TAGS_DELETE);
+        request.setArticleID(articleID);
+        request.setExtra(TextUtils.join(QueueItem.DELETED_TAGS_DELIMITER, tags));
+
+        startService(context, request);
     }
 
     public static void deleteArticle(Context context, int articleID) {
@@ -155,6 +169,7 @@ public class ServiceHelper {
         switch(request.getAction()) {
             case ADD_LINK:
             case ARTICLE_CHANGE:
+            case ARTICLE_TAGS_DELETE:
             case ARTICLE_DELETE:
             case SYNC_QUEUE:
             case UPDATE_ARTICLES:

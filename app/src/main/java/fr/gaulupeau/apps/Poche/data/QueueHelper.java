@@ -1,10 +1,15 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
@@ -84,6 +89,51 @@ public class QueueHelper {
         return queueChanged;
     }
 
+    public boolean deleteTagsFromArticle(int articleID, String tagsString) {
+        Log.d(TAG, String.format("deleteTagsFromArticle(%d, %s) started", articleID, tagsString));
+
+        QueueItem queueItem = null;
+
+        for(QueueItem item: getQueuedItemsForArticle(articleID)) {
+            switch(item.getAction()) {
+                case ARTICLE_TAGS_DELETE:
+                    queueItem = item;
+                    Log.d(TAG, "deleteTagsFromArticle() found existing tags delete item");
+                    break;
+
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "deleteTagsFromArticle(): article is already in queue for Deleting; ignoring");
+                    return false;
+            }
+        }
+
+        Collection<String> tags = Arrays.asList(tagsString.split(DELETED_TAGS_DELIMITER));
+
+        if(queueItem != null) {
+            Log.v(TAG, "deleteTagsFromArticle() existing deleted tags: " + queueItem.getExtra());
+
+            Set<String> existingDeletedTags = new HashSet<>(
+                    Arrays.asList(queueItem.getExtra().split(DELETED_TAGS_DELIMITER)));
+
+            int oldSize = existingDeletedTags.size();
+
+            existingDeletedTags.addAll(tags);
+
+            if(existingDeletedTags.size() == oldSize) {
+                Log.d(TAG, "deleteTagsFromArticle() no new tags to delete");
+                return false;
+            }
+
+            queueItem.setExtra(TextUtils.join(DELETED_TAGS_DELIMITER, existingDeletedTags));
+            queueItemDao.update(queueItem);
+        } else {
+            enqueueDeleteTagsFromArticle(articleID, TextUtils.join(DELETED_TAGS_DELIMITER, tags));
+        }
+
+        Log.d(TAG, "deleteTagsFromArticle() finished");
+        return true;
+    }
+
     public boolean deleteArticle(int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
@@ -150,6 +200,19 @@ public class QueueHelper {
         enqueue(item);
 
         Log.d(TAG, "enqueueArticleChange() finished");
+    }
+
+    private void enqueueDeleteTagsFromArticle(int articleID, String tags) {
+        Log.d(TAG, String.format("enqueueDeleteTagsFromArticle(%d, %s) started", articleID, tags));
+
+        QueueItem item = new QueueItem();
+        item.setAction(Action.ARTICLE_TAGS_DELETE);
+        item.setArticleId(articleID);
+        item.setExtra(tags);
+
+        enqueue(item);
+
+        Log.d(TAG, "enqueueDeleteTagsFromArticle() finished");
     }
 
     private void enqueueDeleteArticle(int articleID) {

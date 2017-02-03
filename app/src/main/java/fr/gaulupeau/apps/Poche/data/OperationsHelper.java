@@ -2,10 +2,18 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
+import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
@@ -97,6 +105,132 @@ public class OperationsHelper {
         ServiceHelper.favoriteArticle(context, articleID);
 
         Log.d(TAG, "archiveArticle() finished");
+    }
+
+    public static void changeArticleTitle(Context context, Article article, String title) {
+        Log.d(TAG, String.format("changeArticleTitle(%d, %s) started", article.getArticleId(), title));
+
+        article.setTitle(title);
+
+        notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TITLE_CHANGED);
+
+        ServiceHelper.changeArticleTitle(context, article.getArticleId());
+
+        Log.d(TAG, "changeArticleTitle() finished");
+    }
+
+    public static void setArticleTags(Context context, int articleID, List<Tag> newTags) {
+        Log.d(TAG, String.format("setArticleTags(%d, %s) started", articleID, newTags));
+
+        boolean tagsChanged = false;
+
+        ArticleDao articleDao = getArticleDao();
+        Article article = getArticle(articleID, articleDao);
+        TagDao tagDao = DbConnection.getSession().getTagDao();
+        ArticleTagsJoinDao joinDao = DbConnection.getSession().getArticleTagsJoinDao();
+
+        if(article == null) {
+            Log.w(TAG, "setArticleTags() article was not found");
+            return; // not an error?
+        }
+
+        article.resetTags();
+        List<Tag> currentTags = article.getTags();
+
+        List<String> tagsToDelete = new ArrayList<>();
+        List<Tag> tagsToInsert = new ArrayList<>();
+
+        List<Long> joinsToDelete = new ArrayList<>();
+        List<ArticleTagsJoin> joinsToCreate = new ArrayList<>();
+
+        if(!currentTags.isEmpty()) {
+            List<Tag> tagsToRemove = new ArrayList<>();
+
+            for(Tag oldTag: currentTags) {
+                Tag newTag = null;
+                for(Tag t: newTags) {
+                    if(TextUtils.equals(t.getLabel(), oldTag.getLabel())) {
+                        newTag = t;
+                        break;
+                    }
+                }
+
+                if(newTag == null) {
+                    if(oldTag.getTagId() != null) tagsToDelete.add(oldTag.getTagId().toString());
+                    tagsToRemove.add(oldTag);
+                    joinsToDelete.add(oldTag.getId());
+                } else {
+                    newTags.remove(newTag);
+                }
+            }
+
+            if(!tagsToRemove.isEmpty()) {
+                currentTags.removeAll(tagsToRemove);
+            }
+        }
+
+        if(!newTags.isEmpty()) {
+            List<Tag> tags = tagDao.queryBuilder().list();
+
+            for(Tag tag: newTags) {
+                Tag existingTag = null;
+                for(Tag t: tags) {
+                    if(TextUtils.equals(t.getLabel(), tag.getLabel())) {
+                        existingTag = t;
+                        break;
+                    }
+                }
+
+                if(existingTag != null) {
+                    currentTags.add(existingTag);
+                    joinsToCreate.add(new ArticleTagsJoin(
+                            null, article.getId(), existingTag.getId()));
+                } else {
+                    currentTags.add(tag);
+                    tagsToInsert.add(tag);
+                }
+            }
+        }
+
+        if(!tagsToInsert.isEmpty()) {
+            tagsChanged = true;
+            tagDao.insertInTx(tagsToInsert);
+
+            for(Tag tag: tagsToInsert) {
+                joinsToCreate.add(new ArticleTagsJoin(null, article.getId(), tag.getId()));
+            }
+        }
+
+        if(!joinsToDelete.isEmpty()) {
+            tagsChanged = true;
+
+            List<ArticleTagsJoin> joins = joinDao.queryBuilder().where(
+                    ArticleTagsJoinDao.Properties.ArticleId.eq(article.getId()),
+                    ArticleTagsJoinDao.Properties.TagId.in(joinsToDelete)).list();
+
+            joinDao.deleteInTx(joins);
+        }
+
+        if(!joinsToCreate.isEmpty()) {
+            tagsChanged = true;
+            joinDao.insertInTx(joinsToCreate, false);
+        }
+
+        if(!tagsToDelete.isEmpty()) {
+            tagsChanged = true;
+
+            Log.d(TAG, "setArticleTags() storing deleted tags to offline queue");
+            ServiceHelper.deleteTagsFromArticle(context, articleID, tagsToDelete);
+        }
+
+        if(tagsChanged) {
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
+
+            Log.d(TAG, "setArticleTags() storing tags change to offline queue");
+            ServiceHelper.changeArticleTags(context, articleID);
+        }
+
+        Log.d(TAG, "setArticleTags() finished");
     }
 
     public static void deleteArticle(Context context, int articleID) {

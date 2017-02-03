@@ -12,8 +12,8 @@ import fr.gaulupeau.apps.Poche.network.Updater;
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        ADD_LINK, ARTICLE_CHANGE, ARTICLE_DELETE, SYNC_QUEUE, UPDATE_ARTICLES, FETCH_IMAGES,
-        DOWNLOAD_AS_FILE
+        ADD_LINK, ARTICLE_CHANGE, ARTICLE_TAGS_DELETE, ARTICLE_DELETE,
+        SYNC_QUEUE, UPDATE_ARTICLES, FETCH_IMAGES, DOWNLOAD_AS_FILE
     }
 
     public enum RequestType {
@@ -37,7 +37,7 @@ public class ActionRequest implements Parcelable {
 
     private Integer articleID;
     private QueueItem.ArticleChangeType articleChangeType;
-    private String link;
+    private String extra;
     private Updater.UpdateType updateType;
     private DownloadFormat downloadFormat;
 
@@ -91,12 +91,12 @@ public class ActionRequest implements Parcelable {
         this.articleChangeType = articleChangeType;
     }
 
-    public String getLink() {
-        return link;
+    public String getExtra() {
+        return extra;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
     public Updater.UpdateType getUpdateType() {
@@ -138,7 +138,7 @@ public class ActionRequest implements Parcelable {
 
         writeInteger(articleID, out);
         writeInteger(articleChangeType != null ? articleChangeType.ordinal() : null, out);
-        writeString(link, out);
+        writeString(extra, out);
         writeInteger(updateType != null ? updateType.ordinal() : null, out);
         writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
         out.writeParcelable(nextRequest, 0);
@@ -154,7 +154,7 @@ public class ActionRequest implements Parcelable {
         if(articleChangeTypeInteger != null) {
             articleChangeType = QueueItem.ArticleChangeType.values()[articleChangeTypeInteger];
         }
-        link = readString(in);
+        extra = readString(in);
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
             updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];
