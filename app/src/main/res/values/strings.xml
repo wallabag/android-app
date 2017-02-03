@@ -126,6 +126,9 @@
     <string name="menu_lists_search">Search</string>
     <string name="menu_lists_changeSortOrder">Change sort order</string>
     <string name="other_searchHint">Search by article title or text</string>
+    <string name="menu_manageTags">Manage tags</string>
+    <string name="manageTags_save">OK</string>
+    <string name="manageTags_cancel">Cancel</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>

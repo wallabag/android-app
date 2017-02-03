@@ -141,7 +141,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         // TODO: remove: debug
         if(!mArticle.getTags().isEmpty()) {
-            htmlContent = mArticle.getTags().toString() + "<br>" + htmlContent;
+            Log.d(TAG, "onCreate: tags: " + mArticle.getTags().toString());
         }
 
         setTitle(titleText);
@@ -505,6 +505,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private boolean manageTags() {
+        ManageArticleTagsDialogFragment.newInstance(mArticle.getArticleId())
+                .show(getSupportFragmentManager(), "manageTagsFragment");
+
+        return true;
+    }
+
     private boolean openOriginal() {
         Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(originalUrlText));
         startActivity(launchBrowserIntent);
@@ -597,6 +604,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuShare:
                 return shareArticle();
+            case R.id.menuManageTags:
+                return manageTags();
             case R.id.menuDelete:
                 return deleteArticle();
             case R.id.menuOpenOriginal:
