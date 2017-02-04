@@ -51,7 +51,7 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'org.greenrobot:greendao:3.2.0'
     compile 'com.squareup.okhttp3:okhttp:3.6.0'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.5.0'
+    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.6.0'
     compile 'com.facebook.stetho:stetho:1.4.2'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.2'
     compile 'com.mikepenz:aboutlibraries:5.7.3'
