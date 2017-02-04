@@ -2,12 +2,17 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 
 public class Themes {
 
     private static Theme theme;
+
+    private static Map<Activity, Theme> appliedThemes = new WeakHashMap<>();
 
     static {
         init();
@@ -23,10 +28,17 @@ public class Themes {
 
     public static void applyTheme(Activity activity) {
         activity.setTheme(theme.getResId());
+        appliedThemes.put(activity, theme);
     }
 
     public static void applyProxyTheme(Activity activity) {
         activity.setTheme(theme.getProxyResId());
+        appliedThemes.put(activity, theme);
+    }
+
+    public static void checkTheme(Activity activity) {
+        Theme appliedTheme = appliedThemes.get(activity);
+        if(appliedTheme != theme) activity.recreate();
     }
 
     public enum Theme {

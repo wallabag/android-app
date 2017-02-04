@@ -9,7 +9,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,18 +23,20 @@ import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
 
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+        if(savedInstanceState == null) {
+            getFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, new SettingsFragment())
+                    .commit();
+        }
     }
 
     public static class SettingsFragment extends PreferenceFragment
@@ -64,8 +65,6 @@ public class SettingsActivity extends AppCompatActivity {
         };
 
         private Settings settings;
-
-        private boolean newTheme;
 
         private boolean autoSyncChanged;
         private boolean oldAutoSyncEnabled;
@@ -180,8 +179,6 @@ public class SettingsActivity extends AppCompatActivity {
         private void resetChanges() {
             Log.d(TAG, "resetChanges() started");
 
-            newTheme = false;
-
             autoSyncChanged = false;
             oldAutoSyncEnabled = settings.isAutoSyncEnabled();
             oldAutoSyncInterval = settings.getAutoSyncInterval();
@@ -201,13 +198,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void applyChanges() {
             Log.d(TAG, "applyChanges() started");
-
-            if(newTheme) {
-                newTheme = false;
-                Log.d(TAG, "applyChanges() newTheme is true");
-
-                Themes.init();
-            }
 
             if(autoSyncChanged) {
                 autoSyncChanged = false;
@@ -308,10 +298,12 @@ public class SettingsActivity extends AppCompatActivity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.d(TAG, "onSharedPreferenceChanged(" + key + ")");
 
+            boolean themeChanged = false;
+
             int keyResID = Settings.getPrefKeyIDByValue(key);
             switch(keyResID) {
                 case R.string.pref_key_ui_theme:
-                    newTheme = true;
+                    themeChanged = true;
                     break;
 
                 case R.string.pref_key_autoSync_enabled:
@@ -358,6 +350,15 @@ public class SettingsActivity extends AppCompatActivity {
 
             // not optimal :/
             updateSummary(keyResID);
+
+            if(themeChanged) {
+                Log.d(TAG, "onSharedPreferenceChanged() theme changed");
+
+                Themes.init();
+
+                Activity activity = getActivity();
+                if(activity != null) Themes.checkTheme(activity);
+            }
         }
 
         @Override

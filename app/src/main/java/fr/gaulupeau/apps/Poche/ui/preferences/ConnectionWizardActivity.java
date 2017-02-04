@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +24,10 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
 import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
+import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 
 // TODO: split classes?
-public class ConnectionWizardActivity extends AppCompatActivity {
+public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_SKIP_WELCOME = "skip_welcome";
     public static final String EXTRA_SHOW_SUMMARY = "show_summary";

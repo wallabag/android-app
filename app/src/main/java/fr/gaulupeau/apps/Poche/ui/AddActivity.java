@@ -13,7 +13,6 @@ public class AddActivity extends BaseActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 

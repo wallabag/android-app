@@ -108,7 +108,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int fontSize;
 
     public void onCreate(Bundle savedInstanceState) {
-        Themes.applyTheme(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 

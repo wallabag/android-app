@@ -1,166 +1,209 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="@string/pref_key_main"
+    android:persistent="false">
     <Preference
         android:key="@string/pref_key_connection_wizard"
         android:title="@string/pref_name_runConnectionWizard"
-        android:summary="@string/pref_desc_runConnectionWizard" >
+        android:summary="@string/pref_desc_runConnectionWizard"
+        android:persistent="false">
     </Preference>
-    <PreferenceScreen android:title="@string/pref_categoryName_connection">
-        <PreferenceCategory android:title="@string/pref_categoryName_connection">
+    <PreferenceScreen
+        android:key="@string/pref_key_connection"
+        android:title="@string/pref_categoryName_connection"
+        android:persistent="false">
+        <PreferenceCategory
+            android:key="@string/pref_key_connection_category"
+            android:title="@string/pref_categoryName_connection"
+            android:persistent="false">
             <EditTextPreference
                 android:key="@string/pref_key_connection_url"
                 android:title="@string/pref_name_connection_url"
                 android:summary="@string/pref_desc_connection_url"
-                android:defaultValue="http://" />
+                android:defaultValue="http://"/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_username"
                 android:title="@string/pref_name_connection_username"
-                android:defaultValue="" />
+                android:defaultValue=""/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_password"
                 android:title="@string/pref_name_connection_password"
                 android:inputType="textPassword"
-                android:defaultValue="" />
+                android:defaultValue=""/>
             <Preference
                 android:key="@string/pref_key_connection_autofill"
                 android:title="@string/pref_name_connection_autofill"
-                android:summary="@string/pref_desc_connection_autofill"/>
+                android:summary="@string/pref_desc_connection_autofill"
+                android:persistent="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
                 android:key="@string/pref_key_connection_serverVersion"
                 android:title="@string/pref_name_connection_serverVersion"
                 android:dialogTitle="@string/pref_name_connection_serverVersion"
                 android:entries="@array/pref_option_connection_serverVersion"
                 android:entryValues="@array/pref_option_connection_serverVersion_values"
-                android:defaultValue="-1" />
+                android:defaultValue="-1"/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_feedsUserID"
                 android:title="@string/pref_name_connection_feedsUserID"
-                android:defaultValue="" />
+                android:defaultValue=""/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_feedsToken"
                 android:title="@string/pref_name_connection_feedsToken"
-                android:defaultValue="" />
+                android:defaultValue=""/>
         </PreferenceCategory>
-        <PreferenceScreen android:title="@string/pref_categoryName_connection_advanced">
-          <PreferenceCategory android:title="@string/pref_categoryName_connection_advanced">
-            <CheckBoxPreference
-                android:key="@string/pref_key_connection_advanced_acceptAllCertificates"
-                android:title="@string/pref_name_connection_advanced_acceptAllCertificates"
-                android:summary="@string/pref_desc_connection_advanced_acceptAllCertificates"
-                android:defaultValue="false" />
-            <CheckBoxPreference
-                android:key="@string/pref_key_connection_advanced_customSSLSettings"
-                android:title="@string/pref_name_connection_advanced_customSSLSettings"
-                android:summary="@string/pref_desc_connection_advanced_customSSLSettings"
-                android:defaultValue="false" />
-            <Preference
-                android:key="@string/pref_key_connection_advanced_clearCookies"
-                android:title="@string/pref_name_connection_advanced_clearCookies"
-                android:summary="@string/pref_desc_connection_advanced_clearCookies"/>
+        <PreferenceScreen
+            android:key="@string/pref_key_connection_advanced"
+            android:title="@string/pref_categoryName_connection_advanced"
+            android:persistent="false">
+            <PreferenceCategory
+                android:key="@string/pref_key_connection_advanced_category"
+                android:title="@string/pref_categoryName_connection_advanced"
+                android:persistent="false">
+                <CheckBoxPreference
+                    android:key="@string/pref_key_connection_advanced_acceptAllCertificates"
+                    android:title="@string/pref_name_connection_advanced_acceptAllCertificates"
+                    android:summary="@string/pref_desc_connection_advanced_acceptAllCertificates"
+                    android:defaultValue="false"/>
+                <CheckBoxPreference
+                    android:key="@string/pref_key_connection_advanced_customSSLSettings"
+                    android:title="@string/pref_name_connection_advanced_customSSLSettings"
+                    android:summary="@string/pref_desc_connection_advanced_customSSLSettings"
+                    android:defaultValue="false"/>
+                <Preference
+                    android:key="@string/pref_key_connection_advanced_clearCookies"
+                    android:title="@string/pref_name_connection_advanced_clearCookies"
+                    android:summary="@string/pref_desc_connection_advanced_clearCookies"
+                    android:persistent="false"/>
             </PreferenceCategory>
-            <PreferenceCategory android:title="@string/pref_categoryName_connection_advanced_httpAuth"
-                android:summary="@string/pref_categoryDesc_connection_advanced_httpAuth">
+            <PreferenceCategory
+                android:key="@string/pref_key_connection_advanced_httpAuth_category"
+                android:title="@string/pref_categoryName_connection_advanced_httpAuth"
+                android:summary="@string/pref_categoryDesc_connection_advanced_httpAuth"
+                android:persistent="false">
                 <EditTextPreference
                     android:key="@string/pref_key_connection_advanced_httpAuthUsername"
                     android:title="@string/pref_name_connection_advanced_httpAuthUsername"
-                    android:defaultValue="" />
+                    android:defaultValue=""/>
                 <EditTextPreference
                     android:key="@string/pref_key_connection_advanced_httpAuthPassword"
                     android:title="@string/pref_name_connection_advanced_httpAuthPassword"
                     android:inputType="textPassword"
-                    android:defaultValue="" />
+                    android:defaultValue=""/>
             </PreferenceCategory>
         </PreferenceScreen>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_categoryName_ui">
-      <PreferenceCategory android:title="@string/pref_categoryName_ui">
-        <ListPreference
-            android:key="@string/pref_key_ui_theme"
-            android:title="@string/pref_name_ui_theme"
-            android:dialogTitle="@string/pref_name_ui_theme"
-            android:defaultValue="LIGHT" />
-        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
-            android:key="@string/pref_key_ui_article_fontSize"
-            android:title="@string/pref_name_ui_article_fontSize"
-            android:inputType="number"
-            android:defaultValue="100" />
-        <CheckBoxPreference
-            android:key="@string/pref_key_ui_article_fontSerif"
-            android:title="@string/pref_name_ui_article_fontSerif"
-            android:summary="@string/pref_desc_ui_article_fontSerif"
-            android:defaultValue="false" />
-      </PreferenceCategory>
-        <PreferenceCategory android:title="@string/pref_categoryName_ui_screenScrolling">
+    <PreferenceScreen
+        android:key="@string/pref_key_ui"
+        android:title="@string/pref_categoryName_ui"
+        android:persistent="false">
+        <PreferenceCategory
+            android:key="@string/pref_key_ui_category"
+            android:title="@string/pref_categoryName_ui"
+            android:persistent="false">
+            <ListPreference
+                android:key="@string/pref_key_ui_theme"
+                android:title="@string/pref_name_ui_theme"
+                android:dialogTitle="@string/pref_name_ui_theme"
+                android:defaultValue="LIGHT"/>
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+                android:key="@string/pref_key_ui_article_fontSize"
+                android:title="@string/pref_name_ui_article_fontSize"
+                android:inputType="number"
+                android:defaultValue="100"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_article_fontSerif"
+                android:title="@string/pref_name_ui_article_fontSerif"
+                android:summary="@string/pref_desc_ui_article_fontSerif"
+                android:defaultValue="false"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:key="@string/pref_key_ui_screenScrolling"
+            android:title="@string/pref_categoryName_ui_screenScrolling"
+            android:persistent="false">
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_volumeButtonsScrolling_enabled"
                 android:title="@string/pref_name_ui_volumeButtonsScrolling_enabled"
-                android:defaultValue="false" />
+                android:defaultValue="false"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_tapToScroll_enabled"
                 android:title="@string/pref_name_ui_tapToScroll_enabled"
                 android:summary="@string/pref_desc_ui_tapToScroll_enabled"
-                android:defaultValue="false" />
+                android:defaultValue="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.FloatEditTextPreference
                 android:key="@string/pref_key_ui_screenScrolling_percent"
                 android:title="@string/pref_name_ui_screenScrolling_percent"
                 android:inputType="numberDecimal"
-                android:defaultValue="95" />
+                android:defaultValue="95"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_screenScrolling_smooth"
                 android:title="@string/pref_name_ui_screenScrolling_smooth"
-                android:defaultValue="true" />
+                android:defaultValue="true"/>
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_categoryName_autoSync">
-      <PreferenceCategory android:title="@string/pref_categoryName_autoSync">
-        <CheckBoxPreference
-            android:key="@string/pref_key_autoSync_enabled"
-            android:title="@string/pref_name_autoSync_enabled"
-            android:summary="@string/pref_desc_autoSync_enabled"
-            android:defaultValue="false" />
-        <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
-            android:dependency="@string/pref_key_autoSync_enabled"
-            android:key="@string/pref_key_autoSync_interval"
-            android:title="@string/pref_name_autoSync_interval"
-            android:dialogTitle="@string/pref_name_autoSync_interval"
-            android:defaultValue="86400000" />
-        <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
-            android:dependency="@string/pref_key_autoSync_enabled"
-            android:key="@string/pref_key_autoSync_type"
-            android:title="@string/pref_name_autoSync_type"
-            android:dialogTitle="@string/pref_name_autoSync_type"
-            android:entries="@array/pref_option_autoSync_type"
-            android:entryValues="@array/pref_option_autoSync_type_values"
-            android:defaultValue="0" />
-        <CheckBoxPreference
-            android:key="@string/pref_key_autoSyncQueue_enabled"
-            android:title="@string/pref_name_autoSyncQueue_enabled"
-            android:summary="@string/pref_desc_autoSyncQueue_enabled"
-            android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="@string/pref_key_autoDlNew_enabled"
-            android:title="@string/pref_name_autoDlNew_enabled"
-            android:summary="@string/pref_desc_autoDlNew_enabled"
-            android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="@string/pref_key_imageCache_enabled"
-            android:title="@string/pref_name_imageCache_enabled"
-            android:summary="@string/pref_desc_imageCache_enabled"
-            android:defaultValue="false" />
+    <PreferenceScreen
+        android:key="@string/pref_key_autoSync"
+        android:title="@string/pref_categoryName_autoSync"
+        android:persistent="false">
+        <PreferenceCategory
+            android:key="@string/pref_key_autoSync_category"
+            android:title="@string/pref_categoryName_autoSync"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="@string/pref_key_autoSync_enabled"
+                android:title="@string/pref_name_autoSync_enabled"
+                android:summary="@string/pref_desc_autoSync_enabled"
+                android:defaultValue="false"/>
+            <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
+                android:dependency="@string/pref_key_autoSync_enabled"
+                android:key="@string/pref_key_autoSync_interval"
+                android:title="@string/pref_name_autoSync_interval"
+                android:dialogTitle="@string/pref_name_autoSync_interval"
+                android:defaultValue="86400000"/>
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
+                android:dependency="@string/pref_key_autoSync_enabled"
+                android:key="@string/pref_key_autoSync_type"
+                android:title="@string/pref_name_autoSync_type"
+                android:dialogTitle="@string/pref_name_autoSync_type"
+                android:entries="@array/pref_option_autoSync_type"
+                android:entryValues="@array/pref_option_autoSync_type_values"
+                android:defaultValue="0"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_autoSyncQueue_enabled"
+                android:title="@string/pref_name_autoSyncQueue_enabled"
+                android:summary="@string/pref_desc_autoSyncQueue_enabled"
+                android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_autoDlNew_enabled"
+                android:title="@string/pref_name_autoDlNew_enabled"
+                android:summary="@string/pref_desc_autoDlNew_enabled"
+                android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_imageCache_enabled"
+                android:title="@string/pref_name_imageCache_enabled"
+                android:summary="@string/pref_desc_imageCache_enabled"
+                android:defaultValue="false"/>
         </PreferenceCategory>
     </PreferenceScreen>
-    <PreferenceScreen android:title="@string/pref_categoryName_miscellaneous">
-      <PreferenceCategory android:title="@string/pref_categoryName_miscellaneous">
-        <CheckBoxPreference
-            android:key="@string/pref_key_misc_handleHttpScheme"
-            android:title="@string/pref_name_misc_handleHttpScheme"
-            android:summary="@string/pref_desc_misc_handleHttpScheme"
-            android:defaultValue="false"
-            android:persistent="false" />
-        <Preference
-            android:key="@string/pref_key_misc_wipeDB"
-            android:title="@string/pref_name_misc_wipeDB"
-            android:summary="@string/pref_desc_misc_wipeDB" />
+    <PreferenceScreen
+        android:key="@string/pref_key_misc"
+        android:title="@string/pref_categoryName_miscellaneous"
+        android:persistent="false">
+        <PreferenceCategory
+            android:key="@string/pref_key_misc_category"
+            android:title="@string/pref_categoryName_miscellaneous"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="@string/pref_key_misc_handleHttpScheme"
+                android:title="@string/pref_name_misc_handleHttpScheme"
+                android:summary="@string/pref_desc_misc_handleHttpScheme"
+                android:defaultValue="false"
+                android:persistent="false"/>
+            <Preference
+                android:key="@string/pref_key_misc_wipeDB"
+                android:title="@string/pref_name_misc_wipeDB"
+                android:summary="@string/pref_desc_misc_wipeDB"
+                android:persistent="false"/>
         </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>
