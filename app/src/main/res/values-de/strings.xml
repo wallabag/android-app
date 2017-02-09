@@ -4,7 +4,6 @@
     <string name="label_name">Mit wallabag speichern!</string>
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnMarkUnread">Als ungelesen markieren</string>
-    <string name="btnSettings">Einstellungen</string>
     <string name="add_to_favorites">Zu Favoriten hinzufügen</string>
     <string name="remove_from_favorites">Aus Favoriten entfernen</string>
     <string name="menuShare">Teilen</string>
@@ -29,7 +28,6 @@
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
     <string name="txtNetOffline">Bitte prüfe deine Internetverbindung!</string>
     <string name="txtConfigNotSet">Die App muss vor dem Synchronisieren konfiguriert werden!</string>
-    <string name="bag_page">Neuen Artikel hinzufügen</string>
     <string name="activity_add_label">Neuen Artikel hinzufügen</string>
     <string name="page_url">Artikel-URL</string>
     <string name="bag_it">Artikel speichern</string>
@@ -55,7 +53,6 @@
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
     <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
-    <string name="update_allFeeds">Alle Feeds aktualisieren</string>
     <string name="updateFeed_previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
@@ -71,7 +68,6 @@
     <string name="themeName_solarized">Solarisiert</string>
     <string name="menu_readArticle_increaseFontSize">Schrift vergrößern</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift verkleinern</string>
-    <string name="menuAbout">Über</string>
     <string name="aboutText">&lt;b>wallabag-App für Android&lt;/b>&lt;br/>wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es, wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Stimmhöhe</string>
@@ -201,5 +197,8 @@
 
     <string name="pref_name_imageCache_enabled">Speichere in Artikel eingebettete Bilder zwischen</string>
     <string name="pref_desc_imageCache_enabled">Lädt automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
+
+    <string name="nav_other_settings">Einstellungen</string>
+    <string name="nav_other_about">Über</string>
 
 </resources>

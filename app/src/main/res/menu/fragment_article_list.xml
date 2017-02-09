@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_list_openRandomArticle"
+        android:title="@string/menu_open_random_article"
+        android:orderInCategory="12"/>
+</menu>

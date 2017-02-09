@@ -43,7 +43,7 @@ import android.widget.Toast;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.ui.ArticlesListActivity;
+import fr.gaulupeau.apps.Poche.ui.MainActivity;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -146,7 +146,7 @@ public class TtsFragment
         super.onCreate(savedInstanceState);
         this.settings = App.getInstance().getSettings();
         Intent mainFocusIntent = new Intent(Intent.ACTION_MAIN);
-        mainFocusIntent.setClass(getActivity(), ArticlesListActivity.class);
+        mainFocusIntent.setClass(getActivity(), MainActivity.class);
         mainFocusIntent.addCategory(Intent.CATEGORY_LAUNCHER);
         notificationPendingIntent = PendingIntent.getActivity(getActivity(), 0, mainFocusIntent, 0);
         if (ttsEngines == null) {

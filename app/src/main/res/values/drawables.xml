@@ -1,0 +1,9 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TODO: better icon for main lists -->
+    <item name="ic_menu_articles" type="drawable">@drawable/ic_list_black_24dp</item>
+    <item name="ic_menu_tags" type="drawable">@drawable/ic_tag_black_24dp</item>
+    <item name="ic_menu_tagged_articles" type="drawable">@drawable/ic_list_black_24dp</item>
+    <item name="ic_menu_add" type="drawable">@drawable/ic_add_black_24dp</item>
+    <item name="ic_menu_settings" type="drawable">@drawable/ic_settings_black_24dp</item>
+    <item name="ic_menu_about" type="drawable">@drawable/ic_info_outline_black_24dp</item>
+</resources>

@@ -4,7 +4,6 @@
     <string name="label_name">Bag it!</string>
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
-    <string name="btnSettings">Configuración</string>
     <string name="add_to_favorites">Añadir a favoritos</string>
     <string name="remove_from_favorites">Eliminar de favoritos</string>
     <string name="menuShare">Compartir</string>
@@ -30,7 +29,6 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
-    <string name="bag_page">Guardar página</string>
     <string name="activity_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
     <string name="bag_it">Bag it!</string>
@@ -73,7 +71,6 @@
     <string name="d_testConnection_fail_title">Prueba de conexión fallida</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña incorrecta</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
-    <string name="update_allFeeds">Actualizar todas las fuentes</string>
     <string name="updateFeed_previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>
@@ -89,7 +86,6 @@
     <string name="themeName_solarized">Solarizado</string>
     <string name="menu_readArticle_increaseFontSize">Aumentar tamaño de letra</string>
     <string name="menu_readArticle_decreaseFontSize">Disminuir tamaño de letra</string>
-    <string name="menuAbout">Acerca de</string>
     <string name="aboutText">&lt;b>Aplicación de wallabag para Android&lt;/b>&lt;br />wallabag es una aplicación self hosted que te ayuda a no perderte contenidos nunca más. Haz clic, guarda y lee cuando puedas. Extrae contenido de forma automática para que puedas leerlo cuando tengas tiempo.</string>
     <string name="readSpeed">Velocidad de lectura</string>
     <string name="voiceHeight">Tono de voz</string>
@@ -111,6 +107,9 @@
     <string name="menu_lists_search">Buscar</string>
     <string name="menu_lists_changeSortOrder">Cambiar orden</string>
     <string name="other_searchHint">Buscar por título o texto</string>
+
+    <string name="nav_other_settings">Configuración</string>
+    <string name="nav_other_about">Acerca de</string>
 
     <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
     <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a realizar una configuración de conexión básica</string>

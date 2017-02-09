@@ -4,7 +4,6 @@
     <string name="label_name">Sauvegarder !</string>
     <string name="btnMarkRead">Marquer comme lu</string>
     <string name="btnMarkUnread">Marquer comme non lu</string>
-    <string name="btnSettings">Paramètres</string>
     <string name="add_to_favorites">Ajouter aux favoris</string>
     <string name="remove_from_favorites">Supprimer des favoris</string>
     <string name="menuShare">Partager</string>
@@ -16,7 +15,6 @@
     <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
     <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
-    <string name="bag_page">Sauvegarder la page</string>
     <string name="activity_add_label">Sauvegarder</string>
     <string name="page_url">URL de la page</string>
     <string name="bag_it">Sauvegarder</string>
@@ -39,7 +37,6 @@
     <string name="feedName_unread">Non lus</string>
     <string name="feedName_favorites">Favoris</string>
     <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
-    <string name="update_allFeeds">Mettre à jour tous les flux</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
@@ -70,7 +67,6 @@
     <string name="ttsPitch">Hauteur de la voix</string>
     <string name="ttsOptions">Options</string>
     <string name="ttsError">Erreur de Synthèse Vocale</string>
-    <string name="menuAbout">À propos</string>
     <string name="aboutText">&lt;b>Application wallabag pour Android&lt;/b>&lt;br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
@@ -88,6 +84,9 @@
     <string name="other_searchHint">Rechercher dans le titre de l\'article ou dans le texte</string>
 
     <string name="notification_error">Erreur</string>
+
+    <string name="nav_other_settings">Paramètres</string>
+    <string name="nav_other_about">À propos</string>
 
     <string name="pref_name_connection_url">Votre URL wallabag</string>
     <string name="pref_desc_connection_url">

@@ -4,7 +4,6 @@
     <string name="label_name">В бэг!</string>
     <string name="btnMarkRead">Прочитано</string>
     <string name="btnMarkUnread">Не прочитано</string>
-    <string name="btnSettings">Настройки</string>
     <string name="add_to_favorites">Добавить в избранное</string>
     <string name="remove_from_favorites">Удалить из избранного</string>
     <string name="menuShare">Поделиться</string>
@@ -17,7 +16,6 @@
     <string name="d_deleteArticle_message">Вы уверены, что хотите удалить статью?</string>
     <string name="txtNetOffline">Пожалуйста, проверьте интернет-соединение!</string>
     <string name="txtConfigNotSet">Пожалуйста, настройте приложение перед синхронизацией!</string>
-    <string name="bag_page">Отправить в бэг</string>
     <string name="activity_add_label">Отправить в бэг</string>
     <string name="page_url">URL страницы</string>
     <string name="bag_it">В бэг</string>
@@ -43,7 +41,6 @@
     <string name="d_testConnection_fail_title">Ошибка</string>
     <string name="wrongUsernameOrPassword_errorMessage">Ошибка входа: возможно, неверное имя пользователя или пароль</string>
     <string name="unsuccessfulRequest_errorMessage">"Запрос отклонён; код ответа: %1$d, сообщение: %2$s"</string>
-    <string name="update_allFeeds">Обновить все ленты</string>
     <string name="updateFeed_previousUpdateNotFinished">Предыдущая операция ещё не завершилась</string>
     <string name="feedName_favorites">Избранное</string>
     <string name="feedName_archived">Архив</string>
@@ -73,6 +70,9 @@
     <string name="ttsError">Ошибка генерации речи</string>
 
     <string name="notification_error">Ошибка</string>
+
+    <string name="nav_other_settings">Настройки</string>
+    <string name="nav_other_about">О приложении</string>
 
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
@@ -115,7 +115,6 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
     <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
-    <string name="menuAbout">О приложении</string>
     <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>

@@ -3,7 +3,6 @@
     <string name="label_name">バッグ!</string>
     <string name="btnMarkRead">既読にする</string>
     <string name="btnMarkUnread">未読にする</string>
-    <string name="btnSettings">設定</string>
     <string name="add_to_favorites">お気に入りに追加</string>
     <string name="remove_from_favorites">お気に入りから削除</string>
     <string name="menuShare">共有</string>
@@ -29,7 +28,6 @@
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
     <string name="txtNetOffline">インターネット接続を確認してください!</string>
     <string name="txtConfigNotSet">同期の前に、アプリを構成してください!</string>
-    <string name="bag_page">バッグのページ</string>
     <string name="activity_add_label">バッグのページ</string>
     <string name="page_url">ページ URL</string>
     <string name="bag_it">バッグに入れる</string>
@@ -73,7 +71,6 @@
     <string name="d_testConnection_fail_title">接続テストに失敗しました</string>
     <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
     <string name="unsuccessfulRequest_errorMessage">要求が失敗しました。レスポンスコード: %1$d、レスポンスメッセージ: %2$s</string>
-    <string name="update_allFeeds">すべてのフィードを更新</string>
     <string name="updateFeed_previousUpdateNotFinished">以前の更新操作がまだ終わっていません</string>
     <string name="feedName_favorites">お気に入り</string>
     <string name="feedName_archived">アーカイブ済</string>
@@ -89,7 +86,6 @@
     <string name="themeName_solarized">ソラリゼーション</string>
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
-    <string name="menuAbout">アプリについて</string>
     <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声の高さ</string>
@@ -111,6 +107,9 @@
     <string name="menu_lists_search">検索</string>
     <string name="menu_lists_changeSortOrder">並び順を変更</string>
     <string name="other_searchHint">記事のタイトルや本文で検索します</string>
+
+    <string name="nav_other_settings">設定</string>
+    <string name="nav_other_about">アプリについて</string>
 
     <string name="pref_name_runConnectionWizard">接続ウィザードを実行</string>
     <string name="pref_desc_runConnectionWizard">接続ウィザードは、基本的な接続設定を行います</string>
