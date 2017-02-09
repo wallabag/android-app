@@ -21,6 +21,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -39,6 +41,7 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity
     private Settings settings;
 
     private ConfigurationTestHelper configurationTestHelper;
+
+    private ProgressBar progressBar;
 
     private NavigationView navigationView;
 
@@ -114,6 +119,8 @@ public class MainActivity extends AppCompatActivity
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         navigationView = (NavigationView)findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -443,6 +450,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
+        Log.d(TAG, "onUpdateArticlesProgressEvent");
+
+        if(progressBar != null) {
+            progressBar.setIndeterminate(false);
+            progressBar.setMax(event.getTotal());
+            progressBar.setProgress(event.getCurrent());
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
         Log.d(TAG, "onUpdateArticlesFinishedEvent");
 
@@ -459,7 +477,10 @@ public class MainActivity extends AppCompatActivity
 
         updateRunning = started;
 
-//        setRefreshingUI(started); // TODO: add progress bar
+        if(progressBar != null) {
+            progressBar.setVisibility(started ? View.VISIBLE : View.GONE);
+            progressBar.setIndeterminate(true);
+        }
     }
 
     private void performSearch(String query) {
