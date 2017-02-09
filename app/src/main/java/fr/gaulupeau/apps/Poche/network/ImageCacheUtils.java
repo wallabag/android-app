@@ -38,9 +38,9 @@ public class ImageCacheUtils {
             = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
 
     private static final Pattern[] responsiveParametersPatterns = {
-            Pattern.compile("srcset=\".*\""),
-            Pattern.compile("sizes=\".*\""),
-            Pattern.compile("data-zoom-src=\".*\""),
+            Pattern.compile("srcset=\"[^\"]*?\""),
+            Pattern.compile("sizes=\"[^\"]*?\""),
+            Pattern.compile("data-zoom-src=\"[^\"]*?\""),
     };
 
     private static OkHttpClient okHttpClient;
