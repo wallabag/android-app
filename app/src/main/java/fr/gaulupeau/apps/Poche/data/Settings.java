@@ -368,6 +368,23 @@ public class Settings {
         setString(R.string.pref_key_ui_lists_sortOrder, sortOrder.toString());
     }
 
+    public Sortable.SortOrder getTagListSortOrder() {
+        String sortOrderParam = getString(R.string.pref_key_ui_tagList_sortOrder);
+
+        Sortable.SortOrder sortOrder = null;
+        if(sortOrderParam != null) {
+            try {
+                sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
+            } catch(IllegalArgumentException ignored) {}
+        }
+
+        return sortOrder != null ? sortOrder : Sortable.SortOrder.ASC;
+    }
+
+    public void setTagListSortOrder(Sortable.SortOrder sortOrder) {
+        setString(R.string.pref_key_ui_tagList_sortOrder, sortOrder.toString());
+    }
+
     public Themes.Theme getTheme() {
         String themeName = getString(R.string.pref_key_ui_theme);
 

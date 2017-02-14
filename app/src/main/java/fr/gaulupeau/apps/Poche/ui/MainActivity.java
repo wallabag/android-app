@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
     private Fragment currentFragment;
 
     private Sortable.SortOrder sortOrder;
+    private Sortable.SortOrder tagsSortOrder;
     private String searchQuery;
     private String searchQueryPrevious;
     private boolean searchUIPending;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity
         offlineQueuePending = settings.isOfflineQueuePending();
 
         sortOrder = settings.getListSortOrder();
+        tagsSortOrder = settings.getTagListSortOrder();
 
         String currentFragmentType = null;
 
@@ -524,18 +526,31 @@ public class MainActivity extends AppCompatActivity
         Log.v(TAG, "setParametersToFragment() started");
         if(fragment == null) return;
 
-        setSortOrder(fragment, sortOrder);
+        setSortOrder(fragment);
         setSearchQueryOnFragment(fragment, searchQuery);
     }
 
     private void switchSortOrder() {
-        sortOrder = sortOrder == Sortable.SortOrder.DESC
-                ? Sortable.SortOrder.ASC
-                : Sortable.SortOrder.DESC;
+        if(FRAGMENT_TAG_LIST.equals(currentFragmentType)) {
+            tagsSortOrder = tagsSortOrder == Sortable.SortOrder.DESC
+                    ? Sortable.SortOrder.ASC
+                    : Sortable.SortOrder.DESC;
 
-        settings.setListSortOrder(sortOrder);
+            settings.setTagListSortOrder(tagsSortOrder);
+        } else {
+            sortOrder = sortOrder == Sortable.SortOrder.DESC
+                    ? Sortable.SortOrder.ASC
+                    : Sortable.SortOrder.DESC;
 
-        setSortOrder(currentFragment, sortOrder);
+            settings.setListSortOrder(sortOrder);
+        }
+
+        setSortOrder(currentFragment);
+    }
+
+    private void setSortOrder(Fragment fragment) {
+        setSortOrder(fragment, FRAGMENT_TAG_LIST.equals(currentFragmentType)
+                ? tagsSortOrder : sortOrder);
     }
 
     private void setSortOrder(Fragment fragment, Sortable.SortOrder sortOrder) {

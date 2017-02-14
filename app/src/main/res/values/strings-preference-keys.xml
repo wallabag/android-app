@@ -23,6 +23,7 @@
     <string name="pref_key_ui_article_fontSize" translatable="false">ui.article.fontSize</string>
     <string name="pref_key_ui_article_fontSerif" translatable="false">ui.article.fontSerif</string>
     <string name="pref_key_ui_lists_sortOrder" translatable="false">ui.lists.sortOrder</string>
+    <string name="pref_key_ui_tagList_sortOrder" translatable="false">ui.tagList.sortOrder</string>
     <string name="pref_key_ui_theme" translatable="false">ui.theme</string>
     <string name="pref_key_ui_volumeButtonsScrolling_enabled" translatable="false">ui.volumeButtonsScrolling.enabled</string>
     <string name="pref_key_ui_tapToScroll_enabled" translatable="false">ui.tapToScroll.enabled</string>
