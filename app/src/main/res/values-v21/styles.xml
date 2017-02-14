@@ -1,44 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar"/>
-    <style name="LightThemeContrast" parent="LightTheme">
-        <item name="android:textColor">#000000</item>
+    <style name="LightTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-    <style name="DarkTheme" parent="Theme.AppCompat"/>
-    <style name="DarkThemeContrast" parent="DarkTheme">
-        <item name="android:background">#000000</item>
-        <item name="android:textColor">#FFFFFF</item>
+
+    <style name="LightThemeContrast.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="DarkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="DarkThemeContrast.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
     <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
         <item name="android:colorBackground">@color/solarizedBase3</item>
         <item name="android:colorForeground">@color/solarizedBase01</item>
-        <item name="android:textColorPrimary">@color/solarizedBase01</item>
-        <item name="android:windowBackground">@color/solarizedBase3</item>
-        <item name="android:colorPrimaryDark">@color/solarizedBase1</item>
-        <item name="colorPrimary">@color/solarizedBase2</item>
-        <item name="android:statusBarColor">@color/solarizedBase02</item>
-        <item name="colorAccent">@color/solarizedYellow</item>
-        <item name="android:navigationBarColor">@color/solarizedBase02</item>
-        <item name="android:colorButtonNormal">@color/solarizedBase2</item>
         <item name="android:textColor">@color/solarizedBase00</item>
+        <item name="android:textColorPrimary">@color/solarizedBase01</item>
         <item name="android:textColorSecondary">@color/solarizedBase01</item>
-    </style>
-    <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-    </style>
-    <style name="ProxyThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowBackground">@color/solarizedBase3</item>
+        <item name="colorPrimary">@color/solarizedBase2</item>
+        <item name="colorAccent">@color/solarizedYellow</item>
+        <item name="android:colorPrimaryDark">@color/solarizedBase1</item>
+        <item name="android:colorButtonNormal">@color/solarizedBase2</item>
+        <item name="android:navigationBarColor">@color/solarizedBase02</item>
+        <item name="android:statusBarColor">@color/solarizedBase02</item>
+        <item name="appBarOverlayTheme">@style/SolarizedTheme.AppBarOverlay</item>
+        <item name="popupOverlayTheme">@style/SolarizedTheme.PopupOverlay</item>
     </style>
 
-    <style name="LightTheme.NoActionBar">
+    <style name="SolarizedTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

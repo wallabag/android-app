@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
-        // TODO: themes support
+        Themes.applyTheme(this, false);
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
@@ -201,6 +201,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        Themes.checkTheme(this);
 
         checkConfigurationOnResume = true;
 
