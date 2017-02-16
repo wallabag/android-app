@@ -433,7 +433,7 @@ public class Updater {
         }
 
         if(!articlesToDelete.isEmpty()) {
-            event.isInvalidateAll();
+            event.setInvalidateAll(true);
 
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
             articleDao.deleteByKeyInTx(articlesToDelete);
