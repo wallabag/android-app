@@ -32,6 +32,8 @@
             android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
             android:hardwareAccelerated="true" />
         <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"/>
+        <activity
             android:name="fr.gaulupeau.apps.Poche.ui.BagItProxyActivity"
             android:theme="@style/ProxyTheme">
             <intent-filter android:label="@string/label_name">

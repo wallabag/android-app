@@ -125,8 +125,12 @@
     <string name="menu_lists_fullUpdate">Full update</string>
     <string name="other_searchHint">Search by article title or text</string>
     <string name="menu_manageTags">Manage tags</string>
-    <string name="manageTags_save">OK</string>
+    <string name="manageTags_title">Manage tags</string>
+    <string name="manageTags_save">Save</string>
     <string name="manageTags_cancel">Cancel</string>
+    <string name="manageTags_textField_hint">One or more tags separated by commas</string>
+    <string name="manageTags_addNew">Add</string>
+    <string name="manageTags_currentTags">Selected tags:</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

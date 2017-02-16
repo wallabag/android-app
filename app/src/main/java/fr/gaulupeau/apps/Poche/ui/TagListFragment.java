@@ -130,7 +130,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
         return new TagListDiffCallback(oldItems, newItems);
     }
 
-    private static class TagListDiffCallback extends DiffUtil.Callback {
+    static class TagListDiffCallback extends DiffUtil.Callback {
 
         private List<Tag> oldList;
         private List<Tag> newList;
@@ -152,8 +152,16 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).getTagId().equals(
-                    newList.get(newItemPosition).getTagId());
+            Tag tag1 = oldList.get(oldItemPosition);
+            Tag tag2 = newList.get(newItemPosition);
+            Integer tagID1 = tag1.getTagId();
+            Integer tagID2 = tag2.getTagId();
+
+            if(tagID1 == null && tagID2 == null) {
+                return TextUtils.equals(tag1.getLabel(), tag2.getLabel());
+            }
+
+            return !(tagID1 == null || tagID2 == null) && tagID1.equals(tagID2);
         }
 
         @Override

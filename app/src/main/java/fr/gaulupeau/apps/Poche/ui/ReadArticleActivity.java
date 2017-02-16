@@ -506,8 +506,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private boolean manageTags() {
-        ManageArticleTagsDialogFragment.newInstance(mArticle.getArticleId())
-                .show(getSupportFragmentManager(), "manageTagsFragment");
+        Intent manageTagsIntent = new Intent(this, ManageArticleTagsActivity.class);
+        manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, mArticle.getArticleId());
+        startActivity(manageTagsIntent);
 
         return true;
     }
