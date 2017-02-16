@@ -98,16 +98,7 @@ public class Updater {
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
-        daoSession.getDatabase().beginTransaction();
-        try {
-            Log.d(TAG, "sweepDeletedArticles() sweeping articles");
-            performSweep(event, progressListener);
-            Log.d(TAG, "sweepDeletedArticles() articles sweeping finished");
-
-            daoSession.getDatabase().setTransactionSuccessful();
-        } finally {
-            daoSession.getDatabase().endTransaction();
-        }
+        performSweep(event, progressListener);
 
         Log.i(TAG, "sweepDeletedArticles() finished");
 
