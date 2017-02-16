@@ -45,22 +45,22 @@ public class WallabagServiceWrapper {
         wallabagService = new WallabagService(url, new ParameterHandler() {
             @Override
             public String getUsername() {
-                return settings.getUsername();
+                return getNonNullString(settings.getUsername());
             }
 
             @Override
             public String getPassword() {
-                return settings.getPassword();
+                return getNonNullString(settings.getPassword());
             }
 
             @Override
             public String getClientID() {
-                return settings.getApiClientID();
+                return getNonNullString(settings.getApiClientID());
             }
 
             @Override
             public String getClientSecret() {
-                return settings.getApiClientSecret();
+                return getNonNullString(settings.getApiClientSecret());
             }
 
             @Override
@@ -109,6 +109,10 @@ public class WallabagServiceWrapper {
 
     public WallabagService getWallabagService() {
         return wallabagService;
+    }
+
+    private static String getNonNullString(String s) {
+        return s == null ? "" : s;
     }
 
 }

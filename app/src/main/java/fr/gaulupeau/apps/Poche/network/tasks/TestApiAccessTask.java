@@ -43,10 +43,10 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
                              String refreshToken, String accessToken,
                              boolean customSSLSettings, ResultHandler resultHandler) {
         this.url = url;
-        this.username = username;
-        this.password = password;
-        this.clientID = clientID;
-        this.clientSecret = clientSecret;
+        this.username = getNonNullString(username);
+        this.password = getNonNullString(password);
+        this.clientID = getNonNullString(clientID);
+        this.clientSecret = getNonNullString(clientSecret);
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
         this.customSSLSettings = customSSLSettings;
@@ -141,6 +141,10 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void ignored) {
         if(resultHandler != null) resultHandler.onTestApiAccessTaskResult(result, details);
+    }
+
+    private static String getNonNullString(String s) {
+        return s == null ? "" : s;
     }
 
 }
