@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -381,46 +382,91 @@ public class Updater {
             return;
         }
 
-        int perPage = 30;
+        int dbQuerySize = 50;
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
-                .orderAsc(ArticleDao.Properties.ArticleId).limit(perPage);
+                .orderAsc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
 
         List<Long> articlesToDelete = new ArrayList<>();
 
-        List<String> articleUrls = new ArrayList<>(perPage);
+        LinkedList<Article> articleQueue = new LinkedList<>();
+        List<Article> addedArticles = new ArrayList<>();
+        WallabagService.BatchExistQueryBuilder existQueryBuilder = null;
 
         int offset = 0;
-        while(offset < totalNumber) {
-            Log.d(TAG, String.format("performSweep() %d/%d", offset, totalNumber));
 
-            if(progressListener != null) {
-                progressListener.onProgress(offset, totalNumber);
+        while(true) {
+            if(articleQueue.isEmpty()) {
+                Log.d(TAG, String.format("performSweep() %d/%d", offset, totalNumber));
+
+                if(progressListener != null) {
+                    progressListener.onProgress(offset, totalNumber);
+                }
+
+                articleQueue.addAll(queryBuilder.list());
+
+                offset += dbQuerySize;
+                queryBuilder.offset(offset);
             }
 
-            List<Article> articles = queryBuilder.list();
+            if(articleQueue.isEmpty() && addedArticles.isEmpty()) break;
 
-            articleUrls.clear();
-            for(Article article: articles) {
-                articleUrls.add(article.getUrl());
-            }
+            boolean runQuery = true;
 
-            Map<String, Boolean> articlesMap = wallabagServiceWrapper
-                    .getWallabagService().articlesExist(articleUrls);
+            while(!articleQueue.isEmpty()) {
+                runQuery = false;
 
-            for(Article article: articles) {
-                Boolean value = articlesMap.get(article.getUrl());
-                Log.v(TAG, String.format("performSweep() articleID: %d, value: %s",
-                        article.getArticleId(), value));
+                Article article = articleQueue.element();
 
-                if(value != null && !value) {
-                    articlesToDelete.add(article.getId());
+                String url = article.getUrl();
+                if(TextUtils.isEmpty(url)) {
+                    Log.w(TAG, "performSweep() empty or null URL on article with ArticleID: "
+                            + article.getArticleId());
+
+                    articleQueue.remove();
+                    continue;
+                }
+
+                if(existQueryBuilder == null) {
+                    existQueryBuilder = wallabagServiceWrapper.getWallabagService()
+                            .getArticlesExistQueryBuilder(7950);
+                }
+
+                if(existQueryBuilder.addUrl(url)) {
+                    addedArticles.add(article);
+                    articleQueue.remove();
+                } else if(addedArticles.isEmpty()) {
+                    Log.e(TAG, "performSweep() can't check article with ArticleID: "
+                            + article.getArticleId());
+
+                    articleQueue.remove();
+                } else {
+                    Log.d(TAG, "performSweep() can't add more articles to query");
+
+                    runQuery = true;
+                    break;
                 }
             }
 
-            offset += perPage;
+            if(runQuery && existQueryBuilder != null) {
+                Log.d(TAG, "performSweep() checking articles; number of articles: "
+                        + addedArticles.size());
 
-            queryBuilder.offset(offset);
+                Map<String, Boolean> articlesMap = existQueryBuilder.execute();
+                existQueryBuilder.reset();
+
+                for(Article a: addedArticles) {
+                    Boolean value = articlesMap.get(a.getUrl());
+                    Log.v(TAG, String.format("performSweep() articleID: %d, exists: %s",
+                            a.getArticleId(), value));
+
+                    if(value != null && !value) {
+                        articlesToDelete.add(a.getId());
+                    }
+                }
+
+                addedArticles.clear();
+            }
         }
 
         if(!articlesToDelete.isEmpty()) {
