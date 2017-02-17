@@ -159,6 +159,10 @@ public class Article {
         this.estimatedReadingTime = estimatedReadingTime;
     }
 
+    public int getEstimatedReadingTime(int readingSpeed) {
+        return (int)Math.round(this.estimatedReadingTime * 200. / readingSpeed);
+    }
+
     public String getLanguage() {
         return this.language;
     }

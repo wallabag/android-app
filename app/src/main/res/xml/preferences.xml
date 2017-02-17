@@ -108,6 +108,14 @@
                 android:title="@string/pref_name_ui_article_fontSerif"
                 android:summary="@string/pref_desc_ui_article_fontSerif"
                 android:defaultValue="false"/>
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
+                android:key="@string/pref_key_ui_readingSpeed"
+                android:title="@string/pref_name_ui_readingSpeed"
+                android:summary="@string/pref_desc_ui_readingSpeed"
+                android:dialogTitle="@string/pref_name_ui_readingSpeed"
+                android:entries="@array/pref_option_readingSpeed_values"
+                android:entryValues="@array/pref_option_readingSpeed_values"
+                android:defaultValue="200"/>
         </PreferenceCategory>
         <PreferenceCategory
             android:key="@string/pref_key_ui_screenScrolling"

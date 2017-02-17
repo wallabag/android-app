@@ -117,6 +117,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
 
+        settings = App.getInstance().getSettings();
+
         DaoSession session = DbConnection.getSession();
         mArticleDao = session.getArticleDao();
         mArticle = getArticle(articleID);
@@ -135,13 +137,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         originalUrlText = mArticle.getUrl();
         Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
         String htmlContent = mArticle.getContent();
+        int estimatedReadingTime = mArticle.getEstimatedReadingTime(settings.getReadingSpeed());
+        htmlContent = getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
+                + htmlContent;
         if(BuildConfig.DEBUG) Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
         positionToRestore = mArticle.getArticleProgress();
         Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
         setTitle(titleText);
-
-        settings = App.getInstance().getSettings();
 
         if(settings.isImageCacheEnabled()) {
             Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");

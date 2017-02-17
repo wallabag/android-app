@@ -351,6 +351,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
 
+    public int getReadingSpeed() {
+        return getInt(R.string.pref_key_ui_readingSpeed, 200);
+    }
+
+    public void setReadingSpeed(int readingSpeed) {
+        setInt(R.string.pref_key_ui_readingSpeed, readingSpeed);
+    }
+
     public Sortable.SortOrder getListSortOrder() {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 

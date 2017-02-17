@@ -131,6 +131,7 @@
     <string name="manageTags_textField_hint">One or more tags separated by commas</string>
     <string name="manageTags_addNew">Add</string>
     <string name="manageTags_currentTags">Selected tags:</string>
+    <string name="content_estimatedReadingTime">Estimated reading time: %s min</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -175,6 +176,8 @@
     <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif typeface for article fonts</string>
+    <string name="pref_name_ui_readingSpeed">Reading speed</string>
+    <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scroll with volume buttons</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tap-to-scroll</string>
