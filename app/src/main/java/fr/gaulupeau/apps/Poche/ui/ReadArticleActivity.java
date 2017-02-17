@@ -136,6 +136,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onCreate: titleText=" + titleText);
         originalUrlText = mArticle.getUrl();
         Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
+        domainText = mArticle.getDomain();
+        Log.d(TAG, "onCreate: domainText=" + domainText);
         String htmlContent = mArticle.getContent();
         int estimatedReadingTime = mArticle.getEstimatedReadingTime(settings.getReadingSpeed());
         htmlContent = getString(R.string.content_estimatedReadingTime,
@@ -201,11 +203,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         } else {
             classAttr = "";
         }
-
-        try {
-            URL url = new URL(originalUrlText);
-            domainText = url.getHost();
-        } catch (Exception ignored) {}
 
         String htmlBase;
         try {

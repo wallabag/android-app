@@ -315,7 +315,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
             return oldArticle.getArchive().equals(newArticle.getArchive())
                     && oldArticle.getFavorite().equals(newArticle.getFavorite())
                     && TextUtils.equals(oldArticle.getTitle(), newArticle.getTitle())
-                    && TextUtils.equals(oldArticle.getUrl(), newArticle.getUrl());
+                    && TextUtils.equals(oldArticle.getDomain(), newArticle.getDomain());
         }
 
     }
