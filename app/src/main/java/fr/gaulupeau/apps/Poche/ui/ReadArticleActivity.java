@@ -139,11 +139,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         positionToRestore = mArticle.getArticleProgress();
         Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
-        // TODO: remove: debug
-        if(!mArticle.getTags().isEmpty()) {
-            Log.d(TAG, "onCreate: tags: " + mArticle.getTags().toString());
-        }
-
         setTitle(titleText);
 
         settings = App.getInstance().getSettings();
