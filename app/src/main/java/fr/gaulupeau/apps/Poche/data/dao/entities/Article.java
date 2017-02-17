@@ -27,11 +27,21 @@ public class Article {
 
     private String title;
 
+    private String domain;
+
     private String url;
+
+    private int estimatedReadingTime;
+
+    private String language;
+
+    private String previewPictureURL;
 
     private Boolean favorite;
 
     private Boolean archive;
+
+    private Date creationDate;
 
     private Date updateDate;
 
@@ -62,18 +72,24 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 1635440040)
-    public Article(Long id, Integer articleId, String content, String author,
-            String title, String url, Boolean favorite, Boolean archive,
+    @Generated(hash = 1312680328)
+    public Article(Long id, Integer articleId, String content, String author, String title,
+            String domain, String url, int estimatedReadingTime, String language,
+            String previewPictureURL, Boolean favorite, Boolean archive, Date creationDate,
             Date updateDate, Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
         this.author = author;
         this.title = title;
+        this.domain = domain;
         this.url = url;
+        this.estimatedReadingTime = estimatedReadingTime;
+        this.language = language;
+        this.previewPictureURL = previewPictureURL;
         this.favorite = favorite;
         this.archive = archive;
+        this.creationDate = creationDate;
         this.updateDate = updateDate;
         this.articleProgress = articleProgress;
         this.imagesDownloaded = imagesDownloaded;
@@ -119,12 +135,44 @@ public class Article {
         this.title = title;
     }
 
+    public String getDomain() {
+        return this.domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
     public String getUrl() {
         return url;
     }
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public int getEstimatedReadingTime() {
+        return this.estimatedReadingTime;
+    }
+
+    public void setEstimatedReadingTime(int estimatedReadingTime) {
+        this.estimatedReadingTime = estimatedReadingTime;
+    }
+
+    public String getLanguage() {
+        return this.language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    public String getPreviewPictureURL() {
+        return this.previewPictureURL;
+    }
+
+    public void setPreviewPictureURL(String previewPictureURL) {
+        this.previewPictureURL = previewPictureURL;
     }
 
     public Boolean getFavorite() {
@@ -141,6 +189,14 @@ public class Article {
 
     public void setArchive(Boolean archive) {
         this.archive = archive;
+    }
+
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Date getUpdateDate() {

@@ -211,8 +211,13 @@ public class Updater {
 
                 article.setTitle(apiArticle.title);
                 article.setContent(apiArticle.content);
+                article.setDomain(apiArticle.domainName);
                 article.setUrl(apiArticle.url);
+                article.setEstimatedReadingTime(apiArticle.readingTime);
+                article.setLanguage(apiArticle.language);
+                article.setPreviewPictureURL(apiArticle.previewPicture);
                 article.setArticleId(id);
+                article.setCreationDate(apiArticle.createdAt);
                 article.setUpdateDate(apiArticle.updatedAt);
                 article.setArchive(apiArticle.archived);
                 article.setFavorite(apiArticle.starred);
