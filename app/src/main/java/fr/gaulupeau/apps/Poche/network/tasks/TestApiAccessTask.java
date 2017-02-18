@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.di72nn.stuff.wallabag.apiwrapper.ParameterHandler;
@@ -90,9 +91,11 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
             }
 
             @Override
-            public void tokensUpdated(TokenResponse token) {
+            public boolean tokensUpdated(TokenResponse token) {
                 localRefreshToken = token.refreshToken;
                 localAccessToken = token.accessToken;
+
+                return !TextUtils.isEmpty(token.accessToken);
             }
         }, WallabagConnection.createClient(false, customSSLSettings));
 

@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.network;
 
+import android.text.TextUtils;
+
 import com.di72nn.stuff.wallabag.apiwrapper.*;
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
@@ -74,9 +76,11 @@ public class WallabagServiceWrapper {
             }
 
             @Override
-            public void tokensUpdated(TokenResponse token) {
+            public boolean tokensUpdated(TokenResponse token) {
                 if(token.refreshToken != null) settings.setApiRefreshToken(token.refreshToken);
                 settings.setApiAccessToken(token.accessToken);
+
+                return !TextUtils.isEmpty(token.accessToken);
             }
         }, WallabagConnection.createClient(false, settings.isCustomSSLSettings()));
     }
