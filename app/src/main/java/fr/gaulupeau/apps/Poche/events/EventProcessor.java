@@ -333,7 +333,7 @@ public class EventProcessor {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(context.getString(R.string.downloadPdfPathStart))
                 .setContentText(context.getString(R.string.downloadPdfProgress))
-                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setSmallIcon(R.drawable.ic_file_download_24dp)
                 .setOngoing(true);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -366,7 +366,7 @@ public class EventProcessor {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded))
                     .setContentText(context.getString(R.string.downloadPdfTouchToOpen))
-                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setSmallIcon(R.drawable.ic_file_download_24dp)
                     .setContentIntent(contentIntent)
                     .setProgress(0, 0, false);
 
