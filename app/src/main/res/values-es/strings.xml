@@ -62,7 +62,7 @@
     <string name="testConnection_errorMessage_noCSRF">Error al parsear el formulario de login</string>
     <string name="testConnection_errorMessage_incorrectCredentials">No se pudo iniciar sesión — revisa usuario y contraseña</string>
     <string name="testConnection_errorMessage_authProblems">Problemas relacionados con autorización. Estos son causados generalmente por redirecciones HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión</string>
     <string name="testConnection_errorMessage_unknown">Error desconocido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Considera cambiar de URL</string>
