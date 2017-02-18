@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+
 import java.util.Collection;
 
 import fr.gaulupeau.apps.Poche.App;
@@ -149,12 +151,12 @@ public class ServiceHelper {
     }
 
     public static void downloadArticleAsPDF(Context context, int articleID, Long operationID) {
-        downloadArticleAsFile(context, articleID, ActionRequest.DownloadFormat.PDF, operationID);
+        downloadArticleAsFile(context, articleID, WallabagService.ResponseFormat.PDF, operationID);
     }
 
     private static void downloadArticleAsFile(Context context, int articleID,
-                                             ActionRequest.DownloadFormat downloadFormat,
-                                             Long operationID) {
+                                              WallabagService.ResponseFormat downloadFormat,
+                                              Long operationID) {
         Log.d(TAG, "downloadArticleAsFile() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.DOWNLOAD_AS_FILE);

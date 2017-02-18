@@ -16,6 +16,8 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.Updater;
@@ -354,7 +356,7 @@ public class EventProcessor {
             intent.setAction(android.content.Intent.ACTION_VIEW);
             Uri uri = Uri.fromFile(event.getFile());
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    event.getRequest().getDownloadFormat().asString());
+                    event.getRequest().getDownloadFormat().toString().toLowerCase(Locale.US));
             intent.setDataAndType(uri, mimeType);
 
             Context context = getContext();

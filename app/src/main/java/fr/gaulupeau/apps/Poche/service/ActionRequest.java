@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Locale;
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
@@ -20,15 +20,6 @@ public class ActionRequest implements Parcelable {
         AUTO, MANUAL, MANUAL_BY_OPERATION
     }
 
-    public enum DownloadFormat {
-        EPUB, MOBI, PDF, CSV, JSON, TXT, XML;
-
-        public String asString() {
-            return name().toLowerCase(Locale.US);
-        }
-
-    }
-
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
 
     private Action action;
@@ -39,7 +30,7 @@ public class ActionRequest implements Parcelable {
     private QueueItem.ArticleChangeType articleChangeType;
     private String extra;
     private Updater.UpdateType updateType;
-    private DownloadFormat downloadFormat;
+    private WallabagService.ResponseFormat downloadFormat;
 
     private ActionRequest nextRequest;
 
@@ -107,11 +98,11 @@ public class ActionRequest implements Parcelable {
         this.updateType = updateType;
     }
 
-    public DownloadFormat getDownloadFormat() {
+    public WallabagService.ResponseFormat getDownloadFormat() {
         return downloadFormat;
     }
 
-    public void setDownloadFormat(DownloadFormat downloadFormat) {
+    public void setDownloadFormat(WallabagService.ResponseFormat downloadFormat) {
         this.downloadFormat = downloadFormat;
     }
 
@@ -161,7 +152,7 @@ public class ActionRequest implements Parcelable {
         }
         Integer downloadFormatInteger = readInteger(in);
         if(downloadFormatInteger != null) {
-            downloadFormat = DownloadFormat.values()[downloadFormatInteger];
+            downloadFormat = WallabagService.ResponseFormat.values()[downloadFormatInteger];
         }
         nextRequest = in.readParcelable(getClass().getClassLoader());
     }

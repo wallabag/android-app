@@ -6,7 +6,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.di72nn.stuff.wallabag.apiwrapper.CompatibilityHelper;
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import org.greenrobot.greendao.DaoException;
@@ -15,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
@@ -138,50 +138,14 @@ public class SecondaryService extends IntentServiceBase {
             if(CompatibilityHelper.isExportArticleSupported(
                     getWallabagServiceWrapper().getWallabagService())) {
 
-                WallabagService.ResponseFormat responseFormat;
-                ActionRequest.DownloadFormat downloadFormat = actionRequest.getDownloadFormat();
-                // TODO: use WallabagService.ResponseFormat instead of ActionRequest.DownloadFormat
-                switch(downloadFormat) {
-                    case PDF:
-                        responseFormat = WallabagService.ResponseFormat.PDF;
-                        break;
-
-                    case CSV:
-                        responseFormat = WallabagService.ResponseFormat.CSV;
-                        break;
-
-                    case EPUB:
-                        responseFormat = WallabagService.ResponseFormat.EPUB;
-                        break;
-
-                    case JSON:
-                        responseFormat = WallabagService.ResponseFormat.JSON;
-                        break;
-
-                    case MOBI:
-                        responseFormat = WallabagService.ResponseFormat.MOBI;
-                        break;
-
-                    case TXT:
-                        responseFormat = WallabagService.ResponseFormat.TXT;
-                        break;
-
-                    case XML:
-                        responseFormat = WallabagService.ResponseFormat.XML;
-                        break;
-
-                    default:
-                        throw new IllegalArgumentException("Unsupported format: " + downloadFormat);
-                }
-
                 // TODO: fix: not synchronized
                 source = getWallabagServiceWrapper().getWallabagService()
-                        .exportArticle(articleID, responseFormat).source();
+                        .exportArticle(articleID, actionRequest.getDownloadFormat()).source();
             } else {
                 Log.d(TAG, "downloadAsFile() downloading via API is not supported");
             }
 
-            String fileExt = actionRequest.getDownloadFormat().asString();
+            String fileExt = actionRequest.getDownloadFormat().toString().toLowerCase(Locale.US);
 
             // TODO: remove fallback
             if(source == null) {
