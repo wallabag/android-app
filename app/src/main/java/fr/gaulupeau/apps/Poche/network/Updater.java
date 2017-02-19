@@ -100,7 +100,7 @@ public class Updater {
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
-        performSweep(event, progressListener);
+        performSweep(event, progressListener, false);
 
         Log.i(TAG, "sweepDeletedArticles() finished");
 
@@ -375,7 +375,8 @@ public class Updater {
         return null;
     }
 
-    private void performSweep(ArticlesChangedEvent event, ProgressListener progressListener)
+    private void performSweep(ArticlesChangedEvent event, ProgressListener progressListener,
+                              boolean force)
             throws UnsuccessfulResponseException, IOException {
         Log.d(TAG, "performSweep() started");
 
@@ -395,14 +396,18 @@ public class Updater {
                 totalNumber, remoteTotal));
 
         if(totalNumber <= remoteTotal) {
-            Log.d(TAG, "performSweep() local number is not greater than remote; aborting sweep");
-            return;
+            Log.d(TAG, "performSweep() local number is not greater than remote");
+
+            if(!force) {
+                Log.d(TAG, "performSweep() aborting sweep");
+                return;
+            }
         }
 
         int dbQuerySize = 50;
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
-                .orderAsc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
+                .orderDesc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
 
         List<Long> articlesToDelete = new ArrayList<>();
 
@@ -494,6 +499,15 @@ public class Updater {
                 }
 
                 addedArticles.clear();
+
+                if(articlesToDelete.size() >= totalNumber - remoteTotal) {
+                    Log.d(TAG, "performSweep() number of found deleted articles >= expected number");
+
+                    if(!force) {
+                        Log.d(TAG, "performSweep() finishing sweep");
+                        break;
+                    }
+                }
             }
         }
 
