@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="label_name">Guárdalo!</string>
+    <string name="label_name">Bag it!</string>
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
     <string name="btnSettings">Configuración</string>
@@ -33,7 +33,7 @@
     <string name="bag_page">Guardar página</string>
     <string name="activity_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
-    <string name="bag_it">Guárdalo</string>
+    <string name="bag_it">Bag it!</string>
     <string name="share_article_title">Compartir artículo</string>
     <string name="share_text_extra">" vía @wallabagapp"</string>
     <string name="positive_answer">Sí</string>
