@@ -387,6 +387,17 @@ public class Updater {
             return;
         }
 
+        int remoteTotal = wallabagServiceWrapper.getWallabagService()
+                .getArticlesBuilder().perPage(1).execute().total;
+
+        Log.d(TAG, String.format("performSweep() local total: %d, remote total: %d",
+                totalNumber, remoteTotal));
+
+        if(totalNumber <= remoteTotal) {
+            Log.d(TAG, "performSweep() local number is not greater than remote; aborting sweep");
+            return;
+        }
+
         int dbQuerySize = 50;
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
