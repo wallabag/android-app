@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 import com.di72nn.stuff.wallabag.apiwrapper.models.Articles;
 
@@ -477,7 +478,18 @@ public class Updater {
                             a.getArticleId(), value));
 
                     if(value != null && !value) {
-                        articlesToDelete.add(a.getId());
+                        Log.v(TAG, String.format("performSweep() article not found remotely" +
+                                "; articleID: %d, article URL: %s", a.getArticleId(), a.getUrl()));
+
+                        Log.v(TAG, "performSweep() trying to find article by ID");
+                        try {
+                            // we could use `getArticle(int)`, but `getTags()` is lighter
+                            wallabagServiceWrapper.getWallabagService().getTags(a.getArticleId());
+                            Log.v(TAG, "performSweep() article found by ID");
+                        } catch(NotFoundException nfe) {
+                            Log.v(TAG, "performSweep() article not found by ID");
+                            articlesToDelete.add(a.getId());
+                        }
                     }
                 }
 
