@@ -101,7 +101,7 @@ public class EventProcessor {
         Updater.UpdateType updateType = settings.getAutoSyncType() == 0
                 ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
 
-        ServiceHelper.syncAndUpdate(getContext(), updateType, true, settings);
+        ServiceHelper.syncAndUpdate(getContext(), settings, updateType, true);
     }
 
     @Subscribe
@@ -525,11 +525,13 @@ public class EventProcessor {
         if(result == null || result.isSuccess()) {
             Log.d(TAG, "onLinkUploadedEvent() result is null or success");
 
-            if(getSettings().isAutoDownloadNewArticlesEnabled()
-                    && !getSettings().isOfflineQueuePending()) {
+            Settings settings = getSettings();
+            if(settings.isAutoDownloadNewArticlesEnabled()
+                    && !settings.isOfflineQueuePending()) {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
-                ServiceHelper.updateArticles(getContext(), Updater.UpdateType.FAST, true, null);
+                ServiceHelper.updateArticles(getContext(), settings,
+                        Updater.UpdateType.FAST, true, null);
             }
         }
     }

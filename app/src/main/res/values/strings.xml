@@ -122,6 +122,7 @@
     <string name="notification_expandedError">Error: %s</string>
     <string name="menu_lists_search">Search</string>
     <string name="menu_lists_changeSortOrder">Change sort order</string>
+    <string name="menu_lists_sweepDeletedArticles">\"Sweep\" deleted articles</string>
     <string name="menu_lists_fullUpdate">Full update</string>
     <string name="other_searchHint">Search by article title or text</string>
     <string name="menu_manageTags">Manage tags</string>
@@ -185,6 +186,17 @@
     <string name="pref_name_ui_screenScrolling_percent">Percent of screen height to scroll</string>
     <string name="pref_name_ui_screenScrolling_smooth">Use smooth scrolling</string>
 
+    <string name="pref_categoryName_sync">Synchronization</string>
+    <string name="pref_name_sync_syncTypes">Synchronization types</string>
+    <string name="pref_desc_sync_syncTypes">Press to show more info about synchronization types</string>
+    <string name="pref_desc_sync_syncTypes_text">There are two main synchronization types: \"Full\" and \"Fast\".\n\n
+        \"Full\" sync type deletes all local content and downloads it all over again. This type of sync is available in the options menu. It is recommended to use this option only as a last resort.\n\n
+        \"Fast\" sync type (incremental sync) downloads only changes made since the previous sync, which usually takes significantly less time and internet traffic. However, this method has a shortcoming: it can\'t detect remotely deleted article (so no local articles are deleted during \"Fast\" sync). This sync type is invoked with a pull-to-refresh gesture in any article list.\n\n
+        To remedy the shortcoming of the \"Fast\" sync type there is an option to run \"deleted articles sweeping\" that iterates over every local article and asks the server whether it is still present on the server - if it is not, the local article is removed. Depending on the number of articles you have, this operation may take some time, but it saves a lot of internet traffic comparing to \"Full\" sync.\n\n
+        None of these functions affect client-to-server sync: your local changes will always be sent to the server before updating local content.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Enable \"Deleted articles sweeping\" after \"fast\" sync</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Read sync types description above for more info</string>
     <string name="pref_categoryName_autoSync">Auto-sync</string>
     <string name="pref_name_autoSync_enabled">Enable auto-sync</string>
     <string name="pref_desc_autoSync_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>

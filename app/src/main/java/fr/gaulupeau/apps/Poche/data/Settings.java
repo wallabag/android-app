@@ -506,6 +506,14 @@ public class Settings {
         setBoolean(R.string.pref_key_tts_autoplayNext, value);
     }
 
+    public boolean isSweepingAfterFastSyncEnabled() {
+        return getBoolean(R.string.pref_key_sync_sweepingAfterFastSync_enabled, false);
+    }
+
+    public void setSweepingAfterFastSyncEnabled(boolean value) {
+        setBoolean(R.string.pref_key_sync_sweepingAfterFastSync_enabled, value);
+    }
+
     public boolean isAutoSyncEnabled() {
         return getBoolean(R.string.pref_key_autoSync_enabled, false);
     }

@@ -101,6 +101,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
+            setOnClickListener(R.string.pref_key_sync_syncTypes_description);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
@@ -374,6 +375,17 @@ public class SettingsActivity extends BaseActionBarActivity {
                             getActivity(), this, this, settings, false);
                     configurationTestHelper.test();
 
+                    return true;
+                }
+                case R.string.pref_key_sync_syncTypes_description: {
+                    Activity activity = getActivity();
+                    if(activity != null) {
+                        new AlertDialog.Builder(activity)
+                                .setTitle(R.string.pref_name_sync_syncTypes)
+                                .setMessage(R.string.pref_desc_sync_syncTypes_text)
+                                .setPositiveButton(R.string.ok, null)
+                                .show();
+                    }
                     return true;
                 }
                 case R.string.pref_key_misc_wipeDB: {

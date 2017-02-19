@@ -20,8 +20,13 @@
         android:orderInCategory="20"
         app:showAsAction="never"/>
     <item
+        android:id="@+id/menu_main_sweepDeletedArticles"
+        android:title="@string/menu_lists_sweepDeletedArticles"
+        android:orderInCategory="21"
+        app:showAsAction="never"/>
+    <item
         android:id="@+id/menu_main_fullUpdate"
         android:title="@string/menu_lists_fullUpdate"
-        android:orderInCategory="21"
+        android:orderInCategory="22"
         app:showAsAction="never"/>
 </menu>

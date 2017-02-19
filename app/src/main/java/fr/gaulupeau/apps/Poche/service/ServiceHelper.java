@@ -9,7 +9,6 @@ import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 
 import java.util.Collection;
 
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
@@ -68,30 +67,26 @@ public class ServiceHelper {
         startService(context, request);
     }
 
-    public static void syncAndUpdate(Context context, Updater.UpdateType updateType,
-                                     boolean auto, Settings settings) {
-        syncAndUpdate(context, updateType, auto, settings, null);
+    public static void syncAndUpdate(Context context, Settings settings,
+                                     Updater.UpdateType updateType, boolean auto) {
+        syncAndUpdate(context, settings, updateType, auto, null);
     }
 
-    private static void syncAndUpdate(Context context, Updater.UpdateType updateType,
-                                      boolean auto, Settings settings, Long operationID) {
-        Log.d(TAG, "syncAndUpdate(conditional) started");
-
-        if(settings != null && settings.isOfflineQueuePending()) {
-            syncAndUpdate(context, updateType, auto, operationID);
-        } else {
-            updateArticles(context, updateType, auto, operationID);
-        }
-    }
-
-    private static void syncAndUpdate(Context context, Updater.UpdateType updateType,
+    private static void syncAndUpdate(Context context, Settings settings,
+                                      Updater.UpdateType updateType,
                                       boolean auto, Long operationID) {
         Log.d(TAG, "syncAndUpdate() started");
 
-        ActionRequest syncRequest = getSyncQueueRequest(auto, false);
-        syncRequest.setNextRequest(getUpdateArticlesRequest(updateType, auto, operationID));
+        if(settings != null && settings.isOfflineQueuePending()) {
+            Log.d(TAG, "syncAndUpdate() running sync and update");
 
-        startService(context, syncRequest);
+            ActionRequest syncRequest = getSyncQueueRequest(auto, false);
+            syncRequest.setNextRequest(getUpdateArticlesRequest(settings, updateType, auto, operationID));
+
+            startService(context, syncRequest);
+        } else {
+            updateArticles(context, settings, updateType, auto, operationID);
+        }
     }
 
     public static void syncQueue(Context context) {
@@ -116,30 +111,37 @@ public class ServiceHelper {
         return request;
     }
 
-    public static void updateArticles(Context context,
+    public static void updateArticles(Context context, Settings settings,
                                       Updater.UpdateType updateType,
                                       boolean auto, Long operationID) {
         Log.d(TAG, "updateArticles() started");
 
-        startService(context, getUpdateArticlesRequest(updateType, auto, operationID));
+        startService(context, getUpdateArticlesRequest(settings, updateType, auto, operationID));
     }
 
-    private static ActionRequest getUpdateArticlesRequest(Updater.UpdateType updateType,
+    private static ActionRequest getUpdateArticlesRequest(Settings settings,
+                                                          Updater.UpdateType updateType,
                                                           boolean auto, Long operationID) {
         ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_ARTICLES);
         request.setUpdateType(updateType);
         request.setOperationID(operationID);
         if(auto) request.setRequestType(ActionRequest.RequestType.AUTO);
 
-        if(updateType == Updater.UpdateType.FAST) {
+        if(updateType == Updater.UpdateType.FAST && settings.isSweepingAfterFastSyncEnabled()) {
             request.setNextRequest(getSweepDeletedArticlesRequest(auto, operationID));
         }
 
-        if(App.getInstance().getSettings().isImageCacheEnabled()) {
+        if(settings.isImageCacheEnabled()) {
             addNextRequest(request, getFetchImagesRequest());
         }
 
         return request;
+    }
+
+    public static void sweepDeletedArticles(Context context) {
+        Log.d(TAG, "sweepDeletedArticles() started");
+
+        startService(context, getSweepDeletedArticlesRequest(false, null));
     }
 
     private static ActionRequest getSweepDeletedArticlesRequest(boolean auto, Long operationID) {

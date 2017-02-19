@@ -142,9 +142,29 @@
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:key="@string/pref_key_autoSync"
-        android:title="@string/pref_categoryName_autoSync"
+        android:key="@string/pref_key_sync"
+        android:title="@string/pref_categoryName_sync"
         android:persistent="false">
+        <PreferenceCategory
+            android:key="@string/pref_key_sync_category"
+            android:title="@string/pref_categoryName_sync"
+            android:persistent="false">
+            <Preference
+                android:key="@string/pref_key_sync_syncTypes_description"
+                android:title="@string/pref_name_sync_syncTypes"
+                android:summary="@string/pref_desc_sync_syncTypes"
+                android:persistent="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_sync_sweepingAfterFastSync_enabled"
+                android:title="@string/pref_name_sync_sweepingAfterFastSync_enabled"
+                android:summary="@string/pref_desc_sync_sweepingAfterFastSync_enabled"
+                android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_imageCache_enabled"
+                android:title="@string/pref_name_imageCache_enabled"
+                android:summary="@string/pref_desc_imageCache_enabled"
+                android:defaultValue="false"/>
+        </PreferenceCategory>
         <PreferenceCategory
             android:key="@string/pref_key_autoSync_category"
             android:title="@string/pref_categoryName_autoSync"
@@ -177,11 +197,6 @@
                 android:key="@string/pref_key_autoDlNew_enabled"
                 android:title="@string/pref_name_autoDlNew_enabled"
                 android:summary="@string/pref_desc_autoDlNew_enabled"
-                android:defaultValue="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_imageCache_enabled"
-                android:title="@string/pref_name_imageCache_enabled"
-                android:summary="@string/pref_desc_imageCache_enabled"
                 android:defaultValue="false"/>
         </PreferenceCategory>
     </PreferenceScreen>

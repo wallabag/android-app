@@ -279,6 +279,7 @@ public class MainService extends IntentServiceBase {
 
                 boolean stop = true;
                 switch(itemError) {
+                    case NOT_FOUND_LOCALLY:
                     case NEGATIVE_RESPONSE:
                         stop = false;
                         break;
@@ -331,7 +332,8 @@ public class MainService extends IntentServiceBase {
                 .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
 
         if(article == null) {
-            return new ActionResult(ActionResult.ErrorType.UNKNOWN, "Article is not found locally");
+            return new ActionResult(ActionResult.ErrorType.NOT_FOUND_LOCALLY,
+                    "Article is not found locally");
         }
 
         WallabagService.ModifyArticleBuilder builder

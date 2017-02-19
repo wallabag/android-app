@@ -361,6 +361,10 @@ public class MainActivity extends AppCompatActivity
                 syncQueue();
                 return true;
 
+            case R.id.menu_main_sweepDeletedArticles:
+                sweepDeletedArticles();
+                return true;
+
             case R.id.menu_main_fullUpdate:
                 fullUpdate(true);
                 return true;
@@ -712,6 +716,15 @@ public class MainActivity extends AppCompatActivity
         ServiceHelper.syncQueue(this);
     }
 
+    private void sweepDeletedArticles() {
+        if(!WallabagConnection.isNetworkAvailable()) {
+            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ServiceHelper.sweepDeletedArticles(this);
+    }
+
     private void updateAllFeedsIfDbIsEmpty() {
         if(settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
             fullUpdate(false);
@@ -735,7 +748,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncAndUpdate(this, updateType, false, settings);
+            ServiceHelper.syncAndUpdate(this, settings, updateType, false);
 
             result = true;
         } else {

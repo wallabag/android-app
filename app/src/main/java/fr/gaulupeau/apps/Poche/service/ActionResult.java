@@ -5,7 +5,7 @@ public class ActionResult {
     public enum ErrorType {
         TEMPORARY, NO_NETWORK,
         INCORRECT_CONFIGURATION, INCORRECT_CREDENTIALS,
-        NOT_FOUND, NEGATIVE_RESPONSE, UNKNOWN
+        NOT_FOUND, NOT_FOUND_LOCALLY, NEGATIVE_RESPONSE, UNKNOWN
     }
 
     private boolean success = true;
