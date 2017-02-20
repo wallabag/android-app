@@ -27,7 +27,7 @@ public class Settings {
 
     private static final String TAG = Settings.class.getSimpleName();
 
-    private static final int PREFERENCES_VERSION = 1;
+    private static final int PREFERENCES_VERSION = 100;
 
     private static Map<String, Integer> preferenceKeysMap;
 
@@ -76,7 +76,7 @@ public class Settings {
         if(settings.isFirstRun()) {
             settings.setFirstRun(false);
 
-            ConnectionWizardActivity.runWizard(context, false);
+            ConnectionWizardActivity.runWizard(context, false, false, true);
 
             return true;
         }
@@ -120,26 +120,24 @@ public class Settings {
             return;
         }
 
+        SharedPreferences.Editor prefEditor = pref.edit();
+
         if(prefVersion == -1) { // preferences are not set
             PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
 
-            if(LegacySettingsHelper.migrateLegacySettings(context, pref)) {
+            if(LegacySettingsHelper.migrateLegacySettings(context, prefEditor)) {
                 setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
                 if(getDefaultCustomSSLSettingsValue()) {
-                    pref.edit().putBoolean(context.getString(
-                            R.string.pref_key_connection_advanced_customSSLSettings), true)
-                            .apply();
+                    prefEditor.putBoolean(context.getString(
+                            R.string.pref_key_connection_advanced_customSSLSettings), true);
                 }
 
                 Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
                         ? Themes.Theme.LIGHT_CONTRAST : Themes.Theme.LIGHT;
-                pref.edit().putString(context.getString(R.string.pref_key_ui_theme), theme.toString())
-                        .apply();
+                prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
             }
-
-            SharedPreferences.Editor prefEditor = pref.edit();
 
             if(!contains(R.string.pref_key_tts_speed)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_speed), 1);
@@ -147,12 +145,15 @@ public class Settings {
             if(!contains(R.string.pref_key_tts_pitch)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_pitch), 1);
             }
-
-            prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),
-                    PREFERENCES_VERSION);
-
-            prefEditor.apply();
+        } else if(prefVersion < 100) { // v1.*
+            prefEditor.putBoolean(context.getString(R.string.pref_key_internal_firstRun), true);
+            prefEditor.putBoolean(context.getString(R.string.pref_key_internal_configurationIsOk), false);
         }
+
+        prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),
+                PREFERENCES_VERSION);
+
+        prefEditor.apply();
     }
 
     public SharedPreferences getSharedPreferences() {

@@ -32,6 +32,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_SKIP_WELCOME = "skip_welcome";
     public static final String EXTRA_SHOW_SUMMARY = "show_summary";
+    public static final String EXTRA_FILL_OUT_FROM_SETTINGS = "fill_out_from_settings";
 
     private static final String TAG = "ConnectionWizard";
 
@@ -57,13 +58,15 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String PAGE_SUMMARY = "summary";
 
     public static void runWizard(Context context, boolean skipWelcome) {
-        runWizard(context, skipWelcome, false);
+        runWizard(context, skipWelcome, false, false);
     }
 
-    public static void runWizard(Context context, boolean skipWelcome, boolean showSummary) {
+    public static void runWizard(Context context, boolean skipWelcome, boolean showSummary,
+                                 boolean fillOutFromSettings) {
         Intent intent = new Intent(context, ConnectionWizardActivity.class);
         if(skipWelcome) intent.putExtra(EXTRA_SKIP_WELCOME, true);
         if(showSummary) intent.putExtra(EXTRA_SHOW_SUMMARY, true);
+        if(fillOutFromSettings) intent.putExtra(EXTRA_FILL_OUT_FROM_SETTINGS, true);
         context.startActivity(intent);
     }
 
@@ -81,28 +84,57 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             String currentPage = null;
 
+            boolean fillOutData = false;
+            String url = null, username = null, password = null;
+
             String dataString = intent.getDataString();
             if(dataString != null) {
                 Log.d(TAG, "onCreate() got data string: " + dataString);
                 try {
                     ConnectionData connectionData = parseLoginData(dataString);
 
-                    if(connectionData.username != null) {
-                        bundle.putString(DATA_USERNAME, connectionData.username);
-                    }
+                    url = connectionData.url;
+                    username = connectionData.username;
 
-                    if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(connectionData.url)) {
-                        bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
-                    } else if(connectionData.url != null) {
-                        bundle.putString(DATA_URL, connectionData.url);
-                    }
-
-                    currentPage = PAGE_PROVIDER_SELECTION;
+                    fillOutData = true;
                 } catch(IllegalArgumentException e) {
                     Log.w(TAG, "onCreate() login data parsing exception", e);
                     Toast.makeText(this, R.string.connectionWizard_misc_incorrectConnectionURI,
                             Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            if(intent.getBooleanExtra(EXTRA_FILL_OUT_FROM_SETTINGS, false)) {
+                Settings settings = App.getInstance().getSettings();
+
+                url = settings.getUrl();
+                username = settings.getUsername();
+                password = settings.getPassword();
+
+                fillOutData = true;
+            }
+
+            if(fillOutData) {
+                boolean filledOutSomething = false;
+
+                if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(url)) {
+                    bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
+                    filledOutSomething = true;
+                } else if(!TextUtils.isEmpty(url)) {
+                    bundle.putString(DATA_URL, url);
+                    filledOutSomething = true;
+                }
+
+                if(!TextUtils.isEmpty(username)) {
+                    bundle.putString(DATA_USERNAME, username);
+                    filledOutSomething = true;
+                }
+                if(!TextUtils.isEmpty(password)) {
+                    bundle.putString(DATA_PASSWORD, password);
+                    filledOutSomething = true;
+                }
+
+                if(filledOutSomething) currentPage = PAGE_PROVIDER_SELECTION;
             }
 
             if(currentPage == null && intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
@@ -354,15 +386,19 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             View v = super.onCreateView(inflater, container, savedInstanceState);
 
             if (v != null) {
-                EditText urlEditText = (EditText) v.findViewById(R.id.wallabag_url);
-                EditText usernameEditText = (EditText) v.findViewById(R.id.username);
+                EditText urlEditText = (EditText)v.findViewById(R.id.wallabag_url);
+                EditText usernameEditText = (EditText)v.findViewById(R.id.username);
+                EditText passwordEditText = (EditText)v.findViewById(R.id.password);
 
-                if (urlEditText != null && getArguments().containsKey(DATA_URL)) {
+                if(urlEditText != null && getArguments().containsKey(DATA_URL)) {
                     urlEditText.setText(getArguments().getString(DATA_URL));
                 }
 
-                if (usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
+                if(usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
                     usernameEditText.setText(getArguments().getString(DATA_USERNAME));
+                }
+                if(passwordEditText != null && getArguments().containsKey(DATA_PASSWORD)) {
+                    passwordEditText.setText(getArguments().getString(DATA_PASSWORD));
                 }
             }
 

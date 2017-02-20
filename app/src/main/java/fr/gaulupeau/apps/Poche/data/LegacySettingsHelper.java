@@ -38,12 +38,11 @@ class LegacySettingsHelper {
     static final String FIRST_SYNC_DONE = "first_sync_done";
     static final String PENDING_OFFLINE_QUEUE = "offline_queue.pending";
 
-    static boolean migrateLegacySettings(Context cx, SharedPreferences pref) {
+    static boolean migrateLegacySettings(Context cx, SharedPreferences.Editor prefEditor) {
         SharedPreferences legacyPref = cx.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
 
         if(!legacyPref.contains("pocheUrl")) return false;
 
-        SharedPreferences.Editor prefEditor = pref.edit();
         migrateStringPref(cx, URL, R.string.pref_key_connection_url, legacyPref, prefEditor);
         migrateStringPref(cx, USERNAME, R.string.pref_key_connection_username, legacyPref, prefEditor);
         migrateStringPref(cx, PASSWORD, R.string.pref_key_connection_password, legacyPref, prefEditor);
