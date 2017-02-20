@@ -34,7 +34,7 @@
     <string name="page_url">Artikel-URL</string>
     <string name="bag_it">Artikel speichern</string>
     <string name="share_article_title">Artikel teilen</string>
-    <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="share_text_extra">" über @wallabagapp"</string>
     <string name="positive_answer">Ja</string>
     <string name="negative_answer">Nein</string>
     <string name="no_articles">Keine Artikel</string>
@@ -220,11 +220,11 @@
     <string name="connectionWizard_misc_incorrectConnectionURI">Falsche Verbindungs-URL genutzt</string>
 
     <string name="notification_downloadingImages">Bilder herunterladen</string>
-    <string name="menu_lists_search">Suche</string>
+    <string name="menu_lists_search">Suchen</string>
     <string name="menu_lists_changeSortOrder">Ändere Sortierung</string>
-    <string name="other_searchHint">Suche nach Artikelüberschrift oder Text</string>
+    <string name="other_searchHint">Suche nach Artikelüberschrift oder -text</string>
 
-    <string name="pref_name_imageCache_enabled">Speicher in Artikel eingebettete Bilder zwischen</string>
+    <string name="pref_name_imageCache_enabled">Speichere in Artikel eingebettete Bilder zwischen</string>
     <string name="pref_desc_imageCache_enabled">Läd automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
 
 </resources>
