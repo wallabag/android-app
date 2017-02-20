@@ -9,8 +9,8 @@ android {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 32
-        versionName "1.12.2"
+        versionCode 100
+        versionName "2.0.0a"
     }
 
     lintOptions {
@@ -39,7 +39,7 @@ android {
 }
 
 greendao {
-    schemaVersion 9
+    schemaVersion 100
     daoPackage 'fr.gaulupeau.apps.Poche.data.dao'
 }
 
