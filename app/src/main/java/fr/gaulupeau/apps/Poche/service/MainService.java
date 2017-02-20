@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
@@ -45,6 +46,8 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 public class MainService extends IntentServiceBase {
 
     private static final String TAG = MainService.class.getSimpleName();
+
+    private Updater updater;
 
     public MainService() {
         super(MainService.class.getSimpleName());
@@ -401,17 +404,28 @@ public class MainService extends IntentServiceBase {
         ArticlesChangedEvent event = null;
 
         if(WallabagConnection.isNetworkAvailable()) {
+            final Settings settings = getSettings();
+
             try {
-                Updater.ProgressListener progressListener = new Updater.ProgressListener() {
+                Updater.UpdateListener updateListener = new Updater.UpdateListener() {
                     @Override
                     public void onProgress(int current, int total) {
                         postEvent(new UpdateArticlesProgressEvent(
                                 actionRequest, current, total));
                     }
+
+                    @Override
+                    public void onSuccess(long latestUpdatedItemTimestamp) {
+                        Log.i(TAG, "updateArticles() update successful, saving timestamps");
+
+                        settings.setLatestUpdatedItemTimestamp(latestUpdatedItemTimestamp);
+                        settings.setLatestUpdateRunTimestamp(System.currentTimeMillis());
+                        settings.setFirstSyncDone(true);
+                    }
                 };
 
-                event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
-                        .update(updateType, progressListener);
+                event = getUpdater().update(updateType,
+                        settings.getLatestUpdatedItemTimestamp(), updateListener);
             } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateArticles()");
                 result.updateWith(r);
@@ -449,8 +463,7 @@ public class MainService extends IntentServiceBase {
                     }
                 };
 
-                event = new Updater(getSettings(), getDaoSession(), getWallabagServiceWrapper())
-                        .sweepDeletedArticles(progressListener);
+                event = getUpdater().sweepDeletedArticles(progressListener);
             } catch(UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "sweepDeletedArticles()");
                 result.updateWith(r);
@@ -470,6 +483,14 @@ public class MainService extends IntentServiceBase {
 
         Log.d(TAG, "sweepDeletedArticles() finished");
         return result;
+    }
+
+    private Updater getUpdater() throws IncorrectConfigurationException {
+        if(updater == null) {
+            updater = new Updater(getDaoSession(), getWallabagServiceWrapper());
+        }
+
+        return updater;
     }
 
 }

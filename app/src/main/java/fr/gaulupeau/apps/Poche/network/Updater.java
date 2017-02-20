@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -37,28 +36,28 @@ public class Updater {
         void onProgress(int current, int total);
     }
 
+    public interface UpdateListener extends ProgressListener {
+        void onSuccess(long latestUpdatedItemTimestamp);
+    }
+
     private static final String TAG = Updater.class.getSimpleName();
 
-    private final Settings settings;
     private final DaoSession daoSession;
     private final WallabagServiceWrapper wallabagServiceWrapper;
 
-    public Updater(Settings settings, DaoSession daoSession,
-                   WallabagServiceWrapper wallabagServiceWrapper) {
-        this.settings = settings;
+    public Updater(DaoSession daoSession, WallabagServiceWrapper wallabagServiceWrapper) {
         this.daoSession = daoSession;
         this.wallabagServiceWrapper = wallabagServiceWrapper;
     }
 
-    public ArticlesChangedEvent update(UpdateType updateType, ProgressListener progressListener)
+    public ArticlesChangedEvent update(UpdateType updateType, long latestUpdatedItemTimestamp,
+                                       UpdateListener updateListener)
             throws UnsuccessfulResponseException, IOException {
         boolean clean = updateType != UpdateType.FAST;
 
         Log.i(TAG, "update() started; clean: " + clean);
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
-
-        long latestUpdatedItemTimestamp = 0;
 
         daoSession.getDatabase().beginTransaction();
         try {
@@ -71,12 +70,11 @@ public class Updater {
                 event.setInvalidateAll(true);
             }
 
-            latestUpdatedItemTimestamp = settings.getLatestUpdatedItemTimestamp();
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
 
             Log.d(TAG, "update() updating articles");
             latestUpdatedItemTimestamp = performUpdate(
-                    event, clean, latestUpdatedItemTimestamp, progressListener);
+                    event, clean, latestUpdatedItemTimestamp, updateListener);
             Log.d(TAG, "update() articles updated");
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
 
@@ -85,9 +83,7 @@ public class Updater {
             daoSession.getDatabase().endTransaction();
         }
 
-        settings.setLatestUpdatedItemTimestamp(latestUpdatedItemTimestamp);
-        settings.setLatestUpdateRunTimestamp(System.currentTimeMillis());
-        settings.setFirstSyncDone(true);
+        if(updateListener != null) updateListener.onSuccess(latestUpdatedItemTimestamp);
 
         Log.i(TAG, "update() finished");
 
@@ -108,7 +104,7 @@ public class Updater {
     }
 
     private long performUpdate(ArticlesChangedEvent event, boolean full,
-                               long latestUpdatedItemTimestamp, ProgressListener progressListener)
+                               long latestUpdatedItemTimestamp, UpdateListener updateListener)
             throws UnsuccessfulResponseException, IOException {
         Log.d(TAG, String.format("performUpdate(full: %s, latestUpdatedItemTimestamp: %d) started",
                 full, latestUpdatedItemTimestamp));
@@ -171,8 +167,8 @@ public class Updater {
             Log.d(TAG, String.format("performUpdate() page: %d/%d, total articles: %d",
                     articles.page, articles.pages, articles.total));
 
-            if(progressListener != null) {
-                progressListener.onProgress((articles.page - 1) * perPage, articles.total);
+            if(updateListener != null) {
+                updateListener.onProgress((articles.page - 1) * perPage, articles.total);
             }
 
             if(articles.embedded.items.isEmpty()) {
