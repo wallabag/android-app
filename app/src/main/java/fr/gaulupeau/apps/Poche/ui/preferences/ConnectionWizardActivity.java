@@ -143,8 +143,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             next(currentPage, bundle, true);
         } else {
-            // TODO: check
-            Log.w(TAG, "onCreate() savedInstanceState != null");
+            Log.d(TAG, "onCreate() savedInstanceState != null");
         }
     }
 

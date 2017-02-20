@@ -44,15 +44,6 @@
                 android:key="@string/pref_key_connection_api_clientSecret"
                 android:title="@string/pref_name_connection_api_clientSecret"
                 android:defaultValue=""/>
-            <!-- TODO: remove: debug -->
-            <EditTextPreference
-                android:key="@string/pref_key_connection_api_refreshToken"
-                android:title="Refresh token"
-                android:defaultValue=""/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_api_accessToken"
-                android:title="Access token"
-                android:defaultValue=""/>
         </PreferenceCategory>
         <PreferenceScreen
             android:key="@string/pref_key_connection_advanced"

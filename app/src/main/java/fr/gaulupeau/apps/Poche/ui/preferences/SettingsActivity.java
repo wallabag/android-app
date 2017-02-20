@@ -57,8 +57,6 @@ public class SettingsActivity extends BaseActionBarActivity {
                 R.string.pref_key_connection_password,
                 R.string.pref_key_connection_api_clientID,
                 R.string.pref_key_connection_api_clientSecret,
-                R.string.pref_key_connection_api_refreshToken, // TODO: remove: debug
-                R.string.pref_key_connection_api_accessToken, // TODO: remove: debug
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
@@ -491,8 +489,6 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 case R.string.pref_key_connection_password:
                 case R.string.pref_key_connection_api_clientSecret:
-                case R.string.pref_key_connection_api_refreshToken: // TODO: remove: debug
-                case R.string.pref_key_connection_api_accessToken: // TODO: remove: debug
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                     setPasswordSummary(key);
                     break;

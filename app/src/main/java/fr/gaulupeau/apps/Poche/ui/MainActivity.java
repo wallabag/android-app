@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity
         if(searchQuery == null) performSearch("");
 
         if(currentFragmentType == null) currentFragmentType = FRAGMENT_ARTICLE_LISTS;
-        // TODO: set nav drawer selected item
 
         if(savedInstanceState == null) {
             setCurrentFragment(currentFragmentType);
