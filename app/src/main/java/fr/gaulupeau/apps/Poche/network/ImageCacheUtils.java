@@ -291,6 +291,11 @@ public class ImageCacheUtils {
             } else {
                 // TODO: better SD Card detection
                 for(File extStorageDir: extStorage) {
+                    if(extStorageDir == null) {
+                        Log.w(TAG, "getExternalStoragePath: extStorageDir is null");
+                        continue;
+                    }
+
                     Log.d(TAG, "getExternalStoragePath: extStorageDir.getPath()="
                             + extStorageDir.getPath());
                     returnPath = extStorageDir.getPath();
