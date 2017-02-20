@@ -57,8 +57,9 @@ On Android versions prior to Android 6.0, wallabag requires the following permis
 - Full Network Access.
 - View Network Connections.
 - Run at startup.
+- Read and write access to external storage.
 
-The "Run at startup" permission is only used if Auto-Sync is enabled and is not utilised when Auto-Sync is disabled. The other two permissions are made use of for downloading content for viewing offline.
+The "Run at startup" permission is only used if Auto-Sync is enabled and is not utilised otherwise. The network access permissions are made use of for downloading content. The external storage permission is used to cache article images for viewing offline.
 
 ## Contributing
 wallabag app is a free and open source project developed by volunteers. Any contributions are welcome. Here are a few ways you can help:
