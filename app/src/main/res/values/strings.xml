@@ -198,6 +198,8 @@
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Enable \"Deleted articles sweeping\" after \"fast\" sync</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Read sync types description above for more info</string>
     <string name="pref_categoryName_autoSync">Auto-sync</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Enable auto-sync on application start</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">The app will sync when you open it</string>
     <string name="pref_name_autoSync_enabled">Enable auto-sync</string>
     <string name="pref_desc_autoSync_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>
     <string name="pref_name_autoSync_interval">Auto-sync interval</string>

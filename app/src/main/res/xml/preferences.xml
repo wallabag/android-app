@@ -170,6 +170,11 @@
             android:title="@string/pref_categoryName_autoSync"
             android:persistent="false">
             <CheckBoxPreference
+                android:key="@string/pref_key_autoSync_onStartup_enabled"
+                android:title="@string/pref_name_autoSync_onStartup_enabled"
+                android:summary="@string/pref_decs_autoSync_onStartup_enabled"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_autoSync_enabled"
                 android:title="@string/pref_name_autoSync_enabled"
                 android:summary="@string/pref_desc_autoSync_enabled"

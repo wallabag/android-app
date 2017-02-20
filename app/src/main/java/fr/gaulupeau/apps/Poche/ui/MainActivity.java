@@ -208,9 +208,7 @@ public class MainActivity extends AppCompatActivity
 
         checkConfigurationOnResume = true;
 
-        if(!firstSyncDone) {
-            tryToUpdateOnResume = true;
-        }
+        tryToUpdateOnResume = true;
     }
 
     @Override
@@ -251,7 +249,11 @@ public class MainActivity extends AppCompatActivity
         if(tryToUpdateOnResume) {
             tryToUpdateOnResume = false;
 
-            updateAllFeedsIfDbIsEmpty();
+            if(!firstSyncDone) {
+                updateAllFeedsIfDbIsEmpty();
+            } else {
+                updateOnStartup();
+            }
         }
     }
 
@@ -728,6 +730,15 @@ public class MainActivity extends AppCompatActivity
     private void updateAllFeedsIfDbIsEmpty() {
         if(settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
             fullUpdate(false);
+        }
+    }
+
+    private void updateOnStartup() {
+        long delay = 5 * 60 * 1000; // 5 minutes
+        if(settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk()
+                && settings.isFirstSyncDone()
+                && settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
+            updateArticles(false, Updater.UpdateType.FAST);
         }
     }
 

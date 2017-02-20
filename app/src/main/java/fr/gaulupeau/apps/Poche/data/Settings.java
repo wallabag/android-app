@@ -514,6 +514,14 @@ public class Settings {
         setBoolean(R.string.pref_key_sync_sweepingAfterFastSync_enabled, value);
     }
 
+    public boolean isAutoSyncOnStartupEnabled() {
+        return getBoolean(R.string.pref_key_autoSync_onStartup_enabled, true);
+    }
+
+    public void setAutoSyncOnStartupEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoSync_onStartup_enabled, value);
+    }
+
     public boolean isAutoSyncEnabled() {
         return getBoolean(R.string.pref_key_autoSync_enabled, false);
     }

@@ -47,6 +47,7 @@
     <string name="pref_key_sync_sweepingAfterFastSync_enabled" translatable="false">sync.sweepingAfterFastSync.enabled</string>
     <string name="pref_key_autoSync" translatable="false">autoSync</string>
     <string name="pref_key_autoSync_category" translatable="false">autoSync.category</string>
+    <string name="pref_key_autoSync_onStartup_enabled" translatable="false">autoSync.onStartup.enabled</string>
     <string name="pref_key_autoSync_enabled" translatable="false">autoSync.enabled</string>
     <string name="pref_key_autoSync_interval" translatable="false">autoSync.interval</string>
     <string name="pref_key_autoSync_type" translatable="false">autoSync.type</string>
