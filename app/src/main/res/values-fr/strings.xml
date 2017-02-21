@@ -82,6 +82,10 @@
     <string name="downloadPdfTouchToOpen">Appuyez pour ouvrir</string>
     <string name="downloadPdfProgressDetail">wallabag télécharge votre article %s en PDF</string>
     <string name="downloadPdfProgress">wallabag télécharge votre article en PDF</string>
+    <string name="notification_downloadingImages">Téléchargement des images</string>
+    <string name="menu_lists_search">Rechercher</string>
+    <string name="menu_lists_changeSortOrder">Changer l\'ordre de tri</string>
+    <string name="other_searchHint">Rechercher dans le titre de l\'article ou dans le texte</string>
 
     <string name="notification_error">Erreur</string>
 
@@ -212,4 +216,7 @@
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Faire défiler à l\'aide des boutons du volume</string>
     <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de connexion incorrecte</string>
+    <string name="pref_name_imageCache_enabled">Mettre les images de l\'article en cache</string>
+    <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images dans chaque article et les sauvegarde sur l\'appareil. En fonction du nombre d\'articles dans votre liste wallabag, cela peut prendre un moment et utiliser beaucoup d\'espace disque sur votre appareil.</string>
+
 </resources>
