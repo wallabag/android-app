@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,6 +37,9 @@ public class DbConnection {
 
             Log.d(TAG, "creating new db session");
             WallabagOpenHelper dbHelper = new WallabagOpenHelper(context, "wallabag", null);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                dbHelper.setWriteAheadLoggingEnabled(true);
+            }
             Database db = dbHelper.getWritableDb();
             DaoMaster daoMaster = new DaoMaster(db);
             Holder.session = daoMaster.newSession();

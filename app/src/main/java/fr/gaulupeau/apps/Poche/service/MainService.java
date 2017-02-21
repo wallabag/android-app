@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
@@ -136,7 +137,8 @@ public class MainService extends IntentServiceBase {
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+        sqliteDatabase.beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
@@ -173,9 +175,9 @@ public class MainService extends IntentServiceBase {
                     break;
             }
 
-            daoSession.getDatabase().setTransactionSuccessful();
+            sqliteDatabase.setTransactionSuccessful();
         } finally {
-            daoSession.getDatabase().endTransaction();
+            sqliteDatabase.endTransaction();
         }
 
         Log.d(TAG, "serveSimpleRequest() finished");
@@ -303,15 +305,16 @@ public class MainService extends IntentServiceBase {
         Long queueLength = null;
 
         if(!completedQueueItems.isEmpty()) {
-            daoSession.getDatabase().beginTransaction();
+            SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+            sqliteDatabase.beginTransactionNonExclusive();
             try {
                 queueHelper.dequeueItems(completedQueueItems);
 
                 queueLength = queueHelper.getQueueLength();
 
-                daoSession.getDatabase().setTransactionSuccessful();
+                sqliteDatabase.setTransactionSuccessful();
             } finally {
-                daoSession.getDatabase().endTransaction();
+                sqliteDatabase.endTransaction();
             }
         }
 

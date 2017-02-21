@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.network;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -59,7 +60,8 @@ public class Updater {
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
-        daoSession.getDatabase().beginTransaction();
+        SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+        sqliteDatabase.beginTransactionNonExclusive();
         try {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
@@ -78,9 +80,9 @@ public class Updater {
             Log.d(TAG, "update() articles updated");
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
 
-            daoSession.getDatabase().setTransactionSuccessful();
+            sqliteDatabase.setTransactionSuccessful();
         } finally {
-            daoSession.getDatabase().endTransaction();
+            sqliteDatabase.endTransaction();
         }
 
         if(updateListener != null) updateListener.onSuccess(latestUpdatedItemTimestamp);
