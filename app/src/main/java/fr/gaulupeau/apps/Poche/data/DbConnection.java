@@ -41,6 +41,11 @@ public class DbConnection {
                 dbHelper.setWriteAheadLoggingEnabled(true);
             }
             Database db = dbHelper.getWritableDb();
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                if(!((SQLiteDatabase)db.getRawDatabase()).enableWriteAheadLogging()) {
+                    Log.w(TAG, "write ahead logging was not enabled");
+                }
+            }
             DaoMaster daoMaster = new DaoMaster(db);
             Holder.session = daoMaster.newSession();
         } else {
