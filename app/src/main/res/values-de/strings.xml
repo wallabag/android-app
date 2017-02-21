@@ -219,4 +219,12 @@
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Falsche Verbindungs-URL genutzt</string>
 
+    <string name="notification_downloadingImages">Bilder herunterladen</string>
+    <string name="menu_lists_search">Suche</string>
+    <string name="menu_lists_changeSortOrder">Ändere Sortierung</string>
+    <string name="other_searchHint">Suche nach Artikelüberschrift oder Text</string>
+
+    <string name="pref_name_imageCache_enabled">Speicher in Artikel eingebettete Bilder zwischen</string>
+    <string name="pref_desc_imageCache_enabled">Läd automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
+
 </resources>
