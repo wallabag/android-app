@@ -193,7 +193,6 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         if(scrollToTop && recyclerView != null) {
             recyclerView.scrollToPosition(0);
         }
-
     }
 
     protected void loadMore(int page, final int totalItemsCount) {

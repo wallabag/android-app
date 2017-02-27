@@ -67,8 +67,7 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article_lists, container, false);
 
-        adapter = new ArticleListsPagerAdapter(
-                getChildFragmentManager(), tag);
+        adapter = new ArticleListsPagerAdapter(getChildFragmentManager(), tag);
 
         viewPager = (ViewPager)view.findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
