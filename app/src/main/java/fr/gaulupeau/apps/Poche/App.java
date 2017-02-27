@@ -4,6 +4,8 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
+import org.greenrobot.eventbus.EventBus;
+
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -20,6 +22,13 @@ public class App extends Application {
         super.onCreate();
 
         if(BuildConfig.DEBUG) Stetho.initializeWithDefaults(this);
+
+        EventBus.builder()
+                .sendNoSubscriberEvent(false)
+                .sendSubscriberExceptionEvent(false)
+                .throwSubscriberException(BuildConfig.DEBUG)
+                .addIndex(new EventBusIndex())
+                .installDefaultEventBus();
 
         Settings.init(this);
         settings = new Settings(this);
