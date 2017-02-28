@@ -75,46 +75,34 @@ public class DbConnection {
         public void onUpgrade(Database db, int oldVersion, int newVersion) {
             Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
-            boolean recreateTables = true;
-
             List<String> offlineUrls = null;
-            if(oldVersion == 2) {
+            if(oldVersion >= 2) {
                 Cursor c = null;
                 try {
-                    c = db.rawQuery("select url from offline_url order by _id", null);
+                    c = db.rawQuery(oldVersion == 2
+                            ? "select url from offline_url order by _id"
+                            : "select extra from QUEUE_ITEM where action = 1 order by _id", null);
 
                     offlineUrls = new ArrayList<>();
                     while(c.moveToNext()) {
                         if(!c.isNull(0)) offlineUrls.add(c.getString(0));
                     }
                 } catch(Exception e) {
-                    Log.w(TAG, "Exception while migrating from version 2", e);
+                    Log.w(TAG, "Exception while migrating from version " + oldVersion, e);
                 } finally {
                     if(c != null) {
                         c.close();
                     }
                 }
-            } else if(oldVersion == 5) {
-                db.beginTransaction();
-                try {
-                    db.execSQL("ALTER TABLE ARTICLE ADD COLUMN images_downloaded INTEGER DEFAULT 0");
-
-                    db.setTransactionSuccessful();
-
-                    recreateTables = false;
-                } catch(Exception e) {
-                    Log.w(TAG, "Exception while altering table ARTICLE", e);
-                } finally {
-                    db.endTransaction();
-                }
             }
-
-            if(!recreateTables) return;
 
             DaoMaster.dropAllTables(db, true);
             onCreate(db);
 
-            new Settings(context).setFirstSyncDone(false);
+            Settings settings = new Settings(context);
+            settings.setFirstSyncDone(false);
+            settings.setLatestUpdatedItemTimestamp(0);
+            settings.setLatestUpdateRunTimestamp(0);
 
             if(offlineUrls != null && !offlineUrls.isEmpty()) {
                 boolean inserted = false;
