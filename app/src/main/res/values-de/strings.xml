@@ -19,7 +19,7 @@
     <string name="ttsLanguage">Sprache auswählen</string>
     <string name="ttsVoice">Sprachausgabemodul wählen</string>
     <string name="ttsAutoplayNextArticle">Nächsten Artikel automatisch wiedergeben</string>
-    <string name="ttsError">Sprachsynthese-Fehler</string>
+    <string name="ttsError">Sprachsynthesefehler</string>
     <string name="ttsFastRewind">Schnellrücklauf</string>
     <string name="ttsPlayPause">Wiedergabe / Pause</string>
     <string name="ttsFastForward">Schnellvorlauf</string>
@@ -27,8 +27,8 @@
     <string name="menu_open_random_article">Zufälligen Artikel öffnen</string>
     <string name="d_deleteArticle_title">Artikel entfernen?</string>
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
-    <string name="txtNetOffline">Prüfe deine Internetverbindung!</string>
-    <string name="txtConfigNotSet">Die App muss zuerst eingerichtet werden!</string>
+    <string name="txtNetOffline">Bitte prüfe deine Internetverbindung!</string>
+    <string name="txtConfigNotSet">Die App muss vor dem Synchronisieren konfiguriert werden!</string>
     <string name="bag_page">Neuen Artikel hinzufügen</string>
     <string name="activity_add_label">Neuen Artikel hinzufügen</string>
     <string name="page_url">Artikel-URL</string>
@@ -48,19 +48,19 @@
     <string name="addLink_success_text">Hinzugefügt</string>
     <string name="testConnection_progressDialogMessage">Verbindung wird überprüft…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Falsche URL</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-Dienst nicht gefunden – überprüfe bitte die wallabag-URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-Dienst nicht gefunden – überprüfe bitte die URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Anmeldung fehlgeschlagen – überprüfe bitte Benutzername und Passwort</string>
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
     <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
-    <string name="update_allFeeds">Alle Feeds aktualisiert</string>
+    <string name="update_allFeeds">Alle Feeds aktualisieren</string>
     <string name="updateFeed_previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
     <string name="feedName_unread">Ungelesen</string>
-    <string name="articleList_favoriteMark">Favoritmarkierung</string>
+    <string name="articleList_favoriteMark">Favoritenmarkierung</string>
     <string name="articleList_ArchivedMark">Archivmarkierung</string>
     <string name="noPreviousArticle">Es gibt keinen vorherigen Artikel in der aktuellen Liste</string>
     <string name="noNextArticle">Es gibt keinen nächsten Artikel in der aktuellen Liste</string>
@@ -69,12 +69,12 @@
     <string name="themeName_dark">Dunkel</string>
     <string name="themeName_dark_contrast">Dunkel (hoher Kontrast)</string>
     <string name="themeName_solarized">Solarisiert</string>
-    <string name="menu_readArticle_increaseFontSize">Schrift größer</string>
-    <string name="menu_readArticle_decreaseFontSize">Schrift kleiner</string>
+    <string name="menu_readArticle_increaseFontSize">Schrift vergrößern</string>
+    <string name="menu_readArticle_decreaseFontSize">Schrift verkleinern</string>
     <string name="menuAbout">Über</string>
-    <string name="aboutText">&lt;b&gt;wallabag-App für Android&lt;/b&gt;&lt;br/&gt;wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
+    <string name="aboutText">&lt;b>wallabag-App für Android&lt;/b>&lt;br/>wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es, wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
-    <string name="voiceHeight">Sprachhöhe</string>
+    <string name="voiceHeight">Stimmhöhe</string>
     <string name="readVolume">Leselautstärke</string>
     <string name="menuDownloadPdf">PDF herunterladen</string>
     <string name="downloadPdfPathStart">Artikel wird heruntergeladen</string>
@@ -96,8 +96,8 @@
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>
     <string name="pref_name_connection_serverVersion">wallabag-Server-Version</string>
-    <string name="pref_name_connection_feedsUserID">Deine Benutzer-ID</string>
-    <string name="pref_name_connection_feedsToken">Dein Token</string>
+    <string name="pref_name_connection_feedsUserID">Benutzer-ID</string>
+    <string name="pref_name_connection_feedsToken">Token</string>
 
     <string name="pref_name_connection_advanced_acceptAllCertificates">Akzeptiere alle SSL-Zertifikate</string>
     <string name="pref_desc_connection_advanced_acceptAllCertificates">Kann Neustart erfordern; unsicher; selbstsignierte Zertifikate müssen in Android importiert werden.</string>
@@ -105,13 +105,13 @@
     <string name="pref_desc_connection_advanced_customSSLSettings">Deaktiviert SSL auf allen Geräten, aktiviert TLS 1.1 und TLS 1.2 auf Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP-Basis-Authentifizierung</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierungs-Benutzername</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierungsbenutzername</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierungspasswort</string>
 
     <string name="pref_name_ui_theme">Thema</string>
     <string name="pref_name_ui_article_fontSize">Schriftgröße für Artikel (in %)</string>
-    <string name="pref_name_ui_article_fontSerif">Serifen-Schrift</string>
-    <string name="pref_desc_ui_article_fontSerif">Serifen-Schrift für Artikel</string>
+    <string name="pref_name_ui_article_fontSerif">Serifenschrift</string>
+    <string name="pref_desc_ui_article_fontSerif">Serifenschrift für Artikel</string>
 
     <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
     <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste der Webbrowser</string>
@@ -191,7 +191,7 @@
     <string name="pref_name_autoSync_type">Art der automatischen Synchronisation</string>
     <string name="pref_name_connection_advanced_clearCookies">Lösche Cookies</string>
     <string name="pref_name_connection_autofill">Automatisch ausfüllen</string>
-    <string name="pref_name_runConnectionWizard">Starte Verbindingsassistent</string>
+    <string name="pref_name_runConnectionWizard">Starte Verbindungsassistenten</string>
     <string name="pref_option_autoSync_interval_12h">12 Stunden</string>
     <string name="pref_option_autoSync_interval_15m">15 Minuten</string>
     <string name="pref_option_autoSync_interval_1h">1 Stunde</string>
@@ -225,6 +225,6 @@
     <string name="other_searchHint">Suche nach Artikelüberschrift oder -text</string>
 
     <string name="pref_name_imageCache_enabled">Speichere in Artikel eingebettete Bilder zwischen</string>
-    <string name="pref_desc_imageCache_enabled">Läd automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
+    <string name="pref_desc_imageCache_enabled">Lädt automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
 
 </resources>
