@@ -49,7 +49,7 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
         }
 
         // start article list activity on click on the widget
-        Intent intent = new Intent(context, ArticlesListActivity.class);
+        Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);

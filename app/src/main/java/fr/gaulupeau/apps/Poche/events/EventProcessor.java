@@ -16,9 +16,11 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Locale;
+
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
@@ -33,10 +35,11 @@ public class EventProcessor {
     private static final String TAG = EventProcessor.class.getSimpleName();
 
     private static final int NOTIFICATION_ID_OTHER = 0;
-    private static final int NOTIFICATION_ID_UPDATE_FEEDS_ONGOING = 1;
-    private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 2;
-    private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 3;
-    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 4;
+    private static final int NOTIFICATION_ID_SYNC_QUEUE_ONGOING = 1;
+    private static final int NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING = 2;
+    private static final int NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING = 3;
+    private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 4;
+    private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 5;
 
     private Context context;
     private Settings settings;
@@ -45,6 +48,9 @@ public class EventProcessor {
 
     private boolean delayedNetworkChangedTask;
 
+    private NotificationCompat.Builder syncQueueNotificationBuilder;
+    private NotificationCompat.Builder updateArticlesNotificationBuilder;
+    private NotificationCompat.Builder sweepDeletedArticlesNotificationBuilder;
     private NotificationCompat.Builder fetchImagesNotificationBuilder;
 
     public EventProcessor(Context context) {
@@ -92,16 +98,10 @@ public class EventProcessor {
             return;
         }
 
-        int updateTypeVal = settings.getAutoSyncType();
-        FeedUpdater.FeedType feedType = updateTypeVal == 0 ? FeedUpdater.FeedType.MAIN : null;
-        FeedUpdater.UpdateType updateType = updateTypeVal == 0 ? FeedUpdater.UpdateType.FAST : null;
+        Updater.UpdateType updateType = settings.getAutoSyncType() == 0
+                ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
 
-        Context context = getContext();
-        // TODO: if the queue sync operation fails, the update feed operation should not be started
-        if(settings.isOfflineQueuePending()) {
-            ServiceHelper.syncQueue(context, true);
-        }
-        ServiceHelper.updateFeed(context, feedType, updateType, null, true);
+        ServiceHelper.syncAndUpdate(getContext(), settings, updateType, true);
     }
 
     @Subscribe
@@ -130,7 +130,7 @@ public class EventProcessor {
         settings.setOfflineQueuePending(!queueIsEmpty);
 
         if(event.isTriggeredByOperation() && WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncQueue(getContext(), false, true, queueLength);
+            ServiceHelper.syncQueue(getContext(), false, true);
         } else if(settings.isAutoSyncQueueEnabled()) {
             enableConnectivityChangeReceiver(!queueIsEmpty);
         }
@@ -147,76 +147,111 @@ public class EventProcessor {
     }
 
     @Subscribe(sticky = true)
-    public void onUpdateFeedsStartedEvent(UpdateFeedsStartedEvent event) {
-        Log.d(TAG, "onUpdateFeedsStartedEvent() started");
+    public void onUpdateArticlesStartedEvent(UpdateArticlesStartedEvent event) {
+        Log.d(TAG, "onUpdateArticlesStartedEvent() started");
 
         Context context = getContext();
 
-        String detailedMessage;
-        FeedUpdater.FeedType feedType = event.getFeedType();
-        if(feedType == null) {
-            detailedMessage = context.getString(R.string.notification_updatingAllFeeds);
-        } else {
-            detailedMessage = context.getString(R.string.notification_updatingSpecificFeed,
-                    context.getString(feedType.getLocalizedResourceID()));
-        }
+        String detailedMessage = context.getString(
+                event.getRequest().getUpdateType() != Updater.UpdateType.FAST
+                        ? R.string.notification_updatingArticles_full
+                        : R.string.notification_updatingArticles_fast);
+
         detailedMessage = prependAppName(detailedMessage);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(context.getString(R.string.notification_updatingFeeds))
+                .setContentTitle(context.getString(R.string.notification_updatingArticles))
                 .setContentText(detailedMessage)
                 .setOngoing(true);
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING,
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
+
+        updateArticlesNotificationBuilder = notificationBuilder;
     }
 
     @Subscribe
-    public void onUpdateFeedsFinishedEvent(UpdateFeedsFinishedEvent event) {
-        Log.d(TAG, "onUpdateFeedsFinishedEvent() started");
+    public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
+        Log.d(TAG, "onUpdateArticlesProgressEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_FEEDS_ONGOING);
-
-        Settings settings = getSettings();
-
-        if(event.getResult().isSuccess()) {
-            if(!getSettings().isFirstSyncDone()) {
-                settings.setFirstSyncDone(true);
-            }
-
-            if(settings.isImageCacheEnabled()) {
-                ServiceHelper.fetchImages(getContext());
-            }
+        if(updateArticlesNotificationBuilder != null) {
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
+                    updateArticlesNotificationBuilder
+                            .setProgress(event.getTotal(), event.getCurrent(), false)
+                            .build());
         }
     }
 
+    @Subscribe
+    public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
+        Log.d(TAG, "onUpdateArticlesFinishedEvent() started");
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING);
+
+        updateArticlesNotificationBuilder = null;
+    }
+
     @Subscribe(sticky = true)
-    public void onFetchImagesStartedEvent(FetchImagesStartedEvent event) {
-        Log.d(TAG, "onFetchImagesStartedEvent() started");
+    public void onSweepDeletedArticlesStartedEvent(SweepDeletedArticlesStartedEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesStartedEvent() started");
 
         Context context = getContext();
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_action_refresh)
-                .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                .setContentTitle(context.getString(R.string.notification_sweepingDeletedArticles))
                 .setOngoing(true);
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             notificationBuilder.setContentText(context.getString(R.string.app_name));
         }
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
 
-        fetchImagesNotificationBuilder = notificationBuilder;
+        sweepDeletedArticlesNotificationBuilder = notificationBuilder;
+    }
+
+    @Subscribe
+    public void onSweepDeletedArticlesProgressEvent(SweepDeletedArticlesProgressEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesProgressEvent() started");
+
+        if(sweepDeletedArticlesNotificationBuilder != null) {
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
+                    sweepDeletedArticlesNotificationBuilder
+                            .setProgress(event.getTotal(), event.getCurrent(), false)
+                            .build());
+        }
+    }
+
+    @Subscribe
+    public void onSweepDeletedArticlesFinishedEvent(SweepDeletedArticlesFinishedEvent event) {
+        Log.d(TAG, "onSweepDeletedArticlesFinishedEvent() started");
+
+        getNotificationManager().cancel(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING);
+
+        sweepDeletedArticlesNotificationBuilder = null;
     }
 
     @Subscribe
     public void onFetchImagesProgressEvent(FetchImagesProgressEvent event) {
         Log.d(TAG, "onFetchImagesProgressEvent() started");
 
-        if(fetchImagesNotificationBuilder == null) return;
+        if(fetchImagesNotificationBuilder == null) {
+            Context context = getContext();
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setContentTitle(context.getString(R.string.notification_downloadingImages))
+                    .setOngoing(true);
+
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                notificationBuilder.setContentText(context.getString(R.string.app_name));
+            }
+
+            fetchImagesNotificationBuilder = notificationBuilder;
+        }
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
                 fetchImagesNotificationBuilder
@@ -233,26 +268,43 @@ public class EventProcessor {
         fetchImagesNotificationBuilder = null;
     }
 
-    @Subscribe(sticky = true)
-    public void onSyncQueueStartedEvent(SyncQueueStartedEvent event) {
-        Log.d(TAG, "onSyncQueueStartedEvent() started");
+    @Subscribe
+    public void onSyncQueueProgressEvent(SyncQueueProgressEvent event) {
+        Log.d(TAG, "onSyncQueueProgressEvent() started");
+
+        boolean showNotification = false;
 
         ActionRequest request = event.getRequest();
-        if(request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION
-                || (request.getQueueLength() != null && request.getQueueLength() > 1)) {
-            Context context = getContext();
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                    .setSmallIcon(R.drawable.ic_action_refresh)
-                    .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
-                    .setOngoing(true);
+        int total = event.getTotal();
 
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                notificationBuilder.setContentText(context.getString(R.string.app_name));
+        if(total > 1) {
+            showNotification = true;
+        } else if(total == 1
+                && request.getRequestType() != ActionRequest.RequestType.MANUAL_BY_OPERATION) {
+            showNotification = true;
+        }
+
+        if(showNotification) {
+            NotificationCompat.Builder notificationBuilder = syncQueueNotificationBuilder;
+
+            if(notificationBuilder == null) {
+                Context context = getContext();
+
+                notificationBuilder = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_action_refresh)
+                        .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
+                        .setOngoing(true);
+
+                if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    notificationBuilder.setContentText(context.getString(R.string.app_name));
+                }
+
+                syncQueueNotificationBuilder = notificationBuilder;
             }
 
             getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
-                    notificationBuilder.setProgress(0, 0, true).build());
+                    notificationBuilder.setProgress(total, event.getCurrent(), false).build());
         }
     }
 
@@ -261,6 +313,8 @@ public class EventProcessor {
         Log.d(TAG, "onSyncQueueFinishedEvent() started");
 
         getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
+
+        syncQueueNotificationBuilder = null;
 
         ActionResult result = event.getResult();
         if((result != null && !result.isSuccess())
@@ -279,7 +333,7 @@ public class EventProcessor {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setContentTitle(context.getString(R.string.downloadPdfPathStart))
                 .setContentText(context.getString(R.string.downloadPdfProgress))
-                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setSmallIcon(R.drawable.ic_file_download_24dp)
                 .setOngoing(true);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
@@ -302,7 +356,7 @@ public class EventProcessor {
             intent.setAction(android.content.Intent.ACTION_VIEW);
             Uri uri = Uri.fromFile(event.getFile());
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    event.getRequest().getDownloadFormat().asString());
+                    event.getRequest().getDownloadFormat().toString().toLowerCase(Locale.US));
             intent.setDataAndType(uri, mimeType);
 
             Context context = getContext();
@@ -312,7 +366,7 @@ public class EventProcessor {
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                     .setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded))
                     .setContentText(context.getString(R.string.downloadPdfTouchToOpen))
-                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setSmallIcon(R.drawable.ic_file_download_24dp)
                     .setContentIntent(contentIntent)
                     .setProgress(0, 0, false);
 
@@ -342,102 +396,118 @@ public class EventProcessor {
 
         ActionResult result = event.getResult();
 
+        boolean success = true;
+
         if(result != null) {
-            if(result.isSuccess()) {
-                Log.d(TAG, "onActionResultEvent() result is success");
-            } else {
-                ActionResult.ErrorType errorType = result.getErrorType();
+            if(!result.isSuccess()) success = false;
+            Log.d(TAG, "onActionResultEvent() result is success: " + success);
+        } else {
+            Log.d(TAG, "onActionResultEvent() result is null");
+        }
 
-                Log.d(TAG, "onActionResultEvent() result is not success; errorType: " + errorType);
-                Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
+        if(success) {
+            ActionRequest nextRequest = request.getNextRequest();
 
-                switch(errorType) {
-                    case TEMPORARY:
-                    case NO_NETWORK:
-                        // don't show it to user at all or make it suppressible
-                        // optionally schedule auto-retry
-                        // TODO: not important: implement
-                        break;
+            if(nextRequest != null) {
+                Log.d(TAG, "onActionResultEvent() starting nextRequest with action: "
+                        + nextRequest.getAction());
 
-                    case INCORRECT_CONFIGURATION:
-                    case INCORRECT_CREDENTIALS: {
-                        // notify user -- user must fix something before retry
-                        // maybe suppress notification if:
-                        //  - the action was not requested by user (that probably implies the second case), or
-                        //  - notification was already shown in the past
-                        // no auto-retry
+                ServiceHelper.startService(getContext(), nextRequest);
+            }
+        } else {
+            ActionResult.ErrorType errorType = result.getErrorType();
 
-                        Settings settings = getSettings();
-                        if(settings.isConfigurationOk()) {
-                            // TODO: we probably want to automatically test connection
+            Log.d(TAG, "onActionResultEvent() result is not success; errorType: " + errorType);
+            Log.d(TAG, "onActionResultEvent() result message: " + result.getMessage());
 
-                            settings.setConfigurationOk(false);
-                        }
+            switch(errorType) {
+                case TEMPORARY:
+                case NO_NETWORK:
+                    // don't show it to user at all or make it suppressible
+                    // optionally schedule auto-retry
+                    // TODO: not important: implement
+                    break;
 
-                        if(request.getRequestType() != ActionRequest.RequestType.AUTO
-                                || !settings.isConfigurationErrorShown()) {
-                            settings.setConfigurationErrorShown(true);
+                case INCORRECT_CONFIGURATION:
+                case INCORRECT_CREDENTIALS: {
+                    // notify user -- user must fix something before retry
+                    // maybe suppress notification if:
+                    //  - the action was not requested by user (that probably implies the second case), or
+                    //  - notification was already shown in the past
+                    // no auto-retry
 
-                            Context context = getContext();
+                    Settings settings = getSettings();
+                    if(settings.isConfigurationOk()) {
+                        // TODO: we probably want to automatically test connection
 
-                            Intent intent = new Intent(context, SettingsActivity.class);
-                            PendingIntent contentIntent = PendingIntent.getActivity(
-                                    context, 0, intent, 0);
-
-                            String detailedText = context.getString(
-                                    errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
-                                            ? R.string.notification_incorrectCredentials
-                                            : R.string.notification_incorrectConfiguration);
-
-                            detailedText = prependAppName(detailedText);
-
-                            NotificationCompat.Builder notificationBuilder =
-                                    new NotificationCompat.Builder(context)
-                                            .setSmallIcon(R.drawable.ic_warning_24dp)
-                                            .setContentTitle(context.getString(R.string.notification_error))
-                                            .setContentText(detailedText)
-                                            .setContentIntent(contentIntent);
-
-                            notification = notificationBuilder.build();
-                        }
-                        break;
+                        settings.setConfigurationOk(false);
                     }
 
-                    case UNKNOWN: {
-                        // this is undecided yet
-                        // show notification + schedule auto-retry
-                        // TODO: decide on behavior
+                    if(request.getRequestType() != ActionRequest.RequestType.AUTO
+                            || !settings.isConfigurationErrorShown()) {
+                        settings.setConfigurationErrorShown(true);
 
                         Context context = getContext();
 
-                        String detailedText = context.getString(R.string.notification_unknownError);
+                        Intent intent = new Intent(context, SettingsActivity.class);
+                        PendingIntent contentIntent = PendingIntent.getActivity(
+                                context, 0, intent, 0);
+
+                        String detailedText = context.getString(
+                                errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
+                                        ? R.string.notification_incorrectCredentials
+                                        : R.string.notification_incorrectConfiguration);
+
                         detailedText = prependAppName(detailedText);
 
                         NotificationCompat.Builder notificationBuilder =
                                 new NotificationCompat.Builder(context)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
-                                        .setContentText(detailedText);
-
-                        if(result.getMessage() != null) {
-                            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                                    .bigText(context.getString(R.string.notification_expandedError,
-                                            result.getMessage())));
-                        }
+                                        .setContentText(detailedText)
+                                        .setContentIntent(contentIntent);
 
                         notification = notificationBuilder.build();
-                        break;
+                    }
+                    break;
+                }
+
+                case UNKNOWN: {
+                    // this is undecided yet
+                    // show notification + schedule auto-retry
+                    // TODO: decide on behavior
+
+                    Context context = getContext();
+
+                    String detailedText = context.getString(R.string.notification_unknownError);
+                    detailedText = prependAppName(detailedText);
+
+                    NotificationCompat.Builder notificationBuilder =
+                            new NotificationCompat.Builder(context)
+                                    .setSmallIcon(R.drawable.ic_warning_24dp)
+                                    .setContentTitle(context.getString(R.string.notification_error))
+                                    .setContentText(detailedText);
+
+                    if(result.getMessage() != null) {
+                        notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(context.getString(R.string.notification_expandedError,
+                                        result.getMessage())));
                     }
 
-                    case NEGATIVE_RESPONSE:
-                        // server acknowledged the operation but failed/refused to performed it;
-                        // detection of such response is not implemented on client yet
-                        Log.w(TAG, "onActionResultEvent() got a NEGATIVE_RESPONSE; that was not expected");
-                        break;
+                    notification = notificationBuilder.build();
+                    break;
                 }
+
+                case NOT_FOUND:
+                    Log.w(TAG, "onActionResultEvent() got a NOT_FOUND");
+                    break;
+
+                case NEGATIVE_RESPONSE:
+                    // server acknowledged the operation but failed/refused to performed it;
+                    // detection of such response is not implemented on client yet
+                    Log.w(TAG, "onActionResultEvent() got a NEGATIVE_RESPONSE; that was not expected");
+                    break;
             }
-        } else {
-            Log.d(TAG, "onActionResultEvent() result is null");
         }
 
         if(notification != null) {
@@ -455,12 +525,13 @@ public class EventProcessor {
         if(result == null || result.isSuccess()) {
             Log.d(TAG, "onLinkUploadedEvent() result is null or success");
 
-            if(getSettings().isAutoDownloadNewArticlesEnabled()
-                    && !getSettings().isOfflineQueuePending()) {
+            Settings settings = getSettings();
+            if(settings.isAutoDownloadNewArticlesEnabled()
+                    && !settings.isOfflineQueuePending()) {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
-                ServiceHelper.updateFeed(getContext(),
-                        FeedUpdater.FeedType.MAIN, FeedUpdater.UpdateType.FAST, null, true);
+                ServiceHelper.updateArticles(getContext(), settings,
+                        Updater.UpdateType.FAST, true, null);
             }
         }
     }

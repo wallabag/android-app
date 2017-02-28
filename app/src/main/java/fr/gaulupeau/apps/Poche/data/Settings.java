@@ -18,8 +18,8 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
 import fr.gaulupeau.apps.Poche.service.WallabagJobService;
-import fr.gaulupeau.apps.Poche.ui.ArticlesListFragment;
 import fr.gaulupeau.apps.Poche.ui.HttpSchemeHandlerActivity;
+import fr.gaulupeau.apps.Poche.ui.Sortable;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
 
@@ -27,7 +27,7 @@ public class Settings {
 
     private static final String TAG = Settings.class.getSimpleName();
 
-    private static final int PREFERENCES_VERSION = 1;
+    private static final int PREFERENCES_VERSION = 100;
 
     private static Map<String, Integer> preferenceKeysMap;
 
@@ -76,7 +76,7 @@ public class Settings {
         if(settings.isFirstRun()) {
             settings.setFirstRun(false);
 
-            ConnectionWizardActivity.runWizard(context, false);
+            ConnectionWizardActivity.runWizard(context, false, false, true);
 
             return true;
         }
@@ -120,26 +120,24 @@ public class Settings {
             return;
         }
 
+        SharedPreferences.Editor prefEditor = pref.edit();
+
         if(prefVersion == -1) { // preferences are not set
             PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
 
-            if(LegacySettingsHelper.migrateLegacySettings(context, pref)) {
+            if(LegacySettingsHelper.migrateLegacySettings(context, prefEditor)) {
                 setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
                 if(getDefaultCustomSSLSettingsValue()) {
-                    pref.edit().putBoolean(context.getString(
-                            R.string.pref_key_connection_advanced_customSSLSettings), true)
-                            .apply();
+                    prefEditor.putBoolean(context.getString(
+                            R.string.pref_key_connection_advanced_customSSLSettings), true);
                 }
 
                 Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
                         ? Themes.Theme.LIGHT_CONTRAST : Themes.Theme.LIGHT;
-                pref.edit().putString(context.getString(R.string.pref_key_ui_theme), theme.toString())
-                        .apply();
+                prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
             }
-
-            SharedPreferences.Editor prefEditor = pref.edit();
 
             if(!contains(R.string.pref_key_tts_speed)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_speed), 1);
@@ -147,12 +145,15 @@ public class Settings {
             if(!contains(R.string.pref_key_tts_pitch)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_pitch), 1);
             }
-
-            prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),
-                    PREFERENCES_VERSION);
-
-            prefEditor.apply();
+        } else if(prefVersion < 100) { // v1.*
+            prefEditor.putBoolean(context.getString(R.string.pref_key_internal_firstRun), true);
+            prefEditor.putBoolean(context.getString(R.string.pref_key_internal_configurationIsOk), false);
         }
+
+        prefEditor.putInt(context.getString(R.string.pref_key_internal_preferencesVersion),
+                PREFERENCES_VERSION);
+
+        prefEditor.apply();
     }
 
     public SharedPreferences getSharedPreferences() {
@@ -263,14 +264,6 @@ public class Settings {
         setString(R.string.pref_key_connection_url, url);
     }
 
-    public int getWallabagServerVersion() {
-        return getInt(R.string.pref_key_connection_serverVersion, -1);
-    }
-
-    public void setWallabagServerVersion(int version) {
-        setInt(R.string.pref_key_connection_serverVersion, version);
-    }
-
     public String getUsername() {
         return getString(R.string.pref_key_connection_username);
     }
@@ -287,28 +280,36 @@ public class Settings {
         setString(R.string.pref_key_connection_password, password);
     }
 
-    public String getFeedsUserID() {
-        return getString(R.string.pref_key_connection_feedsUserID);
+    public String getApiClientID() {
+        return getString(R.string.pref_key_connection_api_clientID);
     }
 
-    public void setFeedsUserID(String feedsUserID) {
-        setString(R.string.pref_key_connection_feedsUserID, feedsUserID);
+    public void setApiClientID(String apiClientID) {
+        setString(R.string.pref_key_connection_api_clientID, apiClientID);
     }
 
-    public String getFeedsToken() {
-        return getString(R.string.pref_key_connection_feedsToken);
+    public String getApiClientSecret() {
+        return getString(R.string.pref_key_connection_api_clientSecret);
     }
 
-    public void setFeedsToken(String feedsToken) {
-        setString(R.string.pref_key_connection_feedsToken, feedsToken);
+    public void setApiClientSecret(String apiClientSecret) {
+        setString(R.string.pref_key_connection_api_clientSecret, apiClientSecret);
     }
 
-    public boolean isAcceptAllCertificates() {
-        return getBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, false);
+    public String getApiRefreshToken() {
+        return getString(R.string.pref_key_connection_api_refreshToken);
     }
 
-    public void setAcceptAllCertificates(boolean value) {
-        setBoolean(R.string.pref_key_connection_advanced_acceptAllCertificates, value);
+    public void setApiRefreshToken(String apiRefreshToken) {
+        setString(R.string.pref_key_connection_api_refreshToken, apiRefreshToken);
+    }
+
+    public String getApiAccessToken() {
+        return getString(R.string.pref_key_connection_api_accessToken);
+    }
+
+    public void setApiAccessToken(String apiAccessToken) {
+        setString(R.string.pref_key_connection_api_accessToken, apiAccessToken);
     }
 
     public boolean isCustomSSLSettings() {
@@ -351,21 +352,46 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
 
-    public ArticlesListFragment.SortOrder getListSortOrder() {
+    public int getReadingSpeed() {
+        return getInt(R.string.pref_key_ui_readingSpeed, 200);
+    }
+
+    public void setReadingSpeed(int readingSpeed) {
+        setInt(R.string.pref_key_ui_readingSpeed, readingSpeed);
+    }
+
+    public Sortable.SortOrder getListSortOrder() {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 
-        ArticlesListFragment.SortOrder sortOrder = null;
+        Sortable.SortOrder sortOrder = null;
         if(sortOrderParam != null) {
             try {
-                sortOrder = ArticlesListFragment.SortOrder.valueOf(sortOrderParam);
+                sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
             } catch(IllegalArgumentException ignored) {}
         }
 
-        return sortOrder != null ? sortOrder : ArticlesListFragment.SortOrder.DESC;
+        return sortOrder != null ? sortOrder : Sortable.SortOrder.DESC;
     }
 
-    public void setListSortOrder(ArticlesListFragment.SortOrder sortOrder) {
+    public void setListSortOrder(Sortable.SortOrder sortOrder) {
         setString(R.string.pref_key_ui_lists_sortOrder, sortOrder.toString());
+    }
+
+    public Sortable.SortOrder getTagListSortOrder() {
+        String sortOrderParam = getString(R.string.pref_key_ui_tagList_sortOrder);
+
+        Sortable.SortOrder sortOrder = null;
+        if(sortOrderParam != null) {
+            try {
+                sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
+            } catch(IllegalArgumentException ignored) {}
+        }
+
+        return sortOrder != null ? sortOrder : Sortable.SortOrder.ASC;
+    }
+
+    public void setTagListSortOrder(Sortable.SortOrder sortOrder) {
+        setString(R.string.pref_key_ui_tagList_sortOrder, sortOrder.toString());
     }
 
     public Themes.Theme getTheme() {
@@ -481,6 +507,22 @@ public class Settings {
         setBoolean(R.string.pref_key_tts_autoplayNext, value);
     }
 
+    public boolean isSweepingAfterFastSyncEnabled() {
+        return getBoolean(R.string.pref_key_sync_sweepingAfterFastSync_enabled, false);
+    }
+
+    public void setSweepingAfterFastSyncEnabled(boolean value) {
+        setBoolean(R.string.pref_key_sync_sweepingAfterFastSync_enabled, value);
+    }
+
+    public boolean isAutoSyncOnStartupEnabled() {
+        return getBoolean(R.string.pref_key_autoSync_onStartup_enabled, true);
+    }
+
+    public void setAutoSyncOnStartupEnabled(boolean value) {
+        setBoolean(R.string.pref_key_autoSync_onStartup_enabled, value);
+    }
+
     public boolean isAutoSyncEnabled() {
         return getBoolean(R.string.pref_key_autoSync_enabled, false);
     }
@@ -567,6 +609,22 @@ public class Settings {
 
     public void setOfflineQueuePending(boolean value) {
         setBoolean(R.string.pref_key_internal_offlineQueue_pending, value);
+    }
+
+    public long getLatestUpdatedItemTimestamp() {
+        return getLong(R.string.pref_key_internal_update_latestUpdatedItemTimestamp, 0);
+    }
+
+    public void setLatestUpdatedItemTimestamp(long timestamp) {
+        setLong(R.string.pref_key_internal_update_latestUpdatedItemTimestamp, timestamp);
+    }
+
+    public long getLatestUpdateRunTimestamp() {
+        return getLong(R.string.pref_key_internal_update_latestUpdateRunTimestamp, 0);
+    }
+
+    public void setLatestUpdateRunTimestamp(long timestamp) {
+        setLong(R.string.pref_key_internal_update_latestUpdateRunTimestamp, timestamp);
     }
 
     public boolean isHandlingHttpScheme() {

@@ -1,31 +1,30 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 
-public class QueueHelper {
+import static fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem.*;
 
-    public static final int QI_ACTION_ADD_LINK = 1;
-    public static final int QI_ACTION_ARCHIVE = 2;
-    public static final int QI_ACTION_UNARCHIVE = 3;
-    public static final int QI_ACTION_FAVORITE = 4;
-    public static final int QI_ACTION_UNFAVORITE = 5;
-    public static final int QI_ACTION_DELETE = 6;
+public class QueueHelper {
 
     private static final String TAG = QueueHelper.class.getSimpleName();
 
-    private DaoSession daoSession;
-    private QueueItemDao queueItemDao;
+    private final QueueItemDao queueItemDao;
 
     public QueueHelper(DaoSession daoSession) {
-        this.daoSession = daoSession;
-        this.queueItemDao = daoSession.getQueueItemDao();
+        queueItemDao = daoSession.getQueueItemDao();
     }
 
     public List<QueueItem> getQueueItems() {
@@ -43,130 +42,115 @@ public class QueueHelper {
         }
     }
 
-    // TODO: reuse code in {,enqueue}{archive,favorite,delete}Article
+    public boolean changeArticle(int articleID, ArticleChangeType articleChangeType) {
+        Log.d(TAG, String.format("changeArticle(%d, %s) started", articleID, articleChangeType));
 
-    public boolean archiveArticle(int articleID, boolean archive) {
-        Log.d(TAG, String.format("archiveArticle(%d, %s) started", articleID, archive));
-
-        boolean cancel = false;
-        QueueItem itemToCancel = null;
+        QueueItem existingChangeItem = null;
 
         for(QueueItem item: getQueuedItemsForArticle(articleID)) {
             switch(item.getAction()) {
-                case QI_ACTION_ARCHIVE:
-                    cancel = true;
-                    if(archive) {
-                        Log.d(TAG, "archiveArticle(): already in queue for Archive; ignoring");
-                    } else {
-                        Log.d(TAG, "archiveArticle(): in queue for Archive; canceled out");
-                        itemToCancel = item;
-                    }
+                case ARTICLE_CHANGE:
+                    existingChangeItem = item;
+                    Log.d(TAG, "changeArticle() found existing change item");
                     break;
 
-                case QI_ACTION_UNARCHIVE:
-                    cancel = true;
-                    if(!archive) {
-                        Log.d(TAG, "archiveArticle(): already in queue for UnArchive; ignoring");
-                    } else {
-                        Log.d(TAG, "archiveArticle(): in queue for UnArchive; canceled out");
-                        itemToCancel = item;
-                    }
-                    break;
-
-                case QI_ACTION_DELETE:
-                    cancel = true;
-                    Log.d(TAG, "archiveArticle(): already in queue for Deleting; ignoring");
-                    break;
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "changeArticle(): already in queue for Deleting; ignoring");
+                    return false;
             }
         }
 
         boolean queueChanged = false;
 
-        if(itemToCancel != null) {
-            dequeueItem(itemToCancel);
+        if(existingChangeItem != null) {
+            Log.v(TAG, "changeArticle() existing changes: " + existingChangeItem.getExtra());
+
+            EnumSet<ArticleChangeType> changes
+                    = ArticleChangeType.stringToEnumSet(existingChangeItem.getExtra());
+
+            if(!changes.contains(articleChangeType)) {
+                Log.d(TAG, "changeArticle() adding the change to change set");
+
+                changes.add(articleChangeType);
+                existingChangeItem.setExtra(ArticleChangeType.enumSetToString(changes));
+
+                queueItemDao.update(existingChangeItem);
+
+                queueChanged = true;
+            } else {
+                Log.d(TAG, "changeArticle() change type is already queued: " + articleChangeType);
+            }
+        } else {
+            enqueueArticleChange(articleID, articleChangeType);
             queueChanged = true;
         }
 
-        if(!cancel) {
-            enqueueArchiveArticle(articleID, archive);
-            queueChanged = true;
-        }
-
-        Log.d(TAG, "archiveArticle() finished");
+        Log.d(TAG, "changeArticle() finished; queue changed: " + queueChanged);
         return queueChanged;
     }
 
-    public boolean favoriteArticle(int articleID, boolean favorite) {
-        Log.d(TAG, String.format("favoriteArticle(%d, %s) started", articleID, favorite));
+    public boolean deleteTagsFromArticle(int articleID, String tagsString) {
+        Log.d(TAG, String.format("deleteTagsFromArticle(%d, %s) started", articleID, tagsString));
 
-        boolean cancel = false;
-        QueueItem itemToCancel = null;
+        QueueItem queueItem = null;
 
         for(QueueItem item: getQueuedItemsForArticle(articleID)) {
             switch(item.getAction()) {
-                case QI_ACTION_FAVORITE:
-                    cancel = true;
-                    if(favorite) {
-                        Log.d(TAG, "favoriteArticle(): already in queue for Favorite; ignoring");
-                    } else {
-                        Log.d(TAG, "favoriteArticle(): in queue for Favorite; canceled out");
-                        itemToCancel = item;
-                    }
+                case ARTICLE_TAGS_DELETE:
+                    queueItem = item;
+                    Log.d(TAG, "deleteTagsFromArticle() found existing tags delete item");
                     break;
 
-                case QI_ACTION_UNFAVORITE:
-                    cancel = true;
-                    if(!favorite) {
-                        Log.d(TAG, "favoriteArticle(): already in queue for UnFavorite; ignoring");
-                    } else {
-                        Log.d(TAG, "favoriteArticle(): in queue for UnFavorite; canceled out");
-                        itemToCancel = item;
-                    }
-                    break;
-
-                case QI_ACTION_DELETE:
-                    cancel = true;
-                    Log.d(TAG, "favoriteArticle(): already in queue for Delete; ignoring");
-                    break;
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "deleteTagsFromArticle(): article is already in queue for Deleting; ignoring");
+                    return false;
             }
         }
 
-        boolean queueChanged = false;
+        Collection<String> tags = Arrays.asList(tagsString.split(DELETED_TAGS_DELIMITER));
 
-        if(itemToCancel != null) {
-            dequeueItem(itemToCancel);
-            queueChanged = true;
+        if(queueItem != null) {
+            Log.v(TAG, "deleteTagsFromArticle() existing deleted tags: " + queueItem.getExtra());
+
+            Set<String> existingDeletedTags = new HashSet<>(
+                    Arrays.asList(queueItem.getExtra().split(DELETED_TAGS_DELIMITER)));
+
+            int oldSize = existingDeletedTags.size();
+
+            existingDeletedTags.addAll(tags);
+
+            if(existingDeletedTags.size() == oldSize) {
+                Log.d(TAG, "deleteTagsFromArticle() no new tags to delete");
+                return false;
+            }
+
+            queueItem.setExtra(TextUtils.join(DELETED_TAGS_DELIMITER, existingDeletedTags));
+            queueItemDao.update(queueItem);
+        } else {
+            enqueueDeleteTagsFromArticle(articleID, TextUtils.join(DELETED_TAGS_DELIMITER, tags));
         }
 
-        if(!cancel) {
-            enqueueFavoriteArticle(articleID, favorite);
-            queueChanged = true;
-        }
-
-        Log.d(TAG, "favoriteArticle() finished");
-        return queueChanged;
+        Log.d(TAG, "deleteTagsFromArticle() finished");
+        return true;
     }
 
     public boolean deleteArticle(int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
-        boolean cancel = false;
+        boolean ignore = false;
         List<QueueItem> itemsToCancel = new LinkedList<>();
 
         for(QueueItem item: getQueuedItemsForArticle(articleID)) {
             switch(item.getAction()) {
-                case QI_ACTION_ARCHIVE:
-                case QI_ACTION_UNARCHIVE:
-                case QI_ACTION_FAVORITE:
-                case QI_ACTION_UNFAVORITE:
+                case ARTICLE_CHANGE:
                     Log.d(TAG, "deleteArticle(): going to dequeue item with action id: " +
                             item.getAction());
                     itemsToCancel.add(item);
                     break;
 
-                case QI_ACTION_DELETE:
-                    cancel = true;
+                case ARTICLE_DELETE:
                     Log.d(TAG, "deleteArticle(): already in queue for Delete; ignoring");
+                    ignore = true;
                     break;
             }
         }
@@ -178,7 +162,7 @@ public class QueueHelper {
             queueChanged = true;
         }
 
-        if(!cancel) {
+        if(!ignore) {
             enqueueDeleteArticle(articleID);
             queueChanged = true;
         }
@@ -191,7 +175,7 @@ public class QueueHelper {
         Log.d(TAG, String.format("addLink(\"%s\") started", link));
 
         boolean cancel = queueItemDao.queryBuilder()
-                .where(QueueItemDao.Properties.Action.eq(QI_ACTION_ADD_LINK),
+                .where(QueueItemDao.Properties.Action.eq(Action.ADD_LINK.getId()),
                         QueueItemDao.Properties.Extra.eq(link)).count() != 0;
 
         if(!cancel) {
@@ -204,35 +188,38 @@ public class QueueHelper {
         return !cancel;
     }
 
-    private void enqueueArchiveArticle(int articleID, boolean archive) {
-        Log.d(TAG, String.format("enqueueArchiveArticle(%d, %s) started", articleID, archive));
+    private void enqueueArticleChange(int articleID, ArticleChangeType articleChangeType) {
+        Log.d(TAG, String.format("enqueueArticleChange(%d, %s) started",
+                articleID, articleChangeType));
 
         QueueItem item = new QueueItem();
-        item.setAction(archive ? QI_ACTION_ARCHIVE : QI_ACTION_UNARCHIVE);
+        item.setAction(Action.ARTICLE_CHANGE);
         item.setArticleId(articleID);
+        item.setExtra(articleChangeType.name());
 
         enqueue(item);
 
-        Log.d(TAG, "enqueueArchiveArticle() finished");
+        Log.d(TAG, "enqueueArticleChange() finished");
     }
 
-    private void enqueueFavoriteArticle(int articleID, boolean archive) {
-        Log.d(TAG, String.format("enqueueFavoriteArticle(%d, %s) started", articleID, archive));
+    private void enqueueDeleteTagsFromArticle(int articleID, String tags) {
+        Log.d(TAG, String.format("enqueueDeleteTagsFromArticle(%d, %s) started", articleID, tags));
 
         QueueItem item = new QueueItem();
-        item.setAction(archive ? QI_ACTION_FAVORITE : QI_ACTION_UNFAVORITE);
+        item.setAction(Action.ARTICLE_TAGS_DELETE);
         item.setArticleId(articleID);
+        item.setExtra(tags);
 
         enqueue(item);
 
-        Log.d(TAG, "enqueueFavoriteArticle() finished");
+        Log.d(TAG, "enqueueDeleteTagsFromArticle() finished");
     }
 
     private void enqueueDeleteArticle(int articleID) {
         Log.d(TAG, String.format("enqueueDeleteArticle(%d) started", articleID));
 
         QueueItem item = new QueueItem();
-        item.setAction(QI_ACTION_DELETE);
+        item.setAction(Action.ARTICLE_DELETE);
         item.setArticleId(articleID);
 
         enqueue(item);
@@ -244,7 +231,7 @@ public class QueueHelper {
         Log.d(TAG, String.format("enqueueAddLink(%s) started", link));
 
         QueueItem item = new QueueItem();
-        item.setAction(QI_ACTION_ADD_LINK);
+        item.setAction(Action.ADD_LINK);
         item.setExtra(link);
 
         enqueue(item);
@@ -271,10 +258,6 @@ public class QueueHelper {
         if(items.isEmpty()) return 1;
 
         return items.get(0).getQueueNumber() + 1;
-    }
-
-    private void dequeueItem(QueueItem item) {
-        queueItemDao.delete(item);
     }
 
     private List<QueueItem> getQueuedItemsForArticle(int articleID) {

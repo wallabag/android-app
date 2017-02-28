@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.net.URL;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -15,10 +14,6 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
-/**
- * @author Victor Häggqvist
- * @since 10/19/15
- */
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<Article> articles;
@@ -70,14 +65,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         public void bind(Article article) {
-            String urlText = article.getUrl();
-            try {
-                URL url = new URL(urlText);
-                urlText = url.getHost();
-            } catch (Exception ignored) {}
-
             title.setText(article.getTitle());
-            url.setText(urlText);
+            url.setText(article.getDomain());
 
             boolean showFavourite = false;
             boolean showRead = false;

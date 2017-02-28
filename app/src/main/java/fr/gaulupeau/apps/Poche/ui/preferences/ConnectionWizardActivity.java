@@ -21,16 +21,18 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
-import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
+import fr.gaulupeau.apps.Poche.network.ClientCredentials;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
+import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 
 // TODO: split classes?
 public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_SKIP_WELCOME = "skip_welcome";
     public static final String EXTRA_SHOW_SUMMARY = "show_summary";
+    public static final String EXTRA_FILL_OUT_FROM_SETTINGS = "fill_out_from_settings";
 
     private static final String TAG = "ConnectionWizard";
 
@@ -41,14 +43,11 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String DATA_HTTP_AUTH_USERNAME = "http_auth_username";
     private static final String DATA_HTTP_AUTH_PASSWORD = "http_auth_password";
     private static final String DATA_CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
-    private static final String DATA_ACCEPT_ALL_CERTIFICATES = "accept_all_certificates";
-    private static final String DATA_SERVER_VERSION = "server_version";
-    private static final String DATA_FEEDS_USER_ID = "feeds_user_id";
-    private static final String DATA_FEEDS_TOKEN = "feeds_token";
+    private static final String DATA_API_CLIENT_ID = "api_client_id";
+    private static final String DATA_API_CLIENT_SECRET = "api_client_secret";
 
     private static final int PROVIDER_NO = -1;
     private static final int PROVIDER_WALLABAG_IT = 0;
-    private static final int PROVIDER_FRAMABAG = 1;
 
     private static final String PAGE_NONE = "";
     private static final String PAGE_WELCOME = "welcome";
@@ -59,13 +58,15 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String PAGE_SUMMARY = "summary";
 
     public static void runWizard(Context context, boolean skipWelcome) {
-        runWizard(context, skipWelcome, false);
+        runWizard(context, skipWelcome, false, false);
     }
 
-    public static void runWizard(Context context, boolean skipWelcome, boolean showSummary) {
+    public static void runWizard(Context context, boolean skipWelcome, boolean showSummary,
+                                 boolean fillOutFromSettings) {
         Intent intent = new Intent(context, ConnectionWizardActivity.class);
         if(skipWelcome) intent.putExtra(EXTRA_SKIP_WELCOME, true);
         if(showSummary) intent.putExtra(EXTRA_SHOW_SUMMARY, true);
+        if(fillOutFromSettings) intent.putExtra(EXTRA_FILL_OUT_FROM_SETTINGS, true);
         context.startActivity(intent);
     }
 
@@ -83,28 +84,57 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             String currentPage = null;
 
+            boolean fillOutData = false;
+            String url = null, username = null, password = null;
+
             String dataString = intent.getDataString();
             if(dataString != null) {
                 Log.d(TAG, "onCreate() got data string: " + dataString);
                 try {
                     ConnectionData connectionData = parseLoginData(dataString);
 
-                    if(connectionData.username != null) {
-                        bundle.putString(DATA_USERNAME, connectionData.username);
-                    }
+                    url = connectionData.url;
+                    username = connectionData.username;
 
-                    if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(connectionData.url)) {
-                        bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
-                    } else if(connectionData.url != null) {
-                        bundle.putString(DATA_URL, connectionData.url);
-                    }
-
-                    currentPage = PAGE_PROVIDER_SELECTION;
+                    fillOutData = true;
                 } catch(IllegalArgumentException e) {
                     Log.w(TAG, "onCreate() login data parsing exception", e);
                     Toast.makeText(this, R.string.connectionWizard_misc_incorrectConnectionURI,
                             Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            if(intent.getBooleanExtra(EXTRA_FILL_OUT_FROM_SETTINGS, false)) {
+                Settings settings = App.getInstance().getSettings();
+
+                url = settings.getUrl();
+                username = settings.getUsername();
+                password = settings.getPassword();
+
+                fillOutData = true;
+            }
+
+            if(fillOutData) {
+                boolean filledOutSomething = false;
+
+                if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(url)) {
+                    bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
+                    filledOutSomething = true;
+                } else if(!TextUtils.isEmpty(url)) {
+                    bundle.putString(DATA_URL, url);
+                    filledOutSomething = true;
+                }
+
+                if(!TextUtils.isEmpty(username)) {
+                    bundle.putString(DATA_USERNAME, username);
+                    filledOutSomething = true;
+                }
+                if(!TextUtils.isEmpty(password)) {
+                    bundle.putString(DATA_PASSWORD, password);
+                    filledOutSomething = true;
+                }
+
+                if(filledOutSomething) currentPage = PAGE_PROVIDER_SELECTION;
             }
 
             if(currentPage == null && intent.getBooleanExtra(EXTRA_SKIP_WELCOME, false)) {
@@ -113,8 +143,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             next(currentPage, bundle, true);
         } else {
-            // TODO: check
-            Log.w(TAG, "onCreate() savedInstanceState != null");
+            Log.d(TAG, "onCreate() savedInstanceState != null");
         }
     }
 
@@ -178,10 +207,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 switch(provider) {
                     case PROVIDER_WALLABAG_IT:
                         goToFragment = new WallabagItConfigFragment();
-                        break;
-
-                    case PROVIDER_FRAMABAG:
-                        goToFragment = new FramabagConfigFragment();
                         break;
 
                     default:
@@ -325,10 +350,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                         provider = PROVIDER_WALLABAG_IT;
                         break;
 
-                    case R.id.providerFramabag:
-                        provider = PROVIDER_FRAMABAG;
-                        break;
-
                     default:
                         provider = PROVIDER_NO;
                         break;
@@ -348,11 +369,9 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         protected String url;
         protected String username, password;
-        protected String feedsUserID, feedsToken;
+        protected String clientID, clientSecret;
         protected String httpAuthUsername, httpAuthPassword;
         protected boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
-        protected boolean acceptAllCertificates;
-        protected int wallabagServerVersion = -1;
         protected boolean tryPossibleURLs = true;
 
         protected ConfigurationTestHelper configurationTestHelper;
@@ -366,15 +385,19 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             View v = super.onCreateView(inflater, container, savedInstanceState);
 
             if (v != null) {
-                EditText urlEditText = (EditText) v.findViewById(R.id.wallabag_url);
-                EditText usernameEditText = (EditText) v.findViewById(R.id.username);
+                EditText urlEditText = (EditText)v.findViewById(R.id.wallabag_url);
+                EditText usernameEditText = (EditText)v.findViewById(R.id.username);
+                EditText passwordEditText = (EditText)v.findViewById(R.id.password);
 
-                if (urlEditText != null && getArguments().containsKey(DATA_URL)) {
+                if(urlEditText != null && getArguments().containsKey(DATA_URL)) {
                     urlEditText.setText(getArguments().getString(DATA_URL));
                 }
 
-                if (usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
+                if(usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
                     usernameEditText.setText(getArguments().getString(DATA_USERNAME));
+                }
+                if(passwordEditText != null && getArguments().containsKey(DATA_PASSWORD)) {
+                    passwordEditText.setText(getArguments().getString(DATA_PASSWORD));
                 }
             }
 
@@ -409,9 +432,9 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             cancelTest();
 
             configurationTestHelper = new ConfigurationTestHelper(
-                    activity, this, this, url, username, password, feedsUserID, feedsToken,
-                    httpAuthUsername, httpAuthPassword, customSSLSettings, acceptAllCertificates,
-                    wallabagServerVersion, tryPossibleURLs, false);
+                    activity, this, this, url, httpAuthUsername, httpAuthPassword,
+                    username, password, clientID, clientSecret,
+                    customSSLSettings, tryPossibleURLs, false);
             configurationTestHelper.test();
         }
 
@@ -423,18 +446,17 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public void onGetCredentialsResult(String feedsUserID, String feedsToken) {
-            this.feedsUserID = feedsUserID;
-            this.feedsToken = feedsToken;
+        public void onGetCredentialsResult(ClientCredentials clientCredentials) {
+            this.clientID = clientCredentials.clientID;
+            this.clientSecret = clientCredentials.clientSecret;
         }
 
         @Override
         public void onGetCredentialsFail() {}
 
         @Override
-        public void onConfigurationTestSuccess(String url, Integer wallabagServerVersion) {
+        public void onConfigurationTestSuccess(String url) {
             if(url != null) acceptSuggestion(url);
-            if(wallabagServerVersion != null) this.wallabagServerVersion = wallabagServerVersion;
 
             populateBundleWithConnectionSettings();
 
@@ -442,11 +464,11 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public void onConnectionTestFail(WallabagServiceEndpoint.ConnectionTestResult result,
+        public void onConnectionTestFail(WallabagWebService.ConnectionTestResult result,
                                          String details) {}
 
         @Override
-        public void onFeedsTestFail(TestFeedsTask.Result result, String details) {}
+        public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {}
 
         protected void acceptSuggestion(String newUrl) {
             if(newUrl != null) url = newUrl;
@@ -463,13 +485,11 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             bundle.putString(DATA_URL, url);
             bundle.putString(DATA_USERNAME, username);
             bundle.putString(DATA_PASSWORD, password);
-            bundle.putString(DATA_FEEDS_USER_ID, feedsUserID);
-            bundle.putString(DATA_FEEDS_TOKEN, feedsToken);
+            bundle.putString(DATA_API_CLIENT_ID, clientID);
+            bundle.putString(DATA_API_CLIENT_SECRET, clientSecret);
             bundle.putString(DATA_HTTP_AUTH_USERNAME, httpAuthUsername);
             bundle.putString(DATA_HTTP_AUTH_PASSWORD, httpAuthPassword);
             bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
-            bundle.putBoolean(DATA_ACCEPT_ALL_CERTIFICATES, acceptAllCertificates);
-            bundle.putInt(DATA_SERVER_VERSION, wallabagServerVersion);
         }
 
     }
@@ -499,37 +519,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             password = passwordEditText.getText().toString();
 
             url = "https://" + WALLABAG_IT_HOSTNAME;
-            wallabagServerVersion = 2;
-
-            tryPossibleURLs = false;
-        }
-
-    }
-
-    public static class FramabagConfigFragment extends GenericConfigFragment {
-
-        public String getPageName() {
-            return PAGE_CONFIG_FRAMABAG;
-        }
-
-        @Override
-        protected int getLayoutResourceID() {
-            return R.layout.connection_wizard_framabag_config_fragment;
-        }
-
-        @Override
-        protected void gatherData() {
-            View view = getView();
-            if(view == null) return;
-
-            EditText usernameEditText = (EditText)view.findViewById(R.id.username);
-            EditText passwordEditText = (EditText)view.findViewById(R.id.password);
-
-            username = usernameEditText.getText().toString();
-            password = passwordEditText.getText().toString();
-
-            url = "https://framabag.org/u/" + username;
-            wallabagServerVersion = 1;
 
             tryPossibleURLs = false;
         }
@@ -579,14 +568,13 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             String url = bundle.getString(DATA_URL);
             String username = bundle.getString(DATA_USERNAME);
             String httpAuthUsername = bundle.getString(DATA_HTTP_AUTH_USERNAME);
-            int wallabagServerVersion = bundle.getInt(DATA_SERVER_VERSION);
-            String feedsUserID = bundle.getString(DATA_FEEDS_USER_ID);
+            String clientID = bundle.getString(DATA_API_CLIENT_ID);
 
-            boolean newUser = !TextUtils.equals(settings.getUrl(), url)
+            boolean newUrl = !TextUtils.equals(settings.getUrl(), url);
+            boolean newUser = newUrl
                     || !TextUtils.equals(settings.getUsername(), username)
                     || !TextUtils.equals(settings.getHttpAuthUsername(), httpAuthUsername)
-                    || !TextUtils.equals(settings.getFeedsUserID(), feedsUserID)
-                    || settings.getWallabagServerVersion() != wallabagServerVersion;
+                    || !TextUtils.equals(settings.getApiClientID(), clientID);
 
             settings.setUrl(url);
             settings.setUsername(username);
@@ -594,16 +582,20 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             settings.setHttpAuthUsername(httpAuthUsername);
             settings.setHttpAuthPassword(bundle.getString(DATA_HTTP_AUTH_PASSWORD));
             settings.setCustomSSLSettings(bundle.getBoolean(DATA_CUSTOM_SSL_SETTINGS));
-            settings.setAcceptAllCertificates(bundle.getBoolean(DATA_ACCEPT_ALL_CERTIFICATES));
-            settings.setWallabagServerVersion(wallabagServerVersion);
-            settings.setFeedsUserID(feedsUserID);
-            settings.setFeedsToken(bundle.getString(DATA_FEEDS_TOKEN));
+            settings.setApiClientID(clientID);
+            settings.setApiClientSecret(bundle.getString(DATA_API_CLIENT_SECRET));
             settings.setConfigurationOk(true);
             settings.setConfigurationErrorShown(false);
             settings.setFirstRun(false);
 
             if(newUser) {
-                WallabagConnection.clearCookies(getActivity());
+                settings.setApiRefreshToken("");
+                settings.setApiAccessToken("");
+
+                if(newUrl) {
+                    WallabagServiceWrapper.resetInstance();
+                }
+
                 OperationsHelper.wipeDB(settings);
             }
         }

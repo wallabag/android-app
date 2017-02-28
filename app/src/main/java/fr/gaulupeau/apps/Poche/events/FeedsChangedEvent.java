@@ -1,8 +1,8 @@
 package fr.gaulupeau.apps.Poche.events;
 
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
-
 public class FeedsChangedEvent {
+
+    public enum FeedType { MAIN, FAVORITE, ARCHIVE }
 
     private boolean invalidateAll;
 
@@ -53,7 +53,7 @@ public class FeedsChangedEvent {
         return invalidateAll || mainFeedChanged || favoriteFeedChanged || archiveFeedChanged;
     }
 
-    public void setChangedByFeedType(FeedUpdater.FeedType feedType) {
+    public void setChangedByFeedType(FeedType feedType) {
         if(feedType == null) return;
 
         switch(feedType) {

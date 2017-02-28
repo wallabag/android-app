@@ -1,56 +1,53 @@
 package fr.gaulupeau.apps.Poche.network.tasks;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
-import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
+import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
 
+    private static final String TAG = GetCredentialsTask.class.getSimpleName();
+
     private ResultHandler handler;
-    private final String endpoint;
+    private final String url;
     private final String username;
     private final String password;
-    private String httpAuthUsername;
-    private String httpAuthPassword;
-    private boolean customSSLSettings;
-    private boolean acceptAllCertificates;
+    private final String httpAuthUsername;
+    private final String httpAuthPassword;
+    private final boolean customSSLSettings;
 
-    private FeedsCredentials credentials;
-    private int wallabagVersion = -1;
+    private ClientCredentials credentials;
 
-    public GetCredentialsTask(ResultHandler handler, String endpoint,
+    public GetCredentialsTask(ResultHandler handler, String url,
                               String username, String password,
                               String httpAuthUsername, String httpAuthPassword,
-                              boolean customSSLSettings, boolean acceptAllCertificates,
-                              int wallabagVersion) {
+                              boolean customSSLSettings) {
         this.handler = handler;
-        this.endpoint = endpoint;
+        this.url = url;
         this.username = username;
         this.password = password;
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
         this.customSSLSettings = customSSLSettings;
-        this.acceptAllCertificates = acceptAllCertificates;
-        this.wallabagVersion = wallabagVersion;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
-        WallabagService service = new WallabagService(endpoint, username, password,
-                httpAuthUsername, httpAuthPassword, wallabagVersion,
-                WallabagConnection.createClient(false, customSSLSettings, acceptAllCertificates));
+        WallabagWebService service = new WallabagWebService(url, username, password,
+                httpAuthUsername, httpAuthPassword,
+                WallabagConnection.createClient(true, customSSLSettings));
         try {
-            credentials = service.getCredentials();
-            wallabagVersion = service.getWallabagVersion();
+            credentials = service.getApiClientCredentials();
 
             return credentials != null;
-        } catch (RequestException | IOException e) {
-            e.printStackTrace();
+        } catch(RequestException | IOException e) {
+            Log.e(TAG, "doInBackground() exception", e);
             return false;
         }
     }
@@ -58,16 +55,12 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean success) {
         if(handler != null) {
-            handler.handleGetCredentialsResult(
-                    success != null && success, credentials, wallabagVersion
-            );
+            handler.handleGetCredentialsResult(success != null && success, credentials);
         }
     }
 
     public interface ResultHandler {
-        void handleGetCredentialsResult(
-                boolean success, FeedsCredentials credentials, int wallabagVersion
-        );
+        void handleGetCredentialsResult(boolean success, ClientCredentials credentials);
     }
 
 }

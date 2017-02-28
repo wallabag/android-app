@@ -17,6 +17,9 @@
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/menuManageTags"
+        android:title="@string/menu_manageTags" />
+    <item
         android:id="@+id/menuDelete"
         android:title="@string/menuDelete" />
     <item

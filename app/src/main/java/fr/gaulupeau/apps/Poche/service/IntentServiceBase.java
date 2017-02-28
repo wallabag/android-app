@@ -3,15 +3,17 @@ package fr.gaulupeau.apps.Poche.service;
 import android.app.IntentService;
 import android.util.Log;
 
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.AuthorizationException;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+
 import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
-import fr.gaulupeau.apps.Poche.network.WallabagService;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectCredentialsException;
-import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
 
 public abstract class IntentServiceBase extends IntentService {
 
@@ -20,7 +22,7 @@ public abstract class IntentServiceBase extends IntentService {
     private Settings settings;
 
     private DaoSession daoSession;
-    private WallabagService wallabagService;
+    private WallabagWebService wallabagWebService;
 
     public IntentServiceBase(String name) {
         super(name);
@@ -31,15 +33,18 @@ public abstract class IntentServiceBase extends IntentService {
 
         Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
 
-        if(e instanceof RequestException) {
-            if(e instanceof IncorrectCredentialsException) {
+        if(e instanceof UnsuccessfulResponseException) {
+            UnsuccessfulResponseException ure = (UnsuccessfulResponseException)e;
+            if(ure instanceof AuthorizationException) {
                 result.setErrorType(ActionResult.ErrorType.INCORRECT_CREDENTIALS);
-            } else if(e instanceof IncorrectConfigurationException) {
-                result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
+                result.setMessage(ure.getResponseBody()); // TODO: fix message
             } else {
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
-                result.setMessage(e.getMessage());
+                result.setMessage(e.toString());
             }
+        } else if(e instanceof IncorrectConfigurationException) {
+            result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
+            result.setMessage(e.getMessage());
         } else if(e instanceof IOException) {
             boolean handled = false;
 
@@ -87,13 +92,18 @@ public abstract class IntentServiceBase extends IntentService {
         return daoSession;
     }
 
-    protected WallabagService getWallabagService() {
-        if(wallabagService == null) {
+    protected WallabagWebService getWallabagWebService() {
+        if(wallabagWebService == null) {
             Settings settings = getSettings();
-            wallabagService = WallabagService.fromSettings(settings);
+            wallabagWebService = WallabagWebService.fromSettings(settings);
         }
 
-        return wallabagService;
+        return wallabagWebService;
+    }
+
+    protected WallabagServiceWrapper getWallabagServiceWrapper()
+            throws IncorrectConfigurationException {
+        return WallabagServiceWrapper.getInstance();
     }
 
 }

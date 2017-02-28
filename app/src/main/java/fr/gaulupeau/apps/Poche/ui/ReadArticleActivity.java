@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +21,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -82,8 +80,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Boolean contextFavorites;
     private Boolean contextArchived;
 
-    private boolean acceptAllSSLCerts;
-
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
     private float screenScrollingPercent;
@@ -121,6 +117,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
 
+        settings = App.getInstance().getSettings();
+
         DaoSession session = DbConnection.getSession();
         mArticleDao = session.getArticleDao();
         mArticle = getArticle(articleID);
@@ -138,22 +136,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onCreate: titleText=" + titleText);
         originalUrlText = mArticle.getUrl();
         Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
+        domainText = mArticle.getDomain();
+        Log.d(TAG, "onCreate: domainText=" + domainText);
         String htmlContent = mArticle.getContent();
+        int estimatedReadingTime = mArticle.getEstimatedReadingTime(settings.getReadingSpeed());
+        htmlContent = getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
+                + htmlContent;
         if(BuildConfig.DEBUG) Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
         positionToRestore = mArticle.getArticleProgress();
         Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
         setTitle(titleText);
 
-        settings = App.getInstance().getSettings();
-
         if(settings.isImageCacheEnabled()) {
             Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
             htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
                     htmlContent, mArticle.getArticleId().longValue());
         }
-
-        acceptAllSSLCerts = settings.isAcceptAllCertificates();
 
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
@@ -203,11 +203,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         } else {
             classAttr = "";
         }
-
-        try {
-            URL url = new URL(originalUrlText);
-            domainText = url.getHost();
-        } catch (Exception ignored) {}
 
         String htmlBase;
         try {
@@ -275,15 +270,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 } else {
                     Log.d(TAG, "onReceivedHttpAuthRequest() host mismatch");
                     super.onReceivedHttpAuthRequest(view, handler, host, realm);
-                }
-            }
-
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                if(acceptAllSSLCerts) {
-                    handler.proceed();
-                } else {
-                    super.onReceivedSslError(view, handler, error);
                 }
             }
 
@@ -515,6 +501,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private boolean manageTags() {
+        Intent manageTagsIntent = new Intent(this, ManageArticleTagsActivity.class);
+        manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, mArticle.getArticleId());
+        startActivity(manageTagsIntent);
+
+        return true;
+    }
+
     private boolean openOriginal() {
         Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(originalUrlText));
         startActivity(launchBrowserIntent);
@@ -607,6 +601,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuShare:
                 return shareArticle();
+            case R.id.menuManageTags:
+                return manageTags();
             case R.id.menuDelete:
                 return deleteArticle();
             case R.id.menuOpenOriginal:
@@ -639,7 +635,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
-            Article article = getArticle(articleID);
+            Article article = getArticle(articleID); // TODO: use "articleId" not "id"
             if(article != null) {
                 article.setArticleProgress(getReadingPosition());
                 mArticleDao.update(article);

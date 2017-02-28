@@ -8,7 +8,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 public class ArticlesChangedEvent extends FeedsChangedEvent {
 
     public enum ChangeType {
-        ARCHIVED, UNARCHIVED, FAVORITED, UNFAVORITED, ADDED, DELETED, UNSPECIFIED
+        ARCHIVED, UNARCHIVED, FAVORITED, UNFAVORITED, TITLE_CHANGED, TAGS_CHANGED,
+        ADDED, DELETED, UNSPECIFIED
     }
 
     public static class ArticleEntry {
@@ -50,6 +51,10 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
 
     public void addChangedArticle(Article article, ChangeType changeType) {
         getChangedArticles().put(article.getArticleId(), new ArticleEntry(article, changeType));
+    }
+
+    public void addChangedArticleID(Article article, ChangeType changeType) {
+        getChangedArticles().put(article.getArticleId(), new ArticleEntry(null, changeType));
     }
 
     public ChangeType getArticleChangeType(Article article) {

@@ -1,32 +1,44 @@
 package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
+import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesProgressEvent;
+import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
+import fr.gaulupeau.apps.Poche.events.SyncQueueProgressEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsStartedEvent;
-import fr.gaulupeau.apps.Poche.events.UpdateFeedsFinishedEvent;
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesProgressEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
+import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
-import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
@@ -35,6 +47,8 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 public class MainService extends IntentServiceBase {
 
     private static final String TAG = MainService.class.getSimpleName();
+
+    private Updater updater;
 
     public MainService() {
         super(MainService.class.getSimpleName());
@@ -53,11 +67,9 @@ public class MainService extends IntentServiceBase {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case ARCHIVE:
-            case UNARCHIVE:
-            case FAVORITE:
-            case UNFAVORITE:
-            case DELETE:
+            case ARTICLE_CHANGE:
+            case ARTICLE_TAGS_DELETE:
+            case ARTICLE_DELETE:
             case ADD_LINK:
                 Long queueChangedLength = serveSimpleRequest(actionRequest);
                 if(queueChangedLength != null) {
@@ -81,15 +93,29 @@ public class MainService extends IntentServiceBase {
                 break;
             }
 
-            case UPDATE_FEED: {
-                UpdateFeedsStartedEvent startEvent = new UpdateFeedsStartedEvent(actionRequest);
+            case UPDATE_ARTICLES: {
+                UpdateArticlesStartedEvent startEvent = new UpdateArticlesStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
                 try {
-                    result = updateFeed(actionRequest);
+                    result = updateArticles(actionRequest);
                 } finally {
                     removeStickyEvent(startEvent);
                     if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
-                    postEvent(new UpdateFeedsFinishedEvent(actionRequest, result));
+                    postEvent(new UpdateArticlesFinishedEvent(actionRequest, result));
+                }
+                break;
+            }
+
+            case SWEEP_DELETED_ARTICLES: {
+                SweepDeletedArticlesStartedEvent startEvent
+                        = new SweepDeletedArticlesStartedEvent(actionRequest);
+                postStickyEvent(startEvent);
+                try {
+                    result = sweepDeletedArticles(actionRequest);
+                } finally {
+                    removeStickyEvent(startEvent);
+                    if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+                    postEvent(new SweepDeletedArticlesFinishedEvent(actionRequest, result));
                 }
                 break;
             }
@@ -99,50 +125,47 @@ public class MainService extends IntentServiceBase {
                 break;
         }
 
-        if(result != null) {
-            postEvent(new ActionResultEvent(actionRequest, result));
-        }
+        postEvent(new ActionResultEvent(actionRequest, result));
 
         Log.d(TAG, "onHandleIntent() finished");
     }
 
     private Long serveSimpleRequest(ActionRequest actionRequest) {
         Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s, link: %s",
-                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getLink()));
+                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getExtra()));
 
         Long queueChangedLength = null;
 
         DaoSession daoSession = getDaoSession();
-        daoSession.getDatabase().beginTransaction();
+        SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+        sqliteDatabase.beginTransactionNonExclusive();
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
             ActionRequest.Action action = actionRequest.getAction();
             switch(action) {
-                case ARCHIVE:
-                case UNARCHIVE:
-                    if(queueHelper.archiveArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.ARCHIVE)) {
+                case ARTICLE_CHANGE:
+                    if(queueHelper.changeArticle(actionRequest.getArticleID(),
+                            actionRequest.getArticleChangeType())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case FAVORITE:
-                case UNFAVORITE:
-                    if(queueHelper.favoriteArticle(actionRequest.getArticleID(),
-                            action == ActionRequest.Action.FAVORITE)) {
+                case ARTICLE_TAGS_DELETE:
+                    if(queueHelper.deleteTagsFromArticle(actionRequest.getArticleID(),
+                            actionRequest.getExtra())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
-                case DELETE:
+                case ARTICLE_DELETE:
                     if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
 
                 case ADD_LINK:
-                    if(queueHelper.addLink(actionRequest.getLink())) {
+                    if(queueHelper.addLink(actionRequest.getExtra())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
@@ -152,9 +175,9 @@ public class MainService extends IntentServiceBase {
                     break;
             }
 
-            daoSession.getDatabase().setTransactionSuccessful();
+            sqliteDatabase.setTransactionSuccessful();
         } finally {
-            daoSession.getDatabase().endTransaction();
+            sqliteDatabase.endTransaction();
         }
 
         Log.d(TAG, "serveSimpleRequest() finished");
@@ -178,62 +201,53 @@ public class MainService extends IntentServiceBase {
         List<QueueItem> queueItems = queueHelper.getQueueItems();
 
         List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
-        Set<Integer> maskedArticles = new HashSet<>();
 
+        int counter = 0, totalNumber = queueItems.size();
         for(QueueItem item: queueItems) {
+            Log.d(TAG, "syncOfflineQueue() processing " + counter + " out of " + totalNumber);
+            postEvent(new SyncQueueProgressEvent(actionRequest, counter, totalNumber));
+
             Integer articleIdInteger = item.getArticleId();
 
             Log.d(TAG, String.format(
                     "syncOfflineQueue() processing: queue item ID: %d, article ID: \"%s\"",
                     item.getId(), articleIdInteger));
 
-            if(articleIdInteger != null && maskedArticles.contains(articleIdInteger)) {
-                Log.d(TAG, String.format(
-                        "syncOfflineQueue() article with ID: \"%d\" is masked; skipping",
-                        articleIdInteger));
-                continue;
-            }
             int articleID = articleIdInteger != null ? articleIdInteger : -1;
 
-            boolean articleItem = false;
+            boolean canTolerateNotFound = false;
 
             ActionResult itemResult = null;
             try {
-                int action = item.getAction();
+                QueueItem.Action action = item.getAction();
                 switch(action) {
-                    case QueueHelper.QI_ACTION_ARCHIVE:
-                    case QueueHelper.QI_ACTION_UNARCHIVE: {
-                        articleItem = true;
+                    case ARTICLE_CHANGE: {
+                        canTolerateNotFound = true;
 
-                        if(!getWallabagService().toggleArchive(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
+                        itemResult = syncArticleChange(item, articleID);
+                        break;
+                    }
+
+                    case ARTICLE_TAGS_DELETE: {
+                        canTolerateNotFound = true;
+
+                        itemResult = syncDeleteTagsFromArticle(item, articleID);
+                        break;
+                    }
+
+                    case ARTICLE_DELETE: {
+                        canTolerateNotFound = true;
+
+                        if(getWallabagServiceWrapper().deleteArticle(articleID) == null) {
+                            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
                     }
 
-                    case QueueHelper.QI_ACTION_FAVORITE:
-                    case QueueHelper.QI_ACTION_UNFAVORITE: {
-                        articleItem = true;
-
-                        if(!getWallabagService().toggleFavorite(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
-                        }
-                        break;
-                    }
-
-                    case QueueHelper.QI_ACTION_DELETE: {
-                        articleItem = true;
-
-                        if(!getWallabagService().deleteArticle(articleID)) {
-                            itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
-                        }
-                        break;
-                    }
-
-                    case QueueHelper.QI_ACTION_ADD_LINK: {
+                    case ADD_LINK: {
                         String link = item.getExtra();
                         if(link != null && !link.isEmpty()) {
-                            if(!getWallabagService().addLink(link)) {
+                            if(getWallabagServiceWrapper().addArticle(link) == null) {
                                 itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                             }
                             if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
@@ -246,15 +260,19 @@ public class MainService extends IntentServiceBase {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + action);
                 }
-            } catch(RequestException | IOException e) {
+            } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
                 if(!r.isSuccess()) itemResult = r;
             } catch(Exception e) {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
-                itemResult = new ActionResult();
-                itemResult.setErrorType(ActionResult.ErrorType.UNKNOWN);
-                itemResult.setMessage(e.toString());
+                itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN, e.toString());
+            }
+
+            if(itemResult != null && !itemResult.isSuccess() && canTolerateNotFound
+                    && itemResult.getErrorType() == ActionResult.ErrorType.NOT_FOUND) {
+                Log.i(TAG, "syncOfflineQueue() ignoring NOT_FOUND");
+                itemResult = null;
             }
 
             if(itemResult == null || itemResult.isSuccess()) {
@@ -264,22 +282,11 @@ public class MainService extends IntentServiceBase {
 
                 Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
 
-                boolean stop = false;
-                boolean mask = false; // it seems masking is not used
+                boolean stop = true;
                 switch(itemError) {
-                    case TEMPORARY:
-                    case NO_NETWORK:
-                        stop = true;
-                        break;
-                    case INCORRECT_CONFIGURATION:
-                    case INCORRECT_CREDENTIALS:
-                        stop = true;
-                        break;
-                    case UNKNOWN:
-                        stop = true;
-                        break;
+                    case NOT_FOUND_LOCALLY:
                     case NEGATIVE_RESPONSE:
-                        mask = true; // ?
+                        stop = false;
                         break;
                 }
 
@@ -287,9 +294,6 @@ public class MainService extends IntentServiceBase {
                     result.updateWith(itemResult);
                     Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                     break;
-                }
-                if(mask && articleItem) {
-                    maskedArticles.add(articleID);
                 }
             } else { // should not happen
                 Log.w(TAG, "syncOfflineQueue() errorType is not present in itemResult");
@@ -301,15 +305,16 @@ public class MainService extends IntentServiceBase {
         Long queueLength = null;
 
         if(!completedQueueItems.isEmpty()) {
-            daoSession.getDatabase().beginTransaction();
+            SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+            sqliteDatabase.beginTransactionNonExclusive();
             try {
                 queueHelper.dequeueItems(completedQueueItems);
 
                 queueLength = queueHelper.getQueueLength();
 
-                daoSession.getDatabase().setTransactionSuccessful();
+                sqliteDatabase.setTransactionSuccessful();
             } finally {
-                daoSession.getDatabase().endTransaction();
+                sqliteDatabase.endTransaction();
             }
         }
 
@@ -327,40 +332,111 @@ public class MainService extends IntentServiceBase {
         return new Pair<>(result, queueLength);
     }
 
-    private ActionResult updateFeed(ActionRequest actionRequest) {
-        FeedUpdater.FeedType feedType = actionRequest.getFeedUpdateFeedType();
-        FeedUpdater.UpdateType updateType = actionRequest.getFeedUpdateUpdateType();
+    private ActionResult syncArticleChange(QueueItem item, int articleID)
+            throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
+        Article article = getDaoSession().getArticleDao().queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
 
-        Log.d(TAG, String.format("updateFeed(%s, %s) started", feedType, updateType));
+        if(article == null) {
+            return new ActionResult(ActionResult.ErrorType.NOT_FOUND_LOCALLY,
+                    "Article is not found locally");
+        }
+
+        WallabagService.ModifyArticleBuilder builder
+                = getWallabagServiceWrapper().getWallabagService()
+                .modifyArticleBuilder(articleID);
+
+        for(QueueItem.ArticleChangeType changeType:
+                QueueItem.ArticleChangeType.stringToEnumSet(item.getExtra())) {
+            switch(changeType) {
+                case ARCHIVE:
+                    builder.archive(article.getArchive());
+                    break;
+
+                case FAVORITE:
+                    builder.starred(article.getFavorite());
+                    break;
+
+                case TITLE:
+                    builder.title(article.getTitle());
+                    break;
+
+                case TAGS:
+                    // all tags are pushed
+                    for(Tag tag: article.getTags()) {
+                        builder.tag(tag.getLabel());
+                    }
+                    break;
+
+                default:
+                    throw new IllegalStateException("Change type is not implemented: " + changeType);
+            }
+        }
+
+        ActionResult itemResult = null;
+
+        if(WallabagServiceWrapper.executeModifyArticleCall(builder) == null) {
+            itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
+        }
+
+        return itemResult;
+    }
+
+    private ActionResult syncDeleteTagsFromArticle(QueueItem item, int articleID)
+            throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
+        WallabagServiceWrapper wallabagServiceWrapper = getWallabagServiceWrapper();
+
+        for(String tag: Arrays.asList(item.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER))) {
+            try {
+                wallabagServiceWrapper.getWallabagService()
+                        .deleteTag(articleID, Integer.parseInt(tag));
+            } catch(NotFoundException e) {
+                Log.w(TAG, String.format("HTTP 404 while removing tag %s from article %d",
+                        tag, articleID));
+            }
+        }
+
+        return null;
+    }
+
+    private ActionResult updateArticles(final ActionRequest actionRequest) {
+        Updater.UpdateType updateType = actionRequest.getUpdateType();
+        Log.d(TAG, String.format("updateArticles(%s) started", updateType));
 
         ActionResult result = new ActionResult();
         ArticlesChangedEvent event = null;
 
         if(WallabagConnection.isNetworkAvailable()) {
-            Settings settings = getSettings();
-            FeedUpdater feedUpdater = new FeedUpdater(
-                    settings.getUrl(),
-                    settings.getFeedsUserID(),
-                    settings.getFeedsToken(),
-                    settings.getHttpAuthUsername(),
-                    settings.getHttpAuthPassword(),
-                    settings.getWallabagServerVersion());
+            final Settings settings = getSettings();
 
-            DaoSession daoSession = getDaoSession();
-            daoSession.getDatabase().beginTransaction();
             try {
-                event = feedUpdater.update(feedType, updateType);
+                Updater.UpdateListener updateListener = new Updater.UpdateListener() {
+                    @Override
+                    public void onProgress(int current, int total) {
+                        postEvent(new UpdateArticlesProgressEvent(
+                                actionRequest, current, total));
+                    }
 
-                daoSession.getDatabase().setTransactionSuccessful();
-            } catch(IncorrectFeedException e) {
-                Log.e(TAG, "updateFeed() IncorrectFeedException", e);
+                    @Override
+                    public void onSuccess(long latestUpdatedItemTimestamp) {
+                        Log.i(TAG, "updateArticles() update successful, saving timestamps");
+
+                        settings.setLatestUpdatedItemTimestamp(latestUpdatedItemTimestamp);
+                        settings.setLatestUpdateRunTimestamp(System.currentTimeMillis());
+                        settings.setFirstSyncDone(true);
+                    }
+                };
+
+                event = getUpdater().update(updateType,
+                        settings.getLatestUpdatedItemTimestamp(), updateListener);
+            } catch(UnsuccessfulResponseException | IOException e) {
+                ActionResult r = processException(e, "updateArticles()");
+                result.updateWith(r);
+            } catch(Exception e) {
+                Log.e(TAG, "updateArticles() exception", e);
+
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
-                result.setMessage("Error while parsing feed: " + e.getMessage()); // TODO: string resource
-            } catch(RequestException | IOException e) {
-                ActionResult r = processException(e, "updateFeed()");
-                if(!r.isSuccess()) result = r;
-            } finally {
-                daoSession.getDatabase().endTransaction();
+                result.setMessage(e.toString());
             }
         } else {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
@@ -370,8 +446,54 @@ public class MainService extends IntentServiceBase {
             postEvent(event);
         }
 
-        Log.d(TAG, "updateFeed() finished");
+        Log.d(TAG, "updateArticles() finished");
         return result;
+    }
+
+    private ActionResult sweepDeletedArticles(final ActionRequest actionRequest) {
+        Log.d(TAG, "sweepDeletedArticles() started");
+
+        ActionResult result = new ActionResult();
+        ArticlesChangedEvent event = null;
+
+        if(WallabagConnection.isNetworkAvailable()) {
+            try {
+                Updater.ProgressListener progressListener = new Updater.ProgressListener() {
+                    @Override
+                    public void onProgress(int current, int total) {
+                        postEvent(new SweepDeletedArticlesProgressEvent(
+                                actionRequest, current, total));
+                    }
+                };
+
+                event = getUpdater().sweepDeletedArticles(progressListener);
+            } catch(UnsuccessfulResponseException | IOException e) {
+                ActionResult r = processException(e, "sweepDeletedArticles()");
+                result.updateWith(r);
+            } catch(Exception e) {
+                Log.e(TAG, "sweepDeletedArticles() exception", e);
+
+                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
+                result.setMessage(e.toString());
+            }
+        } else {
+            result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
+        }
+
+        if(event != null && event.isAnythingChanged()) {
+            postEvent(event);
+        }
+
+        Log.d(TAG, "sweepDeletedArticles() finished");
+        return result;
+    }
+
+    private Updater getUpdater() throws IncorrectConfigurationException {
+        if(updater == null) {
+            updater = new Updater(getDaoSession(), getWallabagServiceWrapper());
+        }
+
+        return updater;
     }
 
 }

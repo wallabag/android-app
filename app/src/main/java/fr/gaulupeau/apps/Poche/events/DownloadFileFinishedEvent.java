@@ -6,9 +6,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 
-public class DownloadFileFinishedEvent extends BackgroundOperationEvent {
+public class DownloadFileFinishedEvent extends BackgroundOperationFinishedEvent {
 
-    private ActionResult result;
     private Article article;
     private File file;
 
@@ -16,14 +15,10 @@ public class DownloadFileFinishedEvent extends BackgroundOperationEvent {
                                      ActionResult result,
                                      Article article,
                                      File file) {
-        super(request);
+        super(request, result);
         this.result = result;
         this.article = article;
         this.file = file;
-    }
-
-    public ActionResult getResult() {
-        return result;
     }
 
     public Article getArticle() {

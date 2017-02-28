@@ -14,42 +14,40 @@ import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.FeedsCredentials;
+import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceEndpoint;
+import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
-import fr.gaulupeau.apps.Poche.network.tasks.TestFeedsTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 
 public class ConfigurationTestHelper
         implements GetCredentialsTask.ResultHandler,
         TestConnectionTask.ResultHandler,
-        TestFeedsTask.ResultHandler {
+        TestApiAccessTask.ResultHandler {
 
     private static final String TAG = ConfigurationTestHelper.class.getSimpleName();
 
     public interface ResultHandler {
-        void onConfigurationTestSuccess(String url, Integer serverVersion);
-        void onConnectionTestFail(WallabagServiceEndpoint.ConnectionTestResult result, String details);
-        void onFeedsTestFail(TestFeedsTask.Result result, String details);
+        void onConfigurationTestSuccess(String url);
+        void onConnectionTestFail(WallabagWebService.ConnectionTestResult result, String details);
+        void onApiAccessTestFail(TestApiAccessTask.Result result, String details);
     }
 
     public interface GetCredentialsHandler {
-        void onGetCredentialsResult(String feedsUserID, String feedsToken);
+        void onGetCredentialsResult(ClientCredentials clientCredentials);
         void onGetCredentialsFail();
     }
 
-    protected Context context;
-    protected String url;
-    protected String username, password;
-    protected String feedsUserID, feedsToken;
-    protected String httpAuthUsername, httpAuthPassword;
-    protected boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
-    protected boolean acceptAllCertificates;
-    protected int wallabagServerVersion = -1;
+    private Context context;
+    private String url;
+    private String httpAuthUsername, httpAuthPassword;
+    private String username, password;
+    private String clientID, clientSecret;
+    private boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
 
-    protected boolean tryPossibleURLs;
-    protected boolean handleResult;
+    private boolean tryPossibleURLs;
+    private boolean handleResult;
 
     private ResultHandler handler;
     private GetCredentialsHandler credentialsHandler;
@@ -58,46 +56,40 @@ public class ConfigurationTestHelper
 
     private TestConnectionTask testConnectionTask;
     private GetCredentialsTask getCredentialsTask;
-    private TestFeedsTask testFeedsTask;
+    private TestApiAccessTask testApiAccessTask;
 
     private boolean canceled;
 
     private String newUrl;
-    private Integer newWallabagServerVersion;
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
                                    GetCredentialsHandler credentialsHandler,
-                                   Settings settings, boolean detectVersion,
-                                   boolean handleResult) {
+                                   Settings settings, boolean handleResult) {
         this(context, handler, credentialsHandler, settings.getUrl(),
-                settings.getUsername(), settings.getPassword(),
-                settings.getFeedsUserID(), settings.getFeedsToken(),
                 settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
-                settings.isCustomSSLSettings(), settings.isAcceptAllCertificates(),
-                detectVersion ? -1 : settings.getWallabagServerVersion(), false, handleResult);
+                settings.getUsername(), settings.getPassword(),
+                settings.getApiClientID(), settings.getApiClientSecret(),
+                settings.isCustomSSLSettings(), false, handleResult);
     }
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
                                    GetCredentialsHandler credentialsHandler, String url,
-                                   String username, String password,
-                                   String feedsUserID, String feedsToken,
                                    String httpAuthUsername, String httpAuthPassword,
-                                   boolean customSSLSettings, boolean acceptAllCertificates,
-                                   int wallabagServerVersion, boolean tryPossibleURLs,
+                                   String username, String password,
+                                   String clientID, String clientSecret,
+                                   boolean customSSLSettings, boolean tryPossibleURLs,
                                    boolean handleResult) {
         this.context = context;
         this.handler = handler;
         this.credentialsHandler = credentialsHandler;
         this.url = url;
-        this.username = username;
-        this.password = password;
-        this.feedsUserID = feedsUserID;
-        this.feedsToken = feedsToken;
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
+        this.username = username;
+        this.password = password;
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
         this.customSSLSettings = customSSLSettings;
-        this.acceptAllCertificates = acceptAllCertificates;
-        this.wallabagServerVersion = wallabagServerVersion;
 
         this.tryPossibleURLs = tryPossibleURLs;
         this.handleResult = handleResult;
@@ -118,8 +110,8 @@ public class ConfigurationTestHelper
         progressDialog.show();
 
         testConnectionTask = new TestConnectionTask(url, username, password,
-                httpAuthUsername, httpAuthPassword, customSSLSettings, acceptAllCertificates,
-                wallabagServerVersion, true, this);
+                httpAuthUsername, httpAuthPassword,
+                customSSLSettings, tryPossibleURLs, this);
         testConnectionTask.execute();
     }
 
@@ -135,10 +127,6 @@ public class ConfigurationTestHelper
         return newUrl != null ? newUrl : url;
     }
 
-    protected int getWallabagServerVersion() {
-        return newWallabagServerVersion != null ? newWallabagServerVersion : wallabagServerVersion;
-    }
-
     @Override
     public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
         dismissDialog(progressDialog);
@@ -150,24 +138,20 @@ public class ConfigurationTestHelper
                 Log.w(TAG, "onTestConnectionResult(): results are empty");
             } else {
                 String bestUrl = null;
-                int bestUrlServerVersion = -1;
-                int originalUrlServerVersion = -1;
                 boolean isOriginalBest = false;
                 boolean isOriginalOk = false;
-                WallabagServiceEndpoint.ConnectionTestResult error = null;
+                WallabagWebService.ConnectionTestResult error = null;
                 String errorMessage = null;
 
                 for(int i = results.size() - 1; i >= 0; i--) {
                     TestConnectionTask.TestResult result = results.get(i);
                     String url = result.url;
                     if(TestConnectionTask.areUrlsEqual(url, this.url)) {
-                        if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
+                        if(result.result == WallabagWebService.ConnectionTestResult.OK) {
                             isOriginalOk = true;
-                            originalUrlServerVersion = result.wallabagServerVersion;
 
                             if(bestUrl == null) {
                                 bestUrl = result.url;
-                                bestUrlServerVersion = result.wallabagServerVersion;
                                 isOriginalBest = true;
                                 break;
                             }
@@ -175,19 +159,17 @@ public class ConfigurationTestHelper
                             error = result.result;
                             errorMessage = result.errorMessage;
                         }
-                    } else if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
+                    } else if(result.result == WallabagWebService.ConnectionTestResult.OK) {
                         if(bestUrl == null) {
                             bestUrl = result.url;
-                            bestUrlServerVersion = result.wallabagServerVersion;
                         }
                     }
                 }
 
                 if(isOriginalBest) { // the original URL is just fine
-                    connectionTestOnSuccess(bestUrl, bestUrlServerVersion);
+                    connectionTestOnSuccess(bestUrl);
                 } else if(bestUrl != null) { // there is a better option
-                    showSuggestionDialog(bestUrl, bestUrlServerVersion,
-                            originalUrlServerVersion, isOriginalOk);
+                    showSuggestionDialog(bestUrl, isOriginalOk);
                 } else { // all the options have failed
                     if(handler != null) handler.onConnectionTestFail(error, errorMessage);
                     showErrorDialog(error, errorMessage);
@@ -198,17 +180,14 @@ public class ConfigurationTestHelper
         }
     }
 
-    protected void showSuggestionDialog(final String suggestedUrl,
-                                        final int suggestedUrlServerVersion,
-                                        final int originalUrlServerVersion,
-                                        boolean allowToDecline) {
+    protected void showSuggestionDialog(final String suggestedUrl, boolean allowToDecline) {
         AlertDialog.Builder b = new AlertDialog.Builder(context)
                 .setTitle(R.string.d_testConnection_urlSuggestion_title)
                 .setPositiveButton(R.string.d_testConnection_urlSuggestion_acceptButton,
                         new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        connectionTestOnSuccess(suggestedUrl, suggestedUrlServerVersion);
+                        connectionTestOnSuccess(suggestedUrl);
                     }
                 });
 
@@ -218,7 +197,7 @@ public class ConfigurationTestHelper
                             new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            connectionTestOnSuccess(null, originalUrlServerVersion);
+                            connectionTestOnSuccess(null);
                         }
                     });
         } else {
@@ -228,39 +207,41 @@ public class ConfigurationTestHelper
         b.show();
     }
 
-    protected void showErrorDialog(WallabagServiceEndpoint.ConnectionTestResult error,
+    protected void showErrorDialog(WallabagWebService.ConnectionTestResult error,
                                    String errorMessage) {
         String errorStr;
         if(error != null) {
+            int stringID;
             switch(error) {
                 case INCORRECT_URL:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectUrl);
+                    stringID = R.string.testConnection_errorMessage_incorrectUrl;
                     break;
-                case INCORRECT_SERVER_VERSION:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectServerVersion);
+                case UNSUPPORTED_SERVER_VERSION:
+                    stringID = R.string.testConnection_errorMessage_unsupportedServerVersion;
                     break;
                 case WALLABAG_NOT_FOUND:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_wallabagNotFound);
+                    stringID = R.string.testConnection_errorMessage_wallabagNotFound;
                     break;
                 case HTTP_AUTH:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_httpAuth);
+                    stringID = R.string.testConnection_errorMessage_httpAuth;
                     break;
                 case NO_CSRF:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_noCSRF);
+                    stringID = R.string.testConnection_errorMessage_noCSRF;
                     break;
                 case INCORRECT_CREDENTIALS:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_incorrectCredentials);
+                    stringID = R.string.testConnection_errorMessage_incorrectCredentials;
                     break;
                 case AUTH_PROBLEM:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_authProblems);
+                    stringID = R.string.testConnection_errorMessage_authProblems;
                     break;
                 case UNKNOWN_PAGE_AFTER_LOGIN:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_unknownPageAfterLogin);
+                    stringID = R.string.testConnection_errorMessage_unknownPageAfterLogin;
                     break;
                 default:
-                    errorStr = context.getString(R.string.testConnection_errorMessage_unknown);
+                    stringID = R.string.testConnection_errorMessage_unknown;
                     break;
             }
+            errorStr = context.getString(stringID);
         } else {
             if(errorMessage != null && !errorMessage.isEmpty()) {
                 errorStr = context.getString(R.string.testConnection_errorMessage_unknownWithMessage, errorMessage);
@@ -276,80 +257,76 @@ public class ConfigurationTestHelper
                 .show();
     }
 
-    protected void connectionTestOnSuccess(String url, Integer serverVersion) {
+    protected void connectionTestOnSuccess(String url) {
         Log.d(TAG, "connectionTestOnSuccess() new url: " + url);
         newUrl = url;
-        newWallabagServerVersion = serverVersion;
 
         if(canceled) return;
 
         if(credentialsHandler != null) {
-            getFeedsCredentials();
+            getApiCredentials();
         } else {
-            testFeedsCredentials();
+            testApiCredentials();
         }
     }
 
-    protected void getFeedsCredentials() {
-        progressDialog.setMessage(context.getString(R.string.getFeedsCredentials_progressDialogMessage));
+    protected void getApiCredentials() {
+        progressDialog.setMessage(context.getString(R.string.getCredentials_progressDialogMessage));
         progressDialog.show();
 
         getCredentialsTask = new GetCredentialsTask(this, getUrl(),
                 username, password,
                 httpAuthUsername, httpAuthPassword,
-                customSSLSettings, acceptAllCertificates,
-                getWallabagServerVersion());
+                customSSLSettings);
         getCredentialsTask.execute();
     }
 
     @Override
-    public void handleGetCredentialsResult(boolean success,
-                                           FeedsCredentials credentials,
-                                           int wallabagVersion) {
+    public void handleGetCredentialsResult(boolean success, ClientCredentials credentials) {
         dismissDialog(progressDialog);
 
         if(canceled) return;
 
         if(success) {
-            feedsUserID = credentials.userID;
-            feedsToken = credentials.token;
+            clientID = credentials.clientID;
+            clientSecret = credentials.clientSecret;
 
             if(credentialsHandler != null) {
-                credentialsHandler.onGetCredentialsResult(credentials.userID, credentials.token);
+                credentialsHandler.onGetCredentialsResult(credentials);
             }
 
-            testFeedsCredentials();
+            testApiCredentials();
         } else {
             if(credentialsHandler != null) {
                 credentialsHandler.onGetCredentialsFail();
             }
 
             new AlertDialog.Builder(context)
-                    .setTitle(R.string.d_getFeedsCredentials_title_fail)
-                    .setMessage(R.string.d_getFeedsCredentials_title_message)
+                    .setTitle(R.string.d_getCredentials_title_fail)
+                    .setMessage(R.string.d_getCredentials_title_message)
                     .setPositiveButton(R.string.ok, null)
                     .show();
         }
     }
 
-    protected void testFeedsCredentials() {
-        progressDialog.setMessage(context.getString(R.string.checkFeeds_progressDialogMessage));
+    protected void testApiCredentials() {
+        progressDialog.setMessage(context.getString(R.string.checkCredentials_progressDialogMessage));
         progressDialog.show();
 
-        testFeedsTask = new TestFeedsTask(getUrl(), feedsUserID, feedsToken,
-                httpAuthUsername, httpAuthPassword,
-                customSSLSettings, acceptAllCertificates,
-                getWallabagServerVersion(), this);
-        testFeedsTask.execute();
+        testApiAccessTask = new TestApiAccessTask(getUrl(),
+                username, password,
+                clientID, clientSecret, null, null,
+                customSSLSettings, this);
+        testApiAccessTask.execute();
     }
 
     @Override
-    public void testFeedsTaskOnResult(TestFeedsTask.Result result, String details) {
+    public void onTestApiAccessTaskResult(TestApiAccessTask.Result result, String details) {
         dismissDialog(progressDialog);
 
         if(canceled) return;
 
-        if(result == TestFeedsTask.Result.OK) {
+        if(result == TestApiAccessTask.Result.OK) {
             if(handleResult) {
                 Settings settings = App.getInstance().getSettings();
 
@@ -363,45 +340,52 @@ public class ConfigurationTestHelper
                 Toast.makeText(context, R.string.settings_parametersAreOk, Toast.LENGTH_SHORT).show();
             }
 
-            handler.onConfigurationTestSuccess(newUrl, newWallabagServerVersion);
+            handler.onConfigurationTestSuccess(newUrl);
         } else {
             if(handleResult) {
+                int basicErrorResId;
+                int messageErrorResId;
+
+                if(result == null) result = TestApiAccessTask.Result.UNKNOWN_ERROR;
+                switch(result) {
+                    case NOT_FOUND:
+                        basicErrorResId = R.string.d_checkCredentials_errorMessage_notFound;
+                        messageErrorResId = R.string.d_checkCredentials_errorMessage_notFoundWithMessage;
+                        break;
+
+                    case NO_ACCESS:
+                        basicErrorResId = R.string.d_checkCredentials_errorMessage_noAccess;
+                        messageErrorResId = R.string.d_checkCredentials_errorMessage_noAccessWithMessage;
+                        break;
+
+                    default:
+                        basicErrorResId = R.string.d_checkCredentials_errorMessage_unknown;
+                        messageErrorResId = R.string.d_checkCredentials_errorMessage_unknownWithMessage;
+                        break;
+                }
+
                 String errorMessage;
-                if(result != null) {
-                    switch(result) {
-                        case NOT_FOUND:
-                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_notFound);
-                            break;
-                        case NO_ACCESS:
-                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_noAccess);
-                            break;
-                        default:
-                            errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknown);
-                            break;
-                    }
+                if(details == null) {
+                    errorMessage = context.getString(basicErrorResId);
                 } else {
-                    if(details != null) {
-                        errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknownWithMessage, details);
-                    } else {
-                        errorMessage = context.getString(R.string.d_checkFeeds_errorMessage_unknown);
-                    }
+                    errorMessage = context.getString(messageErrorResId, details);
                 }
 
                 new AlertDialog.Builder(context)
-                        .setTitle(R.string.d_checkFeeds_title_fail)
+                        .setTitle(R.string.d_checkCredentials_title_fail)
                         .setMessage(errorMessage)
                         .setPositiveButton(R.string.ok, null)
                         .show();
             }
 
-            handler.onFeedsTestFail(result, details);
+            handler.onApiAccessTestFail(result, details);
         }
     }
 
     private void cancelTasks() {
         cancelTask(testConnectionTask);
         cancelTask(getCredentialsTask);
-        cancelTask(testFeedsTask);
+        cancelTask(testApiAccessTask);
     }
 
     private void cancelTask(AsyncTask task) {

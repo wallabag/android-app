@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
-    tools:context="fr.gaulupeau.apps.Poche.ui.ArticlesListActivity" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.MainActivity">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/articles_list_tab_layout"

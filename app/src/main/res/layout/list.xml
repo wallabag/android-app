@@ -2,14 +2,14 @@
 <android.support.v4.widget.SwipeRefreshLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_container"
+    android:id="@+id/list_swipeContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="fr.gaulupeau.apps.Poche.ui.ArticlesListFragment" >
+    tools:context="fr.gaulupeau.apps.Poche.ui.ArticleListFragment" >
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/article_list"
+        android:id="@+id/list_recyclerView"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

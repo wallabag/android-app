@@ -8,58 +8,37 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
-import com.franmontiel.persistentcookiejar.ClearableCookieJar;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.CookiePersistor;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
 
-import okhttp3.Cookie;
-import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 public class WallabagConnection {
 
     private static final String TAG = WallabagConnection.class.getSimpleName();
-
-    public static HttpUrl getHttpURL(String url) throws IncorrectConfigurationException {
-        HttpUrl httpUrl = HttpUrl.parse(url);
-
-        if(httpUrl == null) throw new IncorrectConfigurationException("Incorrect URL");
-
-        return httpUrl;
-    }
 
     public static boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
@@ -69,90 +48,32 @@ public class WallabagConnection {
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
-    public static void clearCookies(Context context) {
-        new SharedPrefsCookiePersistor(context).clear();
-        replaceClient();
-    }
-
-    public static OkHttpClient replaceClient() {
-        return Holder.client = createClient();
-    }
-
-    public static OkHttpClient getClient() {
-        if (Holder.client != null)
-            return Holder.client;
-
-        OkHttpClient client = createClient();
-
-        Holder.client = client;
-        return client;
-    }
-
     public static OkHttpClient createClient() {
         return createClient(true);
     }
 
-    public static OkHttpClient createClient(boolean persistentCookies) {
-        Settings settings = App.getInstance().getSettings();
-
-        return createClient(persistentCookies,
-                settings.isCustomSSLSettings(),
-                settings.isAcceptAllCertificates());
+    public static OkHttpClient createClient(boolean addCookieManager) {
+        return createClient(addCookieManager, App.getInstance().getSettings().isCustomSSLSettings());
     }
 
-    public static OkHttpClient createClient(
-            boolean persistentCookies, boolean customSSLSettings, boolean acceptAllCertificates) {
+    public static OkHttpClient createClient(boolean addCookieManager, boolean customSSLSettings) {
+        return getClientBuilder(addCookieManager, customSSLSettings).build();
+    }
+
+    private static OkHttpClient.Builder getClientBuilder(boolean addCookieManager,
+                                                         boolean customSSLSettings) {
         OkHttpClient.Builder b = new OkHttpClient.Builder()
                 .readTimeout(45, TimeUnit.SECONDS);
 
-        ClearableCookieJar cookieJar = new PersistentCookieJar(
-                new SetCookieCache(),
-                persistentCookies
-                        ? new SharedPrefsCookiePersistor(App.getInstance())
-                        : new FakeCookiePersistor());
-        b.cookieJar(cookieJar);
+        if(addCookieManager) {
+            b.cookieJar(new JavaNetCookieJar(new CookieManager(null, CookiePolicy.ACCEPT_ALL)));
+        }
 
         if(customSSLSettings) {
             try {
                 b.sslSocketFactory(new CustomSSLSocketFactory());
             } catch(Exception e) {
                 Log.w(TAG, "Couldn't init custom socket library", e);
-            }
-        } else if(acceptAllCertificates) {
-            try {
-                final TrustManager[] trustAllCerts = new TrustManager[]{
-                        new X509TrustManager() {
-                            @Override
-                            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                                    throws CertificateException {}
-
-                            @Override
-                            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType)
-                                    throws CertificateException {}
-
-                            @Override
-                            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                                return new java.security.cert.X509Certificate[0];
-                            }
-                        }
-                };
-
-                // Install the all-trusting trust manager
-                final SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, trustAllCerts, null);
-                // Create an ssl socket factory with our all-trusting manager
-                final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
-
-                b.sslSocketFactory(sslSocketFactory).hostnameVerifier(
-                        new HostnameVerifier() {
-                            @Override
-                            public boolean verify(String hostname, SSLSession session) {
-                                return true;
-                            }
-                        }
-                );
-            } catch(Exception e) {
-                Log.w(TAG, "Couldn't init all-trusting client", e);
             }
         }
 
@@ -161,36 +82,14 @@ public class WallabagConnection {
             b.addNetworkInterceptor(new StethoInterceptor());
         }
 
-        return b.build();
-    }
-
-    private static class Holder {
-        private static OkHttpClient client = getClient();
-    }
-
-    static class FakeCookiePersistor implements CookiePersistor {
-
-        @Override
-        public List<Cookie> loadAll() {
-            return new ArrayList<>(0);
-        }
-
-        @Override
-        public void saveAll(Collection<Cookie> cookies) {}
-
-        @Override
-        public void removeAll(Collection<Cookie> cookies) {}
-
-        @Override
-        public void clear() {}
-
+        return b;
     }
 
     /**
      * OkHttp Logging interceptor
      * http://stackoverflow.com/a/30625572/1592572
      */
-    static class LoggingInterceptor implements Interceptor {
+    private static class LoggingInterceptor implements Interceptor {
         @Override public Response intercept(Chain chain) throws IOException {
             Request request = chain.request();
 
@@ -214,7 +113,7 @@ public class WallabagConnection {
      * https://gitlab.com/bitfireAT/davdroid/blob/master/app/src/main/java/at/bitfire/davdroid/SSLSocketFactoryCompat.java
      * http://blog.dev-area.net/2015/08/13/android-4-1-enable-tls-1-1-and-tls-1-2/
      */
-    static class CustomSSLSocketFactory extends SSLSocketFactory {
+    private static class CustomSSLSocketFactory extends SSLSocketFactory {
 
         private static final String TAG = CustomSSLSocketFactory.class.getSimpleName();
 
@@ -293,7 +192,7 @@ public class WallabagConnection {
             }
         }
 
-        public CustomSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
+        private CustomSSLSocketFactory() throws NoSuchAlgorithmException, KeyManagementException {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, null, null);
             delegate = sslContext.getSocketFactory();

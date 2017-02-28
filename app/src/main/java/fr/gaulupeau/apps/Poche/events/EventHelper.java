@@ -38,7 +38,7 @@ public class EventHelper {
                 else mainUpdated = true;
                 break;
 
-            case DELETED:
+            default:
                 if(article.getArchive()) archiveUpdated = true;
                 else mainUpdated = true;
                 if(article.getFavorite()) favoriteUpdated = true;

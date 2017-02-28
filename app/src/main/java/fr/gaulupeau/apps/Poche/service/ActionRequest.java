@@ -4,28 +4,20 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Locale;
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 
-import fr.gaulupeau.apps.Poche.network.FeedUpdater;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.network.Updater;
 
 public class ActionRequest implements Parcelable {
 
     public enum Action {
-        ADD_LINK, ARCHIVE, UNARCHIVE, FAVORITE, UNFAVORITE, DELETE, SYNC_QUEUE, UPDATE_FEED,
-        DOWNLOAD_AS_FILE, FETCH_IMAGES
+        ADD_LINK, ARTICLE_CHANGE, ARTICLE_TAGS_DELETE, ARTICLE_DELETE,
+        SYNC_QUEUE, UPDATE_ARTICLES, SWEEP_DELETED_ARTICLES, FETCH_IMAGES, DOWNLOAD_AS_FILE
     }
 
     public enum RequestType {
         AUTO, MANUAL, MANUAL_BY_OPERATION
-    }
-
-    public enum DownloadFormat {
-        EPUB, MOBI, PDF, CSV, JSON, TXT, XML;
-
-        public String asString() {
-            return name().toLowerCase(Locale.US);
-        }
-
     }
 
     public static final String ACTION_REQUEST = "wallabag.extra.action_request";
@@ -35,11 +27,12 @@ public class ActionRequest implements Parcelable {
     private Long operationID;
 
     private Integer articleID;
-    private String link;
-    private Long queueLength;
-    private FeedUpdater.FeedType feedUpdateFeedType;
-    private FeedUpdater.UpdateType feedUpdateUpdateType;
-    private DownloadFormat downloadFormat;
+    private QueueItem.ArticleChangeType articleChangeType;
+    private String extra;
+    private Updater.UpdateType updateType;
+    private WallabagService.ResponseFormat downloadFormat;
+
+    private ActionRequest nextRequest;
 
     public static ActionRequest fromIntent(Intent intent) {
         return intent.getParcelableExtra(ACTION_REQUEST);
@@ -81,44 +74,44 @@ public class ActionRequest implements Parcelable {
         this.articleID = articleID;
     }
 
-    public String getLink() {
-        return link;
+    public QueueItem.ArticleChangeType getArticleChangeType() {
+        return articleChangeType;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setArticleChangeType(QueueItem.ArticleChangeType articleChangeType) {
+        this.articleChangeType = articleChangeType;
     }
 
-    public Long getQueueLength() {
-        return queueLength;
+    public String getExtra() {
+        return extra;
     }
 
-    public void setQueueLength(Long queueLength) {
-        this.queueLength = queueLength;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 
-    public FeedUpdater.FeedType getFeedUpdateFeedType() {
-        return feedUpdateFeedType;
+    public Updater.UpdateType getUpdateType() {
+        return updateType;
     }
 
-    public void setFeedUpdateFeedType(FeedUpdater.FeedType feedUpdateFeedType) {
-        this.feedUpdateFeedType = feedUpdateFeedType;
+    public void setUpdateType(Updater.UpdateType updateType) {
+        this.updateType = updateType;
     }
 
-    public FeedUpdater.UpdateType getFeedUpdateUpdateType() {
-        return feedUpdateUpdateType;
-    }
-
-    public void setFeedUpdateUpdateType(FeedUpdater.UpdateType feedUpdateUpdateType) {
-        this.feedUpdateUpdateType = feedUpdateUpdateType;
-    }
-
-    public DownloadFormat getDownloadFormat() {
+    public WallabagService.ResponseFormat getDownloadFormat() {
         return downloadFormat;
     }
 
-    public void setDownloadFormat(DownloadFormat downloadFormat) {
+    public void setDownloadFormat(WallabagService.ResponseFormat downloadFormat) {
         this.downloadFormat = downloadFormat;
+    }
+
+    public ActionRequest getNextRequest() {
+        return nextRequest;
+    }
+
+    public void setNextRequest(ActionRequest nextRequest) {
+        this.nextRequest = nextRequest;
     }
 
 // Parcelable implementation
@@ -135,11 +128,11 @@ public class ActionRequest implements Parcelable {
         writeLong(operationID, out);
 
         writeInteger(articleID, out);
-        writeString(link, out);
-        writeLong(queueLength, out);
-        writeInteger(this.feedUpdateFeedType != null ? this.feedUpdateFeedType.ordinal() : null, out);
-        writeInteger(this.feedUpdateUpdateType != null ? this.feedUpdateUpdateType.ordinal() : null, out);
-        writeInteger(this.downloadFormat != null ? this.downloadFormat.ordinal() : null, out);
+        writeInteger(articleChangeType != null ? articleChangeType.ordinal() : null, out);
+        writeString(extra, out);
+        writeInteger(updateType != null ? updateType.ordinal() : null, out);
+        writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
+        out.writeParcelable(nextRequest, 0);
     }
 
     private ActionRequest(Parcel in) {
@@ -148,20 +141,20 @@ public class ActionRequest implements Parcelable {
         operationID = readLong(in);
 
         articleID = readInteger(in);
-        link = readString(in);
-        queueLength = readLong(in);
-        Integer feedUpdateFeedTypeInteger = readInteger(in);
-        if(feedUpdateFeedTypeInteger != null) {
-            feedUpdateFeedType = FeedUpdater.FeedType.values()[feedUpdateFeedTypeInteger];
+        Integer articleChangeTypeInteger = readInteger(in);
+        if(articleChangeTypeInteger != null) {
+            articleChangeType = QueueItem.ArticleChangeType.values()[articleChangeTypeInteger];
         }
+        extra = readString(in);
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
-            feedUpdateUpdateType = FeedUpdater.UpdateType.values()[feedUpdateUpdateTypeInteger];
+            updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];
         }
         Integer downloadFormatInteger = readInteger(in);
         if(downloadFormatInteger != null) {
-            downloadFormat = DownloadFormat.values()[downloadFormatInteger];
+            downloadFormat = WallabagService.ResponseFormat.values()[downloadFormatInteger];
         }
+        nextRequest = in.readParcelable(getClass().getClassLoader());
     }
 
     private void writeLong(Long value, Parcel out) {

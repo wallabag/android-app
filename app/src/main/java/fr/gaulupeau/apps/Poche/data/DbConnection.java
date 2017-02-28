@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.data;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
@@ -16,6 +17,8 @@ import java.util.List;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 public class DbConnection {
@@ -34,7 +37,15 @@ public class DbConnection {
 
             Log.d(TAG, "creating new db session");
             WallabagOpenHelper dbHelper = new WallabagOpenHelper(context, "wallabag", null);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                dbHelper.setWriteAheadLoggingEnabled(true);
+            }
             Database db = dbHelper.getWritableDb();
+            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                if(!((SQLiteDatabase)db.getRawDatabase()).enableWriteAheadLogging()) {
+                    Log.w(TAG, "write ahead logging was not enabled");
+                }
+            }
             DaoMaster daoMaster = new DaoMaster(db);
             Holder.session = daoMaster.newSession();
         } else {
@@ -111,14 +122,19 @@ public class DbConnection {
                 db.beginTransaction();
                 try {
                     DatabaseStatement stmt = db.compileStatement(
-                            "insert into queue_item(_id, queue_number, action, extra) values(?, ?, ?, ?)");
+                            "insert into " + QueueItemDao.TABLENAME + "("
+                                    + QueueItemDao.Properties.Id.columnName + ", "
+                                    + QueueItemDao.Properties.QueueNumber.columnName + ", "
+                                    + QueueItemDao.Properties.Action.columnName + ", "
+                                    + QueueItemDao.Properties.Extra.columnName
+                                    + ") values(?, ?, ?, ?)");
 
                     int i = 1;
                     for(String url: offlineUrls) {
                         try {
                             stmt.bindLong(1, i);
                             stmt.bindLong(2, i);
-                            stmt.bindLong(3, QueueHelper.QI_ACTION_ADD_LINK);
+                            stmt.bindLong(3, QueueItem.Action.ADD_LINK.getId());
                             stmt.bindString(4, url);
 
                             stmt.executeInsert();
