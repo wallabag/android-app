@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -230,41 +231,55 @@ public class ArticlesListFragment extends Fragment implements ListAdapter.OnItem
     }
 
     private void resetListContent() {
-        List<Article> articles = getArticles(0);
+        final boolean scrollToTop = recyclerViewLayoutManager != null
+                && recyclerViewLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
 
-        boolean scrollToTop = false;
-        if(recyclerViewLayoutManager != null) {
-            scrollToTop = recyclerViewLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
-        }
+        new AsyncTask<Void, Void, List<Article>>() {
+            @Override
+            protected List<Article> doInBackground(Void... params) {
+                return getArticles(0);
+            }
 
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
-                new ArticleListDiffCallback(mArticles, articles));
+            @Override
+            protected void onPostExecute(List<Article> articles) {
+                super.onPostExecute(articles);
 
-        mArticles.clear();
-        mArticles.addAll(articles);
+                // TODO: move to background thread if possible
+                DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
+                        new ArticleListDiffCallback(mArticles, articles));
 
-        diffResult.dispatchUpdatesTo(mAdapter);
+                mArticles.clear();
+                mArticles.addAll(articles);
 
-        if(scrollListener != null) scrollListener.resetState();
+                diffResult.dispatchUpdatesTo(mAdapter);
 
-        if(scrollToTop && recyclerView != null) {
-            recyclerView.scrollToPosition(0);
-        }
+                if(scrollListener != null) scrollListener.resetState();
+
+                if(scrollToTop && recyclerView != null) {
+                    recyclerView.scrollToPosition(0);
+                }
+            }
+        }.execute();
     }
 
-    private void loadMore(int page, final int totalItemsCount) {
+    private void loadMore(final int page, final int totalItemsCount) {
         Log.d(TAG, String.format("loadMore(page: %d, totalItemsCount: %d)", page, totalItemsCount));
 
-        List<Article> articles = getArticles(page);
-        final int addedItemsCount = articles.size();
-
-        mArticles.addAll(articles);
-        recyclerView.post(new Runnable() {
+        new AsyncTask<Void, Void, List<Article>>() {
             @Override
-            public void run() {
-                mAdapter.notifyItemRangeInserted(totalItemsCount, addedItemsCount);
+            protected List<Article> doInBackground(Void... params) {
+                return getArticles(page);
             }
-        });
+
+            @Override
+            protected void onPostExecute(List<Article> articles) {
+                super.onPostExecute(articles);
+
+                mArticles.addAll(articles);
+
+                mAdapter.notifyItemRangeInserted(totalItemsCount, articles.size());
+            }
+        }.execute();
     }
 
     public void openRandomArticle() {
