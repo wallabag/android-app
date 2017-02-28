@@ -257,8 +257,12 @@ public class OperationsHelper {
 
     public static void wipeDB(Settings settings) {
         DbConnection.getSession().getArticleDao().deleteAll();
+        DbConnection.getSession().getTagDao().deleteAll();
+        DbConnection.getSession().getArticleTagsJoinDao().deleteAll();
         DbConnection.getSession().getQueueItemDao().deleteAll();
 
+        settings.setLatestUpdatedItemTimestamp(0);
+        settings.setLatestUpdateRunTimestamp(0);
         settings.setFirstSyncDone(false);
 
         EventHelper.notifyEverythingChanged();
