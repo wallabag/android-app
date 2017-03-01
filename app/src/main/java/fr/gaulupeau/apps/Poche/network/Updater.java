@@ -65,9 +65,9 @@ public class Updater {
         try {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
+                daoSession.getArticleTagsJoinDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();
                 daoSession.getTagDao().deleteAll();
-                daoSession.getArticleTagsJoinDao().deleteAll();
 
                 event.setInvalidateAll(true);
             }
