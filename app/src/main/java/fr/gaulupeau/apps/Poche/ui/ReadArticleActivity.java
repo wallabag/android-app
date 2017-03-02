@@ -11,6 +11,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
@@ -218,8 +219,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             return;
         }
 
-        String htmlPage = String.format(htmlBase, cssName, classAttr, titleText,
-                originalUrlText, domainText, htmlContent);
+        String htmlPage = String.format(htmlBase, cssName, classAttr,
+                TextUtils.htmlEncode(titleText), originalUrlText, domainText, htmlContent);
 
         String httpAuthHostTemp = settings.getUrl();
         try {
