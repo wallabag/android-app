@@ -131,8 +131,15 @@ public class Updater {
             tags = tagDao.queryBuilder().list();
         }
 
-        Map<String, Tag> tagMap = new HashMap<>(tags.size());
-        for(Tag tag: tags) tagMap.put(tag.getLabel(), tag);
+        Map<Integer, Tag> tagIdMap = new HashMap<>(tags.size());
+        Map<String, Tag> tagLabelMap = new HashMap<>(tags.size());
+        for(Tag tag: tags) {
+            if(tag.getTagId() != null) {
+                tagIdMap.put(tag.getTagId(), tag);
+            } else {
+                tagLabelMap.put(tag.getLabel(), tag);
+            }
+        }
 
         WallabagService.ArticlesQueryBuilder articlesQueryBuilder
                 = wallabagServiceWrapper.getWallabagService().getArticlesBuilder();
@@ -227,18 +234,17 @@ public class Updater {
                     List<Tag> tagJoinsToRemove = null;
 
                     for(Tag tag: articleTags) {
-                        com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag
-                                = findApiTagByLabel(tag.getLabel(), apiArticle.tags);
-                        apiArticle.tags.remove(apiTag);
+                        boolean found;
+                        if(tag.getTagId() != null) {
+                            found = findApiTagByID(tag.getTagId(), apiArticle.tags) != null;
+                        } else {
+                            found = findApiTagByLabel(tag.getLabel(), apiArticle.tags) != null;
+                        }
 
-                        if(apiTag == null) {
+                        if(!found) {
                             if(tagJoinsToRemove == null) tagJoinsToRemove = new ArrayList<>();
 
                             tagJoinsToRemove.add(tag);
-                        } else if(tag.getTagId() == null || tag.getTagId() != apiTag.id) {
-                            tag.setTagId(apiTag.id);
-
-                            tagsToUpdate.add(tag);
                         }
                     }
 
@@ -255,21 +261,39 @@ public class Updater {
                     List<Tag> tagJoinsToInsert = new ArrayList<>(apiArticle.tags.size());
 
                     for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag: apiArticle.tags) {
-                        Tag tag = tagMap.get(apiTag.label);
+                        Tag tag = tagIdMap.get(apiTag.id);
 
                         if(tag == null) {
-                            tag = new Tag(null, apiTag.id, apiTag.label);
-                            tagMap.put(tag.getLabel(), tag);
+                            tag = tagLabelMap.get(apiTag.label);
 
-                            tagsToInsert.add(tag);
-                        } else if(tag.getTagId() == null || tag.getTagId() != apiTag.id) {
-                            tag.setTagId(apiTag.id);
+                            if(tag == null) {
+                                tag = new Tag(null, apiTag.id, apiTag.label);
+
+                                tagIdMap.put(tag.getTagId(), tag);
+
+                                tagsToInsert.add(tag);
+                            } else {
+                                tag.setTagId(apiTag.id);
+
+                                tagIdMap.put(tag.getTagId(), tag);
+                                tagLabelMap.remove(tag.getLabel());
+
+                                tagsToUpdate.add(tag);
+                            }
+                        } else if(!TextUtils.equals(tag.getLabel(), apiTag.label)) {
+                            Log.w(TAG, String.format("performUpdate() tag label mismatch: " +
+                                    "tag ID: %s, local label: %s, remote label: %s",
+                                    tag.getId(), tag.getLabel(), apiTag.label));
+
+                            tag.setLabel(apiTag.label);
 
                             tagsToUpdate.add(tag);
                         }
 
-                        articleTags.add(tag);
-                        tagJoinsToInsert.add(tag);
+                        if(!articleTags.contains(tag)) {
+                            articleTags.add(tag);
+                            tagJoinsToInsert.add(tag);
+                        }
                     }
 
                     if(!tagJoinsToInsert.isEmpty()) {
@@ -366,6 +390,15 @@ public class Updater {
         }
 
         return latestUpdatedItemTimestamp;
+    }
+
+    private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByID(
+            Integer id, List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> tags) {
+        for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag tag: tags) {
+            if(id.equals(tag.id)) return tag;
+        }
+
+        return null;
     }
 
     private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByLabel(
