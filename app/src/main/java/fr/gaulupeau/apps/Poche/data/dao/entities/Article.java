@@ -23,8 +23,6 @@ public class Article {
 
     private String content;
 
-    private String author;
-
     private String title;
 
     private String domain;
@@ -72,15 +70,14 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 1312680328)
-    public Article(Long id, Integer articleId, String content, String author, String title,
-            String domain, String url, int estimatedReadingTime, String language,
-            String previewPictureURL, Boolean favorite, Boolean archive, Date creationDate,
-            Date updateDate, Double articleProgress, Boolean imagesDownloaded) {
+    @Generated(hash = 768349527)
+    public Article(Long id, Integer articleId, String content, String title, String domain, String url,
+            int estimatedReadingTime, String language, String previewPictureURL, Boolean favorite,
+            Boolean archive, Date creationDate, Date updateDate, Double articleProgress,
+            Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
-        this.author = author;
         this.title = title;
         this.domain = domain;
         this.url = url;
@@ -117,14 +114,6 @@ public class Article {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public String getTitle() {
