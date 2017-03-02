@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
     tools:context="fr.gaulupeau.apps.Poche.ui.MainActivity">
 
     <android.support.design.widget.TabLayout
