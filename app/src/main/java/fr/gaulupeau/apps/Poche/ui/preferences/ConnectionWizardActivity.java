@@ -233,7 +233,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                     .replace(android.R.id.content, goToFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             if(!noBackStack && !PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
-            ft.commit();
+            ft.commitAllowingStateLoss();
         }
     }
 
