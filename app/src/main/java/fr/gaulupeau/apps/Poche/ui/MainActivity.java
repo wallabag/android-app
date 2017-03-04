@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.Libs;
@@ -386,7 +388,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_add:
-                startActivity(new Intent(getBaseContext(), AddActivity.class));
+                showAddBagDialog();
                 break;
 
             case R.id.nav_settings:
@@ -796,6 +798,27 @@ public class MainActivity extends AppCompatActivity
             configurationTestHelper.cancel();
             configurationTestHelper = null;
         }
+    }
+
+    private void showAddBagDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.nav_add);
+
+        @SuppressLint("InflateParams")
+        final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
+
+        builder.setView(view);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                TextView textView = (TextView)view.findViewById(R.id.page_url);
+                ServiceHelper.addLink(getBaseContext(), textView.getText().toString());
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+
+        builder.show();
     }
 
 }
