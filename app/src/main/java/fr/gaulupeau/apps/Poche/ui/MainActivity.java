@@ -802,7 +802,7 @@ public class MainActivity extends AppCompatActivity
 
     private void showAddBagDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.nav_add);
+        builder.setTitle(R.string.dialog_add_label);
 
         @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
