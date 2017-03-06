@@ -28,7 +28,7 @@
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
     <string name="txtNetOffline">インターネット接続を確認してください!</string>
     <string name="txtConfigNotSet">同期の前に、アプリを構成してください!</string>
-    <string name="activity_add_label">バッグのページ</string>
+    <string name="dialog_add_label">バッグのページ</string>
     <string name="page_url">ページ URL</string>
     <string name="bag_it">バッグに入れる</string>
     <string name="share_article_title">記事を共有</string>

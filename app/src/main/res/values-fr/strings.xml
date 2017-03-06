@@ -15,7 +15,7 @@
     <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
     <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
-    <string name="activity_add_label">Sauvegarder</string>
+    <string name="dialog_add_label">Sauvegarder</string>
     <string name="page_url">URL de la page</string>
     <string name="bag_it">Sauvegarder</string>
     <string name="share_article_title">Partager l\'article</string>

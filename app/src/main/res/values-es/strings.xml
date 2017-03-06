@@ -29,7 +29,7 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
-    <string name="activity_add_label">Guardar página</string>
+    <string name="dialog_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
     <string name="bag_it">Bag it!</string>
     <string name="share_article_title">Compartir artículo</string>

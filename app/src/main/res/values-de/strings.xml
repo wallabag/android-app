@@ -28,7 +28,7 @@
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
     <string name="txtNetOffline">Bitte prüfe deine Internetverbindung!</string>
     <string name="txtConfigNotSet">Die App muss vor dem Synchronisieren konfiguriert werden!</string>
-    <string name="activity_add_label">Neuen Artikel hinzufügen</string>
+    <string name="dialog_add_label">Neuen Artikel hinzufügen</string>
     <string name="page_url">Artikel-URL</string>
     <string name="bag_it">Artikel speichern</string>
     <string name="share_article_title">Artikel teilen</string>

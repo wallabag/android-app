@@ -16,7 +16,7 @@
     <string name="d_deleteArticle_message">Вы уверены, что хотите удалить статью?</string>
     <string name="txtNetOffline">Пожалуйста, проверьте интернет-соединение!</string>
     <string name="txtConfigNotSet">Пожалуйста, настройте приложение перед синхронизацией!</string>
-    <string name="activity_add_label">Отправить в бэг</string>
+    <string name="dialog_add_label">Отправить в бэг</string>
     <string name="page_url">URL страницы</string>
     <string name="bag_it">В бэг</string>
     <string name="share_article_title">Поделиться статьёй</string>
