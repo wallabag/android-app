@@ -54,6 +54,7 @@
     <string name="settings_parametersAutofilled">Parámetros rellenados</string>
     <string name="testConnection_progressDialogMessage">Probando conexión…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorrecta</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Detectada una versión no soportada</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Servicio de wallabag no encontrado — revisa la URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticación por HTTP fallida</string>
     <string name="testConnection_errorMessage_noCSRF">Error al parsear el formulario de login</string>
@@ -69,6 +70,17 @@
     <string name="d_testConnection_urlSuggestion_message">Se recomienda cambiar la URL a: "%s". Pero también puedes usar la que escribiste.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Se recomienda cambiar la URL a: "%s"</string>
     <string name="d_testConnection_fail_title">Prueba de conexión fallida</string>
+    <string name="getCredentials_progressDialogMessage">Obteniendo credenciales API…</string>
+    <string name="d_getCredentials_title_fail">No se pueden recuperar los credenciales API</string>
+    <string name="d_getCredentials_title_message">Algo fue mal. Comprueba tu conexión a Internet e inténtalo de nuevo.</string>
+    <string name="checkCredentials_progressDialogMessage">Probando el acceso API…</string>
+    <string name="d_checkCredentials_title_fail">La prueba de acceso API ha fallado</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API no encontrada</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API no encontrada: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">Sin acceso al API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Sin acceso al API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Error desconocido</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña incorrecta</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
     <string name="updateFeed_previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
@@ -97,6 +109,10 @@
     <string name="downloadPdfTouchToOpen">Toca para abrir</string>
     <string name="downloadPdfProgressDetail">wallabag está descargando tus %s artículo en PDF</string>
     <string name="downloadPdfProgress">wallabag está descargando tu artículo en PDF</string>
+    <string name="notification_updatingArticles">Actualizando artículos</string>
+    <string name="notification_updatingArticles_full">Realizando actualización completa</string>
+    <string name="notification_updatingArticles_fast">Realizando actualización rápida</string>
+    <string name="notification_sweepingDeletedArticles">Limpiando artículos eliminados</string>
     <string name="notification_downloadingImages">Descargando imágenes</string>
     <string name="notification_syncingQueue">Sincronizando cambios locales</string>
     <string name="notification_error">Error</string>
@@ -106,7 +122,25 @@
     <string name="notification_expandedError">Error: %s</string>
     <string name="menu_lists_search">Buscar</string>
     <string name="menu_lists_changeSortOrder">Cambiar orden</string>
+    <string name="menu_lists_sweepDeletedArticles">\"Limpiar\" artículos eliminados</string>
+    <string name="menu_lists_fullUpdate">Actualización completa</string>
     <string name="other_searchHint">Buscar por título o texto</string>
+    <string name="menu_manageTags">Cambiar etiquetas</string>
+    <string name="manageTags_title">Cambiar etiquetas</string>
+    <string name="manageTags_save">Guardar</string>
+    <string name="manageTags_textField_hint">Una o varias etiquetas separadas por comas</string>
+    <string name="manageTags_addNew">Añadir</string>
+    <string name="manageTags_currentTags">Etiquetas seleccionadas:</string>
+    <string name="content_estimatedReadingTime">Tiempo estimado de lectura: %s min</string>
+
+    <string name="navigation_drawer_open">Abrir caja de navegación</string>
+    <string name="navigation_drawer_close">Cerrar caja de navegación</string>
+
+    <string name="nav_main_articles">Artículos</string>
+    <string name="nav_main_tags">Etiquetas</string>
+    <string name="nav_main_tagged_articles">Artículos etiquetados</string>
+
+    <string name="nav_add">Añadir un artículo</string>
 
     <string name="nav_other_settings">Configuración</string>
     <string name="nav_other_about">Acerca de</string>
@@ -124,7 +158,9 @@
     </string>
     <string name="pref_name_connection_username">Usuario</string>
     <string name="pref_name_connection_password">Contraseña</string>
-    <string name="pref_name_connection_autofill">Autorellenar</string>
+    <string name="pref_name_connection_api_clientID">Identificador del cliente</string>
+    <string name="pref_name_connection_api_clientSecret">Secreto del cliente</string>
+    <string name="pref_name_connection_autofill">Autocompletar</string>
     <string name="pref_desc_connection_autofill">Probar conexión y rellenar versión del servidor, ID de usuario y Token</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
@@ -140,6 +176,8 @@
     <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para el contenido del artículo</string>
+    <string name="pref_name_ui_readingSpeed">Velocidad de lectura</string>
+    <string name="pref_desc_ui_readingSpeed">Tu velocidad de lectura (en palabras por minuto). Usado para calcular el tiempo estimado de lectura.</string>
     <string name="pref_categoryName_ui_screenScrolling">Desplazamiento de pantalla</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Desplazar con botones de volumen</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tocar para desplazar</string>
@@ -147,16 +185,29 @@
     <string name="pref_name_ui_screenScrolling_percent">Porcentaje de altura de pantalla a deslizar</string>
     <string name="pref_name_ui_screenScrolling_smooth">Usar desplazamiento suave</string>
 
+    <string name="pref_categoryName_sync">Sincronización</string>
+    <string name="pref_name_sync_syncTypes">Tipos de sincronización</string>
+    <string name="pref_desc_sync_syncTypes">Pulsa para obtener más información sobre los tipos de sincronización</string>
+    <string name="pref_desc_sync_syncTypes_text">Existen dos tipos de sincronización: \"Completa\" y \"Rápida\".\n\n
+        La sincronización \"Completa\" borra todo el contenido local y lo vuelve a descargar de nuevo. Este tipo de sincronización está disponible en el menú de opciones. Solo se recomienda utilizar esta opción como último recurso.\n\n
+        La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual, normalmente tarda mucho menos tiempo y requiere menos datos. Sin embargo, este método tiene un inconveniente: no puede detectar los artículos borrados de forma remta (por lo tanto, no se eliminan artículos locales durante la sincronización \"Rápida\"). Este tipo de sincronización se ejecuta con el gesto \"pull-to-refresh\" en la lista de artíclos.\n\n
+        Para solventar este inconveniente de la sincronización \"Rápida\" existe una opción llamada \"limpiar artículos borrados\" que pregunta al servidor para cada artículo local si todavía existe en el servidor - si no existe, el artículo es eliminado. Dependiendo del número de artículos que tengas, esta operación puede llevar algún tiempo, pero ahorra muchos datos en comparación la sincronziación \"Completa\".\n\n
+        ninguna de estas funciones afecta a la sincronización cliente-servidor: los cambios locales siempre se envían al servidor antes de actualizar el contenido local.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Activar \"Limpiar artículos borrados\" después de la sincronización \"rápida\"</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lee los tipos de sincronización en la parte superior</string>
     <string name="pref_categoryName_autoSync">Sincronización automática</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Activar sincronización automática al inicio</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">La aplicación se sincronizará al iniciarse</string>
     <string name="pref_name_autoSync_enabled">Activar sincronización automática</string>
-    <string name="pref_desc_autoSync_enabled">Esto activa la sincronización automática de cambios locales (enlaces añadidos, artículos archivados, etc.) y la descarga de artículos nuevos basada en un horario</string>
+    <string name="pref_desc_autoSync_enabled">Activa la sincronización automática de cambios locales (artículos añadidos, archivados, etc.) y descarga nuevos artículos siguiendo una planificación</string>
     <string name="pref_name_autoSync_interval">Intervalo de sincronización automática</string>
     <string name="pref_option_autoSync_interval_15m">15 minutos</string>
     <string name="pref_option_autoSync_interval_30m">30 minutos</string>
     <string name="pref_option_autoSync_interval_1h">1 hora</string>
     <string name="pref_option_autoSync_interval_12h">12 horas</string>
     <string name="pref_option_autoSync_interval_24h">24 horas</string>
-    <string name="pref_name_autoSync_type">Tipo de sincronización</string>
+    <string name="pref_name_autoSync_type">Tipo de sincronización automática</string>
     <string-array name="pref_option_autoSync_type">
         <item>Rápida</item>
         <item>Completa</item>
@@ -207,5 +258,5 @@
     <string name="connectionWizard_summary_text">Presiona el botón para guardar los ajustes e ir a la pantalla principal.</string>
     <string name="connectionWizard_summary_toastMessage">Configuración completada</string>
     <string name="connectionWizard_summary_prev">Volver</string>
-    <string name="connectionWizard_summary_next">Guardar ajustes</string>
+    <string name="connectionWizard_summary_next">Guardar configuración</string>
 </resources>
