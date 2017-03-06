@@ -15,9 +15,9 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
-public class BagItProxyActivity extends AppCompatActivity {
+public class AddUrlProxyActivity extends AppCompatActivity {
 
-    private static final String TAG = BagItProxyActivity.class.getSimpleName();
+    private static final String TAG = AddUrlProxyActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +37,8 @@ public class BagItProxyActivity extends AppCompatActivity {
             pageUrl = matcher.group();
         } else {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.d_bag_fail_title)
-                    .setMessage(getString(R.string.d_bag_fail_text) + extraText)
+                    .setTitle(R.string.d_add_fail_title)
+                    .setMessage(getString(R.string.d_add_fail_text) + extraText)
                     .setPositiveButton(R.string.ok, null)
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override

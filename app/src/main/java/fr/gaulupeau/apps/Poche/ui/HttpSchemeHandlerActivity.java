@@ -18,7 +18,7 @@ public class HttpSchemeHandlerActivity extends AppCompatActivity {
         if(data != null) {
             String url = data.toString();
 
-            Intent addActivityIntent = new Intent(this, BagItProxyActivity.class);
+            Intent addActivityIntent = new Intent(this, AddUrlProxyActivity.class);
             addActivityIntent.setAction(Intent.ACTION_SEND);
             addActivityIntent.putExtra(Intent.EXTRA_TEXT, url);
 
