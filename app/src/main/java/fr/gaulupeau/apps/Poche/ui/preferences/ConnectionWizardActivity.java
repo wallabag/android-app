@@ -160,7 +160,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         String[] values = data.split("@");
 
-        if (values.length < 1 || values.length > 2) {
+        if(values.length != 2) {
             // error illegal number of URI elements detected
             throw new IllegalArgumentException("Illegal number of login URL elements detected: " + values.length);
         }
@@ -233,7 +233,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                     .replace(android.R.id.content, goToFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             if(!noBackStack && !PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
-            ft.commit();
+            ft.commitAllowingStateLoss();
         }
     }
 
