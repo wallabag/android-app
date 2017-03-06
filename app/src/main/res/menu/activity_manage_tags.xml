@@ -8,9 +8,5 @@
         android:title="@string/manageTags_save"
         android:icon="@drawable/ic_done_24dp"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/menu_manageTags_cancel"
-        android:title="@string/manageTags_cancel"
-        app:showAsAction="never" />
 
 </menu>

@@ -235,9 +235,6 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
             case R.id.menu_manageTags_save:
                 save();
                 return true;
-            case R.id.menu_manageTags_cancel:
-                finish();
-                return true;
         }
 
         return super.onOptionsItemSelected(item);

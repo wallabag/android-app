@@ -204,7 +204,6 @@
     <string name="d_getCredentials_title_message">Quelque chose s\'est mal passé. Vérifiez votre connexion internet</string>
     <string name="getCredentials_progressDialogMessage">Récupération des identifiants de l\'API…</string>
     <string name="manageTags_addNew">Ajouter</string>
-    <string name="manageTags_cancel">Annuler</string>
     <string name="manageTags_currentTags">Tags sélectionnés</string>
     <string name="manageTags_save">Sauvegarder</string>
     <string name="manageTags_textField_hint">Un ou plusieurs tags séparés par des virgules</string>

@@ -128,7 +128,6 @@
     <string name="menu_manageTags">Manage tags</string>
     <string name="manageTags_title">Manage tags</string>
     <string name="manageTags_save">Save</string>
-    <string name="manageTags_cancel">Cancel</string>
     <string name="manageTags_textField_hint">One or more tags separated by commas</string>
     <string name="manageTags_addNew">Add</string>
     <string name="manageTags_currentTags">Selected tags:</string>
