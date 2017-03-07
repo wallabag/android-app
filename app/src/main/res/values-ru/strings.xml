@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="addActivity_label">Добавить в wallabag</string>
     <string name="btnMarkRead">Прочитано</string>
     <string name="btnMarkUnread">Не прочитано</string>
     <string name="add_to_favorites">Добавить в избранное</string>

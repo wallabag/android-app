@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_name">wallabag</string>
-    <string name="addActivity_label">Add to wallabag</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnMarkUnread">Mark as Unread</string>
     <string name="add_to_favorites">Add to Favorites</string>
