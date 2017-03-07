@@ -184,11 +184,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         fontSize = settings.getArticleFontSize();
-        boolean serifFont = settings.isArticleFontSerif();
 
         List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
-        if(serifFont) additionalClasses.add("serif-font");
+        if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
+        if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
 
         String classAttr;
         if(!additionalClasses.isEmpty()) {

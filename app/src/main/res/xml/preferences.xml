@@ -99,6 +99,11 @@
                 android:title="@string/pref_name_ui_article_fontSerif"
                 android:summary="@string/pref_desc_ui_article_fontSerif"
                 android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_article_textAlignment_justify"
+                android:title="@string/pref_name_ui_article_textAlignment_justify"
+                android:summary="@string/pref_desc_ui_article_textAlignment_justify"
+                android:defaultValue="true"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
                 android:key="@string/pref_key_ui_readingSpeed"
                 android:title="@string/pref_name_ui_readingSpeed"
