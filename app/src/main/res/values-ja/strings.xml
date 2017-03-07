@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">wallabag</string>
+<resources>
     <string name="btnMarkRead">既読にする</string>
     <string name="btnMarkUnread">未読にする</string>
     <string name="add_to_favorites">お気に入りに追加</string>

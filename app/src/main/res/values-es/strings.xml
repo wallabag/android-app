@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">wallabag</string>
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
     <string name="add_to_favorites">Añadir a favoritos</string>
