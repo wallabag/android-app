@@ -352,6 +352,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
 
+    public boolean isArticleTextAlignmentJustify() {
+        return getBoolean(R.string.pref_key_ui_article_textAlignment_justify, true);
+    }
+
+    public void setArticleTextAlignmentJustify(boolean value) {
+        setBoolean(R.string.pref_key_ui_article_textAlignment_justify, value);
+    }
+
     public int getReadingSpeed() {
         return getInt(R.string.pref_key_ui_readingSpeed, 200);
     }
