@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">wallabag</string>
-    <string name="label_name">Bag it!</string>
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
     <string name="add_to_favorites">Añadir a favoritos</string>
@@ -29,9 +27,7 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
-    <string name="dialog_add_label">Guardar página</string>
     <string name="page_url">URL de la página</string>
-    <string name="bag_it">Bag it!</string>
     <string name="share_article_title">Compartir artículo</string>
     <string name="share_text_extra">" vía @wallabagapp"</string>
     <string name="positive_answer">Sí</string>
@@ -42,8 +38,8 @@
     <string name="d_urlAction_openInBrowser">Abrir en el navegador</string>
     <string name="d_urlAction_addToWallabag">Añadir a wallabag</string>
     <string name="ok">Aceptar</string>
-    <string name="d_bag_fail_title">Fallo</string>
-    <string name="d_bag_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
+    <string name="d_add_fail_title">Fallo</string>
+    <string name="d_add_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
     <string name="d_configurationChanged_title">Parámetros modificados</string>
     <string name="d_configurationChanged_message">Parece que algunos parámetros han cambiado. Se recomienda hacer una prueba de conexión.</string>
     <string name="d_configurationChanged_answer_decline">Ahora no</string>
@@ -190,7 +186,7 @@
     <string name="pref_desc_sync_syncTypes">Pulsa para obtener más información sobre los tipos de sincronización</string>
     <string name="pref_desc_sync_syncTypes_text">Existen dos tipos de sincronización: \"Completa\" y \"Rápida\".\n\n
         La sincronización \"Completa\" borra todo el contenido local y lo vuelve a descargar de nuevo. Este tipo de sincronización está disponible en el menú de opciones. Solo se recomienda utilizar esta opción como último recurso.\n\n
-        La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual, normalmente tarda mucho menos tiempo y requiere menos datos. Sin embargo, este método tiene un inconveniente: no puede detectar los artículos borrados de forma remta (por lo tanto, no se eliminan artículos locales durante la sincronización \"Rápida\"). Este tipo de sincronización se ejecuta con el gesto \"pull-to-refresh\" en la lista de artíclos.\n\n
+        La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual, normalmente tarda mucho menos tiempo y requiere menos datos. Sin embargo, este método tiene un inconveniente: no puede detectar los artículos borrados de forma remota (por lo tanto, no se eliminan artículos locales durante la sincronización \"Rápida\"). Este tipo de sincronización se ejecuta con el gesto \"pull-to-refresh\" en la lista de artíclos.\n\n
         Para solventar este inconveniente de la sincronización \"Rápida\" existe una opción llamada \"limpiar artículos borrados\" que pregunta al servidor para cada artículo local si todavía existe en el servidor - si no existe, el artículo es eliminado. Dependiendo del número de artículos que tengas, esta operación puede llevar algún tiempo, pero ahorra muchos datos en comparación la sincronziación \"Completa\".\n\n
         ninguna de estas funciones afecta a la sincronización cliente-servidor: los cambios locales siempre se envían al servidor antes de actualizar el contenido local.
     </string>

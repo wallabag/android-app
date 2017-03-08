@@ -1,7 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">wallabag</string>
-    <string name="label_name">В бэг!</string>
     <string name="btnMarkRead">Прочитано</string>
     <string name="btnMarkUnread">Не прочитано</string>
     <string name="add_to_favorites">Добавить в избранное</string>
@@ -16,9 +14,8 @@
     <string name="d_deleteArticle_message">Вы уверены, что хотите удалить статью?</string>
     <string name="txtNetOffline">Пожалуйста, проверьте интернет-соединение!</string>
     <string name="txtConfigNotSet">Пожалуйста, настройте приложение перед синхронизацией!</string>
-    <string name="dialog_add_label">Отправить в бэг</string>
+    <string name="dialog_add_label">Добавить новую статью</string>
     <string name="page_url">URL страницы</string>
-    <string name="bag_it">В бэг</string>
     <string name="share_article_title">Поделиться статьёй</string>
     <string name="share_text_extra">" через @wallabagapp"</string>
     <string name="positive_answer">Да</string>
@@ -29,8 +26,8 @@
     <string name="d_urlAction_openInBrowser">Открыть в браузере</string>
     <string name="d_urlAction_addToWallabag">Добавить в wallabag</string>
     <string name="ok">OK</string>
-    <string name="d_bag_fail_title">Ошибка</string>
-    <string name="d_bag_fail_text">В строке не найден URL:\n</string>
+    <string name="d_add_fail_title">Ошибка</string>
+    <string name="d_add_fail_text">В строке не найден URL:\n</string>
     <string name="addLink_success_text">Добавлено</string>
     <string name="testConnection_progressDialogMessage">Проверка соединения…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Некорректный URL</string>
