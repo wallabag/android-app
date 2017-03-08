@@ -1,10 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="app_name">wallabag</string>
-    <string name="label_name">Bezsebel!</string>
     <string name="btnMarkRead">Elolvasva</string>
     <string name="btnMarkUnread">Olvasatlan</string>
-    <string name="btnSettings">Beállítások</string>
     <string name="add_to_favorites">Add hozzá a Kedvencekhez</string>
     <string name="remove_from_favorites">Eltávolítás a Kedvencekből</string>
     <string name="menuShare">Megosztás</string>
@@ -30,10 +27,7 @@
     <string name="d_deleteArticle_message">Biztosan törölni akarja a cikket?</string>
     <string name="txtNetOffline">Kérjük, ellenőrizze az internetkapcsolatot!</string>
     <string name="txtConfigNotSet">Kérjük, állítsa be az alkalmazást szinkronizálás előtt!</string>
-    <string name="bag_page">Bezsebeli az oldalt</string>
-    <string name="activity_add_label">Bezsebeli az oldalt</string>
     <string name="page_url">Oldal URL</string>
-    <string name="bag_it">Bezsebel</string>
     <string name="share_article_title">Cikk megosztása</string>
     <string name="share_text_extra">" vele @wallabagapp"</string>
     <string name="positive_answer">Igen</string>
@@ -44,8 +38,8 @@
     <string name="d_urlAction_openInBrowser">Megnyitás a böngészőben</string>
     <string name="d_urlAction_addToWallabag">Hozzáadás a wallabaghez</string>
     <string name="ok">Rendben</string>
-    <string name="d_bag_fail_title">Sikertelen</string>
-    <string name="d_bag_fail_text">Nem található URL-cím a megosztás szövegében:\n</string>
+    <string name="d_add_fail_title">Sikertelen</string>
+    <string name="d_add_fail_text">Nem található URL-cím a megosztás szövegében:\n</string>
     <string name="d_configurationChanged_title">Megváltoztak a paraméterek</string>
     <string name="d_configurationChanged_message">Úgy tűnik, néhány paraméter megváltozott. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
     <string name="d_configurationChanged_answer_decline">Most nem</string>
@@ -56,7 +50,6 @@
     <string name="settings_parametersAutofilled">Paraméterek kitöltve</string>
     <string name="testConnection_progressDialogMessage">Kapcsolat tesztelése…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Helytelen URL</string>
-    <string name="testConnection_errorMessage_incorrectServerVersion">Hibás szerver verzió van kiválasztva</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag szolgáltatás nem található - ellenőrizze az URL-t</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-hitelesítés sikertelen</string>
     <string name="testConnection_errorMessage_noCSRF">Hiba a belépési űrlap elemzésekor</string>
@@ -72,18 +65,11 @@
     <string name="d_testConnection_urlSuggestion_message">Javasoljuk, hogy változtassa meg az URL-t erre: %s. De használhatja a beírtat is.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Javasolt megváltoztatni az URL-t erre: %s</string>
     <string name="d_testConnection_fail_title">Kapcsolat teszt sikertelen</string>
-    <string name="getFeedsCredentials_progressDialogMessage">Hírcsatornák beállítása…</string>
-    <string name="d_getFeedsCredentials_title_fail">Nem lehetett beállítani a hírcsatornákat</string>
-    <string name="d_getFeedsCredentials_title_message">Probléma merült fel. Ellenőrizze az internetkapcsolatot, majd próbálja meg újra.</string>
-    <string name="checkFeeds_progressDialogMessage">Hírcsatornák ellenőrzése…</string>
-    <string name="d_checkFeeds_title_fail">Hírcsatornák ellenőrzése sikertelen</string>
-    <string name="d_checkFeeds_errorMessage_notFound">Nem találhatóak hírcsatornák</string>
-    <string name="d_checkFeeds_errorMessage_noAccess">Nincs hozzáférés a hírcsatornákhoz</string>
-    <string name="d_checkFeeds_errorMessage_unknown">Ismeretlen hiba</string>
-    <string name="d_checkFeeds_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
+    <string name="d_getCredentials_title_message">Probléma merült fel. Ellenőrizze az internetkapcsolatot, majd próbálja meg újra.</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Ismeretlen hiba</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Nem lehetett bejelentkezni: valószínűleg rossz a felhasználónév vagy a jelszó</string>
     <string name="unsuccessfulRequest_errorMessage">Kérés sikertelen; válasz kód: %1$d, válasz üzenet: %2$s</string>
-    <string name="update_allFeeds">Összes hírcsatorna frissítése</string>
     <string name="updateFeed_previousUpdateNotFinished">Korábbi frissítési művelet nem fejeződött be, még</string>
     <string name="feedName_favorites">Kedvencek</string>
     <string name="feedName_archived">Archivált</string>
@@ -99,7 +85,6 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="menuAbout">Névjegy</string>
     <string name="aboutText">&lt;b>wallabag Android alkalmazás&lt;/b>&lt;br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hang magassága</string>
@@ -111,9 +96,6 @@
     <string name="downloadPdfTouchToOpen">Megnyitáshoz érintse meg</string>
     <string name="downloadPdfProgressDetail">A wallabag letölti a cikked %s PDF-ben</string>
     <string name="downloadPdfProgress">A wallabag letölti a cikked PDF-ben</string>
-    <string name="notification_updatingFeeds">Hírcsatornák frissítése</string>
-    <string name="notification_updatingAllFeeds">Minden Hírcsatorna frissítése</string>
-    <string name="notification_updatingSpecificFeed">%s hírcsatorna frissítése</string>
     <string name="notification_downloadingImages">Képek letöltése</string>
     <string name="notification_syncingQueue">Helyi változások szinkronizálása</string>
     <string name="notification_error">Hiba</string>
@@ -124,6 +106,9 @@
     <string name="menu_lists_search">Keresés</string>
     <string name="menu_lists_changeSortOrder">Rendezési sorrend módosítása</string>
     <string name="other_searchHint">Keresés cikk címe vagy szöveg alapján</string>
+
+    <string name="nav_other_settings">Beállítások</string>
+    <string name="nav_other_about">Névjegy</string>
 
     <string name="pref_name_runConnectionWizard">Kapcsolat varázsló futtatása</string>
     <string name="pref_desc_runConnectionWizard">A csatlakozás varázsló segít beállítani alapvető csatlakoztatási beállításokat</string>
@@ -140,23 +125,14 @@
     <string name="pref_name_connection_password">Jelszó</string>
     <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
     <string name="pref_desc_connection_autofill">Kapcsolat tesztelése, majd töltse ki a server verziót, felhasználói azonosítót, illetve Token-t</string>
-    <string name="pref_name_connection_serverVersion">wallabag szerver verzió</string>
-    <string name="pref_name_connection_feedsUserID">Felhasználói azonosító</string>
-    <string name="pref_name_connection_feedsToken">Token</string>
 
     <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
-    <string name="pref_name_connection_advanced_acceptAllCertificates">Minden SSL tanúsítvány elfogadása</string>
-    <string name="pref_desc_connection_advanced_acceptAllCertificates">Szükség lehet újraindításra; nem biztonságos; fontolja meg a saját aláírású tanúsítvány beszerzését.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1–4.4 verziókhoz</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP alapszintű hitelesítés</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP azonosítási felhasználónév</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP azonosítási jelszó</string>
-
-    <string name="pref_name_connection_advanced_clearCookies">Cookie-k törlése</string>
-    <string name="pref_desc_connection_advanced_clearCookies">Visszaállítja a létrehozott bejelentkezési munkamenetet (ha van)</string>
-    <string name="pref_toast_connection_advanced_clearCookies">Cookie-k törölve</string>
 
     <string name="pref_categoryName_ui">Felület</string>
     <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
@@ -207,7 +183,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt a lehetőséget ha kézzel szeretné megadni a beállításokat</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
     <string name="connectionWizard_providerSelection_next">Következő</string>
 
@@ -218,10 +193,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfiguráció</string>
     <string name="connectionWizard_provider_wallabagit_prev">Vissza</string>
     <string name="connectionWizard_provider_wallabagit_next">Csatlakozás</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguráció</string>
-    <string name="connectionWizard_provider_framabag_prev">Vissza</string>
-    <string name="connectionWizard_provider_framabag_next">Csatlakozás</string>
 
     <string name="connectionWizard_summary_titleMessage">Készen is vagyunk!</string>
     <string name="connectionWizard_summary_text">Nyomja meg a gombot a beállítások mentéséhez, és a fő képernyőhöz való visszajutáshoz.</string>
