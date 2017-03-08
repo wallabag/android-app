@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">wallabag</string>
+<resources>
+    <string name="app_name">wallabag</string>
     <string name="label_name">Bezsebel!</string>
     <string name="btnMarkRead">Elolvasva</string>
     <string name="btnMarkUnread">Olvasatlan</string>
@@ -44,8 +45,7 @@
     <string name="d_urlAction_addToWallabag">Hozzáadás a wallabaghez</string>
     <string name="ok">Rendben</string>
     <string name="d_bag_fail_title">Sikertelen</string>
-    <string name="d_bag_fail_text">Nem található URL-cím a megosztás szövegében:
-</string>
+    <string name="d_bag_fail_text">Nem található URL-cím a megosztás szövegében:\n</string>
     <string name="d_configurationChanged_title">Megváltoztak a paraméterek</string>
     <string name="d_configurationChanged_message">Úgy tűnik, néhány paraméter megváltozott. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
     <string name="d_configurationChanged_answer_decline">Most nem</string>
@@ -100,7 +100,7 @@
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
     <string name="menuAbout">Névjegy</string>
-    <string name="aboutText"><b>wallabag Android alkalmazás</b><br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
+    <string name="aboutText">&lt;b>wallabag Android alkalmazás&lt;/b>&lt;br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hang magassága</string>
     <string name="readVolume">Olvasás hangereje</string>
@@ -131,14 +131,11 @@
     <string name="pref_categoryName_connection">Kapcsolat</string>
     <string name="pref_name_connection_url">wallabag URL-címe</string>
     <string name="pref_desc_connection_url">
- Példák:
-
- <i>https://wallabag.example.com</i>
-
- <i>https://example.com/wallabag</i>
-
- <i>https://framabag.org/u/your-username</i>
- </string>
+        Példák:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
     <string name="pref_name_connection_username">Felhasználónév</string>
     <string name="pref_name_connection_password">Jelszó</string>
     <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
@@ -151,7 +148,7 @@
     <string name="pref_name_connection_advanced_acceptAllCertificates">Minden SSL tanúsítvány elfogadása</string>
     <string name="pref_desc_connection_advanced_acceptAllCertificates">Szükség lehet újraindításra; nem biztonságos; fontolja meg a saját aláírású tanúsítvány beszerzését.</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1-4.4 verziókhoz</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1–4.4 verziókhoz</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP alapszintű hitelesítés</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP azonosítási felhasználónév</string>
