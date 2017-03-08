@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="btnMarkRead">Elolvasva</string>
+    <string name="btnMarkUnread">Olvasatlan</string>
+    <string name="add_to_favorites">Add hozzá a Kedvencekhez</string>
+    <string name="remove_from_favorites">Eltávolítás a Kedvencekből</string>
+    <string name="menuShare">Megosztás</string>
+    <string name="menuNext">Következő cikk</string>
+    <string name="menuPrevious">Előző cikk</string>
+    <string name="menuDelete">Törlés</string>
+    <string name="menuOpenOriginal">Eredeti megnyitása</string>
+    <string name="menuTTS">Szövegfelolvasó</string>
+    <string name="ttsSpeed">Sebesség</string>
+    <string name="ttsPitch">Hangmagasság</string>
+    <string name="ttsVolume">Hangerő</string>
+    <string name="ttsLanguage">Válasszon nyelvet</string>
+    <string name="ttsVoice">Válasszon hangot</string>
+    <string name="ttsAutoplayNextArticle">Következő cikk automatikus lejátszása</string>
+    <string name="ttsError">Szövegfelolvasó hiba</string>
+    <string name="ttsFastRewind">Gyors Visszatekerés</string>
+    <string name="ttsPlayPause">Lejátszás / Szünet</string>
+    <string name="ttsFastForward">Gyors előretekerés</string>
+    <string name="ttsOptions">Beállítások</string>
+    <string name="menu_open_random_article">Találomra egy cikk</string>
+    <string name="menu_syncLocalChanges">Szinkronizál a szerverrel</string>
+    <string name="d_deleteArticle_title">Törli a cikket?</string>
+    <string name="d_deleteArticle_message">Biztosan törölni akarja a cikket?</string>
+    <string name="txtNetOffline">Kérjük, ellenőrizze az internetkapcsolatot!</string>
+    <string name="txtConfigNotSet">Kérjük, állítsa be az alkalmazást szinkronizálás előtt!</string>
+    <string name="page_url">Oldal URL</string>
+    <string name="share_article_title">Cikk megosztása</string>
+    <string name="share_text_extra">" vele @wallabagapp"</string>
+    <string name="positive_answer">Igen</string>
+    <string name="negative_answer">Nem</string>
+    <string name="no_articles">Nincsenek cikkek</string>
+    <string name="loading_article_text">Betöltés…</string>
+    <string name="d_urlAction_title">Válasszon egy műveletet az URL-hez</string>
+    <string name="d_urlAction_openInBrowser">Megnyitás a böngészőben</string>
+    <string name="d_urlAction_addToWallabag">Hozzáadás a wallabaghez</string>
+    <string name="ok">Rendben</string>
+    <string name="d_add_fail_title">Sikertelen</string>
+    <string name="d_add_fail_text">Nem található URL-cím a megosztás szövegében:\n</string>
+    <string name="d_configurationChanged_title">Megváltoztak a paraméterek</string>
+    <string name="d_configurationChanged_message">Úgy tűnik, néhány paraméter megváltozott. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
+    <string name="d_configurationChanged_answer_decline">Most nem</string>
+    <string name="d_configurationIsQuestionable_title">Észlelt probléma</string>
+    <string name="d_configurationIsQuestionable_message">Volt egy csatlakozási hiba mostanában. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
+    <string name="addLink_success_text">Hozzáadva</string>
+    <string name="settings_parametersAreOk">A paraméterek jók</string>
+    <string name="settings_parametersAutofilled">Paraméterek kitöltve</string>
+    <string name="testConnection_progressDialogMessage">Kapcsolat tesztelése…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">Helytelen URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag szolgáltatás nem található - ellenőrizze az URL-t</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP-hitelesítés sikertelen</string>
+    <string name="testConnection_errorMessage_noCSRF">Hiba a belépési űrlap elemzésekor</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Nem tudok belépni – ellenőrizze a felhasználónevet és a jelszót</string>
+    <string name="testConnection_errorMessage_authProblems">Engedélyezéssel kapcsolatos problémák. Ezeket általában HTTP-átirányítások okozzák.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ismeretlen oldal bejelentkezés után</string>
+    <string name="testConnection_errorMessage_unknown">Ismeretlen hiba</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
+    <string name="d_testConnection_urlSuggestion_title">Fontolja meg az URL megváltoztatását</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Javasolt használata</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Saját használata</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Mégse</string>
+    <string name="d_testConnection_urlSuggestion_message">Javasoljuk, hogy változtassa meg az URL-t erre: %s. De használhatja a beírtat is.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Javasolt megváltoztatni az URL-t erre: %s</string>
+    <string name="d_testConnection_fail_title">Kapcsolat teszt sikertelen</string>
+    <string name="d_getCredentials_title_message">Probléma merült fel. Ellenőrizze az internetkapcsolatot, majd próbálja meg újra.</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Ismeretlen hiba</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Nem lehetett bejelentkezni: valószínűleg rossz a felhasználónév vagy a jelszó</string>
+    <string name="unsuccessfulRequest_errorMessage">Kérés sikertelen; válasz kód: %1$d, válasz üzenet: %2$s</string>
+    <string name="updateFeed_previousUpdateNotFinished">Korábbi frissítési művelet nem fejeződött be, még</string>
+    <string name="feedName_favorites">Kedvencek</string>
+    <string name="feedName_archived">Archivált</string>
+    <string name="feedName_unread">Olvasatlan</string>
+    <string name="articleList_favoriteMark">Kedvencek</string>
+    <string name="articleList_ArchivedMark">Archiváltak</string>
+    <string name="noPreviousArticle">Nincs előző cikk az aktuális listában</string>
+    <string name="noNextArticle">Nincs következő cikk az aktuális listában</string>
+    <string name="themeName_light">Világos</string>
+    <string name="themeName_light_contrast">Világos (kontrasztos)</string>
+    <string name="themeName_dark">Sötét</string>
+    <string name="themeName_dark_contrast">Sötét (kontrasztos)</string>
+    <string name="themeName_solarized">Túlexponált</string>
+    <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
+    <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
+    <string name="aboutText">&lt;b>wallabag Android alkalmazás&lt;/b>&lt;br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
+    <string name="readSpeed">Olvasási sebesség</string>
+    <string name="voiceHeight">Hang magassága</string>
+    <string name="readVolume">Olvasás hangereje</string>
+    <string name="menuDownloadPdf">PDF letöltése</string>
+    <string name="downloadPdfPathStart">Cikk letöltése</string>
+    <string name="downloadPdfArticleDownloaded">A cikk le lett töltve</string>
+    <string name="downloadPdfArticleDownloadedDetail">A cikk: %s le lett töltve</string>
+    <string name="downloadPdfTouchToOpen">Megnyitáshoz érintse meg</string>
+    <string name="downloadPdfProgressDetail">A wallabag letölti a cikked %s PDF-ben</string>
+    <string name="downloadPdfProgress">A wallabag letölti a cikked PDF-ben</string>
+    <string name="notification_downloadingImages">Képek letöltése</string>
+    <string name="notification_syncingQueue">Helyi változások szinkronizálása</string>
+    <string name="notification_error">Hiba</string>
+    <string name="notification_incorrectCredentials">Helytelen hitelesítő adatok</string>
+    <string name="notification_incorrectConfiguration">Helytelen konfiguráció</string>
+    <string name="notification_unknownError">Ismeretlen hiba</string>
+    <string name="notification_expandedError">Hiba: %s</string>
+    <string name="menu_lists_search">Keresés</string>
+    <string name="menu_lists_changeSortOrder">Rendezési sorrend módosítása</string>
+    <string name="other_searchHint">Keresés cikk címe vagy szöveg alapján</string>
+
+    <string name="nav_other_settings">Beállítások</string>
+    <string name="nav_other_about">Névjegy</string>
+
+    <string name="pref_name_runConnectionWizard">Kapcsolat varázsló futtatása</string>
+    <string name="pref_desc_runConnectionWizard">A csatlakozás varázsló segít beállítani alapvető csatlakoztatási beállításokat</string>
+
+    <string name="pref_categoryName_connection">Kapcsolat</string>
+    <string name="pref_name_connection_url">wallabag URL-címe</string>
+    <string name="pref_desc_connection_url">
+        Példák:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
+    <string name="pref_name_connection_username">Felhasználónév</string>
+    <string name="pref_name_connection_password">Jelszó</string>
+    <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
+    <string name="pref_desc_connection_autofill">Kapcsolat tesztelése, majd töltse ki a server verziót, felhasználói azonosítót, illetve Token-t</string>
+
+    <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1–4.4 verziókhoz</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP alapszintű hitelesítés</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP azonosítási felhasználónév</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP azonosítási jelszó</string>
+
+    <string name="pref_categoryName_ui">Felület</string>
+    <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
+    <string name="pref_name_ui_article_fontSize">Cikk betűméret (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Serif betűtípussal</string>
+    <string name="pref_desc_ui_article_fontSerif">Serif betűtípust a cikk szövegéhez</string>
+    <string name="pref_categoryName_ui_screenScrolling">Képernyő görgetés</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Lapozzunk a hangerő gombokkal</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Érintésre görget</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Görgessen a képernyő bal és jobb oldalának megérintésével</string>
+    <string name="pref_name_ui_screenScrolling_percent">Képernyőmagasság százaléka a görgetéshez</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Finomgörgetés használata</string>
+
+    <string name="pref_categoryName_autoSync">Automatikus szinkronizálás</string>
+    <string name="pref_name_autoSync_enabled">Automatikus szinkronizálás engedélyezése</string>
+    <string name="pref_desc_autoSync_enabled">Ez lehetővé teszi a helyi változások automatikus szinkronizálást (linkek, archivált cikkek, stb.) és letölti az új cikkeket a megadott ütemezés szerint</string>
+    <string name="pref_name_autoSync_interval">Automatikus szinkronizálási időköz</string>
+    <string name="pref_option_autoSync_interval_15m">15 perc</string>
+    <string name="pref_option_autoSync_interval_30m">30 perc</string>
+    <string name="pref_option_autoSync_interval_1h">1 óra</string>
+    <string name="pref_option_autoSync_interval_12h">12 óra</string>
+    <string name="pref_option_autoSync_interval_24h">24 óra</string>
+    <string name="pref_name_autoSync_type">Automatikus szinkronizálás típusa</string>
+    <string name="pref_name_autoSyncQueue_enabled">Külön szinkron a helyi változásoknak</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Ez lehetővé teszi a helyi változások (linkek, archivált cikkek, stb.) szinkronizálását a szerverrel, amint a hálózat elérhető lesz.</string>
+    <string name="pref_name_autoDlNew_enabled">Töltse le az új cikkeket a hozzáadásuk után</string>
+    <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a letöltés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
+    <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek beágyazott képeihez</string>
+    <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez nagyon hosszú időt és sok tárhelyet vehet igénybe.</string>
+
+    <string name="pref_categoryName_miscellaneous">Egyéb</string>
+    <string name="pref_name_misc_handleHttpScheme">HTTP rendszer kezelése</string>
+    <string name="pref_desc_misc_handleHttpScheme">A wallabag megjelenítése a web böngészők között</string>
+    <string name="pref_name_misc_wipeDB">Adatbázis törlése</string>
+    <string name="pref_desc_misc_wipeDB">Töröl minden cikket a helyi adatbázisból, eltávolítja az összes nem szinkronizált helyi változást és Url-t</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Törölje az adatbázist?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Biztos benne, hogy törölni szeretné az adatokat?</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">Helytelen kapcsolat URI-t használt</string>
+
+    <string name="connectionWizard_welcome_titleMessage">Üdvözli a wallabag!</string>
+    <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítania a kapcsolatot a szerverrel. Ez a varázsló megpróbál segíteni ebben.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Bármikor újra futtathatja az internetkapcsolat varázslót a beállításokból.</string>
+    <string name="connectionWizard_welcome_prev">Kihagyás</string>
+    <string name="connectionWizard_welcome_next">Következő</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Wallabag szolgáltató kiválasztása</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt a lehetőséget ha kézzel szeretné megadni a beállításokat</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
+    <string name="connectionWizard_providerSelection_next">Következő</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Alapkonfiguráció</string>
+    <string name="connectionWizard_provider_general_prev">Vissza</string>
+    <string name="connectionWizard_provider_general_next">Csatlakozás</string>
+
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfiguráció</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Vissza</string>
+    <string name="connectionWizard_provider_wallabagit_next">Csatlakozás</string>
+
+    <string name="connectionWizard_summary_titleMessage">Készen is vagyunk!</string>
+    <string name="connectionWizard_summary_text">Nyomja meg a gombot a beállítások mentéséhez, és a fő képernyőhöz való visszajutáshoz.</string>
+    <string name="connectionWizard_summary_toastMessage">A beállítás befejeződött</string>
+    <string name="connectionWizard_summary_prev">Vissza</string>
+    <string name="connectionWizard_summary_next">Beállítások mentése</string>
+</resources>
