@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="btnMarkRead">Segna come Già Letto</string>
+    <string name="btnMarkUnread">Segna come Da Leggere</string>
+    <string name="add_to_favorites">Aggiungi ai Preferiti</string>
+    <string name="remove_from_favorites">Rimuovi dai Preferiti</string>
+    <string name="menuShare">Condividi</string>
+    <string name="menuNext">Prossimo articolo</string>
+    <string name="menuPrevious">Articolo precedente</string>
+    <string name="menuDelete">Elimina</string>
+    <string name="menuOpenOriginal">Apri originale</string>
+    <string name="menuTTS">Text To Speech</string>
+    <string name="ttsSpeed">Velocità</string>
+    <string name="ttsPitch">Tonalità</string>
+    <string name="ttsVolume">Volume</string>
+    <string name="ttsLanguage">Scegli Lingua</string>
+    <string name="ttsVoice">Scegli Voce</string>
+    <string name="ttsAutoplayNextArticle">Riproduci automaticamente il prossimo articolo</string>
+    <string name="ttsError">Errore Text To Speech</string>
+    <string name="ttsFastRewind">Vai indietro</string>
+    <string name="ttsPlayPause">Play / Pausa</string>
+    <string name="ttsFastForward">Vai avanti</string>
+    <string name="ttsOptions">Opzioni</string>
+    <string name="menu_open_random_article">Apri articolo casuale</string>
+    <string name="menu_syncLocalChanges">Sincronizza modifiche locali</string>
+    <string name="d_deleteArticle_title">Cancella articolo?</string>
+    <string name="d_deleteArticle_message">Sei sicuro di voler cancellare l\'articolo?</string>
+    <string name="txtNetOffline">Si prega di controllare la connessione ad Internet!</string>
+    <string name="txtConfigNotSet">Si prega di configurare l\'app prima di sincronizzare!</string>
+    <string name="dialog_add_label">Salva pagina</string>
+    <string name="page_url">URL pagina</string>
+    <string name="share_article_title">Condividi articolo</string>
+    <string name="share_text_extra">" attraverso @wallabagapp"</string>
+    <string name="positive_answer">Sì</string>
+    <string name="negative_answer">No</string>
+    <string name="no_articles">Nessun articolo</string>
+    <string name="loading_article_text">Caricamento…</string>
+    <string name="d_urlAction_title">Seleziona un\'azione per URL</string>
+    <string name="d_urlAction_openInBrowser">Apri nel browser</string>
+    <string name="d_urlAction_addToWallabag">Aggiungi a wallabag</string>
+    <string name="ok">OK</string>
+    <string name="d_add_fail_title">Insuccesso</string>
+    <string name="d_add_fail_text">Impossibile trovare URL nel testo da condividere:\n</string>
+    <string name="d_configurationChanged_title">Parametri cambiati</string>
+    <string name="d_configurationChanged_message">Sembra che alcuni parametri siano stati cambiati. É consigliabile eseguire un test di connessione.</string>
+    <string name="d_configurationChanged_answer_decline">Non ora</string>
+    <string name="d_configurationIsQuestionable_title">Problema trovato</string>
+    <string name="d_configurationIsQuestionable_message">C\'é stato un errore di connessione recentemente. É consigliabile eseguire un test di connessione.</string>
+    <string name="addLink_success_text">Aggiunto</string>
+    <string name="settings_parametersAreOk">I parametri vanno bene</string>
+    <string name="settings_parametersAutofilled">Parametri riempiti</string>
+    <string name="testConnection_progressDialogMessage">Testando connessione…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">URL sbagliato</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Individuata versione del server non supportata</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Servizio wallabag non trovato — controlla l\' URL</string>
+    <string name="testConnection_errorMessage_httpAuth">Autenticazione HTTP fallita</string>
+    <string name="testConnection_errorMessage_noCSRF">Errore analisi modulo login</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Impossibile eseguire il login — controlla username e password</string>
+    <string name="testConnection_errorMessage_authProblems">Problemi legati all\'autorizzazione. Causati di solito da reindirizzamenti HTTP.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Pagina sconosciuta dopo il login</string>
+    <string name="testConnection_errorMessage_unknown">Errore sconosciuto</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">errore sconosciuto: %s</string>
+    <string name="d_testConnection_urlSuggestion_title">Considera cambiare URL</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Usa consigliato</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Usa il mio</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Annulla</string>
+    <string name="d_testConnection_urlSuggestion_message">É consigliabile cambiare l\'URL in: "%s". Pupi però usare anche quello già inserito.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">É consigliabile cambiare l\'URL in: "%s"</string>
+    <string name="d_testConnection_fail_title">Test di connessione fallito</string>
+    <string name="getCredentials_progressDialogMessage">Acquisendo credenziali API…</string>
+    <string name="d_getCredentials_title_fail">Impossibile acquisire credenziali API</string>
+    <string name="d_getCredentials_title_message">Qalcosa é andato storto. Controlla la tua connessione ad internet e riprova.</string>
+    <string name="checkCredentials_progressDialogMessage">Testando accesso API…</string>
+    <string name="d_checkCredentials_title_fail">Test di accesso API fallito</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API non trovata</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API non trovata: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">Nessun accesso all\'API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Nessun accesso all\'API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Errore sconosciuto</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore sconosciuto: %s</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Impossibile eseguire il login: eventuali username o password sbagliati</string>
+    <string name="unsuccessfulRequest_errorMessage">"Richiesta senza successo; codice di risposta: %1$d, messaggio di risposta: %2$s"</string>
+    <string name="updateFeed_previousUpdateNotFinished">Operazione di aggiornamento precedente non ancora finita</string>
+    <string name="feedName_favorites">Preferiti</string>
+    <string name="feedName_archived">Archiviati</string>
+    <string name="feedName_unread">Non letti</string>
+    <string name="articleList_favoriteMark">Segno dei preferiti</string>
+    <string name="articleList_ArchivedMark">Segno degli archiviati</string>
+    <string name="noPreviousArticle">Non c\'é nessun articolo precedente nella lista corrente</string>
+    <string name="noNextArticle">Non c\'é nessun articolo successivo nella lista corrente</string>
+    <string name="themeName_light">Chiaro</string>
+    <string name="themeName_light_contrast">Chiaro (alto contrasto)</string>
+    <string name="themeName_dark">Scuro</string>
+    <string name="themeName_dark_contrast">Scuro (alto contrasto)</string>
+    <string name="themeName_solarized">Solarizzato</string>
+    <string name="menu_readArticle_increaseFontSize">Aumenta dimensione del font</string>
+    <string name="menu_readArticle_decreaseFontSize">Diminuisci dimensione del font</string>
+    <string name="aboutText">&lt;b>App wallabag per Android&lt;/b>&lt;br />wallabag é un\'applicazione self hostable che ti permette di non perdere più nessun contenuto. Clicca, salva e leggi quando puoi. Estrae il contenuto in modo che tu possa leggere quando puoi.</string>
+    <string name="readSpeed">Velocità di lettura</string>
+    <string name="voiceHeight">Tonalità della voce</string>
+    <string name="readVolume">Volume di lettura</string>
+    <string name="menuDownloadPdf">Scarica PDF</string>
+    <string name="downloadPdfPathStart">Scaricando articolo</string>
+    <string name="downloadPdfArticleDownloaded">Articolo scaricato</string>
+    <string name="downloadPdfArticleDownloadedDetail">Articolo %s scaricato</string>
+    <string name="downloadPdfTouchToOpen">Tocca per aprire</string>
+    <string name="downloadPdfProgressDetail">wallabag scarica il tuo articolo %s in PDF</string>
+    <string name="downloadPdfProgress">wallabag scarica il tuo articolo in PDF</string>
+    <string name="notification_updatingArticles">Aggiornando articoli</string>
+    <string name="notification_updatingArticles_full">Aggiornamento completo in corso</string>
+    <string name="notification_updatingArticles_fast">Aggiornamento veloce in corso</string>
+    <string name="notification_sweepingDeletedArticles">Pulendo articoli cancellati</string>
+    <string name="notification_downloadingImages">Scaricando immagini</string>
+    <string name="notification_syncingQueue">Sincronizzando modifiche locali</string>
+    <string name="notification_error">Errore</string>
+    <string name="notification_incorrectCredentials">Credenziali sbagliate</string>
+    <string name="notification_incorrectConfiguration">Configurazione sbagliata</string>
+    <string name="notification_unknownError">Errore sconosciuto</string>
+    <string name="notification_expandedError">Errore: %s</string>
+    <string name="menu_lists_search">Cerca</string>
+    <string name="menu_lists_changeSortOrder">Cambia ordinamento</string>
+    <string name="menu_lists_sweepDeletedArticles">\"Pulisci\" articoli cancellati</string>
+    <string name="menu_lists_fullUpdate">Aggiornamento completo</string>
+    <string name="other_searchHint">Cerca per articolo o per testo</string>
+    <string name="menu_manageTags">Gestisci etichette</string>
+    <string name="manageTags_title">Gestisci etichette</string>
+    <string name="manageTags_save">Salva</string>
+    <string name="manageTags_textField_hint">Una o più etichette separate da virgole</string>
+    <string name="manageTags_addNew">Aggiungi</string>
+    <string name="manageTags_currentTags">Etichette selezionate:</string>
+    <string name="content_estimatedReadingTime">Tempo di lettura stimato: %s min</string>
+
+    <string name="navigation_drawer_open">Apri menù di navigazione</string>
+    <string name="navigation_drawer_close">Chiudi menù di navigazione</string>
+
+    <string name="nav_main_articles">Articoli</string>
+    <string name="nav_main_tags">Etichette</string>
+    <string name="nav_main_tagged_articles">Articoli etichettati</string>
+
+    <string name="nav_add">Aggiungi nuova voce</string>
+
+    <string name="nav_other_settings">Impostazioni</string>
+    <string name="nav_other_about">Informazioni</string>
+
+    <string name="pref_name_runConnectionWizard">Esegui assistente di connessione</string>
+    <string name="pref_desc_runConnectionWizard">L\'assistente di connessione ti aiuterà a creare un\'impostazione di connessione basica</string>
+
+    <string name="pref_categoryName_connection">Connessione</string>
+    <string name="pref_name_connection_url">URL di wallabag</string>
+    <string name="pref_desc_connection_url">
+        Esempi:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
+    <string name="pref_name_connection_username">Username</string>
+    <string name="pref_name_connection_password">Password</string>
+    <string name="pref_name_connection_api_clientID">ID del Client</string>
+    <string name="pref_name_connection_api_clientSecret">Segreto del Client</string>
+    <string name="pref_name_connection_autofill">Riempimento automatico</string>
+    <string name="pref_desc_connection_autofill">Testa la connessione ed inserisci la versione dle server, user ID, e Token</string>
+
+    <string name="pref_categoryName_connection_advanced">Impostazioni di connessione avanzate</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Impostazioni SSL personalizzate</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Disabilita SSL su tutti i dispositivi, abilita TLS 1.1 e TLS 1.2 su Android 4.1–4.4</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Autenticazione basica HTTP</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Se non sai cos\'é, lasciala vuota</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Username HTTP</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">Password HTTP</string>
+
+    <string name="pref_categoryName_ui">UI</string>
+    <string name="pref_name_ui_theme">Tema Applicazione</string>
+    <string name="pref_name_ui_article_fontSize">Dimensione font articolo (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Carattere Serif</string>
+    <string name="pref_desc_ui_article_fontSerif">Carattere Serif per i font dell\'articolo</string>
+    <string name="pref_name_ui_readingSpeed">Velocità di lettura</string>
+    <string name="pref_desc_ui_readingSpeed">La tua velocità di lettura (misurata in parole al minuto). Usata per calcolare il tempo di lettura stimato.</string>
+    <string name="pref_categoryName_ui_screenScrolling">Scorrimento schermo</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scorri con i bottoni del volume</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Tocca per scorrere</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Scorri lo schermo toccando i lati destro e sinistro dello schermo</string>
+    <string name="pref_name_ui_screenScrolling_percent">Percentuale dell\'altezza dello schermo da scorrere</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Usa scorrimento morbido</string>
+
+    <string name="pref_categoryName_sync">Sincronizzazione</string>
+    <string name="pref_name_sync_syncTypes">Tipi di sincronizzazione</string>
+    <string name="pref_desc_sync_syncTypes">Premi per mostrare più informazioni sui tipi di sincronizzazione</string>
+    <string name="pref_desc_sync_syncTypes_text">Ci sono due tipi di sincronizzazione principali: \"Completa\" e \"Veloce\".\n\n
+        Il tipo di sincronizzazione \"Completa\" cancella tutto il contenuto locale e scarica di nuovo. Questo tipo di sincronizzazione é disponibile nel menù delle opzioni. É consigliabile usare questa opzione solo come ultima risorsa.\n\n
+        Il tipo di sincronizzazione \"Veloce\" (sincronizzazione incrementale) scarica solo le modifiche fatte dalla sincronizzazione precedente, il che richiede meno tempo e traffico Internet. Tuttavia, questo metodo ha uno svantaggio: non può individuare gli articoli cancellati da remoto (quindi nessun articolo locale é cancellato durante la sincronizzazione \"Veloce\"). Questo tipo di sincronizazione si avvia con un gesto \"pull-to-refresh\" nella lista degli articoli.\n\n
+        Per rimediare a questo svantaggio del tipo di sincronizzazione \"Veloce\" c\'é un\'opzione detta \"Pulizia degli articoli cancellati\" che, per ogni articolo locale, chiede al server se é ancora presente su di esso - se non lo é, l\'articolo locale é rimosso. A seconda del numero di articoli che hai, questa operazione può richiedere del tempo, ma risparmia molto traffico Internet rispetto ad una sincronizzazzione  \"Completa\".\n\n
+        Nessuna di queste azioni ha effetto sulla sincronizzazione client-to-server: le tue modifiche locali saranno sempre mandate al server prima di aggiornare il contenuto locale.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Abilita \"Pulizia degli articoli cancellati\" dopo sincronizzazione \"veloce\"</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Leggi la descrizione dei tipi di sincronizzazione soprastante per avere più informazioni</string>
+    <string name="pref_categoryName_autoSync">Sincronizzazione automatica</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Abilita sincronizzazione automatica all\'avvio dell\'applicazione</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">L\'app si sincronizzerà all\'avvio</string>
+    <string name="pref_name_autoSync_enabled">Abilita sincronizzazione automatica</string>
+    <string name="pref_desc_autoSync_enabled">Questa opzione abilita la sincronizzazione delle modifiche locali (link aggiunti, articoli archiviati, etc.) ed il download dei nuovi articoli basato su un orario</string>
+    <string name="pref_name_autoSync_interval">Intervallo sincronizzazione automatica</string>
+    <string name="pref_option_autoSync_interval_15m">15 minuti</string>
+    <string name="pref_option_autoSync_interval_30m">30 minuti</string>
+    <string name="pref_option_autoSync_interval_1h">1 ora</string>
+    <string name="pref_option_autoSync_interval_12h">12 ore</string>
+    <string name="pref_option_autoSync_interval_24h">24 ore</string>
+    <string name="pref_name_autoSync_type">Tipo di sincronizzazione automatica</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Veloce</item>
+        <item>Completa</item>
+    </string-array>
+    <string-array name="pref_option_autoSync_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="pref_name_autoSyncQueue_enabled">Sincronizzazione automatica separata per le modifiche locali</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Questa opzione permette alle modifiche locali (link aggiunti, articoli archiviati, etc.) di essere sincronizzate sul server non appena venga resa disponibile una connessione.</string>
+    <string name="pref_name_autoDlNew_enabled">Scarica nuovi articoli all\'aggiunta</string>
+    <string name="pref_desc_autoDlNew_enabled">Scarica automaticamente nuovi articoli subito dopo essere stati aggiunti tramite l\'app. Nota: il download non ci sarà se avete modifiche offline non sincronizzate.</string>
+    <string name="pref_name_imageCache_enabled">Salva in cache le immagini degli articoli</string>
+    <string name="pref_desc_imageCache_enabled">Scarica automaticamente tutte le immagini in ogni articoli e le salva sul dispositivo. A seconda della lunghezza della tua lista di articoli di wallabag questo potrebbe richiedere molto tempo e consumare molto spazio.</string>
+
+    <string name="pref_categoryName_miscellaneous">Varie</string>
+    <string name="pref_name_misc_handleHttpScheme">Gestisci schema HTTP</string>
+    <string name="pref_desc_misc_handleHttpScheme">Mostra wallabag nella lista dei browser</string>
+    <string name="pref_name_misc_wipeDB">Cancella Database</string>
+    <string name="pref_desc_misc_wipeDB">Cancella tutti gli articoli dal database locale, rimuove anche tutte le modifiche locali e gli URL non sincronizzati</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Cancella Database?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Sei sicuro di voler cancellare il database?</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">Usato URI di connessione sbagliato</string>
+
+    <string name="connectionWizard_welcome_titleMessage">Benvenuto in wallabag!</string>
+    <string name="connectionWizard_welcome_text">Prima di poter usare l\'app di wallabag devi configurare una connessione. Questo assistente di connessione cercherà di aiutarti.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Puoi comunque riavviare l\'assistente di connessione dalle Impostazioni.</string>
+    <string name="connectionWizard_welcome_prev">Salta</string>
+    <string name="connectionWizard_welcome_next">Successivo</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Seleziona il provider di wallabag</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Altro</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Seleziona questa opzione per inserire le impostazioni richieste manualmente</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Seleziona questa opzione se hai un account su https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_prev">Salta</string>
+    <string name="connectionWizard_providerSelection_next">Successivo</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Configurazione base</string>
+    <string name="connectionWizard_provider_general_prev">Indietro</string>
+    <string name="connectionWizard_provider_general_next">Connetti</string>
+
+    <string name="connectionWizard_provider_wallabagit_titleMessage">Configurazione di wallabag.it</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Indietro</string>
+    <string name="connectionWizard_provider_wallabagit_next">Connetti</string>
+
+    <string name="connectionWizard_summary_titleMessage">Fatto!</string>
+    <string name="connectionWizard_summary_text">Premi il bottone per salvare le impostazioni ed andare alla schermata principale.</string>
+    <string name="connectionWizard_summary_toastMessage">Impostazione completata</string>
+    <string name="connectionWizard_summary_prev">Indietro</string>
+    <string name="connectionWizard_summary_next">Salva impostazioni</string>
+</resources>
