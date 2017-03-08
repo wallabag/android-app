@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">wallabag</string>
-    <string name="label_name">バッグ!</string>
+<resources>
     <string name="btnMarkRead">既読にする</string>
     <string name="btnMarkUnread">未読にする</string>
     <string name="add_to_favorites">お気に入りに追加</string>
@@ -28,9 +27,7 @@
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
     <string name="txtNetOffline">インターネット接続を確認してください!</string>
     <string name="txtConfigNotSet">同期の前に、アプリを構成してください!</string>
-    <string name="dialog_add_label">バッグのページ</string>
     <string name="page_url">ページ URL</string>
-    <string name="bag_it">バッグに入れる</string>
     <string name="share_article_title">記事を共有</string>
     <string name="share_text_extra">" @wallabagapp で"</string>
     <string name="positive_answer">はい</string>
@@ -41,8 +38,8 @@
     <string name="d_urlAction_openInBrowser">ブラウザーで開く</string>
     <string name="d_urlAction_addToWallabag">Wallabag に追加</string>
     <string name="ok">OK</string>
-    <string name="d_bag_fail_title">失敗</string>
-    <string name="d_bag_fail_text">共有文字列で URL を見つけることができませんでした:
+    <string name="d_add_fail_title">失敗</string>
+    <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:
 </string>
     <string name="d_configurationChanged_title">パラメーターが変更されました</string>
     <string name="d_configurationChanged_message">いくつかのパラメーターが変更されているようです。接続テストを実行することをお勧めします。</string>
