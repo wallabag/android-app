@@ -123,6 +123,7 @@
     <string name="menu_lists_sweepDeletedArticles">\"Sweep\" deleted articles</string>
     <string name="menu_lists_fullUpdate">Full update</string>
     <string name="other_searchHint">Search by article title or text</string>
+    <string name="menu_changeTitle">Change title</string>
     <string name="menu_manageTags">Manage tags</string>
     <string name="manageTags_title">Manage tags</string>
     <string name="manageTags_save">Save</string>

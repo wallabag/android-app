@@ -502,6 +502,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return true;
     }
 
+    private void showChangeTitleDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        @SuppressLint("InflateParams") // ok for dialogs
+        final View view = getLayoutInflater().inflate(R.layout.dialog_change_title, null);
+
+        ((TextView)view.findViewById(R.id.editText_title)).setText(titleText);
+
+        builder.setView(view);
+
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                TextView textView = (TextView)view.findViewById(R.id.editText_title);
+                changeTitle(textView.getText().toString());
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+
+        builder.show();
+    }
+
+    private void changeTitle(String title) {
+        OperationsHelper.changeArticleTitle(this, mArticle.getArticleId(), title);
+    }
+
     private boolean manageTags() {
         Intent manageTagsIntent = new Intent(this, ManageArticleTagsActivity.class);
         manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, mArticle.getArticleId());
@@ -602,6 +628,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             case R.id.menuShare:
                 return shareArticle();
+            case R.id.menuChangeTitle:
+                showChangeTitleDialog();
+                return true;
             case R.id.menuManageTags:
                 return manageTags();
             case R.id.menuDelete:
@@ -694,6 +723,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case UNSPECIFIED:
                 Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
                 invalidateOptionsMenu();
+                break;
+
+            case TITLE_CHANGED:
+                Log.d(TAG, "onArticleChangedEvent() title changed");
+                // TODO: also update title in the WebView
+                titleText = mArticle.getTitle();
+                setTitle(titleText);
                 break;
         }
     }
