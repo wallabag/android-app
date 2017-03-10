@@ -104,7 +104,8 @@
     <string name="pref_name_ui_theme">Thème de l\'application</string>
     <string name="pref_name_ui_article_fontSize">Taille de la police (%)</string>
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (serif)</string>
-
+    <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
