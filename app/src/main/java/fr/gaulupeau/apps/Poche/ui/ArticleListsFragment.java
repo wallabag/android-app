@@ -9,7 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Collections;
+import java.util.EnumSet;
+
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 
 public class ArticleListsFragment extends Fragment implements Sortable, Searchable {
@@ -20,6 +24,18 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
 
     private static final String STATE_SORT_ORDER = "sort_order";
     private static final String STATE_SEARCH_QUERY = "search_query";
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.UNSPECIFIED,
+            ArticlesChangedEvent.ChangeType.ADDED,
+            ArticlesChangedEvent.ChangeType.DELETED,
+            ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED,
+            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED,
+            ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
+            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED);
 
     private ArticleListsPagerAdapter adapter;
     private ViewPager viewPager;
@@ -145,18 +161,18 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     }
 
     private void invalidateLists(FeedsChangedEvent event) {
-        if(event.isInvalidateAll()) {
+        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET)) {
             updateAllLists();
             return;
         }
 
-        if(event.isMainFeedChanged()) {
+        if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.MAIN));
         }
-        if(event.isFavoriteFeedChanged()) {
+        if(!Collections.disjoint(event.getFavoriteFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.FAVORITE));
         }
-        if(event.isArchiveFeedChanged()) {
+        if(!Collections.disjoint(event.getArchiveFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.ARCHIVE));
         }
     }

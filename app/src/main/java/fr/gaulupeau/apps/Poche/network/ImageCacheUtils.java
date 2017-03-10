@@ -123,7 +123,7 @@ public class ImageCacheUtils {
         return source.toString();
     }
 
-    public static void cacheImages(long articleId, String articleContent) {
+    public static boolean cacheImages(long articleId, String articleContent) {
         Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty="
                 + (articleContent == null || articleContent.isEmpty()));
         String extStoragePath = getExternalStoragePath();
@@ -131,17 +131,19 @@ public class ImageCacheUtils {
 
         if(articleContent == null || extStoragePath == null || extStoragePath.isEmpty()) {
             Log.d(TAG, "cacheImages: returning, because an essential var is null");
-            return;
+            return false;
         }
         // TODO: collect them all and process them in a thread with progress showing in status bar as notification
         List<String> imageURLs = findImageUrlsInHtml(articleContent);
-        if(imageURLs.isEmpty()) return;
+        if(imageURLs.isEmpty()) return false;
 
         String articleCachePath = getArticleCachePath(extStoragePath, articleId);
         if(!createArticleCacheDir(articleCachePath)) {
             Log.i(TAG, "cacheImages: couldn't create article cache dir");
-            return;
+            return false;
         }
+
+        boolean downloadedSomething = false;
 
         for(String imageURL: imageURLs) {
             Log.d(TAG, "cacheImages: downloading " + imageURL);
@@ -162,8 +164,12 @@ public class ImageCacheUtils {
                 continue;
             }
 
-            downloadImageToCache(url, destinationPath, articleId);
+            if(downloadImageToCache(url, destinationPath, articleId)) {
+                downloadedSomething = true;
+            }
         }
+
+        return downloadedSomething;
     }
 
     public static List<String> findImageUrlsInHtml(String htmlContent) {
@@ -227,13 +233,13 @@ public class ImageCacheUtils {
         }
     }
 
-    public static void downloadImageToCache(HttpUrl imageURL, String destination, long articleId) {
+    public static boolean downloadImageToCache(HttpUrl imageURL, String destination, long articleId) {
         Log.d(TAG, "downloadImageToCache: imageURL=" + imageURL + " destination=" + destination);
 
         File dest = new File(destination);
         if(dest.exists()) {
             Log.d(TAG, "downloadImageToCache: file already exists, skipping");
-            return;
+            return false;
         }
 
         if(okHttpClient == null) {
@@ -247,19 +253,23 @@ public class ImageCacheUtils {
         } catch(IOException e) {
             Log.d(TAG, "IOException while requesting imageURL=" + imageURL
                     + " in articleID=" + articleId, e);
-            return;
+            return false;
         }
 
         File downloadFile = new File(destination);
+
+        boolean success = false;
 
         BufferedSource source = response.body().source();
         BufferedSink sink = null;
         try {
             sink = Okio.buffer(Okio.sink(downloadFile));
             sink.writeAll(source);
+
+            success = true;
         } catch(FileNotFoundException e) {
             Log.d(TAG, "downloadImageToCache: FileNotFoundException", e);
-            return;
+            return false;
         } catch(IOException e) {
             Log.d(TAG, "downloadImageToCache: IOException while downloading imageURL=" + imageURL
                     + " in articleID=" + articleId, e);
@@ -280,6 +290,8 @@ public class ImageCacheUtils {
 
         Log.d(TAG, "downloadImageToCache: function finished for imageURL=" + imageURL
                 + " destination=" + destination);
+
+        return success;
     }
 
     public static String getExternalStoragePath() {

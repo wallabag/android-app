@@ -1,72 +1,112 @@
 package fr.gaulupeau.apps.Poche.events;
 
+import java.util.EnumSet;
+
 public class FeedsChangedEvent {
 
     public enum FeedType { MAIN, FAVORITE, ARCHIVE }
 
-    private boolean invalidateAll;
+    public enum ChangeType {
+        ARCHIVED, UNARCHIVED, FAVORITED, UNFAVORITED, TITLE_CHANGED, DOMAIN_CHANGED, URL_CHANGED,
+        ESTIMATED_READING_TIME_CHANGED, LANGUAGE_CHANGED, PREVIEW_PICTURE_URL_CHANGED,
+        CREATED_DATE_CHANGED, UPDATED_DATE_CHANGED, TAGS_CHANGED, CONTENT_CHANGED,
+        FETCHED_IMAGES_CHANGED, ADDED, DELETED, UNSPECIFIED
+    }
 
-    private boolean mainFeedChanged;
-    private boolean favoriteFeedChanged;
-    private boolean archiveFeedChanged;
+    protected EnumSet<ChangeType> invalidateAllChanges = EnumSet.noneOf(ChangeType.class);
+
+    protected EnumSet<ChangeType> mainFeedChanges = EnumSet.noneOf(ChangeType.class);
+    protected EnumSet<ChangeType> favoriteFeedChanges = EnumSet.noneOf(ChangeType.class);
+    protected EnumSet<ChangeType> archiveFeedChanges = EnumSet.noneOf(ChangeType.class);
 
     public FeedsChangedEvent() {}
 
     public boolean isInvalidateAll() {
-        return invalidateAll;
+        return !invalidateAllChanges.isEmpty();
     }
 
-    public void setInvalidateAll(boolean invalidateAll) {
-        this.invalidateAll = invalidateAll;
-        if(invalidateAll) {
-            this.mainFeedChanged = true;
-            this.favoriteFeedChanged = true;
-            this.archiveFeedChanged = true;
-        }
+    public void invalidateAll() {
+        invalidateAll((EnumSet<ChangeType>)null);
+    }
+
+    public void invalidateAll(ChangeType changeType) {
+        invalidateAll(EnumSet.of(changeType));
+    }
+
+    public void invalidateAll(EnumSet<ChangeType> changes) {
+        if(changes == null) changes = EnumSet.of(ChangeType.UNSPECIFIED);
+
+        invalidateAllChanges.addAll(changes);
+        addChanges(changes);
+    }
+
+    public EnumSet<ChangeType> getInvalidateAllChanges() {
+        return invalidateAllChanges;
     }
 
     public boolean isMainFeedChanged() {
-        return mainFeedChanged;
+        return !mainFeedChanges.isEmpty();
     }
 
-    public void setMainFeedChanged(boolean mainFeedChanged) {
-        this.mainFeedChanged = mainFeedChanged;
+    public void setMainFeedChanged() {
+        mainFeedChanges.add(ChangeType.UNSPECIFIED);
+    }
+
+    public EnumSet<ChangeType> getMainFeedChanges() {
+        return mainFeedChanges;
     }
 
     public boolean isFavoriteFeedChanged() {
-        return favoriteFeedChanged;
+        return !favoriteFeedChanges.isEmpty();
     }
 
-    public void setFavoriteFeedChanged(boolean favoriteFeedChanged) {
-        this.favoriteFeedChanged = favoriteFeedChanged;
+    public void setFavoriteFeedChanged() {
+        favoriteFeedChanges.add(ChangeType.UNSPECIFIED);
+    }
+
+    public EnumSet<ChangeType> getFavoriteFeedChanges() {
+        return favoriteFeedChanges;
     }
 
     public boolean isArchiveFeedChanged() {
-        return archiveFeedChanged;
+        return !archiveFeedChanges.isEmpty();
     }
 
-    public void setArchiveFeedChanged(boolean archiveFeedChanged) {
-        this.archiveFeedChanged = archiveFeedChanged;
+    public void setArchiveFeedChanged() {
+        archiveFeedChanges.add(ChangeType.UNSPECIFIED);
+    }
+
+    public EnumSet<ChangeType> getArchiveFeedChanges() {
+        return archiveFeedChanges;
     }
 
     public boolean isAnythingChanged() {
-        return invalidateAll || mainFeedChanged || favoriteFeedChanged || archiveFeedChanged;
+        return isInvalidateAll() || isMainFeedChanged()
+                || isFavoriteFeedChanged() || isArchiveFeedChanged();
     }
 
-    public void setChangedByFeedType(FeedType feedType) {
-        if(feedType == null) return;
+    public void addChanges(EnumSet<ChangeType> changes) {
+        if(changes == null) changes = EnumSet.of(ChangeType.UNSPECIFIED);
+
+        mainFeedChanges.addAll(changes);
+        favoriteFeedChanges.addAll(changes);
+        archiveFeedChanges.addAll(changes);
+    }
+
+    public void addChangesByFeedType(FeedType feedType, EnumSet<ChangeType> changes) {
+        if(changes == null) changes = EnumSet.of(ChangeType.UNSPECIFIED);
 
         switch(feedType) {
             case MAIN:
-                mainFeedChanged = true;
+                mainFeedChanges.addAll(changes);
                 break;
 
             case FAVORITE:
-                favoriteFeedChanged = true;
+                favoriteFeedChanges.addAll(changes);
                 break;
 
             case ARCHIVE:
-                archiveFeedChanged = true;
+                archiveFeedChanges.addAll(changes);
                 break;
         }
     }

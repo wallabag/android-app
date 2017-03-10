@@ -13,6 +13,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,6 +29,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+
+import static fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent.ChangeType;
 
 public class Updater {
 
@@ -69,7 +72,7 @@ public class Updater {
                 daoSession.getArticleDao().deleteAll();
                 daoSession.getTagDao().deleteAll();
 
-                event.setInvalidateAll(true);
+                event.invalidateAll(ChangeType.DELETED);
             }
 
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
@@ -197,6 +200,8 @@ public class Updater {
 
                 Article article = null;
 
+                EnumSet<ChangeType> articleChanges = EnumSet.noneOf(ChangeType.class);
+
                 if(!full) {
                     article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
@@ -205,16 +210,61 @@ public class Updater {
                 boolean existing = true;
                 if(article == null) {
                     article = new Article(null);
+
                     existing = false;
+
+                    articleChanges.add(ChangeType.ADDED);
                 }
 
-                // TODO: change detection?
+                if(existing) {
+                    if(!TextUtils.equals(article.getContent(), apiArticle.content)) {
+                        articleChanges.add(ChangeType.CONTENT_CHANGED);
+                    }
+                    if(!TextUtils.equals(article.getTitle(), apiArticle.title)) {
+                        articleChanges.add(ChangeType.TITLE_CHANGED);
+                    }
+                    if(!TextUtils.equals(article.getDomain(), apiArticle.domainName)) {
+                        articleChanges.add(ChangeType.DOMAIN_CHANGED);
+                    }
+                    if(!TextUtils.equals(article.getUrl(), apiArticle.url)) {
+                        articleChanges.add(ChangeType.URL_CHANGED);
+                    }
+                    if(article.getEstimatedReadingTime() != apiArticle.readingTime) {
+                        articleChanges.add(ChangeType.ESTIMATED_READING_TIME_CHANGED);
+                    }
+                    if(!TextUtils.equals(article.getLanguage(), apiArticle.language)) {
+                        articleChanges.add(ChangeType.LANGUAGE_CHANGED);
+                    }
+                    if(!TextUtils.equals(article.getPreviewPictureURL(), apiArticle.previewPicture)) {
+                        articleChanges.add(ChangeType.PREVIEW_PICTURE_URL_CHANGED);
+                    }
+                    if(article.getCreationDate().getTime() != apiArticle.createdAt.getTime()) {
+                        articleChanges.add(ChangeType.CREATED_DATE_CHANGED);
+                    }
+                    if(article.getUpdateDate().getTime() != apiArticle.updatedAt.getTime()) {
+                        articleChanges.add(ChangeType.UPDATED_DATE_CHANGED);
+                    }
+                    if(article.getArchive() != apiArticle.archived) {
+                        articleChanges.add(apiArticle.archived
+                                ? ChangeType.ARCHIVED
+                                : ChangeType.UNARCHIVED);
+                    }
+                    if(article.getFavorite() != apiArticle.starred) {
+                        articleChanges.add(apiArticle.starred
+                                ? ChangeType.FAVORITED
+                                : ChangeType.UNFAVORITED);
+                    }
+                }
 
-                if(!existing || (article.getImagesDownloaded()
-                        && !TextUtils.equals(article.getContent(), apiArticle.content))) {
+                if(!existing || articleChanges.contains(ChangeType.CONTENT_CHANGED)) {
+                    if(article.getImagesDownloaded() != null && article.getImagesDownloaded()) {
+                        articleChanges.add(ChangeType.FETCHED_IMAGES_CHANGED);
+                    }
+
                     article.setImagesDownloaded(false);
                 }
 
+                article.setArticleId(id);
                 article.setTitle(apiArticle.title);
                 article.setContent(apiArticle.content);
                 article.setDomain(apiArticle.domainName);
@@ -222,7 +272,6 @@ public class Updater {
                 article.setEstimatedReadingTime(apiArticle.readingTime);
                 article.setLanguage(apiArticle.language);
                 article.setPreviewPictureURL(apiArticle.previewPicture);
-                article.setArticleId(id);
                 article.setCreationDate(apiArticle.createdAt);
                 article.setUpdateDate(apiArticle.updatedAt);
                 article.setArchive(apiArticle.archived);
@@ -305,16 +354,25 @@ public class Updater {
                     latestUpdatedItemTimestamp = apiArticle.updatedAt.getTime();
                 }
 
-                if(event != null) {
-                    ArticlesChangedEvent.ChangeType changeType = existing
-                            ? ArticlesChangedEvent.ChangeType.UNSPECIFIED
-                            : ArticlesChangedEvent.ChangeType.ADDED;
-
-                    event.setInvalidateAll(true); // improve?
-                    event.addChangedArticleID(article, changeType);
+                if(!articleChanges.isEmpty()) {
+                    (existing ? articlesToUpdate : articlesToInsert).add(article);
+                } else {
+                    Log.d(TAG, "performUpdate() article wasn't changed");
                 }
 
-                (existing ? articlesToUpdate : articlesToInsert).add(article);
+                if(!tagsToUpdate.isEmpty() || !tagsToInsert.isEmpty()
+                        || !articleTagJoinsToRemove.isEmpty()
+                        || !articleTagJoinsToInsert.isEmpty()) {
+                    articleChanges.add(ChangeType.TAGS_CHANGED);
+                }
+
+                if(!articleChanges.isEmpty()) {
+                    Log.d(TAG, "performUpdate() articleChanges: " + articleChanges);
+
+                    if(event != null) {
+                        event.addArticleChangeWithoutObject(article, articleChanges);
+                    }
+                }
             }
 
             if(!articlesToUpdate.isEmpty()) {
@@ -528,7 +586,10 @@ public class Updater {
                             Log.v(TAG, "performSweep() article found by ID");
                         } catch(NotFoundException nfe) {
                             Log.v(TAG, "performSweep() article not found by ID");
+
                             articlesToDelete.add(a.getId());
+
+                            event.addArticleChangeWithoutObject(a, ChangeType.DELETED);
                         }
                     }
                 }
@@ -547,8 +608,6 @@ public class Updater {
         }
 
         if(!articlesToDelete.isEmpty()) {
-            event.setInvalidateAll(true);
-
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
             articleDao.deleteByKeyInTx(articlesToDelete);
             Log.d(TAG, "performSweep() articles deleted");

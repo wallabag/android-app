@@ -13,14 +13,18 @@ import org.greenrobot.greendao.DaoException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.DownloadFileStartedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
@@ -247,7 +251,12 @@ public class SecondaryService extends IntentServiceBase {
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
                 .orderAsc(ArticleDao.Properties.ArticleId).list(); // TODO: lazyList
 
-        List<Integer> updatedArticles = new ArrayList<>(articleList.size());
+        if(articleList.isEmpty()) return;
+
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+
+        List<Integer> processedArticles = new ArrayList<>(articleList.size());
+        Set<Integer> changedArticles = new HashSet<>(articleList.size());
 
         Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
         int i = 0, totalNumber = articleList.size();
@@ -255,15 +264,17 @@ public class SecondaryService extends IntentServiceBase {
             Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
             postEvent(new FetchImagesProgressEvent(actionRequest, i, totalNumber));
 
-            ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent());
+            if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent())) {
+                changedArticles.add(article.getArticleId());
+            }
 
-            updatedArticles.add(article.getArticleId());
+            processedArticles.add(article.getArticleId());
 
             Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
         }
 
         // TODO: update in bulk
-        for(Integer articleID: updatedArticles) {
+        for(Integer articleID: processedArticles) {
             try {
                 Article article = articleDao.queryBuilder()
                         .where(ArticleDao.Properties.ArticleId.eq(articleID))
@@ -272,10 +283,20 @@ public class SecondaryService extends IntentServiceBase {
                 if(article != null) {
                     article.setImagesDownloaded(true);
                     articleDao.update(article);
+
+                    if(changedArticles.contains(articleID)) {
+                        // maybe add another change type for unsuccessful articles?
+                        event.addArticleChangeWithoutObject(article,
+                                FeedsChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
+                    }
                 }
             } catch(DaoException e) {
                 Log.e(TAG, "fetchImages() Exception while updating articles", e);
             }
+        }
+
+        if(event.isAnythingChanged()) {
+            postEvent(event);
         }
 
         Log.d(TAG, "fetchImages() finished");

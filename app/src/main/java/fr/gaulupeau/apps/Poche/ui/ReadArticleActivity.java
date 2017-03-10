@@ -36,6 +36,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
@@ -43,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -65,6 +68,30 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private static final String TAG_TTS_FRAGMENT = "ttsFragment";
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_ACTIONS = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED);
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_CONTENT = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.CONTENT_CHANGED,
+            ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
+            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED,
+            ArticlesChangedEvent.ChangeType.URL_CHANGED,
+            ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
+            ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_PREV_NEXT = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.UNSPECIFIED,
+            ArticlesChangedEvent.ChangeType.ADDED,
+            ArticlesChangedEvent.ChangeType.DELETED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED,
+            ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED);
 
     private Boolean contextFavorites;
     private Boolean contextArchived;
@@ -304,38 +331,52 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
-        ArticlesChangedEvent.ChangeType changeType = event.getArticleChangeType(article);
-        if(changeType == null) {
-            // current article wasn't changed
+        boolean updatePrevNext = false;
+        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET_PREV_NEXT)) {
+            updatePrevNext = true;
+        } else {
+            EnumSet<ArticlesChangedEvent.ChangeType> changes;
+            if(contextArchived != null) {
+                changes = contextArchived ? event.getArchiveFeedChanges() : event.getMainFeedChanges();
+            } else if(contextFavorites != null && contextFavorites) {
+                changes = event.getFavoriteFeedChanges();
+            } else {
+                changes = EnumSet.copyOf(event.getMainFeedChanges());
+                changes.addAll(event.getArchiveFeedChanges());
+                changes.addAll(event.getFavoriteFeedChanges());
+            }
 
-            // TODO: better detection
-            updatePrevNextButtons();
-
-            return;
+            if(!Collections.disjoint(changes, CHANGE_SET_PREV_NEXT)) {
+                updatePrevNext = true;
+            }
         }
 
-        Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
+        if(updatePrevNext) {
+            Log.d(TAG, "onArticleChangedEvent() prev/next buttons changed");
 
-        boolean updateActions = false; // menu
-        boolean updateTitle = false;
+            updatePrevNextButtons();
+        }
 
-        switch(changeType) {
-            case FAVORITED:
-            case UNFAVORITED:
-            case ARCHIVED:
-            case UNARCHIVED:
-                updateActions = true;
-                break;
+        EnumSet<ArticlesChangedEvent.ChangeType> changes = event.getArticleChanges(article);
+        if(changes == null) return;
 
-            case TITLE_CHANGED:
-                updateTitle = true;
-                break;
+        Log.d(TAG, "onArticlesChangedEvent() changes: " + changes);
 
-            default:
-                updateActions = true;
-                updateTitle = true;
-                // TODO: update content view
-                break;
+        boolean updateActions;
+        boolean updateContent;
+        boolean updateTitle;
+        boolean updateURL;
+
+        if(changes.contains(FeedsChangedEvent.ChangeType.UNSPECIFIED)) {
+            updateActions = true;
+            updateContent = true;
+            updateTitle = true;
+            updateURL = true;
+        } else {
+            updateActions = !Collections.disjoint(changes, CHANGE_SET_ACTIONS);
+            updateContent = !Collections.disjoint(changes, CHANGE_SET_CONTENT);
+            updateTitle = changes.contains(FeedsChangedEvent.ChangeType.TITLE_CHANGED);
+            updateURL = changes.contains(FeedsChangedEvent.ChangeType.URL_CHANGED);
         }
 
         if(updateActions) {
@@ -351,7 +392,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             articleTitle = article.getTitle();
             setTitle(articleTitle);
-            // TODO: also update title in the WebView
+        }
+
+        if(updateURL) {
+            Log.d(TAG, "onArticleChangedEvent() URL changed");
+
+            articleUrl = article.getUrl();
+        }
+
+        if(updateContent) {
+            Log.d(TAG, "onArticleChangedEvent() content changed");
+
+//            prepareToRestorePosition(true);
+
+            loadArticleToWebView();
+
+//            restorePositionAfterUpdate();
         }
     }
 
@@ -973,6 +1029,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void onPageFinished() {
+        Log.d(TAG, "onPageFinished() started");
+
         if(!isResumed) {
             onPageFinishedCallPostponedUntilResume = true;
 

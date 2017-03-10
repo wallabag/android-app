@@ -16,6 +16,8 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Locale;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -40,6 +42,13 @@ public class EventProcessor {
     private static final int NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING = 3;
     private static final int NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING = 4;
     private static final int NOTIFICATION_ID_FETCH_IMAGES_ONGOING = 5;
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_UNREAD_WIDGET = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.UNSPECIFIED,
+            ArticlesChangedEvent.ChangeType.ADDED,
+            ArticlesChangedEvent.ChangeType.DELETED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED);
 
     private Context context;
     private Settings settings;
@@ -140,7 +149,7 @@ public class EventProcessor {
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "onFeedsChangedEvent() started");
 
-        if(event.isMainFeedChanged()) {
+        if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET_UNREAD_WIDGET)) {
             Log.d(TAG, "onFeedsChangedEvent() triggering update for IconUnreadWidget");
             IconUnreadWidget.triggerWidgetUpdate(getContext());
         }
