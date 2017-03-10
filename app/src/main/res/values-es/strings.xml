@@ -208,10 +208,6 @@
         <item>Rápida</item>
         <item>Completa</item>
     </string-array>
-    <string-array name="pref_option_autoSync_type_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Sincronizar cambios locales por separado</string>
     <string name="pref_desc_autoSyncQueue_enabled">Esto permite sincronizar cambios locales (enlaces añadidos, artículos archivados, etc.) con el servidor tan pronto haya una conexión disponible.</string>
     <string name="pref_name_autoDlNew_enabled">Descargar artículos nuevos al añadirlos</string>
