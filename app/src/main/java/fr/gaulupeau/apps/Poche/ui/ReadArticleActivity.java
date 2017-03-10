@@ -238,7 +238,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuArticleFavorite:
             case R.id.menuArticleUnfavorite:
                 toggleFavorite();
-                invalidateOptionsMenu(); // TODO: use events instead
                 break;
 
             case R.id.menuShare:
@@ -306,26 +305,53 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
         ArticlesChangedEvent.ChangeType changeType = event.getArticleChangeType(article);
-        if(changeType == null) return;
+        if(changeType == null) {
+            // current article wasn't changed
+
+            // TODO: better detection
+            updatePrevNextButtons();
+
+            return;
+        }
 
         Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
+
+        boolean updateActions = false; // menu
+        boolean updateTitle = false;
 
         switch(changeType) {
             case FAVORITED:
             case UNFAVORITED:
             case ARCHIVED:
             case UNARCHIVED:
-            case UNSPECIFIED:
-                Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
-                invalidateOptionsMenu();
+                updateActions = true;
                 break;
 
             case TITLE_CHANGED:
-                Log.d(TAG, "onArticleChangedEvent() title changed");
-                // TODO: also update title in the WebView
-                articleTitle = article.getTitle();
-                setTitle(articleTitle);
+                updateTitle = true;
                 break;
+
+            default:
+                updateActions = true;
+                updateTitle = true;
+                // TODO: update content view
+                break;
+        }
+
+        if(updateActions) {
+            Log.d(TAG, "onArticleChangedEvent() actions changed");
+
+            updateMarkAsReadButtonView();
+
+            invalidateOptionsMenu();
+        }
+
+        if(updateTitle) {
+            Log.d(TAG, "onArticleChangedEvent() title changed");
+
+            articleTitle = article.getTitle();
+            setTitle(articleTitle);
+            // TODO: also update title in the WebView
         }
     }
 
@@ -557,7 +583,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         updatePrevNextButtons();
     }
 
-    // TODO: update on events
     private void updateMarkAsReadButtonView() {
         Button buttonMarkRead = (Button)findViewById(R.id.btnMarkRead);
         Button buttonMarkUnread = (Button)findViewById(R.id.btnMarkUnread);
@@ -578,7 +603,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         buttonMarkUnread.setOnClickListener(onClickListener);
     }
 
-    // TODO: update on events
     private void updatePrevNextButtons() {
         previousArticleID = getAdjacentArticle(true);
         nextArticleID = getAdjacentArticle(false);
