@@ -1,96 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/viewMain">
-
-<ScrollView
+    android:id="@+id/viewMain"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:id="@+id/scroll"
-    tools:context="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
-    tools:ignore="UselessParent">
+    android:layout_height="match_parent"
+    tools:context="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity">
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:ignore="WebViewLayout" >
-
-        <WebView
-            android:id="@+id/webViewContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingLeft="15sp"
-            android:paddingRight="15sp" >
+            tools:ignore="WebViewLayout">
 
-            <View
-                android:id="@+id/view1"
-                android:layout_width="fill_parent"
-                android:layout_height="1dip"
-                android:layout_marginBottom="5sp"
-                android:layout_marginTop="5sp"
-                android:background="#000000"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_loading_article"
+            <WebView
+                android:id="@+id/webViewContent"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="@string/loading_article_text" />
+                android:layout_height="wrap_content"/>
 
             <LinearLayout
-                android:id="@+id/bottomTools"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:orientation="horizontal"
-                android:visibility="gone">
-                <ImageButton
-                    android:id="@+id/btnGoPrevious"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp">
+
+                <View
+                    android:id="@+id/view1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="5sp"
+                    android:layout_marginTop="5sp"
+                    android:background="#000000"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tv_loading_article"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/menuPrevious"
-                    android:src="@drawable/ic_action_previous_item"
-                    android:layout_weight="1" />
-                <Button
-                    android:id="@+id/btnMarkRead"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/btnMarkRead"
-                    android:layout_weight="6" />
-                <Button
-                    android:id="@+id/btnMarkUnread"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/btnMarkUnread"
-                    android:layout_weight="6"
-                    android:visibility="gone" />
-                <ImageButton
-                    android:id="@+id/btnGoNext"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/menuNext"
-                    android:src="@drawable/ic_action_next_item"
-                    android:layout_weight="1" />
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="@string/loading_article_text"/>
+
+                <LinearLayout
+                    android:id="@+id/bottomTools"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+                    <ImageButton
+                        android:id="@+id/btnGoPrevious"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/menuPrevious"
+                        android:src="@drawable/ic_action_previous_item"
+                        android:layout_weight="1"/>
+                    <Button
+                        android:id="@+id/btnMarkRead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/btnMarkRead"
+                        android:layout_weight="6"/>
+                    <Button
+                        android:id="@+id/btnMarkUnread"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="@string/btnMarkUnread"
+                        android:layout_weight="6"
+                        android:visibility="gone"/>
+                    <ImageButton
+                        android:id="@+id/btnGoNext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/menuNext"
+                        android:src="@drawable/ic_action_next_item"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
 
-
-    </LinearLayout>
-
-
-</ScrollView>
+    </ScrollView>
 
 </LinearLayout>
