@@ -107,10 +107,19 @@ public class OperationsHelper {
         Log.d(TAG, "archiveArticle() finished");
     }
 
-    public static void changeArticleTitle(Context context, Article article, String title) {
-        Log.d(TAG, String.format("changeArticleTitle(%d, %s) started", article.getArticleId(), title));
+    public static void changeArticleTitle(Context context, int articleID, String title) {
+        Log.d(TAG, String.format("changeArticleTitle(%d, %s) started", articleID, title));
+
+        ArticleDao articleDao = getArticleDao();
+
+        Article article = getArticle(articleID, articleDao);
+        if(article == null) {
+            Log.w(TAG, "changeArticleTitle() article was not found");
+            return; // not an error?
+        }
 
         article.setTitle(title);
+        articleDao.update(article);
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TITLE_CHANGED);
 
