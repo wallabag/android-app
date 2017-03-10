@@ -209,10 +209,6 @@
         <item>Veloce</item>
         <item>Completa</item>
     </string-array>
-    <string-array name="pref_option_autoSync_type_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Sincronizzazione automatica separata per le modifiche locali</string>
     <string name="pref_desc_autoSyncQueue_enabled">Questa opzione permette alle modifiche locali (link aggiunti, articoli archiviati, etc.) di essere sincronizzate sul server non appena venga resa disponibile una connessione.</string>
     <string name="pref_name_autoDlNew_enabled">Scarica nuovi articoli all\'aggiunta</string>

@@ -213,10 +213,6 @@
         <item>Fast</item>
         <item>Full</item>
     </string-array>
-    <string-array name="pref_option_autoSync_type_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
     <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>

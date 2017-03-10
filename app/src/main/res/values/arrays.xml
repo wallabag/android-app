@@ -9,4 +9,8 @@
         <item>350</item>
         <item>400</item>
     </string-array>
+    <string-array name="pref_option_autoSync_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>

@@ -169,10 +169,6 @@
         <item>Rapide</item>
         <item>Complète</item>
     </string-array>
-    <string-array name="pref_option_autoSync_type_values">
-        <item>0</item>
-        <item>1</item>
-    </string-array>
     <string name="pref_name_connection_autofill">Remplir automatiquement</string>
     <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
     <string name="pref_name_ui_article_fontSerif">Police avec Serif</string>
