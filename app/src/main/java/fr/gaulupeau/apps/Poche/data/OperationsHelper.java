@@ -129,6 +129,23 @@ public class OperationsHelper {
         Log.d(TAG, "changeArticleTitle() finished");
     }
 
+    public static void setArticleProgress(Context context, int articleID, double progress) {
+        Log.d(TAG, String.format("setArticleProgress(%d, %g) started", articleID, progress));
+
+        ArticleDao articleDao = getArticleDao();
+
+        Article article = getArticle(articleID, articleDao);
+        if(article == null) {
+            Log.w(TAG, "setArticleProgress() article was not found");
+            return; // not an error?
+        }
+
+        article.setArticleProgress(progress);
+        articleDao.update(article);
+
+        Log.d(TAG, "setArticleProgress() finished");
+    }
+
     public static void setArticleTags(Context context, int articleID, List<Tag> newTags) {
         Log.d(TAG, String.format("setArticleTags(%d, %s) started", articleID, newTags));
 

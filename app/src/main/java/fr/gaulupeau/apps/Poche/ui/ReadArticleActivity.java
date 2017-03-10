@@ -74,7 +74,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private View hrBar;
     private TtsFragment ttsFragment;
 
-    private long articleID;
     private Article mArticle;
     private ArticleDao mArticleDao;
 
@@ -109,7 +108,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         setContentView(R.layout.article);
 
         Intent intent = getIntent();
-        articleID = intent.getLongExtra(EXTRA_ID, -1);
+        long articleID = intent.getLongExtra(EXTRA_ID, -1);
         Log.d(TAG, "onCreate() articleId=" + articleID);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
@@ -665,11 +664,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(loadingFinished && mArticle != null) {
             cancelPositionRestoration();
 
-            Article article = getArticle(articleID); // TODO: use "articleId" not "id"
-            if(article != null) {
-                article.setArticleProgress(getReadingPosition());
-                mArticleDao.update(article);
-            }
+            OperationsHelper.setArticleProgress(this, mArticle.getArticleId(), getReadingPosition());
         }
         super.onStop();
     }
