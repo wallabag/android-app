@@ -83,7 +83,7 @@ public class DbConnection {
                         c.close();
                     }
                 }
-            } else if(oldVersion == 5) {
+            } else if(oldVersion == 5 && newVersion == 6) {
                 db.beginTransaction();
                 try {
                     db.execSQL("ALTER TABLE ARTICLE ADD COLUMN images_downloaded INTEGER DEFAULT 0");
