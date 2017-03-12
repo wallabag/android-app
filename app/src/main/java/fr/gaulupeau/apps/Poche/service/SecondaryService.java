@@ -250,8 +250,11 @@ public class SecondaryService extends IntentServiceBase {
                 Article article = articleDao.queryBuilder()
                         .where(ArticleDao.Properties.ArticleId.eq(articleID))
                         .unique();
-                article.setImagesDownloaded(true);
-                articleDao.update(article);
+
+                if(article != null) {
+                    article.setImagesDownloaded(true);
+                    articleDao.update(article);
+                }
             } catch(DaoException e) {
                 Log.e(TAG, "fetchImages() Exception while updating articles", e);
             }
