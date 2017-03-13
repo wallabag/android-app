@@ -63,7 +63,7 @@
     <string name="ttsPitch">Hauteur de la voix</string>
     <string name="ttsOptions">Options</string>
     <string name="ttsError">Erreur de Synthèse Vocale</string>
-    <string name="aboutText">&lt;b>Application wallabag pour Android&lt;/b>&lt;br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
@@ -241,4 +241,5 @@
     <string name="checkCredentials_progressDialogMessage">Test de l\'accès API</string>
     <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
     <string name="menu_changeTitle">Modifier le titre</string>
-</resources>
+<string name="dialog_add_label">Ajouter un nouvel article</string>
+    </resources>
