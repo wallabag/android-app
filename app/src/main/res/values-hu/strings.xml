@@ -259,4 +259,6 @@
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Olvasson többet a szinkronizálás-típusokról a fentiekben</string>
     <string name="pref_name_autoSync_onStartup_enabled">Engedélyezze az automata szinkronizációt az alkalmazás indításkor</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
+    <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
+
     </resources>
