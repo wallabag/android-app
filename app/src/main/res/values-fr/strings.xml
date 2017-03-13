@@ -201,10 +201,10 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="d_checkCredentials_title_fail">Erreur du test de l\'API</string>
     <string name="d_getCredentials_title_fail">Impossible de récupérer les identifiants de l\'API</string>
-    <string name="d_getCredentials_title_message">Quelque chose s\'est mal passé. Vérifiez votre connexion internet</string>
+    <string name="d_getCredentials_title_message">Quelque chose s\'est mal passé. Vérifiez votre connexion internet et essayez à nouveau.</string>
     <string name="getCredentials_progressDialogMessage">Récupération des identifiants de l\'API…</string>
     <string name="manageTags_addNew">Ajouter</string>
-    <string name="manageTags_currentTags">Tags sélectionnés</string>
+    <string name="manageTags_currentTags">Tags sélectionnés :</string>
     <string name="manageTags_save">Sauvegarder</string>
     <string name="manageTags_textField_hint">Un ou plusieurs tags séparés par des virgules</string>
     <string name="manageTags_title">Gérer les tags</string>
@@ -224,11 +224,19 @@
     <string name="pref_categoryName_sync">Synchonisation</string>
     <string name="pref_decs_autoSync_onStartup_enabled">L\'application se synchonisera lorsque vous l\'ouvrirez</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire la description des types de synchronisation pour plus d\'informations</string>
-    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».\n\n
-        Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.\n\n
-        La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraichir » sur l\'écran de la liste des articles.\n\n
-        Pour reméder à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur - si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.\n\n
-        Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.</string>
+    <string name="pref_desc_sync_syncTypes_text">"Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».
+
+
+Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.
+
+
+La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.
+
+
+Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur - si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.
+
+Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.
+ "</string>
     <string name="pref_desc_sync_syncTypes">Appuyer ici pour en savoir plus à propos des types de synchronisation</string>
     <string name="pref_desc_ui_readingSpeed">Votre vitesse de lecture (mesurée en mots par minutes). Utilisée pour calculer le temps estimé de lecture.</string>
     <string name="pref_name_autoSync_onStartup_enabled">Activer la synchronisation automatique lors du lancement de l\'application</string>
@@ -238,7 +246,7 @@
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
     <string name="pref_name_ui_readingSpeed">Vitesse de lecture</string>
     <string name="testConnection_errorMessage_unsupportedServerVersion">Détection d\'une version du serveur non prise en charge</string>
-    <string name="checkCredentials_progressDialogMessage">Test de l\'accès API</string>
+    <string name="checkCredentials_progressDialogMessage">Test de l\'accès API…</string>
     <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
     <string name="menu_changeTitle">Modifier le titre</string>
 <string name="dialog_add_label">Ajouter un nouvel article</string>
