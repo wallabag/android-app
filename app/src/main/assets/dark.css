@@ -28,6 +28,10 @@ body {
   font-family: serif;
 }
 
+.text-align-justify {
+  text-align: justify;
+}
+
 /* ==========================================================================
    1 = Style Guide
    ========================================================================== */
@@ -187,7 +191,6 @@ header.mbm {
 #article {
   width: 70%;
 /*  margin-bottom: 3em; */
-  text-align: justify;
   word-wrap: break-word;
 }
 
