@@ -253,4 +253,6 @@
     </string>
     <string name="pref_desc_connection_autofill">接続をテストし、クライアント ID とクライアント シークレットを入力します</string>
 
+    <string name="title_main_tag">タグ: %s</string>
+
 </resources>
