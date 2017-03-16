@@ -8,6 +8,7 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
@@ -127,6 +128,7 @@ public class OperationsHelper {
 
         settings.setFirstSyncDone(false);
 
+        EventHelper.postEvent(new OfflineQueueChangedEvent(0L));
         EventHelper.notifyEverythingChanged();
     }
 
