@@ -23,9 +23,11 @@ public class EventHelper {
         postEvent(new ArticlesChangedEvent(article, changeType));
     }
 
-    public static void notifyEverythingChanged() {
+    public static void notifyEverythingRemoved() {
+        postEvent(new OfflineQueueChangedEvent(0L));
+
         ArticlesChangedEvent event = new ArticlesChangedEvent();
-        event.invalidateAll();
+        event.invalidateAll(FeedsChangedEvent.ChangeType.DELETED);
 
         postEvent(event);
     }

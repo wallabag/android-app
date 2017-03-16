@@ -16,7 +16,6 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
-import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
@@ -292,8 +291,7 @@ public class OperationsHelper {
         settings.setLatestUpdateRunTimestamp(0);
         settings.setFirstSyncDone(false);
 
-        EventHelper.postEvent(new OfflineQueueChangedEvent(0L));
-        EventHelper.notifyEverythingChanged();
+        EventHelper.notifyEverythingRemoved();
     }
 
     private static ArticleDao getArticleDao() {
