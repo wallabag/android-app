@@ -68,7 +68,7 @@
     <string name="d_testConnection_fail_title">接続テストに失敗しました</string>
     <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
     <string name="unsuccessfulRequest_errorMessage">要求が失敗しました。レスポンスコード: %1$d、レスポンスメッセージ: %2$s</string>
-    <string name="updateFeed_previousUpdateNotFinished">以前の更新操作がまだ終わっていません</string>
+    <string name="previousUpdateNotFinished">以前の更新操作がまだ終わっていません</string>
     <string name="feedName_favorites">お気に入り</string>
     <string name="feedName_archived">アーカイブ済</string>
     <string name="feedName_unread">未読</string>

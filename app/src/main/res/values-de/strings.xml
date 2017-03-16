@@ -50,7 +50,7 @@
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
     <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
-    <string name="updateFeed_previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
+    <string name="previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
     <string name="feedName_unread">Ungelesen</string>

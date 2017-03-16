@@ -38,7 +38,7 @@
     <string name="d_testConnection_fail_title">Ошибка</string>
     <string name="wrongUsernameOrPassword_errorMessage">Ошибка входа: возможно, неверное имя пользователя или пароль</string>
     <string name="unsuccessfulRequest_errorMessage">"Запрос отклонён; код ответа: %1$d, сообщение: %2$s"</string>
-    <string name="updateFeed_previousUpdateNotFinished">Предыдущая операция ещё не завершилась</string>
+    <string name="previousUpdateNotFinished">Предыдущая операция ещё не завершилась</string>
     <string name="feedName_favorites">Избранное</string>
     <string name="feedName_archived">Архив</string>
     <string name="feedName_unread">Непрочитанное</string>

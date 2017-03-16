@@ -32,7 +32,7 @@
     <string name="feedName_archived">Archivés</string>
     <string name="feedName_unread">Non lus</string>
     <string name="feedName_favorites">Favoris</string>
-    <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
+    <string name="previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
