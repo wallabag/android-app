@@ -124,7 +124,6 @@
     <string name="pref_name_connection_username">Felhasználónév</string>
     <string name="pref_name_connection_password">Jelszó</string>
     <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
-    <string name="pref_desc_connection_autofill">Kapcsolat tesztelése, majd töltse ki a server verziót, felhasználói azonosítót, illetve Token-t</string>
 
     <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>

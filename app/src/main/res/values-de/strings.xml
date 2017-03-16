@@ -153,7 +153,6 @@
     <string name="pref_desc_autoDlNew_enabled">Lade neue Artikel automatisch herunter sobald sie mit der App hinzugefügt wurden. Beachte: Der Download findet nicht statt, wenn du ausstehende unsynchronisierte Änderungen hast.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt, lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren, sobald die Internetverbindung verfügbar wird.</string>
     <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter</string>
-    <string name="pref_desc_connection_autofill">Testet die Verbindung zu wallabag und füllt die Felder Server-Version, Benutzer-ID und den Token automatisch aus</string>
     <string name="pref_desc_misc_wipeDB">Löscht alle Artikel vom Gerät, löscht auch alle nicht synchronisierten lokalen Änderungen und URLs</string>
     <string name="pref_desc_runConnectionWizard">Der Verbindungsassistent hilft dir die grundlegenden Verbindungsdaten einzurichten</string>
     <string name="pref_name_autoDlNew_enabled">Download neuer Artikel beim Hinzufügen</string>

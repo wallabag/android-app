@@ -158,7 +158,6 @@
     <string name="pref_name_connection_api_clientID">ID klienta</string>
     <string name="pref_name_connection_api_clientSecret">Secret klienta</string>
     <string name="pref_name_connection_autofill">Autouzupełnnienie</string>
-    <string name="pref_desc_connection_autofill">Testuj połączenie i uzupełnij wersję serwera, ID użytkownika i Token</string>
 
     <string name="pref_categoryName_connection_advanced">Zaawansowane ustawienia połączenią</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
