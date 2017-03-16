@@ -80,7 +80,7 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore sconosciuto: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Impossibile eseguire il login: eventuali username o password sbagliati</string>
     <string name="unsuccessfulRequest_errorMessage">"Richiesta senza successo; codice di risposta: %1$d, messaggio di risposta: %2$s"</string>
-    <string name="updateFeed_previousUpdateNotFinished">Operazione di aggiornamento precedente non ancora finita</string>
+    <string name="previousUpdateNotFinished">Operazione di aggiornamento precedente non ancora finita</string>
     <string name="feedName_favorites">Preferiti</string>
     <string name="feedName_archived">Archiviati</string>
     <string name="feedName_unread">Non letti</string>
@@ -158,7 +158,6 @@
     <string name="pref_name_connection_api_clientID">ID del Client</string>
     <string name="pref_name_connection_api_clientSecret">Segreto del Client</string>
     <string name="pref_name_connection_autofill">Riempimento automatico</string>
-    <string name="pref_desc_connection_autofill">Testa la connessione ed inserisci la versione dle server, user ID, e Token</string>
 
     <string name="pref_categoryName_connection_advanced">Impostazioni di connessione avanzate</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Impostazioni SSL personalizzate</string>

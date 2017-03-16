@@ -752,8 +752,7 @@ public class MainActivity extends AppCompatActivity
 
         if(updateRunning) {
             if(showErrors) {
-                Toast.makeText(this, R.string.updateFeed_previousUpdateNotFinished,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.previousUpdateNotFinished, Toast.LENGTH_SHORT).show();
             }
         } else if(!settings.isConfigurationOk()) {
             if(showErrors) {

@@ -32,7 +32,7 @@
     <string name="feedName_archived">Archivés</string>
     <string name="feedName_unread">Non lus</string>
     <string name="feedName_favorites">Favoris</string>
-    <string name="updateFeed_previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
+    <string name="previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
@@ -158,7 +158,6 @@
     <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles directement après leur ajout par l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
     <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
-    <string name="pref_desc_connection_autofill">Tester la connexion et remplir les informations de version de serveur, l\'ID utilisateur et le token</string>
     <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
     <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
     <string name="pref_name_autoDlNew_enabled">Télécharger les nouveaux articles</string>

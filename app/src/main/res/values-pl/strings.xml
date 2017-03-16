@@ -80,7 +80,7 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Nieznany błąd: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Nie można zalogować: prawdopodobnie błędna nazwa użytkownika lub hasło</string>
     <string name="unsuccessfulRequest_errorMessage">"Nieudane żądanie; kod odpowiedzi: %1$d, treść odpowiedzi: %2$s"</string>
-    <string name="updateFeed_previousUpdateNotFinished">Poprzednia operacja aktualizacji nie zakończyła się jeszcze</string>
+    <string name="previousUpdateNotFinished">Poprzednia operacja aktualizacji nie zakończyła się jeszcze</string>
     <string name="feedName_favorites">Ulubione</string>
     <string name="feedName_archived">Zarchiwizowane</string>
     <string name="feedName_unread">Nieprzeczytane</string>
@@ -158,7 +158,6 @@
     <string name="pref_name_connection_api_clientID">ID klienta</string>
     <string name="pref_name_connection_api_clientSecret">Secret klienta</string>
     <string name="pref_name_connection_autofill">Autouzupełnnienie</string>
-    <string name="pref_desc_connection_autofill">Testuj połączenie i uzupełnij wersję serwera, ID użytkownika i Token</string>
 
     <string name="pref_categoryName_connection_advanced">Zaawansowane ustawienia połączenią</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>

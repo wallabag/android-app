@@ -79,7 +79,7 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: probablemente usuario o contraseña incorrecta</string>
     <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
-    <string name="updateFeed_previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
+    <string name="previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>
     <string name="feedName_unread">No leídos</string>
@@ -157,7 +157,6 @@
     <string name="pref_name_connection_api_clientID">Identificador del cliente</string>
     <string name="pref_name_connection_api_clientSecret">Secreto del cliente</string>
     <string name="pref_name_connection_autofill">Autocompletar</string>
-    <string name="pref_desc_connection_autofill">Probar conexión y rellenar versión del servidor, ID de usuario y Token</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizadas</string>
