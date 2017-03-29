@@ -53,6 +53,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         TextView url;
         ImageView favourite;
         ImageView read;
+        TextView readingTime;
 
         public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -61,6 +62,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             url = (TextView) itemView.findViewById(R.id.url);
             favourite = (ImageView) itemView.findViewById(R.id.favourite);
             read = (ImageView) itemView.findViewById(R.id.read);
+            readingTime = (TextView) itemView.findViewById(R.id.estimatedReadingTime);
             itemView.setOnClickListener(this);
         }
 
