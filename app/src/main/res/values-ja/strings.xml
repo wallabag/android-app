@@ -39,8 +39,7 @@
     <string name="d_urlAction_addToWallabag">Wallabag に追加</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">失敗</string>
-    <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:
-</string>
+    <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:</string>
     <string name="d_configurationChanged_title">パラメーターが変更されました</string>
     <string name="d_configurationChanged_message">いくつかのパラメーターが変更されているようです。接続テストを実行することをお勧めします。</string>
     <string name="d_configurationChanged_answer_decline">後で</string>
@@ -114,14 +113,11 @@
     <string name="pref_categoryName_connection">接続</string>
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
- 例:
-
- <i>https://wallabag.example.com</i>
-
- <i>https://example.com/wallabag</i>
-
- <i>https://framabag.org/u/your-username</i>
- </string>
+        例:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
     <string name="pref_name_connection_username">ユーザー名</string>
     <string name="pref_name_connection_password">パスワード</string>
     <string name="pref_name_connection_autofill">オートフィル</string>
@@ -199,4 +195,62 @@
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>
     <string name="connectionWizard_summary_prev">戻る</string>
     <string name="connectionWizard_summary_next">設定を保存</string>
+    <string name="dialog_add_label">新しい記事を追加</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">サポートされていないサーバーのバージョンを検出しました</string>
+    <string name="getCredentials_progressDialogMessage">API 資格情報を取得しています…</string>
+    <string name="d_getCredentials_title_fail">API 資格情報を取得できませんでした</string>
+    <string name="d_getCredentials_title_message">何か問題がありました。インターネット接続を確認して、もう一度やり直してください。</string>
+    <string name="checkCredentials_progressDialogMessage">API アクセスをテストしています…</string>
+    <string name="d_checkCredentials_title_fail">API アクセス テストに失敗しました</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API が見つかりません</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API が見つかりません: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">API にアクセスできません</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">API にアクセスできません: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">不明なエラー</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">不明なエラー: %s</string>
+    <string name="notification_updatingArticles">記事の更新中</string>
+    <string name="notification_updatingArticles_full">全更新を実行しています</string>
+    <string name="notification_updatingArticles_fast">高速更新を実行しています</string>
+    <string name="notification_sweepingDeletedArticles">削除された記事を掃除中</string>
+    <string name="menu_lists_sweepDeletedArticles">削除された記事を\"掃除\"</string>
+    <string name="menu_lists_fullUpdate">全て更新</string>
+    <string name="menu_changeTitle">タイトルの変更</string>
+    <string name="menu_manageTags">タグを管理</string>
+    <string name="manageTags_title">タグを管理</string>
+    <string name="manageTags_save">保存</string>
+    <string name="manageTags_textField_hint">カンマで区切られた 1 つまたは複数のタグ</string>
+    <string name="manageTags_addNew">追加</string>
+    <string name="manageTags_currentTags">選択されたタグ:</string>
+    <string name="content_estimatedReadingTime">推定読書時間: %s 分</string>
+
+    <string name="navigation_drawer_open">ナビゲーションドロワーを開く</string>
+    <string name="navigation_drawer_close">ナビゲーションドロワーを閉じる</string>
+
+    <string name="nav_main_articles">記事</string>
+    <string name="nav_main_tags">タグ</string>
+    <string name="nav_main_tagged_articles">タグ付きの記事</string>
+
+    <string name="nav_add">新しいエントリを追加</string>
+
+    <string name="pref_name_connection_api_clientID">クライアント ID</string>
+    <string name="pref_name_connection_api_clientSecret">クライアント シークレット</string>
+    <string name="pref_name_ui_article_textAlignment_justify">テキストの配置: 均等割り付け</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">それぞれの行が (新聞や雑誌のように) 同じ幅になるように行を伸ばします</string>
+    <string name="pref_name_ui_readingSpeed">読書の速度</string>
+    <string name="pref_desc_ui_readingSpeed">あなたの読書速度 (1 分あたりの単語で測定します)。推定読書時間を計算するために使用します。</string>
+    <string name="pref_categoryName_sync">同期</string>
+    <string name="pref_name_sync_syncTypes">同期の種類</string>
+    <string name="pref_desc_sync_syncTypes">押すと同期の種類についての詳細情報を表示します</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"高速\" 同期後に \"削除された記事の掃除\" を有効にする</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">詳細は上記の同期種類の説明をお読みください</string>
+    <string name="pref_name_autoSync_onStartup_enabled">アプリケーションの起動時に自動同期を有効にする</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">アプリの起動時に同期されます</string>
+    <string name="pref_desc_sync_syncTypes_text">主に 2 種類の同期があります: \"完全\" と \"高速\"。\n\n
+        \"完全\" の同期種類は、すべてのローカル コンテンツを削除し、すべてもう一度ダウンロードします。この種類の同期は、オプション メニューで利用可能です。最後の手段としてのみこのオプションを使用することをお勧めします。\n\n
+        \"高速\" の同期の種類 (増分同期) は、前回の同期以降に加えられた変更だけをダウンロードして、通常、大幅に時間とインターネットのトラフィックが少なくなります。ただし、このメソッドには欠点があります: リモートで削除された記事を検出できません (そのため、\"高速\" 同期中にローカルの記事は削除されません)。この同期種類は、記事一覧で引いて更新のジェスチャーで呼び出されます。\n\n
+        \"高速\" 同期種類の欠点を解決するため、すべてのローカル記事を反復処理し、サーバー上にまだ存在かどうかをサーバーに問い合わせる、\"削除された記事を掃除\" を実行するオプションがあります。存在しない場合、ローカル記事が削除されます。自分の記事の数に応じて、この操作は時間がかかることがありますが、\"完全\" 同期と比較して多くのインターネットのトラフィックを節約します。\n\n
+        これらの機能はクライアントからサーバーの同期に影響を与えません: ローカルの変更は、常にローカルのコンテンツを更新する前にサーバーに送信されます。
+    </string>
+    <string name="pref_desc_connection_autofill">接続をテストし、クライアント ID とクライアント シークレットを入力します</string>
+
 </resources>

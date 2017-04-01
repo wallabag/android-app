@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="btnMarkRead">Elolvasva</string>
-    <string name="btnMarkUnread">Olvasatlan</string>
+    <string name="btnMarkRead">Jelöld olvasottként</string>
+    <string name="btnMarkUnread">Megjelölés olvasatlanként</string>
     <string name="add_to_favorites">Add hozzá a Kedvencekhez</string>
     <string name="remove_from_favorites">Eltávolítás a Kedvencekből</string>
     <string name="menuShare">Megosztás</string>
@@ -85,7 +85,7 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="aboutText">&lt;b>wallabag Android alkalmazás&lt;/b>&lt;br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
+    <string name="aboutText">&lt;b&gt;wallabag Android alkalmazás&lt;/b&gt;&lt;br/&gt;A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hang magassága</string>
     <string name="readVolume">Olvasás hangereje</string>
@@ -198,4 +198,59 @@
     <string name="connectionWizard_summary_toastMessage">A beállítás befejeződött</string>
     <string name="connectionWizard_summary_prev">Vissza</string>
     <string name="connectionWizard_summary_next">Beállítások mentése</string>
+    <string name="dialog_add_label">Új cikk hozzáadása</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Nem támogatott kiszolgáló verziót észleltünk</string>
+    <string name="getCredentials_progressDialogMessage">API hitelesítő adatok fogadása…</string>
+    <string name="d_getCredentials_title_fail">Nem lehetett beszerezni az API hitelesítő adatokat</string>
+    <string name="checkCredentials_progressDialogMessage">API hozzáférés tesztelése…</string>
+    <string name="d_checkCredentials_title_fail">Az API hozzáférés tesztje meghiúsult</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API nem található</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API nem található: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">Nincs hozzáférés az API-hez</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Nincs hozzáférés az API-hez: %s</string>
+    <string name="notification_updatingArticles">Cikkek frissítése</string>
+    <string name="notification_updatingArticles_full">Teljes frissítés folyamatban</string>
+    <string name="notification_updatingArticles_fast">Gyors frissítés folyamatban</string>
+    <string name="notification_sweepingDeletedArticles">Törölt cikkek takarítása</string>
+    <string name="menu_lists_sweepDeletedArticles">\"Takarítja\" a törölt cikkeket</string>
+    <string name="menu_lists_fullUpdate">Teljes frissítés</string>
+    <string name="menu_changeTitle">Cím megváltoztatása</string>
+    <string name="menu_manageTags">Címkék kezelése</string>
+    <string name="manageTags_title">Címkék kezelése</string>
+    <string name="manageTags_save">Mentés</string>
+    <string name="manageTags_textField_hint">Egy vagy több címke, vesszővel elválasztva</string>
+    <string name="manageTags_addNew">Hozzáad</string>
+    <string name="manageTags_currentTags">Választott címkék:</string>
+    <string name="content_estimatedReadingTime">Becsült olvasási idő: %s perc</string>
+
+    <string name="navigation_drawer_open">Navigációs fiók megnyitása</string>
+    <string name="navigation_drawer_close">Navigációs fiók bezárása</string>
+
+    <string name="nav_main_articles">Cikkek</string>
+    <string name="nav_main_tags">Címkék</string>
+    <string name="nav_main_tagged_articles">Címkézett cikkek</string>
+
+    <string name="nav_add">Új bejegyzés</string>
+
+    <string name="pref_name_connection_api_clientID">Ügyfél ID</string>
+    <string name="pref_name_connection_api_clientSecret">Ügyfél titok</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Szöveg igazítása: sorkizárt</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Nyújtja a sorokat úgy, hogy minden sor azonos szélességű legyen (mint újságokban és folyóiratokban)</string>
+    <string name="pref_name_ui_readingSpeed">Olvasási sebesség</string>
+    <string name="pref_desc_ui_readingSpeed">Az olvasási sebességed (percenkénti szóban mérve). A becsült olvasási idő kiszámításához.</string>
+    <string name="pref_categoryName_sync">Szinkronizáció</string>
+    <string name="pref_name_sync_syncTypes">Szinkronizálás típusok</string>
+    <string name="pref_desc_sync_syncTypes">Nyomja meg, hogy több információt kapjon a szinkronizálás típusokról</string>
+    <string name="pref_desc_sync_syncTypes_text">Két fő szinkronizálási típus van: \"Teljes\" és \"Gyors\".\n\n
+        \"Teljes\" szinkronizálás törli az összes helyi tartalmat és letöltéseket és letölti az egész tartalmat újra. Ez a fajta szinkronizáció a beállítások menüben található. Javasoljuk, hogy ezt a lehetőséget csak a legvégső esetben használja.\n\n
+        \"Gyors\" szinkronizálás (inkrementális szinkron) csak a változtatásokat tölti le az előzőhöz képest, ami általában lényegesen kevesebb időt és internetes forgalmat jelent. Ennek a módszernek azonban van egy hiányossága: nem ismeri fel a távolról törölt cikket (tehát nem töröl helyi cikket \"Gyors\" szinkron közben). Ez a szinkronizálás akkor indul el, amikor \"húzz a frissítésért\" mozdulat történik bármelyik cikk-listában.\n\n
+        A \"Gyors\" szinkronizálás hiányosságának orvoslására van egy lehetőség: \"törölt cikkek takarítása\", amely végigmegy minden helyi cikken, és megkérdezi a szerver, hogy jelen van-e rajta továbbra is - ha nem, a helyi cikk törlődik. A cikkek számától függően, ez a művelet hosszabb időt vehet igénybe, de sok internetes forgalmat spórol meg a \"Teljes\" szinkronhoz képest.\n\n
+        Egyik funkció sem befolyásolja a kliensről-szerverre szinkronizálást: A helyi változások mindig el lesznek küldve a szerver felé, mielőtt a helyi tartalmat frissítjük.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Engedélyezze a \"Törölt cikkek takarítását\" a \"Gyors\" szinkronizáláshoz</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Olvasson többet a szinkronizálás-típusokról a fentiekben</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Engedélyezze az automata szinkronizációt az alkalmazás indításkor</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
+    <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
+
 </resources>
