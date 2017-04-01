@@ -198,7 +198,7 @@
     <string name="connectionWizard_summary_toastMessage">A beállítás befejeződött</string>
     <string name="connectionWizard_summary_prev">Vissza</string>
     <string name="connectionWizard_summary_next">Beállítások mentése</string>
-<string name="dialog_add_label">Új cikk hozzáadása</string>
+    <string name="dialog_add_label">Új cikk hozzáadása</string>
     <string name="testConnection_errorMessage_unsupportedServerVersion">Nem támogatott kiszolgáló verziót észleltünk</string>
     <string name="getCredentials_progressDialogMessage">API hitelesítő adatok fogadása…</string>
     <string name="d_getCredentials_title_fail">Nem lehetett beszerezni az API hitelesítő adatokat</string>
@@ -241,24 +241,16 @@
     <string name="pref_categoryName_sync">Szinkronizáció</string>
     <string name="pref_name_sync_syncTypes">Szinkronizálás típusok</string>
     <string name="pref_desc_sync_syncTypes">Nyomja meg, hogy több információt kapjon a szinkronizálás típusokról</string>
-    <string name="pref_desc_sync_syncTypes_text">"Két fő szinkronizálási típus van: \"Teljes\" és \"Gyors\".
-
-
- \"Teljes\" szinkronizálás törli az összes helyi tartalmat és letöltéseket és letölti az egész tartalmat újra. Ez a fajta szinkronizáció a beállítások menüben található. Javasoljuk, hogy ezt a lehetőséget csak a legvégső esetben használja.
-
-
-  \"Gyors\" szinkronizálás (inkrementális szinkron) csak a változtatásokat tölti le az előzőhöz képest, ami általában lényegesen kevesebb időt és internetes forgalmat jelent. Ennek a módszernek azonban van egy hiányossága: nem ismeri fel a távolról törölt cikket (tehát nem töröl helyi cikket \"Gyors\" szinkron közben). Ez a szinkronizálás akkor indul el, amikor \"húzz a frissítésért\" mozdulat történik bármelyik cikk-listában.
-
-
- A \"Gyors\" szinkronizálás hiányosságának orvoslására van egy lehetőség: \"törölt cikkek takarítása\", amely végigmegy minden helyi cikken, és megkérdezi a szerver, hogy jelen van-e rajta továbbra is - ha nem, a helyi cikk törlődik. A cikkek számától függően, ez a művelet hosszabb időt vehet igénybe, de sok internetes forgalmat spórol meg a \"Teljes\" szinkronhoz képest.
-
-
- Egyik funkció sem befolyásolja a kliensről-szerverre szinkronizálást: A helyi változások mindig el lesznek küldve a szerver felé, mielőtt a helyi tartalmat frissítjük.
- "</string>
+    <string name="pref_desc_sync_syncTypes_text">Két fő szinkronizálási típus van: \"Teljes\" és \"Gyors\".\n\n
+        \"Teljes\" szinkronizálás törli az összes helyi tartalmat és letöltéseket és letölti az egész tartalmat újra. Ez a fajta szinkronizáció a beállítások menüben található. Javasoljuk, hogy ezt a lehetőséget csak a legvégső esetben használja.\n\n
+        \"Gyors\" szinkronizálás (inkrementális szinkron) csak a változtatásokat tölti le az előzőhöz képest, ami általában lényegesen kevesebb időt és internetes forgalmat jelent. Ennek a módszernek azonban van egy hiányossága: nem ismeri fel a távolról törölt cikket (tehát nem töröl helyi cikket \"Gyors\" szinkron közben). Ez a szinkronizálás akkor indul el, amikor \"húzz a frissítésért\" mozdulat történik bármelyik cikk-listában.\n\n
+        A \"Gyors\" szinkronizálás hiányosságának orvoslására van egy lehetőség: \"törölt cikkek takarítása\", amely végigmegy minden helyi cikken, és megkérdezi a szerver, hogy jelen van-e rajta továbbra is - ha nem, a helyi cikk törlődik. A cikkek számától függően, ez a művelet hosszabb időt vehet igénybe, de sok internetes forgalmat spórol meg a \"Teljes\" szinkronhoz képest.\n\n
+        Egyik funkció sem befolyásolja a kliensről-szerverre szinkronizálást: A helyi változások mindig el lesznek küldve a szerver felé, mielőtt a helyi tartalmat frissítjük.
+    </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Engedélyezze a \"Törölt cikkek takarítását\" a \"Gyors\" szinkronizáláshoz</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Olvasson többet a szinkronizálás-típusokról a fentiekben</string>
     <string name="pref_name_autoSync_onStartup_enabled">Engedélyezze az automata szinkronizációt az alkalmazás indításkor</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
     <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
 
-    </resources>
+</resources>
