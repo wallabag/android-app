@@ -318,11 +318,9 @@ public class Updater {
             }
 
             if(!articlesToUpdate.isEmpty()) {
-                Log.v(TAG, "performUpdate() performing articleDao.update() for multiple articles");
-                for(Article article: articlesToUpdate) {
-                    articleDao.update(article);
-                }
-                Log.v(TAG, "performUpdate() done articleDao.update()");
+                Log.v(TAG, "performUpdate() performing articleDao.updateInTx()");
+                articleDao.updateInTx(articlesToUpdate);
+                Log.v(TAG, "performUpdate() done articleDao.updateInTx()");
 
                 articlesToUpdate.clear();
             }
@@ -336,11 +334,9 @@ public class Updater {
             }
 
             if(!tagsToUpdate.isEmpty()) {
-                Log.v(TAG, "performUpdate() performing tagDao.update() for multiple tags");
-                for(Tag tag: tagsToUpdate) {
-                    tagDao.update(tag);
-                }
-                Log.v(TAG, "performUpdate() done tagDao.update()");
+                Log.v(TAG, "performUpdate() performing tagDao.updateInTx()");
+                tagDao.updateInTx(tagsToUpdate);
+                Log.v(TAG, "performUpdate() done tagDao.updateInTx()");
 
                 tagsToUpdate.clear();
             }
