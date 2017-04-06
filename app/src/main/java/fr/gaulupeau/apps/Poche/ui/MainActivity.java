@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity
     private String searchQuery;
     private String searchQueryPrevious;
     private boolean searchUIPending;
+    private Tag selectedTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -668,6 +669,7 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
+        CharSequence title = null;
         @IdRes int itemID = 0;
         switch(type) {
             case FRAGMENT_ARTICLE_LISTS:
@@ -680,8 +682,14 @@ public class MainActivity extends AppCompatActivity
 
             case FRAGMENT_TAGGED_ARTICLE_LISTS:
                 itemID = R.id.nav_taggedLists;
+
+                if(selectedTag != null) {
+                    title = getString(R.string.title_main_tag, selectedTag.getLabel());
+                }
+
                 MenuItem item = navigationView.getMenu().findItem(itemID);
                 if(item != null) {
+                    if(title != null) item.setTitle(title);
                     item.setVisible(true);
                     item.setEnabled(true);
                 }
@@ -691,15 +699,22 @@ public class MainActivity extends AppCompatActivity
         if(itemID != 0) {
             navigationView.setCheckedItem(itemID);
 
-            MenuItem item = navigationView.getMenu().findItem(itemID);
-            if(item != null) {
-                setTitle(item.getTitle());
+            if(title == null) {
+                MenuItem item = navigationView.getMenu().findItem(itemID);
+                if(item != null) {
+                    title = item.getTitle();
+                }
             }
+        }
+        if(title != null) {
+            setTitle(title);
         }
     }
 
     @Override
     public void onTagSelected(Tag tag) {
+        selectedTag = tag;
+
         Fragment fragment = ArticleListsFragment.newInstance(tag.getLabel());
 
         setCurrentFragment(fragment, FRAGMENT_TAGGED_ARTICLE_LISTS);
