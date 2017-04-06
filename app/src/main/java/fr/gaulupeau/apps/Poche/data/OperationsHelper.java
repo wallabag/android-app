@@ -16,7 +16,6 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
-import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
@@ -127,6 +126,23 @@ public class OperationsHelper {
         ServiceHelper.changeArticleTitle(context, article.getArticleId());
 
         Log.d(TAG, "changeArticleTitle() finished");
+    }
+
+    public static void setArticleProgress(Context context, int articleID, double progress) {
+        Log.d(TAG, String.format("setArticleProgress(%d, %g) started", articleID, progress));
+
+        ArticleDao articleDao = getArticleDao();
+
+        Article article = getArticle(articleID, articleDao);
+        if(article == null) {
+            Log.w(TAG, "setArticleProgress() article was not found");
+            return; // not an error?
+        }
+
+        article.setArticleProgress(progress);
+        articleDao.update(article);
+
+        Log.d(TAG, "setArticleProgress() finished");
     }
 
     public static void setArticleTags(Context context, int articleID, List<Tag> newTags) {
@@ -275,8 +291,7 @@ public class OperationsHelper {
         settings.setLatestUpdateRunTimestamp(0);
         settings.setFirstSyncDone(false);
 
-        EventHelper.postEvent(new OfflineQueueChangedEvent(0L));
-        EventHelper.notifyEverythingChanged();
+        EventHelper.notifyEverythingRemoved();
     }
 
     private static ArticleDao getArticleDao() {

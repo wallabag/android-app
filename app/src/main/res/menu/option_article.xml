@@ -1,44 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
         android:icon="@drawable/ic_done_24dp"
-        app:showAsAction="always" />
+        app:showAsAction="always"/>
     <item
-        android:id="@+id/menuArticleToggleFavorite"
+        android:id="@+id/menuArticleMarkAsUnread"
+        android:title="@string/btnMarkUnread"
+        android:icon="@drawable/ic_undo_24dp"
+        app:showAsAction="always"
+        android:visible="false"/>
+    <item
+        android:id="@+id/menuArticleFavorite"
         android:title="@string/add_to_favorites"
         android:icon="@drawable/ic_star_border_white_24dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuArticleUnfavorite"
+        android:title="@string/remove_from_favorites"
+        android:icon="@drawable/ic_star_white_24dp"
+        app:showAsAction="ifRoom"
+        android:visible="false"/>
     <item
         android:id="@+id/menuShare"
         android:title="@string/menuShare"
         android:icon="@android:drawable/ic_menu_share"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menuChangeTitle"
-        android:title="@string/menu_changeTitle" />
+        android:title="@string/menu_changeTitle"/>
     <item
         android:id="@+id/menuManageTags"
-        android:title="@string/menu_manageTags" />
+        android:title="@string/menu_manageTags"/>
     <item
         android:id="@+id/menuDelete"
-        android:title="@string/menuDelete" />
+        android:title="@string/menuDelete"/>
     <item
         android:id="@+id/menuOpenOriginal"
-        android:title="@string/menuOpenOriginal" />
+        android:title="@string/menuOpenOriginal"/>
     <item
         android:id="@+id/menuDownloadPdf"
-        android:title="@string/menuDownloadPdf" />
+        android:title="@string/menuDownloadPdf"/>
     <item
         android:id="@+id/menuIncreaseFontSize"
-        android:title="@string/menu_readArticle_increaseFontSize" />
+        android:title="@string/menu_readArticle_increaseFontSize"/>
     <item
         android:id="@+id/menuDecreaseFontSize"
-        android:title="@string/menu_readArticle_decreaseFontSize" />
+        android:title="@string/menu_readArticle_decreaseFontSize"/>
     <item
         android:id="@+id/menuTTS"
         android:checkable="true"
-        android:title="@string/menuTTS" />
+        android:title="@string/menuTTS"/>
 </menu>

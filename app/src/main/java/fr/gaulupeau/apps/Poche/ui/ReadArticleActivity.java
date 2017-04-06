@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,7 +13,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +36,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
@@ -46,6 +44,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -67,6 +67,45 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
+    private static final String TAG_TTS_FRAGMENT = "ttsFragment";
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_ACTIONS = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED);
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_CONTENT = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.CONTENT_CHANGED,
+            ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
+            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED,
+            ArticlesChangedEvent.ChangeType.URL_CHANGED,
+            ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
+            ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_PREV_NEXT = EnumSet.of(
+            ArticlesChangedEvent.ChangeType.UNSPECIFIED,
+            ArticlesChangedEvent.ChangeType.ADDED,
+            ArticlesChangedEvent.ChangeType.DELETED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED,
+            ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED);
+
+    private Boolean contextFavorites;
+    private Boolean contextArchived;
+
+    private Settings settings;
+
+    private ArticleDao articleDao;
+
+    private int fontSize;
+    private boolean volumeButtonsScrolling;
+    private boolean tapToScroll;
+    private float screenScrollingPercent;
+    private boolean smoothScrolling;
+
     private ScrollView scrollView;
     private WebView webViewContent;
     private TextView loadingPlaceholder;
@@ -74,43 +113,29 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private View hrBar;
     private TtsFragment ttsFragment;
 
-    private long articleID;
-    private Article mArticle;
-    private ArticleDao mArticleDao;
-
-    private Boolean contextFavorites;
-    private Boolean contextArchived;
-
-    private boolean volumeButtonsScrolling;
-    private boolean tapToScroll;
-    private float screenScrollingPercent;
-    private boolean smoothScrolling;
-
-    private String titleText;
-    private String originalUrlText;
-    private String domainText;
-    private Double positionToRestore;
-    private int webViewHeightBeforeUpdate;
-    private Runnable positionRestorationRunnable;
+    private Article article;
+    private String articleTitle;
+    private String articleDomain;
+    private String articleUrl;
+    private Double articleProgress;
 
     private Long previousArticleID;
     private Long nextArticleID;
 
+    private int webViewHeightBeforeUpdate;
+    private Runnable positionRestorationRunnable;
+
     private boolean isResumed;
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
-
-    private Settings settings;
-
-    private int fontSize;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
         Intent intent = getIntent();
-        articleID = intent.getLongExtra(EXTRA_ID, -1);
-        Log.d(TAG, "onCreate() articleId=" + articleID);
+        long articleID = intent.getLongExtra(EXTRA_ID, -1);
+        Log.d(TAG, "onCreate() articleId: " + articleID);
         if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
         }
@@ -121,128 +146,292 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         settings = App.getInstance().getSettings();
 
         DaoSession session = DbConnection.getSession();
-        mArticleDao = session.getArticleDao();
-        mArticle = getArticle(articleID);
+        articleDao = session.getArticleDao();
 
-        // article is loaded - update menu
-        invalidateOptionsMenu();
-
-        if(mArticle == null) {
-            Log.e(TAG, "onCreate: Did not find article with articleId=" + articleID + ". Thus we" +
-                    " are not able to create this activity. Finish.");
+        if(!loadArticle(articleID)) {
+            Log.e(TAG, "onCreate: Did not find article with ID: " + articleID);
             finish();
             return;
         }
-        titleText = mArticle.getTitle();
-        Log.d(TAG, "onCreate: titleText=" + titleText);
-        originalUrlText = mArticle.getUrl();
-        Log.d(TAG, "onCreate: originalUrlText=" + originalUrlText);
-        domainText = mArticle.getDomain();
-        Log.d(TAG, "onCreate: domainText=" + domainText);
-        String htmlContent = mArticle.getContent();
-        int estimatedReadingTime = mArticle.getEstimatedReadingTime(settings.getReadingSpeed());
-        htmlContent = getString(R.string.content_estimatedReadingTime,
-                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
-                + htmlContent;
-        if(BuildConfig.DEBUG) Log.d(TAG, "onCreate: htmlContent=" + htmlContent);
-        positionToRestore = mArticle.getArticleProgress();
-        Log.d(TAG, "onCreate: positionToRestore=" + positionToRestore);
 
-        setTitle(titleText);
-
-        if(settings.isImageCacheEnabled()) {
-            Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
-            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
-                    htmlContent, mArticle.getArticleId().longValue());
-        }
-
+        fontSize = settings.getArticleFontSize();
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
 
-        String cssName;
-        boolean highContrast = false;
-        switch(Themes.getCurrentTheme()) {
-            case LIGHT_CONTRAST:
-                highContrast = true;
-            case LIGHT:
-            default:
-                cssName = "main";
-                break;
+        setTitle(articleTitle);
 
-            case DARK_CONTRAST:
-                highContrast = true;
-            case DARK:
-                cssName = "dark";
-                break;
+        // article is loaded - update menu
+        invalidateOptionsMenu();
 
-            case SOLARIZED:
-                cssName = "solarized";
-                highContrast = false;
-                break;
+        scrollView = (ScrollView)findViewById(R.id.scroll);
+        webViewContent = (WebView)findViewById(R.id.webViewContent);
+        loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
+        bottomTools = (LinearLayout)findViewById(R.id.bottomTools);
+        hrBar = findViewById(R.id.view1);
+
+        initWebView();
+
+        if(ttsFragment != null) {
+            // is it ever executed?
+            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle);
         }
 
-        fontSize = settings.getArticleFontSize();
+        loadArticleToWebView();
 
-        List<String> additionalClasses = new ArrayList<>(1);
-        if(highContrast) additionalClasses.add("high-contrast");
-        if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
-        if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
+        initButtons();
 
-        String classAttr;
-        if(!additionalClasses.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
+        if(settings.isTtsVisible() && ttsFragment == null) {
+            ttsFragment = (TtsFragment)getSupportFragmentManager()
+                    .findFragmentByTag(TAG_TTS_FRAGMENT);
 
-            sb.append(" class=\"");
-            for(String cl: additionalClasses) {
-                sb.append(cl).append(' ');
+            if(ttsFragment == null) {
+                toggleTTS(false);
             }
-            sb.append('"');
+        }
 
-            classAttr = sb.toString();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        isResumed = true;
+        if(onPageFinishedCallPostponedUntilResume) {
+            onPageFinishedCallPostponedUntilResume = false;
+
+            onPageFinished();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        isResumed = false;
+    }
+
+    @Override
+    public void onStop() {
+        if(loadingFinished && article != null) {
+            cancelPositionRestoration();
+
+            OperationsHelper.setArticleProgress(this, article.getArticleId(), getReadingPosition());
+        }
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        Log.d(TAG, "onCreateOptionsMenu() started");
+
+        getMenuInflater().inflate(R.menu.option_article, menu);
+
+        if(article != null) {
+            boolean unread = article.getArchive() != null && !article.getArchive();
+            menu.findItem(R.id.menuArticleMarkAsRead).setVisible(unread);
+            menu.findItem(R.id.menuArticleMarkAsUnread).setVisible(!unread);
+
+            boolean favorite = article.getFavorite() != null && article.getFavorite();
+            menu.findItem(R.id.menuArticleFavorite).setVisible(!favorite);
+            menu.findItem(R.id.menuArticleUnfavorite).setVisible(favorite);
+        }
+
+        menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menuArticleMarkAsRead:
+            case R.id.menuArticleMarkAsUnread:
+                markAsReadAndClose();
+                break;
+
+            case R.id.menuArticleFavorite:
+            case R.id.menuArticleUnfavorite:
+                toggleFavorite();
+                break;
+
+            case R.id.menuShare:
+                shareArticle();
+                break;
+
+            case R.id.menuChangeTitle:
+                showChangeTitleDialog();
+                break;
+
+            case R.id.menuManageTags:
+                manageTags();
+                break;
+
+            case R.id.menuDelete:
+                deleteArticle();
+                break;
+
+            case R.id.menuOpenOriginal:
+                openOriginal();
+                break;
+
+            case R.id.menuDownloadPdf:
+                downloadPdf();
+                break;
+
+            case R.id.menuIncreaseFontSize:
+                changeFontSize(true);
+                break;
+
+            case R.id.menuDecreaseFontSize:
+                changeFontSize(false);
+                break;
+
+            case R.id.menuTTS:
+                toggleTTS(true);
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if(volumeButtonsScrolling) {
+            switch(event.getKeyCode()) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    scroll(true, screenScrollingPercent, smoothScrolling);
+                    return true;
+
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    scroll(false, screenScrollingPercent, smoothScrolling);
+                    return true;
+            }
+        }
+
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
+        Log.d(TAG, "onArticlesChangedEvent() started");
+
+        boolean updatePrevNext = false;
+        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET_PREV_NEXT)) {
+            updatePrevNext = true;
         } else {
-            classAttr = "";
+            EnumSet<ArticlesChangedEvent.ChangeType> changes;
+            if(contextArchived != null) {
+                changes = contextArchived ? event.getArchiveFeedChanges() : event.getMainFeedChanges();
+            } else if(contextFavorites != null && contextFavorites) {
+                changes = event.getFavoriteFeedChanges();
+            } else {
+                changes = EnumSet.copyOf(event.getMainFeedChanges());
+                changes.addAll(event.getArchiveFeedChanges());
+                changes.addAll(event.getFavoriteFeedChanges());
+            }
+
+            if(!Collections.disjoint(changes, CHANGE_SET_PREV_NEXT)) {
+                updatePrevNext = true;
+            }
         }
 
-        String htmlBase;
-        try {
-            htmlBase = readRawString(R.raw.webview_htmlbase);
-        } catch(Exception ignored) {
-            // TODO: show error message
-            finish();
-            return;
+        if(updatePrevNext) {
+            Log.d(TAG, "onArticleChangedEvent() prev/next buttons changed");
+
+            updatePrevNextButtons();
         }
 
-        String htmlPage = String.format(htmlBase, cssName, classAttr,
-                TextUtils.htmlEncode(titleText), originalUrlText, domainText, htmlContent);
+        EnumSet<ArticlesChangedEvent.ChangeType> changes = event.getArticleChanges(article);
+        if(changes == null) return;
 
-        String httpAuthHostTemp = settings.getUrl();
-        try {
-            httpAuthHostTemp = new URL(httpAuthHostTemp).getHost();
-        } catch (Exception ignored) {}
-        final String httpAuthHost = httpAuthHostTemp;
-        final String httpAuthUsername = settings.getHttpAuthUsername();
-        final String httpAuthPassword = settings.getHttpAuthPassword();
+        Log.d(TAG, "onArticlesChangedEvent() changes: " + changes);
 
-        scrollView = (ScrollView) findViewById(R.id.scroll);
-        webViewContent = (WebView) findViewById(R.id.webViewContent);
-        webViewContent.getSettings().setJavaScriptEnabled(true); // TODO: make optional?
+        boolean updateActions;
+        boolean updateContent;
+        boolean updateTitle;
+        boolean updateURL;
+
+        if(changes.contains(FeedsChangedEvent.ChangeType.UNSPECIFIED)) {
+            updateActions = true;
+            updateContent = true;
+            updateTitle = true;
+            updateURL = true;
+        } else {
+            updateActions = !Collections.disjoint(changes, CHANGE_SET_ACTIONS);
+            updateContent = !Collections.disjoint(changes, CHANGE_SET_CONTENT);
+            updateTitle = changes.contains(FeedsChangedEvent.ChangeType.TITLE_CHANGED);
+            updateURL = changes.contains(FeedsChangedEvent.ChangeType.URL_CHANGED);
+        }
+
+        if(updateActions) {
+            Log.d(TAG, "onArticleChangedEvent() actions changed");
+
+            updateMarkAsReadButtonView();
+
+            invalidateOptionsMenu();
+        }
+
+        if(updateTitle) {
+            Log.d(TAG, "onArticleChangedEvent() title changed");
+
+            articleTitle = article.getTitle();
+            setTitle(articleTitle);
+        }
+
+        if(updateURL) {
+            Log.d(TAG, "onArticleChangedEvent() URL changed");
+
+            articleUrl = article.getUrl();
+        }
+
+        if(updateContent) {
+            Log.d(TAG, "onArticleChangedEvent() content changed");
+
+//            prepareToRestorePosition(true);
+
+            loadArticleToWebView();
+
+//            restorePositionAfterUpdate();
+        }
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initWebView() {
+        webViewContent.getSettings().setJavaScriptEnabled(true);
+
         webViewContent.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 boolean result = false;
-                if (ttsFragment != null) {
+                if(ttsFragment != null) {
                     result = ttsFragment.onWebViewConsoleMessage(cm);
                 }
-                if ( ! result) {
+                if(!result) {
                     Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
                             cm.lineNumber(), cm.sourceId()));
                 }
                 return true;
             }
         });
+
         webViewContent.setWebViewClient(new WebViewClient() {
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 ReadArticleActivity.this.onPageFinished();
@@ -251,42 +440,43 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                if (!url.equals(originalUrlText)) {
-                    return openUrl(url);
-                } else { // If we try to open current URL, do not propose to save it, directly open browser
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) { // TODO: check
+                // If we try to open current URL, do not propose to save it, directly open browser
+                if(url.equals(articleUrl)) {
                     Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(launchBrowserIntent);
-                    return true;
+                } else {
+                    openUrl(url);
                 }
+
+                return true; // always override URL loading
             }
 
             @Override
             public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
                                                   String host, String realm) {
                 Log.d(TAG, "onReceivedHttpAuthRequest() host: " + host + ", realm: " + realm);
-                if(host != null && host.contains(httpAuthHost)) {
-                    Log.d(TAG, "onReceivedHttpAuthRequest() host match");
-                    handler.proceed(httpAuthUsername, httpAuthPassword);
-                } else {
-                    Log.d(TAG, "onReceivedHttpAuthRequest() host mismatch");
-                    super.onReceivedHttpAuthRequest(view, handler, host, realm);
+
+                if(!TextUtils.isEmpty(host)) {
+                    String httpAuthHost = settings.getUrl();
+                    try {
+                        httpAuthHost = new URL(httpAuthHost).getHost();
+                    } catch(Exception ignored) {}
+
+                    if(host.contains(httpAuthHost)) {
+                        Log.d(TAG, "onReceivedHttpAuthRequest() host match");
+                        handler.proceed(settings.getHttpAuthUsername(), settings.getHttpAuthPassword());
+                        return;
+                    }
                 }
+
+                super.onReceivedHttpAuthRequest(view, handler, host, realm);
             }
 
         });
 
         if(fontSize != 100) setFontSize(webViewContent, fontSize);
 
-
-        if (ttsFragment != null) {
-                ttsFragment.onDocumentLoadStart(domainText, titleText);
-        }
-
-        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
-                "text/html", "utf-8", null);
-
-        // TODO: remove logging after calibrated
         GestureDetector.SimpleOnGestureListener gestureListener
                 = new GestureDetector.SimpleOnGestureListener() {
             @Override
@@ -303,27 +493,27 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 //                }
 
                 if(Math.abs(velocityX) < 80) {
-                    Log.d("FLING", "too slow");
+                    Log.v("FLING", "too slow");
                     return false; // too slow
                 }
 
                 if(Math.abs(velocityX / velocityY) < 3) {
-                    Log.d("FLING", "not a horizontal fling");
+                    Log.v("FLING", "not a horizontal fling");
                     return false; // not a horizontal fling
                 }
 
                 float diff = e1.getX() - e2.getX();
 
                 if(Math.abs(diff) < 80) { // configurable
-                    Log.d("FLING", "too small distance");
+                    Log.v("FLING", "too small distance");
                     return false; // too small distance
                 }
 
                 if(diff > 0) { // right-to-left: next
-                    Log.d("FLING", "right-to-left: next");
+                    Log.v("FLING", "right-to-left: next");
                     openNextArticle();
                 } else { // left-to-right: prev
-                    Log.d("FLING", "left-to-right: prev");
+                    Log.v("FLING", "left-to-right: prev");
                     openPreviousArticle();
                 }
                 return true;
@@ -361,57 +551,140 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return gestureDetector.onTouchEvent(event);
             }
         });
+    }
 
-        loadingPlaceholder = (TextView) findViewById(R.id.tv_loading_article);
-        bottomTools = (LinearLayout) findViewById(R.id.bottomTools);
-        hrBar = findViewById(R.id.view1);
+    private void loadArticleToWebView() {
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", getHtmlPage(),
+                "text/html", "utf-8", null);
+    }
 
+    private String getHtmlPage() {
+        String cssName;
+        boolean highContrast = false;
+        switch(Themes.getCurrentTheme()) {
+            case LIGHT_CONTRAST:
+                highContrast = true;
+            case LIGHT:
+            default:
+                cssName = "main";
+                break;
+
+            case DARK_CONTRAST:
+                highContrast = true;
+            case DARK:
+                cssName = "dark";
+                break;
+
+            case SOLARIZED:
+                cssName = "solarized";
+                highContrast = false;
+                break;
+        }
+
+        List<String> additionalClasses = new ArrayList<>(1);
+        if(highContrast) additionalClasses.add("high-contrast");
+        if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
+        if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
+
+        String classAttr;
+        if(!additionalClasses.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+
+            sb.append(" class=\"");
+            for(String cl: additionalClasses) {
+                sb.append(cl).append(' ');
+            }
+            sb.append('"');
+
+            classAttr = sb.toString();
+        } else {
+            classAttr = "";
+        }
+
+        String htmlBase;
+        try {
+            htmlBase = readRawString(R.raw.webview_htmlbase);
+        } catch(Exception e) {
+            // should not happen
+            throw new RuntimeException("Couldn't load raw resource", e);
+        }
+
+        String htmlContent = getHtmlContent();
+
+        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
+                articleUrl, articleDomain, htmlContent);
+    }
+
+    private String getHtmlContent() {
+        String htmlContent = article.getContent();
+
+        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
+
+        htmlContent = getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
+                + htmlContent;
+        if(BuildConfig.DEBUG) Log.d(TAG, "onCreate() htmlContent: " + htmlContent);
+
+        if(settings.isImageCacheEnabled()) {
+            Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
+            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
+                    htmlContent, article.getArticleId().longValue());
+        }
+
+        return htmlContent;
+    }
+
+    private void initButtons() {
+        updateMarkAsReadButtonView();
+        updatePrevNextButtons();
+    }
+
+    private void updateMarkAsReadButtonView() {
+        Button buttonMarkRead = (Button)findViewById(R.id.btnMarkRead);
+        Button buttonMarkUnread = (Button)findViewById(R.id.btnMarkUnread);
+
+        boolean archived = article.getArchive();
+        buttonMarkRead.setVisibility(!archived ? View.VISIBLE: View.GONE);
+        buttonMarkUnread.setVisibility(archived ? View.VISIBLE: View.GONE);
+
+        OnClickListener onClickListener =
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        markAsReadAndClose();
+                    }
+                };
+
+        buttonMarkRead.setOnClickListener(onClickListener);
+        buttonMarkUnread.setOnClickListener(onClickListener);
+    }
+
+    private void updatePrevNextButtons() {
         previousArticleID = getAdjacentArticle(true);
         nextArticleID = getAdjacentArticle(false);
 
-        Button btnMarkRead = (Button) findViewById(R.id.btnMarkRead);
-        if(mArticle.getArchive()) {
-            btnMarkRead.setText(R.string.btnMarkUnread);
-        }
-        btnMarkRead.setOnClickListener(new OnClickListener() {
+        updatePrevNextButtonViews();
+    }
 
-            @Override
-            public void onClick(View v) {
-                markAsReadAndClose();
-            }
-        });
+    private void updatePrevNextButtonViews() {
+        ImageButton buttonGoPrevious = (ImageButton)findViewById(R.id.btnGoPrevious);
+        ImageButton buttonGoNext = (ImageButton)findViewById(R.id.btnGoNext);
 
-        ImageButton btnGoPrevious;
-        ImageButton btnGoNext;
-        btnGoPrevious = (ImageButton) findViewById(R.id.btnGoPrevious);
-        if(previousArticleID == null) {
-            btnGoPrevious.setVisibility(View.GONE);
-        }
-        btnGoNext = (ImageButton) findViewById(R.id.btnGoNext);
-        if(nextArticleID == null) {
-            btnGoNext.setVisibility(View.GONE);
-        }
-        btnGoPrevious.setOnClickListener(new OnClickListener() {
+        buttonGoPrevious.setVisibility(previousArticleID == null ? View.GONE : View.VISIBLE);
+        buttonGoNext.setVisibility(nextArticleID == null ? View.GONE : View.VISIBLE);
+
+        buttonGoPrevious.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 openPreviousArticle();
             }
         });
-        btnGoNext.setOnClickListener(new OnClickListener() {
+        buttonGoNext.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNextArticle();
             }
         });
-
-        if(settings.isTtsVisible() && (ttsFragment == null)) {
-            ttsFragment = (TtsFragment)getSupportFragmentManager().findFragmentByTag("ttsFragment");
-            if (ttsFragment == null) {
-                toggleTTS(false);
-            }
-        }
-
-        EventBus.getDefault().register(this);
     }
 
     private void loadingFinished() {
@@ -424,20 +697,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         // should there be a pause between visibility change and position restoration?
 
         restoreReadingPosition();
-        if (ttsFragment != null) {
+
+        if(ttsFragment != null) {
             ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
         }
     }
 
-    private boolean openUrl(final String url) {
-        if(url == null) return true;
+    private void openUrl(final String url) {
+        if(url == null) return;
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
         @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
-        TextView tv = (TextView) v.findViewById(R.id.tv_dialog_title_url);
+
+        TextView tv = (TextView)v.findViewById(R.id.tv_dialog_title_url);
         tv.setText(url);
+
         builder.setCustomTitle(v);
 
         builder.setItems(
@@ -449,7 +726,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(url));
                                 startActivity(launchBrowserIntent);
                                 break;
                             case 1:
@@ -458,48 +736,46 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         }
                     }
                 });
-        builder.show();
 
-        return true;
+        builder.show();
     }
 
     private void markAsReadAndClose() {
-        OperationsHelper.archiveArticle(this, mArticle.getArticleId(), !mArticle.getArchive());
+        OperationsHelper.archiveArticle(this, article.getArticleId(), !article.getArchive());
 
         finish();
     }
 
-    private boolean toggleFavorite() {
-        OperationsHelper.favoriteArticle(this, mArticle.getArticleId(), !mArticle.getFavorite());
-
-        return true;
+    private void toggleFavorite() {
+        OperationsHelper.favoriteArticle(this, article.getArticleId(), !article.getFavorite());
     }
 
-    private boolean shareArticle() {
+    private void shareArticle() {
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, titleText);
-        send.putExtra(Intent.EXTRA_TEXT, originalUrlText + getString(R.string.share_text_extra));
+        send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        send.putExtra(Intent.EXTRA_TEXT, articleUrl + getString(R.string.share_text_extra));
+
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
-        return true;
     }
 
-    private boolean deleteArticle() {
+    private void deleteArticle() {
         AlertDialog.Builder b = new AlertDialog.Builder(this);
+
         b.setTitle(R.string.d_deleteArticle_title);
         b.setMessage(R.string.d_deleteArticle_message);
+
         b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                OperationsHelper.deleteArticle(ReadArticleActivity.this, mArticle.getArticleId());
+                OperationsHelper.deleteArticle(ReadArticleActivity.this, article.getArticleId());
 
                 finish();
             }
         });
         b.setNegativeButton(R.string.negative_answer, null);
-        b.create().show();
 
-        return true;
+        b.show();
     }
 
     private void showChangeTitleDialog() {
@@ -508,7 +784,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         @SuppressLint("InflateParams") // ok for dialogs
         final View view = getLayoutInflater().inflate(R.layout.dialog_change_title, null);
 
-        ((TextView)view.findViewById(R.id.editText_title)).setText(titleText);
+        ((TextView)view.findViewById(R.id.editText_title)).setText(articleTitle);
 
         builder.setView(view);
 
@@ -525,41 +801,51 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void changeTitle(String title) {
-        OperationsHelper.changeArticleTitle(this, mArticle.getArticleId(), title);
+        OperationsHelper.changeArticleTitle(this, article.getArticleId(), title);
     }
 
-    private boolean manageTags() {
+    private void manageTags() {
         Intent manageTagsIntent = new Intent(this, ManageArticleTagsActivity.class);
-        manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, mArticle.getArticleId());
+        manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, article.getArticleId());
+
         startActivity(manageTagsIntent);
-
-        return true;
     }
 
-    private boolean openOriginal() {
-        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(originalUrlText));
+    private void openOriginal() {
+        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
+
         startActivity(launchBrowserIntent);
-
-        return true;
     }
 
-    private boolean downloadPdf() {
-        Log.d(TAG, "downloadPdf()");
+    private void downloadPdf() {
+        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), article.getArticleId(), null);
+    }
 
-        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), mArticle.getArticleId(), null);
+    private void changeFontSize(boolean increase) {
+        prepareToRestorePosition(true);
 
-        return true;
+        int step = 5;
+        fontSize += step * (increase ? 1 : -1);
+        if(!increase && fontSize < 5) fontSize = 5;
+
+        setFontSize(webViewContent, fontSize);
+
+        settings.setArticleFontSize(fontSize);
+
+        restorePositionAfterUpdate();
     }
 
     private void openArticle(Long id) {
-        if (ttsFragment != null) {
+        if(ttsFragment != null) {
             ttsFragment.onOpenNewArticle();
         }
+
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
         if(contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
         if(contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
+
         startActivity(intent);
     }
 
@@ -581,157 +867,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Toast.makeText(this, R.string.noNextArticle, Toast.LENGTH_SHORT).show();
         return false;
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        Log.d(TAG, "onCreateOptionsMenu() started");
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.option_article, menu);
-
-        if(mArticle != null) {
-            boolean unread = mArticle.getArchive() != null && !mArticle.getArchive();
-
-            MenuItem markReadItem = menu.findItem(R.id.menuArticleMarkAsRead);
-            markReadItem.setTitle(unread ? R.string.btnMarkRead : R.string.btnMarkUnread);
-
-            boolean favorite = mArticle.getFavorite() != null && mArticle.getFavorite();
-
-            MenuItem toggleFavoriteItem = menu.findItem(R.id.menuArticleToggleFavorite);
-            toggleFavoriteItem.setTitle(
-                    favorite ? R.string.remove_from_favorites : R.string.add_to_favorites);
-            toggleFavoriteItem.setIcon(getIcon(favorite
-                    ? R.drawable.ic_star_white_24dp
-                    : R.drawable.ic_star_border_white_24dp, null)
-            );
-        }
-
-        MenuItem menuTTS = menu.findItem(R.id.menuTTS);
-        menuTTS.setChecked(ttsFragment != null);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuArticleMarkAsRead:
-                markAsReadAndClose();
-                return true;
-            case R.id.menuArticleToggleFavorite:
-                toggleFavorite();
-                invalidateOptionsMenu();
-                return true;
-            case R.id.menuShare:
-                return shareArticle();
-            case R.id.menuChangeTitle:
-                showChangeTitleDialog();
-                return true;
-            case R.id.menuManageTags:
-                return manageTags();
-            case R.id.menuDelete:
-                return deleteArticle();
-            case R.id.menuOpenOriginal:
-                return openOriginal();
-            case R.id.menuDownloadPdf:
-                return downloadPdf();
-            case R.id.menuIncreaseFontSize:
-                changeFontSize(true);
-                return true;
-            case R.id.menuDecreaseFontSize:
-                changeFontSize(false);
-                return true;
-            case R.id.menuTTS:
-                toggleTTS(true);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
-
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        if(loadingFinished && mArticle != null) {
-            cancelPositionRestoration();
-
-            Article article = getArticle(articleID); // TODO: use "articleId" not "id"
-            if(article != null) {
-                article.setArticleProgress(getReadingPosition());
-                mArticleDao.update(article);
-            }
-        }
-        super.onStop();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        isResumed = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        isResumed = true;
-        if (onPageFinishedCallPostponedUntilResume) {
-            onPageFinishedCallPostponedUntilResume = false;
-            onPageFinished();
-        }
-    }
-
-    @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
-        if(volumeButtonsScrolling) {
-            switch(event.getKeyCode()) {
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                    scroll(true, screenScrollingPercent, smoothScrolling);
-                    return true;
-                case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    scroll(false, screenScrollingPercent, smoothScrolling);
-                    return true;
-            }
-        }
-
-        return super.dispatchKeyEvent(event);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
-        Log.d(TAG, "onArticlesChangedEvent() started");
-
-        ArticlesChangedEvent.ChangeType changeType = event.getArticleChangeType(mArticle);
-        if(changeType == null) return;
-
-        Log.d(TAG, "onArticlesChangedEvent() change type: " + changeType);
-
-        switch(changeType) {
-            case FAVORITED:
-            case UNFAVORITED:
-            case ARCHIVED:
-            case UNARCHIVED:
-            case UNSPECIFIED:
-                Log.d(TAG, "onArticleChangedEvent() calling invalidateOptionsMenu()");
-                invalidateOptionsMenu();
-                break;
-
-            case TITLE_CHANGED:
-                Log.d(TAG, "onArticleChangedEvent() title changed");
-                // TODO: also update title in the WebView
-                titleText = mArticle.getTitle();
-                setTitle(titleText);
-                break;
-        }
     }
 
     private void scroll(boolean up, float percent, boolean smooth) {
@@ -758,39 +893,38 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private double getReadingPosition() {
-        String t = "ReadArticle.getPos";
-
         int yOffset = scrollView.getScrollY();
         int viewHeight = scrollView.getHeight();
         int totalHeight = scrollView.getChildAt(0).getHeight();
-        // id/btnMarkRead height; not necessary; insignificantly increases accuracy
-//        int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
-        Log.d(t, "yOffset: " + yOffset + ", viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
 
-//        totalHeight -= appendixHeight;
+        Log.v(TAG, "getReadingPosition() yOffset: " + yOffset + ", viewHeight: " + viewHeight
+                + ", totalHeight: " + totalHeight);
+
         totalHeight -= viewHeight;
 
-        double progress = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
-        Log.d(t, "progress: " + progress);
+        double position = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
+        if(position > 100) position = 100;
 
-        return progress;
+        Log.d(TAG, "getReadingPosition() position: " + position);
+
+        return position;
     }
 
     private void restoreReadingPosition() {
-        String t = "ReadArticle.restorePos";
+        Log.d(TAG, "restoreReadingPosition() articleProgress: " + articleProgress);
 
-        Log.d(t, "positionToRestore: " + positionToRestore);
-        if(positionToRestore != null) {
+        if(articleProgress != null) {
             int viewHeight = scrollView.getHeight();
-//            int appendixHeight = ((LinearLayout)view.getChildAt(0)).getChildAt(1).getHeight();
             int totalHeight = scrollView.getChildAt(0).getHeight();
-            Log.d(t, "viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
 
-//            totalHeight -= appendixHeight;
+            Log.v(TAG, "restoreReadingPosition() viewHeight: " + viewHeight
+                    + ", totalHeight: " + totalHeight);
+
             totalHeight -= viewHeight;
 
-            int yOffset = totalHeight > 0 ? ((int)Math.round(positionToRestore * totalHeight)) : 0;
-            Log.d(t, "yOffset: " + yOffset);
+            int yOffset = totalHeight > 0 ? ((int)Math.round(articleProgress * totalHeight)) : 0;
+
+            Log.v(TAG, "restoreReadingPosition() yOffset: " + yOffset);
 
             scrollView.scrollTo(scrollView.getScrollX(), yOffset);
         }
@@ -798,25 +932,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     public boolean toggleTTS(boolean autoPlay) {
         boolean result;
-        if (ttsFragment == null) {
+        if(ttsFragment == null) {
             ttsFragment = TtsFragment.newInstance(autoPlay);
+
             getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.viewMain, ttsFragment, "ttsFragment")
+                .add(R.id.viewMain, ttsFragment, TAG_TTS_FRAGMENT)
                 .commit();
+
             settings.setTtsVisible(true);
-            ttsFragment.onDocumentLoadStart(domainText, titleText);
-            if (loadingFinished) {
+
+            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle);
+            if(loadingFinished) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
+
             result = true;
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
                     .remove(ttsFragment)
                     .commit();
+
             ttsFragment = null;
+
             settings.setTtsVisible(false);
+
             result = false;
         }
 
@@ -825,16 +966,32 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return result;
     }
 
+    private boolean loadArticle(long id) {
+        article = getArticle(id);
+
+        if(article == null) return false;
+
+        articleTitle = article.getTitle();
+        Log.d(TAG, "loadArticle() articleTitle: " + articleTitle);
+        articleDomain = article.getDomain();
+        Log.d(TAG, "loadArticle() articleDomain: " + articleDomain);
+        articleUrl = article.getUrl();
+        Log.d(TAG, "loadArticle() articleUrl: " + articleUrl);
+        articleProgress = article.getArticleProgress();
+        Log.d(TAG, "loadArticle() articleProgress: " + articleProgress);
+
+        return true;
+    }
 
     private Article getArticle(long articleID) {
-        return mArticleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleID)).unique();
+        return articleDao.queryBuilder().where(ArticleDao.Properties.Id.eq(articleID)).unique();
     }
 
     private Long getAdjacentArticle(boolean previous) {
-        QueryBuilder<Article> qb = mArticleDao.queryBuilder();
+        QueryBuilder<Article> qb = articleDao.queryBuilder();
 
-        if(previous) qb.where(ArticleDao.Properties.ArticleId.gt(mArticle.getArticleId()));
-        else qb.where(ArticleDao.Properties.ArticleId.lt(mArticle.getArticleId()));
+        if(previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
+        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
 
         if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
         if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
@@ -866,22 +1023,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             if(reader != null) {
                 try {
                     reader.close();
-                } catch (IOException e) {
-                    // unrecoverable exception, only log it and move on
-                    Log.w(TAG, "readRawString() failed to close reader", e);
-                }
+                } catch(IOException ignored) {}
             }
         }
     }
 
     private void onPageFinished() {
-        if ( ! isResumed) {
+        Log.d(TAG, "onPageFinished() started");
+
+        if(!isResumed) {
             onPageFinishedCallPostponedUntilResume = true;
-            if (ttsFragment != null) {
+
+            if(ttsFragment != null) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
             return;
         }
+
         // dirty. Looks like there is no good solution
         webViewContent.postDelayed(new Runnable() {
             int counter;
@@ -908,7 +1066,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void prepareToRestorePosition(boolean savePosition) {
-        if(savePosition) positionToRestore = getReadingPosition();
+        if(savePosition) articleProgress = getReadingPosition();
 
         webViewHeightBeforeUpdate = webViewContent.getHeight();
     }
@@ -946,20 +1104,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    private void changeFontSize(boolean increase) {
-        prepareToRestorePosition(true);
-
-        int step = 5;
-        fontSize += step * (increase ? 1 : -1);
-        if(!increase && fontSize < 5) fontSize = 5;
-
-        setFontSize(webViewContent, fontSize);
-
-        settings.setArticleFontSize(fontSize);
-
-        restorePositionAfterUpdate();
-    }
-
     private void setFontSize(WebView view, int size) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             setFontSizeNew(view, size);
@@ -976,24 +1120,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @TargetApi(Build.VERSION_CODES.FROYO)
     private void setFontSizeOld(WebView view, int size) {
         view.getSettings().setDefaultFontSize(size);
-    }
-
-    private Drawable getIcon(int id, Resources.Theme theme) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return getIconNew(id, theme);
-        }
-
-        return getIconOld(id);
-    }
-
-    @TargetApi(Build.VERSION_CODES.FROYO)
-    private Drawable getIconOld(int id) {
-        return getResources().getDrawable(id);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private Drawable getIconNew(int id, Resources.Theme theme) {
-        return getResources().getDrawable(id, theme);
     }
 
 }
