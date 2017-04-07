@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="btnMarkRead">Прочитано</string>
-    <string name="btnMarkUnread">Не прочитано</string>
+    <string name="btnMarkRead">Отметить как прочитанное</string>
+    <string name="btnMarkUnread">Отметить как непрочитанное</string>
     <string name="add_to_favorites">Добавить в избранное</string>
     <string name="remove_from_favorites">Удалить из избранного</string>
     <string name="menuShare">Поделиться</string>
@@ -199,4 +199,71 @@
     <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
     <string name="connectionWizard_summary_prev">Назад</string>
     <string name="connectionWizard_summary_next">Сохранить настройки</string>
-</resources>
+<string name="testConnection_errorMessage_unsupportedServerVersion">Обнаружена неподдерживаемая версия сервера</string>
+    <string name="getCredentials_progressDialogMessage">Получение учётных данных API…</string>
+    <string name="d_getCredentials_title_fail">Не удалось получить учётные данные API</string>
+    <string name="d_getCredentials_title_message">Что-то пошло не так. Проверьте подключение к интернету и повторите попытку.</string>
+    <string name="checkCredentials_progressDialogMessage">Проверка доступа к API…</string>
+    <string name="d_checkCredentials_title_fail">Проверка доступа к API потерпела неудачу</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API не найден</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API не найден: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">Нет доступа к API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Нет доступа к API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Неизвестная ошибка</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
+    <string name="notification_updatingArticles">Обновление статей</string>
+    <string name="notification_updatingArticles_full">Выполняется полное обновление</string>
+    <string name="notification_updatingArticles_fast">Выполняется быстрое обновление</string>
+    <string name="notification_sweepingDeletedArticles">Чистка удалённых статей</string>
+    <string name="menu_lists_sweepDeletedArticles">Очистить удалённые статьи</string>
+    <string name="menu_lists_fullUpdate">Полное обновление</string>
+    <string name="menu_changeTitle">Изменить заголовок</string>
+    <string name="menu_manageTags">Управление тегами</string>
+    <string name="manageTags_title">Управление тегами</string>
+    <string name="manageTags_save">Сохранить</string>
+    <string name="manageTags_textField_hint">Один или несколько тегов, разделённых запятыми</string>
+    <string name="manageTags_addNew">Добавить</string>
+    <string name="manageTags_currentTags">Выбранные теги:</string>
+    <string name="content_estimatedReadingTime">Время чтения: %s мин</string>
+
+    <string name="navigation_drawer_open">Открыть панель навигации</string>
+    <string name="navigation_drawer_close">Закрыть панель навигации</string>
+
+    <string name="nav_main_articles">Статьи</string>
+    <string name="nav_main_tags">Теги</string>
+    <string name="nav_main_tagged_articles">Статьи с тегами</string>
+
+    <string name="nav_add">Добавить новую запись</string>
+
+    <string name="title_main_tag">Тег: %s</string>
+
+    <string name="pref_name_connection_api_clientID">ID клиента</string>
+    <string name="pref_name_connection_api_clientSecret">Секрет клиента</string>
+    <string name="pref_desc_connection_autofill">Проверить подключение и заполнить ID и секрет клиента</string>
+
+    <string name="pref_name_ui_article_textAlignment_justify">Выравнивание текста по ширине</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Растягивает строки так, чтобы все строки имели одинаковую ширину (как в газетах и журналах)</string>
+    <string name="pref_name_ui_readingSpeed">Скорость чтения</string>
+    <string name="pref_desc_ui_readingSpeed">Ваша скорость чтения (измеряется в словах за минуту). Используется для расчёта примерного времени чтения статей.</string>
+    <string name="pref_categoryName_sync">Синхронизация</string>
+    <string name="pref_name_sync_syncTypes">Типы синхронизации</string>
+    <string name="pref_desc_sync_syncTypes">Нажмите, чтобы показать больше информации о типах синхронизации</string>
+    <string name="pref_desc_sync_syncTypes_text">"Существует два основных типа синхронизации: \"полный\" и \"быстрый\".
+
+
+\"Полный\" тип синхронизации удаляет весь локальный контент и загружает его заново. Этот тип синхронизации доступен в меню опций. Рекомендуется использовать данный вариант только в крайнем случае.
+
+
+\"Быстрый\" тип синхронизации (инкрементальная синхронизация) загружает только изменения, сделанные с момента предыдущей синхронизации, что обычно требует существенно меньше времени и интернет-трафика. Однако, у этого метода есть недостаток: он не может обнаружить, что статьи удалены на сервере (так что локальные статьи не удаляются во время \"быстрой\" синхронизации). Этот тип синхронизации вызывается при помощи жеста \"pull-to-refresh\" (потянуть список вниз, находясь в его начале) в любом списке статей.
+
+
+Чтобы исправить недостаток \"быстрой\" синхронизации, есть опция, выполняющая \"очистку удалённых статей\", которая перебирает все локальные статьи и спрашивает у сервера, не удалена ли статья - если удалена, она удаляется и локально. В зависимости от количества статей, эта операция может занять некоторое время, но существенно экономит интернет-трафик по сравнению с \"полной\" синхронизацией.
+
+
+Ни одна из этих функций не влияет на синхронизацию с клиента на сервер: ваши локальные изменения всегда будут отправлены на сервер перед обновлением локального контента.
+ "</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Включить \"чистку удалённых статей\" после \"быстрой\" синхронизации</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Прочитайте описание типов синхронизации выше для получения дополнительной информации</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Включить авто-синхронизацию при запуске приложения</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">Приложение выполнит синхронизацию, когда вы его открываете</string>
+    </resources>
