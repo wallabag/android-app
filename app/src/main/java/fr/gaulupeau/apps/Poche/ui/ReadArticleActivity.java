@@ -623,10 +623,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         htmlContent = getString(R.string.content_estimatedReadingTime,
                 estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
                 + htmlContent;
-        if(BuildConfig.DEBUG) Log.d(TAG, "onCreate() htmlContent: " + htmlContent);
+        if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
         if(settings.isImageCacheEnabled()) {
-            Log.d(TAG, "onCreate() replacing image links to cached versions in htmlContent");
+            Log.d(TAG, "getHtmlContent() replacing image links to cached versions in htmlContent");
             htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
                     htmlContent, article.getArticleId().longValue());
         }

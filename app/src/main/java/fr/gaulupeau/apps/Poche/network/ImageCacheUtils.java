@@ -84,18 +84,18 @@ public class ImageCacheUtils {
         }
 
         if(TextUtils.equals(sb, htmlContent)) {
-            Log.d(TAG, "onCreate: htmlContent is still the same, no image paths replaced");
+            Log.d(TAG, "replaceImagesInHtmlContent: htmlContent is still the same, no image paths replaced");
             return htmlContent;
         }
 
         if(BuildConfig.DEBUG) {
-            Log.v(TAG, "onCreate: htmlContent before removing responsive image params:\n" + sb);
+            Log.v(TAG, "replaceImagesInHtmlContent: htmlContent before removing responsive image params:\n" + sb);
         }
 
         htmlContent = removeResponsiveParameters(sb);
 
         if(BuildConfig.DEBUG) {
-            Log.v(TAG, "onCreate: htmlContent with replaced image paths:\n" + htmlContent);
+            Log.v(TAG, "replaceImagesInHtmlContent: htmlContent with replaced image paths:\n" + htmlContent);
         }
 
         return htmlContent;
