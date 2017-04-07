@@ -754,7 +754,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
         send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
-        send.putExtra(Intent.EXTRA_TEXT, articleUrl + getString(R.string.share_text_extra));
+        send.putExtra(Intent.EXTRA_TEXT, articleTitle + " "
+                + articleUrl + getString(R.string.share_text_extra));
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
     }
