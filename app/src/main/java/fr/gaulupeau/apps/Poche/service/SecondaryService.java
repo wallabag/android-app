@@ -9,6 +9,7 @@ import com.di72nn.stuff.wallabag.apiwrapper.CompatibilityHelper;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -247,33 +248,60 @@ public class SecondaryService extends IntentServiceBase {
         }
 
         ArticleDao articleDao = getDaoSession().getArticleDao();
-        List<Article> articleList = articleDao.queryBuilder()
-                .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
-                .orderAsc(ArticleDao.Properties.ArticleId).list(); // TODO: lazyList
 
-        if(articleList.isEmpty()) return;
+        QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
+                .orderAsc(ArticleDao.Properties.ArticleId);
+
+        int totalNumber = (int)queryBuilder.count();
+        Log.d(TAG, "fetchImages() total number: " + totalNumber);
+
+        if(totalNumber == 0) {
+            Log.d(TAG, "fetchImages() nothing to do");
+            return;
+        }
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
-        List<Integer> processedArticles = new ArrayList<>(articleList.size());
-        Set<Integer> changedArticles = new HashSet<>(articleList.size());
+        List<Integer> processedArticles = new ArrayList<>(totalNumber);
+        Set<Integer> changedArticles = new HashSet<>(totalNumber);
 
-        Log.d(TAG, "fetchImages() articleList.size()=" + articleList.size());
-        int i = 0, totalNumber = articleList.size();
-        for(Article article: articleList) {
-            Log.d(TAG, "fetchImages() processing " + i++ + ". articleID=" + article.getArticleId());
-            postEvent(new FetchImagesProgressEvent(actionRequest, i, totalNumber));
+        int dbQuerySize = 50;
 
-            if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent())) {
-                changedArticles.add(article.getArticleId());
+        queryBuilder.limit(dbQuerySize);
+
+        int offset = 0;
+
+        while(true) {
+            Log.d(TAG, "fetchImages() looping; offset: " + offset);
+
+            List<Article> articleList = queryBuilder.list();
+
+            if(articleList.isEmpty()) {
+                Log.d(TAG, "fetchImages() no more articles");
+                break;
             }
 
-            processedArticles.add(article.getArticleId());
+            int i = 0;
+            for(Article article: articleList) {
+                int index = offset + i++;
+                Log.d(TAG, "fetchImages() processing " + index
+                        + ". articleID: " + article.getArticleId());
+                postEvent(new FetchImagesProgressEvent(actionRequest, index, totalNumber));
 
-            Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
+                if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent())) {
+                    changedArticles.add(article.getArticleId());
+                }
+
+                processedArticles.add(article.getArticleId());
+
+                Log.d(TAG, "fetchImages() processing article " + article.getArticleId() + " finished");
+            }
+
+            offset += dbQuerySize;
+            queryBuilder.offset(offset);
         }
 
-        // TODO: update in bulk
         for(Integer articleID: processedArticles) {
             try {
                 Article article = articleDao.queryBuilder()
