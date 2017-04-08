@@ -210,6 +210,11 @@
             android:title="@string/pref_categoryName_miscellaneous"
             android:persistent="false">
             <CheckBoxPreference
+                android:key="@string/pref_key_misc_appendWallabagMention_enabled"
+                android:title="@string/pref_name_misc_appendWallabagMention"
+                android:summary="@string/pref_desc_misc_appendWallabagMention"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_misc_handleHttpScheme"
                 android:title="@string/pref_name_misc_handleHttpScheme"
                 android:summary="@string/pref_desc_misc_handleHttpScheme"

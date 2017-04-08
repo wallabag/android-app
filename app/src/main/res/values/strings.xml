@@ -223,6 +223,8 @@
     <string name="pref_desc_imageCache_enabled">Automatically downloads all images in every article and saves them to the device. Depending on the length of your wallabag article list this can take very long and consume a lot of space.</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
+    <string name="pref_name_misc_appendWallabagMention">Append wallabag mention</string>
+    <string name="pref_desc_misc_appendWallabagMention">Append \"via @wallabagapp\" to shared texts</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
     <string name="pref_desc_misc_handleHttpScheme">Show wallabag in the list of web browsers</string>
     <string name="pref_name_misc_wipeDB">Wipe Database</string>

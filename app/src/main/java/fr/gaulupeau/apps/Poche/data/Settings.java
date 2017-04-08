@@ -579,6 +579,14 @@ public class Settings {
         setBoolean(R.string.pref_key_imageCache_enabled, value);
     }
 
+    public boolean isAppendWallabagMentionEnabled() {
+        return getBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, true);
+    }
+
+    public void setAppendWallabagMentionEnabled(boolean value) {
+        setBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, value);
+    }
+
     public boolean isFirstRun() {
         return getBoolean(R.string.pref_key_internal_firstRun, true);
     }

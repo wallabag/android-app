@@ -751,11 +751,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void shareArticle() {
+        String shareText = articleTitle + " " + articleUrl;
+
+        if(settings.isAppendWallabagMentionEnabled()) {
+            shareText += getString(R.string.share_text_extra);
+        }
+
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
         send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
-        send.putExtra(Intent.EXTRA_TEXT, articleTitle + " "
-                + articleUrl + getString(R.string.share_text_extra));
+        send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
     }
