@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Zwiększ rozmiar czcionki</string>
     <string name="menu_readArticle_decreaseFontSize">Zmniejsz rozmiar czcionki</string>
-    <string name="aboutText">&lt;b>Aplikacja wallabag dla Androida&lt;/b>&lt;br />wallabag jest aplikacją, którą możesz uruchomić na własnym serwerze, pozwalającą Ci już nigdy nie zgubić kontentu. Kliknij, aby zapisać i przeczytać kiedy będziesz mógł. Wyciąga zawartość, którą możesz przeczytać, kiedy będziesz miał czas.</string>
+    <string name="aboutText">&lt;b&gt;Aplikacja wallabag dla Androida&lt;/b&gt;&lt;br /&gt;wallabag jest aplikacją, którą możesz uruchomić na własnym serwerze, pozwalającą Ci już nigdy nie zgubić kontentu. Kliknij, aby zapisać i przeczytać kiedy będziesz mógł. Wyciąga zawartość, którą możesz przeczytać, kiedy będziesz miał czas.</string>
     <string name="readSpeed">Prędkość czytania</string>
     <string name="voiceHeight">Wysokość głosu</string>
     <string name="readVolume">Głośność czytania</string>
@@ -160,7 +160,7 @@
     <string name="pref_name_connection_autofill">Autouzupełnnienie</string>
 
     <string name="pref_categoryName_connection_advanced">Zaawansowane ustawienia połączenią</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Custom SSL settings</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Niestandardowe ustawienia SSL</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Wyłącza SSL dla wszystkich urządzeń, włącza TLS 1.1 i TLS 1.2 na Androidzie 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Podstawowe uwierzytelnienie HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Jeżeli nie wiesz co to jest, zostaw puste</string>
@@ -251,4 +251,13 @@
     <string name="connectionWizard_summary_toastMessage">Konfiguracja zakończona</string>
     <string name="connectionWizard_summary_prev">Wróć</string>
     <string name="connectionWizard_summary_next">Zapisz ustawienia</string>
+
+    <string name="pref_desc_connection_autofill">Testuj połączenie i uzupełnij ID klienta oraz sekret klienta</string>
+
+    <string name="pref_name_ui_article_textAlignment_justify">Wyrównanie tekstu: justowanie</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Rozciągaj linie tak, aby każda miała taką samą szerokość (jak w gazetach i magazynach)</string>
+
+    <string name="menu_changeTitle">Zmień tytuł</string>
+    <string name="title_main_tag">Tag: %s</string>
+
 </resources>
