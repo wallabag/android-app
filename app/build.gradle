@@ -3,14 +3,14 @@ apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 11
         targetSdkVersion 25
-        versionCode 102
-        versionName "2.0.0a3"
+        versionCode 103
+        versionName "2.0.0b1"
 
         javaCompileOptions {
             annotationProcessorOptions {
