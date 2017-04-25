@@ -221,7 +221,7 @@
     <string name="notification_updatingArticles">Mise à jour des articles</string>
     <string name="notification_updatingArticles_fast">Mise à jour rapide en cours</string>
     <string name="notification_updatingArticles_full">Mise à jour complète en cours</string>
-    <string name="pref_categoryName_sync">Synchonisation</string>
+    <string name="pref_categoryName_sync">Synchronisation</string>
     <string name="pref_decs_autoSync_onStartup_enabled">L\'application se synchonisera lorsque vous l\'ouvrirez</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire la description des types de synchronisation pour plus d\'informations</string>
     <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».\n\n
