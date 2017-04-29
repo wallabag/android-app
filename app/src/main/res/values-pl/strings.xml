@@ -92,7 +92,7 @@
     <string name="themeName_light_contrast">Jasny (wysoki kontrast)</string>
     <string name="themeName_dark">Ciemny</string>
     <string name="themeName_dark_contrast">Ciemny (wysoki kontrast)</string>
-    <string name="themeName_solarized">Solarized</string>
+    <string name="themeName_solarized">Prześwietlony (Solarized)</string>
     <string name="menu_readArticle_increaseFontSize">Zwiększ rozmiar czcionki</string>
     <string name="menu_readArticle_decreaseFontSize">Zmniejsz rozmiar czcionki</string>
     <string name="aboutText">&lt;b&gt;Aplikacja wallabag dla Androida&lt;/b&gt;&lt;br /&gt;wallabag jest aplikacją, którą możesz uruchomić na własnym serwerze, pozwalającą Ci już nigdy nie zgubić kontentu. Kliknij, aby zapisać i przeczytać kiedy będziesz mógł. Wyciąga zawartość, którą możesz przeczytać, kiedy będziesz miał czas.</string>
