@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.Updater;
@@ -361,14 +363,17 @@ public class EventProcessor {
 
         ActionResult result = event.getResult();
         if(result == null || result.isSuccess()) {
+            Context context = getContext();
+
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-            Uri uri = Uri.fromFile(event.getFile());
+            Uri uri = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".fileprovider",
+                    event.getFile());
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     event.getRequest().getDownloadFormat().toString().toLowerCase(Locale.US));
             intent.setDataAndType(uri, mimeType);
-
-            Context context = getContext();
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
