@@ -95,6 +95,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
                     if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(connectionData.url)) {
                         bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
+                    } else if(FramabagConfigFragment.FRAMABAG_HOSTNAME.equals(connectionData.url)) {
+                        bundle.putInt(DATA_PROVIDER, PROVIDER_FRAMABAG);
                     } else if(connectionData.url != null) {
                         bundle.putString(DATA_URL, connectionData.url);
                     }
@@ -400,9 +402,9 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             EditText usernameEditText = (EditText)view.findViewById(R.id.username);
             EditText passwordEditText = (EditText)view.findViewById(R.id.password);
 
-            url = urlEditText.getText().toString();
-            username = usernameEditText.getText().toString();
-            password = passwordEditText.getText().toString();
+            if(urlEditText != null) url = urlEditText.getText().toString();
+            if(usernameEditText != null) username = usernameEditText.getText().toString();
+            if(passwordEditText != null) password = passwordEditText.getText().toString();
         }
 
         protected void runTest() {
@@ -489,14 +491,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         @Override
         protected void gatherData() {
-            View view = getView();
-            if(view == null) return;
-
-            EditText usernameEditText = (EditText)view.findViewById(R.id.username);
-            EditText passwordEditText = (EditText)view.findViewById(R.id.password);
-
-            username = usernameEditText.getText().toString();
-            password = passwordEditText.getText().toString();
+            super.gatherData();
 
             url = "https://" + WALLABAG_IT_HOSTNAME;
             wallabagServerVersion = 2;
@@ -512,6 +507,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             return PAGE_CONFIG_FRAMABAG;
         }
 
+        static final String FRAMABAG_HOSTNAME = "framabag.org";
+
         @Override
         protected int getLayoutResourceID() {
             return R.layout.connection_wizard_framabag_config_fragment;
@@ -519,17 +516,10 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         @Override
         protected void gatherData() {
-            View view = getView();
-            if(view == null) return;
+            super.gatherData();
 
-            EditText usernameEditText = (EditText)view.findViewById(R.id.username);
-            EditText passwordEditText = (EditText)view.findViewById(R.id.password);
-
-            username = usernameEditText.getText().toString();
-            password = passwordEditText.getText().toString();
-
-            url = "https://framabag.org/u/" + username;
-            wallabagServerVersion = 1;
+            url = "https://" + FRAMABAG_HOSTNAME;
+            wallabagServerVersion = 2;
 
             tryPossibleURLs = false;
         }

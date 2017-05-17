@@ -25,8 +25,10 @@ import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV1.WALLABAG
 public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
 
     public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String FRAMABAG_LOGIN_FORM = "/login_check\" class=\"form\" method=\"post\" name=\"loginform\">";
     public static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
     public static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
+    private static final String FRAMABAG_MARKER = "<span class=\"frama\">Frama</span>";
 
     private static final String CREDENTIALS_PATTERN = "\"/(\\S+)/([a-zA-Z0-9]+)/unread.xml\"";
 
@@ -140,7 +142,8 @@ public class WallabagServiceEndpointV2 extends WallabagServiceEndpoint {
     }
 
     protected boolean isLoginPage(String body) {
-        return containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2);
+        return (containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2))
+                || (containsMarker(body, FRAMABAG_LOGIN_FORM) && containsMarker(body, FRAMABAG_MARKER));
     }
 
     protected boolean isRegularPage(String body) throws IOException {

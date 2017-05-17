@@ -19,6 +19,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV2.WALLABAG_LOGIN_FORM_V2;
+import static fr.gaulupeau.apps.Poche.network.WallabagServiceEndpointV2.FRAMABAG_LOGIN_FORM;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectionTask.TestResult>> {
 
@@ -180,13 +181,15 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
         }
 
         String loginPath = "/login";
-        if(newUrlWithoutProto.endsWith(loginPath)
-                && response.body().string().contains(WALLABAG_LOGIN_FORM_V2)) {
-            // presumably Wallabag v2 login page
+        if(newUrlWithoutProto.endsWith(loginPath)) {
+            String body = response.body().string();
+            if(body.contains(WALLABAG_LOGIN_FORM_V2) || body.contains(FRAMABAG_LOGIN_FORM)) {
+                // presumably Wallabag v2 login page
 
-            newUrlWithoutProto = newUrlWithoutProto.substring(
-                    0, newUrlWithoutProto.length() - loginPath.length());
-            newUrl = newUrl.substring(0, newUrl.length() - loginPath.length());
+                newUrlWithoutProto = newUrlWithoutProto.substring(
+                        0, newUrlWithoutProto.length() - loginPath.length());
+                newUrl = newUrl.substring(0, newUrl.length() - loginPath.length());
+            }
         }
 
         if(srcUrlWithoutProto.equals(newUrlWithoutProto)) {
