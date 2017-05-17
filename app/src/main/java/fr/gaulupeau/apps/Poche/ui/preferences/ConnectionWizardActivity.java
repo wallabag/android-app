@@ -118,10 +118,12 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             if(fillOutData) {
                 boolean filledOutSomething = false;
 
-                if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(url)) {
+                if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(url)
+                        || ("https://" + WallabagItConfigFragment.WALLABAG_IT_HOSTNAME).equals(url)) {
                     bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
                     filledOutSomething = true;
-                } else if(FramabagConfigFragment.FRAMABAG_HOSTNAME.equals(url)) {
+                } else if(FramabagConfigFragment.FRAMABAG_HOSTNAME.equals(url)
+                        || ("https://" + FramabagConfigFragment.FRAMABAG_HOSTNAME).equals(url)) {
                     bundle.putInt(DATA_PROVIDER, PROVIDER_FRAMABAG);
                     filledOutSomething = true;
                 } else if(!TextUtils.isEmpty(url) && !"https://".equals(url)) {
