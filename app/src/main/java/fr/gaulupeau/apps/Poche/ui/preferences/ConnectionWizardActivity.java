@@ -124,7 +124,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 } else if(FramabagConfigFragment.FRAMABAG_HOSTNAME.equals(url)) {
                     bundle.putInt(DATA_PROVIDER, PROVIDER_FRAMABAG);
                     filledOutSomething = true;
-                } else if(!TextUtils.isEmpty(url)) {
+                } else if(!TextUtils.isEmpty(url) && !"https://".equals(url)) {
                     bundle.putString(DATA_URL, url);
                     filledOutSomething = true;
                 }

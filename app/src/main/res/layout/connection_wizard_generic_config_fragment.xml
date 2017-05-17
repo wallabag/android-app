@@ -49,7 +49,9 @@
                     android:inputType="textUri"
                     android:linksClickable="false"
                     android:maxLines="1"
-                    android:scrollHorizontally="false" />
+                    android:scrollHorizontally="false"
+                    android:text="https://"
+                    tools:ignore="HardcodedText"/>
 
             </android.support.design.widget.TextInputLayout>
 
