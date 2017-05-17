@@ -183,6 +183,7 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Выберите этот вариант, если у вас есть аккаунт на https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Выберите этот вариант, если у вас есть аккаунт на https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Пропустить</string>
     <string name="connectionWizard_providerSelection_next">Дальше</string>
 
@@ -193,6 +194,10 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">Настройка wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Назад</string>
     <string name="connectionWizard_provider_wallabagit_next">Подключиться</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Настройка Framabag</string>
+    <string name="connectionWizard_provider_framabag_prev">Назад</string>
+    <string name="connectionWizard_provider_framabag_next">Подключиться</string>
 
     <string name="connectionWizard_summary_titleMessage">Готово!</string>
     <string name="connectionWizard_summary_text">Нажмите на кнопку, чтобы сохранить настройки и перейти к главному экрану.</string>

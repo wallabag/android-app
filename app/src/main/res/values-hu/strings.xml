@@ -182,6 +182,7 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt a lehetőséget ha kézzel szeretné megadni a beállításokat</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
     <string name="connectionWizard_providerSelection_next">Következő</string>
 
@@ -192,6 +193,10 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfiguráció</string>
     <string name="connectionWizard_provider_wallabagit_prev">Vissza</string>
     <string name="connectionWizard_provider_wallabagit_next">Csatlakozás</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguráció</string>
+    <string name="connectionWizard_provider_framabag_prev">Vissza</string>
+    <string name="connectionWizard_provider_framabag_next">Csatlakozás</string>
 
     <string name="connectionWizard_summary_titleMessage">Készen is vagyunk!</string>
     <string name="connectionWizard_summary_text">Nyomja meg a gombot a beállítások mentéséhez, és a fő képernyőhöz való visszajutáshoz.</string>
