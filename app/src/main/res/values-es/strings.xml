@@ -234,6 +234,7 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir los ajustes requeridos manualmente</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecciona esta opción si tienes una cuenta en https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecciona esta opción si tienes una cuenta en https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Saltar</string>
     <string name="connectionWizard_providerSelection_next">Siguiente</string>
 
@@ -244,6 +245,10 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">Configuración de wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Volver</string>
     <string name="connectionWizard_provider_wallabagit_next">Conectar</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Configuración de Framabag</string>
+    <string name="connectionWizard_provider_framabag_prev">Volver</string>
+    <string name="connectionWizard_provider_framabag_next">Conectar</string>
 
     <string name="connectionWizard_summary_titleMessage">¡Todo listo!</string>
     <string name="connectionWizard_summary_text">Presiona el botón para guardar los ajustes e ir a la pantalla principal.</string>
