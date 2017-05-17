@@ -27,8 +27,10 @@ public class WallabagWebService {
     private static final String TAG = WallabagWebService.class.getSimpleName();
 
     public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String FRAMABAG_LOGIN_FORM = "/login_check\" class=\"form\" method=\"post\" name=\"loginform\">";
     private static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
     private static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
+    private static final String FRAMABAG_MARKER = "<span class=\"frama\">Frama</span>";
     private static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
 
     private static final String CLIENT_NAME = "Android app";
@@ -257,7 +259,8 @@ public class WallabagWebService {
     }
 
     private boolean isLoginPage(String body) {
-        return containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2);
+        return (containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2))
+                || (containsMarker(body, FRAMABAG_LOGIN_FORM) && containsMarker(body, FRAMABAG_MARKER));
     }
 
     private boolean isRegularPage(String body) throws IOException {
