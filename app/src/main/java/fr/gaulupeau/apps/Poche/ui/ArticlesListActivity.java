@@ -670,6 +670,8 @@ public class ArticlesListActivity extends BaseActionBarActivity
             if(tryToRestoreFragments) {
                 Log.d(TAG, "<init>() trying to restore fragments");
 
+                // no fix for legacy version
+                //noinspection RestrictedApi
                 for(Fragment f: fm.getFragments()) {
                     if(f instanceof ArticlesListFragment) {
                         ArticlesListFragment articlesListFragment = (ArticlesListFragment)f;

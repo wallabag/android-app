@@ -21,7 +21,7 @@
                 android:key="@string/pref_key_connection_url"
                 android:title="@string/pref_name_connection_url"
                 android:summary="@string/pref_desc_connection_url"
-                android:defaultValue="http://"/>
+                android:defaultValue="https://"/>
             <EditTextPreference
                 android:key="@string/pref_key_connection_username"
                 android:title="@string/pref_name_connection_username"

@@ -27,6 +27,7 @@ import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationExceptio
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedException;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectFeedItemException;
 import fr.gaulupeau.apps.Poche.network.exceptions.RequestException;
+import fr.gaulupeau.apps.Poche.network.exceptions.UnsuccessfulResponseException;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -203,11 +204,16 @@ public class FeedUpdater {
     }
 
     private InputStream getInputStream(String url)
-            throws IncorrectConfigurationException, IOException {
+            throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
         Response response = getResponse(url);
         if(response.isSuccessful()) {
             return response.body().byteStream();
         } else {
+            if(response.code() == 500) { // common error
+                throw new UnsuccessfulResponseException(
+                        response.code(), response.message(),
+                        response.body().string(), url);
+            }
             // TODO: check
             throw new IncorrectConfigurationException(String.format(
                     App.getInstance().getString(R.string.unsuccessfulRequest_errorMessage),

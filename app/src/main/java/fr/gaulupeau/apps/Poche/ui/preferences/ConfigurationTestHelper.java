@@ -159,27 +159,27 @@ public class ConfigurationTestHelper
 
                 for(int i = results.size() - 1; i >= 0; i--) {
                     TestConnectionTask.TestResult result = results.get(i);
-                    String url = result.url;
-                    if(TestConnectionTask.areUrlsEqual(url, this.url)) {
-                        if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
+
+                    boolean originalUrl = TestConnectionTask.areUrlsEqual(result.url, url);
+
+                    if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
+                        if(originalUrl) {
                             isOriginalOk = true;
                             originalUrlServerVersion = result.wallabagServerVersion;
-
-                            if(bestUrl == null) {
-                                bestUrl = result.url;
-                                bestUrlServerVersion = result.wallabagServerVersion;
-                                isOriginalBest = true;
-                                break;
-                            }
-                        } else {
-                            error = result.result;
-                            errorMessage = result.errorMessage;
                         }
-                    } else if(result.result == WallabagServiceEndpoint.ConnectionTestResult.OK) {
+
                         if(bestUrl == null) {
                             bestUrl = result.url;
                             bestUrlServerVersion = result.wallabagServerVersion;
+
+                            if(originalUrl) {
+                                isOriginalBest = true;
+                                break;
+                            }
                         }
+                    } else if(originalUrl || error == null) {
+                        error = result.result;
+                        errorMessage = result.errorMessage;
                     }
                 }
 
