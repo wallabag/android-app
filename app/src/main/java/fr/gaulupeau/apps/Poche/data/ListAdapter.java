@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -19,6 +21,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<Article> articles;
     private OnItemClickListener listener;
     private int listType = -1;
+
+    private Settings settings;
 
     public ListAdapter(List<Article> articles, OnItemClickListener listener) {
         this.articles = articles;
@@ -89,6 +93,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
             favourite.setVisibility(showFavourite ? View.VISIBLE : View.GONE);
             read.setVisibility(showRead ? View.VISIBLE : View.GONE);
+            settings = App.getInstance().getSettings();
+            readingTime.setText(Integer.toString(article.getEstimatedReadingTime(settings.getReadingSpeed())));
         }
 
         @Override
