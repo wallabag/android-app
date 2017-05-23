@@ -186,7 +186,8 @@ public class EventProcessor {
     public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
         Log.d(TAG, "onUpdateArticlesProgressEvent() started");
 
-        if(updateArticlesNotificationBuilder != null) {
+        if(updateArticlesNotificationBuilder != null
+                && event.getCurrent() != 0 /* don't show empty progressbar */) {
             getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                     updateArticlesNotificationBuilder
                             .setProgress(event.getTotal(), event.getCurrent(), false)
@@ -228,7 +229,8 @@ public class EventProcessor {
     public void onSweepDeletedArticlesProgressEvent(SweepDeletedArticlesProgressEvent event) {
         Log.d(TAG, "onSweepDeletedArticlesProgressEvent() started");
 
-        if(sweepDeletedArticlesNotificationBuilder != null) {
+        if(sweepDeletedArticlesNotificationBuilder != null
+                && event.getCurrent() != 0 /* don't show empty progressbar */) {
             getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
                     sweepDeletedArticlesNotificationBuilder
                             .setProgress(event.getTotal(), event.getCurrent(), false)
@@ -264,10 +266,14 @@ public class EventProcessor {
             fetchImagesNotificationBuilder = notificationBuilder;
         }
 
+        if(event.getCurrent() == 0) { // show indeterminate progressbar instead of empty one
+            fetchImagesNotificationBuilder.setProgress(0, 0, true);
+        } else {
+            fetchImagesNotificationBuilder.setProgress(event.getTotal(), event.getCurrent(), false);
+        }
+
         getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
-                fetchImagesNotificationBuilder
-                        .setProgress(event.getTotal(), event.getCurrent(), false)
-                        .build());
+                fetchImagesNotificationBuilder.build());
     }
 
     @Subscribe
@@ -381,8 +387,7 @@ public class EventProcessor {
                     .setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded))
                     .setContentText(context.getString(R.string.downloadPdfTouchToOpen))
                     .setSmallIcon(R.drawable.ic_file_download_24dp)
-                    .setContentIntent(contentIntent)
-                    .setProgress(0, 0, false);
+                    .setContentIntent(contentIntent);
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(
