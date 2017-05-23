@@ -222,6 +222,11 @@
     <string name="pref_name_imageCache_enabled">Cache in article embedded images</string>
     <string name="pref_desc_imageCache_enabled">Automatically downloads all images in every article and saves them to the device. Depending on the length of your wallabag article list this can take very long and consume a lot of space.</string>
 
+    <string name="pref_name_storage_dbPath">Database location</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Internal storage</string>
+    <string name="pref_name_storage_dbPath_externalStorage">External storage</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Database moved</string>
+
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
     <string name="pref_name_misc_appendWallabagMention">Append wallabag mention</string>
     <string name="pref_desc_misc_appendWallabagMention">Append \"via @wallabagapp\" to shared texts</string>

@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.network;
 
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -25,6 +24,9 @@ import okio.BufferedSink;
 import okio.BufferedSource;
 import okio.Okio;
 
+import static fr.gaulupeau.apps.Poche.data.StorageHelper.getExternalStoragePath;
+import static fr.gaulupeau.apps.Poche.data.StorageHelper.isExternalStorageReadable;
+
 public class ImageCacheUtils {
 
     private static final String TAG = ImageCacheUtils.class.getSimpleName();
@@ -44,12 +46,11 @@ public class ImageCacheUtils {
     };
 
     private static OkHttpClient okHttpClient;
-    private static String externalStoragePath;
     private static String wallabagUrl;
 
     public static String replaceImagesInHtmlContent(String htmlContent, long articleId) {
         String extStorage = getExternalStoragePath();
-        if(!ImageCacheUtils.isExternalStorageReadable()) {
+        if(!isExternalStorageReadable()) {
             Log.w(TAG, "replaceImagesInHtmlContent: extStorage path is not readable");
             return htmlContent;
         }
@@ -292,48 +293,6 @@ public class ImageCacheUtils {
                 + " destination=" + destination);
 
         return success;
-    }
-
-    public static String getExternalStoragePath() {
-        if(externalStoragePath == null) {
-            String returnPath = null;
-            File[] extStorage = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            if(extStorage == null) {
-                Log.w(TAG, "onCreate: getExternalFilesDirs() returned null or is not readable");
-            } else {
-                // TODO: better SD Card detection
-                for(File extStorageDir: extStorage) {
-                    if(extStorageDir == null) {
-                        Log.w(TAG, "getExternalStoragePath: extStorageDir is null");
-                        continue;
-                    }
-
-                    Log.d(TAG, "getExternalStoragePath: extStorageDir.getPath()="
-                            + extStorageDir.getPath());
-                    returnPath = extStorageDir.getPath();
-                }
-            }
-            Log.d(TAG, "getExternalStoragePath: returnPath=" + returnPath);
-            return externalStoragePath = returnPath;
-        }
-
-        return externalStoragePath;
-    }
-
-    public static boolean isExternalStorageReadable() {
-        String externalStoragePath = getExternalStoragePath();
-        if(externalStoragePath == null) return false;
-
-        File f = new File(externalStoragePath);
-        return f.exists() && f.canRead();
-    }
-
-    public static boolean isExternalStorageWritable() {
-        String externalStoragePath = getExternalStoragePath();
-        if(externalStoragePath == null) return false;
-
-        File f = new File(externalStoragePath);
-        return f.exists() && f.canWrite();
     }
 
     private static String getWallabagUrl() {

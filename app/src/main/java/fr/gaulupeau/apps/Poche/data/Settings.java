@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.lang.reflect.Field;
@@ -26,6 +27,8 @@ import fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity;
 public class Settings {
 
     private static final String TAG = Settings.class.getSimpleName();
+
+    private static final String DB_FILENAME = "wallabag";
 
     private static final int PREFERENCES_VERSION = 100;
 
@@ -579,6 +582,14 @@ public class Settings {
         setBoolean(R.string.pref_key_imageCache_enabled, value);
     }
 
+    public String getDbPath() {
+        return getString(R.string.pref_key_storage_dbPath);
+    }
+
+    public void setDbPath(String dbPath) {
+        setString(R.string.pref_key_storage_dbPath, dbPath);
+    }
+
     public boolean isAppendWallabagMentionEnabled() {
         return getBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, true);
     }
@@ -641,6 +652,49 @@ public class Settings {
 
     public void setLatestUpdateRunTimestamp(long timestamp) {
         setLong(R.string.pref_key_internal_update_latestUpdateRunTimestamp, timestamp);
+    }
+
+    public String getDbPathForDbHelper() {
+        String dbPath = getDbPath();
+        return (TextUtils.isEmpty(dbPath) ? "" : (dbPath + "/")) + DB_FILENAME;
+    }
+
+    private String getFullDbPath(String dbPath) {
+        // empty path == internal storage
+        if(TextUtils.isEmpty(dbPath)) {
+            return context.getDatabasePath(DB_FILENAME).getAbsolutePath();
+        }
+
+        return dbPath + "/" + DB_FILENAME;
+    }
+
+    public boolean moveDb(String dstPath) {
+        String srcPath = getFullDbPath(getDbPath());
+        dstPath = getFullDbPath(dstPath);
+        Log.d(TAG, "moveDb() srcPath: " + srcPath);
+        Log.d(TAG, "moveDb() dstPath: " + dstPath);
+
+        String[] filesEndings = new String[] {"", "-shm", "-wal"};
+
+        for(String ending: filesEndings) {
+            Log.d(TAG, "moveDb() moving file with ending: " + ending);
+            StorageHelper.CopyFileResult result
+                    = StorageHelper.copyFile(srcPath + ending, dstPath + ending);
+            Log.d(TAG, "moveDb() result: " + result);
+
+            if(result != StorageHelper.CopyFileResult.OK
+                    && result != StorageHelper.CopyFileResult.SRC_DOES_NOT_EXIST) {
+                return false;
+            }
+        }
+
+        for(String ending: filesEndings) {
+            Log.d(TAG, "moveDb() deleting file with ending: " + ending);
+            boolean result = StorageHelper.deleteFile(srcPath + ending);
+            Log.d(TAG, "moveDb() deleted: " + result);
+        }
+
+        return true;
     }
 
     public boolean isHandlingHttpScheme() {

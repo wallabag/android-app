@@ -220,6 +220,11 @@
                 android:summary="@string/pref_desc_misc_handleHttpScheme"
                 android:defaultValue="false"
                 android:persistent="false"/>
+            <ListPreference
+                android:key="@string/pref_key_storage_dbPath"
+                android:title="@string/pref_name_storage_dbPath"
+                android:dialogTitle="@string/pref_name_storage_dbPath"
+                android:defaultValue=""/>
             <Preference
                 android:key="@string/pref_key_misc_wipeDB"
                 android:title="@string/pref_name_misc_wipeDB"
