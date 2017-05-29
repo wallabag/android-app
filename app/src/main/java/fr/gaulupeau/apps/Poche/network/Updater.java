@@ -441,6 +441,10 @@ public class Updater {
                 articleTagsJoinDao.insertInTx(joins);
                 Log.v(TAG, "performUpdate() done articleTagsJoinDao.insertInTx()");
             }
+
+            if(updateListener != null) {
+                updateListener.onProgress(articles.page * perPage, articles.total);
+            }
         }
 
         return latestUpdatedItemTimestamp;
