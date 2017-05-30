@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,27 +10,24 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
-import fr.gaulupeau.apps.Poche.data.Settings;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
+    private Context context;
+    private Settings settings;
+
     private List<Article> articles;
     private OnItemClickListener listener;
     private int listType = -1;
 
-    private Settings settings;
-
-    public ListAdapter(List<Article> articles, OnItemClickListener listener) {
-        this.articles = articles;
-        this.listener = listener;
-    }
-
-    public ListAdapter(List<Article> articles, OnItemClickListener listener, int listType) {
+    public ListAdapter(Context context, Settings settings,
+                       List<Article> articles, OnItemClickListener listener, int listType) {
+        this.context = context;
+        this.settings = settings;
         this.articles = articles;
         this.listener = listener;
         this.listType = listType;
@@ -93,8 +91,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
             favourite.setVisibility(showFavourite ? View.VISIBLE : View.GONE);
             read.setVisibility(showRead ? View.VISIBLE : View.GONE);
-            settings = App.getInstance().getSettings();
-            readingTime.setText(Integer.toString(article.getEstimatedReadingTime(settings.getReadingSpeed())));
+            readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
+                    article.getEstimatedReadingTime(settings.getReadingSpeed())));
         }
 
         @Override
