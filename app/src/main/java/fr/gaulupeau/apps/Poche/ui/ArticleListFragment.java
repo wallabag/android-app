@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -133,7 +134,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     @Override
     protected RecyclerView.Adapter getListAdapter(List<Article> list) {
-        return new ListAdapter(list, new ListAdapter.OnItemClickListener() {
+        return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
+                list, new ListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Article article = itemList.get(position);

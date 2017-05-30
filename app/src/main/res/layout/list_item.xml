@@ -32,7 +32,9 @@
                 android:id="@+id/estimatedReadingTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5" />
+                android:layout_marginRight="20dp"
+                android:layout_marginEnd="20dp"
+                android:text="5 min" />
             <ImageView
                 android:id="@+id/favourite"
                 android:layout_width="wrap_content"
