@@ -35,7 +35,11 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
             ArticlesChangedEvent.ChangeType.UNARCHIVED,
             ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED,
             ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
-            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED);
+            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED,
+            ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED);
+
+    private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_FORCE_CONTENT_UPDATE
+            = EnumSet.of(ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED);
 
     private ArticleListsPagerAdapter adapter;
     private ViewPager viewPager;
@@ -162,27 +166,32 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
 
     private void invalidateLists(FeedsChangedEvent event) {
         if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET)) {
-            updateAllLists();
+            updateAllLists(!Collections.disjoint(event.getInvalidateAllChanges(),
+                    CHANGE_SET_FORCE_CONTENT_UPDATE));
             return;
         }
 
         if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET)) {
-            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.MAIN));
+            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.MAIN),
+                    !Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
         if(!Collections.disjoint(event.getFavoriteFeedChanges(), CHANGE_SET)) {
-            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.FAVORITE));
+            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.FAVORITE),
+                    !Collections.disjoint(event.getFavoriteFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
         if(!Collections.disjoint(event.getArchiveFeedChanges(), CHANGE_SET)) {
-            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.ARCHIVE));
+            updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.ARCHIVE),
+                    !Collections.disjoint(event.getArchiveFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
     }
 
-    private void updateAllLists() {
-        Log.d(TAG, "updateAllLists() started");
+    private void updateAllLists(boolean forceContentUpdate) {
+        Log.d(TAG, "updateAllLists() started; forceContentUpdate: " + forceContentUpdate);
 
         for(int i = 0; i < ArticleListsPagerAdapter.PAGES.length; i++) {
             ArticleListFragment f = getFragment(i);
             if(f != null) {
+                if(forceContentUpdate) f.forceContentUpdate();
                 f.invalidateList();
             } else {
                 Log.w(TAG, "updateAllLists() fragment is null; position: " + i);
@@ -190,18 +199,20 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
         }
     }
 
-    private void updateList(int position) {
-        Log.d(TAG, "updateList() position: " + position);
+    private void updateList(int position, boolean forceContentUpdate) {
+        Log.d(TAG, String.format("updateList() position: %d, forceContentUpdate: %s",
+                position, forceContentUpdate));
 
         if(position != -1) {
             ArticleListFragment f = getFragment(position);
             if(f != null) {
+                if(forceContentUpdate) f.forceContentUpdate();
                 f.invalidateList();
             } else {
                 Log.w(TAG, "updateList() fragment is null");
             }
         } else {
-            updateAllLists();
+            updateAllLists(forceContentUpdate);
         }
     }
 
