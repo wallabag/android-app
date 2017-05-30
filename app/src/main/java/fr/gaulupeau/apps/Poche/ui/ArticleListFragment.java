@@ -57,6 +57,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private ArticleDao articleDao;
     private TagDao tagDao;
 
+    private boolean forceContentUpdate;
+
     public static ArticleListFragment newInstance(int listType, String tag) {
         ArticleListFragment fragment = new ArticleListFragment();
 
@@ -131,6 +133,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         return super.onOptionsItemSelected(item);
     }
 
+    public void forceContentUpdate() {
+        forceContentUpdate = true;
+    }
+
     @Override
     protected RecyclerView.Adapter getListAdapter(List<Article> list) {
         return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
@@ -158,6 +164,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         }
 
         super.resetContent();
+
+        forceContentUpdate = false;
     }
 
     @Override
@@ -243,7 +251,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     @Override
     protected DiffUtil.Callback getDiffUtilCallback(List<Article> oldItems, List<Article> newItems) {
-        return new ArticleListDiffCallback(oldItems, newItems);
+        return new ArticleListDiffCallback(oldItems, newItems, forceContentUpdate);
     }
 
     private void openRandomArticle() {
@@ -287,10 +295,12 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
         private List<Article> oldList;
         private List<Article> newList;
+        private boolean forceContentUpdate;
 
-        ArticleListDiffCallback(List<Article> oldList, List<Article> newList) {
+        ArticleListDiffCallback(List<Article> oldList, List<Article> newList, boolean forceContentUpdate) {
             this.oldList = oldList;
             this.newList = newList;
+            this.forceContentUpdate = forceContentUpdate;
         }
 
         @Override
@@ -311,6 +321,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            if(forceContentUpdate) return false;
+
             Article oldArticle = oldList.get(oldItemPosition);
             Article newArticle = newList.get(newItemPosition);
 
