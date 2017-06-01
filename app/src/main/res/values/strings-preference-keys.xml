@@ -80,6 +80,7 @@
 
     <string name="pref_key_misc" translatable="false">misc</string>
     <string name="pref_key_misc_category" translatable="false">misc.category</string>
+    <string name="pref_key_misc_addTitleToSharedText_enabled" translatable="false">misc.addTitleToSharedText.enabled</string>
     <string name="pref_key_misc_appendWallabagMention_enabled" translatable="false">misc.appendWallabagMention.enabled</string>
     <string name="pref_key_misc_handleHttpScheme" translatable="false">misc.handleHttpScheme</string>
     <string name="pref_key_misc_ftsIcuTokenizer_enabled" translatable="false">misc.ftsIcuTokenizer.enabled</string>

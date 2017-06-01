@@ -722,6 +722,14 @@ public class Settings {
         setString(R.string.pref_key_storage_dbPath, dbPath);
     }
 
+    public boolean isAddTitleToSharedTextEnabled() {
+        return getBoolean(R.string.pref_key_misc_addTitleToSharedText_enabled, true);
+    }
+
+    public void setAddTitleToSharedTextEnabled(boolean value) {
+        setBoolean(R.string.pref_key_misc_addTitleToSharedText_enabled, value);
+    }
+
     public boolean isAppendWallabagMentionEnabled() {
         return getBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, true);
     }

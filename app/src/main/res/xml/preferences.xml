@@ -309,6 +309,11 @@
             android:title="@string/pref_categoryName_miscellaneous"
             android:persistent="false">
             <CheckBoxPreference
+                android:key="@string/pref_key_misc_addTitleToSharedText_enabled"
+                android:title="@string/pref_name_misc_addTitleToSharedText"
+                android:summary="@string/pref_desc_misc_addTitleToSharedText"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_misc_appendWallabagMention_enabled"
                 android:title="@string/pref_name_misc_appendWallabagMention"
                 android:summary="@string/pref_desc_misc_appendWallabagMention"
