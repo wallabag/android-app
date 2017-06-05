@@ -35,8 +35,10 @@ public class DbConnection {
                 QueryBuilder.LOG_VALUES = true;
             }
 
+            String dbPath = new Settings(context).getDbPathForDbHelper();
+
             Log.d(TAG, "creating new db session");
-            WallabagOpenHelper dbHelper = new WallabagOpenHelper(context, "wallabag", null);
+            WallabagOpenHelper dbHelper = new WallabagOpenHelper(context, dbPath, null);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 dbHelper.setWriteAheadLoggingEnabled(true);
             }
@@ -53,6 +55,10 @@ public class DbConnection {
         }
 
         return Holder.session;
+    }
+
+    public static void resetSession() {
+        Holder.session = null;
     }
 
     public static void setContext(Context context) {

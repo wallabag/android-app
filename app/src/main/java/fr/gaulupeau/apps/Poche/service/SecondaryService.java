@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
@@ -242,7 +243,7 @@ public class SecondaryService extends IntentServiceBase {
     private void fetchImages(ActionRequest actionRequest) {
         Log.d(TAG, "fetchImages() started");
 
-        if(!ImageCacheUtils.isExternalStorageWritable()) {
+        if(!StorageHelper.isExternalStorageWritable()) {
             Log.w(TAG, "fetchImages() external storage is not writable");
             return;
         }

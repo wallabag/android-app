@@ -14,10 +14,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
@@ -61,7 +66,8 @@ public class SettingsActivity extends BaseActionBarActivity {
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
                 R.string.pref_key_autoSync_interval,
-                R.string.pref_key_autoSync_type
+                R.string.pref_key_autoSync_type,
+                R.string.pref_key_storage_dbPath
         };
 
         private Settings settings;
@@ -142,6 +148,26 @@ public class SettingsActivity extends BaseActionBarActivity {
             if(handleHttpSchemePreference != null) {
                 handleHttpSchemePreference.setDefaultValue(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
+            }
+
+            ListPreference dbPathListPreference = (ListPreference)findPreference(
+                    getString(R.string.pref_key_storage_dbPath));
+            if(dbPathListPreference != null) {
+                List<String> entriesList = new ArrayList<>(2);
+                List<String> entryValuesList = new ArrayList<>(2);
+
+                entriesList.add(getString(R.string.pref_name_storage_dbPath_internalStorage));
+                entryValuesList.add("");
+
+                if(StorageHelper.isExternalStorageWritable()) {
+                    entriesList.add(getString(R.string.pref_name_storage_dbPath_externalStorage));
+                    entryValuesList.add(StorageHelper.getExternalStoragePath());
+                }
+
+                dbPathListPreference.setEntries(entriesList.toArray(new String[0]));
+                dbPathListPreference.setEntryValues(entryValuesList.toArray(new String[0]));
+
+                dbPathListPreference.setOnPreferenceChangeListener(this);
             }
 
             for(int keyID: SUMMARIES_TO_INITIATE) {
@@ -282,9 +308,28 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
+            Log.d(TAG, String.format("onPreferenceChange(key: %s, newValue: %s)",
+                    preference.getKey(), newValue));
+
             int keyID = Settings.getPrefKeyIDByValue(preference.getKey());
-            if(keyID == R.string.pref_key_misc_handleHttpScheme) {
-                settings.setHandleHttpScheme((Boolean)newValue);
+            switch(keyID) {
+                case R.string.pref_key_misc_handleHttpScheme:
+                    settings.setHandleHttpScheme((Boolean)newValue);
+                    break;
+
+                case R.string.pref_key_storage_dbPath:
+                    if(TextUtils.equals(settings.getDbPath(), (String)newValue)) {
+                        Log.d(TAG, "onPreferenceChange() new DbPath is the same");
+                    } else if(settings.moveDb((String)newValue)) { // TODO: do in a background thread
+                        DbConnection.resetSession();
+
+                        Toast.makeText(getActivity(), R.string.pref_name_storage_dbPath_dbMoved,
+                                Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "onPreferenceChange() couldn't move DB; ignoring preference change");
+                        return false;
+                    }
+                    break;
             }
 
             return true;
@@ -491,6 +536,21 @@ public class SettingsActivity extends BaseActionBarActivity {
                 case R.string.pref_key_connection_api_clientSecret:
                 case R.string.pref_key_connection_advanced_httpAuthPassword:
                     setPasswordSummary(key);
+                    break;
+
+                case R.string.pref_key_storage_dbPath:
+                    ListPreference dbPathListPreference = (ListPreference)findPreference(
+                            getString(R.string.pref_key_storage_dbPath));
+                    if(dbPathListPreference != null) {
+                        CharSequence value = dbPathListPreference.getEntry();
+                        if(TextUtils.isEmpty(value)) {
+                            dbPathListPreference.setSummary(R.string.pref_name_storage_dbPath_internalStorage);
+                        } else if(value.equals(StorageHelper.getExternalStoragePath())) {
+                            dbPathListPreference.setSummary(R.string.pref_name_storage_dbPath_externalStorage);
+                        } else {
+                            dbPathListPreference.setSummary(value);
+                        }
+                    }
                     break;
             }
         }
