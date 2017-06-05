@@ -18,6 +18,9 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
@@ -84,6 +87,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         private boolean imageCachingChanged;
         private boolean oldImageCacheEnabled;
+
+        private boolean readingSpeedChanged;
+        private int oldReadingSpeed;
 
         private ConfigurationTestHelper configurationTestHelper;
 
@@ -194,6 +200,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             imageCachingChanged = false;
             oldImageCacheEnabled = settings.isImageCacheEnabled();
+
+            readingSpeedChanged = false;
+            oldReadingSpeed = settings.getReadingSpeed();
         }
 
         private void applyChanges() {
@@ -278,6 +287,18 @@ public class SettingsActivity extends BaseActionBarActivity {
                     ServiceHelper.fetchImages(App.getInstance());
                 }
             }
+
+            if(readingSpeedChanged) {
+                readingSpeedChanged = false;
+
+                if(oldReadingSpeed != settings.getReadingSpeed()) {
+                    Log.i(TAG, "applyChanges() reading speed changed, posting event");
+
+                    ArticlesChangedEvent event = new ArticlesChangedEvent();
+                    event.invalidateAll(FeedsChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED);
+                    EventHelper.postEvent(event);
+                }
+            }
         }
 
         @Override
@@ -330,6 +351,10 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 case R.string.pref_key_imageCache_enabled:
                     imageCachingChanged = true;
+                    break;
+
+                case R.string.pref_key_ui_readingSpeed:
+                    readingSpeedChanged = true;
                     break;
             }
 

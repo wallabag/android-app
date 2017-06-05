@@ -131,6 +131,7 @@
     <string name="manageTags_addNew">Add</string>
     <string name="manageTags_currentTags">Selected tags:</string>
     <string name="content_estimatedReadingTime">Estimated reading time: %s min</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
