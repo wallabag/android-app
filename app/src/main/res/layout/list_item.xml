@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_star_black_24dp"
+                android:src="?attr/listItem_icon_favorite"
                 android:contentDescription="@string/articleList_favoriteMark" />
             <ImageView
                 android:id="@+id/read"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginEnd="20dp"
-                android:src="@drawable/ic_done_black_24dp"
+                android:src="?attr/listItem_icon_read"
                 android:contentDescription="@string/articleList_ArchivedMark" />
         </LinearLayout>
     </RelativeLayout>
