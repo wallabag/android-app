@@ -27,6 +27,7 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
+    <string name="dialog_add_label">Añadir un artículo</string>
     <string name="page_url">URL de la página</string>
     <string name="share_article_title">Compartir artículo</string>
     <string name="share_text_extra">" vía @wallabagapp"</string>
@@ -121,6 +122,7 @@
     <string name="menu_lists_sweepDeletedArticles">\"Limpiar\" artículos eliminados</string>
     <string name="menu_lists_fullUpdate">Actualización completa</string>
     <string name="other_searchHint">Buscar por título o texto</string>
+    <string name="menu_changeTitle">Cambiar título</string>
     <string name="menu_manageTags">Cambiar etiquetas</string>
     <string name="manageTags_title">Cambiar etiquetas</string>
     <string name="manageTags_save">Guardar</string>
@@ -141,6 +143,8 @@
     <string name="nav_other_settings">Configuración</string>
     <string name="nav_other_about">Acerca de</string>
 
+    <string name="title_main_tag">Etiq: %s</string>
+
     <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
     <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a realizar una configuración de conexión básica</string>
 
@@ -157,6 +161,7 @@
     <string name="pref_name_connection_api_clientID">Identificador del cliente</string>
     <string name="pref_name_connection_api_clientSecret">Secreto del cliente</string>
     <string name="pref_name_connection_autofill">Autocompletar</string>
+    <string name="pref_desc_connection_autofill">Prueba la conexión y rellena el identificador y el secreto del cliente</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizadas</string>
@@ -171,6 +176,8 @@
     <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para el contenido del artículo</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Alineación del texto: justificado</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Estira las líneas para que cada línea tenga el mismo ancho (como en periódicos y revistas)</string>
     <string name="pref_name_ui_readingSpeed">Velocidad de lectura</string>
     <string name="pref_desc_ui_readingSpeed">Tu velocidad de lectura (en palabras por minuto). Usado para calcular el tiempo estimado de lectura.</string>
     <string name="pref_categoryName_ui_screenScrolling">Desplazamiento de pantalla</string>
@@ -187,7 +194,7 @@
         La sincronización \"Completa\" borra todo el contenido local y lo vuelve a descargar de nuevo. Este tipo de sincronización está disponible en el menú de opciones. Solo se recomienda utilizar esta opción como último recurso.\n\n
         La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual, normalmente tarda mucho menos tiempo y requiere menos datos. Sin embargo, este método tiene un inconveniente: no puede detectar los artículos borrados de forma remota (por lo tanto, no se eliminan artículos locales durante la sincronización \"Rápida\"). Este tipo de sincronización se ejecuta con el gesto \"pull-to-refresh\" en la lista de artíclos.\n\n
         Para solventar este inconveniente de la sincronización \"Rápida\" existe una opción llamada \"limpiar artículos borrados\" que pregunta al servidor para cada artículo local si todavía existe en el servidor - si no existe, el artículo es eliminado. Dependiendo del número de artículos que tengas, esta operación puede llevar algún tiempo, pero ahorra muchos datos en comparación la sincronziación \"Completa\".\n\n
-        ninguna de estas funciones afecta a la sincronización cliente-servidor: los cambios locales siempre se envían al servidor antes de actualizar el contenido local.
+        Ninguna de estas funciones afecta a la sincronización cliente-servidor: los cambios locales siempre se envían al servidor antes de actualizar el contenido local.
     </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Activar \"Limpiar artículos borrados\" después de la sincronización \"rápida\"</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lee los tipos de sincronización en la parte superior</string>
@@ -215,6 +222,8 @@
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
 
     <string name="pref_categoryName_miscellaneous">Misceláneos</string>
+    <string name="pref_name_misc_appendWallabagMention">Añadir mención a wallabag</string>
+    <string name="pref_desc_misc_appendWallabagMention">Añade \"via @wallabagapp\" a los artículos compartidos</string>
     <string name="pref_name_misc_handleHttpScheme">Manejar esquema HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Mostrar wallabag en la lista de navegadores web</string>
     <string name="pref_name_misc_wipeDB">Limpiar base de datos</string>
