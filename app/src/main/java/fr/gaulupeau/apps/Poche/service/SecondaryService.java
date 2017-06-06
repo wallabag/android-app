@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Intent;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
@@ -290,7 +291,15 @@ public class SecondaryService extends IntentServiceBase {
                         + ". articleID: " + article.getArticleId());
                 postEvent(new FetchImagesProgressEvent(actionRequest, index, totalNumber));
 
-                if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), article.getContent())) {
+                String content = article.getContent();
+
+                // append preview picture URL to content to fetch it too
+                // should probably be handled separately
+                if(!TextUtils.isEmpty(article.getPreviewPictureURL())) {
+                    content = "<img src=\"" + article.getPreviewPictureURL() + "\"/>" + content;
+                }
+
+                if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), content)) {
                     changedArticles.add(article.getArticleId());
                 }
 

@@ -619,10 +619,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String htmlContent = article.getContent();
 
         int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
+        String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
 
-        htmlContent = getString(R.string.content_estimatedReadingTime,
-                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1")
-                + htmlContent;
+        String previewPicture = "";
+        if(!TextUtils.isEmpty(article.getPreviewPictureURL())) {
+            previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
+        }
+
+        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent;
         if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
         if(settings.isImageCacheEnabled()) {
