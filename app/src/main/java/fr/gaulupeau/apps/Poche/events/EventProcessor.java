@@ -491,20 +491,27 @@ public class EventProcessor {
                     break;
                 }
 
+                case SERVER_ERROR:
                 case UNKNOWN: {
                     // this is undecided yet
                     // show notification + schedule auto-retry
                     // TODO: decide on behavior
 
+                    boolean serverError = errorType == ActionResult.ErrorType.SERVER_ERROR;
+
                     Context context = getContext();
 
-                    String detailedText = context.getString(R.string.notification_unknownError);
+                    String detailedText = context.getString(serverError
+                            ? R.string.notification_serverError
+                            : R.string.notification_unknownError);
                     detailedText = prependAppName(detailedText);
 
                     NotificationCompat.Builder notificationBuilder =
                             new NotificationCompat.Builder(context)
                                     .setSmallIcon(R.drawable.ic_warning_24dp)
-                                    .setContentTitle(context.getString(R.string.notification_error))
+                                    .setContentTitle(context.getString(serverError
+                                            ? R.string.notification_serverError
+                                            : R.string.notification_error))
                                     .setContentText(detailedText);
 
                     if(result.getMessage() != null) {

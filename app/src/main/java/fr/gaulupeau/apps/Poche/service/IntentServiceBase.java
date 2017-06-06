@@ -39,7 +39,9 @@ public abstract class IntentServiceBase extends IntentService {
                 result.setErrorType(ActionResult.ErrorType.INCORRECT_CREDENTIALS);
                 result.setMessage(ure.getResponseBody()); // TODO: fix message
             } else {
-                result.setErrorType(ActionResult.ErrorType.UNKNOWN);
+                result.setErrorType(ure.getResponseCode() == 500
+                        ? ActionResult.ErrorType.SERVER_ERROR
+                        : ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
             }
         } else if(e instanceof IncorrectConfigurationException) {
