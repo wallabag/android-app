@@ -5,6 +5,7 @@
         <attr name="popupOverlayTheme" format="reference"/>
         <attr name="listItem_icon_favorite" format="reference"/>
         <attr name="listItem_icon_read" format="reference"/>
+        <attr name="welcome_logo" format="reference"/>
     </declare-styleable>
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -12,6 +13,7 @@
         <item name="popupOverlayTheme">@style/LightTheme.PopupOverlay</item>
         <item name="listItem_icon_favorite">@drawable/ic_star_black_24dp</item>
         <item name="listItem_icon_read">@drawable/ic_done_black_24dp</item>
+        <item name="welcome_logo">@drawable/welcome</item>
     </style>
 
     <style name="LightTheme.NoActionBar">
@@ -35,6 +37,7 @@
         <item name="popupOverlayTheme">@style/DarkTheme.PopupOverlay</item>
         <item name="listItem_icon_favorite">@drawable/ic_star_white_24dp</item>
         <item name="listItem_icon_read">@drawable/ic_done_24dp</item>
+        <item name="welcome_logo">@drawable/welcome_white</item>
     </style>
 
     <style name="DarkTheme.NoActionBar">
