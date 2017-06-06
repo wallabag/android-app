@@ -11,6 +11,7 @@ import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.ui.Themes;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -62,6 +63,21 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             favourite = (ImageView) itemView.findViewById(R.id.favourite);
             read = (ImageView) itemView.findViewById(R.id.read);
             itemView.setOnClickListener(this);
+
+            switch(Themes.getCurrentTheme()) {
+                case LIGHT_CONTRAST:
+                case LIGHT:
+                case SOLARIZED:
+                default:
+                    favourite.setImageResource(R.drawable.ic_star_black_24dp);
+                    read.setImageResource(R.drawable.ic_done_black_24dp);
+                    break;
+                case DARK_CONTRAST:
+                case DARK:
+                    favourite.setImageResource(R.drawable.ic_star_white_24dp);
+                    read.setImageResource(R.drawable.ic_done_24dp);
+                    break;
+            }
         }
 
         public void bind(Article article) {
