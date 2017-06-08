@@ -36,13 +36,18 @@ public class ImageCacheUtils {
 
     private static final String WALLABAG_RELATIVE_URL_PATH = "/assets/images/";
 
-    private static final Pattern IMG_URL_PATTERN
-            = Pattern.compile("<img[\\w\\W]*?src=\"([^\"]+?)\"[\\w\\W]*?>");
+    private static final Pattern[] IMG_URL_PATTERNS = {
+            Pattern.compile("<img[^>]+src\\s*=\\s*\"([^\"]+)\"[^>]*>", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("<img[^>]+src\\s*=\\s*'([^']+)'[^>]*>", Pattern.CASE_INSENSITIVE)
+    };
 
-    private static final Pattern[] responsiveParametersPatterns = {
-            Pattern.compile("srcset=\"[^\"]*?\""),
-            Pattern.compile("sizes=\"[^\"]*?\""),
-            Pattern.compile("data-zoom-src=\"[^\"]*?\""),
+    private static final Pattern[] RESPONSIVE_PARAMETERS_PATTERNS = {
+            Pattern.compile("srcset\\s*=\\s*\"[^\"]+\"", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("srcset\\s*=\\s*'[^']+'", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("sizes\\s*=\\s*\"[^\"]+\"", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("sizes\\s*=\\s*'[^']+'", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("data-zoom-src\\s*=\\s*\"[^\"]+\"", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("data-zoom-src\\s*=\\s*'[^']+'", Pattern.CASE_INSENSITIVE),
     };
 
     private static OkHttpClient okHttpClient;
@@ -113,11 +118,9 @@ public class ImageCacheUtils {
     }
 
     private static String removeResponsiveParameters(CharSequence source) {
-        for(Pattern pattern: responsiveParametersPatterns) {
+        for(Pattern pattern: RESPONSIVE_PARAMETERS_PATTERNS) {
             Matcher m = pattern.matcher(source);
-
             if(!m.find()) continue; // don't allocate a new string if there are no matches
-
             source = m.replaceAll("");
         }
 
@@ -175,12 +178,16 @@ public class ImageCacheUtils {
 
     public static List<String> findImageUrlsInHtml(String htmlContent) {
         List<String> imageURLs = new ArrayList<>();
-        Matcher matcher = IMG_URL_PATTERN.matcher(htmlContent);
-        while(matcher.find()) {
-            String url = matcher.group(1);
-            imageURLs.add(url);
-            Log.d(TAG, "findImageUrlsInHtml: found image URL " + url);
+
+        for(Pattern pattern: IMG_URL_PATTERNS) {
+            Matcher matcher = pattern.matcher(htmlContent);
+            while(matcher.find()) {
+                String url = matcher.group(1);
+                imageURLs.add(url);
+                Log.d(TAG, "findImageUrlsInHtml: found image URL " + url);
+            }
         }
+
         return imageURLs;
     }
 
