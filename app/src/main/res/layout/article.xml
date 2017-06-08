@@ -53,35 +53,33 @@
                 <LinearLayout
                     android:id="@+id/bottomTools"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:visibility="gone">
                     <ImageButton
                         android:id="@+id/btnGoPrevious"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:contentDescription="@string/menuPrevious"
                         android:src="@drawable/ic_action_previous_item"
                         android:layout_weight="1"/>
                     <Button
                         android:id="@+id/btnMarkRead"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
+                        android:layout_height="match_parent"
                         android:text="@string/btnMarkRead"
                         android:layout_weight="6"/>
                     <Button
                         android:id="@+id/btnMarkUnread"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
+                        android:layout_height="match_parent"
                         android:text="@string/btnMarkUnread"
                         android:layout_weight="6"
                         android:visibility="gone"/>
                     <ImageButton
                         android:id="@+id/btnGoNext"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:contentDescription="@string/menuNext"
                         android:src="@drawable/ic_action_next_item"
                         android:layout_weight="1"/>
