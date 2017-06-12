@@ -51,6 +51,10 @@ p, li {
   color: #FFF;
 }
 
+th, td {
+  color: #FFF;
+}
+
 .high-contrast p,
 .high-contrast li {
   color: #FFF;
