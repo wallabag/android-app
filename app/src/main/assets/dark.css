@@ -51,6 +51,24 @@ p, li {
   color: #FFF;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  color: #FFF;
+  border:1px solid #999;
+  padding: 0.25em;
+  text-align: left;
+}
+
+/* fix images with transparent background */
+img {
+  background: #FFF;
+  max-width: 100%;
+}
+
 .high-contrast p,
 .high-contrast li {
   color: #FFF;
@@ -202,11 +220,17 @@ header.mbm {
   font-style: normal;
 }
 
-blockquote {
-  border:1px solid #999;
-  background: #000;
-  padding: 1em;
+blockquote, pre {
+  border: 1px solid #999;
+  background: #222;
+  padding: 0.25em;
   margin: 0;
+}
+
+#article pre {
+  font-family: monospace;
+  white-space: pre;
+  text-justify: none;
 }
 
 #article h2, #article h3, #article h4 {
