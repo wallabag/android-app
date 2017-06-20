@@ -49,6 +49,17 @@ p, li {
   color: #666;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table, th, td {
+  border:1px solid #999;
+  padding: 0.25em;
+  text-align: left;
+}
+
 .high-contrast p,
 .high-contrast li {
   color: #000;
@@ -199,11 +210,17 @@ header.mbm {
   font-style: normal;
 }
 
-blockquote {
+blockquote, pre {
   border:1px solid #999;
   background: #FFF;
-  padding: 1em;
+  padding: 0.25em;
   margin: 0;
+}
+
+pre {
+  font-family: monospace;
+  white-space: pre;
+  text-justify: none;
 }
 
 #article h2, #article h3, #article h4 {
