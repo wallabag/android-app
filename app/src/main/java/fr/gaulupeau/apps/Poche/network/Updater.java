@@ -209,73 +209,88 @@ public class Updater {
 
                 boolean existing = true;
                 if(article == null) {
-                    article = new Article(null);
-
                     existing = false;
+
+                    article = new Article(null);
+                    article.setArticleId(id);
+                    article.setTitle(apiArticle.title);
+                    article.setContent(apiArticle.content);
+                    article.setDomain(apiArticle.domainName);
+                    article.setUrl(apiArticle.url);
+                    article.setEstimatedReadingTime(apiArticle.readingTime);
+                    article.setLanguage(apiArticle.language);
+                    article.setPreviewPictureURL(apiArticle.previewPicture);
+                    article.setCreationDate(apiArticle.createdAt);
+                    article.setUpdateDate(apiArticle.updatedAt);
+                    article.setArchive(apiArticle.archived);
+                    article.setFavorite(apiArticle.starred);
+                    article.setImagesDownloaded(false);
 
                     articleChanges.add(ChangeType.ADDED);
                 }
 
                 if(existing) {
-                    if(!TextUtils.equals(article.getContent(), apiArticle.content)) {
+                    if(!equalOrEmpty(article.getContent(), apiArticle.content)) {
+                        article.setContent(apiArticle.content);
                         articleChanges.add(ChangeType.CONTENT_CHANGED);
                     }
-                    if(!TextUtils.equals(article.getTitle(), apiArticle.title)) {
+                    if(!equalOrEmpty(article.getTitle(), apiArticle.title)) {
+                        article.setTitle(apiArticle.title);
                         articleChanges.add(ChangeType.TITLE_CHANGED);
                     }
-                    if(!TextUtils.equals(article.getDomain(), apiArticle.domainName)) {
+                    if(!equalOrEmpty(article.getDomain(), apiArticle.domainName)) {
+                        article.setDomain(apiArticle.domainName);
                         articleChanges.add(ChangeType.DOMAIN_CHANGED);
                     }
-                    if(!TextUtils.equals(article.getUrl(), apiArticle.url)) {
+                    if(!equalOrEmpty(article.getUrl(), apiArticle.url)) {
+                        article.setUrl(apiArticle.url);
                         articleChanges.add(ChangeType.URL_CHANGED);
                     }
                     if(article.getEstimatedReadingTime() != apiArticle.readingTime) {
+                        article.setEstimatedReadingTime(apiArticle.readingTime);
                         articleChanges.add(ChangeType.ESTIMATED_READING_TIME_CHANGED);
                     }
-                    if(!TextUtils.equals(article.getLanguage(), apiArticle.language)) {
+                    if(!equalOrEmpty(article.getLanguage(), apiArticle.language)) {
+                        article.setLanguage(apiArticle.language);
                         articleChanges.add(ChangeType.LANGUAGE_CHANGED);
                     }
-                    if(!TextUtils.equals(article.getPreviewPictureURL(), apiArticle.previewPicture)) {
+                    if(!equalOrEmpty(article.getPreviewPictureURL(), apiArticle.previewPicture)) {
+                        article.setPreviewPictureURL(apiArticle.previewPicture);
                         articleChanges.add(ChangeType.PREVIEW_PICTURE_URL_CHANGED);
                     }
                     if(article.getCreationDate().getTime() != apiArticle.createdAt.getTime()) {
+                        article.setCreationDate(apiArticle.createdAt);
                         articleChanges.add(ChangeType.CREATED_DATE_CHANGED);
                     }
                     if(article.getUpdateDate().getTime() != apiArticle.updatedAt.getTime()) {
+                        article.setUpdateDate(apiArticle.updatedAt);
                         articleChanges.add(ChangeType.UPDATED_DATE_CHANGED);
                     }
                     if(article.getArchive() != apiArticle.archived) {
+                        article.setArchive(apiArticle.archived);
                         articleChanges.add(apiArticle.archived
                                 ? ChangeType.ARCHIVED
                                 : ChangeType.UNARCHIVED);
                     }
                     if(article.getFavorite() != apiArticle.starred) {
+                        article.setFavorite(apiArticle.starred);
                         articleChanges.add(apiArticle.starred
                                 ? ChangeType.FAVORITED
                                 : ChangeType.UNFAVORITED);
                     }
-                }
 
-                if(!existing || articleChanges.contains(ChangeType.CONTENT_CHANGED)) {
-                    if(article.getImagesDownloaded() != null && article.getImagesDownloaded()) {
-                        articleChanges.add(ChangeType.FETCHED_IMAGES_CHANGED);
+                    if(articleChanges.contains(ChangeType.CONTENT_CHANGED)
+                            || articleChanges.contains(ChangeType.PREVIEW_PICTURE_URL_CHANGED)) {
+
+                        if(article.getImagesDownloaded() != null && article.getImagesDownloaded()) {
+                            articleChanges.add(ChangeType.FETCHED_IMAGES_CHANGED);
+                        }
+
+                        article.setImagesDownloaded(false);
                     }
-
-                    article.setImagesDownloaded(false);
                 }
 
-                article.setArticleId(id);
-                article.setTitle(apiArticle.title);
-                article.setContent(apiArticle.content);
-                article.setDomain(apiArticle.domainName);
-                article.setUrl(apiArticle.url);
-                article.setEstimatedReadingTime(apiArticle.readingTime);
-                article.setLanguage(apiArticle.language);
-                article.setPreviewPictureURL(apiArticle.previewPicture);
-                article.setCreationDate(apiArticle.createdAt);
-                article.setUpdateDate(apiArticle.updatedAt);
-                article.setArchive(apiArticle.archived);
-                article.setFavorite(apiArticle.starred);
+                fixArticleNullValues(article);
 
                 List<Tag> articleTags;
                 if(existing) {
@@ -448,6 +463,28 @@ public class Updater {
         }
 
         return latestUpdatedItemTimestamp;
+    }
+
+    /**
+     * Returns true if both arguments are equal or empty.
+     * {@code null} and empty sequences are considered equal.
+     *
+     * @param s1 first char sequence
+     * @param s2 second char sequence
+     * @return true if arguments are considered equal
+     */
+    private boolean equalOrEmpty(CharSequence s1, CharSequence s2) {
+        return (TextUtils.isEmpty(s1) && TextUtils.isEmpty(s2))
+                || TextUtils.equals(s1, s2);
+    }
+
+    private void fixArticleNullValues(Article article) {
+        if(article.getTitle() == null) article.setTitle("");
+        if(article.getContent() == null) article.setContent("");
+        if(article.getDomain() == null) article.setDomain("");
+        if(article.getUrl() == null) article.setUrl("");
+        if(article.getLanguage() == null) article.setLanguage("");
+        if(article.getPreviewPictureURL() == null) article.setPreviewPictureURL("");
     }
 
     private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByID(
