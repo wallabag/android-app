@@ -43,6 +43,9 @@
         android:id="@+id/menuOpenOriginal"
         android:title="@string/menuOpenOriginal"/>
     <item
+        android:id="@+id/menuCopyOriginalURL"
+        android:title="@string/menuCopyOriginalURL"/>
+    <item
         android:id="@+id/menuDownloadPdf"
         android:title="@string/menuDownloadPdf"/>
     <item
