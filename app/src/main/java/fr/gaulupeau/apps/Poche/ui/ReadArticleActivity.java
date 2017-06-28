@@ -2,6 +2,9 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -285,6 +288,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             case R.id.menuOpenOriginal:
                 openOriginal();
+                break;
+
+            case R.id.menuCopyOriginalURL:
+                copyOriginalURL();
                 break;
 
             case R.id.menuDownloadPdf:
@@ -826,6 +833,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
 
         startActivity(launchBrowserIntent);
+    }
+
+    private void copyOriginalURL() {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData urlClipData = ClipData.newPlainText("article URL", articleUrl);
+        clipboardManager.setPrimaryClip(urlClipData);
+        Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
     }
 
     private void downloadPdf() {
