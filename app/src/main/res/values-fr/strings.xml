@@ -247,4 +247,6 @@
     <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
     <string name="menu_changeTitle">Modifier le titre</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
+    <string name="title_main_tag">Étiquette: %s</string>
+
 </resources>

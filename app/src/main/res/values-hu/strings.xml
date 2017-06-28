@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
-    <string name="btnMarkRead">Jelöld olvasottként</string>
-    <string name="btnMarkUnread">Megjelölés olvasatlanként</string>
+    <string name="btnMarkRead">Megjelölés olvasottként</string>
+    <string name="btnMarkUnread">Megjelölés olvasandóként</string>
     <string name="add_to_favorites">Add hozzá a Kedvencekhez</string>
     <string name="remove_from_favorites">Eltávolítás a Kedvencekből</string>
     <string name="menuShare">Megosztás</string>
@@ -29,21 +29,21 @@
     <string name="txtConfigNotSet">Kérjük, állítsa be az alkalmazást szinkronizálás előtt!</string>
     <string name="page_url">Oldal URL</string>
     <string name="share_article_title">Cikk megosztása</string>
-    <string name="share_text_extra">" vele @wallabagapp"</string>
+    <string name="share_text_extra">" a @wallabagapp segítségével"</string>
     <string name="positive_answer">Igen</string>
     <string name="negative_answer">Nem</string>
     <string name="no_articles">Nincsenek cikkek</string>
     <string name="loading_article_text">Betöltés…</string>
     <string name="d_urlAction_title">Válasszon egy műveletet az URL-hez</string>
     <string name="d_urlAction_openInBrowser">Megnyitás a böngészőben</string>
-    <string name="d_urlAction_addToWallabag">Hozzáadás a wallabaghez</string>
+    <string name="d_urlAction_addToWallabag">Hozzáadás a wallabag-hez</string>
     <string name="ok">Rendben</string>
     <string name="d_add_fail_title">Sikertelen</string>
     <string name="d_add_fail_text">Nem található URL-cím a megosztás szövegében:\n</string>
     <string name="d_configurationChanged_title">Megváltoztak a paraméterek</string>
     <string name="d_configurationChanged_message">Úgy tűnik, néhány paraméter megváltozott. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
     <string name="d_configurationChanged_answer_decline">Most nem</string>
-    <string name="d_configurationIsQuestionable_title">Észlelt probléma</string>
+    <string name="d_configurationIsQuestionable_title">Problémát észleltünk</string>
     <string name="d_configurationIsQuestionable_message">Volt egy csatlakozási hiba mostanában. Javasoljuk, hogy végezze el a csatlakozási tesztet.</string>
     <string name="addLink_success_text">Hozzáadva</string>
     <string name="settings_parametersAreOk">A paraméterek jók</string>
@@ -53,7 +53,7 @@
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag szolgáltatás nem található - ellenőrizze az URL-t</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-hitelesítés sikertelen</string>
     <string name="testConnection_errorMessage_noCSRF">Hiba a belépési űrlap elemzésekor</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Nem tudok belépni – ellenőrizze a felhasználónevet és a jelszót</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Nem lehet belépni – ellenőrizze a felhasználónevet és a jelszót</string>
     <string name="testConnection_errorMessage_authProblems">Engedélyezéssel kapcsolatos problémák. Ezeket általában HTTP-átirányítások okozzák.</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Ismeretlen oldal bejelentkezés után</string>
     <string name="testConnection_errorMessage_unknown">Ismeretlen hiba</string>
@@ -72,8 +72,8 @@
     <string name="unsuccessfulRequest_errorMessage">Kérés sikertelen; válasz kód: %1$d, válasz üzenet: %2$s</string>
     <string name="previousUpdateNotFinished">Korábbi frissítési művelet nem fejeződött be, még</string>
     <string name="feedName_favorites">Kedvencek</string>
-    <string name="feedName_archived">Archivált</string>
-    <string name="feedName_unread">Olvasatlan</string>
+    <string name="feedName_archived">Archívum</string>
+    <string name="feedName_unread">Olvasandó</string>
     <string name="articleList_favoriteMark">Kedvencek</string>
     <string name="articleList_ArchivedMark">Archiváltak</string>
     <string name="noPreviousArticle">Nincs előző cikk az aktuális listában</string>
@@ -85,7 +85,7 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="aboutText">&lt;b&gt;wallabag Android alkalmazás&lt;/b&gt;&lt;br/&gt;A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy ne hagyjon ki semmilyen tartalmat többé. Kattintson, mentsen és olvassa el, amikor tudja. Kivonja a cikk tartalmát úgy, hogy Ön el tudja olvasni amikor ideje van rá, kényelmesen.</string>
+    <string name="aboutText">&lt;b&gt;wallabag Android alkalmazás&lt;/b&gt;&lt;br/&gt;A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentsen és olvassa el, amikor tudja. A program kivonja a cikk tartalmát, hogy Ön el tudja olvasni azt ami a lényeg, sallangmentesen.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hang magassága</string>
     <string name="readVolume">Olvasás hangereje</string>
@@ -94,8 +94,8 @@
     <string name="downloadPdfArticleDownloaded">A cikk le lett töltve</string>
     <string name="downloadPdfArticleDownloadedDetail">A cikk: %s le lett töltve</string>
     <string name="downloadPdfTouchToOpen">Megnyitáshoz érintse meg</string>
-    <string name="downloadPdfProgressDetail">A wallabag letölti a cikked %s PDF-ben</string>
-    <string name="downloadPdfProgress">A wallabag letölti a cikked PDF-ben</string>
+    <string name="downloadPdfProgressDetail">A wallabag letölti a cikkét: %s PDF-ben</string>
+    <string name="downloadPdfProgress">A wallabag letölti a cikkét PDF-ben</string>
     <string name="notification_downloadingImages">Képek letöltése</string>
     <string name="notification_syncingQueue">Helyi változások szinkronizálása</string>
     <string name="notification_error">Hiba</string>
@@ -105,16 +105,16 @@
     <string name="notification_expandedError">Hiba: %s</string>
     <string name="menu_lists_search">Keresés</string>
     <string name="menu_lists_changeSortOrder">Rendezési sorrend módosítása</string>
-    <string name="other_searchHint">Keresés cikk címe vagy szöveg alapján</string>
+    <string name="other_searchHint">Keresett cikk címe vagy szövege</string>
 
     <string name="nav_other_settings">Beállítások</string>
     <string name="nav_other_about">Névjegy</string>
 
     <string name="pref_name_runConnectionWizard">Kapcsolat varázsló futtatása</string>
-    <string name="pref_desc_runConnectionWizard">A csatlakozás varázsló segít beállítani alapvető csatlakoztatási beállításokat</string>
+    <string name="pref_desc_runConnectionWizard">A csatlakozás varázsló segít az alapvető csatlakozási beállításokban</string>
 
     <string name="pref_categoryName_connection">Kapcsolat</string>
-    <string name="pref_name_connection_url">wallabag URL-címe</string>
+    <string name="pref_name_connection_url">A wallabag URL-címe</string>
     <string name="pref_desc_connection_url">
         Példák:\n
         <i>https://wallabag.example.com</i>\n
@@ -128,52 +128,52 @@
     <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1–4.4 verziókhoz</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP alapszintű hitelesítés</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP egyszerű hitelesítés</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP azonosítási felhasználónév</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP azonosítási jelszó</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP felhasználónév</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP jelszó</string>
 
     <string name="pref_categoryName_ui">Felület</string>
     <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
-    <string name="pref_name_ui_article_fontSize">Cikk betűméret (%)</string>
-    <string name="pref_name_ui_article_fontSerif">Serif betűtípussal</string>
-    <string name="pref_desc_ui_article_fontSerif">Serif betűtípust a cikk szövegéhez</string>
+    <string name="pref_name_ui_article_fontSize">A Cikk betűmérete (%-ban)</string>
+    <string name="pref_name_ui_article_fontSerif">Serif betűtípus</string>
+    <string name="pref_desc_ui_article_fontSerif">A cikk szövege Serif betűtípusú legyen</string>
     <string name="pref_categoryName_ui_screenScrolling">Képernyő görgetés</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Lapozzunk a hangerő gombokkal</string>
     <string name="pref_name_ui_tapToScroll_enabled">Érintésre görget</string>
     <string name="pref_desc_ui_tapToScroll_enabled">Görgessen a képernyő bal és jobb oldalának megérintésével</string>
     <string name="pref_name_ui_screenScrolling_percent">Képernyőmagasság százaléka a görgetéshez</string>
-    <string name="pref_name_ui_screenScrolling_smooth">Finomgörgetés használata</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Finom görgetés használata</string>
 
     <string name="pref_categoryName_autoSync">Automatikus szinkronizálás</string>
-    <string name="pref_name_autoSync_enabled">Automatikus szinkronizálás engedélyezése</string>
-    <string name="pref_desc_autoSync_enabled">Ez lehetővé teszi a helyi változások automatikus szinkronizálást (linkek, archivált cikkek, stb.) és letölti az új cikkeket a megadott ütemezés szerint</string>
-    <string name="pref_name_autoSync_interval">Automatikus szinkronizálási időköz</string>
+    <string name="pref_name_autoSync_enabled">Automata szinkron engedélyezése</string>
+    <string name="pref_desc_autoSync_enabled">Lehetővé teszi a helyi változások automatikus szinkronizálást (linkek, archivált cikkek, stb.) és letölti az új cikkeket a megadott ütemezés szerint</string>
+    <string name="pref_name_autoSync_interval">Automata szinkron időköz</string>
     <string name="pref_option_autoSync_interval_15m">15 perc</string>
     <string name="pref_option_autoSync_interval_30m">30 perc</string>
     <string name="pref_option_autoSync_interval_1h">1 óra</string>
     <string name="pref_option_autoSync_interval_12h">12 óra</string>
     <string name="pref_option_autoSync_interval_24h">24 óra</string>
-    <string name="pref_name_autoSync_type">Automatikus szinkronizálás típusa</string>
+    <string name="pref_name_autoSync_type">Automata szinkron típusa</string>
     <string name="pref_name_autoSyncQueue_enabled">Külön szinkron a helyi változásoknak</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Ez lehetővé teszi a helyi változások (linkek, archivált cikkek, stb.) szinkronizálását a szerverrel, amint a hálózat elérhető lesz.</string>
-    <string name="pref_name_autoDlNew_enabled">Töltse le az új cikkeket a hozzáadásuk után</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Lehetővé teszi a helyi változások (linkek, archivált cikkek, stb.) szinkronizálását a szerverrel, amint a hálózat elérhető lesz.</string>
+    <string name="pref_name_autoDlNew_enabled">Cikkek letöltése hozzáadásuk után</string>
     <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a letöltés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
-    <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek beágyazott képeihez</string>
+    <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek képeihez</string>
     <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez nagyon hosszú időt és sok tárhelyet vehet igénybe.</string>
 
     <string name="pref_categoryName_miscellaneous">Egyéb</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP rendszer kezelése</string>
     <string name="pref_desc_misc_handleHttpScheme">A wallabag megjelenítése a web böngészők között</string>
     <string name="pref_name_misc_wipeDB">Adatbázis törlése</string>
-    <string name="pref_desc_misc_wipeDB">Töröl minden cikket a helyi adatbázisból, eltávolítja az összes nem szinkronizált helyi változást és Url-t</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">Törölje az adatbázist?</string>
+    <string name="pref_desc_misc_wipeDB">Töröl minden cikket a helyi adatbázisból, eltávolítja az összes nem szinkronizált helyi változást és URL-t</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Törli az adatbázist?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Biztos benne, hogy törölni szeretné az adatokat?</string>
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Helytelen kapcsolat URI-t használt</string>
 
     <string name="connectionWizard_welcome_titleMessage">Üdvözli a wallabag!</string>
-    <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítania a kapcsolatot a szerverrel. Ez a varázsló megpróbál segíteni ebben.</string>
+    <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítani egy kapcsolatot a szerverrel. Ez a varázsló megpróbál segíteni.</string>
     <string name="connectionWizard_welcome_rerunNotice">Bármikor újra futtathatja az internetkapcsolat varázslót a beállításokból.</string>
     <string name="connectionWizard_welcome_prev">Kihagyás</string>
     <string name="connectionWizard_welcome_next">Következő</string>
@@ -217,9 +217,9 @@
     <string name="notification_updatingArticles_full">Teljes frissítés folyamatban</string>
     <string name="notification_updatingArticles_fast">Gyors frissítés folyamatban</string>
     <string name="notification_sweepingDeletedArticles">Törölt cikkek takarítása</string>
-    <string name="menu_lists_sweepDeletedArticles">\"Takarítja\" a törölt cikkeket</string>
+    <string name="menu_lists_sweepDeletedArticles">Törölt cikkek \"takarítása\"</string>
     <string name="menu_lists_fullUpdate">Teljes frissítés</string>
-    <string name="menu_changeTitle">Cím megváltoztatása</string>
+    <string name="menu_changeTitle">Cím módosítása</string>
     <string name="menu_manageTags">Címkék kezelése</string>
     <string name="manageTags_title">Címkék kezelése</string>
     <string name="manageTags_save">Mentés</string>
@@ -237,24 +237,24 @@
 
     <string name="nav_add">Új bejegyzés</string>
 
-    <string name="pref_name_connection_api_clientID">Ügyfél ID</string>
+    <string name="pref_name_connection_api_clientID">Ügyfél Azonosító</string>
     <string name="pref_name_connection_api_clientSecret">Ügyfél titok</string>
     <string name="pref_name_ui_article_textAlignment_justify">Szöveg igazítása: sorkizárt</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Nyújtja a sorokat úgy, hogy minden sor azonos szélességű legyen (mint újságokban és folyóiratokban)</string>
     <string name="pref_name_ui_readingSpeed">Olvasási sebesség</string>
-    <string name="pref_desc_ui_readingSpeed">Az olvasási sebességed (percenkénti szóban mérve). A becsült olvasási idő kiszámításához.</string>
+    <string name="pref_desc_ui_readingSpeed">Az olvasási sebessége (percenkénti szóban mérve). A becsült olvasási idő kiszámításához.</string>
     <string name="pref_categoryName_sync">Szinkronizáció</string>
-    <string name="pref_name_sync_syncTypes">Szinkronizálás típusok</string>
-    <string name="pref_desc_sync_syncTypes">Nyomja meg, hogy több információt kapjon a szinkronizálás típusokról</string>
+    <string name="pref_name_sync_syncTypes">Szinkronizálási típusok</string>
+    <string name="pref_desc_sync_syncTypes">További információkért érintse meg a fenti szöveget</string>
     <string name="pref_desc_sync_syncTypes_text">Két fő szinkronizálási típus van: \"Teljes\" és \"Gyors\".\n\n
         \"Teljes\" szinkronizálás törli az összes helyi tartalmat és letöltéseket és letölti az egész tartalmat újra. Ez a fajta szinkronizáció a beállítások menüben található. Javasoljuk, hogy ezt a lehetőséget csak a legvégső esetben használja.\n\n
         \"Gyors\" szinkronizálás (inkrementális szinkron) csak a változtatásokat tölti le az előzőhöz képest, ami általában lényegesen kevesebb időt és internetes forgalmat jelent. Ennek a módszernek azonban van egy hiányossága: nem ismeri fel a távolról törölt cikket (tehát nem töröl helyi cikket \"Gyors\" szinkron közben). Ez a szinkronizálás akkor indul el, amikor \"húzz a frissítésért\" mozdulat történik bármelyik cikk-listában.\n\n
         A \"Gyors\" szinkronizálás hiányosságának orvoslására van egy lehetőség: \"törölt cikkek takarítása\", amely végigmegy minden helyi cikken, és megkérdezi a szerver, hogy jelen van-e rajta továbbra is - ha nem, a helyi cikk törlődik. A cikkek számától függően, ez a művelet hosszabb időt vehet igénybe, de sok internetes forgalmat spórol meg a \"Teljes\" szinkronhoz képest.\n\n
         Egyik funkció sem befolyásolja a kliensről-szerverre szinkronizálást: A helyi változások mindig el lesznek küldve a szerver felé, mielőtt a helyi tartalmat frissítjük.
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Engedélyezze a \"Törölt cikkek takarítását\" a \"Gyors\" szinkronizáláshoz</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Olvasson többet a szinkronizálás-típusokról a fentiekben</string>
-    <string name="pref_name_autoSync_onStartup_enabled">Engedélyezze az automata szinkronizációt az alkalmazás indításkor</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Töröltek takarítása\" a \"Gyors\" szinkron után</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Bővebb infó a szinkronizálási típusokról a fentiekben</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Automata szinkron induláskor</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
     <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
 
