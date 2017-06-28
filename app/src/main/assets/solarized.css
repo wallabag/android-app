@@ -235,7 +235,7 @@ blockquote, pre {
   margin: 0;
 }
 
-pre {
+#article pre {
   font-family: monospace;
   white-space: pre;
   text-justify: none;
