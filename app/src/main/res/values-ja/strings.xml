@@ -86,7 +86,6 @@
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声の高さ</string>
     <string name="readVolume">読む音量</string>
-    <string name="menuDownloadPdf">PDF をダウンロード</string>
     <string name="downloadPdfPathStart">記事をダウンロード</string>
     <string name="downloadPdfArticleDownloaded">記事をダウンロードしました</string>
     <string name="downloadPdfArticleDownloadedDetail">記事 %s をダウンロードしました</string>

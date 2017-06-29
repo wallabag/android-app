@@ -116,7 +116,6 @@
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>
     <string name="readVolume">Громкость чтения</string>
-    <string name="menuDownloadPdf">Скачать в формате PDF</string>
     <string name="downloadPdfPathStart">Загрузка статьи</string>
     <string name="downloadPdfArticleDownloaded">Статья загружена</string>
     <string name="downloadPdfArticleDownloadedDetail">Статья %s загружена</string>

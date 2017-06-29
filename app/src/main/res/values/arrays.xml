@@ -13,4 +13,14 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+    <string-array name="options_downloadFormat_values">
+        <item>PDF</item>
+        <item>EPUB</item>
+        <item>MOBI</item>
+        <item>HTML</item>
+        <item>TXT</item>
+        <item>JSON</item>
+        <item>XML</item>
+        <item>CSV</item>
+    </string-array>
 </resources>

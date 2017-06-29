@@ -32,6 +32,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -294,8 +296,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 copyOriginalURL();
                 break;
 
-            case R.id.menuDownloadPdf:
-                downloadPdf();
+            case R.id.menuDownloadAsFile:
+                showDownloadFileDialog();
                 break;
 
             case R.id.menuIncreaseFontSize:
@@ -842,8 +844,29 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
     }
 
-    private void downloadPdf() {
-        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), article.getArticleId(), null);
+    private void showDownloadFileDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_title_downloadFileFormat)
+                .setItems(R.array.options_downloadFormat_values,
+                        new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String selectedFormat = getResources()
+                                .getStringArray(R.array.options_downloadFormat_values)[which];
+
+                        WallabagService.ResponseFormat format;
+                        try {
+                            format = WallabagService.ResponseFormat.valueOf(selectedFormat);
+                        } catch(IllegalArgumentException e) {
+                            Log.e(TAG, "showDownloadFileDialog() unknown selected format: "
+                                    + selectedFormat);
+                            format = WallabagService.ResponseFormat.PDF;
+                        }
+
+                        ServiceHelper.downloadArticleAsFile(getApplicationContext(),
+                                article.getArticleId(), format, null);
+                    }
+                });
+        builder.show();
     }
 
     private void changeFontSize(boolean increase) {

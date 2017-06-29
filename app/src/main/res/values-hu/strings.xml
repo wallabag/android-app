@@ -89,7 +89,6 @@
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hang magassága</string>
     <string name="readVolume">Olvasás hangereje</string>
-    <string name="menuDownloadPdf">PDF letöltése</string>
     <string name="downloadPdfPathStart">Cikk letöltése</string>
     <string name="downloadPdfArticleDownloaded">A cikk le lett töltve</string>
     <string name="downloadPdfArticleDownloadedDetail">A cikk: %s le lett töltve</string>

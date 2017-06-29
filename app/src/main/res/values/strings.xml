@@ -102,7 +102,8 @@
     <string name="readSpeed">Read speed</string>
     <string name="voiceHeight">Voice height</string>
     <string name="readVolume">Read volume</string>
-    <string name="menuDownloadPdf">Download PDF</string>
+    <string name="menuDownloadAsFile">Download as file</string>
+    <string name="dialog_title_downloadFileFormat">Select file format</string>
     <string name="downloadPdfPathStart">Downloading article</string>
     <string name="downloadPdfArticleDownloaded">Article downloaded</string>
     <string name="downloadPdfArticleDownloadedDetail">Article %s downloaded</string>

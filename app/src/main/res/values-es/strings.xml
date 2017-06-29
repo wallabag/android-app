@@ -99,7 +99,6 @@
     <string name="readSpeed">Velocidad de lectura</string>
     <string name="voiceHeight">Tono de voz</string>
     <string name="readVolume">Volumen de lectura</string>
-    <string name="menuDownloadPdf">Descargar como PDF</string>
     <string name="downloadPdfPathStart">Descargando artículo</string>
     <string name="downloadPdfArticleDownloaded">Artículo descargado</string>
     <string name="downloadPdfArticleDownloadedDetail">Artículo %s descargado</string>

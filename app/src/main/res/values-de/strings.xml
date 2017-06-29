@@ -69,7 +69,6 @@
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Stimmhöhe</string>
     <string name="readVolume">Leselautstärke</string>
-    <string name="menuDownloadPdf">PDF herunterladen</string>
     <string name="downloadPdfPathStart">Artikel wird heruntergeladen</string>
     <string name="downloadPdfArticleDownloaded">Artikel heruntergeladen</string>
     <string name="downloadPdfArticleDownloadedDetail">Artikel %s heruntergeladen</string>
