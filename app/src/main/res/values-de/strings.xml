@@ -69,12 +69,12 @@
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Stimmhöhe</string>
     <string name="readVolume">Leselautstärke</string>
-    <string name="downloadPdfPathStart">Artikel wird heruntergeladen</string>
-    <string name="downloadPdfArticleDownloaded">Artikel heruntergeladen</string>
-    <string name="downloadPdfArticleDownloadedDetail">Artikel %s heruntergeladen</string>
-    <string name="downloadPdfTouchToOpen">Zum Öffnen tippen</string>
-    <string name="downloadPdfProgressDetail">wallabag lädt deinen Artikel %s als PDF herunter</string>
-    <string name="downloadPdfProgress">wallabag lädt deinen Artikel als PDF herunter</string>
+    <string name="downloadAsFilePathStart">Artikel wird heruntergeladen</string>
+    <string name="downloadAsFileArticleDownloaded">Artikel heruntergeladen</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Artikel %s heruntergeladen</string>
+    <string name="downloadAsFileTouchToOpen">Zum Öffnen tippen</string>
+    <string name="downloadAsFileProgressDetail">wallabag lädt deinen Artikel %1$s als %2$s herunter</string>
+    <string name="downloadAsFileProgress">wallabag lädt deinen Artikel als %s herunter</string>
 
     <string name="notification_error">Fehler</string>
 

@@ -347,16 +347,19 @@ public class EventProcessor {
 
         Context context = getContext();
 
+        String formatString = event.getRequest().getDownloadFormat().toString();
+
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                .setContentTitle(context.getString(R.string.downloadPdfPathStart))
-                .setContentText(context.getString(R.string.downloadPdfProgress))
+                .setContentTitle(context.getString(R.string.downloadAsFilePathStart))
+                .setContentText(context.getString(R.string.downloadAsFileProgress, formatString))
                 .setSmallIcon(R.drawable.ic_file_download_24dp)
                 .setOngoing(true);
 
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(
-                context.getString(R.string.downloadPdfProgressDetail,
-                        event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
+                context.getString(R.string.downloadAsFileProgressDetail,
+                        event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " "),
+                        formatString));
         notificationBuilder.setStyle(inboxStyle);
 
         getNotificationManager().notify(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
@@ -384,14 +387,14 @@ public class EventProcessor {
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-                    .setContentTitle(context.getString(R.string.downloadPdfArticleDownloaded))
-                    .setContentText(context.getString(R.string.downloadPdfTouchToOpen))
+                    .setContentTitle(context.getString(R.string.downloadAsFileArticleDownloaded))
+                    .setContentText(context.getString(R.string.downloadAsFileTouchToOpen))
                     .setSmallIcon(R.drawable.ic_file_download_24dp)
                     .setContentIntent(contentIntent);
 
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
             inboxStyle.setBigContentTitle(
-                    context.getString(R.string.downloadPdfArticleDownloadedDetail,
+                    context.getString(R.string.downloadAsFileArticleDownloadedDetail,
                             event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
             notificationBuilder.setStyle(inboxStyle);
 
