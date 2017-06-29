@@ -718,6 +718,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openUrl(final String url) {
+        Log.d(TAG, "openUrl() url: " + url);
         if(url == null) return;
 
         // TODO: fancy dialog
@@ -740,8 +741,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(url));
+                                final String PROTOCOL_HTTP = "http://";
+                                final String PROTOCOL_HTTPS = "https://";
+                                Uri uri;
+                                if(!url.startsWith(PROTOCOL_HTTP) && !url.startsWith(PROTOCOL_HTTPS)) {
+                                    // fixes #354 where href was given without a protocol and uri parsing failed
+                                    Log.d(TAG, "openUrl.onClick() prefixing the URL with protocol: " + PROTOCOL_HTTP + url);
+                                    uri = Uri.parse(PROTOCOL_HTTP + url);
+                                }
+                                else {
+                                    uri = Uri.parse(url);
+                                }
+                                Log.d(TAG, "openUrl.onClick() uri: " + uri);
+                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, uri);
                                 startActivity(launchBrowserIntent);
                                 break;
                             case 1:
