@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar progressBar;
 
     private NavigationView navigationView;
+    private TextView lastUpdateTimeView;
 
     private MenuItem searchMenuItem;
     private boolean searchMenuItemExpanded;
@@ -116,6 +118,16 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        navigationView = (NavigationView)findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        if(navigationView != null) {
+            View headerView = navigationView.getHeaderView(0);
+            if(headerView != null) {
+                lastUpdateTimeView = (TextView)headerView.findViewById(R.id.lastUpdateTime);
+            }
+        }
+
         DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
@@ -124,10 +136,32 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            boolean updated;
 
-        navigationView = (NavigationView)findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                updateTime();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if(newState == DrawerLayout.STATE_IDLE) updated = false;
+            }
+
+            private void updateTime() {
+                if(updated) return;
+                updated = true;
+
+                if(lastUpdateTimeView == null) return;
+
+                Log.d(TAG, "DrawerListener.updateTime() updating time");
+
+                updateLastUpdateTime();
+            }
+        });
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         firstSyncDone = settings.isFirstSyncDone();
 
@@ -481,7 +515,23 @@ public class MainActivity extends AppCompatActivity
             tryToUpdateOnResume = false;
         }
 
+        updateLastUpdateTime();
+
         updateStateChanged(false);
+    }
+
+    private void updateLastUpdateTime() {
+        if(lastUpdateTimeView == null) return;
+
+        Log.d(TAG, "updateLastUpdateTime() updating time");
+
+        long timestamp = settings.getLatestUpdateRunTimestamp();
+        if(timestamp != 0) {
+            lastUpdateTimeView.setText(getString(R.string.lastUpdateTimeLabel,
+                    DateUtils.getRelativeTimeSpanString(timestamp)));
+        } else {
+            lastUpdateTimeView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void updateStateChanged(boolean started) {
