@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -49,7 +50,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     private int listType;
     private String tagLabel;
-    private Long tagID;
+    private List<Long> tagIDs;
 
     private OnFragmentInteractionListener host;
 
@@ -144,15 +145,17 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     @Override
     protected void resetContent() {
         if(tagLabel != null) {
-            // TODO: check: can be non-unique?
-            Tag tag = tagDao.queryBuilder()
+            List<Tag> tags = tagDao.queryBuilder()
                     .where(TagDao.Properties.Label.eq(tagLabel))
                     .orderDesc(TagDao.Properties.Label)
-                    .unique();
+                    .list();
 
-            tagID = tag != null ? tag.getId() : null;
+            tagIDs = new ArrayList<>(tags.size());
+            for(Tag t: tags) {
+                tagIDs.add(t.getId());
+            }
         } else {
-            tagID = null;
+            tagIDs = null;
         }
 
         super.resetContent();
@@ -173,10 +176,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private QueryBuilder<Article> getQueryBuilder() {
         QueryBuilder<Article> qb = articleDao.queryBuilder();
 
-        if(tagID != null) {
+        if(tagIDs != null && !tagIDs.isEmpty()) {
             // TODO: try subquery
             qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
-                    .where(ArticleTagsJoinDao.Properties.TagId.eq(tagID));
+                    .where(ArticleTagsJoinDao.Properties.TagId.in(tagIDs));
         }
 
         switch(listType) {
