@@ -136,8 +136,13 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         return new ListAdapter(list, new ListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Article article = itemList.get(position);
-                openArticle(article.getId());
+                if(position >= itemList.size() || position < 0) {
+                    Log.e(TAG, "Fragment.getListAdapter.onItemClick prevent ArrayIndexOutOfBoundsException position=" + position + ", itemList.size()=" + itemList.size());
+                }
+                else {
+                    Article article = itemList.get(position);
+                    openArticle(article.getId());
+                }
             }
         }, listType);
     }
