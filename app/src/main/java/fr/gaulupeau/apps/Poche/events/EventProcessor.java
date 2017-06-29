@@ -359,7 +359,7 @@ public class EventProcessor {
                         event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
         notificationBuilder.setStyle(inboxStyle);
 
-        getNotificationManager().notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
+        getNotificationManager().notify(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
                 notificationBuilder.setProgress(1, 0, true).build());
     }
 
@@ -395,7 +395,7 @@ public class EventProcessor {
                             event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
             notificationBuilder.setStyle(inboxStyle);
 
-            getNotificationManager().notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
+            getNotificationManager().notify(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
                     notificationBuilder.build());
         } else {
             getNotificationManager().cancel(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING);
