@@ -46,8 +46,8 @@
         android:id="@+id/menuCopyOriginalURL"
         android:title="@string/menuCopyOriginalURL"/>
     <item
-        android:id="@+id/menuDownloadPdf"
-        android:title="@string/menuDownloadPdf"/>
+        android:id="@+id/menuDownloadAsFile"
+        android:title="@string/menuDownloadAsFile"/>
     <item
         android:id="@+id/menuIncreaseFontSize"
         android:title="@string/menu_readArticle_increaseFontSize"/>
