@@ -10,6 +10,7 @@
     <string name="menuPrevious">Previous article</string>
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
+    <string name="menuCopyOriginalURL">Copy original URL</string>
     <string name="menuTTS">Text To Speech</string>
     <string name="ttsSpeed">Rate</string>
     <string name="ttsPitch">Pitch</string>
@@ -28,6 +29,7 @@
     <string name="d_deleteArticle_message">Are you sure you want to delete the article?</string>
     <string name="txtNetOffline">Please check Internet connectivity!</string>
     <string name="txtConfigNotSet">Please configure the app before syncing!</string>
+    <string name="txtUrlCopied">Article URL copied to clipboard</string>
     <string name="dialog_add_label">Add a new article</string>
     <string name="page_url">Page URL</string>
     <string name="share_article_title">Share article</string>
