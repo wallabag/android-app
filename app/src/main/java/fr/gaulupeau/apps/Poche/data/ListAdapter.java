@@ -1,17 +1,25 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
 
@@ -53,15 +61,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         OnItemClickListener listener;
         TextView title;
         TextView url;
+        LinearLayout tagContainer;
         ImageView favourite;
         ImageView read;
         TextView readingTime;
+        boolean areTagsAdded;
 
         public ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
             title = (TextView) itemView.findViewById(R.id.title);
             url = (TextView) itemView.findViewById(R.id.url);
+            tagContainer = (LinearLayout) itemView.findViewById(R.id.tagContainer);
+            areTagsAdded = false;
             favourite = (ImageView) itemView.findViewById(R.id.favourite);
             read = (ImageView) itemView.findViewById(R.id.read);
             readingTime = (TextView) itemView.findViewById(R.id.estimatedReadingTime);
@@ -71,6 +83,29 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public void bind(Article article) {
             title.setText(article.getTitle());
             url.setText(article.getDomain());
+            if (areTagsAdded){
+                tagContainer.removeAllViews();
+                areTagsAdded = false;
+            }
+            List<String> tagsAdded = new ArrayList<>(); // do not add duplicate labels
+            for (Iterator<Tag> tags = article.getTags().iterator(); tags.hasNext();) {
+                Tag t = tags.next();
+                if(!areTagsAdded && !tagsAdded.contains(t.getLabel())) {
+                    // TODO apply current theme
+                    TextView tagText = new TextView(context);
+                    tagText.setText(t.getLabel());
+                    tagText.setBackground(context.getResources().getDrawable(R.drawable.tag_shape));
+                    tagText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                    tagText.setTextColor(Color.WHITE);
+                    tagText.setPadding(5, 2, 5, 2); // (left, top, right, bottom);
+                    LinearLayout.LayoutParams lllp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    lllp.setMargins(0, 0, 5, 0);
+                    tagText.setLayoutParams(lllp);
+                    tagContainer.addView(tagText);
+                    tagsAdded.add(t.getLabel());
+                }
+            }
+            areTagsAdded = true;
 
             boolean showFavourite = false;
             boolean showRead = false;
