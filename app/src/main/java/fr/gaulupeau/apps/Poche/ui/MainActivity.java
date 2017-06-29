@@ -348,6 +348,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Log.v(TAG, "searchMenuItem collapsed");
+                supportInvalidateOptionsMenu();
                 searchMenuItemExpanded = false;
                 return true;
             }
