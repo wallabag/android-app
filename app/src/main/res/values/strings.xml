@@ -152,6 +152,8 @@
 
     <string name="title_main_tag">Tag: %s</string>
 
+    <string name="message_couldNotOpenUrl">Couldn\'t open this URL</string>
+
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
 

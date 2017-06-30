@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -448,14 +449,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 super.onPageFinished(view, url);
             }
 
+            @SuppressWarnings("deprecation") // can't use newer method until API 21
             @Override
-            public boolean shouldOverrideUrlLoading(WebView webView, String url) { // TODO: check
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 // If we try to open current URL, do not propose to save it, directly open browser
                 if(url.equals(articleUrl)) {
-                    Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(launchBrowserIntent);
+                    openURL(url);
                 } else {
-                    openUrl(url);
+                    handleUrlClicked(url);
                 }
 
                 return true; // always override URL loading
@@ -717,8 +718,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    private void openUrl(final String url) {
-        if(url == null) return;
+    private void handleUrlClicked(final String url) {
+        Log.d(TAG, "handleUrlClicked() url: " + url);
+        if(TextUtils.isEmpty(url)) return;
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -740,9 +742,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(url));
-                                startActivity(launchBrowserIntent);
+                                openURL(url);
                                 break;
                             case 1:
                                 ServiceHelper.addLink(ReadArticleActivity.this, url);
@@ -752,6 +752,26 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 });
 
         builder.show();
+    }
+
+    private void openURL(String url) {
+        Log.d(TAG, "openURL() url: " + url);
+        if(TextUtils.isEmpty(url)) return;
+
+        Uri uri = Uri.parse(url);
+        if(uri.getScheme() == null) {
+            Log.i(TAG, "openURL() scheme is null, appending default scheme");
+            uri = Uri.parse("http://" + url);
+        }
+        Log.d(TAG, "openURL() uri: " + uri);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(intent);
+        } catch(ActivityNotFoundException e) {
+            Log.w(TAG, "openURL() failed to open URL", e);
+            Toast.makeText(this, R.string.message_couldNotOpenUrl, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void markAsReadAndClose() {
@@ -832,9 +852,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openOriginal() {
-        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
-
-        startActivity(launchBrowserIntent);
+        openURL(articleUrl);
     }
 
     private void copyOriginalURL() {
