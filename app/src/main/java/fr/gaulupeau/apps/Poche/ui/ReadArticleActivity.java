@@ -448,8 +448,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 super.onPageFinished(view, url);
             }
 
+            @SuppressWarnings("deprecation") // can't use newer method until API 21
             @Override
-            public boolean shouldOverrideUrlLoading(WebView webView, String url) { // TODO: check
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 // If we try to open current URL, do not propose to save it, directly open browser
                 if(url.equals(articleUrl)) {
                     Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
