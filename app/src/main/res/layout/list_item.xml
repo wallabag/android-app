@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -11,28 +10,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorPrimary" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?android:attr/textColorPrimary"/>
 
         <ImageView
             android:id="@+id/favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_favoriteMark"
-            android:src="?attr/listItem_icon_favorite" />
+            android:src="?attr/listItem_icon_favorite"/>
 
         <ImageView
             android:id="@+id/read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_ArchivedMark"
-            android:src="?attr/listItem_icon_read" />
+            android:src="?attr/listItem_icon_read"/>
     </LinearLayout>
 
     <LinearLayout
@@ -42,17 +42,17 @@
 
         <TextView
             android:id="@+id/url"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_weight="1"
-            android:text="New Text" />
+            android:text="New Text"/>
 
         <TextView
             android:id="@+id/estimatedReadingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="5 min" />
+            android:text="5 min"/>
     </LinearLayout>
 </LinearLayout>
