@@ -85,7 +85,7 @@ table, th, td {
 
 a {
   color: #b58900; /* $yellow; */
-  font-weight: bold;
+  text-decoration: none;
 }
 
 a:hover, a:focus {
