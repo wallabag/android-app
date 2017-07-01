@@ -8,7 +8,8 @@
     <string name="menuNext">Artículo siguiente</string>
     <string name="menuPrevious">Artículo anterior</string>
     <string name="menuDelete">Eliminar</string>
-    <string name="menuOpenOriginal">Abrir original</string>
+    <string name="menuOpenOriginal">Abrir URL original</string>
+    <string name="menuCopyOriginalURL">Copiar URL original</string>
     <string name="menuTTS">Síntesis de voz</string>
     <string name="ttsSpeed">Velocidad</string>
     <string name="ttsPitch">Tono</string>
@@ -27,6 +28,7 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
+    <string name="txtUrlCopied">URL copiada al portapapeles</string>
     <string name="dialog_add_label">Añadir un artículo</string>
     <string name="page_url">URL de la página</string>
     <string name="share_article_title">Compartir artículo</string>
@@ -99,6 +101,8 @@
     <string name="readSpeed">Velocidad de lectura</string>
     <string name="voiceHeight">Tono de voz</string>
     <string name="readVolume">Volumen de lectura</string>
+    <string name="menuDownloadAsFile">Descargar como archivo</string>
+    <string name="dialog_title_downloadFileFormat">Selecciona un formato</string>
     <string name="downloadAsFilePathStart">Descargando artículo</string>
     <string name="downloadAsFileArticleDownloaded">Artículo descargado</string>
     <string name="downloadAsFileArticleDownloadedDetail">Artículo %s descargado</string>
@@ -114,6 +118,7 @@
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Credenciales incorrectas</string>
     <string name="notification_incorrectConfiguration">Configuración incorrecta</string>
+    <string name="notification_serverError">Error en el servidor</string>
     <string name="notification_unknownError">Error desconocido</string>
     <string name="notification_expandedError">Error: %s</string>
     <string name="menu_lists_search">Buscar</string>
@@ -129,6 +134,8 @@
     <string name="manageTags_addNew">Añadir</string>
     <string name="manageTags_currentTags">Etiquetas seleccionadas:</string>
     <string name="content_estimatedReadingTime">Tiempo estimado de lectura: %s min</string>
+    <string name="lastUpdateTimeLabel">Última actualización: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
 
     <string name="navigation_drawer_open">Abrir caja de navegación</string>
     <string name="navigation_drawer_close">Cerrar caja de navegación</string>
@@ -143,6 +150,8 @@
     <string name="nav_other_about">Acerca de</string>
 
     <string name="title_main_tag">Etiq: %s</string>
+
+    <string name="message_couldNotOpenUrl">No se puede abrir la URL</string>
 
     <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
     <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a realizar una configuración de conexión básica</string>
@@ -219,6 +228,11 @@
     <string name="pref_desc_autoDlNew_enabled">Descargar artículos nuevos automáticamente justo después de añadirlos desde la app. Nota: no se descargarán si tienes cambios locales pendientes de sincronizar.</string>
     <string name="pref_name_imageCache_enabled">Cachear imágenes de los artículos</string>
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
+
+    <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Almacenamiento interno</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Almacenamiento externo</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Base de datos reubicada</string>
 
     <string name="pref_categoryName_miscellaneous">Misceláneos</string>
     <string name="pref_name_misc_appendWallabagMention">Añadir mención a wallabag</string>
