@@ -67,8 +67,8 @@ table, th, td {
 }
 
 a {
-  color: #000;
-  font-weight: bold;
+  color: #039be5;
+  text-decoration: none;
 }
 
 a:hover, a:focus {
