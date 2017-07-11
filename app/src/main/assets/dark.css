@@ -220,7 +220,7 @@ header.mbm {
   font-style: normal;
 }
 
-blockquote, pre {
+#article blockquote, #article pre {
   border: 1px solid #999;
   background: #222;
   padding: 0.25em;
@@ -231,6 +231,10 @@ blockquote, pre {
   font-family: monospace;
   white-space: pre;
   text-justify: none;
+}
+
+#article blockquote *, #article pre * {
+  background: inherit;
 }
 
 #article h2, #article h3, #article h4 {
