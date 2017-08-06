@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="btnMarkRead">Markatu irakurritako gisa</string>
+<resources>
+    <string name="btnMarkRead">Markatu irakurritako gisa</string>
     <string name="btnMarkUnread">Markatu irakurri gabeko gisa</string>
     <string name="add_to_favorites">Gehitu Gogokoetara</string>
     <string name="remove_from_favorites">Kendu Gogokoetatik</string>
@@ -39,8 +40,7 @@
     <string name="d_urlAction_addToWallabag">Gehitu wallabagera</string>
     <string name="ok">Ados</string>
     <string name="d_add_fail_title">Hutsegitea</string>
-    <string name="d_add_fail_text">Ezin izan da URLik aurkitu partekatzeko katean:
-\n</string>
+    <string name="d_add_fail_text">Ezin izan da URLik aurkitu partekatzeko katean:\n</string>
     <string name="d_configurationChanged_title">Parametro aldatuak</string>
     <string name="d_configurationChanged_message">Parametro batzuk aldatu direla dirudi. Konexio proba bat egitea gomendatzen da.</string>
     <string name="d_configurationChanged_answer_decline">Orain ez</string>
@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarizatuta</string>
     <string name="menu_readArticle_increaseFontSize">Handiagotu letra-tamaina</string>
     <string name="menu_readArticle_decreaseFontSize">Txikiagotu letra-tamaina</string>
-    <string name="aboutText"><b>wallabag aplikazioa Androiderako</b><br/>"wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri  bat da. Egin klik, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko."</string>
+    <string name="aboutText">&lt;b&gt;wallabag aplikazioa Androiderako&lt;/b&gt;&lt;br/&gt;"wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri  bat da. Egin klik, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko."</string>
     <string name="readSpeed">Irakurketa abiadura</string>
     <string name="voiceHeight">Tonuaren altuera</string>
     <string name="readVolume">Irakurketa bolumena</string>
@@ -150,10 +150,11 @@
 
     <string name="pref_categoryName_connection">Konexioa</string>
     <string name="pref_name_connection_url">wallabagen URLa</string>
-    <string name="pref_desc_connection_url"> Adibideak:
-\n <i>https://wallabag.example.com</i>
-\n <i>https://example.com/wallabag</i>
-\n <i>https://framabag.org/u/your-username</i> </string>
+    <string name="pref_desc_connection_url">Adibideak:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://framabag.org/u/your-username</i>
+    </string>
     <string name="pref_name_connection_username">Erabiltzaile-izena</string>
     <string name="pref_name_connection_password">Pasahitza</string>
     <string name="pref_name_connection_api_clientID">Bezeroaren IDa</string>
@@ -188,15 +189,12 @@
     <string name="pref_categoryName_sync">Sinkronizazioa</string>
     <string name="pref_name_sync_syncTypes">Sinkronizazio motak</string>
     <string name="pref_desc_sync_syncTypes">Sakatu sinkronizazio motei buruzko informazio gehiago erakusteko</string>
-    <string name="pref_desc_sync_syncTypes_text">Bi sinkronizazio mota nagusi daude: \"Osoa\" eta \"Bizkorra\".
-\n
-\n \"Osoa\" sinkronizazio motak eduki lokal guztia ezabatzen du eta dena berriro deskargatzen du. Sinkronizazio mota hau aukeren menuan dago erabilgarri. Aukera hau azken baliabide bezala bakarrik erabiltzea gomendatzen da.
-\n
-\n \"Bizkorra\" sinkronizazio mota (sinkronizazio inkrementala) aurreko sinkronizaziotik egindako aldaketak bakarrik deskargatzen ditu, zeinak denbora eta Internet trafiko askoz gutxiago hartu ohi duen. Halere, metodo honek gabezia bat du: ezin ditu urrunetik ezabatutako artikuluak detektatu (beraz artikulu lokalak ez dira ezabatzen sinkronizazio \"Bikorra\"n). Sinkronizazio mota hau tiratu freskatzeko mugimendu batekin deitzen da edozein artikulu zerrendan.
-\n
-\n \"Bizkorra\" sinkronizazio motaren gabezia konpontzeko \"garbitu ezabatutako artikuluak\" exekutatzeko aukera dago, zeinak artikulu lokal bakoitza egiaztatzen duen eta zerbitzariari galdetzen dion ea zerbitzarian oraindik badagoen - ez badago, artikulu lokala kendu egiten da. Daukazun artikulu kopuruaren arabera, eragiketa honek denbora bat har dezake, baina Internet trafiko pila bat aurrezten du \"Osoa\" sinkronizazioarekin konparatuta.
-\n
-\n Funtzio hauetatik batek ere ez du eragiten bezerotik zerbitzarirako sinkronizazioan: zure aldaketa lokalak beti bidaliko dira zerbitzarira eduki lokala eguneratu aurretik.</string>
+    <string name="pref_desc_sync_syncTypes_text">Bi sinkronizazio mota nagusi daude: \"Osoa\" eta \"Bizkorra\".\n\n
+        \"Osoa\" sinkronizazio motak eduki lokal guztia ezabatzen du eta dena berriro deskargatzen du. Sinkronizazio mota hau aukeren menuan dago erabilgarri. Aukera hau azken baliabide bezala bakarrik erabiltzea gomendatzen da.\n\n
+        \"Bizkorra\" sinkronizazio mota (sinkronizazio inkrementala) aurreko sinkronizaziotik egindako aldaketak bakarrik deskargatzen ditu, zeinak denbora eta Internet trafiko askoz gutxiago hartu ohi duen. Halere, metodo honek gabezia bat du: ezin ditu urrunetik ezabatutako artikuluak detektatu (beraz artikulu lokalak ez dira ezabatzen sinkronizazio \"Bikorra\"n). Sinkronizazio mota hau tiratu freskatzeko mugimendu batekin deitzen da edozein artikulu zerrendan.\n\n
+        \"Bizkorra\" sinkronizazio motaren gabezia konpontzeko \"garbitu ezabatutako artikuluak\" exekutatzeko aukera dago, zeinak artikulu lokal bakoitza egiaztatzen duen eta zerbitzariari galdetzen dion ea zerbitzarian oraindik badagoen - ez badago, artikulu lokala kendu egiten da. Daukazun artikulu kopuruaren arabera, eragiketa honek denbora bat har dezake, baina Internet trafiko pila bat aurrezten du \"Osoa\" sinkronizazioarekin konparatuta.\n\n
+        Funtzio hauetatik batek ere ez du eragiten bezerotik zerbitzarirako sinkronizazioan: zure aldaketa lokalak beti bidaliko dira zerbitzarira eduki lokala eguneratu aurretik.
+    </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Gaitu \"Garbitu ezabatutako artikuluak\" sinkronizazio \"Bizkorra\" eta gero</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Irakurri goian sinkronizazio moten azalpena informazio gehiagorako</string>
     <string name="pref_categoryName_autoSync">Sinkronizazio automatikoa</string>
