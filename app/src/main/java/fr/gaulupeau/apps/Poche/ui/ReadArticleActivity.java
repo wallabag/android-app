@@ -322,6 +322,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        switch(event.getKeyCode()) {
+            case KeyEvent.KEYCODE_PAGE_UP:
+                scroll(true, screenScrollingPercent, smoothScrolling);
+                return true;
+
+            case KeyEvent.KEYCODE_PAGE_DOWN:
+                scroll(false, screenScrollingPercent, smoothScrolling);
+                return true;
+        }
+
         if(volumeButtonsScrolling) {
             switch(event.getKeyCode()) {
                 case KeyEvent.KEYCODE_VOLUME_UP:
