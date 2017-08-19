@@ -88,7 +88,8 @@
         Exemples:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
