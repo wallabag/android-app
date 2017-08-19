@@ -151,22 +151,29 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     }
 
     @Override
-    protected void resetContent() {
-        if(tagLabel != null) {
-            List<Tag> tags = tagDao.queryBuilder()
-                    .where(TagDao.Properties.Label.eq(tagLabel))
-                    .orderDesc(TagDao.Properties.Label)
-                    .list();
+    protected List<Article> load() {
+        if(cleanLoad) {
+            if(tagLabel != null) {
+                List<Tag> tags = tagDao.queryBuilder()
+                        .where(TagDao.Properties.Label.eq(tagLabel))
+                        .orderDesc(TagDao.Properties.Label)
+                        .list();
 
-            tagIDs = new ArrayList<>(tags.size());
-            for(Tag t: tags) {
-                tagIDs.add(t.getId());
+                tagIDs = new ArrayList<>(tags.size());
+                for(Tag t: tags) {
+                    tagIDs.add(t.getId());
+                }
+            } else {
+                tagIDs = null;
             }
-        } else {
-            tagIDs = null;
         }
 
-        super.resetContent();
+        return super.load();
+    }
+
+    @Override
+    protected void processContent(List<Article> items) {
+        super.processContent(items);
 
         forceContentUpdate = false;
     }
