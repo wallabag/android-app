@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="btnMarkRead">Okundu Olarak İşaretle</string>
+<resources>
+    <string name="btnMarkRead">Okundu Olarak İşaretle</string>
     <string name="btnMarkUnread">Okunmadı Olarak İşaretle</string>
     <string name="add_to_favorites">Favorilere Ekle</string>
     <string name="remove_from_favorites">Favorilerden Çıkart</string>
@@ -39,8 +40,7 @@
     <string name="d_urlAction_addToWallabag">Wallabag\'e Ekle</string>
     <string name="ok">Tamam</string>
     <string name="d_add_fail_title">Başarısız</string>
-    <string name="d_add_fail_text">Paylaşım metninde bir URL bulunamadı
-\n</string>
+    <string name="d_add_fail_text">Paylaşım metninde bir URL bulunamadı\n</string>
     <string name="d_configurationChanged_title">Parametreler değiştirildi</string>
     <string name="d_configurationChanged_message">Bazı parametreler değiştirilmiş gibi görünüyor. Bir bağlantı testi gerçekleştirmenizi tavsiye ediyoruz.</string>
     <string name="d_configurationChanged_answer_decline">Şimdi değil</string>
@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
-    <string name="aboutText"><b>Android için wallabag</b><br/> wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+    <string name="aboutText">&lt;b>Android için wallabag&lt;/b>&lt;br/> wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>
@@ -150,10 +150,13 @@
 
     <string name="pref_categoryName_connection">Bağlantı</string>
     <string name="pref_name_connection_url">wallabag URL\'i</string>
-    <string name="pref_desc_connection_url"> Örnekler: 
-\n<i>https://wallabag.ornek.com</i>
-\n<i>https://arda.pw/wallabag</i>
-\n<i>https://framabag.org/u/kullanici-adiniz</i> </string>
+    <string name="pref_desc_connection_url">
+        Örnekler:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
+    </string>
     <string name="pref_name_connection_username">Kullanıcı adı</string>
     <string name="pref_name_connection_password">Şifre</string>
     <string name="pref_name_connection_api_clientID">İstemci Kimliği (ID)</string>
@@ -163,7 +166,7 @@
 
     <string name="pref_categoryName_connection_advanced">Gelişmiş bağlantı ayarları</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Özel SSL ayarları</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">SSL\'i tüm cihazlarda devre dışı bırakır, TLS 1.1 ve 1.2\'yi Android 4.1-4.4 arası için aktif eder</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">SSL\'i tüm cihazlarda devre dışı bırakır, TLS 1.1 ve 1.2\'yi Android 4.1–4.4 arası için aktif eder</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Temel kimlik Doğrulaması</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Eğer ne olduğunu bilmiyorsanız boş bırakın</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP kimlik doğrulama kullanıcı adı</string>
@@ -188,15 +191,12 @@
     <string name="pref_categoryName_sync">Senkronizasyon</string>
     <string name="pref_name_sync_syncTypes">Senkronizasyon türleri</string>
     <string name="pref_desc_sync_syncTypes">Senkronizasyon türleri hakkında daha fazla bilgi görmek için tıklayın</string>
-    <string name="pref_desc_sync_syncTypes_text">İki ana senkronizasyon türü vardır: \"Tam\" ve \"Hızlı\". 
-\n
-\n\"Tam\" senkronizasyon türü tüm yerel içeriği siler ve her şeyi yeniden indirir. Bu eşitleme seçenekler menüsündedir. Bu seçeneğin yalnızca son çare olarak kullanılması önerilir. 
-\n
-\n\"Hızlı\" senkronizasyon türü (artımlı eşitleme) genellikle daha az zaman ve internet trafiğini alır, çünkü önceki senkronizasyondan sonra yapılan değişiklikleri yükler. Ancak, bu yöntemin bir handikapı vardır: Bu senkronizasyon sunucuda doğrudan silinmiş makaleleri algılayamaz (bu sebeple yerel makaleler hızlı senkronizasyon ile silinmez). Bu eşitleme türü herhangi bir makale listesinde sayfayı aşağı doğru çekme / yenileme hareketi ile çağrılır. 
-\n
-\nBu eşleştirme listesinde silinmiş makalelerin de uygulamadan kaldırılmasına çözüm olarak \"silinmiş makalelerin kaldırılması\" seçeneğini kullanabilirsiniz. Bu seçenek çalıştırıldığında tüm makaleleri tek tek gezerek hala sunucuda olup olmadığını kontrol eder. Eğer sunucuda değilse makaleyi uygulamadan siler. Makale sayısı çokluğuna göre bu işlem biraz zaman alabilir, ama \"tam senkronizasyon\"a göre oldukça daha az internet trafiği harcayacaktır.
-\n
-\nUnutmamak gerekir ki bu fonksiyonların hiç biri istemciden sunucuya olan senkronizasyonu etkilememektedir. Yerel değişiklikleriniz senkronizasyonlardan önce her zaman sunucuya gönderilmektedir.</string>
+    <string name="pref_desc_sync_syncTypes_text">İki ana senkronizasyon türü vardır: \"Tam\" ve \"Hızlı\".\n\n
+        \"Tam\" senkronizasyon türü tüm yerel içeriği siler ve her şeyi yeniden indirir. Bu eşitleme seçenekler menüsündedir. Bu seçeneğin yalnızca son çare olarak kullanılması önerilir.\n\n
+        \"Hızlı\" senkronizasyon türü (artımlı eşitleme) genellikle daha az zaman ve internet trafiğini alır, çünkü önceki senkronizasyondan sonra yapılan değişiklikleri yükler. Ancak, bu yöntemin bir handikapı vardır: Bu senkronizasyon sunucuda doğrudan silinmiş makaleleri algılayamaz (bu sebeple yerel makaleler hızlı senkronizasyon ile silinmez). Bu eşitleme türü herhangi bir makale listesinde sayfayı aşağı doğru çekme / yenileme hareketi ile çağrılır.\n\n
+        Bu eşleştirme listesinde silinmiş makalelerin de uygulamadan kaldırılmasına çözüm olarak \"silinmiş makalelerin kaldırılması\" seçeneğini kullanabilirsiniz. Bu seçenek çalıştırıldığında tüm makaleleri tek tek gezerek hala sunucuda olup olmadığını kontrol eder. Eğer sunucuda değilse makaleyi uygulamadan siler. Makale sayısı çokluğuna göre bu işlem biraz zaman alabilir, ama \"tam senkronizasyon\"a göre oldukça daha az internet trafiği harcayacaktır.\n\n
+        Unutmamak gerekir ki bu fonksiyonların hiç biri istemciden sunucuya olan senkronizasyonu etkilememektedir. Yerel değişiklikleriniz senkronizasyonlardan önce her zaman sunucuya gönderilmektedir.
+    </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Hızlı\" senkronizasyon ardından \"Silinmiş yazıları temizleme\" özelliğini çalıştır</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Daha fazla detay için yukarıdan senkronizasyon türleri açıklamalarına göz atın</string>
     <string name="pref_categoryName_autoSync">Otomatik senkronizasyon</string>
