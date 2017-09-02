@@ -26,12 +26,12 @@ public class WallabagWebService {
 
     private static final String TAG = WallabagWebService.class.getSimpleName();
 
-    public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
+    public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\"? method=\"?post\"? name=\"?loginform\"?>";
     public static final String FRAMABAG_LOGIN_FORM = "/login_check\" class=\"form\" method=\"post\" name=\"loginform\">";
-    private static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
-    private static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
+    private static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\"?>";
+    private static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" ?/?>";
     private static final String FRAMABAG_MARKER = "<span class=\"frama\">Frama</span>";
-    private static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
+    private static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"?post\"? action=\"?\\?login\"? name=\"?loginform\"?>";
 
     private static final String CLIENT_NAME = "Android app";
 
@@ -206,23 +206,19 @@ public class WallabagWebService {
     private boolean createApiClient() throws RequestException, IOException {
         Request createClientPageRequest = getCreateClientPageRequest();
         String createClientPage = executeRequestForResult(createClientPageRequest);
+        String token = null;
 
-        String token = findSubstring(
-                "<input type=\"hidden\" id=\"client__token\" name=\"client[_token]\" value=\"", "\" />",
-                createClientPage);
+        Pattern pattern = Pattern.compile(
+                "<input type=\"?hidden\"? id=\"?client__token\"? name=\"?client\\[_token\\]\"? value=\"?([^ \"]+)\"? ?/?>",
+                Pattern.DOTALL
+        );
+
+        Matcher matcher = pattern.matcher(createClientPage);
+        if (matcher.find()) {
+            token = matcher.group(1);
+        }
 
         return token != null && executeRequest(getCreateClientRequest(CLIENT_NAME, token));
-    }
-
-    private String findSubstring(String startMarker, String endMarker, String s) {
-        int startIndex = s.indexOf(startMarker);
-        if(startIndex < 0) return null;
-        startIndex += startMarker.length();
-
-        int endIndex = s.indexOf(endMarker, startIndex);
-        if(endIndex < 0) return null;
-
-        return s.substring(startIndex, endIndex);
     }
 
     private Response exec(Request request) throws IOException {
@@ -272,7 +268,17 @@ public class WallabagWebService {
     }
 
     private boolean containsMarker(String body, String marker) {
-        return !(body == null || body.isEmpty()) && body.contains(marker);
+        if (body == null || body.isEmpty()) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile(
+                marker,
+                Pattern.DOTALL
+        );
+
+        Matcher matcher = pattern.matcher(body.toString());
+        return matcher.find();
     }
 
     private Request.Builder getRequestBuilder() {
@@ -369,7 +375,19 @@ public class WallabagWebService {
     }
 
     private String getCsrfToken(String body) {
-        return findSubstring("<input type=\"hidden\" name=\"_csrf_token\" value=\"", "\" />", body);
+        String token = null;
+
+        Pattern pattern = Pattern.compile(
+                "<input type=\"?hidden\"? name=\"?_csrf_token\"? value=\"?([^ \"]+)\"? ?/?>",
+                Pattern.DOTALL
+        );
+
+        Matcher matcher = pattern.matcher(body);
+        if (matcher.find()) {
+            token = matcher.group(1);
+        }
+
+        return token;
     }
 
     private Request getPathRequest(String path) throws IncorrectConfigurationException {
