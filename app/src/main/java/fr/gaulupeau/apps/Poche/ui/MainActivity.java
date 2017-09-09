@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity
     private static final String STATE_SAVED_FRAGMENT_STATES = "saved_fragment_states";
     private static final String STATE_CURRENT_FRAGMENT = "active_fragment";
     private static final String STATE_SEARCH_QUERY = "search_query";
+    private static final String STATE_SELECTED_TAG = "selected_tag";
 
     private static final String FRAGMENT_ARTICLE_LISTS = "fragment_article_lists";
     private static final String FRAGMENT_TAG_LIST = "fragment_tag_list";
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity
     private String searchQuery;
     private String searchQueryPrevious;
     private boolean searchUIPending;
-    private Tag selectedTag;
+    private String selectedTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,6 +185,8 @@ public class MainActivity extends AppCompatActivity
 
             currentFragmentType = savedInstanceState.getString(STATE_CURRENT_FRAGMENT);
 
+            selectedTag = savedInstanceState.getString(STATE_SELECTED_TAG);
+
             performSearch(savedInstanceState.getString(STATE_SEARCH_QUERY));
         }
         if(searchQuery == null) performSearch("");
@@ -195,6 +198,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentType);
             this.currentFragmentType = currentFragmentType;
+            updateNavigationUI(currentFragmentType);
         }
 
         EventBus.getDefault().register(this);
@@ -233,6 +237,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         outState.putString(STATE_CURRENT_FRAGMENT, currentFragmentType);
+        outState.putString(STATE_SELECTED_TAG, selectedTag);
         outState.putString(STATE_SEARCH_QUERY, searchQuery);
     }
 
@@ -710,7 +715,6 @@ public class MainActivity extends AppCompatActivity
 
     private void updateNavigationUI(String type) {
         if(type == null || navigationView == null) return;
-        if(TextUtils.equals(type, currentFragmentType)) return;
 
         if(FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
             MenuItem item = navigationView.getMenu().findItem(R.id.nav_taggedLists);
@@ -735,7 +739,7 @@ public class MainActivity extends AppCompatActivity
                 itemID = R.id.nav_taggedLists;
 
                 if(selectedTag != null) {
-                    title = getString(R.string.title_main_tag, selectedTag.getLabel());
+                    title = getString(R.string.title_main_tag, selectedTag);
                 }
 
                 MenuItem item = navigationView.getMenu().findItem(itemID);
@@ -764,7 +768,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTagSelected(Tag tag) {
-        selectedTag = tag;
+        selectedTag = tag.getLabel();
 
         Fragment fragment = ArticleListsFragment.newInstance(tag.getLabel());
 
