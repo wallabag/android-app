@@ -145,7 +145,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             // call root view and don't claim to have consumed the touchEvent
             // https://stackoverflow.com/a/22490810
             super.dispatchTouchEvent(ev);
-            //findViewById(R.id.viewMain).dispatchTouchEvent(ev);
             return false;
         }
     }
