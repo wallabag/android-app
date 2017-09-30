@@ -109,6 +109,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int fontSize;
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
+    private boolean disableTouch;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
 
@@ -134,6 +135,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean isResumed;
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        // from https://stackoverflow.com/a/28429348
+        if (disableTouch) {
+            return true;
+        } else {
+            // call root view and don't claim to have consumed the touchEvent
+            // https://stackoverflow.com/a/22490810
+            super.dispatchTouchEvent(ev);
+            //findViewById(R.id.viewMain).dispatchTouchEvent(ev);
+            return false;
+        }
+    }
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,6 +178,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         fontSize = settings.getArticleFontSize();
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
+        disableTouch = false; // will be toggled by pressing the key defined in dispatchKeyEvent()
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
 
@@ -329,6 +345,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             case KeyEvent.KEYCODE_PAGE_DOWN:
                 scroll(false, screenScrollingPercent, smoothScrolling);
+                return true;
+
+            case KeyEvent.KEYCODE_CAMERA:
+                if(event.getAction() == KeyEvent.ACTION_DOWN) {
+                    // only do this once per key press (otherwise it's toggled immediately off again with the following KeyEvent.ACTION_UP
+                    disableTouch = !disableTouch;
+
+                    if(disableTouch) {
+                        Toast.makeText(this, "Touch screen disabled", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Touch screen enabled", Toast.LENGTH_SHORT).show();
+                    }
+                    Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                }
                 return true;
         }
 
