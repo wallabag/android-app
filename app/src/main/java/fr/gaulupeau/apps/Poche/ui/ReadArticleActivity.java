@@ -337,39 +337,42 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        switch(event.getKeyCode()) {
-            case KeyEvent.KEYCODE_PAGE_UP:
-                scroll(true, screenScrollingPercent, smoothScrolling);
-                return true;
 
-            case KeyEvent.KEYCODE_PAGE_DOWN:
-                scroll(false, screenScrollingPercent, smoothScrolling);
-                return true;
+        // only do this once per key press (otherwise the action is done twice)
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            switch (event.getKeyCode()) {
+                case KeyEvent.KEYCODE_PAGE_UP:
+                    scroll(true, screenScrollingPercent, smoothScrolling);
+                    return true;
 
-            case KeyEvent.KEYCODE_CAMERA:
-                if(event.getAction() == KeyEvent.ACTION_DOWN) {
-                    // only do this once per key press (otherwise it's toggled immediately off again with the following KeyEvent.ACTION_UP
+                case KeyEvent.KEYCODE_PAGE_DOWN:
+                    scroll(false, screenScrollingPercent, smoothScrolling);
+                    return true;
+
+                case KeyEvent.KEYCODE_CAMERA:
+
                     disableTouch = !disableTouch;
 
-                    if(disableTouch) {
+                    if (disableTouch) {
                         Toast.makeText(this, "Touch screen disabled", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(this, "Touch screen enabled", Toast.LENGTH_SHORT).show();
                     }
                     Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                    return true;
+            }
+
+
+            if (volumeButtonsScrolling) {
+                switch (event.getKeyCode()) {
+                    case KeyEvent.KEYCODE_VOLUME_UP:
+                        scroll(true, screenScrollingPercent, smoothScrolling);
+                        return true;
+
+                    case KeyEvent.KEYCODE_VOLUME_DOWN:
+                        scroll(false, screenScrollingPercent, smoothScrolling);
+                        return true;
                 }
-                return true;
-        }
-
-        if(volumeButtonsScrolling) {
-            switch(event.getKeyCode()) {
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                    scroll(true, screenScrollingPercent, smoothScrolling);
-                    return true;
-
-                case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    scroll(false, screenScrollingPercent, smoothScrolling);
-                    return true;
             }
         }
 
