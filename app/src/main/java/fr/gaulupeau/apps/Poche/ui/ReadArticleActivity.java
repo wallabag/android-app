@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
@@ -139,6 +141,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     public void onCreate(Bundle savedInstanceState) {
+
+        settings = App.getInstance().getSettings();
+
+        if(settings.isFullscreenArticleView()) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
@@ -151,8 +162,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
-
-        settings = App.getInstance().getSettings();
 
         DaoSession session = DbConnection.getSession();
         articleDao = session.getArticleDao();
