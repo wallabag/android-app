@@ -159,6 +159,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // TODO: hide wallabag's BaseActionBarActivity also, but restore it once out of article view
+            // TODO: fix initial setting of setting (checkbox is false, fullscreen is nevertheless on)
         }
 
         super.onCreate(savedInstanceState);
