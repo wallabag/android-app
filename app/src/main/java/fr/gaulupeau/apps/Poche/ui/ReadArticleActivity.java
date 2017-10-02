@@ -359,21 +359,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
                     return true;
 
-								case KeyEvent.KEYCODE_VOLUME_UP:
-										if (volumeButtonsScrolling) {
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                    if (volumeButtonsScrolling) {
                         scroll(true, screenScrollingPercent, smoothScrolling);
                         return true;
-										} else {
-												return super.dispatchKeyEvent(event);
-										}
+                    } else {
+                        return super.dispatchKeyEvent(event);
+                    }
 
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
-										if (volumeButtonsScrolling) {
+                    if (volumeButtonsScrolling) {
                         scroll(false, screenScrollingPercent, smoothScrolling);
                         return true;
-										} else {
-												return super.dispatchKeyEvent(event);
-										}
+                    } else {
+                        return super.dispatchKeyEvent(event);
+                    }
 
             } // end switch
         } // end if
