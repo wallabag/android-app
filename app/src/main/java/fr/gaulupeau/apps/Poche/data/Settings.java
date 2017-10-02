@@ -363,6 +363,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_textAlignment_justify, value);
     }
 
+    public boolean isFullscreenArticleView() {
+        return getBoolean(R.string.pref_key_ui_article_fullscreen, true);
+    }
+
+    public void setFullScreenArticleView(boolean value) {
+        setBoolean(R.string.pref_key_ui_article_fullscreen, value);
+    }
+
     public int getReadingSpeed() {
         return getInt(R.string.pref_key_ui_readingSpeed, 200);
     }
