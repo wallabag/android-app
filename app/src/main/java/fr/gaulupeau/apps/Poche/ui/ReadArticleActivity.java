@@ -350,9 +350,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     return true;
 
                 case KeyEvent.KEYCODE_CAMERA:
-
                     disableTouch = !disableTouch;
-
                     if (disableTouch) {
                         Toast.makeText(this, "Touch screen disabled", Toast.LENGTH_SHORT).show();
                     } else {
@@ -360,21 +358,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     }
                     Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
                     return true;
-            }
 
-
-            if (volumeButtonsScrolling) {
-                switch (event.getKeyCode()) {
-                    case KeyEvent.KEYCODE_VOLUME_UP:
+								case KeyEvent.KEYCODE_VOLUME_UP:
+										if (volumeButtonsScrolling) {
                         scroll(true, screenScrollingPercent, smoothScrolling);
                         return true;
+										} else {
+												return super.dispatchKeyEvent(event);
+										}
 
-                    case KeyEvent.KEYCODE_VOLUME_DOWN:
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+										if (volumeButtonsScrolling) {
                         scroll(false, screenScrollingPercent, smoothScrolling);
                         return true;
-                }
-            }
-        }
+										} else {
+												return super.dispatchKeyEvent(event);
+										}
+
+            } // end switch
+        } // end if
 
         return super.dispatchKeyEvent(event);
     }
