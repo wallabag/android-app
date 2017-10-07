@@ -136,19 +136,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev){
-        // from https://stackoverflow.com/a/28429348
-        if (disableTouch) {
-            return true;
-        } else {
-            // call root view and don't claim to have consumed the touchEvent
-            // https://stackoverflow.com/a/22490810
-            super.dispatchTouchEvent(ev);
-            return false;
-        }
-    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
@@ -337,48 +324,37 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-
-        // only do this once per key press (otherwise the action is done twice)
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (event.getKeyCode()) {
+            int code = event.getKeyCode();
+            switch (code) {
                 case KeyEvent.KEYCODE_PAGE_UP:
-                    scroll(true, screenScrollingPercent, smoothScrolling);
-                    return true;
-
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                    scroll(false, screenScrollingPercent, smoothScrolling);
-                    return true;
-
-                case KeyEvent.KEYCODE_CAMERA:
-                    disableTouch = !disableTouch;
-                    if (disableTouch) {
-                        Toast.makeText(this, "Touch screen disabled", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Touch screen enabled", Toast.LENGTH_SHORT).show();
-                    }
-                    Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling);
                     return true;
 
                 case KeyEvent.KEYCODE_VOLUME_UP:
-                    if (volumeButtonsScrolling) {
-                        scroll(true, screenScrollingPercent, smoothScrolling);
-                        return true;
-                    } else {
-                        return super.dispatchKeyEvent(event);
-                    }
-
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     if (volumeButtonsScrolling) {
-                        scroll(false, screenScrollingPercent, smoothScrolling);
+                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling);
                         return true;
-                    } else {
-                        return super.dispatchKeyEvent(event);
                     }
+                    break;
 
+                case KeyEvent.KEYCODE_CAMERA:
+                    disableTouch = !disableTouch;
+                    Toast.makeText(this, disableTouch ? "Touch screen disabled" : "Touch screen enabled",
+                            Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                    return true;
             } // end switch
         } // end if
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return disableTouch || super.dispatchTouchEvent(ev);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
