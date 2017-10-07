@@ -136,6 +136,16 @@
                 android:title="@string/pref_name_ui_screenScrolling_smooth"
                 android:defaultValue="true"/>
         </PreferenceCategory>
+        <PreferenceCategory
+            android:key="@string/pref_key_ui_misc_category"
+            android:title="@string/pref_categoryName_ui_misc"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_disableTouch_enabled"
+                android:title="@string/pref_name_ui_disableTouch_enabled"
+                android:summary="@string/pref_desc_ui_disableTouch_enabled"
+                android:defaultValue="false"/>
+        </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/pref_key_sync"

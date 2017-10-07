@@ -454,6 +454,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_screenScrolling_smooth, value);
     }
 
+    public boolean isDisableTouchEnabled() {
+        return getBoolean(R.string.pref_key_ui_disableTouch_enabled, false);
+    }
+
+    public void setDisableTouchEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_disableTouch_enabled, value);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }
