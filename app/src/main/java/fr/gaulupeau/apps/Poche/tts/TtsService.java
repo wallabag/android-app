@@ -695,7 +695,7 @@ public class TtsService
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, metaDataTitle)
                 .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
-                        BitmapFactory.decodeResource(getResources(), R.drawable.icon));
+                        BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         if (textInterface != null) {
             builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, textInterface.getTotalDuration());
         }
@@ -761,7 +761,7 @@ public class TtsService
         NotificationCompat.Builder builder = generateNotificationBuilderFrom(getApplicationContext(), mediaSession);
         builder.setContentIntent(notificationPendingIntent);
         builder.setWhen(0);
-        builder.setSmallIcon(R.drawable.icon);
+        builder.setSmallIcon(R.mipmap.ic_launcher);
         if (state != State.ERROR) {
             //builder.addAction( generateAction( android.R.drawable.ic_media_previous, "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS ) );
             builder.addAction(generateAction(android.R.drawable.ic_media_rew, "Rewind", KeyEvent.KEYCODE_MEDIA_REWIND));
