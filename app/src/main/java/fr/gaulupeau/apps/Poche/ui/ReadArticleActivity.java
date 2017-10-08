@@ -334,6 +334,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int code = event.getKeyCode();
+
+            if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
+                disableTouch = !disableTouch;
+                settings.setDisableTouchLastState(disableTouch);
+
+                Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                showDisableTouchToast();
+                return true;
+            }
+
             switch (code) {
                 case KeyEvent.KEYCODE_PAGE_UP:
                 case KeyEvent.KEYCODE_PAGE_DOWN:
@@ -347,15 +357,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         return true;
                     }
                     break;
-            }
-
-            if(event.getKeyCode() == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
-                disableTouch = !disableTouch;
-                settings.setDisableTouchLastState(disableTouch);
-
-                Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
-                showDisableTouchToast();
-                return true;
             }
         }
 

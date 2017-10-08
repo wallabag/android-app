@@ -157,7 +157,7 @@
     <string name="message_disableTouch_inputDisabled">Touch input disabled</string>
     <string name="message_disableTouch_inputEnabled">Touch input enabled</string>
     <string name="d_disableTouch_changeKey_title">Disable touch input button</string>
-    <string name="d_disableTouch_currentCode">Current key code:</string>
+    <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              android:padding="16dp"
               android:orientation="vertical">
 
     <TextView
@@ -9,6 +10,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="10sp"
         android:layout_gravity="center"
+        android:gravity="center_horizontal"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/d_disableTouch_currentCode" />
 
