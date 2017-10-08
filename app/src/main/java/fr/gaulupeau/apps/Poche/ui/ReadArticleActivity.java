@@ -112,6 +112,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
     private boolean disableTouchOptionEnabled;
+    private int disableTouchKeyCode;
     private boolean disableTouch;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
@@ -168,6 +169,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
         disableTouchOptionEnabled = settings.isDisableTouchEnabled();
+        disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
 
@@ -357,21 +359,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         return true;
                     }
                     break;
+            }
 
-                case KeyEvent.KEYCODE_CAMERA:
-                    if(disableTouch || disableTouchOptionEnabled) {
-                        disableTouch = !disableTouch;
+            if(event.getKeyCode() == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
+                disableTouch = !disableTouch;
 
-                        Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
-                        Toast.makeText(this, disableTouch
-                                        ? R.string.message_disableTouch_inputDisabled
-                                        : R.string.message_disableTouch_inputEnabled,
-                                Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                    break;
-            } // end switch
-        } // end if
+                Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                Toast.makeText(this, disableTouch
+                                ? R.string.message_disableTouch_inputDisabled
+                                : R.string.message_disableTouch_inputEnabled,
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        }
 
         return super.dispatchKeyEvent(event);
     }

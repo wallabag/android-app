@@ -156,6 +156,8 @@
 
     <string name="message_disableTouch_inputDisabled">Touch input disabled</string>
     <string name="message_disableTouch_inputEnabled">Touch input enabled</string>
+    <string name="d_disableTouch_changeKey_title">Disable touch input button</string>
+    <string name="d_disableTouch_currentCode">Current key code:</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
@@ -201,7 +203,9 @@
     <string name="pref_name_ui_screenScrolling_smooth">Use smooth scrolling</string>
     <string name="pref_categoryName_ui_misc">Miscellanea</string>
     <string name="pref_name_ui_disableTouch_enabled">Disable touch input</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Press the camera button to block/unblock touch input on the reading screen (system controls are not affected)</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>

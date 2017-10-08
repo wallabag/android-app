@@ -145,6 +145,11 @@
                 android:title="@string/pref_name_ui_disableTouch_enabled"
                 android:summary="@string/pref_desc_ui_disableTouch_enabled"
                 android:defaultValue="false"/>
+            <Preference
+                android:key="@string/pref_key_ui_disableTouch_keyCode"
+                android:title="@string/pref_name_ui_disableTouch_keyCode"
+                android:summary="@string/pref_desc_ui_disableTouch_keyCode"
+                android:persistent="false"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen

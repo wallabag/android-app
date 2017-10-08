@@ -9,6 +9,7 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -460,6 +461,14 @@ public class Settings {
 
     public void setDisableTouchEnabled(boolean value) {
         setBoolean(R.string.pref_key_ui_disableTouch_enabled, value);
+    }
+
+    public int getDisableTouchKeyCode() {
+        return getInt(R.string.pref_key_ui_disableTouch_keyCode, KeyEvent.KEYCODE_CAMERA);
+    }
+
+    public void setDisableTouchKeyCode(int keyCode) {
+        setInt(R.string.pref_key_ui_disableTouch_keyCode, keyCode);
     }
 
     public boolean isTtsVisible() {
