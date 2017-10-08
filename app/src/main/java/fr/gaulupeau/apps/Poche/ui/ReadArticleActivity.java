@@ -71,8 +71,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
     public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
-    private static final String STATE_TOUCH_DISABLED = "state_touchDisabled";
-
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private static final String TAG_TTS_FRAGMENT = "ttsFragment";
@@ -112,8 +110,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
     private boolean disableTouchOptionEnabled;
-    private int disableTouchKeyCode;
     private boolean disableTouch;
+    private int disableTouchKeyCode;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
 
@@ -169,6 +167,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
         disableTouchOptionEnabled = settings.isDisableTouchEnabled();
+        disableTouch = settings.isDisableTouchLastState();
         disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
@@ -204,10 +203,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
         }
 
-        if(savedInstanceState != null) {
-            Log.v(TAG, "onCreate() restoring state");
-
-            disableTouch = savedInstanceState.getBoolean(STATE_TOUCH_DISABLED, false);
+        if(disableTouch) {
+            showDisableTouchToast();
         }
 
         EventBus.getDefault().register(this);
@@ -248,15 +245,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         EventBus.getDefault().unregister(this);
 
         super.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        Log.v(TAG, "onSaveInstanceState()");
-
-        outState.putBoolean(STATE_TOUCH_DISABLED, disableTouch);
     }
 
     @Override
@@ -363,12 +351,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             if(event.getKeyCode() == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
                 disableTouch = !disableTouch;
+                settings.setDisableTouchLastState(disableTouch);
 
                 Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
-                Toast.makeText(this, disableTouch
-                                ? R.string.message_disableTouch_inputDisabled
-                                : R.string.message_disableTouch_inputEnabled,
-                        Toast.LENGTH_SHORT).show();
+                showDisableTouchToast();
                 return true;
             }
         }
@@ -463,6 +449,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
 //            restorePositionAfterUpdate();
         }
+    }
+
+    private void showDisableTouchToast() {
+        Toast.makeText(this, disableTouch
+                        ? R.string.message_disableTouch_inputDisabled
+                        : R.string.message_disableTouch_inputEnabled,
+                Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("SetJavaScriptEnabled")

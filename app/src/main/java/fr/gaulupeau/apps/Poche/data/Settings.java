@@ -463,6 +463,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_disableTouch_enabled, value);
     }
 
+    public boolean isDisableTouchLastState() {
+        return getBoolean(R.string.pref_key_ui_disableTouch_lastState, false);
+    }
+
+    public void setDisableTouchLastState(boolean value) {
+        setBoolean(R.string.pref_key_ui_disableTouch_lastState, value);
+    }
+
     public int getDisableTouchKeyCode() {
         return getInt(R.string.pref_key_ui_disableTouch_keyCode, KeyEvent.KEYCODE_CAMERA);
     }
