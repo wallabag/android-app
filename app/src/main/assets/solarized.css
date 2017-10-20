@@ -85,7 +85,7 @@ table, th, td {
 
 a {
   color: #b58900; /* $yellow; */
-  font-weight: bold;
+  text-decoration: none;
 }
 
 a:hover, a:focus {
@@ -228,7 +228,7 @@ header.mbm {
   font-style: normal;
 }
 
-blockquote, pre {
+#article blockquote, #article pre {
   border:1px solid #999;
   background: #eee8d5; /* $base2*/
   padding: 0.25em;
@@ -239,6 +239,10 @@ blockquote, pre {
   font-family: monospace;
   white-space: pre;
   text-justify: none;
+}
+
+#article blockquote *, #article pre * {
+  background: inherit;
 }
 
 #article h2, #article h3, #article h4 {

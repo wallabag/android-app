@@ -26,22 +26,29 @@ public class WallabagWebService {
 
     private static final String TAG = WallabagWebService.class.getSimpleName();
 
-    public static final String WALLABAG_LOGIN_FORM_V2 = "/login_check\" method=\"post\" name=\"loginform\">";
-    public static final String FRAMABAG_LOGIN_FORM = "/login_check\" class=\"form\" method=\"post\" name=\"loginform\">";
-    private static final String WALLABAG_LOGOUT_LINK_V2 = "/logout\">";
-    private static final String WALLABAG_LOGO_V2 = "alt=\"wallabag logo\" />";
-    private static final String FRAMABAG_MARKER = "<span class=\"frama\">Frama</span>";
-    private static final String WALLABAG_LOGIN_FORM_V1 = "<form method=\"post\" action=\"?login\" name=\"loginform\">";
+    private static final Pattern WALLABAG_LOGIN_FORM_V2 = compile("/login_check\"? method=\"?post\"? name=\"?loginform\"?>");
+    private static final Pattern FRAMABAG_LOGIN_FORM = compile("/login_check\" class=\"form\" method=\"post\" name=\"loginform\">");
+    private static final Pattern WALLABAG_LOGOUT_LINK_V2 = compile("/logout\"?>");
+    private static final Pattern WALLABAG_LOGO_V2 = compile("alt=\"wallabag logo\" ?/?>");
+    private static final Pattern FRAMABAG_MARKER = compile("<span class=\"frama\">Frama</span>");
+    private static final Pattern WALLABAG_LOGIN_FORM_V1 = compile("<form method=\"?post\"? action=\"?\\?login\"? name=\"?loginform\"?>");
 
     private static final String CLIENT_NAME = "Android app";
 
-    private static final String CLIENT_PATTERN =
+    private static final Pattern CLIENT_PATTERN = compile(
             "<div class=\"collapsible-header\">([^<]+?)</div>" +
                     ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
                     ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
                     ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
                     ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
-                    ".*?/developer/client/delete/";
+                    ".*?/developer/client/delete/");
+
+    private static final Pattern CLIENT_TOKEN_PATTERN = compile(
+            "<input type=\"?hidden\"? id=\"?client__token\"? name=\"?client\\[_token\\]\"? value=\"?([^ \"]+)\"? ?/?>"
+    );
+    private static final Pattern CSRF_TOKEN_PATTERN = compile(
+            "<input type=\"?hidden\"? name=\"?_csrf_token\"? value=\"?([^ \"]+)\"? ?/?>"
+    );
 
     public enum ConnectionTestResult {
         OK, INCORRECT_URL, UNSUPPORTED_SERVER_VERSION, WALLABAG_NOT_FOUND,
@@ -165,16 +172,11 @@ public class WallabagWebService {
             return null;
         }
 
-        Pattern pattern = Pattern.compile(
-                CLIENT_PATTERN,
-                Pattern.DOTALL
-        );
-
         String lastClientID = null;
         String lastClientSecret = null;
         boolean found = desperate;
 
-        Matcher matcher = pattern.matcher(response);
+        Matcher matcher = CLIENT_PATTERN.matcher(response);
         while(matcher.find()) {
             String clientName = matcher.group(1);
             lastClientID = matcher.group(2);
@@ -206,23 +208,14 @@ public class WallabagWebService {
     private boolean createApiClient() throws RequestException, IOException {
         Request createClientPageRequest = getCreateClientPageRequest();
         String createClientPage = executeRequestForResult(createClientPageRequest);
+        String token = null;
 
-        String token = findSubstring(
-                "<input type=\"hidden\" id=\"client__token\" name=\"client[_token]\" value=\"", "\" />",
-                createClientPage);
+        Matcher matcher = CLIENT_TOKEN_PATTERN.matcher(createClientPage);
+        if (matcher.find()) {
+            token = matcher.group(1);
+        }
 
         return token != null && executeRequest(getCreateClientRequest(CLIENT_NAME, token));
-    }
-
-    private String findSubstring(String startMarker, String endMarker, String s) {
-        int startIndex = s.indexOf(startMarker);
-        if(startIndex < 0) return null;
-        startIndex += startMarker.length();
-
-        int endIndex = s.indexOf(endMarker, startIndex);
-        if(endIndex < 0) return null;
-
-        return s.substring(startIndex, endIndex);
     }
 
     private Response exec(Request request) throws IOException {
@@ -258,7 +251,7 @@ public class WallabagWebService {
         return true;
     }
 
-    private boolean isLoginPage(String body) {
+    public static boolean isLoginPage(String body) {
         return (containsMarker(body, WALLABAG_LOGIN_FORM_V2) && containsMarker(body, WALLABAG_LOGO_V2))
                 || (containsMarker(body, FRAMABAG_LOGIN_FORM) && containsMarker(body, FRAMABAG_MARKER));
     }
@@ -271,8 +264,12 @@ public class WallabagWebService {
         return containsMarker(body, WALLABAG_LOGIN_FORM_V1);
     }
 
-    private boolean containsMarker(String body, String marker) {
-        return !(body == null || body.isEmpty()) && body.contains(marker);
+    private static boolean containsMarker(String body, Pattern markerPattern) {
+        if (body == null || body.isEmpty()) {
+            return false;
+        }
+
+        return markerPattern.matcher(body).find();
     }
 
     private Request.Builder getRequestBuilder() {
@@ -369,7 +366,14 @@ public class WallabagWebService {
     }
 
     private String getCsrfToken(String body) {
-        return findSubstring("<input type=\"hidden\" name=\"_csrf_token\" value=\"", "\" />", body);
+        String token = null;
+
+        Matcher matcher = CSRF_TOKEN_PATTERN.matcher(body);
+        if (matcher.find()) {
+            token = matcher.group(1);
+        }
+
+        return token;
     }
 
     private Request getPathRequest(String path) throws IncorrectConfigurationException {
@@ -423,6 +427,10 @@ public class WallabagWebService {
         if(httpUrl == null) throw new IncorrectConfigurationException("Incorrect URL");
 
         return httpUrl;
+    }
+
+    private static Pattern compile(String pattern) {
+        return Pattern.compile(pattern, Pattern.DOTALL);
     }
 
 }

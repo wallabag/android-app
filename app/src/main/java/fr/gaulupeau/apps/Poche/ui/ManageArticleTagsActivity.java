@@ -339,6 +339,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         newList.add(suggestedTags.get(position));
 
         updateCurrentTagList(newList);
+
+        setEditText("");
     }
 
     private void currentTagClicked(int position) {

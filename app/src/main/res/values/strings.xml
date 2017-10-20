@@ -98,7 +98,7 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
-    <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br />wallabag is a self hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.</string>
+    <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br/>wallabag is a self-hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.</string>
     <string name="readSpeed">Read speed</string>
     <string name="voiceHeight">Voice height</string>
     <string name="readVolume">Read volume</string>
@@ -154,6 +154,11 @@
 
     <string name="message_couldNotOpenUrl">Couldn\'t open this URL</string>
 
+    <string name="message_disableTouch_inputDisabled">Touch input disabled</string>
+    <string name="message_disableTouch_inputEnabled">Touch input enabled</string>
+    <string name="d_disableTouch_changeKey_title">Disable touch input button</string>
+    <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
+
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
     <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
 
@@ -163,7 +168,8 @@
         Examples:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
@@ -195,6 +201,11 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Scroll screen by tapping on left and right screen sides</string>
     <string name="pref_name_ui_screenScrolling_percent">Percent of screen height to scroll</string>
     <string name="pref_name_ui_screenScrolling_smooth">Use smooth scrolling</string>
+    <string name="pref_categoryName_ui_misc">Miscellanea</string>
+    <string name="pref_name_ui_disableTouch_enabled">Disable touch input</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
