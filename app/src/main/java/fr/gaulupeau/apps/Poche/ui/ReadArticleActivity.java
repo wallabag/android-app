@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -146,10 +147,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if(settings.isFullscreenArticleView()) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            // TODO: hide wallabag's BaseActionBarActivity also, but restore it once out of article view
-            // TODO: fix initial setting of setting (checkbox is false, fullscreen is nevertheless on)
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    );
+            ActionBar actionBar = super.getSupportActionBar();
+            if(actionBar != null) actionBar.hide();
         }
 
         super.onCreate(savedInstanceState);
@@ -343,7 +346,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        if (event.getAction() == KeyEvent.ACTION_UP) {
             int code = event.getKeyCode();
 
             if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
