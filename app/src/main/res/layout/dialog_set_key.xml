@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="16dp"
+              android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="10sp"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/d_disableTouch_currentCode" />
+
+    <TextView
+        android:id="@+id/tv_keyCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="" />
+
+</LinearLayout>

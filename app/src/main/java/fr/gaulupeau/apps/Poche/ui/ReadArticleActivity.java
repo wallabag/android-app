@@ -111,7 +111,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int fontSize;
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
+    private boolean disableTouchOptionEnabled;
     private boolean disableTouch;
+    private int disableTouchKeyCode;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
 
@@ -137,19 +139,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean isResumed;
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev){
-        // from https://stackoverflow.com/a/28429348
-        if (disableTouch) {
-            return true;
-        } else {
-            // call root view and don't claim to have consumed the touchEvent
-            // https://stackoverflow.com/a/22490810
-            super.dispatchTouchEvent(ev);
-            return false;
-        }
-    }
 
     public void onCreate(Bundle savedInstanceState) {
 
@@ -188,7 +177,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         fontSize = settings.getArticleFontSize();
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
-        disableTouch = false; // will be toggled by pressing the key defined in dispatchKeyEvent()
+        disableTouchOptionEnabled = settings.isDisableTouchEnabled();
+        disableTouch = settings.isDisableTouchLastState();
+        disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
 
@@ -221,6 +212,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             if(ttsFragment == null) {
                 toggleTTS(false);
             }
+        }
+
+        if(disableTouch) {
+            showDisableTouchToast();
         }
 
         EventBus.getDefault().register(this);
@@ -348,48 +343,40 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-
-        // only do this once per key press (otherwise the action is done twice)
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            switch (event.getKeyCode()) {
+            int code = event.getKeyCode();
+
+            if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
+                disableTouch = !disableTouch;
+                settings.setDisableTouchLastState(disableTouch);
+
+                Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                showDisableTouchToast();
+                return true;
+            }
+
+            switch (code) {
                 case KeyEvent.KEYCODE_PAGE_UP:
-                    scroll(true, screenScrollingPercent, smoothScrolling);
-                    return true;
-
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                    scroll(false, screenScrollingPercent, smoothScrolling);
-                    return true;
-
-                case KeyEvent.KEYCODE_CAMERA:
-                    disableTouch = !disableTouch;
-                    if (disableTouch) {
-                        Toast.makeText(this, "Touch screen disabled", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(this, "Touch screen enabled", Toast.LENGTH_SHORT).show();
-                    }
-                    Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling);
                     return true;
 
                 case KeyEvent.KEYCODE_VOLUME_UP:
-                    if (volumeButtonsScrolling) {
-                        scroll(true, screenScrollingPercent, smoothScrolling);
-                        return true;
-                    } else {
-                        return super.dispatchKeyEvent(event);
-                    }
-
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     if (volumeButtonsScrolling) {
-                        scroll(false, screenScrollingPercent, smoothScrolling);
+                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling);
                         return true;
-                    } else {
-                        return super.dispatchKeyEvent(event);
                     }
-
-            } // end switch
-        } // end if
+                    break;
+            }
+        }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return disableTouch || super.dispatchTouchEvent(ev);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -474,6 +461,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
 //            restorePositionAfterUpdate();
         }
+    }
+
+    private void showDisableTouchToast() {
+        Toast.makeText(this, disableTouch
+                        ? R.string.message_disableTouch_inputDisabled
+                        : R.string.message_disableTouch_inputEnabled,
+                Toast.LENGTH_SHORT).show();
     }
 
     @SuppressLint("SetJavaScriptEnabled")
