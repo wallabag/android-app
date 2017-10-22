@@ -194,7 +194,7 @@
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches the lines so that each line has equal width (like in newspapers and magazines)</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
-    <string name="pref_desc_ui_article_fullscreen">Hides Android\'s notification bar when reading articles</string>
+    <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
     <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
