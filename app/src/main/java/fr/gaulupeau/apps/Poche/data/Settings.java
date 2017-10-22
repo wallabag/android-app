@@ -365,7 +365,7 @@ public class Settings {
     }
 
     public boolean isFullscreenArticleView() {
-        return getBoolean(R.string.pref_key_ui_article_fullscreen, true);
+        return getBoolean(R.string.pref_key_ui_article_fullscreen, false);
     }
 
     public void setFullScreenArticleView(boolean value) {
