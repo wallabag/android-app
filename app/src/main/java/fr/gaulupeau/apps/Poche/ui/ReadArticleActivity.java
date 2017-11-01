@@ -114,6 +114,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int disableTouchKeyCode;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
+    private int scrolledToBottom;
 
     private ScrollView scrollView;
     private WebView webViewContent;
@@ -171,6 +172,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
+        scrolledToBottom = 2;
 
         setTitle(articleTitle);
 
@@ -993,6 +995,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             } else {
                 scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
             }
+
+        }
+
+        if(newYOffset > webViewContent.getBottom()) {
+            if(scrolledToBottom > 0) {
+                Toast.makeText(this, this.getString(R.string.scrolledToBottom, scrolledToBottom), Toast.LENGTH_SHORT).show();
+                scrolledToBottom--;
+            } else {
+                Toast.makeText(this, R.string.markedAsRead, Toast.LENGTH_SHORT).show();
+                markAsReadAndClose();
+            }
+        } else {
+            scrolledToBottom = 2;
         }
     }
 

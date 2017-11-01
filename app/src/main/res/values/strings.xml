@@ -91,6 +91,8 @@
     <string name="articleList_ArchivedMark">Archived mark</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
     <string name="noNextArticle">There is no next article in current list</string>
+    <string name="scrolledToBottom">Scroll %d time(s) more to the bottom to mark the article as read</string>
+    <string name="markedAsRead"> Article marked as read</string>
     <string name="themeName_light">Light</string>
     <string name="themeName_light_contrast">Light (high contrast)</string>
     <string name="themeName_dark">Dark</string>
