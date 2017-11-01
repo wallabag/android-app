@@ -346,9 +346,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_UP) {
-            int code = event.getKeyCode();
+        int code = event.getKeyCode();
+        boolean triggerAction;
+        if (code == KeyEvent.KEYCODE_PAGE_UP || code == KeyEvent.KEYCODE_PAGE_DOWN) {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_UP);
+        } else {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_DOWN);
+        }
 
+        if (triggerAction) {
             if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
                 disableTouch = !disableTouch;
                 settings.setDisableTouchLastState(disableTouch);
