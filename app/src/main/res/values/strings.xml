@@ -28,7 +28,7 @@
     <string name="d_deleteArticle_title">Delete article?</string>
     <string name="d_deleteArticle_message">Are you sure you want to delete the article?</string>
     <string name="txtNetOffline">Please check Internet connectivity!</string>
-    <string name="txtConfigNotSet">Please configure the app before syncing!</string>
+    <string name="txtConfigNotSet">Please configure the app before syncing.</string>
     <string name="txtUrlCopied">Article URL copied to clipboard</string>
     <string name="dialog_add_label">Add a new article</string>
     <string name="page_url">Page URL</string>
@@ -58,7 +58,7 @@
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag service not found — check URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP Authentication failed</string>
     <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Can\'t login — check username and password</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Can\'t log in — check username and password</string>
     <string name="testConnection_errorMessage_authProblems">Authorization-related problems. These usually caused by HTTP-redirects.</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login</string>
     <string name="testConnection_errorMessage_unknown">Unknown error</string>
@@ -81,16 +81,16 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">No access to API: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Unknown error</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Unknown error: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t login: probably wrong username or password</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t log in: Presumably wrong username or password</string>
     <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
-    <string name="previousUpdateNotFinished">Previous update operation not finished yet</string>
+    <string name="previousUpdateNotFinished">Previous update not finished yet</string>
     <string name="feedName_favorites">Favorites</string>
     <string name="feedName_archived">Archived</string>
     <string name="feedName_unread">Unread</string>
     <string name="articleList_favoriteMark">Favorite mark</string>
     <string name="articleList_ArchivedMark">Archived mark</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
-    <string name="noNextArticle">There is no next article in current list</string>
+    <string name="noNextArticle">No more articles in current list</string>
     <string name="themeName_light">Light</string>
     <string name="themeName_light_contrast">Light (high contrast)</string>
     <string name="themeName_dark">Dark</string>
@@ -98,9 +98,9 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
-    <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br/>wallabag is a self-hostable application allowing you to not miss any content anymore. Click, save and read it when you can. It extracts content so that you can read it when you have time.</string>
+    <string name="aboutText">&lt;b>wallabag app for Android&lt;/b>&lt;br/>wallabag is a self-hostable app, allowing you to not miss any content anymore. Click, save and read the extracted content at your leisure.</string>
     <string name="readSpeed">Read speed</string>
-    <string name="voiceHeight">Voice height</string>
+    <string name="voiceHeight">Voice pitch</string>
     <string name="readVolume">Read volume</string>
     <string name="menuDownloadAsFile">Download as file</string>
     <string name="dialog_title_downloadFileFormat">Select file format</string>
@@ -160,7 +160,7 @@
     <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
-    <string name="pref_desc_runConnectionWizard">The connection wizard will help you to set up basic connection settings</string>
+    <string name="pref_desc_runConnectionWizard">Helps you set up basic connection settings</string>
 
     <string name="pref_categoryName_connection">Connection</string>
     <string name="pref_name_connection_url">wallabag URL</string>
@@ -187,12 +187,12 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
 
     <string name="pref_categoryName_ui">UI</string>
-    <string name="pref_name_ui_theme">Application theme</string>
-    <string name="pref_name_ui_article_fontSize">Article font size (%)</string>
+    <string name="pref_name_ui_theme">App theme</string>
+    <string name="pref_name_ui_article_fontSize">Article text size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
-    <string name="pref_desc_ui_article_fontSerif">Serif typeface for article fonts</string>
-    <string name="pref_name_ui_article_textAlignment_justify">Text alignment: justify</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Stretches the lines so that each line has equal width (like in newspapers and magazines)</string>
+    <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
     <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
@@ -211,13 +211,13 @@
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
     <string name="pref_desc_sync_syncTypes">Press to show more info about synchronization types</string>
     <string name="pref_desc_sync_syncTypes_text">There are two main synchronization types: \"Full\" and \"Fast\".\n\n
-        \"Full\" sync type deletes all local content and downloads it all over again. This type of sync is available in the options menu. It is recommended to use this option only as a last resort.\n\n
-        \"Fast\" sync type (incremental sync) downloads only changes made since the previous sync, which usually takes significantly less time and internet traffic. However, this method has a shortcoming: it can\'t detect remotely deleted article (so no local articles are deleted during \"Fast\" sync). This sync type is invoked with a pull-to-refresh gesture in any article list.\n\n
-        To remedy the shortcoming of the \"Fast\" sync type there is an option to run \"deleted articles sweeping\" that iterates over every local article and asks the server whether it is still present on the server - if it is not, the local article is removed. Depending on the number of articles you have, this operation may take some time, but it saves a lot of internet traffic comparing to \"Full\" sync.\n\n
-        None of these functions affect client-to-server sync: your local changes will always be sent to the server before updating local content.
+        \"Full\" sync deletes all local content and downloads it again. It is available from the options menu, as a last resort.\n\n
+        \"Fast\" sync (incremental) only downloads changes made since the previous sync, reducing time and bandwidth spent. However, this method has a shortcoming: It can\'t detect remotely deleted article (so no local articles are deleted during \"Fast\" sync). Pull downwards beyond the top position scrollbar in any article list to initiate.\n\n
+        To remedy the shortcoming of the \"Fast\" sync type, \"Deleted article sweep\" checks every local article and asks the server whether it is still present on the server - if not, the local article is removed. Depending on the number of articles you have, it takes a while, but saves traffic over the \"Full\" sync.\n\n
+        None of these functions affect client-to-server sync: Your local changes will always be sent to the server before updating local content.
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Enable \"Deleted articles sweeping\" after \"fast\" sync</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Read sync types description above for more info</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Enable \"Deleted article sweep\" after \"Fast\" sync</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Read the description of different sync types above for more info</string>
     <string name="pref_categoryName_autoSync">Auto-sync</string>
     <string name="pref_name_autoSync_onStartup_enabled">Enable auto-sync on application start</string>
     <string name="pref_decs_autoSync_onStartup_enabled">The app will sync when you open it</string>
@@ -236,10 +236,10 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
-    <string name="pref_name_autoDlNew_enabled">Download new articles on addition</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: download will not happen if you have unsynchronized offline changes.</string>
-    <string name="pref_name_imageCache_enabled">Cache in article embedded images</string>
-    <string name="pref_desc_imageCache_enabled">Automatically downloads all images in every article and saves them to the device. Depending on the length of your wallabag article list this can take very long and consume a lot of space.</string>
+    <string name="pref_name_autoDlNew_enabled">Download newly added articles</string>
+    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: Fetching will not occur if you have unsynchronized offline changes.</string>
+    <string name="pref_name_imageCache_enabled">Put article images in cache</string>
+    <string name="pref_desc_imageCache_enabled">Automatically downloads all images from every article and saves them to the device. Depending on the length of your wallabag article list, this can take up a lot of time and space.</string>
 
     <string name="pref_name_storage_dbPath">Database location</string>
     <string name="pref_name_storage_dbPath_internalStorage">Internal storage</string>
@@ -254,23 +254,23 @@
     <string name="pref_name_misc_wipeDB">Wipe Database</string>
     <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe database?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe the database?</string>
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag!</string>
-    <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up connection. This connection wizard will try to help you with it.</string>
-    <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from the Settings screen.</string>
+    <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag.</string>
+    <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up a connection. The connection wizard will help you do so.</string>
+    <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from \"Settings\".</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 
     <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Select this option to input required settings manually</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Select this to input required settings manually</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this option if you have an account on https://framabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>
 
@@ -286,9 +286,9 @@
     <string name="connectionWizard_provider_framabag_prev">Back</string>
     <string name="connectionWizard_provider_framabag_next">Connect</string>
 
-    <string name="connectionWizard_summary_titleMessage">We\'re all done!</string>
-    <string name="connectionWizard_summary_text">Press the button to save settings and go to the main screen.</string>
-    <string name="connectionWizard_summary_toastMessage">Setup is complete</string>
+    <string name="connectionWizard_summary_titleMessage">All done.</string>
+    <string name="connectionWizard_summary_text">Click to save and go to the main screen.</string>
+    <string name="connectionWizard_summary_toastMessage">Setup complete</string>
     <string name="connectionWizard_summary_prev">Back</string>
     <string name="connectionWizard_summary_next">Save settings</string>
 </resources>
