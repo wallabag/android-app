@@ -169,7 +169,7 @@
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Tema Applicazione</string>
-    <string name="pref_name_ui_article_fontSize">Dimensione font articolo (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Dimensione font articolo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Carattere Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Carattere Serif per i font dell\'articolo</string>
     <string name="pref_name_ui_readingSpeed">Velocità di lettura</string>

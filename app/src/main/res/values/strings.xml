@@ -188,7 +188,7 @@
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">App theme</string>
-    <string name="pref_name_ui_article_fontSize">Article text size (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Article text size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>

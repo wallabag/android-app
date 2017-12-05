@@ -173,7 +173,7 @@
 
     <string name="pref_categoryName_ui">Interfazea</string>
     <string name="pref_name_ui_theme">Aplikazioaren gaia</string>
-    <string name="pref_name_ui_article_fontSize">Artikuluaren letra-tamaina (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Artikuluaren letra-tamaina (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif tipografia</string>
     <string name="pref_desc_ui_article_fontSerif">Serif tipografia artikuluen letra-tiporako</string>
     <string name="pref_name_ui_article_textAlignment_justify">Testu-lerrokatzea: justifikatua</string>

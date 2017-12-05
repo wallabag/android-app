@@ -182,7 +182,7 @@
 
     <string name="pref_categoryName_ui">Interfaz</string>
     <string name="pref_name_ui_theme">Tema de la aplicación</string>
-    <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Tamaño de letra del artículo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para el contenido del artículo</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alineación del texto: justificado</string>
