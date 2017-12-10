@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="btnMarkRead">Marker som lest</string>
+<resources>
+    <string name="btnMarkRead">Marker som lest</string>
     <string name="btnMarkUnread">Marker som ulest</string>
     <string name="add_to_favorites">Legg til i favoritter</string>
     <string name="remove_from_favorites">Fjern fra favoritter</string>
@@ -39,8 +40,7 @@
     <string name="d_urlAction_addToWallabag">Legg til i wallabag</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Feil</string>
-    <string name="d_add_fail_text">Kunne ikke funne nettadresse i delingsstreng:
-\n</string>
+    <string name="d_add_fail_text">Kunne ikke funne nettadresse i delingsstreng:\n</string>
     <string name="d_configurationChanged_title">Parameter endret</string>
     <string name="d_configurationChanged_message">Det later til at noen parameter har blitt endret. Det anbefales å utføre en tilkoblingstest.</string>
     <string name="d_configurationChanged_answer_decline">Ikke nå</string>
@@ -155,7 +155,7 @@
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Hvis du ikke vet hva det er, la stå tomt</string>
     <string name="pref_categoryName_ui">Brukergrensesnitt</string>
     <string name="pref_name_ui_theme">Programvaredrakt</string>
-    <string name="pref_name_ui_article_fontSize">Skriftstørrelse for atikkel (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Skriftstørrelse for atikkel (%)</string>
     <string name="pref_name_ui_readingSpeed">Lesehastighet</string>
     <string name="pref_desc_ui_readingSpeed">Din lesehastighet (målt i antall ord per minutt). Brukt til å regne ut antatt lesehastighet.</string>
     <string name="pref_categoryName_ui_screenScrolling">Skjermrulling</string>
@@ -176,11 +176,13 @@
     <string name="noPreviousArticle">Det er ingen tidligere artikkel i gjeldende liste</string>
     <string name="noNextArticle">Det er ingen flere artikler i gjeldende liste</string>
     <string name="themeName_solarized">Solarisert</string>
-    <string name="aboutText"><b>wallabag-programfor Android</b><br/>wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
-    <string name="pref_desc_connection_url"> Eksempel:
-\n <i>https://wallabag.eksempel.no</i>
-\n <i>https://example.no/wallabag</i>
-\n <i>https://framabag.org/u/ditt-brukernavn</i> </string>
+    <string name="aboutText">&lt;b>wallabag-programfor Android&lt;/b>&lt;br/>wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
+    <string name="pref_desc_connection_url">
+        Eksempel:\n
+        <i>https://wallabag.eksempel.no</i>\n
+        <i>https://example.no/wallabag</i>\n
+        <i>https://framabag.org/u/ditt-brukernavn</i>
+    </string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-autentiseringsbrukernavn</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-autentiseringspassord</string>
 
@@ -188,15 +190,12 @@
     <string name="pref_desc_ui_article_fontSerif">Seriffskrift for artikler</string>
     <string name="pref_name_ui_article_textAlignment_justify">Tekstjustering: Blokkjustert</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Strekker linjene tilr lik bredde (som i aviser og magasiner)</string>
-    <string name="pref_desc_sync_syncTypes_text">Det er to hovedtyper for synkronisering: \"Full\" and \"Rask\".
-\n
-\n \"Full\" synkronisering sletter alt lokalt innhold og laster det ned igjen. Denne typen synkronisering er tilgjengelig i valgmenyen. Det anbefales å bare bruke dette valget som siste utvei.
-\n
-\n \"Rask\" synkroniseringstype (inkrementell synkronisering) laster kun ned endringer gjort siden forrige synkronisering, som typisk bruker mye mindre tid og trafikk. Dog har denne metoden et aber, den kan ikke oppdage sletting av artikler annensteds hen (så ingen artikler blir slettet i løpet av \"Rask\" synkronisering). Denne typen synkronisering igangsettes med dra for å oppdatere-håndvending i artikkellisten.
-\n
-\nFor å utbedre bakdelene i \"Rask\" type, er det et valg å kjøre \"tømming av slettede artikler\" som går over hver lokale artikkel og spør tjeneren hvorvidt den fremdeles er å finne på tjeneren - hvis ikke, blir den lokale artikkelen fjernet. Avhengig av antall artikler du har, kan dette valget ta noe tid, men det sparer mye trafikk sammenlignet med \"Full\" synkronisering.
-\n
-\nIngen av disse funksjonene har innvirkning på klient-til-tjener synkronisering: Dine lokale endringer vil alltid bli sendt til tjeneren før oppdatering av lokalt innhold.</string>
+    <string name="pref_desc_sync_syncTypes_text">Det er to hovedtyper for synkronisering: \"Full\" and \"Rask\".\n\n
+        \"Full\" synkronisering sletter alt lokalt innhold og laster det ned igjen. Denne typen synkronisering er tilgjengelig i valgmenyen. Det anbefales å bare bruke dette valget som siste utvei.\n\n
+        \"Rask\" synkroniseringstype (inkrementell synkronisering) laster kun ned endringer gjort siden forrige synkronisering, som typisk bruker mye mindre tid og trafikk. Dog har denne metoden et aber, den kan ikke oppdage sletting av artikler annensteds hen (så ingen artikler blir slettet i løpet av \"Rask\" synkronisering). Denne typen synkronisering igangsettes med dra for å oppdatere-håndvending i artikkellisten.\n\n
+        For å utbedre bakdelene i \"Rask\" type, er det et valg å kjøre \"tømming av slettede artikler\" som går over hver lokale artikkel og spør tjeneren hvorvidt den fremdeles er å finne på tjeneren - hvis ikke, blir den lokale artikkelen fjernet. Avhengig av antall artikler du har, kan dette valget ta noe tid, men det sparer mye trafikk sammenlignet med \"Full\" synkronisering.\n\n
+        Ingen av disse funksjonene har innvirkning på klient-til-tjener synkronisering: Dine lokale endringer vil alltid bli sendt til tjeneren før oppdatering av lokalt innhold.
+    </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Skru på \"Tømming av slettede artikler\" etter \"rask\" synkronisering</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Les beskrivelsen av synkroniseringstyper ovenfor for mer info</string>
     <string name="pref_categoryName_autoSync">Automatisk synkronisering</string>
