@@ -291,4 +291,5 @@
     <string name="connectionWizard_summary_toastMessage">Setup complete</string>
     <string name="connectionWizard_summary_prev">Back</string>
     <string name="connectionWizard_summary_next">Save settings</string>
+    <string name="remove_tag">Remove tag</string>
 </resources>

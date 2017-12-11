@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@android:color/transparent"
@@ -19,7 +20,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="?attr/welcome_logo"/>
+        app:srcCompat="?attr/welcome_logo"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/lastUpdateTime"
