@@ -26,7 +26,7 @@
     <string name="d_deleteArticle_title">Törli a cikket?</string>
     <string name="d_deleteArticle_message">Biztosan törölni akarja a cikket?</string>
     <string name="txtNetOffline">Kérjük, ellenőrizze az internetkapcsolatot!</string>
-    <string name="txtConfigNotSet">Kérjük, állítsa be az alkalmazást szinkronizálás előtt!</string>
+    <string name="txtConfigNotSet">Kérjük, konfigurálja az alkalmazást szinkronizálás előtt.</string>
     <string name="page_url">Oldal URL</string>
     <string name="share_article_title">Cikk megosztása</string>
     <string name="share_text_extra">" a @wallabagapp segítségével"</string>
@@ -53,7 +53,7 @@
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag szolgáltatás nem található - ellenőrizze az URL-t</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-hitelesítés sikertelen</string>
     <string name="testConnection_errorMessage_noCSRF">Hiba a belépési űrlap elemzésekor</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Nem lehet belépni – ellenőrizze a felhasználónevet és a jelszót</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Nem lehet bejelentkezni — ellenőrizze a felhasználónevet és a jelszót</string>
     <string name="testConnection_errorMessage_authProblems">Engedélyezéssel kapcsolatos problémák. Ezeket általában HTTP-átirányítások okozzák.</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Ismeretlen oldal bejelentkezés után</string>
     <string name="testConnection_errorMessage_unknown">Ismeretlen hiba</string>
@@ -68,16 +68,16 @@
     <string name="d_getCredentials_title_message">Probléma merült fel. Ellenőrizze az internetkapcsolatot, majd próbálja meg újra.</string>
     <string name="d_checkCredentials_errorMessage_unknown">Ismeretlen hiba</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Nem lehetett bejelentkezni: valószínűleg rossz a felhasználónév vagy a jelszó</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Nem lehetett bejelentkezni: feltételezhetően rossz a felhasználónév vagy a jelszó</string>
     <string name="unsuccessfulRequest_errorMessage">Kérés sikertelen; válasz kód: %1$d, válasz üzenet: %2$s</string>
-    <string name="previousUpdateNotFinished">Korábbi frissítési művelet nem fejeződött be, még</string>
+    <string name="previousUpdateNotFinished">Az előző frissítés még nem fejeződött be</string>
     <string name="feedName_favorites">Kedvencek</string>
     <string name="feedName_archived">Archívum</string>
     <string name="feedName_unread">Olvasandó</string>
     <string name="articleList_favoriteMark">Kedvencek</string>
     <string name="articleList_ArchivedMark">Archiváltak</string>
     <string name="noPreviousArticle">Nincs előző cikk az aktuális listában</string>
-    <string name="noNextArticle">Nincs következő cikk az aktuális listában</string>
+    <string name="noNextArticle">Nincs több cikk az aktuális listában</string>
     <string name="themeName_light">Világos</string>
     <string name="themeName_light_contrast">Világos (kontrasztos)</string>
     <string name="themeName_dark">Sötét</string>
@@ -85,9 +85,9 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="aboutText">&lt;b&gt;wallabag Android alkalmazás&lt;/b&gt;&lt;br/&gt;A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentsen és olvassa el, amikor tudja. A program kivonja a cikk tartalmát, hogy Ön el tudja olvasni azt ami a lényeg, sallangmentesen.</string>
+    <string name="aboutText"><b>wallabag alkalmazás Androidra</b><br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentse és olvassa el a kibontott tartalmat szabadidejében.</string>
     <string name="readSpeed">Olvasási sebesség</string>
-    <string name="voiceHeight">Hang magassága</string>
+    <string name="voiceHeight">Hangmagasság</string>
     <string name="readVolume">Olvasás hangereje</string>
     <string name="downloadAsFilePathStart">Cikk letöltése</string>
     <string name="downloadAsFileArticleDownloaded">A cikk le lett töltve</string>
@@ -110,7 +110,7 @@
     <string name="nav_other_about">Névjegy</string>
 
     <string name="pref_name_runConnectionWizard">Kapcsolat varázsló futtatása</string>
-    <string name="pref_desc_runConnectionWizard">A csatlakozás varázsló segít az alapvető csatlakozási beállításokban</string>
+    <string name="pref_desc_runConnectionWizard">Segít az alapvető csatlakozási beállításokban</string>
 
     <string name="pref_categoryName_connection">Kapcsolat</string>
     <string name="pref_name_connection_url">A wallabag URL-címe</string>
@@ -135,9 +135,9 @@
 
     <string name="pref_categoryName_ui">Felület</string>
     <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
-    <string name="pref_name_ui_article_fontSize" formatted="false">A Cikk betűmérete (%-ban)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Cikk szövegmérete (%-ban)</string>
     <string name="pref_name_ui_article_fontSerif">Serif betűtípus</string>
-    <string name="pref_desc_ui_article_fontSerif">A cikk szövege Serif betűtípusú legyen</string>
+    <string name="pref_desc_ui_article_fontSerif">A cikk Serif betűtípusú legyen</string>
     <string name="pref_categoryName_ui_screenScrolling">Képernyő görgetés</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Lapozzunk a hangerő gombokkal</string>
     <string name="pref_name_ui_tapToScroll_enabled">Érintésre görget</string>
@@ -158,9 +158,9 @@
     <string name="pref_name_autoSyncQueue_enabled">Külön szinkron a helyi változásoknak</string>
     <string name="pref_desc_autoSyncQueue_enabled">Lehetővé teszi a helyi változások (linkek, archivált cikkek, stb.) szinkronizálását a szerverrel, amint a hálózat elérhető lesz.</string>
     <string name="pref_name_autoDlNew_enabled">Cikkek letöltése hozzáadásuk után</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a letöltés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
+    <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a lekérés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
     <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek képeihez</string>
-    <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez nagyon hosszú időt és sok tárhelyet vehet igénybe.</string>
+    <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez sok időt és tárhelyet igényelhet.</string>
 
     <string name="pref_categoryName_miscellaneous">Egyéb</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP rendszer kezelése</string>
@@ -168,19 +168,19 @@
     <string name="pref_name_misc_wipeDB">Adatbázis törlése</string>
     <string name="pref_desc_misc_wipeDB">Töröl minden cikket a helyi adatbázisból, eltávolítja az összes nem szinkronizált helyi változást és URL-t</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Törli az adatbázist?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Biztos benne, hogy törölni szeretné az adatokat?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Biztos benne, hogy törölni szeretné az adatbázist?</string>
 
     <string name="connectionWizard_misc_incorrectConnectionURI">Helytelen kapcsolat URI-t használt</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Üdvözli a wallabag!</string>
-    <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítani egy kapcsolatot a szerverrel. Ez a varázsló megpróbál segíteni.</string>
-    <string name="connectionWizard_welcome_rerunNotice">Bármikor újra futtathatja az internetkapcsolat varázslót a beállításokból.</string>
+    <string name="connectionWizard_welcome_titleMessage">Üdvözöljük a wallabag-ban.</string>
+    <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítani egy kapcsolatot a szerverrel. A varázsló megpróbál ebben segíteni.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Bármikor újra futtathatja a kapcsolat varázslót a beállításokból.</string>
     <string name="connectionWizard_welcome_prev">Kihagyás</string>
     <string name="connectionWizard_welcome_next">Következő</string>
 
     <string name="connectionWizard_providerSelection_titleMessage">Wallabag szolgáltató kiválasztása</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt a lehetőséget ha kézzel szeretné megadni a beállításokat</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt ha kézzel szeretné megadni a beállításokat</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
@@ -198,9 +198,9 @@
     <string name="connectionWizard_provider_framabag_prev">Vissza</string>
     <string name="connectionWizard_provider_framabag_next">Csatlakozás</string>
 
-    <string name="connectionWizard_summary_titleMessage">Készen is vagyunk!</string>
-    <string name="connectionWizard_summary_text">Nyomja meg a gombot a beállítások mentéséhez, és a fő képernyőhöz való visszajutáshoz.</string>
-    <string name="connectionWizard_summary_toastMessage">A beállítás befejeződött</string>
+    <string name="connectionWizard_summary_titleMessage">Minden kész.</string>
+    <string name="connectionWizard_summary_text">Kattintson a mentéshez, és a fő képernyőhöz való visszajutáshoz.</string>
+    <string name="connectionWizard_summary_toastMessage">Beállítás kész</string>
     <string name="connectionWizard_summary_prev">Vissza</string>
     <string name="connectionWizard_summary_next">Beállítások mentése</string>
     <string name="dialog_add_label">Új cikk hozzáadása</string>
@@ -239,8 +239,8 @@
 
     <string name="pref_name_connection_api_clientID">Ügyfél Azonosító</string>
     <string name="pref_name_connection_api_clientSecret">Ügyfél titok</string>
-    <string name="pref_name_ui_article_textAlignment_justify">Szöveg igazítása: sorkizárt</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Nyújtja a sorokat úgy, hogy minden sor azonos szélességű legyen (mint újságokban és folyóiratokban)</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Szöveg igazítása: Sorkizárt</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Azonos szélességűre nyújtja a sorokat (mint az újságokban)</string>
     <string name="pref_name_ui_readingSpeed">Olvasási sebesség</string>
     <string name="pref_desc_ui_readingSpeed">Az olvasási sebessége (percenkénti szóban mérve). A becsült olvasási idő kiszámításához.</string>
     <string name="pref_categoryName_sync">Szinkronizáció</string>
@@ -252,7 +252,7 @@
         A \"Gyors\" szinkronizálás hiányosságának orvoslására van egy lehetőség: \"törölt cikkek takarítása\", amely végigmegy minden helyi cikken, és megkérdezi a szerver, hogy jelen van-e rajta továbbra is - ha nem, a helyi cikk törlődik. A cikkek számától függően, ez a művelet hosszabb időt vehet igénybe, de sok internetes forgalmat spórol meg a \"Teljes\" szinkronhoz képest.\n\n
         Egyik funkció sem befolyásolja a kliensről-szerverre szinkronizálást: A helyi változások mindig el lesznek küldve a szerver felé, mielőtt a helyi tartalmat frissítjük.
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Töröltek takarítása\" a \"Gyors\" szinkron után</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Törölt cikk takarítása\" a \"Gyors\" szinkron után</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Bővebb infó a szinkronizálási típusokról a fentiekben</string>
     <string name="pref_name_autoSync_onStartup_enabled">Automata szinkron induláskor</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
@@ -260,4 +260,33 @@
 
 <string name="title_main_tag">Címke: %s</string>
 
+<string name="menuCopyOriginalURL">Eredeti URL másolása</string>
+    <string name="txtUrlCopied">A cikk URL-je a vágólapra másolva</string>
+    <string name="menuDownloadAsFile">Letöltés fájlként</string>
+    <string name="dialog_title_downloadFileFormat">Válassza ki a fájlformátumot</string>
+    <string name="notification_serverError">Szerver hiba</string>
+    <string name="lastUpdateTimeLabel">Utolsó frissítés: %s</string>
+    <string name="listItem_estimatedReadingTime">%d perc</string>
+
+    <string name="message_couldNotOpenUrl">Nem sikerült megnyitni ezt az URL-t</string>
+
+    <string name="message_disableTouch_inputDisabled">Érintéses bevitel le van tiltva</string>
+    <string name="message_disableTouch_inputEnabled">Érintéses bevitel engedélyezve</string>
+    <string name="d_disableTouch_changeKey_title">Érintéses bevitel tiltásának gombja</string>
+    <string name="d_disableTouch_currentCode">Jelenleg kiválasztott kulcs kód (a gomb megnyomásával változtathatja meg):</string>
+
+    <string name="pref_categoryName_ui_misc">Vegyes beállítások</string>
+    <string name="pref_name_ui_disableTouch_enabled">Érintéses bevitel tiltása</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Nyomja meg a konfigurált gombot (kamera gomb alapértelmezés szerint) az érintéses bevitel blokkolásához/feloldásához a képernyőn (a rendszervezérlők nem érintettek)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Érintéses bevitel tiltásának gombja</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Nyomja meg itt az érintéses bevitelt tiltó/engedélyező gomb beállításához</string>
+
+    <string name="pref_name_storage_dbPath">Adatbázis helye</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Belső tárhely</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Külső tárhely</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Az adatbázis elköltözött</string>
+
+    <string name="pref_name_misc_appendWallabagMention">Mellékelje a wallabag-ra való utalást</string>
+    <string name="pref_desc_misc_appendWallabagMention">Hozzáfűzi \"a @wallabagapp segítségével\"-t a megosztott szövegekhez</string>
+    <string name="remove_tag">Címke eltávolítása</string>
 </resources>
