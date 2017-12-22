@@ -55,7 +55,7 @@
     <string name="dialog_title_downloadFileFormat">Sélectionner le format du fichier</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
-    <string name="menuTTS">Synthèse Vocale</string>
+    <string name="menuTTS">Synthèse vocale</string>
     <string name="ttsAutoplayNextArticle">Lecture automatique de l\'article suivant</string>
     <string name="ttsLanguage">Choisir la Langue</string>
     <string name="ttsVoice">Choisir la Voix</string>
