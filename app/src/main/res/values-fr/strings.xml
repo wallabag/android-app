@@ -13,6 +13,7 @@
     <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
     <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
+    <string name="txtUrlCopied">L\'URL de l\'article a été copiée dans le presse papier</string>
     <string name="page_url">URL de la page</string>
     <string name="share_article_title">Partager l\'article</string>
     <string name="share_text_extra">" via @wallabagapp"</string>
@@ -49,6 +50,9 @@
     <string name="themeName_light">Clair</string>
     <string name="themeName_light_contrast">Clair (contraste élevé)</string>
     <string name="themeName_solarized">Solarisé</string>
+    <string name="menuCopyOriginalURL">Copier l\'URL originale</string>
+    <string name="menuDownloadAsFile">Télécharger fichier sous</string>
+    <string name="dialog_title_downloadFileFormat">Sélectionner le format du fichier</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menuTTS">Synthèse Vocale</string>
@@ -246,6 +250,7 @@
     <string name="testConnection_errorMessage_unsupportedServerVersion">Détection d\'une version du serveur non prise en charge</string>
     <string name="checkCredentials_progressDialogMessage">Test de l\'accès API…</string>
     <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
+    <string name="lastUpdateTimeLabel">Dernière mise à jour : %s</string>
     <string name="menu_changeTitle">Modifier le titre</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
     <string name="title_main_tag">Étiquette: %s</string>
