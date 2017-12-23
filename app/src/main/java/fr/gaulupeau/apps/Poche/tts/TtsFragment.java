@@ -755,25 +755,7 @@ public class TtsFragment
             VoiceInfo voiceInfo = ttsVoiceByLanguage.get(language).get(voicePosition);
             if (voiceInfo != null) {
                 if (ttsService != null) {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        // Cannot programmatically change TTS Engine with older Android,
-                        // We redirect the user to TTS Settings:
-                        String curTtsEngine = ttsService.getEngine();
-                        if ( ! ((curTtsEngine == null)
-                                ||"".equals(curTtsEngine)
-                                || voiceInfo.engineInfo.name.equals(curTtsEngine)))
-                        {
-                            Intent intent = new Intent();
-                            intent.setAction("com.android.settings.TTS_SETTINGS");
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            this.startActivity(intent);
-                            startActivityForResult(intent, REQUEST_CODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS);
-                        } else {
-                            ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
-                        }
-                    } else {
-                        ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
-                    }
+                    ttsService.setEngineAndVoice(voiceInfo.engineInfo.name, voiceInfo.name);
                 }
                 settings.setTtsEngine(voiceInfo.engineInfo.name);
                 settings.setTtsVoice(voiceInfo.name);

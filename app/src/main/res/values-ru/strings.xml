@@ -88,7 +88,7 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-аутентификации</string>
 
     <string name="pref_name_ui_theme">Тема приложения</string>
-    <string name="pref_name_ui_article_fontSize">Размер шрифта статей (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Размер шрифта статей (%)</string>
     <string name="pref_name_ui_article_fontSerif">Шрифт с засечками</string>
     <string name="pref_desc_ui_article_fontSerif">Шрифт с засечками для статей</string>
 

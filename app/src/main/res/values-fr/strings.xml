@@ -102,7 +102,7 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">Mot de passe Authentification HTTP</string>
 
     <string name="pref_name_ui_theme">Thème de l\'application</string>
-    <string name="pref_name_ui_article_fontSize">Taille de la police (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Taille de la police (%)</string>
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (serif)</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>

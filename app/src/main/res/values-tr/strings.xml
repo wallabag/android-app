@@ -174,7 +174,7 @@
 
     <string name="pref_categoryName_ui">Arayüz</string>
     <string name="pref_name_ui_theme">Tema</string>
-    <string name="pref_name_ui_article_fontSize">Makale yazı tipi boyutu (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Makale yazı tipi boyutu (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif yazı tipi</string>
     <string name="pref_desc_ui_article_fontSerif">Makalelerde Serif yazı tipi</string>
     <string name="pref_name_ui_article_textAlignment_justify">Metin hizalama: her iki tarafa da</string>
