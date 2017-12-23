@@ -196,6 +196,7 @@
                 android:src="@drawable/ic_redo_24dp"
                 android:layout_gravity="center_vertical|right"
                 android:clickable="true"
+                android:focusable="true"
                 android:visibility="visible"
                 android:paddingLeft="10sp"
                 android:paddingTop="10sp"

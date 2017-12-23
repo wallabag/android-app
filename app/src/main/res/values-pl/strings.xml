@@ -169,7 +169,7 @@
 
     <string name="pref_categoryName_ui">Interfejs użytkownika</string>
     <string name="pref_name_ui_theme">Motyw aplikacji</string>
-    <string name="pref_name_ui_article_fontSize">Rozmiar czcionki artykułu (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Rozmiar czcionki artykułu (%)</string>
     <string name="pref_name_ui_article_fontSerif">Krój czcionki szeryfowy</string>
     <string name="pref_desc_ui_article_fontSerif">Krój szeryfowy dla czcionek artykuły</string>
     <string name="pref_name_ui_readingSpeed">Prędkość czytania</string>

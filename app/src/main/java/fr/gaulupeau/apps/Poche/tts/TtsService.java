@@ -196,13 +196,11 @@ public class TtsService
         });
         ttsVoice = this.settings.getTtsVoice();
         ttsEngine = this.settings.getTtsEngine();
-        if (ttsEngine.equals("") || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (ttsEngine.equals("")) {
             this.tts = new TextToSpeech(getApplicationContext(), this);
             this.ttsEngine = tts.getDefaultEngine();
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) { // check done again to avoid error notification in Android Studio
-                this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
-            }
+            this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
         }
         noisyReceiver = new BroadcastReceiver() {
             @Override
@@ -513,9 +511,6 @@ public class TtsService
                 // We finally obtained a success status !
                 // (probably after initializing a new TextToSpeech with different engine)
                 state =  State.CREATED;
-            }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                this.ttsEngine = tts.getDefaultEngine();
             }
             this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override

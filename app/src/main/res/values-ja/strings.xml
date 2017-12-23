@@ -132,7 +132,7 @@
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">アプリケーション テーマ</string>
-    <string name="pref_name_ui_article_fontSize">記事のフォントサイズ (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">記事のフォントサイズ (%)</string>
     <string name="pref_name_ui_article_fontSerif">書体</string>
     <string name="pref_desc_ui_article_fontSerif">記事フォントの書体</string>
     <string name="pref_categoryName_ui_screenScrolling">画面のスクロール</string>

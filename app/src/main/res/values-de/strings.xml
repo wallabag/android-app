@@ -97,7 +97,7 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierungspasswort</string>
 
     <string name="pref_name_ui_theme">Thema</string>
-    <string name="pref_name_ui_article_fontSize">Schriftgröße für Artikel (in %)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Schriftgröße für Artikel (in %)</string>
     <string name="pref_name_ui_article_fontSerif">Serifenschrift</string>
     <string name="pref_desc_ui_article_fontSerif">Serifenschrift für Artikel</string>
 

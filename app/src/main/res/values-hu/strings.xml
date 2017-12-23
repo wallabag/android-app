@@ -135,7 +135,7 @@
 
     <string name="pref_categoryName_ui">Felület</string>
     <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
-    <string name="pref_name_ui_article_fontSize">A Cikk betűmérete (%-ban)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">A Cikk betűmérete (%-ban)</string>
     <string name="pref_name_ui_article_fontSerif">Serif betűtípus</string>
     <string name="pref_desc_ui_article_fontSerif">A cikk szövege Serif betűtípusú legyen</string>
     <string name="pref_categoryName_ui_screenScrolling">Képernyő görgetés</string>
