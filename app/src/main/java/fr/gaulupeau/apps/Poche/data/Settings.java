@@ -479,6 +479,14 @@ public class Settings {
         setInt(R.string.pref_key_ui_disableTouch_keyCode, keyCode);
     }
 
+    public int getScrolledOverBottom() {
+        return getInt(R.string.pref_key_ui_scrollOverBottom, 3);
+    }
+
+    public void setScrolledOverBottom(int scrolls) {
+        setInt(R.string.pref_key_ui_scrollOverBottom, scrolls);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }
