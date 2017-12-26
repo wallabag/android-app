@@ -26,7 +26,7 @@
     <string name="d_deleteArticle_title">Ezabatu artikulua?</string>
     <string name="d_deleteArticle_message">Ziur zaude artikulua ezabatu nahi duzula?</string>
     <string name="txtNetOffline">Mesedez, egiaztatu Internet konexioa!</string>
-    <string name="txtConfigNotSet">Mesedez, aplikazioa konfiguratu sinkronizatu aurretik!</string>
+    <string name="txtConfigNotSet">Mesedez, aplikazioa konfiguratu sinkronizatu aurretik.</string>
     <string name="dialog_add_label">Gehitu artikulu berri bat</string>
     <string name="page_url">Orriaren URLa</string>
     <string name="share_article_title">Partekatu artikulua</string>
@@ -78,16 +78,16 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">APIra sarbiderik ez: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Errore ezezaguna</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore ezezaguna: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Ezin izan da saioa hasi: ziurrenik erabiltzaile-izen edo pasahitz okerra</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Ezin izan da saioa hasi: Ziur aski erabiltzaile-izen edo pasahitz okerra</string>
     <string name="unsuccessfulRequest_errorMessage">Eskaera ez da burutu; erantzun-kodea: %1$d, erantzun-mezua: %2$s</string>
-    <string name="previousUpdateNotFinished">Aurreko eguneratze eragiketa oraindik ez da amaitu</string>
+    <string name="previousUpdateNotFinished">Aurreko eguneratzea oraindik ez da amaitu</string>
     <string name="feedName_favorites">Gogokoak</string>
     <string name="feedName_archived">Artxibatuak</string>
     <string name="feedName_unread">Irakurri gabekoak</string>
     <string name="articleList_favoriteMark">Gogoko marka</string>
     <string name="articleList_ArchivedMark">Artxibatu marka</string>
     <string name="noPreviousArticle">Ez dago aurreko artikulurik uneko zerrendan</string>
-    <string name="noNextArticle">Ez dago hurrengo artikulurik uneko zerrendan</string>
+    <string name="noNextArticle">Ez dago artikulu gehiago uneko zerrendan</string>
     <string name="themeName_light">Argia</string>
     <string name="themeName_light_contrast">Argia (kontraste handia)</string>
     <string name="themeName_dark">Iluna</string>
@@ -97,7 +97,7 @@
     <string name="menu_readArticle_decreaseFontSize">Txikiagotu letra-tamaina</string>
     <string name="aboutText">&lt;b&gt;wallabag aplikazioa Androiderako&lt;/b&gt;&lt;br/&gt;"wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri  bat da. Klikatu, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko."</string>
     <string name="readSpeed">Irakurketa abiadura</string>
-    <string name="voiceHeight">Tonuaren altuera</string>
+    <string name="voiceHeight">Ahots tonua</string>
     <string name="readVolume">Irakurketa bolumena</string>
     <string name="menuDownloadPdf">Deskargatu PDF gisa</string>
     <string name="downloadPdfPathStart">Artikulua deskargatzen</string>
@@ -253,4 +253,23 @@
     <string name="connectionWizard_summary_toastMessage">Konfigurazioa osatu da</string>
     <string name="connectionWizard_summary_prev">Atzera</string>
     <string name="connectionWizard_summary_next">Gorde ezarpenak</string>
-</resources>
+<string name="menuCopyOriginalURL">Kopiatu jatorrizko URLa</string>
+    <string name="txtUrlCopied">Artikuluren URLa arbelera kopiatua</string>
+    <string name="menuDownloadAsFile">Deskargatu fitxategi gisa</string>
+    <string name="dialog_title_downloadFileFormat">Hautatu fitxategi formatua</string>
+    <string name="downloadAsFilePathStart">Artikulua deskargatzen</string>
+    <string name="downloadAsFileArticleDownloaded">Artikulu deskargatua</string>
+    <string name="downloadAsFileArticleDownloadedDetail">%s artikulua deskargatua</string>
+    <string name="downloadAsFileTouchToOpen">Ukitu irekitzeko</string>
+    <string name="downloadAsFileProgressDetail">wallabag zure %1$s artikulu %2$s-(e)n ari da deskargatzen</string>
+    <string name="downloadAsFileProgress">wallabag zure artikulua %s-(e)n ari da deskargatzen</string>
+    <string name="notification_serverError">Errorea zerbitzarian</string>
+    <string name="lastUpdateTimeLabel">Azken eguneratzea: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
+
+    <string name="message_couldNotOpenUrl">Ezin izan da URL hau ireki</string>
+
+    <string name="message_disableTouch_inputDisabled">Ukipen sarrera desgaituta</string>
+    <string name="message_disableTouch_inputEnabled">Ukipen sarrera gaituta</string>
+    <string name="d_disableTouch_changeKey_title">Desgaitu ukipen sarreraren botoia</string>
+    </resources>
