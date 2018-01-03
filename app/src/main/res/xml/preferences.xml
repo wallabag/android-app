@@ -155,7 +155,7 @@
                 android:title="@string/pref_name_ui_scrollOverBottom"
                 android:summary="@string/pref_desc_ui_scrollOverBottom"
                 android:inputType="number"
-                android:defaultValue="10"/>
+                android:defaultValue="3"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
