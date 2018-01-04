@@ -177,7 +177,7 @@
         <item>Complète</item>
     </string-array>
     <string name="pref_name_connection_autofill">Remplir automatiquement</string>
-    <string name="pref_desc_connection_autofill">Tester la connexion et remplir l\'ID et le secret du client</string>
+    <string name="pref_desc_connection_autofill">Tester la connexion et remplir l\'ID et la clé secrète du client</string>
     <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
     <string name="pref_name_ui_article_fontSerif">Police avec Serif</string>
     <string name="pref_option_autoSync_interval_12h">12 heures</string>
@@ -243,7 +243,7 @@
     <string name="pref_desc_ui_readingSpeed">Votre vitesse de lecture (mesurée en mots par minutes). Utilisée pour calculer le temps estimé de lecture.</string>
     <string name="pref_name_autoSync_onStartup_enabled">Activer la synchronisation automatique lors du lancement de l\'application</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
-    <string name="pref_name_connection_api_clientSecret">Secret client</string>
+    <string name="pref_name_connection_api_clientSecret">Clé secrète</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Activer le nettoyage des articles supprimés après une synchronisation rapide</string>
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
     <string name="pref_name_ui_readingSpeed">Vitesse de lecture</string>
@@ -253,5 +253,5 @@
     <string name="lastUpdateTimeLabel">Dernière mise à jour : %s</string>
     <string name="menu_changeTitle">Modifier le titre</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
-    <string name="title_main_tag">Étiquette: %s</string>
+    <string name="title_main_tag">Tag: %s</string>
 </resources>
