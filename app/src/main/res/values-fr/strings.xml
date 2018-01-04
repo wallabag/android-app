@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="btnMarkRead">Marquer comme lu</string>
-    <string name="btnMarkUnread">Marquer comme Non lu</string>
+    <string name="btnMarkUnread">Marquer comme non lu</string>
     <string name="add_to_favorites">Ajouter aux favoris</string>
     <string name="remove_from_favorites">Supprimer des favoris</string>
     <string name="menuShare">Partager</string>
@@ -35,7 +35,7 @@
     <string name="feedName_favorites">Favoris</string>
     <string name="previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
-    <string name="testConnection_errorMessage_incorrectUrl">URL Incorrecte</string>
+    <string name="testConnection_errorMessage_incorrectUrl">URL incorrecte</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Impossible de se connecter — vérifiez votre identifiant et votre mot de passe</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
@@ -58,7 +58,7 @@
     <string name="menuTTS">Synthèse vocale</string>
     <string name="ttsAutoplayNextArticle">Lecture automatique de l\'article suivant</string>
     <string name="ttsLanguage">Choisir la Langue</string>
-    <string name="ttsVoice">Choisir la Voix</string>
+    <string name="ttsVoice">Choisir la voix</string>
     <string name="ttsVolume">Volume</string>
     <string name="ttsSpeed">Vitesse de lecture</string>
     <string name="ttsPlayPause">Lecture / Pause</string>
@@ -66,7 +66,7 @@
     <string name="ttsFastRewind">Retour Rapide</string>
     <string name="ttsPitch">Hauteur de la voix</string>
     <string name="ttsOptions">Options</string>
-    <string name="ttsError">Erreur de Synthèse Vocale</string>
+    <string name="ttsError">Erreur de synthèse vocale</string>
     <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
@@ -100,10 +100,10 @@
 
     <string name="pref_name_connection_advanced_customSSLSettings">Paramètres SSL personnalisés</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">Désactive SSL sur tous les appareils, active TLS 1.1 et TLS 1.2 sur Android 4.1–4.4</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Authentification HTTP Basique</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Authentification HTTP basique</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Si vous ne savez pas ce que c\'est, laissez-le vide</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">Identifiant Authentification HTTP</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">Mot de passe Authentification HTTP</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Identifiant authentification HTTP</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">Mot de passe authentification HTTP</string>
 
     <string name="pref_name_ui_theme">Thème de l\'application</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Taille de la police (%)</string>
