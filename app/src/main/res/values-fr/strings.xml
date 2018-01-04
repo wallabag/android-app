@@ -118,7 +118,7 @@
     <string name="notification_error">Erreur</string>
     <string name="notification_incorrectCredentials">Identifiants incorrects</string>
     <string name="notification_incorrectConfiguration">Configuration incorrecte</string>
-    <string name="notification_serverError">Server error</string>
+    <string name="notification_serverError">Erreur serveur</string>
     <string name="notification_unknownError">Erreur inconnue</string>
     <string name="notification_expandedError">Erreur : %s</string>
     <string name="menu_lists_search">Rechercher</string>
@@ -151,7 +151,7 @@
 
     <string name="title_main_tag">Tag : %s</string>
 
-    <string name="message_couldNotOpenUrl">Couldn\'t open this URL</string>
+    <string name="message_couldNotOpenUrl">L\'URL n\'a pas pu être ouverte</string>
 
     <string name="message_disableTouch_inputDisabled">Touch input disabled</string>
     <string name="message_disableTouch_inputEnabled">Touch input enabled</string>
