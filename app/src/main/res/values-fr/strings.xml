@@ -14,13 +14,13 @@
     <string name="ttsSpeed">Vitesse de lecture</string>
     <string name="ttsPitch">Hauteur de la voix</string>
     <string name="ttsVolume">Volume</string>
-    <string name="ttsLanguage">Choisir la Langue</string>
+    <string name="ttsLanguage">Choisir la langue</string>
     <string name="ttsVoice">Choisir la voix</string>
     <string name="ttsAutoplayNextArticle">Lecture automatique de l\'article suivant</string>
     <string name="ttsError">Erreur de synthèse vocale</string>
-    <string name="ttsFastRewind">Retour Rapide</string>
+    <string name="ttsFastRewind">Retour rapide</string>
     <string name="ttsPlayPause">Lecture / Pause</string>
-    <string name="ttsFastForward">Avance Rapide</string>
+    <string name="ttsFastForward">Avance rapide</string>
     <string name="ttsOptions">Options</string>
     <string name="menu_open_random_article">Ouvrir un article au hasard</string>
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
