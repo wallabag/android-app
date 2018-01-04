@@ -269,4 +269,5 @@
     <string name="menu_changeTitle">Modifier le titre</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
     <string name="title_main_tag">Tag: %s</string>
+    <string name="remove_tag">Supprimer tag</string>
 </resources>
