@@ -195,6 +195,11 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Faites défiler l\'écran en tapant sur les côtés latéraux de l\'écran</string>
     <string name="pref_name_ui_screenScrolling_percent">Pourcentage de la hauteur d\'écran à faire défiler</string>
     <string name="pref_name_ui_screenScrolling_smooth">Défilement d\'écran doux</string>
+    <string name="pref_categoryName_ui_misc">Divers</string>
+    <string name="pref_name_ui_disableTouch_enabled">Disable touch input</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
     <string name="pref_name_ui_tapToScroll_enabled">Appuyer pour faire défiler</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Faire défiler à l\'aide des boutons du volume</string>
     <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
