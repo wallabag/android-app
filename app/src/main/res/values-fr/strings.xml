@@ -110,11 +110,6 @@
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (serif)</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>
-    <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
-    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
-    <string name="pref_name_misc_wipeDB">Purger la base de données</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
@@ -161,12 +156,27 @@
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_categoryName_connection_advanced">Paramètres de connexion avancés</string>
+
+    <string name="pref_name_storage_dbPath">Emplacement de la base de données</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Stockage interne</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Stockage externe</string>
+    <string name="pref_name_storage_dbPath_dbMoved">La base de données a été déplacée</string>
+
     <string name="pref_categoryName_miscellaneous">Divers</string>
+    <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>
+    <string name="pref_desc_misc_appendWallabagMention">Ajoute \"via @wallabagapp\" aux articles partagés</string>
+    <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
+    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
+    <string name="pref_name_misc_wipeDB">Purger la base de données</string>
+    <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
+
     <string name="pref_categoryName_ui">Interface</string>
     <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles directement après leur ajout par l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
     <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
-    <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
+
     <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
     <string name="pref_name_autoDlNew_enabled">Télécharger les nouveaux articles</string>
     <string name="pref_name_autoSync_enabled">Activer la synchronisation automatique</string>
