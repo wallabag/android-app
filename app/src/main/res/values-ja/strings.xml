@@ -82,9 +82,9 @@
     <string name="themeName_solarized">ソラリゼーション</string>
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
-    <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
+    <string name="aboutText"><b>Android 用 wallabag アプリ</b><br/> wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
     <string name="readSpeed">読む速度</string>
-    <string name="voiceHeight">声の高さ</string>
+    <string name="voiceHeight">声のピッチ</string>
     <string name="readVolume">読む音量</string>
     <string name="downloadAsFilePathStart">記事をダウンロード</string>
     <string name="downloadAsFileArticleDownloaded">記事をダウンロードしました</string>
@@ -107,7 +107,7 @@
     <string name="nav_other_about">アプリについて</string>
 
     <string name="pref_name_runConnectionWizard">接続ウィザードを実行</string>
-    <string name="pref_desc_runConnectionWizard">接続ウィザードは、基本的な接続設定を行います</string>
+    <string name="pref_desc_runConnectionWizard">基本的な接続設定を行うのに役に立ちます</string>
 
     <string name="pref_categoryName_connection">接続</string>
     <string name="pref_name_connection_url">wallabag URL</string>
@@ -131,10 +131,10 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 認証パスワード</string>
 
     <string name="pref_categoryName_ui">UI</string>
-    <string name="pref_name_ui_theme">アプリケーション テーマ</string>
-    <string name="pref_name_ui_article_fontSize" formatted="false">記事のフォントサイズ (%)</string>
+    <string name="pref_name_ui_theme">アプリ テーマ</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">記事の文字サイズ (%)</string>
     <string name="pref_name_ui_article_fontSerif">書体</string>
-    <string name="pref_desc_ui_article_fontSerif">記事フォントの書体</string>
+    <string name="pref_desc_ui_article_fontSerif">記事の書体フォント</string>
     <string name="pref_categoryName_ui_screenScrolling">画面のスクロール</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">ボリューム ボタンでスクロール</string>
     <string name="pref_name_ui_tapToScroll_enabled">タップしてスクロール</string>
@@ -154,10 +154,10 @@
     <string name="pref_name_autoSync_type">自動同期の種類</string>
     <string name="pref_name_autoSyncQueue_enabled">ローカルの変更の自動同期を分離</string>
     <string name="pref_desc_autoSyncQueue_enabled">これは、ネットワークが利用可能になるとすぐにローカルの変更 (追加されたリンク、アーカイブされた記事等) をサーバーに同期することができます。</string>
-    <string name="pref_name_autoDlNew_enabled">追加で新しい記事をダウンロード</string>
-    <string name="pref_desc_autoDlNew_enabled">アプリ経由で追加された記事をすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、ダウンロードは行われません。</string>
-    <string name="pref_name_imageCache_enabled">記事に埋め込まれた画像をキャッシュ</string>
-    <string name="pref_desc_imageCache_enabled">自動的にすべての記事のすべての画像をダウンロードし、デバイスに保存します。Wallabag の記事リストの長さによって、これは非常に長い時間がかかることや、多くの容量を消費することがあります。</string>
+    <string name="pref_name_autoDlNew_enabled">新しく追加された記事をダウンロード</string>
+    <string name="pref_desc_autoDlNew_enabled">アプリで、新しい記事が追加されたらすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、取得は行われません。</string>
+    <string name="pref_name_imageCache_enabled">記事の画像をキャッシュに入れる</string>
+    <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。Wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
 
     <string name="pref_categoryName_miscellaneous">その他</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP スキームの処理</string>
@@ -169,15 +169,15 @@
 
     <string name="connectionWizard_misc_incorrectConnectionURI">誤った接続 URI の使用</string>
 
-    <string name="connectionWizard_welcome_titleMessage">wallabag へようこそ!</string>
-    <string name="connectionWizard_welcome_text">wallabag アプリを使用する前に、接続をセットアップする必要があります。この接続ウィザードはそのお手伝いをします。</string>
-    <string name="connectionWizard_welcome_rerunNotice">いつでも設定画面から接続ウィザードを再実行することができます。</string>
+    <string name="connectionWizard_welcome_titleMessage">wallabag へようこそ。</string>
+    <string name="connectionWizard_welcome_text">wallabag アプリを使用する前に、接続をセットアップする必要があります。接続ウィザードはそのお手伝いをします。</string>
+    <string name="connectionWizard_welcome_rerunNotice">\"設定\" から、いつでも接続ウィザードを再実行することができます。</string>
     <string name="connectionWizard_welcome_prev">スキップ</string>
     <string name="connectionWizard_welcome_next">次へ</string>
 
     <string name="connectionWizard_providerSelection_titleMessage">wallabag プロバイダーを選択してください</string>
     <string name="connectionWizard_providerSelection_provider_general_name">その他</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">このオプションを選択すると、必要な設定を手動で入力します</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">これを選択すると、必要な設定を手動で入力します</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択します</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択します</string>
     <string name="connectionWizard_providerSelection_prev">スキップ</string>
@@ -195,8 +195,8 @@
     <string name="connectionWizard_provider_framabag_prev">戻る</string>
     <string name="connectionWizard_provider_framabag_next">接続</string>
 
-    <string name="connectionWizard_summary_titleMessage">すべて完了しました!</string>
-    <string name="connectionWizard_summary_text">ボタンを押すと、設定を保存し、メイン画面に移動します。</string>
+    <string name="connectionWizard_summary_titleMessage">すべて完了しました。</string>
+    <string name="connectionWizard_summary_text">クリックすると、保存して、メイン画面に移動します。</string>
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>
     <string name="connectionWizard_summary_prev">戻る</string>
     <string name="connectionWizard_summary_next">設定を保存</string>
@@ -240,14 +240,14 @@
     <string name="pref_name_connection_api_clientID">クライアント ID</string>
     <string name="pref_name_connection_api_clientSecret">クライアント シークレット</string>
     <string name="pref_name_ui_article_textAlignment_justify">テキストの配置: 均等割り付け</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">それぞれの行が (新聞や雑誌のように) 同じ幅になるように行を伸ばします</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">同じ幅になるように行を伸ばします (新聞のように)</string>
     <string name="pref_name_ui_readingSpeed">読書の速度</string>
     <string name="pref_desc_ui_readingSpeed">あなたの読書速度 (1 分あたりの単語で測定します)。推定読書時間を計算するために使用します。</string>
     <string name="pref_categoryName_sync">同期</string>
     <string name="pref_name_sync_syncTypes">同期の種類</string>
     <string name="pref_desc_sync_syncTypes">押すと同期の種類についての詳細情報を表示します</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"高速\" 同期後に \"削除された記事の掃除\" を有効にする</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">詳細は上記の同期種類の説明をお読みください</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">詳細は上記の別の同期種類の説明をお読みください</string>
     <string name="pref_name_autoSync_onStartup_enabled">アプリケーションの起動時に自動同期を有効にする</string>
     <string name="pref_decs_autoSync_onStartup_enabled">アプリの起動時に同期されます</string>
     <string name="pref_desc_sync_syncTypes_text">主に 2 種類の同期があります: \"完全\" と \"高速\"。\n\n
