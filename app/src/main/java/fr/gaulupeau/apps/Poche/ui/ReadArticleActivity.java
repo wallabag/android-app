@@ -774,7 +774,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         builder.setItems(
                 new CharSequence[]{
                         getString(R.string.d_urlAction_openInBrowser),
-                        getString(R.string.d_urlAction_addToWallabag)
+                        getString(R.string.d_urlAction_addToWallabag),
+                        getString(R.string.d_urlAction_copyToClipboard),
+                        getString(R.string.menuShare),
                 }, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -784,6 +786,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 break;
                             case 1:
                                 ServiceHelper.addLink(ReadArticleActivity.this, url);
+                                break;
+                            case 2:
+                                copyOriginalURL();
+                                break;
+                            case 3:
+                                Intent sendIntent = new Intent();
+                                sendIntent.setAction(Intent.ACTION_SEND);
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+                                sendIntent.setType("text/plain");
+                                startActivity(sendIntent);
                                 break;
                         }
                     }
