@@ -114,6 +114,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int disableTouchKeyCode;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
+    private int scrolledOverBottom;
 
     private ScrollView scrollView;
     private WebView webViewContent;
@@ -171,6 +172,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
+        scrolledOverBottom = settings.getScrolledOverBottom() - 1;
 
         setTitle(articleTitle);
 
@@ -347,13 +349,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             switch (code) {
                 case KeyEvent.KEYCODE_PAGE_UP:
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling);
+                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling, true);
                     return true;
 
                 case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     if (volumeButtonsScrolling) {
-                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling);
+                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling, true);
                         return true;
                     }
                     break;
@@ -581,9 +583,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     float x = e.getX();
 
                     if(x < viewWidth * 0.3) { // left part
-                        scroll(true, screenScrollingPercent, smoothScrolling);
+                        scroll(true, screenScrollingPercent, smoothScrolling, false);
                     } else if(x > viewWidth * 0.7) { // right part
-                        scroll(false, screenScrollingPercent, smoothScrolling);
+                        scroll(false, screenScrollingPercent, smoothScrolling, false);
                     }
                 }
 
@@ -973,7 +975,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return false;
     }
 
-    private void scroll(boolean up, float percent, boolean smooth) {
+    private void scroll(boolean up, float percent, boolean smooth, boolean keyUsed) {
         if(scrollView == null) return;
 
         int viewHeight = scrollView.getHeight();
@@ -993,6 +995,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             } else {
                 scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
             }
+
+        }
+
+        if(keyUsed && newYOffset > webViewContent.getBottom()) {
+            if(scrolledOverBottom > 0) {
+                Toast.makeText(this, this.getString(R.string.scrolledOverBottom, scrolledOverBottom), Toast.LENGTH_SHORT).show();
+                scrolledOverBottom--;
+            } else {
+                Toast.makeText(this, R.string.markedAsRead, Toast.LENGTH_SHORT).show();
+                markAsReadAndClose();
+            }
+        } else {
+            scrolledOverBottom = settings.getScrolledOverBottom() - 1;
         }
     }
 

@@ -150,6 +150,12 @@
                 android:title="@string/pref_name_ui_disableTouch_keyCode"
                 android:summary="@string/pref_desc_ui_disableTouch_keyCode"
                 android:persistent="false"/>
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+                android:key="@string/pref_key_ui_scrollOverBottom"
+                android:title="@string/pref_name_ui_scrollOverBottom"
+                android:summary="@string/pref_desc_ui_scrollOverBottom"
+                android:inputType="number"
+                android:defaultValue="3"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen

@@ -90,6 +90,8 @@
     <string name="articleList_favoriteMark">Favorite mark</string>
     <string name="articleList_ArchivedMark">Archived mark</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
+    <string name="scrolledOverBottom">Scroll %d time(s) more over the bottom to mark the article as read</string>
+    <string name="markedAsRead"> Article marked as read</string>
     <string name="noNextArticle">No more articles in current list</string>
     <string name="themeName_light">Light</string>
     <string name="themeName_light_contrast">Light (high contrast)</string>
@@ -206,6 +208,8 @@
     <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
+    <string name="pref_name_ui_scrollOverBottom">Scroll over bottom to mark read</string>
+    <string name="pref_desc_ui_scrollOverBottom">Press here to configure the number of times you need to "scroll over the bottom" to mark an article as read</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
