@@ -25,7 +25,7 @@
     <string name="d_deleteArticle_title">Artikel entfernen?</string>
     <string name="d_deleteArticle_message">Möchtest du den Artikel wirklich entfernen?</string>
     <string name="txtNetOffline">Bitte prüfe deine Internetverbindung!</string>
-    <string name="txtConfigNotSet">Die App muss vor dem Synchronisieren konfiguriert werden!</string>
+    <string name="txtConfigNotSet">Bitte konfiguriere die App vor dem Synchronisieren.</string>
     <string name="dialog_add_label">Neuen Artikel hinzufügen</string>
     <string name="page_url">Artikel-URL</string>
     <string name="share_article_title">Artikel teilen</string>
@@ -48,7 +48,7 @@
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Konnte nicht anmelden: vermutlich falscher Benutzername oder Passwort</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Anmeldung nicht möglich: Vermutlich falscher Benutzername oder Passwort</string>
     <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
     <string name="previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
@@ -57,7 +57,7 @@
     <string name="articleList_favoriteMark">Favoritenmarkierung</string>
     <string name="articleList_ArchivedMark">Archivmarkierung</string>
     <string name="noPreviousArticle">Es gibt keinen vorherigen Artikel in der aktuellen Liste</string>
-    <string name="noNextArticle">Es gibt keinen nächsten Artikel in der aktuellen Liste</string>
+    <string name="noNextArticle">Keine weiteren Artikel in der aktuellen Liste</string>
     <string name="themeName_light">Hell</string>
     <string name="themeName_light_contrast">Hell (hoher Kontrast)</string>
     <string name="themeName_dark">Dunkel</string>
@@ -125,13 +125,13 @@
     <string name="connectionWizard_summary_next">Einstellungen speichern</string>
     <string name="connectionWizard_summary_prev">Zurück</string>
     <string name="connectionWizard_summary_text">Einstellungen speichern und zum Hauptbildschirm gelangen.</string>
-    <string name="connectionWizard_summary_titleMessage">Wir sind fertig!</string>
-    <string name="connectionWizard_summary_toastMessage">Das Setup ist vollständig</string>
+    <string name="connectionWizard_summary_titleMessage">Alles fertig.</string>
+    <string name="connectionWizard_summary_toastMessage">Einrichtung ist vollständig</string>
     <string name="connectionWizard_welcome_next">Weiter</string>
     <string name="connectionWizard_welcome_prev">Überspringen</string>
     <string name="connectionWizard_welcome_rerunNotice">Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.</string>
     <string name="connectionWizard_welcome_text">Bevor du die wallabag-App nutzen kannst, musst du die Verbindung zu deinem wallabag-Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
-    <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag!</string>
+    <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag.</string>
     <string name="d_configurationChanged_answer_decline">Nicht jetzt</string>
     <string name="d_configurationChanged_message">Einige Parameter haben sich geändert. Es ist empfohlen, einen Verbindungstest durchzuführen.</string>
     <string name="d_configurationChanged_title">Parameter geändert</string>
@@ -158,8 +158,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt, lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren, sobald die Internetverbindung verfügbar wird.</string>
     <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter</string>
     <string name="pref_desc_misc_wipeDB">Löscht alle Artikel vom Gerät, löscht auch alle nicht synchronisierten lokalen Änderungen und URLs</string>
-    <string name="pref_desc_runConnectionWizard">Der Verbindungsassistent hilft dir die grundlegenden Verbindungsdaten einzurichten</string>
-    <string name="pref_name_autoDlNew_enabled">Download neuer Artikel beim Hinzufügen</string>
+    <string name="pref_desc_runConnectionWizard">Hilft dir die grundlegenden Verbindungsdaten einzurichten</string>
+    <string name="pref_name_autoDlNew_enabled">Download neu hinzugefügter Artikel</string>
     <string name="pref_name_autoSync_enabled">Aktiviere automatische Synchronisation</string>
     <string name="pref_name_autoSync_interval">Zeitintervall für automatische Synchronisation</string>
     <string name="pref_name_autoSync_type">Art der automatischen Synchronisation</string>
@@ -195,7 +195,7 @@
     <string name="menu_lists_changeSortOrder">Ändere Sortierung</string>
     <string name="other_searchHint">Suche nach Artikelüberschrift oder -text</string>
 
-    <string name="pref_name_imageCache_enabled">Speichere in Artikel eingebettete Bilder zwischen</string>
+    <string name="pref_name_imageCache_enabled">Speichere Artikelbilder im Cache</string>
     <string name="pref_desc_imageCache_enabled">Lädt automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
 
     <string name="nav_other_settings">Einstellungen</string>
@@ -244,7 +244,7 @@
     <string name="pref_desc_connection_autofill">Verbindung testen und Client-ID und Clientschlüssel ausfüllen</string>
 
     <string name="pref_name_ui_article_textAlignment_justify">Textausrichtung: Blocksatz</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Streckt die Textzeilen, so dass jede Zeile die gleiche Breite hat (wie in Zeitungen und Zeitschriften)</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Streckt die Textzeilen, so dass jede Zeile die gleiche Breite hat (wie in Zeitungen)</string>
     <string name="pref_name_ui_readingSpeed">Lesegeschwindigkeit</string>
     <string name="pref_desc_ui_readingSpeed">Deine Lesegeschwindigkeit (gemessen in Wörtern pro Minute). Zum Berechnen der geschätzten Lesezeit genutzt.</string>
     <string name="pref_categoryName_sync">Synchronisierung</string>
@@ -261,4 +261,33 @@
     <string name="pref_name_autoSync_onStartup_enabled">Aktiviert die automatische Synchronisierung beim Start der Anwendung</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Die App synchronisiert sich mit dem Server, wenn sie geöffnet wird</string>
 
+    <string name="menuCopyOriginalURL">URL kopieren</string>
+    <string name="txtUrlCopied">Artikel-URL in Zwischenablage kopiert</string>
+    <string name="menuDownloadAsFile">als Datei herunterladen</string>
+    <string name="dialog_title_downloadFileFormat">Wähle Dateiformat</string>
+    <string name="notification_serverError">Serverfehler</string>
+    <string name="lastUpdateTimeLabel">Letzte Aktualisierung: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
+
+    <string name="message_couldNotOpenUrl">Konnte die URL nicht öffnen</string>
+
+    <string name="message_disableTouch_inputDisabled">Toucheingabe deaktiviert</string>
+    <string name="message_disableTouch_inputEnabled">Toucheingabe aktiviert</string>
+    <string name="d_disableTouch_changeKey_title">Deaktiviere Toucheingaben</string>
+    <string name="d_disableTouch_currentCode">Aktuell gewählte Taste (drücke eine Taste, um es zu ändern):</string>
+
+    <string name="pref_categoryName_ui_misc">Verschiedenes</string>
+    <string name="pref_name_ui_disableTouch_enabled">Deaktiviere Toucheingaben</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Drücke die konfigurierte Taste (Standard ist die Kamerataste), um Toucheingaben auf dem Lesebildschirm zu de-/aktivieren (Systemtasteneingaben sind nicht betroffen)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Deaktiviere Taste für Toucheingaben</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Drücke hier, um die Taste für De-/Aktivierung von Toucheingaben zu wählen</string>
+
+    <string name="pref_name_storage_dbPath">Datenbankspeicherort</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Interner Speicher</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Externer Speicher</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Datenbank verschoben</string>
+
+    <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
+    <string name="pref_desc_misc_appendWallabagMention">Hänge \"via @wallabagapp\" an geteilte Text an</string>
+    <string name="remove_tag">Tag entfernen</string>
 </resources>
