@@ -117,6 +117,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int scrolledOverBottom;
 
     private ScrollView scrollView;
+    private View scrollViewLastChild;
     private WebView webViewContent;
     private TextView loadingPlaceholder;
     private LinearLayout bottomTools;
@@ -172,7 +173,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
-        scrolledOverBottom = settings.getScrolledOverBottom() - 1;
+        scrolledOverBottom = settings.getScrolledOverBottom();
 
         setTitle(articleTitle);
 
@@ -180,6 +181,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         invalidateOptionsMenu();
 
         scrollView = (ScrollView)findViewById(R.id.scroll);
+        scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
         webViewContent = (WebView)findViewById(R.id.webViewContent);
         loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
         bottomTools = (LinearLayout)findViewById(R.id.bottomTools);
@@ -995,19 +997,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             } else {
                 scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
             }
-
         }
 
-        if(keyUsed && newYOffset > webViewContent.getBottom()) {
-            if(scrolledOverBottom > 0) {
-                Toast.makeText(this, this.getString(R.string.scrolledOverBottom, scrolledOverBottom), Toast.LENGTH_SHORT).show();
+        if(!up && keyUsed && newYOffset + viewHeight > scrollViewLastChild.getBottom()) {
+            if(scrolledOverBottom > 1) {
                 scrolledOverBottom--;
+                Toast.makeText(this, getString(R.string.scrolledOverBottom, scrolledOverBottom),
+                        Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, R.string.markedAsRead, Toast.LENGTH_SHORT).show();
                 markAsReadAndClose();
             }
         } else {
-            scrolledOverBottom = settings.getScrolledOverBottom() - 1;
+            scrolledOverBottom = settings.getScrolledOverBottom();
         }
     }
 
