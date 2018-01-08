@@ -261,7 +261,7 @@
     <string name="pref_name_autoSync_onStartup_enabled">Aktiviert die automatische Synchronisierung beim Start der Anwendung</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Die App synchronisiert sich mit dem Server, wenn sie geöffnet wird</string>
 
-<string name="menuCopyOriginalURL">URL kopieren</string>
+    <string name="menuCopyOriginalURL">URL kopieren</string>
     <string name="txtUrlCopied">Artikel-URL in Zwischenablage kopiert</string>
     <string name="menuDownloadAsFile">als Datei herunterladen</string>
     <string name="dialog_title_downloadFileFormat">Wähle Dateiformat</string>

@@ -177,11 +177,12 @@
     <string name="noNextArticle">Ingen flere artikler i gjeldende liste</string>
     <string name="themeName_solarized">Solarisert</string>
     <string name="aboutText">&lt;b&gt;wallabag-programfor Android&lt;/b&gt;&lt;br/&gt;wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
-    <string name="pref_desc_connection_url"> Eksempler:
-\n <i>https://wallabag.example.com</i>
-\n <i>https://example.com/wallabag</i>
-\n <i>https://app.wallabag.it</i>
-\n <i>https://framabag.org</i> </string>
+    <string name="pref_desc_connection_url">Eksempler:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
+    </string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-autentiseringsbrukernavn</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-autentiseringspassord</string>
 
@@ -252,7 +253,7 @@
     <string name="connectionWizard_summary_toastMessage">Oppsett fullført</string>
     <string name="connectionWizard_summary_prev">Tilbake</string>
     <string name="connectionWizard_summary_next">Lagre innstillinger</string>
-<string name="menuCopyOriginalURL">Kopier opprinnelig nettadresse</string>
+    <string name="menuCopyOriginalURL">Kopier opprinnelig nettadresse</string>
     <string name="txtUrlCopied">Artikkelnettadresse kopiert til utklippstavle</string>
     <string name="menuDownloadAsFile">Last ned som fil</string>
     <string name="dialog_title_downloadFileFormat">Velg filformat</string>

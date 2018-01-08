@@ -85,7 +85,7 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="aboutText"><b>wallabag alkalmazás Androidra</b><br/>A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentse és olvassa el a kibontott tartalmat szabadidejében.</string>
+    <string name="aboutText">&lt;b&gt;wallabag alkalmazás Androidra&lt;/b&gt;&lt;br/&gt;A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentse és olvassa el a kibontott tartalmat szabadidejében.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hangmagasság</string>
     <string name="readVolume">Olvasás hangereje</string>
@@ -258,9 +258,9 @@
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
     <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
 
-<string name="title_main_tag">Címke: %s</string>
+    <string name="title_main_tag">Címke: %s</string>
 
-<string name="menuCopyOriginalURL">Eredeti URL másolása</string>
+    <string name="menuCopyOriginalURL">Eredeti URL másolása</string>
     <string name="txtUrlCopied">A cikk URL-je a vágólapra másolva</string>
     <string name="menuDownloadAsFile">Letöltés fájlként</string>
     <string name="dialog_title_downloadFileFormat">Válassza ki a fájlformátumot</string>
