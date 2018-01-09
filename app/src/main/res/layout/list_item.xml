@@ -25,14 +25,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_favoriteMark"
-            android:src="?attr/listItem_icon_favorite"/>
+            android:src="?attr/icon_favorite"/>
 
         <ImageView
             android:id="@+id/read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_ArchivedMark"
-            android:src="?attr/listItem_icon_read"/>
+            android:src="?attr/icon_read"/>
     </LinearLayout>
 
     <LinearLayout

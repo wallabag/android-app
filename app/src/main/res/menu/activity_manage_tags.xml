@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menu_manageTags_save"
         android:title="@string/manageTags_save"
-        android:icon="@drawable/ic_done_24dp"
+        android:icon="?attr/icon_read"
         app:showAsAction="ifRoom" />
 
 </menu>
