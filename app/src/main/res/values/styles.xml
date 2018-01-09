@@ -36,7 +36,7 @@
         <item name="appBarOverlayTheme">@style/DarkTheme.AppBarOverlay</item>
         <item name="popupOverlayTheme">@style/DarkTheme.PopupOverlay</item>
         <item name="listItem_icon_favorite">@drawable/ic_star_white_24dp</item>
-        <item name="listItem_icon_read">@drawable/ic_done_24dp</item>
+        <item name="listItem_icon_read">@drawable/ic_done_24dp_white</item>
         <item name="welcome_logo">@drawable/welcome_white</item>
     </style>
 
