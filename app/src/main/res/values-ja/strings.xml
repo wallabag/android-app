@@ -289,4 +289,8 @@
     <string name="pref_name_misc_appendWallabagMention">Wallabag のメンションを追加</string>
     <string name="pref_desc_misc_appendWallabagMention">共有テキストに \"via @wallabagapp\" を追加</string>
     <string name="remove_tag">タグを削除</string>
+    <string name="scrolledOverBottom">%d 回以上下にスクロールすると記事を既読としてマークします</string>
+    <string name="markedAsRead">既読として記事をマークしました</string>
+    <string name="pref_name_ui_scrollOverBottom">最下部にスクロールすると既読としてマークします</string>
+    <string name="pref_desc_ui_scrollOverBottom">記事を既読にするために必要な下へのスクロールの回数を設定するには、ここを押してください</string>
 </resources>

@@ -272,5 +272,4 @@
     <string name="message_disableTouch_inputDisabled">Ukipen sarrera desgaituta</string>
     <string name="message_disableTouch_inputEnabled">Ukipen sarrera gaituta</string>
     <string name="d_disableTouch_changeKey_title">Desgaitu ukipen sarreraren botoia</string>
-
 </resources>
