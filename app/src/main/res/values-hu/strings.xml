@@ -289,4 +289,9 @@
     <string name="pref_name_misc_appendWallabagMention">Mellékelje a wallabag-ra való utalást</string>
     <string name="pref_desc_misc_appendWallabagMention">Hozzáfűzi \"a @wallabagapp segítségével\"-t a megosztott szövegekhez</string>
     <string name="remove_tag">Címke eltávolítása</string>
+    <string name="scrolledOverBottom">Görgessen még %d alkalommal lefelé, hogy megjelölje a cikket olvasottként</string>
+    <string name="markedAsRead">Cikk megjelölve olvasottként</string>
+    <string name="pref_name_ui_scrollOverBottom">Görgessen lefelé az olvasás jelöléséhez</string>
+    <string name="pref_desc_ui_scrollOverBottom">Nyomja meg itt, hogy megadja hányszor kelljen görgetnie lefelé egy cikk olvasottnak jelöléséhez</string>
+
 </resources>

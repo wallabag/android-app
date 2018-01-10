@@ -293,4 +293,9 @@
     <string name="connectionWizard_provider_framabag_next">Koble til</string>
 
     <string name="remove_tag">Fjern etikett</string>
+    <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
+    <string name="markedAsRead">Artikkel merket som lest</string>
+    <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
+    <string name="pref_desc_ui_scrollOverBottom">Trykk her for å sette opp antall ganger du må rulle over bunnen for å markere en artikkel som lest</string>
+
 </resources>
