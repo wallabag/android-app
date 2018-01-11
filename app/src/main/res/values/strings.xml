@@ -60,7 +60,7 @@
     <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Can\'t log in — check username and password</string>
     <string name="testConnection_errorMessage_authProblems">Authorization-related problems. These usually caused by HTTP-redirects.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login. This is usually caused by enabled two-factor authentication, which is not yet supported by the app</string>
     <string name="testConnection_errorMessage_unknown">Unknown error</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unknown error: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Consider changing URL</string>
