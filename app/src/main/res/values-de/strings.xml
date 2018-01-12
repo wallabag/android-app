@@ -179,7 +179,7 @@
     <string name="testConnection_errorMessage_authProblems">Autorisierungbezogenes Problem. Diese werden meist durch HTTP-Umleitungen verursacht.</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-Authentifizierung fehlgeschlagen</string>
     <string name="testConnection_errorMessage_noCSRF">Fehler beim Parsen des Login-Formulars</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login. Das könnte durch aktivierte Zwei-Faktor-Authentifizierung, die z.Z. noch nicht von der App unterstützt wird, verursacht werden</string>
     <string name="pref_name_autoSyncQueue_enabled">Gesonderte Synchronisation lokaler Änderungen</string>
     <string name="pref_categoryName_ui_screenScrolling">Bildschirm scrollen</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scrolle mit den Lautstärketasten</string>
@@ -290,4 +290,9 @@
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
     <string name="pref_desc_misc_appendWallabagMention">Hänge \"via @wallabagapp\" an geteilte Text an</string>
     <string name="remove_tag">Tag entfernen</string>
-</resources>
+<string name="scrolledOverBottom">Scrolle %d Male mehr über das Artikelende, um den Artikel als gelesen zu markieren</string>
+    <string name="markedAsRead">Artikel als gelesen markiert</string>
+    <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
+    <string name="pref_desc_ui_scrollOverBottom">Drücke hier, um die Anzahl der Male zu konfigurieren, die beim über das Artikelende hinausscrollen benötigt werden, um den Artikel als gelesen zu markieren</string>
+
+    </resources>
