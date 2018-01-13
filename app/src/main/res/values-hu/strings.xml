@@ -55,7 +55,7 @@
     <string name="testConnection_errorMessage_noCSRF">Hiba a belépési űrlap elemzésekor</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Nem lehet bejelentkezni — ellenőrizze a felhasználónevet és a jelszót</string>
     <string name="testConnection_errorMessage_authProblems">Engedélyezéssel kapcsolatos problémák. Ezeket általában HTTP-átirányítások okozzák.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ismeretlen oldal bejelentkezés után</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ismeretlen oldal bejelentkezés után. Ezt általában az okozza, hogy engedélyezve van a kéttényezős hitelesítést, amelyet még nem támogat az alkalmazás</string>
     <string name="testConnection_errorMessage_unknown">Ismeretlen hiba</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Fontolja meg az URL megváltoztatását</string>
@@ -291,7 +291,7 @@
     <string name="remove_tag">Címke eltávolítása</string>
     <string name="scrolledOverBottom">Görgessen még %d alkalommal lefelé, hogy megjelölje a cikket olvasottként</string>
     <string name="markedAsRead">Cikk megjelölve olvasottként</string>
-    <string name="pref_name_ui_scrollOverBottom">Görgessen lefelé az olvasás jelöléséhez</string>
+    <string name="pref_name_ui_scrollOverBottom">Görgessen lefelé az olvasottnak jelöléshez</string>
     <string name="pref_desc_ui_scrollOverBottom">Nyomja meg itt, hogy megadja hányszor kelljen görgetnie lefelé egy cikk olvasottnak jelöléséhez</string>
 
 </resources>
