@@ -27,7 +27,7 @@
     <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
     <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
     <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
-    <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser !</string>
+    <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser.</string>
     <string name="txtUrlCopied">L\'URL de l\'article a été copiée dans le presse papier</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
     <string name="page_url">URL de la page</string>
@@ -82,7 +82,7 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
     <string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
-    <string name="previousUpdateNotFinished">L\'opération de mise à jour précédente n\'est pas terminée</string>
+    <string name="previousUpdateNotFinished">La mise à jour précédente n\'est pas terminée</string>
     <string name="feedName_favorites">Favoris</string>
     <string name="feedName_archived">Archivés</string>
     <string name="feedName_unread">Non lus</string>
@@ -257,7 +257,7 @@
 
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de connexion incorrecte</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag !</string>
+    <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag.</string>
     <string name="connectionWizard_welcome_text">Avant que vous puissiez utiliser l’application wallabag, vous devez mettre en place la connexion. Cet assistant de connexion vous aidera à effectuer cette tâche.</string>
     <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
@@ -283,9 +283,9 @@
     <string name="connectionWizard_provider_framabag_prev">Retour</string>
     <string name="connectionWizard_provider_framabag_next">Connecter</string>
 
-    <string name="connectionWizard_summary_titleMessage">C\'est fini !</string>
+    <string name="connectionWizard_summary_titleMessage">C\'est fini.</string>
     <string name="connectionWizard_summary_text">Appuyez sur le bouton pour sauvegarder les paramètres et aller à l\'écran principal.</string>
-    <string name="connectionWizard_summary_toastMessage">La configuration est achevée</string>
+    <string name="connectionWizard_summary_toastMessage">La configuration est terminée</string>
     <string name="connectionWizard_summary_prev">Retour</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
     <string name="remove_tag">Supprimer tag</string>

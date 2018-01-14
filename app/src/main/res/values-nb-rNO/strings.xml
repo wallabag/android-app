@@ -57,7 +57,7 @@
     <string name="testConnection_errorMessage_noCSRF">Feil ved tolkning av innloggingsskjema</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Kan ikke logge inn — sjekk brukernavn og passord</string>
     <string name="testConnection_errorMessage_authProblems">Autorisering-relaterte problemer. Disse forårsakes vanligvis av HTTP-videresendinger.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Dette forårsakes som oftest av to-faktoridentifisering, som ikke støttes i programmet enda</string>
     <string name="testConnection_errorMessage_unknown">Ukjent feil</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Ukjent feil: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Overvei å endre nettadresse</string>
