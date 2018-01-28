@@ -195,6 +195,8 @@
     <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
+    <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
+    <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
     <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>

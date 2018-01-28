@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,6 +22,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
@@ -141,6 +144,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     public void onCreate(Bundle savedInstanceState) {
+
+        settings = App.getInstance().getSettings();
+
+        if(settings.isFullscreenArticleView()) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    );
+            ActionBar actionBar = super.getSupportActionBar();
+            if(actionBar != null) actionBar.hide();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
@@ -153,8 +169,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
-
-        settings = App.getInstance().getSettings();
 
         DaoSession session = DbConnection.getSession();
         articleDao = session.getArticleDao();
@@ -336,9 +350,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            int code = event.getKeyCode();
+        int code = event.getKeyCode();
+        boolean triggerAction;
+        if (code == KeyEvent.KEYCODE_PAGE_UP || code == KeyEvent.KEYCODE_PAGE_DOWN) {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_UP);
+        } else {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_DOWN);
+        }
 
+        if (triggerAction) {
             if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
                 disableTouch = !disableTouch;
                 settings.setDisableTouchLastState(disableTouch);
