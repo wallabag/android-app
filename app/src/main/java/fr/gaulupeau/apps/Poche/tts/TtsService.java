@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -423,9 +424,10 @@ public class TtsService
     }
 
     private void speak() {
-        //Log.d(LOG_TAG, "speak");
-        assert(state == State.PLAYING);
-        assert(textInterface != null);
+        Log.d(LOG_TAG, "speak");
+        if (BuildConfig.DEBUG && (state != State.PLAYING || textInterface == null)) {
+            throw new AssertionError();
+        }
         // Change the utteranceId so that call to onSpeakDone
         // of the previous speak sequence will not interfere with the following one
         utteranceId = "" + (Integer.parseInt(utteranceId) + 1);
@@ -437,8 +439,9 @@ public class TtsService
 
     private void ttsSpeak(String text, int queue, String utteranceId)
     {
-        assert(state == State.PLAYING);
-        assert(isTTSInitialized);
+        if (BuildConfig.DEBUG && !(state == State.PLAYING && isTTSInitialized)) {
+            throw new AssertionError();
+        }
         if (text != null) {
             HashMap params = this.utteranceParams;
             if ( ! utteranceId.equals(params.get("utteranceId"))) {
