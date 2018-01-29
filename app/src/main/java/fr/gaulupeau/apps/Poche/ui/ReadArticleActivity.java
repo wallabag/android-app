@@ -304,7 +304,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
 
             case R.id.menuCopyOriginalURL:
-                copyOriginalURL();
+                copyURLToClipboard();
                 break;
 
             case R.id.menuDownloadAsFile:
@@ -788,7 +788,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 ServiceHelper.addLink(ReadArticleActivity.this, url);
                                 break;
                             case 2:
-                                copyOriginalURL(url);
+                                copyURLToClipboard(url);
                                 break;
                             case 3:
                                 shareArticle(null, url);
@@ -907,14 +907,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         openURL(articleUrl);
     }
 
-    private void copyOriginalURL() {
-        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData urlClipData = ClipData.newPlainText("article URL", articleUrl);
-        clipboardManager.setPrimaryClip(urlClipData);
-        Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
+    private void copyURLToClipboard() {
+       copyURLToClipboard(articleUrl);
     }
 
-    private void copyOriginalURL(String url) {
+    private void copyURLToClipboard(String url) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData urlClipData = ClipData.newPlainText("article URL", url);
         clipboardManager.setPrimaryClip(urlClipData);
