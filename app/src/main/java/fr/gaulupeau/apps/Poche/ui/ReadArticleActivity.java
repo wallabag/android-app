@@ -791,7 +791,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 copyOriginalURL(url);
                                 break;
                             case 3:
-                                shareArticle(url);
+                                shareArticle(null, url);
                                 break;
                         }
                     }
@@ -831,22 +831,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void shareArticle() {
-        String shareText = articleTitle + " " + articleUrl;
-
-        if(settings.isAppendWallabagMentionEnabled()) {
-            shareText += getString(R.string.share_text_extra);
-        }
-
-        Intent send = new Intent(Intent.ACTION_SEND);
-        send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
-        send.putExtra(Intent.EXTRA_TEXT, shareText);
-
-        startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
+       shareArticle(articleTitle, articleUrl);
     }
 
-    private void shareArticle(String url) {
-        String shareText = url;
+    private void shareArticle(String articleTitle , String articleUrl) {
+        String shareText = articleUrl;
+        if(!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+
 
         if(settings.isAppendWallabagMentionEnabled()) {
             shareText += getString(R.string.share_text_extra);
@@ -854,6 +845,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
+        if(!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
