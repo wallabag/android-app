@@ -295,4 +295,6 @@
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
     <string name="pref_desc_ui_scrollOverBottom">Drücke hier, um die Anzahl der Male zu konfigurieren, die beim über das Artikelende hinausscrollen benötigt werden, um den Artikel als gelesen zu markieren</string>
 
+    <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
+    <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>
     </resources>
