@@ -68,7 +68,7 @@ wallabag app is a free and open source project developed by volunteers. Any cont
  * Write some code. Please follow the code style used in the project to make a review process faster.
 
 ## Credits  
-Thanks to Michael Cook ([Twitter](https://twitter.com/mcookie)/[website](https://cookicons.co/) for the app icon.
+Thanks to Michael Cook ([Twitter](https://twitter.com/mcookie)/[website](https://cookicons.co/)) for the app icon.
 
 ## License
 
