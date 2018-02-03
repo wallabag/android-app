@@ -219,31 +219,35 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
 
     public void scroll(boolean up) {
 
-        LinearLayoutManager listLayout = getCurrentFragment().recyclerViewLayoutManager;
+        ArticleListFragment currentFragment = getCurrentFragment();
 
-        int numberOfVisibleItems =
-                listLayout.findLastCompletelyVisibleItemPosition() -
-                        listLayout.findFirstCompletelyVisibleItemPosition() + 1;
+        if( currentFragment != null && currentFragment.recyclerViewLayoutManager != null) {
+            LinearLayoutManager listLayout = currentFragment.recyclerViewLayoutManager;
 
-        int oldPositionOnTop = listLayout.findFirstCompletelyVisibleItemPosition();
+            int numberOfVisibleItems =
+                    listLayout.findLastCompletelyVisibleItemPosition() -
+                            listLayout.findFirstCompletelyVisibleItemPosition() + 1;
 
-        // scroll so that as many new articles are visible than possible with one overlap
-        int newPositionOnTop;
-        if (up) {
-            newPositionOnTop = oldPositionOnTop - numberOfVisibleItems + 1;
-        } else {
-            newPositionOnTop = oldPositionOnTop + numberOfVisibleItems - 1;
+            int oldPositionOnTop = listLayout.findFirstCompletelyVisibleItemPosition();
+
+            // scroll so that as many new articles are visible than possible with one overlap
+            int newPositionOnTop;
+            if (up) {
+                newPositionOnTop = oldPositionOnTop - numberOfVisibleItems + 1;
+            } else {
+                newPositionOnTop = oldPositionOnTop + numberOfVisibleItems - 1;
+            }
+
+            if (newPositionOnTop >= listLayout.getItemCount()) {
+                newPositionOnTop = listLayout.getItemCount() - numberOfVisibleItems - 1;
+            } else if (newPositionOnTop < 0) {
+                newPositionOnTop = 0;
+            }
+
+            Log.v(TAG, " scrolling to position: " + newPositionOnTop);
+
+            listLayout.scrollToPositionWithOffset(newPositionOnTop, 0);
         }
-
-        if (newPositionOnTop >= listLayout.getItemCount()) {
-            newPositionOnTop = listLayout.getItemCount() - numberOfVisibleItems - 1;
-        } else if (newPositionOnTop < 0) {
-            newPositionOnTop = 0;
-        }
-
-        Log.v(TAG, " scrolling to position: " + newPositionOnTop);
-
-        listLayout.scrollToPositionWithOffset(newPositionOnTop, 0);
     }
 
 }
