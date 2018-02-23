@@ -298,4 +298,7 @@
     <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
     <string name="pref_desc_ui_scrollOverBottom">Trykk her for å sette opp antall ganger du må rulle over bunnen for å markere en artikkel som lest</string>
 
-</resources>
+<string name="d_urlAction_copyToClipboard">Kopier til utklippstavle</string>
+    <string name="pref_name_ui_article_fullscreen">Artikkel i fullskjermsvisning</string>
+    <string name="pref_desc_ui_article_fullscreen">Skjuler system- og programfelter under lesing av artikler</string>
+    </resources>
