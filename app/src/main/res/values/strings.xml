@@ -41,6 +41,7 @@
     <string name="d_urlAction_title">Select an action for URL</string>
     <string name="d_urlAction_openInBrowser">Open in browser</string>
     <string name="d_urlAction_addToWallabag">Add to wallabag</string>
+    <string name="d_urlAction_copyToClipboard">Copy to clipboard</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Fail</string>
     <string name="d_add_fail_text">Couldn\'t find a URL in share string:\n</string>

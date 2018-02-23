@@ -37,6 +37,7 @@
     <string name="d_urlAction_title">Wähle eine Aktion für die URL</string>
     <string name="d_urlAction_openInBrowser">Im Browser öffnen</string>
     <string name="d_urlAction_addToWallabag">Zu wallabag hinzufügen</string>
+    <string name="d_urlAction_copyToClipboard">In Zwischenablage kopieren</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Fehlgeschlagen</string>
     <string name="d_add_fail_text">Es wurde keine URL zum Teilen gefunden:\n</string>

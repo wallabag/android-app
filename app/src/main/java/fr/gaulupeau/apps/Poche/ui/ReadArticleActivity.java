@@ -322,7 +322,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 break;
 
             case R.id.menuCopyOriginalURL:
-                copyOriginalURL();
+                copyURLToClipboard();
                 break;
 
             case R.id.menuDownloadAsFile:
@@ -798,7 +798,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         builder.setItems(
                 new CharSequence[]{
                         getString(R.string.d_urlAction_openInBrowser),
-                        getString(R.string.d_urlAction_addToWallabag)
+                        getString(R.string.d_urlAction_addToWallabag),
+                        getString(R.string.d_urlAction_copyToClipboard),
+                        getString(R.string.menuShare)
                 }, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -808,6 +810,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 break;
                             case 1:
                                 ServiceHelper.addLink(ReadArticleActivity.this, url);
+                                break;
+                            case 2:
+                                copyURLToClipboard(url);
+                                break;
+                            case 3:
+                                shareArticle(null, url);
                                 break;
                         }
                     }
@@ -847,7 +855,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void shareArticle() {
-        String shareText = articleTitle + " " + articleUrl;
+       shareArticle(articleTitle, articleUrl);
+    }
+
+    private void shareArticle(String articleTitle , String articleUrl) {
+        String shareText = articleUrl;
+        if(!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+
 
         if(settings.isAppendWallabagMentionEnabled()) {
             shareText += getString(R.string.share_text_extra);
@@ -855,7 +869,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        if(!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
@@ -917,9 +931,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         openURL(articleUrl);
     }
 
-    private void copyOriginalURL() {
+    private void copyURLToClipboard() {
+       copyURLToClipboard(articleUrl);
+    }
+
+    private void copyURLToClipboard(String url) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData urlClipData = ClipData.newPlainText("article URL", articleUrl);
+        ClipData urlClipData = ClipData.newPlainText("article URL", url);
         clipboardManager.setPrimaryClip(urlClipData);
         Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
     }
