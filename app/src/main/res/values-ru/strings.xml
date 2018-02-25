@@ -13,7 +13,7 @@
     <string name="d_deleteArticle_title">Удалить статью?</string>
     <string name="d_deleteArticle_message">Вы уверены, что хотите удалить статью?</string>
     <string name="txtNetOffline">Пожалуйста, проверьте интернет-соединение!</string>
-    <string name="txtConfigNotSet">Пожалуйста, настройте приложение перед синхронизацией!</string>
+    <string name="txtConfigNotSet">Пожалуйста, настройте приложение перед синхронизацией.</string>
     <string name="dialog_add_label">Добавить новую статью</string>
     <string name="page_url">URL страницы</string>
     <string name="share_article_title">Поделиться статьёй</string>
@@ -36,16 +36,16 @@
     <string name="testConnection_errorMessage_unknown">Неизвестная ошибка</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="d_testConnection_fail_title">Ошибка</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Ошибка входа: возможно, неверное имя пользователя или пароль</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Ошибка входа: предположительно, неверное имя пользователя или пароль</string>
     <string name="unsuccessfulRequest_errorMessage">"Запрос отклонён; код ответа: %1$d, сообщение: %2$s"</string>
-    <string name="previousUpdateNotFinished">Предыдущая операция ещё не завершилась</string>
+    <string name="previousUpdateNotFinished">Предыдущее обновление ещё не завершилось</string>
     <string name="feedName_favorites">Избранное</string>
     <string name="feedName_archived">Архив</string>
     <string name="feedName_unread">Непрочитанное</string>
     <string name="articleList_favoriteMark">Отметка избранного</string>
     <string name="articleList_ArchivedMark">Отметка архивированного</string>
     <string name="noPreviousArticle">В текущем списке нет предыдущей статьи</string>
-    <string name="noNextArticle">В текущем списке нет следующей статьи</string>
+    <string name="noNextArticle">В текущем списке больше нет статей</string>
     <string name="themeName_light">Светлая</string>
     <string name="themeName_light_contrast">Светлая (контрастная)</string>
     <string name="themeName_dark">Тёмная</string>
@@ -88,7 +88,7 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-аутентификации</string>
 
     <string name="pref_name_ui_theme">Тема приложения</string>
-    <string name="pref_name_ui_article_fontSize" formatted="false">Размер шрифта статей (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Размер текста статей (%)</string>
     <string name="pref_name_ui_article_fontSerif">Шрифт с засечками</string>
     <string name="pref_desc_ui_article_fontSerif">Шрифт с засечками для статей</string>
 
@@ -106,16 +106,16 @@
     <string name="testConnection_errorMessage_httpAuth">Ошибка HTTP-аутентификации</string>
     <string name="testConnection_errorMessage_noCSRF">Ошибка разбора формы входа</string>
     <string name="testConnection_errorMessage_authProblems">Проблемы, связанные с авторизацией. Обычно это вызвано HTTP-перенаправлениями.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Неизвестная страница после входа</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Неизвестная страница после входа. Обычно это вызвано двухфакторной авторизацией, которая пока не поддерживается приложением</string>
     <string name="d_testConnection_urlSuggestion_title">Измените URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Использовать предложенный</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Использовать свой</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
     <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
-    <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно. Приложение извлекает содержащийся текст, так что вы можете прочитать его, когда у вас будет время.</string>
+    <string name="aboutText"><b>Приложение wallabag для Android</b><br/>wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно.</string>
     <string name="readSpeed">Скорость чтения</string>
-    <string name="voiceHeight">Высота голоса</string>
+    <string name="voiceHeight">Тембр голоса</string>
     <string name="readVolume">Громкость чтения</string>
     <string name="downloadAsFilePathStart">Загрузка статьи</string>
     <string name="downloadAsFileArticleDownloaded">Статья загружена</string>
@@ -134,7 +134,7 @@
     <string name="other_searchHint">Поиск по названию статьи или тексту</string>
 
     <string name="pref_name_runConnectionWizard">Запустить мастер подключения</string>
-    <string name="pref_desc_runConnectionWizard">Мастер подключения поможет вам настроить основные параметры подключения</string>
+    <string name="pref_desc_runConnectionWizard">Помогает настроить основные параметры подключения</string>
 
     <string name="pref_categoryName_connection">Подключение</string>
     <string name="pref_name_connection_autofill">Автозаполнение</string>
@@ -162,7 +162,7 @@
     <string name="pref_name_autoSync_type">Тип автоматической синхронизации</string>
     <string name="pref_name_autoSyncQueue_enabled">Отдельная автоматическая синхронизация для локальных изменений</string>
     <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
-    <string name="pref_name_autoDlNew_enabled">Загружать новые статьи при добавлении</string>
+    <string name="pref_name_autoDlNew_enabled">Загружать статьи при добавлении</string>
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
     <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
     <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
@@ -173,9 +173,9 @@
     <string name="pref_desc_misc_wipeDB">Стирает все статьи из локальной базы данных, также удаляет все не синхронизированные локальные изменения и добавленные URL-адреса</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Использован неправильный URI подключения</string>
 
-    <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в wallabag!</string>
-    <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать wallabag, необходимо настроить соединение. Мастер подключения попытается помочь вам с этим.</string>
-    <string name="connectionWizard_welcome_rerunNotice">Вы всегда можете повторно запустить мастер подключения с экрана Настроек.</string>
+    <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в wallabag.</string>
+    <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать wallabag, необходимо настроить соединение. Мастер подключения поможет вам сделать это.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Вы всегда можете повторно запустить мастер подключения из Настроек.</string>
     <string name="connectionWizard_welcome_prev">Пропустить</string>
     <string name="connectionWizard_welcome_next">Дальше</string>
 
@@ -199,7 +199,7 @@
     <string name="connectionWizard_provider_framabag_prev">Назад</string>
     <string name="connectionWizard_provider_framabag_next">Подключиться</string>
 
-    <string name="connectionWizard_summary_titleMessage">Готово!</string>
+    <string name="connectionWizard_summary_titleMessage">Готово.</string>
     <string name="connectionWizard_summary_text">Нажмите на кнопку, чтобы сохранить настройки и перейти к главному экрану.</string>
     <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
     <string name="connectionWizard_summary_prev">Назад</string>
@@ -248,7 +248,7 @@
     <string name="pref_desc_connection_autofill">Проверить подключение и заполнить ID и секрет клиента</string>
 
     <string name="pref_name_ui_article_textAlignment_justify">Выравнивание текста по ширине</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Растягивает строки так, чтобы все строки имели одинаковую ширину (как в газетах и журналах)</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Растягивает строки до одинаковой ширины (как в газетах)</string>
     <string name="pref_name_ui_readingSpeed">Скорость чтения</string>
     <string name="pref_desc_ui_readingSpeed">Ваша скорость чтения (измеряется в словах за минуту). Используется для расчёта примерного времени чтения статей.</string>
     <string name="pref_categoryName_sync">Синхронизация</string>
@@ -261,9 +261,44 @@
         Ни одна из этих функций не влияет на синхронизацию с клиента на сервер: ваши локальные изменения всегда будут отправлены на сервер перед обновлением локального контента.
     </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Включить \"чистку удалённых статей\" после \"быстрой\" синхронизации</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Прочитайте описание типов синхронизации выше для получения дополнительной информации</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Прочитайте описание разных типов синхронизации выше для получения дополнительной информации</string>
     <string name="pref_name_autoSync_onStartup_enabled">Включить авто-синхронизацию при запуске приложения</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Приложение выполнит синхронизацию, когда вы его открываете</string>
 
 <string name="menuCopyOriginalURL">Скопировать оригинальный URL</string>
-    </resources>
+    <string name="txtUrlCopied">Ссылка на статью скопирована в буфер обмена</string>
+    <string name="d_urlAction_copyToClipboard">Копировать в буфер обмена</string>
+    <string name="scrolledOverBottom">Прокрутите вниз ещё %d раз, чтобы отменить статью как прочитанную</string>
+    <string name="markedAsRead">Статья отмечена как прочитанная</string>
+    <string name="menuDownloadAsFile">Скачать как файл</string>
+    <string name="dialog_title_downloadFileFormat">Выберите формат файла</string>
+    <string name="notification_serverError">"Ошибка сервера "</string>
+    <string name="lastUpdateTimeLabel">Последнее обновление: %s</string>
+    <string name="listItem_estimatedReadingTime">%d мин</string>
+
+    <string name="message_couldNotOpenUrl">Не удалось открыть этот URL</string>
+
+    <string name="message_disableTouch_inputDisabled">Сенсорный ввод отключён</string>
+    <string name="message_disableTouch_inputEnabled">Сенсорный ввод включён</string>
+    <string name="d_disableTouch_changeKey_title">Кнопка отключения сенсорного ввода</string>
+    <string name="d_disableTouch_currentCode">Текущий выбранный код клавиши (нажмите кнопку, чтобы изменить его):</string>
+
+    <string name="pref_name_ui_article_fullscreen">Полноэкранный просмотр статей</string>
+    <string name="pref_desc_ui_article_fullscreen">Скрывает системную панель и панель приложения при чтении статей</string>
+    <string name="pref_categoryName_ui_misc">Разное</string>
+    <string name="pref_name_ui_disableTouch_enabled">Отключить сенсорный ввод</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Нажмите выбранную кнопку (кнопка камеры по умолчанию), чтобы заблокировать/разблокировать сенсорный ввод на экране чтения (системные элементы не затронуты)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Кнопка отключения сенсорного ввода</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Нажмите здесь, чтобы настроить кнопку отключения/включения сенсорного ввода</string>
+    <string name="pref_name_ui_scrollOverBottom">Отмечать как прочитанное прокруткой вниз</string>
+    <string name="pref_desc_ui_scrollOverBottom">Нажмите здесь, чтобы настроить количество раз, которое вам нужно прокрутить вниз, чтобы отметить статью как прочитанную</string>
+
+    <string name="pref_name_storage_dbPath">Расположение базы данных</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Внутренняя память</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Внешний накопитель</string>
+    <string name="pref_name_storage_dbPath_dbMoved">База данных перемещена</string>
+
+    <string name="pref_name_misc_appendWallabagMention">Добавлять упоминание wallabag</string>
+    <string name="pref_desc_misc_appendWallabagMention">Добавлять \"через @wallabagapp\" к тексту</string>
+    <string name="remove_tag">Удалить тег</string>
+</resources>
