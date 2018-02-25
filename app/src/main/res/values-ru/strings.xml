@@ -265,4 +265,5 @@
     <string name="pref_name_autoSync_onStartup_enabled">Включить авто-синхронизацию при запуске приложения</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Приложение выполнит синхронизацию, когда вы его открываете</string>
 
-</resources>
+<string name="menuCopyOriginalURL">Скопировать оригинальный URL</string>
+    </resources>
