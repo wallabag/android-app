@@ -897,7 +897,7 @@ public class MainActivity extends AppCompatActivity
             switch (keyCode) {
                 case KeyEvent.KEYCODE_PAGE_UP:
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                        ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
                     return true;
                 case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
@@ -905,10 +905,10 @@ public class MainActivity extends AppCompatActivity
                         ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
                         return true;
                     }
+                    break;
             }
-            return true;
-        } else {
-            return false;
         }
+
+        return super.onKeyDown(keyCode, event);
     }
 }
