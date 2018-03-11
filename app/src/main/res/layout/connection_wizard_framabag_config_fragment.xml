@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/pref_name_connection_password"
-                    android:inputType="textPassword"/>
+                    android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
