@@ -59,7 +59,7 @@
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Impossible de se connecter — vérifiez votre identifiant et votre mot de passe</string>
     <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion. Celle-ci peut survenir lors de l\'utilisation d\'un second facteur d\'authentification, ce qui n\'est pas encore possible pour cette application</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
@@ -89,7 +89,7 @@
     <string name="articleList_favoriteMark">Marqué comme favori</string>
     <string name="articleList_ArchivedMark">Marqué comme lu</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
-    <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
+    <string name="noNextArticle">Il n\'y a plus d\'articles dans la liste actuelle</string>
     <string name="themeName_light">Clair</string>
     <string name="themeName_light_contrast">Clair (contraste élevé)</string>
     <string name="themeName_dark">Sombre</string>
@@ -97,7 +97,7 @@
     <string name="themeName_solarized">Solarisé</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
-    <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="aboutText"><b>Application wallabag pour Android</b><br/>wallabag est une application auto-hébergeable vous permettant de ne plus rater aucun contenu. Cliquez, enregistrez et lisez le contenu extrait au moment le plus opportun.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
@@ -159,7 +159,7 @@
     <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
 
     <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
-    <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
+    <string name="pref_desc_runConnectionWizard">Vous aide à configurer les informations de connexion de base</string>
 
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_name_connection_url">Votre URL wallabag</string>
@@ -191,7 +191,7 @@
     <string name="pref_name_ui_article_fontSerif">Police avec Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (Serif)</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Étend les lignes à la même longueur (comme dans les journaux)</string>
     <string name="pref_name_ui_readingSpeed">Vitesse de lecture</string>
     <string name="pref_desc_ui_readingSpeed">Votre vitesse de lecture (mesurée en mots par minutes). Utilisée pour calculer le temps estimé de lecture.</string>
     <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
@@ -289,4 +289,6 @@
     <string name="connectionWizard_summary_prev">Retour</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
     <string name="remove_tag">Supprimer tag</string>
-</resources>
+<string name="d_urlAction_copyToClipboard">Copier vers le presse papier</string>
+    <string name="markedAsRead">Article marqué comme lu</string>
+    </resources>
