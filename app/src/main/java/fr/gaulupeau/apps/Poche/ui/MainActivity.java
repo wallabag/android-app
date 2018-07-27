@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -890,4 +891,24 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(currentFragment instanceof ArticleListsFragment) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_PAGE_UP:
+                case KeyEvent.KEYCODE_PAGE_DOWN:
+                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    if (settings.isVolumeButtonsScrollingEnabled()) {
+                        ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
+                        return true;
+                    }
+                    break;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -213,6 +214,39 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
             }
         } else {
             updateAllLists(forceContentUpdate);
+        }
+    }
+
+    public void scroll(boolean up) {
+
+        ArticleListFragment currentFragment = getCurrentFragment();
+
+        if( currentFragment != null && currentFragment.recyclerViewLayoutManager != null) {
+            LinearLayoutManager listLayout = currentFragment.recyclerViewLayoutManager;
+
+            int numberOfVisibleItems =
+                    listLayout.findLastCompletelyVisibleItemPosition() -
+                            listLayout.findFirstCompletelyVisibleItemPosition() + 1;
+
+            int oldPositionOnTop = listLayout.findFirstCompletelyVisibleItemPosition();
+
+            // scroll so that as many new articles are visible than possible with one overlap
+            int newPositionOnTop;
+            if (up) {
+                newPositionOnTop = oldPositionOnTop - numberOfVisibleItems + 1;
+            } else {
+                newPositionOnTop = oldPositionOnTop + numberOfVisibleItems - 1;
+            }
+
+            if (newPositionOnTop >= listLayout.getItemCount()) {
+                newPositionOnTop = listLayout.getItemCount() - numberOfVisibleItems - 1;
+            } else if (newPositionOnTop < 0) {
+                newPositionOnTop = 0;
+            }
+
+            Log.v(TAG, " scrolling to position: " + newPositionOnTop);
+
+            listLayout.scrollToPositionWithOffset(newPositionOnTop, 0);
         }
     }
 
