@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 106
         versionName "2.0.2"
 
@@ -50,20 +50,20 @@ greendao {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
     // workaround for https://code.google.com/p/android/issues/detail?id=231324
-    compile 'com.android.support:cardview-v7:26.1.0'
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'org.greenrobot:greendao:3.2.2'
+    implementation 'com.android.support:cardview-v7:27.1.1'
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'org.greenrobot:greendao:3.2.2'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    compile 'com.squareup.okhttp3:okhttp:3.10.0'
-    compile 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
-    compile 'com.facebook.stetho:stetho:1.5.0'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    compile 'com.mikepenz:aboutlibraries:6.0.2'
-    compile 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:3c987b1'
-    compile 'org.slf4j:slf4j-android:1.7.25'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.10.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.mikepenz:aboutlibraries:6.0.2'
+    implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:3c987b1'
+    implementation 'org.slf4j:slf4j-android:1.7.25'
 }
