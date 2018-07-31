@@ -216,7 +216,7 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
 
     <string name="pref_name_ui_scrollOverBottom">Faire défiler vers le bas pour marquer comme lu</string>
-    <string name="pref_desc_ui_scrollOverBottom">Appuyez ici pour configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string
+    <string name="pref_desc_ui_scrollOverBottom">Appuyez ici pour configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string>
 
     <string name="pref_categoryName_sync">Synchronisation</string>
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
