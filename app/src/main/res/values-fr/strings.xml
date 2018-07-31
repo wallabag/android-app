@@ -40,6 +40,7 @@
     <string name="d_urlAction_title">Choisissez une action pour l\'URL</string>
     <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
     <string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
+    <string name="d_urlAction_copyToClipboard">Copier dans le presse-papier</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Échec</string>
     <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
@@ -89,6 +90,8 @@
     <string name="articleList_favoriteMark">Marqué comme favori</string>
     <string name="articleList_ArchivedMark">Marqué comme lu</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
+    <string name="scrolledOverBottom">Faites défiler %d temps plus en bas pour marquer l\'article comme lu</string>
+    <string name="markedAsRead">Article marqué comme lu</string>
     <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
     <string name="themeName_light">Clair</string>
     <string name="themeName_light_contrast">Clair (contraste élevé)</string>
@@ -155,14 +158,15 @@
 
     <string name="message_disableTouch_inputDisabled">Saisie tactile désactivée</string>
     <string name="message_disableTouch_inputEnabled">Saisie tactile activée</string>
-    <string name="d_disableTouch_changeKey_title">Disable touch input button</string>
-    <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
+    <string name="d_disableTouch_changeKey_title">Désactive la saisie tactile</string>
+    <string name="d_disableTouch_currentCode">Code clé actuellement sélectionné (appuyez sur un bouton pour le modifier) :</string>
 
     <string name="pref_name_runConnectionWizard">Lancer l\'assistant de connexion</string>
     <string name="pref_desc_runConnectionWizard">L\'assistant de connexion va vous aider à configurer les informations de connexion de base</string>
 
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_name_connection_url">Votre URL wallabag</string>
+
     <string name="pref_desc_connection_url">
         Exemples:\n
         <i>https://wallabag.example.com</i>\n
@@ -170,6 +174,7 @@
         <i>https://app.wallabag.it</i>\n
         <i>https://framabag.org</i>
     </string>
+
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
@@ -192,6 +197,10 @@
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (Serif)</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>
+
+    <string name="pref_name_ui_article_fullscreen">Voir l\'article en écran</string>
+    <string name="pref_desc_ui_article_fullscreen">Cacher les barres du système et de l\'application lors de la lecture des articles</string>
+
     <string name="pref_name_ui_readingSpeed">Vitesse de lecture</string>
     <string name="pref_desc_ui_readingSpeed">Votre vitesse de lecture (mesurée en mots par minutes). Utilisée pour calculer le temps estimé de lecture.</string>
     <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
@@ -205,6 +214,9 @@
     <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
+
+    <string name="pref_name_ui_scrollOverBottom">Faire défiler vers le bas pour marquer comme lu</string>
+    <string name="pref_desc_ui_scrollOverBottom">Appuyez ici pour configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string>
 
     <string name="pref_categoryName_sync">Synchronisation</string>
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
