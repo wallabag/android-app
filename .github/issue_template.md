@@ -1,5 +1,8 @@
 # Issue details
 
+### Duplicate?
+Have you searched the issues of this repository if your issue is already known? yes/no
+
 ### Actual behaviour
 - Tell us what happens
 
