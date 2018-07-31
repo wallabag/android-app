@@ -152,14 +152,10 @@ public class ServiceHelper {
         return request;
     }
 
-    public static void downloadArticleAsPDF(Context context, int articleID, Long operationID) {
-        downloadArticleAsFile(context, articleID, WallabagService.ResponseFormat.PDF, operationID);
-    }
-
-    private static void downloadArticleAsFile(Context context, int articleID,
-                                              WallabagService.ResponseFormat downloadFormat,
-                                              Long operationID) {
-        Log.d(TAG, "downloadArticleAsFile() started");
+    public static void downloadArticleAsFile(Context context, int articleID,
+                                             WallabagService.ResponseFormat downloadFormat,
+                                             Long operationID) {
+        Log.d(TAG, "downloadArticleAsFile() started; download format: " + downloadFormat);
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.DOWNLOAD_AS_FILE);
         request.setArticleID(articleID);

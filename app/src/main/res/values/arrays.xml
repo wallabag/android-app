@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="pref_option_readingSpeed_values">
+    <string-array name="pref_option_readingSpeed_values" translatable="false">
         <item>100</item>
         <item>150</item>
         <item>200</item>
@@ -9,8 +9,18 @@
         <item>350</item>
         <item>400</item>
     </string-array>
-    <string-array name="pref_option_autoSync_type_values">
+    <string-array name="pref_option_autoSync_type_values" translatable="false">
         <item>0</item>
         <item>1</item>
+    </string-array>
+    <string-array name="options_downloadFormat_values" translatable="false">
+        <item>PDF</item>
+        <item>EPUB</item>
+        <item>MOBI</item>
+        <item>HTML</item>
+        <item>TXT</item>
+        <item>JSON</item>
+        <item>XML</item>
+        <item>CSV</item>
     </string-array>
 </resources>

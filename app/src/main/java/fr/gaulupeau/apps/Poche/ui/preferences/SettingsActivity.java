@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
@@ -12,6 +13,9 @@ import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +27,9 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.StorageHelper;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
@@ -91,6 +98,9 @@ public class SettingsActivity extends BaseActionBarActivity {
         private boolean imageCachingChanged;
         private boolean oldImageCacheEnabled;
 
+        private boolean readingSpeedChanged;
+        private int oldReadingSpeed;
+
         private ConfigurationTestHelper configurationTestHelper;
 
         public SettingsFragment() {}
@@ -106,6 +116,7 @@ public class SettingsActivity extends BaseActionBarActivity {
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
             setOnClickListener(R.string.pref_key_sync_syncTypes_description);
+            setOnClickListener(R.string.pref_key_ui_disableTouch_keyCode);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
@@ -220,6 +231,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             imageCachingChanged = false;
             oldImageCacheEnabled = settings.isImageCacheEnabled();
+
+            readingSpeedChanged = false;
+            oldReadingSpeed = settings.getReadingSpeed();
         }
 
         private void applyChanges() {
@@ -304,6 +318,18 @@ public class SettingsActivity extends BaseActionBarActivity {
                     ServiceHelper.fetchImages(App.getInstance());
                 }
             }
+
+            if(readingSpeedChanged) {
+                readingSpeedChanged = false;
+
+                if(oldReadingSpeed != settings.getReadingSpeed()) {
+                    Log.i(TAG, "applyChanges() reading speed changed, posting event");
+
+                    ArticlesChangedEvent event = new ArticlesChangedEvent();
+                    event.invalidateAll(FeedsChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED);
+                    EventHelper.postEvent(event);
+                }
+            }
         }
 
         @Override
@@ -376,6 +402,10 @@ public class SettingsActivity extends BaseActionBarActivity {
                 case R.string.pref_key_imageCache_enabled:
                     imageCachingChanged = true;
                     break;
+
+                case R.string.pref_key_ui_readingSpeed:
+                    readingSpeedChanged = true;
+                    break;
             }
 
             switch(keyResID) {
@@ -431,6 +461,10 @@ public class SettingsActivity extends BaseActionBarActivity {
                     }
                     return true;
                 }
+                case R.string.pref_key_ui_disableTouch_keyCode: {
+                    showDisableTouchSetKeyCodeDialog();
+                    return true;
+                }
                 case R.string.pref_key_misc_wipeDB: {
                     Activity activity = getActivity();
                     if(activity != null) {
@@ -451,6 +485,52 @@ public class SettingsActivity extends BaseActionBarActivity {
             }
 
             return false;
+        }
+
+        private void showDisableTouchSetKeyCodeDialog() {
+            Activity activity = getActivity();
+            if(activity != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle(R.string.d_disableTouch_changeKey_title);
+
+                @SuppressLint("InflateParams")
+                final View view = activity.getLayoutInflater().inflate(R.layout.dialog_set_key, null);
+                final TextView keyCodeTextView = (TextView)view.findViewById(R.id.tv_keyCode);
+
+                setIntToTextView(keyCodeTextView, settings.getDisableTouchKeyCode());
+
+                builder.setView(view);
+
+                DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
+
+                        setIntToTextView(keyCodeTextView, keyCode);
+
+                        return false;
+                    }
+                };
+
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            settings.setDisableTouchKeyCode(Integer.parseInt(
+                                    keyCodeTextView.getText().toString()));
+                        } catch(NumberFormatException ignored) {}
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setOnKeyListener(keyListener);
+
+                builder.show();
+            }
+        }
+
+        @SuppressLint("SetTextI18n")
+        private void setIntToTextView(TextView textView, int value) {
+            textView.setText(Integer.toString(value));
         }
 
         @Override

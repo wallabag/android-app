@@ -43,6 +43,14 @@
         <item name="android:statusBarColor">@color/solarizedBase02</item>
         <item name="appBarOverlayTheme">@style/SolarizedTheme.AppBarOverlay</item>
         <item name="popupOverlayTheme">@style/SolarizedTheme.PopupOverlay</item>
+        <item name="icon_favorite">@drawable/ic_star_border_solarized_24dp</item>
+        <item name="icon_favorite_list">@drawable/ic_star_solarized_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_solarized_24dp</item>
+        <item name="icon_read">@drawable/ic_done_solarized_24dp</item>
+        <item name="icon_read_list">@drawable/ic_done_solarized_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_solarized_24dp</item>
+        <item name="icon_search">@drawable/ic_search_solarized_24dp</item>
+        <item name="icon_sort">@drawable/ic_sort_solarized_24dp</item>
     </style>
 
     <style name="SolarizedTheme.NoActionBar">

@@ -16,10 +16,12 @@ import android.widget.Toast;
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -49,12 +51,14 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     private int listType;
     private String tagLabel;
-    private Long tagID;
+    private List<Long> tagIDs;
 
     private OnFragmentInteractionListener host;
 
     private ArticleDao articleDao;
     private TagDao tagDao;
+
+    private boolean forceContentUpdate;
 
     public static ArticleListFragment newInstance(int listType, String tag) {
         ArticleListFragment fragment = new ArticleListFragment();
@@ -130,13 +134,23 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         return super.onOptionsItemSelected(item);
     }
 
+    public void forceContentUpdate() {
+        forceContentUpdate = true;
+    }
+
     @Override
     protected RecyclerView.Adapter getListAdapter(List<Article> list) {
-        return new ListAdapter(list, new ListAdapter.OnItemClickListener() {
+        return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
+                list, new ListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Article article = itemList.get(position);
-                openArticle(article.getId());
+                if(position >= itemList.size() || position < 0) {
+                    Log.e(TAG, "Fragment.getListAdapter.onItemClick prevent ArrayIndexOutOfBoundsException position=" + position + ", itemList.size()=" + itemList.size());
+                }
+                else {
+                    Article article = itemList.get(position);
+                    openArticle(article.getId());
+                }
             }
         }, listType);
     }
@@ -144,18 +158,22 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     @Override
     protected void resetContent() {
         if(tagLabel != null) {
-            // TODO: check: can be non-unique?
-            Tag tag = tagDao.queryBuilder()
+            List<Tag> tags = tagDao.queryBuilder()
                     .where(TagDao.Properties.Label.eq(tagLabel))
                     .orderDesc(TagDao.Properties.Label)
-                    .unique();
+                    .list();
 
-            tagID = tag != null ? tag.getId() : null;
+            tagIDs = new ArrayList<>(tags.size());
+            for(Tag t: tags) {
+                tagIDs.add(t.getId());
+            }
         } else {
-            tagID = null;
+            tagIDs = null;
         }
 
         super.resetContent();
+
+        forceContentUpdate = false;
     }
 
     @Override
@@ -173,10 +191,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private QueryBuilder<Article> getQueryBuilder() {
         QueryBuilder<Article> qb = articleDao.queryBuilder();
 
-        if(tagID != null) {
+        if(tagIDs != null && !tagIDs.isEmpty()) {
             // TODO: try subquery
             qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
-                    .where(ArticleTagsJoinDao.Properties.TagId.eq(tagID));
+                    .where(ArticleTagsJoinDao.Properties.TagId.in(tagIDs));
         }
 
         switch(listType) {
@@ -241,7 +259,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     @Override
     protected DiffUtil.Callback getDiffUtilCallback(List<Article> oldItems, List<Article> newItems) {
-        return new ArticleListDiffCallback(oldItems, newItems);
+        return new ArticleListDiffCallback(oldItems, newItems, forceContentUpdate);
     }
 
     private void openRandomArticle() {
@@ -285,10 +303,12 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
         private List<Article> oldList;
         private List<Article> newList;
+        private boolean forceContentUpdate;
 
-        ArticleListDiffCallback(List<Article> oldList, List<Article> newList) {
+        ArticleListDiffCallback(List<Article> oldList, List<Article> newList, boolean forceContentUpdate) {
             this.oldList = oldList;
             this.newList = newList;
+            this.forceContentUpdate = forceContentUpdate;
         }
 
         @Override
@@ -309,6 +329,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+            if(forceContentUpdate) return false;
+
             Article oldArticle = oldList.get(oldItemPosition);
             Article newArticle = newList.get(newItemPosition);
 

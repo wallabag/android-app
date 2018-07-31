@@ -6,23 +6,23 @@
     <item
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
-        android:icon="@drawable/ic_done_24dp"
+        android:icon="?attr/icon_read"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menuArticleMarkAsUnread"
         android:title="@string/btnMarkUnread"
-        android:icon="@drawable/ic_undo_24dp"
+        android:icon="?attr/icon_read_undo"
         app:showAsAction="always"
         android:visible="false"/>
     <item
         android:id="@+id/menuArticleFavorite"
         android:title="@string/add_to_favorites"
-        android:icon="@drawable/ic_star_border_white_24dp"
+        android:icon="?attr/icon_favorite"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menuArticleUnfavorite"
         android:title="@string/remove_from_favorites"
-        android:icon="@drawable/ic_star_white_24dp"
+        android:icon="?icon_favorite_undo"
         app:showAsAction="ifRoom"
         android:visible="false"/>
     <item
@@ -43,8 +43,11 @@
         android:id="@+id/menuOpenOriginal"
         android:title="@string/menuOpenOriginal"/>
     <item
-        android:id="@+id/menuDownloadPdf"
-        android:title="@string/menuDownloadPdf"/>
+        android:id="@+id/menuCopyOriginalURL"
+        android:title="@string/menuCopyOriginalURL"/>
+    <item
+        android:id="@+id/menuDownloadAsFile"
+        android:title="@string/menuDownloadAsFile"/>
     <item
         android:id="@+id/menuIncreaseFontSize"
         android:title="@string/menu_readArticle_increaseFontSize"/>

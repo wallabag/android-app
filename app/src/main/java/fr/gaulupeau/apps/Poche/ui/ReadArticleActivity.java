@@ -2,11 +2,16 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +22,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
@@ -28,6 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,10 +112,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int fontSize;
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
+    private boolean disableTouchOptionEnabled;
+    private boolean disableTouch;
+    private int disableTouchKeyCode;
     private float screenScrollingPercent;
     private boolean smoothScrolling;
+    private int scrolledOverBottom;
 
     private ScrollView scrollView;
+    private View scrollViewLastChild;
     private WebView webViewContent;
     private TextView loadingPlaceholder;
     private LinearLayout bottomTools;
@@ -130,6 +144,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     public void onCreate(Bundle savedInstanceState) {
+
+        settings = App.getInstance().getSettings();
+
+        if(settings.isFullscreenArticleView()) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN
+                    );
+            ActionBar actionBar = super.getSupportActionBar();
+            if(actionBar != null) actionBar.hide();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
@@ -143,8 +170,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
 
-        settings = App.getInstance().getSettings();
-
         DaoSession session = DbConnection.getSession();
         articleDao = session.getArticleDao();
 
@@ -157,8 +182,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         fontSize = settings.getArticleFontSize();
         volumeButtonsScrolling = settings.isVolumeButtonsScrollingEnabled();
         tapToScroll = settings.isTapToScrollEnabled();
+        disableTouchOptionEnabled = settings.isDisableTouchEnabled();
+        disableTouch = settings.isDisableTouchLastState();
+        disableTouchKeyCode = settings.getDisableTouchKeyCode();
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
+        scrolledOverBottom = settings.getScrolledOverBottom();
 
         setTitle(articleTitle);
 
@@ -166,6 +195,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         invalidateOptionsMenu();
 
         scrollView = (ScrollView)findViewById(R.id.scroll);
+        scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
         webViewContent = (WebView)findViewById(R.id.webViewContent);
         loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
         bottomTools = (LinearLayout)findViewById(R.id.bottomTools);
@@ -189,6 +219,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             if(ttsFragment == null) {
                 toggleTTS(false);
             }
+        }
+
+        if(disableTouch) {
+            showDisableTouchToast();
         }
 
         EventBus.getDefault().register(this);
@@ -287,8 +321,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 openOriginal();
                 break;
 
-            case R.id.menuDownloadPdf:
-                downloadPdf();
+            case R.id.menuCopyOriginalURL:
+                copyURLToClipboard();
+                break;
+
+            case R.id.menuDownloadAsFile:
+                showDownloadFileDialog();
                 break;
 
             case R.id.menuIncreaseFontSize:
@@ -312,19 +350,46 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if(volumeButtonsScrolling) {
-            switch(event.getKeyCode()) {
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                    scroll(true, screenScrollingPercent, smoothScrolling);
+        int code = event.getKeyCode();
+        boolean triggerAction;
+        if (code == KeyEvent.KEYCODE_PAGE_UP || code == KeyEvent.KEYCODE_PAGE_DOWN) {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_UP);
+        } else {
+            triggerAction = (event.getAction() == KeyEvent.ACTION_DOWN);
+        }
+
+        if (triggerAction) {
+            if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
+                disableTouch = !disableTouch;
+                settings.setDisableTouchLastState(disableTouch);
+
+                Log.d(TAG, "toggling touch screen, now disableTouch is " + disableTouch);
+                showDisableTouchToast();
+                return true;
+            }
+
+            switch (code) {
+                case KeyEvent.KEYCODE_PAGE_UP:
+                case KeyEvent.KEYCODE_PAGE_DOWN:
+                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling, true);
                     return true;
 
+                case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    scroll(false, screenScrollingPercent, smoothScrolling);
-                    return true;
+                    if (volumeButtonsScrolling) {
+                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling, true);
+                        return true;
+                    }
+                    break;
             }
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return disableTouch || super.dispatchTouchEvent(ev);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -411,6 +476,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    private void showDisableTouchToast() {
+        Toast.makeText(this, disableTouch
+                        ? R.string.message_disableTouch_inputDisabled
+                        : R.string.message_disableTouch_inputEnabled,
+                Toast.LENGTH_SHORT).show();
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
@@ -439,14 +511,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 super.onPageFinished(view, url);
             }
 
+            @SuppressWarnings("deprecation") // can't use newer method until API 21
             @Override
-            public boolean shouldOverrideUrlLoading(WebView webView, String url) { // TODO: check
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 // If we try to open current URL, do not propose to save it, directly open browser
                 if(url.equals(articleUrl)) {
-                    Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(launchBrowserIntent);
+                    openURL(url);
                 } else {
-                    openUrl(url);
+                    handleUrlClicked(url);
                 }
 
                 return true; // always override URL loading
@@ -533,9 +605,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     float x = e.getX();
 
                     if(x < viewWidth * 0.3) { // left part
-                        scroll(true, screenScrollingPercent, smoothScrolling);
+                        scroll(true, screenScrollingPercent, smoothScrolling, false);
                     } else if(x > viewWidth * 0.7) { // right part
-                        scroll(false, screenScrollingPercent, smoothScrolling);
+                        scroll(false, screenScrollingPercent, smoothScrolling, false);
                     }
                 }
 
@@ -708,8 +780,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    private void openUrl(final String url) {
-        if(url == null) return;
+    private void handleUrlClicked(final String url) {
+        Log.d(TAG, "handleUrlClicked() url: " + url);
+        if(TextUtils.isEmpty(url)) return;
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -725,24 +798,50 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         builder.setItems(
                 new CharSequence[]{
                         getString(R.string.d_urlAction_openInBrowser),
-                        getString(R.string.d_urlAction_addToWallabag)
+                        getString(R.string.d_urlAction_addToWallabag),
+                        getString(R.string.d_urlAction_copyToClipboard),
+                        getString(R.string.menuShare)
                 }, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(url));
-                                startActivity(launchBrowserIntent);
+                                openURL(url);
                                 break;
                             case 1:
                                 ServiceHelper.addLink(ReadArticleActivity.this, url);
+                                break;
+                            case 2:
+                                copyURLToClipboard(url);
+                                break;
+                            case 3:
+                                shareArticle(null, url);
                                 break;
                         }
                     }
                 });
 
         builder.show();
+    }
+
+    private void openURL(String url) {
+        Log.d(TAG, "openURL() url: " + url);
+        if(TextUtils.isEmpty(url)) return;
+
+        Uri uri = Uri.parse(url);
+        if(uri.getScheme() == null) {
+            Log.i(TAG, "openURL() scheme is null, appending default scheme");
+            uri = Uri.parse("http://" + url);
+        }
+        Log.d(TAG, "openURL() uri: " + uri);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(intent);
+        } catch(ActivityNotFoundException e) {
+            Log.w(TAG, "openURL() failed to open URL", e);
+            Toast.makeText(this, R.string.message_couldNotOpenUrl, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void markAsReadAndClose() {
@@ -756,7 +855,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void shareArticle() {
-        String shareText = articleTitle + " " + articleUrl;
+       shareArticle(articleTitle, articleUrl);
+    }
+
+    private void shareArticle(String articleTitle , String articleUrl) {
+        String shareText = articleUrl;
+        if(!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+
 
         if(settings.isAppendWallabagMentionEnabled()) {
             shareText += getString(R.string.share_text_extra);
@@ -764,7 +869,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        if(!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
@@ -823,13 +928,43 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openOriginal() {
-        Intent launchBrowserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(articleUrl));
-
-        startActivity(launchBrowserIntent);
+        openURL(articleUrl);
     }
 
-    private void downloadPdf() {
-        ServiceHelper.downloadArticleAsPDF(getApplicationContext(), article.getArticleId(), null);
+    private void copyURLToClipboard() {
+       copyURLToClipboard(articleUrl);
+    }
+
+    private void copyURLToClipboard(String url) {
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData urlClipData = ClipData.newPlainText("article URL", url);
+        clipboardManager.setPrimaryClip(urlClipData);
+        Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showDownloadFileDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_title_downloadFileFormat)
+                .setItems(R.array.options_downloadFormat_values,
+                        new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String selectedFormat = getResources()
+                                .getStringArray(R.array.options_downloadFormat_values)[which];
+
+                        WallabagService.ResponseFormat format;
+                        try {
+                            format = WallabagService.ResponseFormat.valueOf(selectedFormat);
+                        } catch(IllegalArgumentException e) {
+                            Log.e(TAG, "showDownloadFileDialog() unknown selected format: "
+                                    + selectedFormat);
+                            format = WallabagService.ResponseFormat.PDF;
+                        }
+
+                        ServiceHelper.downloadArticleAsFile(getApplicationContext(),
+                                article.getArticleId(), format, null);
+                    }
+                });
+        builder.show();
     }
 
     private void changeFontSize(boolean increase) {
@@ -880,7 +1015,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return false;
     }
 
-    private void scroll(boolean up, float percent, boolean smooth) {
+    private void scroll(boolean up, float percent, boolean smooth, boolean keyUsed) {
         if(scrollView == null) return;
 
         int viewHeight = scrollView.getHeight();
@@ -900,6 +1035,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             } else {
                 scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
             }
+        }
+
+        if(!up && keyUsed && newYOffset + viewHeight > scrollViewLastChild.getBottom()) {
+            if(scrolledOverBottom > 1) {
+                scrolledOverBottom--;
+                Toast.makeText(this, getString(R.string.scrolledOverBottom, scrolledOverBottom),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.markedAsRead, Toast.LENGTH_SHORT).show();
+                markAsReadAndClose();
+            }
+        } else {
+            scrolledOverBottom = settings.getScrolledOverBottom();
         }
     }
 

@@ -76,7 +76,8 @@
         Например:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/имя-пользователя</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">Имя пользователя</string>
     <string name="pref_name_connection_password">Пароль</string>
@@ -87,7 +88,7 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-аутентификации</string>
 
     <string name="pref_name_ui_theme">Тема приложения</string>
-    <string name="pref_name_ui_article_fontSize">Размер шрифта статей (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Размер шрифта статей (%)</string>
     <string name="pref_name_ui_article_fontSerif">Шрифт с засечками</string>
     <string name="pref_desc_ui_article_fontSerif">Шрифт с засечками для статей</string>
 
@@ -116,13 +117,12 @@
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Высота голоса</string>
     <string name="readVolume">Громкость чтения</string>
-    <string name="menuDownloadPdf">Скачать в формате PDF</string>
-    <string name="downloadPdfPathStart">Загрузка статьи</string>
-    <string name="downloadPdfArticleDownloaded">Статья загружена</string>
-    <string name="downloadPdfArticleDownloadedDetail">Статья %s загружена</string>
-    <string name="downloadPdfTouchToOpen">Коснитесь, чтобы открыть</string>
-    <string name="downloadPdfProgressDetail">wallabag загружает вашу статью %s в PDF</string>
-    <string name="downloadPdfProgress">wallabag загружает вашу статью в PDF</string>
+    <string name="downloadAsFilePathStart">Загрузка статьи</string>
+    <string name="downloadAsFileArticleDownloaded">Статья загружена</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Статья %s загружена</string>
+    <string name="downloadAsFileTouchToOpen">Коснитесь, чтобы открыть</string>
+    <string name="downloadAsFileProgressDetail">wallabag загружает вашу статью %1$s в %2$s</string>
+    <string name="downloadAsFileProgress">wallabag загружает вашу статью в %s</string>
     <string name="notification_downloadingImages">Загружаются изображения</string>
     <string name="notification_syncingQueue">Синхронизация локальных изменений</string>
     <string name="notification_incorrectCredentials">Неправильные данные учётной записи</string>

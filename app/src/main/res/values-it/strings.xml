@@ -99,13 +99,12 @@
     <string name="readSpeed">Velocità di lettura</string>
     <string name="voiceHeight">Tonalità della voce</string>
     <string name="readVolume">Volume di lettura</string>
-    <string name="menuDownloadPdf">Scarica PDF</string>
-    <string name="downloadPdfPathStart">Scaricando articolo</string>
-    <string name="downloadPdfArticleDownloaded">Articolo scaricato</string>
-    <string name="downloadPdfArticleDownloadedDetail">Articolo %s scaricato</string>
-    <string name="downloadPdfTouchToOpen">Tocca per aprire</string>
-    <string name="downloadPdfProgressDetail">wallabag scarica il tuo articolo %s in PDF</string>
-    <string name="downloadPdfProgress">wallabag scarica il tuo articolo in PDF</string>
+    <string name="downloadAsFilePathStart">Scaricando articolo</string>
+    <string name="downloadAsFileArticleDownloaded">Articolo scaricato</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Articolo %s scaricato</string>
+    <string name="downloadAsFileTouchToOpen">Tocca per aprire</string>
+    <string name="downloadAsFileProgressDetail">wallabag scarica il tuo articolo %1$s in %2$s</string>
+    <string name="downloadAsFileProgress">wallabag scarica il tuo articolo in %s</string>
     <string name="notification_updatingArticles">Aggiornando articoli</string>
     <string name="notification_updatingArticles_full">Aggiornamento completo in corso</string>
     <string name="notification_updatingArticles_fast">Aggiornamento veloce in corso</string>
@@ -151,7 +150,8 @@
         Esempi:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
@@ -169,7 +169,7 @@
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">Tema Applicazione</string>
-    <string name="pref_name_ui_article_fontSize">Dimensione font articolo (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Dimensione font articolo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Carattere Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Carattere Serif per i font dell\'articolo</string>
     <string name="pref_name_ui_readingSpeed">Velocità di lettura</string>

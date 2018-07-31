@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="btnMarkRead">Okundu Olarak İşaretle</string>
+    <string name="btnMarkUnread">Okunmadı Olarak İşaretle</string>
+    <string name="add_to_favorites">Favorilere Ekle</string>
+    <string name="remove_from_favorites">Favorilerden Çıkart</string>
+    <string name="menuShare">Paylaş</string>
+    <string name="menuNext">Bir sonraki makale</string>
+    <string name="menuPrevious">Önceki makale</string>
+    <string name="menuDelete">Sil</string>
+    <string name="menuOpenOriginal">Orijinal makaleyi aç</string>
+    <string name="menuTTS">Metni Sesli Oku (Text to Speech)</string>
+    <string name="ttsSpeed">Oylama</string>
+    <string name="ttsPitch">Ses Frekansı</string>
+    <string name="ttsVolume">Ses</string>
+    <string name="ttsLanguage">Dil Seçin</string>
+    <string name="ttsVoice">Ses Seçin</string>
+    <string name="ttsAutoplayNextArticle">Bir sonraki makaleyi otomatik oynat</string>
+    <string name="ttsError">Metin sesli okuma hatası</string>
+    <string name="ttsFastRewind">Hızlı geri sar</string>
+    <string name="ttsPlayPause">Oynat / Beklet</string>
+    <string name="ttsFastForward">Hızlı ileri sar</string>
+    <string name="ttsOptions">Seçenekler</string>
+    <string name="menu_open_random_article">Rastgele makale aç</string>
+    <string name="menu_syncLocalChanges">Yerel değişiklikleri senkron et</string>
+    <string name="d_deleteArticle_title">Makale silinsin mi?</string>
+    <string name="d_deleteArticle_message">Makaleyi silmek istediğinizden emin misiniz?</string>
+    <string name="txtNetOffline">Lütfen internet bağlantınızı kontrol edin!</string>
+    <string name="txtConfigNotSet">Lütfen senkron yapmadan önce ayarlarınızı kontrol edin!</string>
+    <string name="dialog_add_label">Yeni bir makale ekle</string>
+    <string name="page_url">Sayfa URL\'si</string>
+    <string name="share_article_title">Makaleyi paylaş</string>
+    <string name="share_text_extra">" @wallabagapp aracılığıyla"</string>
+    <string name="positive_answer">Evet</string>
+    <string name="negative_answer">Hayır</string>
+    <string name="no_articles">Makale Bulunamadı</string>
+    <string name="loading_article_text">Yükleniyor…</string>
+    <string name="d_urlAction_title">URL için bir eylem seçin</string>
+    <string name="d_urlAction_openInBrowser">Tarayıcıda aç</string>
+    <string name="d_urlAction_addToWallabag">Wallabag\'e Ekle</string>
+    <string name="ok">Tamam</string>
+    <string name="d_add_fail_title">Başarısız</string>
+    <string name="d_add_fail_text">Paylaşım metninde bir URL bulunamadı\n</string>
+    <string name="d_configurationChanged_title">Parametreler değiştirildi</string>
+    <string name="d_configurationChanged_message">Bazı parametreler değiştirilmiş gibi görünüyor. Bir bağlantı testi gerçekleştirmenizi tavsiye ediyoruz.</string>
+    <string name="d_configurationChanged_answer_decline">Şimdi değil</string>
+    <string name="d_configurationIsQuestionable_title">Bir sorun algılandı</string>
+    <string name="d_configurationIsQuestionable_message">Yakın zamanda bir bağlantı hatası oluştu. Bu bir bağlantı testi gerçekleştirmenizi tavsiye ediyoruz.</string>
+    <string name="addLink_success_text">Eklendi</string>
+    <string name="settings_parametersAreOk">Parametreler doğru gibi duruyor</string>
+    <string name="settings_parametersAutofilled">Parametreler dolduruldu</string>
+    <string name="testConnection_progressDialogMessage">Bağlantınız test ediliyor…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">Hatalı URL</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Desteklenmeyen sunucu sürümü algılandı</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag hizmeti bulunamadı — URL\'yi kontrol edin</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP kimlik doğrulaması başarısız oldu</string>
+    <string name="testConnection_errorMessage_noCSRF">Giriş formu işleme hatası</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Giriş yapılamadı — lütfen kullanıcı adı ve parolanızı kontrol edin</string>
+    <string name="testConnection_errorMessage_authProblems">Yetkilendirme ile ilgili sorunlar. Bunlar genellikle HTTP-yönlendirmeleri nedeniyle oluyor.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Giriş yaptıktan sonra bilinmeyen sayfa</string>
+    <string name="testConnection_errorMessage_unknown">Bilinmeyen hata</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">Bilinmeyen hata: %s</string>
+    <string name="d_testConnection_urlSuggestion_title">URL değiştirmeyi düşünün</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Önerileni kullan</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Benimkini kullan</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">İptal</string>
+    <string name="d_testConnection_urlSuggestion_message">URL\'i şu adres ile değiştirmeniz önerilir: %s . Lakin mevcut girdiğiniz adresi de kullanabilirsiniz.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">URL\'i şu adres ile değiştirmeniz önerilir: %s</string>
+    <string name="d_testConnection_fail_title">Bağlantı testi başarısız</string>
+    <string name="getCredentials_progressDialogMessage">API kimlik bilgileri alınıyor…</string>
+    <string name="d_getCredentials_title_fail">API kimlik bilgileri alınamadı</string>
+    <string name="d_getCredentials_title_message">Bir şeyler ters gitti. Internet bağlantınızı denetleyin ve yeniden deneyin.</string>
+    <string name="checkCredentials_progressDialogMessage">API erişimi test ediliyor…</string>
+    <string name="d_checkCredentials_title_fail">API erişim testi başarısız oldu</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API bulunamadı</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API bulunamadı: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">API\'ye erişim yok</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Api\'ye erişim yok: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Bilinmeyen hata</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Bilinmeyen hata: %s</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Giriş yapılamadı: muhtemelen hatalı kullanıcı adı veya parola</string>
+    <string name="unsuccessfulRequest_errorMessage">Başarısız istek; yanıt kodu: %1$d, yanıt iletisi: %2$s</string>
+    <string name="previousUpdateNotFinished">Bir önceki güncelleme işlemi henüz bitmedi</string>
+    <string name="feedName_favorites">Favoriler</string>
+    <string name="feedName_archived">Arşiv</string>
+    <string name="feedName_unread">Okunmamış</string>
+    <string name="articleList_favoriteMark">Favori işareti</string>
+    <string name="articleList_ArchivedMark">Arşivlenmiş işareti</string>
+    <string name="noPreviousArticle">Mevcut listede bir önceki makale yok</string>
+    <string name="noNextArticle">Mevcut listede bir sonraki makale yok</string>
+    <string name="themeName_light">Açık Renk</string>
+    <string name="themeName_light_contrast">Açık Renk (yüksek kontrast)</string>
+    <string name="themeName_dark">Koyu Renk</string>
+    <string name="themeName_dark_contrast">Koyu Renk (yüksek kontrast)</string>
+    <string name="themeName_solarized">Solarized</string>
+    <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
+    <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
+    <string name="aboutText">&lt;b>Android için wallabag&lt;/b>&lt;br/> wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+    <string name="readSpeed">Okuma hızı</string>
+    <string name="voiceHeight">Ses seviyesi</string>
+    <string name="readVolume">Okuma seviyesi</string>
+    <string name="menuDownloadPdf">PDF indir</string>
+    <string name="downloadPdfPathStart">Makale İndiriyor</string>
+    <string name="downloadPdfArticleDownloaded">Makale indirildi</string>
+    <string name="downloadPdfArticleDownloadedDetail">Makale %s indirildi</string>
+    <string name="downloadPdfTouchToOpen">Açmak için dokunun</string>
+    <string name="downloadPdfProgressDetail">wallabag %s makalenizi PDF formatında indirir</string>
+    <string name="downloadPdfProgress">wallabag makalenizi PDF formatında indirir</string>
+    <string name="notification_updatingArticles">Makaleler güncelleniyor</string>
+    <string name="notification_updatingArticles_full">Tam güncelleme çalışıyor</string>
+    <string name="notification_updatingArticles_fast">Hızlı güncelleme çalışıyor</string>
+    <string name="notification_sweepingDeletedArticles">Silinmiş makaleler temizleniyor</string>
+    <string name="notification_downloadingImages">Resimler indiriliyor</string>
+    <string name="notification_syncingQueue">Yerel değişiklikler eşitleniyor</string>
+    <string name="notification_error">Hata</string>
+    <string name="notification_incorrectCredentials">Hatalı kimlik bilgileri</string>
+    <string name="notification_incorrectConfiguration">Hatalı yapılandırma</string>
+    <string name="notification_unknownError">Bilinmeyen hata</string>
+    <string name="notification_expandedError">Hata: %s</string>
+    <string name="menu_lists_search">Arama</string>
+    <string name="menu_lists_changeSortOrder">Sıralamayı değiştir</string>
+    <string name="menu_lists_sweepDeletedArticles">Silinmiş makaleleri temizle</string>
+    <string name="menu_lists_fullUpdate">Tam güncelleme</string>
+    <string name="other_searchHint">Makale başlığı veya metni ile arama</string>
+    <string name="menu_changeTitle">Başlığı değiştir</string>
+    <string name="menu_manageTags">Etiketleri Yönetin</string>
+    <string name="manageTags_title">Etiketleri Yönetin</string>
+    <string name="manageTags_save">Kaydet</string>
+    <string name="manageTags_textField_hint">Virgülle ayrılmış bir veya daha fazla etiket</string>
+    <string name="manageTags_addNew">Ekle</string>
+    <string name="manageTags_currentTags">Seçili etiketler:</string>
+    <string name="content_estimatedReadingTime">Tahmini okuma süresi: %s dk</string>
+
+    <string name="navigation_drawer_open">Navigasyon menüsünü aç</string>
+    <string name="navigation_drawer_close">Navigasyon menüsünü kapat</string>
+
+    <string name="nav_main_articles">Makaleler</string>
+    <string name="nav_main_tags">Etiketler</string>
+    <string name="nav_main_tagged_articles">Etiketli makaleler</string>
+
+    <string name="nav_add">Yeni kayıt ekle</string>
+
+    <string name="nav_other_settings">Ayarlar</string>
+    <string name="nav_other_about">Hakkında</string>
+
+    <string name="title_main_tag">Etiket: %s</string>
+
+    <string name="pref_name_runConnectionWizard">Bağlantı Sihirbazı\'nı çalıştırın</string>
+    <string name="pref_desc_runConnectionWizard">Bağlantı sihirbazı temel bağlantı ayarları ayarlamak için size yardımcı olacaktır</string>
+
+    <string name="pref_categoryName_connection">Bağlantı</string>
+    <string name="pref_name_connection_url">wallabag URL\'i</string>
+    <string name="pref_desc_connection_url">
+        Örnekler:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
+    </string>
+    <string name="pref_name_connection_username">Kullanıcı adı</string>
+    <string name="pref_name_connection_password">Şifre</string>
+    <string name="pref_name_connection_api_clientID">İstemci Kimliği (ID)</string>
+    <string name="pref_name_connection_api_clientSecret">İstemci gizli anahtarı</string>
+    <string name="pref_name_connection_autofill">Otomatik Doldurma</string>
+    <string name="pref_desc_connection_autofill">Bağlantıyı sına ve istemci ID kimlik ve gizli anahtarını otomatik doldur</string>
+
+    <string name="pref_categoryName_connection_advanced">Gelişmiş bağlantı ayarları</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Özel SSL ayarları</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">SSL\'i tüm cihazlarda devre dışı bırakır, TLS 1.1 ve 1.2\'yi Android 4.1–4.4 arası için aktif eder</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Temel kimlik Doğrulaması</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Eğer ne olduğunu bilmiyorsanız boş bırakın</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP kimlik doğrulama kullanıcı adı</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP kimlik Doğrulama parolası</string>
+
+    <string name="pref_categoryName_ui">Arayüz</string>
+    <string name="pref_name_ui_theme">Tema</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Makale yazı tipi boyutu (%)</string>
+    <string name="pref_name_ui_article_fontSerif">Serif yazı tipi</string>
+    <string name="pref_desc_ui_article_fontSerif">Makalelerde Serif yazı tipi</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Metin hizalama: her iki tarafa da</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Satırlardaki boşlukların genişliklerini değiştirerek her satırın aynı genişlikte olmasını sağlar (tıpkı gazetelerdeki gibi)</string>
+    <string name="pref_name_ui_readingSpeed">Okuma hızı</string>
+    <string name="pref_desc_ui_readingSpeed">Okuma hızınızı (dakikada kelime cinsinden). Tahmini okuma zamanı hesaplamak için kullanılır.</string>
+    <string name="pref_categoryName_ui_screenScrolling">Ekran kaydırma</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Ses tuşları ile kaydırma</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Hafifçe dokunarak kaydırma</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Ekranın sol ve sağ kenarlarına hafifçe dokunarak makaleyi kaydırmanızı sağlar</string>
+    <string name="pref_name_ui_screenScrolling_percent">Kaydırmak için ekran yüksekliği yüzdesi</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Yumuşak kaydırmayı kullan</string>
+
+    <string name="pref_categoryName_sync">Senkronizasyon</string>
+    <string name="pref_name_sync_syncTypes">Senkronizasyon türleri</string>
+    <string name="pref_desc_sync_syncTypes">Senkronizasyon türleri hakkında daha fazla bilgi görmek için tıklayın</string>
+    <string name="pref_desc_sync_syncTypes_text">İki ana senkronizasyon türü vardır: \"Tam\" ve \"Hızlı\".\n\n
+        \"Tam\" senkronizasyon türü tüm yerel içeriği siler ve her şeyi yeniden indirir. Bu eşitleme seçenekler menüsündedir. Bu seçeneğin yalnızca son çare olarak kullanılması önerilir.\n\n
+        \"Hızlı\" senkronizasyon türü (artımlı eşitleme) genellikle daha az zaman ve internet trafiğini alır, çünkü önceki senkronizasyondan sonra yapılan değişiklikleri yükler. Ancak, bu yöntemin bir handikapı vardır: Bu senkronizasyon sunucuda doğrudan silinmiş makaleleri algılayamaz (bu sebeple yerel makaleler hızlı senkronizasyon ile silinmez). Bu eşitleme türü herhangi bir makale listesinde sayfayı aşağı doğru çekme / yenileme hareketi ile çağrılır.\n\n
+        Bu eşleştirme listesinde silinmiş makalelerin de uygulamadan kaldırılmasına çözüm olarak \"silinmiş makalelerin kaldırılması\" seçeneğini kullanabilirsiniz. Bu seçenek çalıştırıldığında tüm makaleleri tek tek gezerek hala sunucuda olup olmadığını kontrol eder. Eğer sunucuda değilse makaleyi uygulamadan siler. Makale sayısı çokluğuna göre bu işlem biraz zaman alabilir, ama \"tam senkronizasyon\"a göre oldukça daha az internet trafiği harcayacaktır.\n\n
+        Unutmamak gerekir ki bu fonksiyonların hiç biri istemciden sunucuya olan senkronizasyonu etkilememektedir. Yerel değişiklikleriniz senkronizasyonlardan önce her zaman sunucuya gönderilmektedir.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Hızlı\" senkronizasyon ardından \"Silinmiş yazıları temizleme\" özelliğini çalıştır</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Daha fazla detay için yukarıdan senkronizasyon türleri açıklamalarına göz atın</string>
+    <string name="pref_categoryName_autoSync">Otomatik senkronizasyon</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Uygulama başladığında otomatik senkronizasyon etkinleşsin</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">Uygulamayı açtığınızda senkron olacak</string>
+    <string name="pref_name_autoSync_enabled">Otomatik senkronizasyonu etkinleştir</string>
+    <string name="pref_desc_autoSync_enabled">Bu ayar yerel değişikliklerin (eklenen linkler, arşivlenen makaleler vs.) otomatik olarak sunucuya senkron edilmesini, ve de belli periyotlarda yeni makalelerin indirilmesini sağlar</string>
+    <string name="pref_name_autoSync_interval">Otomatik senkronizasyon aralığı</string>
+    <string name="pref_option_autoSync_interval_15m">15 dakika</string>
+    <string name="pref_option_autoSync_interval_30m">30 dakika</string>
+    <string name="pref_option_autoSync_interval_1h">1 saat</string>
+    <string name="pref_option_autoSync_interval_12h">12 saat</string>
+    <string name="pref_option_autoSync_interval_24h">24 saat</string>
+    <string name="pref_name_autoSync_type">Otomatik senkronizasyon türü</string>
+    <string name="pref_name_autoSyncQueue_enabled">Yerel değişiklikleride otomatik senkronizasyonu ayır</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Bu ayar yerel değişikliklerin (eklenen link, arşivlenen makale vs.) internet erişimi olduğu anda sunucuya senkron edilmesini sağlar.</string>
+    <string name="pref_name_autoDlNew_enabled">Yeni makale eklendiğinde indir</string>
+    <string name="pref_desc_autoDlNew_enabled">Uygulama üzerinden makale eklendiği anda otomatik olarak bu makaleleri indirir. Not: Eğer senkron edilmemiş çevrimdışı yerel değişiklikleriniz varsa bu işlem çalışmayacaktır.</string>
+    <string name="pref_name_imageCache_enabled">Makalelere gömülü resimleri önbellekle</string>
+    <string name="pref_desc_imageCache_enabled">Makalelerin içindeki tüm resimleri cihaza indirir. Makale uzunluğuna, adedine ve resim ebatlarına göre bu işlem zaman ve disk alanı kaplayabilir.</string>
+
+    <string name="pref_categoryName_miscellaneous">Çeşitli</string>
+    <string name="pref_name_misc_handleHttpScheme">HTTP şemasını yönet</string>
+    <string name="pref_desc_misc_handleHttpScheme">Wallabag\'i web tarayıcıları listesinde göster</string>
+    <string name="pref_name_misc_wipeDB">Veritabanını Sıfırla</string>
+    <string name="pref_desc_misc_wipeDB">Tüm makaleleri yerel veritabanından siler, ayrıca tüm senkron edilmemiş değişiklikleri ve URL\'leri de siler</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Veritabanı sıfırlansın mı?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Veritabanını sıfırlamak istediğinize emin misiniz?</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">Hatalı bağlantı URI\'ı kullanılıyor</string>
+
+    <string name="connectionWizard_welcome_titleMessage">Wallabag\'e hoş geldiniz!</string>
+    <string name="connectionWizard_welcome_text">Wallabag uygulamasını kullanmadan önce bağlantınızı ayarlamalısınız. Bu bağlantı sihirbazı size kurulumda yardımcı olacaktır.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Ayarlar sayfasından istediğiniz zaman bu bağlantı sihirbazını yeniden çalıştırabilirsiniz.</string>
+    <string name="connectionWizard_welcome_prev">Atla</string>
+    <string name="connectionWizard_welcome_next">Sonraki</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Wallabag sağlayıcınızı seçin</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Diğer</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">El ile gerekli ayarları girmek için bu seçeneği seçin</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Eğer https://wallabag.it adresinde bir hesabınız varsa bu seçeneği seçin</string>
+    <string name="connectionWizard_providerSelection_prev">Atla</string>
+    <string name="connectionWizard_providerSelection_next">Sonraki</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Temel yapılandırma</string>
+    <string name="connectionWizard_provider_general_prev">Geri</string>
+    <string name="connectionWizard_provider_general_next">Bağlan</string>
+
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it yapılandırması</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Geri</string>
+    <string name="connectionWizard_provider_wallabagit_next">Bağlan</string>
+
+    <string name="connectionWizard_summary_titleMessage">Hepsi tamam!</string>
+    <string name="connectionWizard_summary_text">Ayarları kaydetmek ve ana ekranına dönmek için düğmeye basın.</string>
+    <string name="connectionWizard_summary_toastMessage">Kurulum tamamlandı</string>
+    <string name="connectionWizard_summary_prev">Geri</string>
+    <string name="connectionWizard_summary_next">Ayarları Kaydet</string>
+</resources>

@@ -26,7 +26,7 @@
     <string name="d_deleteArticle_title">記事を削除しますか?</string>
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
     <string name="txtNetOffline">インターネット接続を確認してください!</string>
-    <string name="txtConfigNotSet">同期の前に、アプリを構成してください!</string>
+    <string name="txtConfigNotSet">同期の前に、アプリを構成してください。</string>
     <string name="page_url">ページ URL</string>
     <string name="share_article_title">記事を共有</string>
     <string name="share_text_extra">" @wallabagapp で"</string>
@@ -55,7 +55,7 @@
     <string name="testConnection_errorMessage_noCSRF">ログイン フォーム解析エラー</string>
     <string name="testConnection_errorMessage_incorrectCredentials">ログインできません — ユーザー名とパスワードを確認してください</string>
     <string name="testConnection_errorMessage_authProblems">認証関連の問題があります。これらは通常 HTTP リダイレクトによって引き起こされます。</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">ログイン後に不明なページ</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">ログイン後のページが不明です。これは通常、アプリがサポートしていない２要素認証が有効にされていることが原因です</string>
     <string name="testConnection_errorMessage_unknown">不明なエラー</string>
     <string name="testConnection_errorMessage_unknownWithMessage">原因不明のエラー: %s</string>
     <string name="d_testConnection_urlSuggestion_title">URL の変更を検討してください</string>
@@ -67,14 +67,14 @@
     <string name="d_testConnection_fail_title">接続テストに失敗しました</string>
     <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
     <string name="unsuccessfulRequest_errorMessage">要求が失敗しました。レスポンスコード: %1$d、レスポンスメッセージ: %2$s</string>
-    <string name="previousUpdateNotFinished">以前の更新操作がまだ終わっていません</string>
+    <string name="previousUpdateNotFinished">以前の更新がまだ終わっていません</string>
     <string name="feedName_favorites">お気に入り</string>
     <string name="feedName_archived">アーカイブ済</string>
     <string name="feedName_unread">未読</string>
     <string name="articleList_favoriteMark">お気に入りマーク</string>
     <string name="articleList_ArchivedMark">アーカイブ済マーク</string>
     <string name="noPreviousArticle">現在のリストに前の記事はありません</string>
-    <string name="noNextArticle">現在のリストに次の記事はありません</string>
+    <string name="noNextArticle">現在のリストにもう記事はありません</string>
     <string name="themeName_light">ライト</string>
     <string name="themeName_light_contrast">ライト (高コントラスト)</string>
     <string name="themeName_dark">ダーク</string>
@@ -82,17 +82,16 @@
     <string name="themeName_solarized">ソラリゼーション</string>
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
-    <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。できる時に、クリックして、保存して、読んでください。時間があるときに読むことができまるように、コンテンツを抽出します。</string>
+    <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
     <string name="readSpeed">読む速度</string>
-    <string name="voiceHeight">声の高さ</string>
+    <string name="voiceHeight">声のピッチ</string>
     <string name="readVolume">読む音量</string>
-    <string name="menuDownloadPdf">PDF をダウンロード</string>
-    <string name="downloadPdfPathStart">記事をダウンロード</string>
-    <string name="downloadPdfArticleDownloaded">記事をダウンロードしました</string>
-    <string name="downloadPdfArticleDownloadedDetail">記事 %s をダウンロードしました</string>
-    <string name="downloadPdfTouchToOpen">タップすると開きます</string>
-    <string name="downloadPdfProgressDetail">wallabag は記事 %s を PDF でダウンロードします</string>
-    <string name="downloadPdfProgress">wallabag はあなたの記事を PDF でダウンロードします</string>
+    <string name="downloadAsFilePathStart">記事をダウンロード</string>
+    <string name="downloadAsFileArticleDownloaded">記事をダウンロードしました</string>
+    <string name="downloadAsFileArticleDownloadedDetail">記事 %s をダウンロードしました</string>
+    <string name="downloadAsFileTouchToOpen">タップすると開きます</string>
+    <string name="downloadAsFileProgressDetail">wallabag は記事 %1$s を %2$s でダウンロードします</string>
+    <string name="downloadAsFileProgress">wallabag はあなたの記事を %s でダウンロードします</string>
     <string name="notification_downloadingImages">画像のダウンロード中</string>
     <string name="notification_syncingQueue">ローカルの変更を同期中</string>
     <string name="notification_error">エラー</string>
@@ -108,7 +107,7 @@
     <string name="nav_other_about">アプリについて</string>
 
     <string name="pref_name_runConnectionWizard">接続ウィザードを実行</string>
-    <string name="pref_desc_runConnectionWizard">接続ウィザードは、基本的な接続設定を行います</string>
+    <string name="pref_desc_runConnectionWizard">基本的な接続設定を行うのに役に立ちます</string>
 
     <string name="pref_categoryName_connection">接続</string>
     <string name="pref_name_connection_url">wallabag URL</string>
@@ -116,7 +115,8 @@
         例:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">ユーザー名</string>
     <string name="pref_name_connection_password">パスワード</string>
@@ -131,10 +131,10 @@
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 認証パスワード</string>
 
     <string name="pref_categoryName_ui">UI</string>
-    <string name="pref_name_ui_theme">アプリケーション テーマ</string>
-    <string name="pref_name_ui_article_fontSize">記事のフォントサイズ (%)</string>
+    <string name="pref_name_ui_theme">アプリ テーマ</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">記事の文字サイズ (%)</string>
     <string name="pref_name_ui_article_fontSerif">書体</string>
-    <string name="pref_desc_ui_article_fontSerif">記事フォントの書体</string>
+    <string name="pref_desc_ui_article_fontSerif">記事の書体フォント</string>
     <string name="pref_categoryName_ui_screenScrolling">画面のスクロール</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">ボリューム ボタンでスクロール</string>
     <string name="pref_name_ui_tapToScroll_enabled">タップしてスクロール</string>
@@ -154,10 +154,10 @@
     <string name="pref_name_autoSync_type">自動同期の種類</string>
     <string name="pref_name_autoSyncQueue_enabled">ローカルの変更の自動同期を分離</string>
     <string name="pref_desc_autoSyncQueue_enabled">これは、ネットワークが利用可能になるとすぐにローカルの変更 (追加されたリンク、アーカイブされた記事等) をサーバーに同期することができます。</string>
-    <string name="pref_name_autoDlNew_enabled">追加で新しい記事をダウンロード</string>
-    <string name="pref_desc_autoDlNew_enabled">アプリ経由で追加された記事をすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、ダウンロードは行われません。</string>
-    <string name="pref_name_imageCache_enabled">記事に埋め込まれた画像をキャッシュ</string>
-    <string name="pref_desc_imageCache_enabled">自動的にすべての記事のすべての画像をダウンロードし、デバイスに保存します。Wallabag の記事リストの長さによって、これは非常に長い時間がかかることや、多くの容量を消費することがあります。</string>
+    <string name="pref_name_autoDlNew_enabled">新しく追加された記事をダウンロード</string>
+    <string name="pref_desc_autoDlNew_enabled">アプリで、新しい記事が追加されたらすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、取得は行われません。</string>
+    <string name="pref_name_imageCache_enabled">記事の画像をキャッシュに入れる</string>
+    <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。Wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
 
     <string name="pref_categoryName_miscellaneous">その他</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP スキームの処理</string>
@@ -169,15 +169,15 @@
 
     <string name="connectionWizard_misc_incorrectConnectionURI">誤った接続 URI の使用</string>
 
-    <string name="connectionWizard_welcome_titleMessage">wallabag へようこそ!</string>
-    <string name="connectionWizard_welcome_text">wallabag アプリを使用する前に、接続をセットアップする必要があります。この接続ウィザードはそのお手伝いをします。</string>
-    <string name="connectionWizard_welcome_rerunNotice">いつでも設定画面から接続ウィザードを再実行することができます。</string>
+    <string name="connectionWizard_welcome_titleMessage">wallabag へようこそ。</string>
+    <string name="connectionWizard_welcome_text">wallabag アプリを使用する前に、接続をセットアップする必要があります。接続ウィザードはそのお手伝いをします。</string>
+    <string name="connectionWizard_welcome_rerunNotice">\"設定\" から、いつでも接続ウィザードを再実行することができます。</string>
     <string name="connectionWizard_welcome_prev">スキップ</string>
     <string name="connectionWizard_welcome_next">次へ</string>
 
     <string name="connectionWizard_providerSelection_titleMessage">wallabag プロバイダーを選択してください</string>
     <string name="connectionWizard_providerSelection_provider_general_name">その他</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">このオプションを選択すると、必要な設定を手動で入力します</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">これを選択すると、必要な設定を手動で入力します</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択します</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択します</string>
     <string name="connectionWizard_providerSelection_prev">スキップ</string>
@@ -195,8 +195,8 @@
     <string name="connectionWizard_provider_framabag_prev">戻る</string>
     <string name="connectionWizard_provider_framabag_next">接続</string>
 
-    <string name="connectionWizard_summary_titleMessage">すべて完了しました!</string>
-    <string name="connectionWizard_summary_text">ボタンを押すと、設定を保存し、メイン画面に移動します。</string>
+    <string name="connectionWizard_summary_titleMessage">すべて完了しました。</string>
+    <string name="connectionWizard_summary_text">クリックすると、保存して、メイン画面に移動します。</string>
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>
     <string name="connectionWizard_summary_prev">戻る</string>
     <string name="connectionWizard_summary_next">設定を保存</string>
@@ -240,14 +240,14 @@
     <string name="pref_name_connection_api_clientID">クライアント ID</string>
     <string name="pref_name_connection_api_clientSecret">クライアント シークレット</string>
     <string name="pref_name_ui_article_textAlignment_justify">テキストの配置: 均等割り付け</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">それぞれの行が (新聞や雑誌のように) 同じ幅になるように行を伸ばします</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">同じ幅になるように行を伸ばします (新聞のように)</string>
     <string name="pref_name_ui_readingSpeed">読書の速度</string>
     <string name="pref_desc_ui_readingSpeed">あなたの読書速度 (1 分あたりの単語で測定します)。推定読書時間を計算するために使用します。</string>
     <string name="pref_categoryName_sync">同期</string>
     <string name="pref_name_sync_syncTypes">同期の種類</string>
     <string name="pref_desc_sync_syncTypes">押すと同期の種類についての詳細情報を表示します</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"高速\" 同期後に \"削除された記事の掃除\" を有効にする</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">詳細は上記の同期種類の説明をお読みください</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">詳細は上記の別の同期種類の説明をお読みください</string>
     <string name="pref_name_autoSync_onStartup_enabled">アプリケーションの起動時に自動同期を有効にする</string>
     <string name="pref_decs_autoSync_onStartup_enabled">アプリの起動時に同期されます</string>
     <string name="pref_desc_sync_syncTypes_text">主に 2 種類の同期があります: \"完全\" と \"高速\"。\n\n
@@ -259,5 +259,39 @@
     <string name="pref_desc_connection_autofill">接続をテストし、クライアント ID とクライアント シークレットを入力します</string>
 
     <string name="title_main_tag">タグ: %s</string>
+
+    <string name="menuCopyOriginalURL">元の URL をコピー</string>
+    <string name="txtUrlCopied">記事の URL をクリップボードにコピーしました</string>
+    <string name="menuDownloadAsFile">ファイルとしてダウンロード</string>
+    <string name="dialog_title_downloadFileFormat">ファイル形式を選択</string>
+    <string name="notification_serverError">サーバーエラー</string>
+    <string name="lastUpdateTimeLabel">最終更新: %s</string>
+    <string name="listItem_estimatedReadingTime">%d 分</string>
+
+    <string name="message_couldNotOpenUrl">この URL を開くことができませんでした</string>
+
+    <string name="message_disableTouch_inputDisabled">タッチ入力が無効です</string>
+    <string name="message_disableTouch_inputEnabled">タッチ入力が有効です</string>
+    <string name="d_disableTouch_changeKey_title">タッチ入力ボタンを無効にします</string>
+    <string name="d_disableTouch_currentCode">現在選択しているキーコード (変更するボタンを押します):</string>
+
+    <string name="pref_categoryName_ui_misc">その他</string>
+    <string name="pref_name_ui_disableTouch_enabled">タッチ入力を無効にします</string>
+    <string name="pref_desc_ui_disableTouch_enabled">設定したボタン (デフォルトでカメラボタン) を押して、読書画面でタッチ入力をブロック/ブロック解除します (システムコントロールは影響を受けません)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">タッチ入力ボタンを無効にします</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">ここを押して、タッチ入力を無効/有効にするために使用するボタンを設定します</string>
+
+    <string name="pref_name_storage_dbPath">データベースの場所</string>
+    <string name="pref_name_storage_dbPath_internalStorage">内部ストレージ</string>
+    <string name="pref_name_storage_dbPath_externalStorage">外部ストレージ</string>
+    <string name="pref_name_storage_dbPath_dbMoved">データベースを移動しました</string>
+
+    <string name="pref_name_misc_appendWallabagMention">Wallabag のメンションを追加</string>
+    <string name="pref_desc_misc_appendWallabagMention">共有テキストに \"via @wallabagapp\" を追加</string>
+    <string name="remove_tag">タグを削除</string>
+    <string name="scrolledOverBottom">%d 回以上下にスクロールすると記事を既読としてマークします</string>
+    <string name="markedAsRead">既読として記事をマークしました</string>
+    <string name="pref_name_ui_scrollOverBottom">最下部にスクロールすると既読としてマークします</string>
+    <string name="pref_desc_ui_scrollOverBottom">記事を既読にするために必要な下へのスクロールの回数を設定するには、ここを押してください</string>
 
 </resources>

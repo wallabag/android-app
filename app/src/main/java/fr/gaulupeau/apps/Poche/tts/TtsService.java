@@ -26,7 +26,7 @@ import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.KeyEvent;
 
@@ -35,6 +35,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -196,13 +197,11 @@ public class TtsService
         });
         ttsVoice = this.settings.getTtsVoice();
         ttsEngine = this.settings.getTtsEngine();
-        if (ttsEngine.equals("") || Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+        if (ttsEngine.equals("")) {
             this.tts = new TextToSpeech(getApplicationContext(), this);
             this.ttsEngine = tts.getDefaultEngine();
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) { // check done again to avoid error notification in Android Studio
-                this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
-            }
+            this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
         }
         noisyReceiver = new BroadcastReceiver() {
             @Override
@@ -425,9 +424,10 @@ public class TtsService
     }
 
     private void speak() {
-        //Log.d(LOG_TAG, "speak");
-        assert(state == State.PLAYING);
-        assert(textInterface != null);
+        Log.d(LOG_TAG, "speak");
+        if (BuildConfig.DEBUG && (state != State.PLAYING || textInterface == null)) {
+            throw new AssertionError();
+        }
         // Change the utteranceId so that call to onSpeakDone
         // of the previous speak sequence will not interfere with the following one
         utteranceId = "" + (Integer.parseInt(utteranceId) + 1);
@@ -439,8 +439,9 @@ public class TtsService
 
     private void ttsSpeak(String text, int queue, String utteranceId)
     {
-        assert(state == State.PLAYING);
-        assert(isTTSInitialized);
+        if (BuildConfig.DEBUG && !(state == State.PLAYING && isTTSInitialized)) {
+            throw new AssertionError();
+        }
         if (text != null) {
             HashMap params = this.utteranceParams;
             if ( ! utteranceId.equals(params.get("utteranceId"))) {
@@ -513,9 +514,6 @@ public class TtsService
                 // We finally obtained a success status !
                 // (probably after initializing a new TextToSpeech with different engine)
                 state =  State.CREATED;
-            }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                this.ttsEngine = tts.getDefaultEngine();
             }
             this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
@@ -772,7 +770,7 @@ public class TtsService
             }
             builder.addAction(generateAction(android.R.drawable.ic_media_ff, "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
             builder.addAction(generateAction(android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
-            builder.setStyle(new NotificationCompat.MediaStyle()
+            builder.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2, 3)
                     //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
                     .setMediaSession(mediaSession.getSessionToken())

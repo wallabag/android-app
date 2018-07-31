@@ -17,8 +17,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-import static fr.gaulupeau.apps.Poche.network.WallabagWebService.WALLABAG_LOGIN_FORM_V2;
-import static fr.gaulupeau.apps.Poche.network.WallabagWebService.FRAMABAG_LOGIN_FORM;
+import static fr.gaulupeau.apps.Poche.network.WallabagWebService.isLoginPage;
 
 public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectionTask.TestResult>> {
 
@@ -173,8 +172,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
         String loginPath = "/login";
         if(newUrlWithoutProto.endsWith(loginPath)) {
-            String body = response.body().string();
-            if(body.contains(WALLABAG_LOGIN_FORM_V2) || body.contains(FRAMABAG_LOGIN_FORM)) {
+            if(isLoginPage(response.body().string())) {
                 // presumably Wallabag v2 login page
 
                 newUrlWithoutProto = newUrlWithoutProto.substring(

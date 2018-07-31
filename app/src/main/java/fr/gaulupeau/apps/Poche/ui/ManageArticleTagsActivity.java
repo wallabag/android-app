@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -339,6 +340,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         newList.add(suggestedTags.get(position));
 
         updateCurrentTagList(newList);
+
+        setEditText("");
     }
 
     private void currentTagClicked(int position) {
@@ -374,11 +377,11 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     private static Tag findTagByLabel(String label, List<Tag> list) {
         if(TextUtils.isEmpty(label)) return null;
 
-        label = label.toLowerCase();
+        label = label.toLowerCase(Locale.getDefault());
 
         for(Tag tag: list) {
             String tagLabel = tag.getLabel();
-            if(tagLabel != null && label.equals(tagLabel.toLowerCase())) return tag;
+            if(tagLabel != null && label.equals(tagLabel.toLowerCase(Locale.getDefault()))) return tag;
         }
 
         return null;
@@ -389,12 +392,12 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
             return new ArrayList<>(src);
         }
 
-        label = label.toLowerCase();
+        label = label.toLowerCase(Locale.getDefault());
 
         List<Tag> result = new ArrayList<>();
         for(Tag tag: src) {
             String tagLabel = tag.getLabel();
-            if(tagLabel != null && tagLabel.toLowerCase().contains(label)) {
+            if(tagLabel != null && tagLabel.toLowerCase(Locale.getDefault()).contains(label)) {
                 if(excludeList != null && excludeList.contains(tag)) continue;
 
                 result.add(tag);

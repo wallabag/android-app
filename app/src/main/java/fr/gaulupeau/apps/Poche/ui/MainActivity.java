@@ -19,7 +19,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     private static final String STATE_SAVED_FRAGMENT_STATES = "saved_fragment_states";
     private static final String STATE_CURRENT_FRAGMENT = "active_fragment";
     private static final String STATE_SEARCH_QUERY = "search_query";
+    private static final String STATE_SELECTED_TAG = "selected_tag";
 
     private static final String FRAGMENT_ARTICLE_LISTS = "fragment_article_lists";
     private static final String FRAGMENT_TAG_LIST = "fragment_tag_list";
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar progressBar;
 
     private NavigationView navigationView;
+    private TextView lastUpdateTimeView;
 
     private MenuItem searchMenuItem;
     private boolean searchMenuItemExpanded;
@@ -97,7 +101,7 @@ public class MainActivity extends AppCompatActivity
     private String searchQuery;
     private String searchQueryPrevious;
     private boolean searchUIPending;
-    private Tag selectedTag;
+    private String selectedTag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +120,16 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        navigationView = (NavigationView)findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        if(navigationView != null) {
+            View headerView = navigationView.getHeaderView(0);
+            if(headerView != null) {
+                lastUpdateTimeView = (TextView)headerView.findViewById(R.id.lastUpdateTime);
+            }
+        }
+
         DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
@@ -124,10 +138,32 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            boolean updated;
 
-        navigationView = (NavigationView)findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                updateTime();
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                if(newState == DrawerLayout.STATE_IDLE) updated = false;
+            }
+
+            private void updateTime() {
+                if(updated) return;
+                updated = true;
+
+                if(lastUpdateTimeView == null) return;
+
+                Log.d(TAG, "DrawerListener.updateTime() updating time");
+
+                updateLastUpdateTime();
+            }
+        });
+
+        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         firstSyncDone = settings.isFirstSyncDone();
 
@@ -150,6 +186,8 @@ public class MainActivity extends AppCompatActivity
 
             currentFragmentType = savedInstanceState.getString(STATE_CURRENT_FRAGMENT);
 
+            selectedTag = savedInstanceState.getString(STATE_SELECTED_TAG);
+
             performSearch(savedInstanceState.getString(STATE_SEARCH_QUERY));
         }
         if(searchQuery == null) performSearch("");
@@ -161,6 +199,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentType);
             this.currentFragmentType = currentFragmentType;
+            updateNavigationUI(currentFragmentType);
         }
 
         EventBus.getDefault().register(this);
@@ -199,6 +238,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         outState.putString(STATE_CURRENT_FRAGMENT, currentFragmentType);
+        outState.putString(STATE_SELECTED_TAG, selectedTag);
         outState.putString(STATE_SEARCH_QUERY, searchQuery);
     }
 
@@ -314,6 +354,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Log.v(TAG, "searchMenuItem collapsed");
+                supportInvalidateOptionsMenu();
                 searchMenuItemExpanded = false;
                 return true;
             }
@@ -481,7 +522,23 @@ public class MainActivity extends AppCompatActivity
             tryToUpdateOnResume = false;
         }
 
+        updateLastUpdateTime();
+
         updateStateChanged(false);
+    }
+
+    private void updateLastUpdateTime() {
+        if(lastUpdateTimeView == null) return;
+
+        Log.d(TAG, "updateLastUpdateTime() updating time");
+
+        long timestamp = settings.getLatestUpdateRunTimestamp();
+        if(timestamp != 0) {
+            lastUpdateTimeView.setText(getString(R.string.lastUpdateTimeLabel,
+                    DateUtils.getRelativeTimeSpanString(timestamp)));
+        } else {
+            lastUpdateTimeView.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void updateStateChanged(boolean started) {
@@ -659,7 +716,6 @@ public class MainActivity extends AppCompatActivity
 
     private void updateNavigationUI(String type) {
         if(type == null || navigationView == null) return;
-        if(TextUtils.equals(type, currentFragmentType)) return;
 
         if(FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
             MenuItem item = navigationView.getMenu().findItem(R.id.nav_taggedLists);
@@ -684,7 +740,7 @@ public class MainActivity extends AppCompatActivity
                 itemID = R.id.nav_taggedLists;
 
                 if(selectedTag != null) {
-                    title = getString(R.string.title_main_tag, selectedTag.getLabel());
+                    title = getString(R.string.title_main_tag, selectedTag);
                 }
 
                 MenuItem item = navigationView.getMenu().findItem(itemID);
@@ -713,7 +769,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTagSelected(Tag tag) {
-        selectedTag = tag;
+        selectedTag = tag.getLabel();
 
         Fragment fragment = ArticleListsFragment.newInstance(tag.getLabel());
 
@@ -835,4 +891,24 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(currentFragment instanceof ArticleListsFragment) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_PAGE_UP:
+                case KeyEvent.KEYCODE_PAGE_DOWN:
+                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+                    return true;
+                case KeyEvent.KEYCODE_VOLUME_UP:
+                case KeyEvent.KEYCODE_VOLUME_DOWN:
+                    if (settings.isVolumeButtonsScrollingEnabled()) {
+                        ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
+                        return true;
+                    }
+                    break;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 }

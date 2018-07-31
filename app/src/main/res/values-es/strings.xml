@@ -8,14 +8,15 @@
     <string name="menuNext">Artículo siguiente</string>
     <string name="menuPrevious">Artículo anterior</string>
     <string name="menuDelete">Eliminar</string>
-    <string name="menuOpenOriginal">Abrir original</string>
+    <string name="menuOpenOriginal">Abrir URL original</string>
+    <string name="menuCopyOriginalURL">Copiar URL original</string>
     <string name="menuTTS">Síntesis de voz</string>
     <string name="ttsSpeed">Velocidad</string>
     <string name="ttsPitch">Tono</string>
     <string name="ttsVolume">Volumen</string>
     <string name="ttsLanguage">Elegir idioma</string>
     <string name="ttsVoice">Elegir voz</string>
-    <string name="ttsAutoplayNextArticle">Reproducir siguiente artículo automáticamente</string>
+    <string name="ttsAutoplayNextArticle">Reproducir el siguiente artículo automáticamente</string>
     <string name="ttsError">Error en síntesis de voz</string>
     <string name="ttsFastRewind">Retroceder</string>
     <string name="ttsPlayPause">Reproducir / Pausa</string>
@@ -27,7 +28,8 @@
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
     <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
-    <string name="dialog_add_label">Añadir un artículo</string>
+    <string name="txtUrlCopied">URL copiada al portapapeles</string>
+    <string name="dialog_add_label">Añadir un nuevo artículo</string>
     <string name="page_url">URL de la página</string>
     <string name="share_article_title">Compartir artículo</string>
     <string name="share_text_extra">" vía @wallabagapp"</string>
@@ -95,17 +97,18 @@
     <string name="themeName_solarized">Solarizado</string>
     <string name="menu_readArticle_increaseFontSize">Aumentar tamaño de letra</string>
     <string name="menu_readArticle_decreaseFontSize">Disminuir tamaño de letra</string>
-    <string name="aboutText">&lt;b>Aplicación de wallabag para Android&lt;/b>&lt;br />wallabag es una aplicación self hosted que te ayuda a no perderte contenidos nunca más. Haz clic, guarda y lee cuando puedas. Extrae contenido de forma automática para que puedas leerlo cuando tengas tiempo.</string>
+    <string name="aboutText">&lt;b&gt;Aplicación de wallabag para Android&lt;/b&gt;&lt;br /&gt;wallabag es una aplicación self hosted que te ayuda a no perderte contenidos nunca más. Haz clic, guarda y lee cuando puedas. Extrae contenido de forma automática para que puedas leerlo cuando tengas tiempo.</string>
     <string name="readSpeed">Velocidad de lectura</string>
     <string name="voiceHeight">Tono de voz</string>
     <string name="readVolume">Volumen de lectura</string>
-    <string name="menuDownloadPdf">Descargar como PDF</string>
-    <string name="downloadPdfPathStart">Descargando artículo</string>
-    <string name="downloadPdfArticleDownloaded">Artículo descargado</string>
-    <string name="downloadPdfArticleDownloadedDetail">Artículo %s descargado</string>
-    <string name="downloadPdfTouchToOpen">Toca para abrir</string>
-    <string name="downloadPdfProgressDetail">wallabag está descargando tus %s artículo en PDF</string>
-    <string name="downloadPdfProgress">wallabag está descargando tu artículo en PDF</string>
+    <string name="menuDownloadAsFile">Descargar como archivo</string>
+    <string name="dialog_title_downloadFileFormat">Selecciona un formato</string>
+    <string name="downloadAsFilePathStart">Descargando artículo</string>
+    <string name="downloadAsFileArticleDownloaded">Artículo descargado</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Artículo %s descargado</string>
+    <string name="downloadAsFileTouchToOpen">Toca para abrir</string>
+    <string name="downloadAsFileProgressDetail">wallabag está descargando tus %1$s artículo en %2$s</string>
+    <string name="downloadAsFileProgress">wallabag está descargando tu artículo en %s</string>
     <string name="notification_updatingArticles">Actualizando artículos</string>
     <string name="notification_updatingArticles_full">Realizando actualización completa</string>
     <string name="notification_updatingArticles_fast">Realizando actualización rápida</string>
@@ -115,6 +118,7 @@
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Credenciales incorrectas</string>
     <string name="notification_incorrectConfiguration">Configuración incorrecta</string>
+    <string name="notification_serverError">Error en el servidor</string>
     <string name="notification_unknownError">Error desconocido</string>
     <string name="notification_expandedError">Error: %s</string>
     <string name="menu_lists_search">Buscar</string>
@@ -122,7 +126,7 @@
     <string name="menu_lists_sweepDeletedArticles">\"Limpiar\" artículos eliminados</string>
     <string name="menu_lists_fullUpdate">Actualización completa</string>
     <string name="other_searchHint">Buscar por título o texto</string>
-    <string name="menu_changeTitle">Cambiar título</string>
+    <string name="menu_changeTitle">Modificar el título</string>
     <string name="menu_manageTags">Cambiar etiquetas</string>
     <string name="manageTags_title">Cambiar etiquetas</string>
     <string name="manageTags_save">Guardar</string>
@@ -130,6 +134,8 @@
     <string name="manageTags_addNew">Añadir</string>
     <string name="manageTags_currentTags">Etiquetas seleccionadas:</string>
     <string name="content_estimatedReadingTime">Tiempo estimado de lectura: %s min</string>
+    <string name="lastUpdateTimeLabel">Última actualización: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
 
     <string name="navigation_drawer_open">Abrir caja de navegación</string>
     <string name="navigation_drawer_close">Cerrar caja de navegación</string>
@@ -143,7 +149,9 @@
     <string name="nav_other_settings">Configuración</string>
     <string name="nav_other_about">Acerca de</string>
 
-    <string name="title_main_tag">Etiq: %s</string>
+    <string name="title_main_tag">Etiqueta: %s</string>
+
+    <string name="message_couldNotOpenUrl">No se puede abrir la URL</string>
 
     <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
     <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a realizar una configuración de conexión básica</string>
@@ -154,14 +162,15 @@
         Ejemplos:\n
         <i>https://wallabag.example.com</i>\n
         <i>https://example.com/wallabag</i>\n
-        <i>https://framabag.org/u/your-username</i>
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
     </string>
     <string name="pref_name_connection_username">Usuario</string>
     <string name="pref_name_connection_password">Contraseña</string>
     <string name="pref_name_connection_api_clientID">Identificador del cliente</string>
     <string name="pref_name_connection_api_clientSecret">Secreto del cliente</string>
     <string name="pref_name_connection_autofill">Autocompletar</string>
-    <string name="pref_desc_connection_autofill">Prueba la conexión y rellena el identificador y el secreto del cliente</string>
+    <string name="pref_desc_connection_autofill">Probar la conexión y llenar el ID y el secreto del cliente</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizadas</string>
@@ -173,11 +182,11 @@
 
     <string name="pref_categoryName_ui">Interfaz</string>
     <string name="pref_name_ui_theme">Tema de la aplicación</string>
-    <string name="pref_name_ui_article_fontSize">Tamaño de letra del artículo (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Tamaño de letra del artículo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Tipografía Serif</string>
     <string name="pref_desc_ui_article_fontSerif">Usar tipografía Serif para el contenido del artículo</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alineación del texto: justificado</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">Estira las líneas para que cada línea tenga el mismo ancho (como en periódicos y revistas)</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Alinea el texto para que todas las líneas tengan el mismo ancho (como en los periódicos y revistas)</string>
     <string name="pref_name_ui_readingSpeed">Velocidad de lectura</string>
     <string name="pref_desc_ui_readingSpeed">Tu velocidad de lectura (en palabras por minuto). Usado para calcular el tiempo estimado de lectura.</string>
     <string name="pref_categoryName_ui_screenScrolling">Desplazamiento de pantalla</string>
@@ -220,6 +229,11 @@
     <string name="pref_desc_autoDlNew_enabled">Descargar artículos nuevos automáticamente justo después de añadirlos desde la app. Nota: no se descargarán si tienes cambios locales pendientes de sincronizar.</string>
     <string name="pref_name_imageCache_enabled">Cachear imágenes de los artículos</string>
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
+
+    <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Almacenamiento interno</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Almacenamiento externo</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Base de datos reubicada</string>
 
     <string name="pref_categoryName_miscellaneous">Misceláneos</string>
     <string name="pref_name_misc_appendWallabagMention">Añadir mención a wallabag</string>

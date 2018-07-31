@@ -43,7 +43,7 @@
     <string name="d_urlAction_copyToClipboard">Copier dans le presse-papier</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Échec</string>
-    <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé :</string>
+    <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
     <string name="d_configurationChanged_title">Paramètres modifiés</string>
     <string name="d_configurationChanged_message">Il semble que certains paramètres aient été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationChanged_answer_decline">Pas maintenant</string>
@@ -65,10 +65,10 @@
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
-    <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
-    <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : \"%s\". Mais vous pouvez également utiliser celle tapée.</string>
-    <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : \"%s\"</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
+    <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_fail_title">Échec</string>
     <string name="getCredentials_progressDialogMessage">Récupération des identifiants de l\'API…</string>
     <string name="d_getCredentials_title_fail">Impossible de récupérer les identifiants de l\'API</string>
@@ -100,7 +100,7 @@
     <string name="themeName_solarized">Solarisé</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
-    <string name="aboutText"><b>Application wallabag pour Android</b><br />wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
+    <string name="aboutText">&lt;b&gt;Application wallabag pour Android&lt;/b&gt;&lt;br /&gt;wallabag est une application de lecture différée : elle permet simplement d’archiver une page web en ne conservant que le contenu. Les éléments superflus (menu, publicité, etc.) sont supprimés.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
@@ -166,11 +166,15 @@
 
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_name_connection_url">Votre URL wallabag</string>
-    <string name="pref_desc_connection_url">Exemples:\n
-                   <i >https://wallabag.example.com</i>\n
-                   <i >https://example.com/wallabag</i>\n
-                   <i >https://app.wallabag.it</i>\n
-                   <i >https://framabag.org</i></string>
+
+    <string name="pref_desc_connection_url">
+        Exemples:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
+    </string>
+
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
@@ -193,8 +197,10 @@
     <string name="pref_desc_ui_article_fontSerif">Police avec empattement (Serif)</string>
     <string name="pref_name_ui_article_textAlignment_justify">Alignement du texte : justifié</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Aligne le texte pour que chaque ligne ait la même longueur (comme dans les journaux ou les magazines)</string>
+
     <string name="pref_name_ui_article_fullscreen">Voir l\'article en écran</string>
     <string name="pref_desc_ui_article_fullscreen">Cacher les barres du système et de l\'application lors de la lecture des articles</string>
+
     <string name="pref_name_ui_readingSpeed">Vitesse de lecture</string>
     <string name="pref_desc_ui_readingSpeed">Votre vitesse de lecture (mesurée en mots par minutes). Utilisée pour calculer le temps estimé de lecture.</string>
     <string name="pref_categoryName_ui_screenScrolling">Défilement d\'écran</string>
@@ -208,21 +214,19 @@
     <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
+
     <string name="pref_name_ui_scrollOverBottom">Faire défiler vers le bas pour marquer comme lu</string>
-    <string name="pref_desc_ui_scrollOverBottom">Appuyez ici pour configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string>
+    <string name="pref_desc_ui_scrollOverBottom">Appuyez ici pour configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string
 
     <string name="pref_categoryName_sync">Synchronisation</string>
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
     <string name="pref_desc_sync_syncTypes">Appuyer ici pour en savoir plus à propos des types de synchronisation</string>
-    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».\n
-          \n
-                   Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.\n
-          \n
-                   La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.\n
-          \n
-                   Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur - si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.\n
-          \n
-                   Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.</string>
+    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».\n\n
+        Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.\n\n
+        La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.\n\n
+        Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur - si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.\n\n
+        Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.
+    </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Activer le nettoyage des articles supprimés après une synchronisation rapide</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire la description des types de synchronisation pour plus d\'informations</string>
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
@@ -237,6 +241,10 @@
     <string name="pref_option_autoSync_interval_12h">12 heures</string>
     <string name="pref_option_autoSync_interval_24h">24 heures</string>
     <string name="pref_name_autoSync_type">Type de synchronisation automatique</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Rapide</item>
+        <item>Complète</item>
+    </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
     <string name="pref_name_autoDlNew_enabled">Télécharger les nouveaux articles</string>

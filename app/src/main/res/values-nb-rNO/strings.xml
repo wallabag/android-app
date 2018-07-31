@@ -1,0 +1,301 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="btnMarkRead">Marker som lest</string>
+    <string name="btnMarkUnread">Marker som ulest</string>
+    <string name="add_to_favorites">Legg til i favoritter</string>
+    <string name="remove_from_favorites">Fjern fra favoritter</string>
+    <string name="menuShare">Del</string>
+    <string name="menuNext">Neste artikkel</string>
+    <string name="menuPrevious">Forrige artikkel</string>
+    <string name="menuDelete">Slett</string>
+    <string name="menuOpenOriginal">Åpne opprinnelig</string>
+    <string name="menuTTS">Tekst-til-tale</string>
+    <string name="ttsSpeed">Hastighet</string>
+    <string name="ttsPitch">Frekvens</string>
+    <string name="ttsVolume">Lydstyrke</string>
+    <string name="ttsLanguage">Velg språk</string>
+    <string name="ttsVoice">Velg stemme</string>
+    <string name="ttsAutoplayNextArticle">Spill av neste artikkel automatisk</string>
+    <string name="ttsError">Tekst-til-tale -feil</string>
+    <string name="ttsFastRewind">Rask tilbakespoling</string>
+    <string name="ttsPlayPause">Spill av / pause</string>
+    <string name="ttsFastForward">Rask framoverspoling</string>
+    <string name="ttsOptions">Valg</string>
+    <string name="menu_open_random_article">Åpne tilfeldig artikkel</string>
+    <string name="menu_syncLocalChanges">Synkroniser lokale endringer</string>
+    <string name="d_deleteArticle_title">Slett artikkel?</string>
+    <string name="d_deleteArticle_message">Er du sikker på at du ønsker å slette artikkelen?</string>
+    <string name="txtNetOffline">Sjekk interttilknytningen!</string>
+    <string name="txtConfigNotSet">Sett opp programmet før du synkroniserer.</string>
+    <string name="dialog_add_label">Legg til ny artikkel</string>
+    <string name="page_url">Sidens nettadresse</string>
+    <string name="share_article_title">Del artikkel</string>
+    <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="positive_answer">Ja</string>
+    <string name="negative_answer">Nei</string>
+    <string name="no_articles">Ingen artikler</string>
+    <string name="loading_article_text">Laster…</string>
+    <string name="d_urlAction_title">Velg en handling for nettadressen</string>
+    <string name="d_urlAction_openInBrowser">Åpne i nettleser</string>
+    <string name="d_urlAction_addToWallabag">Legg til i wallabag</string>
+    <string name="ok">OK</string>
+    <string name="d_add_fail_title">Feil</string>
+    <string name="d_add_fail_text">Kunne ikke funne nettadresse i delingsstreng:\n</string>
+    <string name="d_configurationChanged_title">Parameter endret</string>
+    <string name="d_configurationChanged_message">Det later til at noen parameter har blitt endret. Det anbefales å utføre en tilkoblingstest.</string>
+    <string name="d_configurationChanged_answer_decline">Ikke nå</string>
+    <string name="d_configurationIsQuestionable_title">Problem oppdaget</string>
+    <string name="d_configurationIsQuestionable_message">Det var et tilkoblingsproblem nylig. Det anbefales å utføre en tilkoblingstest.</string>
+    <string name="addLink_success_text">Lagt til</string>
+    <string name="settings_parametersAreOk">Parameterne ser bra ut</string>
+    <string name="settings_parametersAutofilled">Parameter utfylt</string>
+    <string name="testConnection_progressDialogMessage">Tester tilkobling…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">Uriktig nettadresse</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Ustøtter tjenerversjon oppdaget</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-tjeneste ble ikke funnet — sjekk nettadresse</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP-autentisering mislyktes</string>
+    <string name="testConnection_errorMessage_noCSRF">Feil ved tolkning av innloggingsskjema</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Kan ikke logge inn — sjekk brukernavn og passord</string>
+    <string name="testConnection_errorMessage_authProblems">Autorisering-relaterte problemer. Disse forårsakes vanligvis av HTTP-videresendinger.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Dette forårsakes som oftest av to-faktoridentifisering, som ikke støttes i programmet enda</string>
+    <string name="testConnection_errorMessage_unknown">Ukjent feil</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">Ukjent feil: %s</string>
+    <string name="d_testConnection_urlSuggestion_title">Overvei å endre nettadresse</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">Bruk valgt</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">Bruk min</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Avbryt</string>
+    <string name="d_testConnection_urlSuggestion_message">Det anbefales å endre nettadresse til: %s. Kan du kan bruke den innskrevne også.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Det anbefales å endre nettadresse til: %s</string>
+    <string name="d_testConnection_fail_title">Tilkoblingstest mislyteks</string>
+    <string name="getCredentials_progressDialogMessage">Henter API-identitetsdetaljer…</string>
+    <string name="d_getCredentials_title_fail">Kunne ikke hente API-identitetsdetaljer</string>
+    <string name="d_getCredentials_title_message">Noe gikk galt. Sjekk din internettilknytning og prøv igjen.</string>
+    <string name="checkCredentials_progressDialogMessage">Tester API-tilgang…</string>
+    <string name="d_checkCredentials_title_fail">API-tilgangstest mislyktes</string>
+    <string name="d_checkCredentials_errorMessage_notFound">API ikke funnet</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API ikke funnet: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">Ingen tilgang til API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Ingen tilgang til API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">Ukjent feil</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">Ukjent feil: %s</string>
+    <string name="feedName_favorites">Favoritter</string>
+    <string name="feedName_archived">Arkivert</string>
+    <string name="feedName_unread">Ulest</string>
+    <string name="themeName_light">Lys</string>
+    <string name="themeName_light_contrast">Lys (høy kontrast)</string>
+    <string name="themeName_dark">Mørk</string>
+    <string name="themeName_dark_contrast">Mørk (høy kontrast)</string>
+    <string name="menu_readArticle_increaseFontSize">Øk skriftstørrelse</string>
+    <string name="menu_readArticle_decreaseFontSize">Forminsk skriftstørrelse</string>
+    <string name="readSpeed">Lesehastighet</string>
+    <string name="voiceHeight">Stemmefrekvens</string>
+    <string name="readVolume">Leselydstyrke</string>
+    <string name="menuDownloadPdf">Last ned PDF</string>
+    <string name="downloadPdfPathStart">Laster ned artikkel</string>
+    <string name="downloadPdfArticleDownloaded">Artikkel nedlastet</string>
+    <string name="downloadPdfArticleDownloadedDetail">Artikkel %s nedlastet</string>
+    <string name="downloadPdfTouchToOpen">Trykk for å åpne</string>
+    <string name="downloadPdfProgressDetail">wallabag laster ned artikkelen din %s som PDF</string>
+    <string name="downloadPdfProgress">wallabag laster ned artikkelen din som PDF</string>
+    <string name="notification_updatingArticles">Oppdaterer artikler</string>
+    <string name="notification_updatingArticles_full">Utfører full oppdatering</string>
+    <string name="notification_updatingArticles_fast">Utfører rask oppdatering</string>
+    <string name="notification_sweepingDeletedArticles">Koster ut slettede artikler</string>
+    <string name="notification_downloadingImages">Laster ned bilder</string>
+    <string name="notification_syncingQueue">Synkroniserer lokale endringer</string>
+    <string name="notification_error">Feil</string>
+    <string name="notification_incorrectCredentials">Uriktige identitetsdetaljer</string>
+    <string name="notification_incorrectConfiguration">Uriktig oppsett</string>
+    <string name="notification_unknownError">Ukjent feil</string>
+    <string name="notification_expandedError">Feil: %s</string>
+    <string name="menu_lists_search">Søk</string>
+    <string name="menu_lists_changeSortOrder">Endre sorteringsrekkefølge</string>
+    <string name="menu_lists_sweepDeletedArticles">\"Kost ut\" slettede artikler</string>
+    <string name="menu_lists_fullUpdate">Full oppdatering</string>
+    <string name="other_searchHint">Søk etter artikkeltittel eller tekst</string>
+    <string name="menu_changeTitle">Endre tittel</string>
+    <string name="menu_manageTags">Behandle etiketter</string>
+    <string name="manageTags_title">Behandle etiketter</string>
+    <string name="manageTags_save">Lagre</string>
+    <string name="manageTags_textField_hint">Én eller flere etiketter, kommainndelt</string>
+    <string name="manageTags_addNew">Legg til</string>
+    <string name="manageTags_currentTags">Valgte etiketter:</string>
+    <string name="content_estimatedReadingTime">Antatt lesetid: %s min</string>
+
+    <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
+    <string name="navigation_drawer_close">Lukk navigasjonsskuff</string>
+
+    <string name="nav_main_articles">Artikler</string>
+    <string name="nav_main_tags">Etiketter</string>
+    <string name="nav_main_tagged_articles">Merkede artikler</string>
+
+    <string name="nav_add">Legg til ny oppføring</string>
+
+    <string name="nav_other_settings">Innstillinger</string>
+    <string name="nav_other_about">Om</string>
+
+    <string name="title_main_tag">Etikett: %s</string>
+
+    <string name="pref_name_runConnectionWizard">Kjør tilkoblingsveiviser</string>
+    <string name="pref_desc_runConnectionWizard">Geleider deg gjennom de mest grunnleggende tilkoblingsinnstillingene</string>
+
+    <string name="pref_categoryName_connection">Tilkobling</string>
+    <string name="pref_name_connection_url">wallabag-nettadresse</string>
+    <string name="pref_name_connection_username">Brukernavn</string>
+    <string name="pref_name_connection_password">Passord</string>
+    <string name="pref_name_connection_api_clientID">Klient-ID</string>
+    <string name="pref_name_connection_api_clientSecret">Klienthemmelighet</string>
+    <string name="pref_name_connection_autofill">Fyll inn automatisk</string>
+    <string name="pref_desc_connection_autofill">Test tilkoblingen og fyll inn klient-ID og klienthemmelighet</string>
+
+    <string name="pref_categoryName_connection_advanced">Avanserte tilkoblingsinnstillinger</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">Egendefinerte SSL-innstillinger</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">Skrur av SSL på alle enheter, skrur på TLS 1.1 og TLS 1.2 på Android 4.1–4.4</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Grunnleggende HTTP-autentisering</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Hvis du ikke vet hva det er, la stå tomt</string>
+    <string name="pref_categoryName_ui">Brukergrensesnitt</string>
+    <string name="pref_name_ui_theme">Programdrakt</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Skriftstørrelse for artikkel (%)</string>
+    <string name="pref_name_ui_readingSpeed">Lesehastighet</string>
+    <string name="pref_desc_ui_readingSpeed">Din lesehastighet (målt i antall ord per minutt). Brukt til å regne ut antatt lesehastighet.</string>
+    <string name="pref_categoryName_ui_screenScrolling">Skjermrulling</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Rull med lydstyrkeknapper</string>
+    <string name="pref_name_ui_tapToScroll_enabled">Trykk for å rulle</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Rull skjermen ved å trykke på venstre og høyre skjermkant</string>
+    <string name="pref_name_ui_screenScrolling_percent">Prosent av skjermhøyden å rulle</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Bruk myk rulling</string>
+
+    <string name="pref_categoryName_sync">Synkronisering</string>
+    <string name="pref_name_sync_syncTypes">Synkroniseringstyper</string>
+    <string name="pref_desc_sync_syncTypes">Trykk for å vise mer info om synkroniseringstyper</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Kunne ikke logge inn: Antagelig galt brukernavn eller passord</string>
+    <string name="unsuccessfulRequest_errorMessage">Forespørsel mislykket; svarkode: %1$d, svarmelding: %2$s</string>
+    <string name="previousUpdateNotFinished">Forrige oppdatering er ikke ferdig</string>
+    <string name="articleList_favoriteMark">Favorittmarkering</string>
+    <string name="articleList_ArchivedMark">Arkiveringsmerking</string>
+    <string name="noPreviousArticle">Det er ingen tidligere artikkel i gjeldende liste</string>
+    <string name="noNextArticle">Ingen flere artikler i gjeldende liste</string>
+    <string name="themeName_solarized">Solarisert</string>
+    <string name="aboutText">&lt;b&gt;wallabag-programfor Android&lt;/b&gt;&lt;br/&gt;wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
+    <string name="pref_desc_connection_url">Eksempler:\n
+        <i>https://wallabag.example.com</i>\n
+        <i>https://example.com/wallabag</i>\n
+        <i>https://app.wallabag.it</i>\n
+        <i>https://framabag.org</i>
+    </string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-autentiseringsbrukernavn</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-autentiseringspassord</string>
+
+    <string name="pref_name_ui_article_fontSerif">Seriffskrift</string>
+    <string name="pref_desc_ui_article_fontSerif">Seriffskrift for artikler</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Tekstjustering: Blokkjustert</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Strekker linjene til lik bredde (som i aviser)</string>
+    <string name="pref_desc_sync_syncTypes_text">Det er to hovedtyper for synkronisering: \"Full\" and \"Rask\".\n\n
+        \"Full\" synkronisering sletter alt lokalt innhold og laster det ned igjen. Denne typen synkronisering er tilgjengelig i valgmenyen. Det anbefales å bare bruke dette valget som siste utvei.\n\n
+        \"Rask\" synkroniseringstype (inkrementell synkronisering) laster kun ned endringer gjort siden forrige synkronisering, som typisk bruker mye mindre tid og trafikk. Dog har denne metoden et aber, den kan ikke oppdage sletting av artikler annensteds hen (så ingen artikler blir slettet i løpet av \"Rask\" synkronisering). Denne typen synkronisering igangsettes med dra for å oppdatere-håndvending i artikkellisten.\n\n
+        For å utbedre bakdelene i \"Rask\" type, er det et valg å kjøre \"tømming av slettede artikler\" som går over hver lokale artikkel og spør tjeneren hvorvidt den fremdeles er å finne på tjeneren - hvis ikke, blir den lokale artikkelen fjernet. Avhengig av antall artikler du har, kan dette valget ta noe tid, men det sparer mye trafikk sammenlignet med \"Full\" synkronisering.\n\n
+        Ingen av disse funksjonene har innvirkning på klient-til-tjener synkronisering: Dine lokale endringer vil alltid bli sendt til tjeneren før oppdatering av lokalt innhold.
+    </string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Skru på \"Tømming av slettede artikler\" etter \"Rask\" synkronisering</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Les beskrivelsen av synkroniseringstyper ovenfor for mer info</string>
+    <string name="pref_categoryName_autoSync">Automatisk synkronisering</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Skru på automatisk synkronisering ved oppstart av programmet</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">Programmet vil synkronisere når du åpner det</string>
+    <string name="pref_name_autoSync_enabled">Skru på automatisk synkronisering</string>
+    <string name="pref_desc_autoSync_enabled">Dette skrur på automatisk synkronisering av lokale endringer (tillagte lenker, arkiverte artikler, osv.) og laster ned nye artikler i henhold til en plan</string>
+    <string name="pref_name_autoSync_interval">Intervall for automatisk synkronisering</string>
+    <string name="pref_option_autoSync_interval_15m">Et kvarter</string>
+    <string name="pref_option_autoSync_interval_30m">Én halvtime</string>
+    <string name="pref_option_autoSync_interval_1h">Én time</string>
+    <string name="pref_option_autoSync_interval_12h">Tolv timer</string>
+    <string name="pref_option_autoSync_interval_24h">24 timer</string>
+    <string name="pref_name_autoSync_type">Automatisk synkroniseringstype</string>
+    <string name="pref_name_autoSyncQueue_enabled">Separer automatisk synkronisering for lokale endringer</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Dette tillater lokale endringer (tillagte lenker, arkiverte artkler, osv.) å synkroniseres til tjeneren så snart nettverk blir tilgjengelig.</string>
+    <string name="pref_name_autoDlNew_enabled">Last ned nylig tillagte artikler</string>
+    <string name="pref_desc_autoDlNew_enabled">Last ned nye artikler automatisk rett etter at de har blitt lagt til i programmet. Merk: Henting vil ikke finne sted hvis du har usynkroniserte frakoblede endringer.</string>
+    <string name="pref_name_imageCache_enabled">Legg bilder fra artikler i hurtiglager</string>
+    <string name="pref_desc_imageCache_enabled">Laster ned bilder fra hver artikkel automatisk og lagrer dem på enheten. Avhengig av lengden på din wallabag-artikkelliste, kan dette ta veldig lang tid og bruke mye plass.</string>
+
+    <string name="pref_categoryName_miscellaneous">Ymse</string>
+    <string name="pref_name_misc_handleHttpScheme">Behandle HTTP-metode</string>
+    <string name="pref_desc_misc_handleHttpScheme">Vis wallabag i listen over nettlesere</string>
+    <string name="pref_name_misc_wipeDB">Tøm database</string>
+    <string name="pref_desc_misc_wipeDB">Tømmer alle artikler fra lokal database, fjerner også alle ikke-synkroniserte lokale endringer og nettadresser</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Tøm database?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Er du sikker på at du ønsker å tømme databasen?</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">Uriktig tilkoblings-URI brukt</string>
+
+    <string name="connectionWizard_welcome_titleMessage">Velkommen til wallabag.</string>
+    <string name="connectionWizard_welcome_text">Før du bruker wallabag må du sette opp en tilkobling. Tilkoblingsveiviseren vil hjelpe deg med det.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Du kan alltids kjøre tilkoblingsveiviseren igjen fra \"Innstillinger\".</string>
+    <string name="connectionWizard_welcome_prev">Hopp over</string>
+    <string name="connectionWizard_welcome_next">Neste</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">Velg wallabag-tilbyder</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Annen</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Velg dette for justere påkrevde innstillinger manuelt</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Velg dette hvis du har en konto på https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_prev">Hopp over</string>
+    <string name="connectionWizard_providerSelection_next">Neste</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">Grunnleggende oppsett</string>
+    <string name="connectionWizard_provider_general_prev">Tilbake</string>
+    <string name="connectionWizard_provider_general_next">Koble til</string>
+
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it-oppsett</string>
+    <string name="connectionWizard_provider_wallabagit_prev">Tilbake</string>
+    <string name="connectionWizard_provider_wallabagit_next">Koble til</string>
+
+    <string name="connectionWizard_summary_titleMessage">Ferdig.</string>
+    <string name="connectionWizard_summary_text">Trykk for å lagre og gå til hovedskjermen.</string>
+    <string name="connectionWizard_summary_toastMessage">Oppsett fullført</string>
+    <string name="connectionWizard_summary_prev">Tilbake</string>
+    <string name="connectionWizard_summary_next">Lagre innstillinger</string>
+    <string name="menuCopyOriginalURL">Kopier opprinnelig nettadresse</string>
+    <string name="txtUrlCopied">Artikkelnettadresse kopiert til utklippstavle</string>
+    <string name="menuDownloadAsFile">Last ned som fil</string>
+    <string name="dialog_title_downloadFileFormat">Velg filformat</string>
+    <string name="downloadAsFilePathStart">Laster ned artikkel</string>
+    <string name="downloadAsFileArticleDownloaded">Artikkel nedlastet</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Artikkel %s nedlastet</string>
+    <string name="downloadAsFileTouchToOpen">Trykk for å åpne</string>
+    <string name="downloadAsFileProgressDetail">wallabag laster ned din artikkel %1$s på %2$s</string>
+    <string name="downloadAsFileProgress">wallabag laster ned din artikkel på %s</string>
+    <string name="notification_serverError">Tjenerfeil</string>
+    <string name="lastUpdateTimeLabel">Siste oppdatering: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
+
+    <string name="message_couldNotOpenUrl">Kunne ikke åpne denne nettadressen</string>
+
+    <string name="message_disableTouch_inputDisabled">Trykkinndata avskrudd</string>
+    <string name="message_disableTouch_inputEnabled">Trykkinndata påskrudd</string>
+    <string name="d_disableTouch_changeKey_title">SKru av trykkinndatatast</string>
+    <string name="d_disableTouch_currentCode">Valgt nøkkelkode (trykk på en tast for å endre den):</string>
+
+    <string name="pref_categoryName_ui_misc">Ymse</string>
+    <string name="pref_name_ui_disableTouch_enabled">Skru av trykkinndata</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Trykk den oppsatte knappen (kameraknappen som forvalg) for å blokkere/fjerne blokkering av trykkinndata på leseskjermen (systemkontroller påvirkes ikke)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">SKru av trykkinndatatast</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Trykk her for å sette opp tasten brukt for å skru på/av trykkinndata</string>
+
+    <string name="pref_name_storage_dbPath">Databaseplassering</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Internt lagringsmedium</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Eksternt lagringsmedium</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Database flyttet</string>
+
+    <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
+    <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Velg dette hvis du har en konto på https://framabag.org</string>
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag-oppsett</string>
+    <string name="connectionWizard_provider_framabag_prev">Tilbake</string>
+    <string name="connectionWizard_provider_framabag_next">Koble til</string>
+
+    <string name="remove_tag">Fjern etikett</string>
+    <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
+    <string name="markedAsRead">Artikkel merket som lest</string>
+    <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
+    <string name="pref_desc_ui_scrollOverBottom">Trykk her for å sette opp antall ganger du må rulle over bunnen for å markere en artikkel som lest</string>
+
+</resources>
