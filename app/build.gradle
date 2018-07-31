@@ -2,15 +2,19 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
+
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
+
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 14
+
         targetSdkVersion 27
         versionCode 106
         versionName "2.0.2"
+
 
         javaCompileOptions {
             annotationProcessorOptions {
