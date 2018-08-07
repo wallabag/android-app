@@ -380,6 +380,14 @@ public class Settings {
         setInt(R.string.pref_key_ui_readingSpeed, readingSpeed);
     }
 
+    public boolean isKeepScreenOn() {
+        return getBoolean(R.string.pref_key_ui_keepScreenOn, false);
+    }
+
+    public void setKeepScreenOn(boolean keepScreenOn) {
+        setBoolean(R.string.pref_key_ui_keepScreenOn, keepScreenOn);
+    }
+
     public Sortable.SortOrder getListSortOrder() {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 

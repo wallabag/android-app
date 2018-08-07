@@ -248,6 +248,8 @@
     <string name="pref_desc_ui_article_textAlignment_justify">Streckt die Textzeilen, so dass jede Zeile die gleiche Breite hat (wie in Zeitungen)</string>
     <string name="pref_name_ui_readingSpeed">Lesegeschwindigkeit</string>
     <string name="pref_desc_ui_readingSpeed">Deine Lesegeschwindigkeit (gemessen in Wörtern pro Minute). Zum Berechnen der geschätzten Lesezeit genutzt.</string>
+    <string name="pref_name_ui_keepScreenOn">Bildschirm während Lesens anlassen</string>
+    <string name="pref_desc_ui_keepScreenOn">Lasse den Bildschirm dauerhaft an, solange du einen Artikel ließt. </string>
     <string name="pref_categoryName_sync">Synchronisierung</string>
     <string name="pref_name_sync_syncTypes">Synchronisationsarten</string>
     <string name="pref_desc_sync_syncTypes">Drücke hier, um mehr Info über die Synchronisierungsarten zu zeigen</string>
