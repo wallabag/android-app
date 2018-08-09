@@ -336,6 +336,14 @@ public class SettingsActivity extends BaseActionBarActivity {
                     EventHelper.postEvent(event);
                 }
             }
+
+            if(keepScreenOnChanged) {
+                keepScreenOnChanged = false;
+
+                if(!oldkeepScreenOn) {
+                    Log.i(TAG, "applyChanges() keep screen on changed, keep screen on");
+                }
+            }
         }
 
         @Override

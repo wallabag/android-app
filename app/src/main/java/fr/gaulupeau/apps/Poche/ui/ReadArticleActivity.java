@@ -157,6 +157,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             if(actionBar != null) actionBar.hide();
         }
 
+        if(settings.isKeepScreenOn()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
