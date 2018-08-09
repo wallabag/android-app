@@ -1,2 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="btnMarkRead">Marcar como lido</string>
+    <string name="btnMarkUnread">Marcar como não lido</string>
+    <string name="add_to_favorites">Adicionar aos favoritos</string>
+    <string name="remove_from_favorites">Remover dos favoritos</string>
+    <string name="menuShare">Compartilhar</string>
+    <string name="menuNext">Próximo artigo</string>
+    <string name="menuPrevious">Artigo anterior</string>
+    <string name="menuDelete">Excluir</string>
+    <string name="menuOpenOriginal">Abrir original</string>
+    <string name="menuCopyOriginalURL">Copiar URL original</string>
+    <string name="menuTTS">Conversão de texto em voz</string>
+    <string name="ttsSpeed">Avaliar</string>
+    <string name="ttsLanguage">Escolher idioma</string>
+    <string name="ttsVoice">Escolher voz</string>
+    <string name="ttsAutoplayNextArticle">AutoPlay Próximo Artigo</string>
+    <string name="ttsError">Erro na conversão de texto em voz</string>
+    </resources>
