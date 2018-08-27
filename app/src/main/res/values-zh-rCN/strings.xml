@@ -1,2 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="btnMarkRead">标记为已读</string>
+    <string name="btnMarkUnread">标记为未读</string>
+    <string name="add_to_favorites">添加到收藏</string>
+    <string name="remove_from_favorites">从收藏中移除</string>
+    <string name="menuShare">分享</string>
+    <string name="menuNext">下一篇文章</string>
+    <string name="menuPrevious">上一篇文章</string>
+    <string name="menuDelete">删除</string>
+    <string name="menuOpenOriginal">打开原始页面</string>
+    <string name="menuCopyOriginalURL">复制原始页面网址</string>
+    <string name="menuTTS">文字转语音</string>
+    <string name="ttsVolume">音量</string>
+    <string name="ttsLanguage">选择语言</string>
+    <string name="ttsVoice">选择声音</string>
+    <string name="ttsAutoplayNextArticle">自动播放下一篇文章</string>
+    </resources>
