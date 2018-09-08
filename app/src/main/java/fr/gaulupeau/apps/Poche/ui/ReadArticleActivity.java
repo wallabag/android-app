@@ -131,6 +131,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String articleTitle;
     private String articleDomain;
     private String articleUrl;
+    private String articleLanguage;
     private Double articleProgress;
 
     private Long previousArticleID;
@@ -209,7 +210,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if(ttsFragment != null) {
             // is it ever executed?
-            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle);
+            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
         }
 
         loadArticleToWebView();
@@ -1105,7 +1106,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             settings.setTtsVisible(true);
 
-            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle);
+            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
             if(loadingFinished) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
@@ -1142,6 +1143,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "loadArticle() articleUrl: " + articleUrl);
         articleProgress = article.getArticleProgress();
         Log.d(TAG, "loadArticle() articleProgress: " + articleProgress);
+        articleLanguage = article.getLanguage();
+        Log.d(TAG, "loadArticle() articleLanguage: " + articleLanguage);
 
         return true;
     }
