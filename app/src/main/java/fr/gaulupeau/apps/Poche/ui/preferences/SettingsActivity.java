@@ -101,6 +101,9 @@ public class SettingsActivity extends BaseActionBarActivity {
         private boolean readingSpeedChanged;
         private int oldReadingSpeed;
 
+        private boolean keepScreenOnChanged;
+        private boolean oldkeepScreenOn;
+        
         private ConfigurationTestHelper configurationTestHelper;
 
         public SettingsFragment() {}
@@ -234,6 +237,9 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             readingSpeedChanged = false;
             oldReadingSpeed = settings.getReadingSpeed();
+
+            keepScreenOnChanged = false;
+            oldkeepScreenOn = settings.isKeepScreenOn();
         }
 
         private void applyChanges() {
@@ -330,6 +336,14 @@ public class SettingsActivity extends BaseActionBarActivity {
                     EventHelper.postEvent(event);
                 }
             }
+
+            if(keepScreenOnChanged) {
+                keepScreenOnChanged = false;
+
+                if(!oldkeepScreenOn) {
+                    Log.i(TAG, "applyChanges() keep screen on changed, keep screen on");
+                }
+            }
         }
 
         @Override
@@ -405,6 +419,10 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 case R.string.pref_key_ui_readingSpeed:
                     readingSpeedChanged = true;
+                    break;
+
+                case R.string.pref_key_ui_keepScreenOn:
+                    keepScreenOnChanged = true;
                     break;
             }
 
