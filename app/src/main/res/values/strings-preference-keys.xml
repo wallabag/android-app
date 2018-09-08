@@ -24,6 +24,7 @@
     <string name="pref_key_ui_article_fontSerif" translatable="false">ui.article.fontSerif</string>
     <string name="pref_key_ui_article_textAlignment_justify" translatable="false">ui.article.textAlignment.justify</string>
     <string name="pref_key_ui_readingSpeed" translatable="false">ui.readingSpeed</string>
+    <string name="pref_key_ui_keepScreenOn" translatable="false">ui.keepScreenOn</string>
     <string name="pref_key_ui_lists_sortOrder" translatable="false">ui.lists.sortOrder</string>
     <string name="pref_key_ui_tagList_sortOrder" translatable="false">ui.tagList.sortOrder</string>
     <string name="pref_key_ui_theme" translatable="false">ui.theme</string>

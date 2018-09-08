@@ -112,6 +112,11 @@
                 android:entries="@array/pref_option_readingSpeed_values"
                 android:entryValues="@array/pref_option_readingSpeed_values"
                 android:defaultValue="200"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_keepScreenOn"
+                android:title="@string/pref_name_ui_keepScreenOn"
+                android:summary="@string/pref_desc_ui_keepScreenOn"
+                android:defaultValue="false"/>
         </PreferenceCategory>
         <PreferenceCategory
             android:key="@string/pref_key_ui_screenScrolling"
