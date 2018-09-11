@@ -61,6 +61,11 @@ public abstract class IntentServiceBase extends IntentService {
                         && e.getMessage().contains("Connection timed out")) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
+                } else if(e instanceof java.net.SocketException
+                        && e.getMessage() != null
+                        && e.getMessage().contains("Software caused connection abort")) {
+                    result.setErrorType(ActionResult.ErrorType.TEMPORARY);
+                    handled = true;
                 }
             }
 
