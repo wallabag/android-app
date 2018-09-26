@@ -228,6 +228,7 @@
     <string name="manageTags_addNew">Hinzufügen</string>
     <string name="manageTags_currentTags">Ausgewählte Tags:</string>
     <string name="content_estimatedReadingTime">Geschätzte Lesezeit: %s min</string>
+    <string name="lastUpdateTimeLabel">Letztes Update: %s</string>
 
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
