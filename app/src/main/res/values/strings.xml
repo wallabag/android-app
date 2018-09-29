@@ -198,6 +198,8 @@
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
+    <string name="pref_name_ui_article_fullscreen_auto">Fullscreen Article View on Scroll</string>
+    <string name="pref_desc_ui_article_fullscreen_auto">Hides/Shows system and app bars automatically scroll. Only works on Android 6.0 and above.</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
     <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_name_ui_keepScreenOn">Keep screen on while reading</string>

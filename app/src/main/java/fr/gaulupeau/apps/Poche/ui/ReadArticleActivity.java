@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 
@@ -144,6 +145,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
+    private boolean isFullscreen;
+    private View decorView;
+
     public void onCreate(Bundle savedInstanceState) {
 
         settings = App.getInstance().getSettings();
@@ -153,7 +157,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             getWindow().setFlags(
                     WindowManager.LayoutParams.FLAG_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FULLSCREEN
-                    );
+            );
             ActionBar actionBar = super.getSupportActionBar();
             if(actionBar != null) actionBar.hide();
         }
@@ -199,7 +203,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         // article is loaded - update menu
         invalidateOptionsMenu();
 
+        // Grab the action bar and decorView for making reading view fullscreen
+        decorView = getWindow().getDecorView();
+        isFullscreen = false;
+
+        // Toggle stable and fullscreen layout flags so everything is overlaid by the
+        // actionbar AND the status bar when article is opened
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        );
+
+
         scrollView = (ScrollView)findViewById(R.id.scroll);
+
+//        // Hide status and action bar when scrolling down, show when scrolling up
+//        // TODO: change to a method compatible with API 14.
+        if (Build.VERSION.SDK_INT >= 23 && settings.isAutoFullscreenArticleView()) {
+            scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener(){
+                @Override
+                public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                    if (oldScrollY - scrollY > 5 && isFullscreen){
+                        isFullscreen = goFullscreen(false);
+                    } else if (oldScrollY - scrollY < -5 && !isFullscreen) {
+                        isFullscreen = goFullscreen(true);
+                    }
+                }
+            });
+        }
+
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
         webViewContent = (WebView)findViewById(R.id.webViewContent);
         loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
@@ -481,6 +513,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
+    private boolean goFullscreen(boolean gofs) {
+        // Hide both status bar and action bar if true else, show them
+        if(gofs){
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            );
+            return true;
+        } else {
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            );
+            return false;
+        }
+    }
+
     private void showDisableTouchToast() {
         Toast.makeText(this, disableTouch
                         ? R.string.message_disableTouch_inputDisabled
@@ -598,22 +648,28 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                if(!tapToScroll) return false;
-
                 if(e.getPointerCount() > 1) return false;
 
-                int viewHeight = scrollView.getHeight();
-                float y = e.getY() - scrollView.getScrollY();
+                float x = e.getX();
+                int viewWidth = scrollView.getWidth();
 
-                if(y > viewHeight * 0.25 && y < viewHeight * 0.75) {
-                    int viewWidth = scrollView.getWidth();
-                    float x = e.getX();
+                if(tapToScroll) {
+                    int viewHeight = scrollView.getHeight();
+                    float y = e.getY() - scrollView.getScrollY();
+                    if (y > viewHeight * 0.25 && y < viewHeight * 0.75) {
 
-                    if(x < viewWidth * 0.3) { // left part
-                        scroll(true, screenScrollingPercent, smoothScrolling, false);
-                    } else if(x > viewWidth * 0.7) { // right part
-                        scroll(false, screenScrollingPercent, smoothScrolling, false);
+                        if (x < viewWidth * 0.3) { // left part
+                            scroll(true, screenScrollingPercent, smoothScrolling, false);
+                        } else if (x > viewWidth * 0.7) { // right part
+                            scroll(false, screenScrollingPercent, smoothScrolling, false);
+                        }
                     }
+                    // TODO: Maybe enable this with option in settings menu?
+                    // Toggle fullscreen if touching center of screen
+                }
+
+                if(x > viewWidth * 0.3 && x < viewWidth * 0.7){
+                    isFullscreen = goFullscreen(!isFullscreen);
                 }
 
                 return false;
