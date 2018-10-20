@@ -15,7 +15,7 @@ import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
  */
 public class WebViewText implements TextInterface {
 
-    private final ReadArticleActivity readArticleActivity;
+    ReadArticleActivity readArticleActivity;
     private final WebView webView;
     private final ScrollView scrollView;
     private final Handler handler;
@@ -276,12 +276,20 @@ public class WebViewText implements TextInterface {
 
     @Override
     public boolean skipToNext() {
-        return readArticleActivity.openNextArticle();
+        if (readArticleActivity != null) {
+            return readArticleActivity.openNextArticle();
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean skipToPrevious() {
-        return readArticleActivity.openPreviousArticle();
+        if (readArticleActivity != null) {
+            return readArticleActivity.openPreviousArticle();
+        } else {
+            return false;
+        }
     }
 
     @Override

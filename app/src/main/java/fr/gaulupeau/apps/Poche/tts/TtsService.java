@@ -1,6 +1,8 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -9,6 +11,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
@@ -116,6 +120,7 @@ public class TtsService
     private String ttsEngine;
     private String ttsVoice;
     private AudioManager audioManager;
+    private AudioFocusRequest audioFocusRequest;
     private MediaSessionCompat mediaSession;
     private MediaPlayer mediaPlayerPageFlip;
     private BroadcastReceiver noisyReceiver;
@@ -136,9 +141,12 @@ public class TtsService
         }
     };
     private PendingIntent notificationPendingIntent;
+    private NotificationChannel notificationChannel;
 
     private static final String LOG_TAG="TtsService";
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
+    private static final String NOTIFICATION_CHANNEL_ID = "fr.gaulupeau.apps.Poche.tts";
+    private static final String NOTIFICATION_CHANNEL_NAME = "Wallabag TTS";
 
 
     private static volatile TtsService instance;
@@ -235,7 +243,7 @@ public class TtsService
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
         mediaSession.setActive(false);
-        audioManager.abandonAudioFocus(this);
+        abandonAudioFocus();
         executor.shutdown();
         executor = null;
         tts.stop();
@@ -246,7 +254,7 @@ public class TtsService
         tts.shutdown();
         tts = null;
         isTTSInitialized = false;
-        audioManager.abandonAudioFocus(this);
+        abandonAudioFocus();
         isAudioFocusGranted = false;
         instance = null;
         state = State.STOPPED;
@@ -302,8 +310,7 @@ public class TtsService
         Log.d(LOG_TAG, "playCmd");
         switch (state) {
             case CREATED:
-                if (audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-                        == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+                if (requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
                 {
                     isAudioFocusGranted = true;
                     mediaSession.setActive(true);
@@ -341,6 +348,40 @@ public class TtsService
                 break;
         }
     }
+
+    private int requestAudioFocus() {
+        int audioFocusResult;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            audioFocusResult = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        } else {
+            if (this.audioFocusRequest == null) {
+                this.audioFocusRequest =
+                        new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                                .setOnAudioFocusChangeListener(this)
+                                .setWillPauseWhenDucked(true)
+                                .setAudioAttributes(
+                                        new AudioAttributes.Builder()
+                                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                                .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                                .build()
+                                )
+                                .build();
+            }
+            audioFocusResult = audioManager.requestAudioFocus(this.audioFocusRequest);
+        }
+        return audioFocusResult;
+    }
+
+    private int abandonAudioFocus() {
+        int audioFocusResult;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            audioFocusResult = audioManager.abandonAudioFocus(this);
+        } else {
+            audioFocusResult = audioManager.abandonAudioFocusRequest(this.audioFocusRequest);
+        }
+        return audioFocusResult;
+    }
+
 
     public void pauseCmd() {
         pauseCmd(State.PAUSED);
@@ -737,6 +778,7 @@ public class TtsService
                     break;
                 case WANT_TO_PLAY:
                 case PLAYING:
+                    createNotificationChannel();
                     startForeground(1, generateNotification());
                     break;
                 case PAUSED:
@@ -752,6 +794,18 @@ public class TtsService
         } else {
             stopForeground(true);
             notificationManager.cancel(1);
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (notificationChannel == null) {
+                notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
+                notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                assert manager != null;
+                manager.createNotificationChannel(notificationChannel);
+            }
         }
     }
 
@@ -785,7 +839,7 @@ public class TtsService
         MediaControllerCompat controller = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = controller.getMetadata();
         MediaDescriptionCompat description = mediaMetadata.getDescription();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
         builder
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
