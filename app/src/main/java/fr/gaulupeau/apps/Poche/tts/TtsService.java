@@ -377,7 +377,14 @@ public class TtsService
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             audioFocusResult = audioManager.abandonAudioFocus(this);
         } else {
-            audioFocusResult = audioManager.abandonAudioFocusRequest(this.audioFocusRequest);
+            if (this.audioFocusRequest != null) {
+                audioFocusResult = audioManager.abandonAudioFocusRequest(this.audioFocusRequest);
+                if (audioFocusResult != AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+                    this.audioFocusRequest = null;
+                }
+            } else {
+                audioFocusResult = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+            }
         }
         return audioFocusResult;
     }
