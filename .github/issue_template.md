@@ -21,6 +21,7 @@ Have you searched the issues of this repository if your issue is already known? 
 - **Android ROM** (e.g. stock, LineageOS, SlimRom,…): 
 - **Android hardware**: 
 - **wallabag server version**: 
+- **Do you have Two-Factor-Authentication enabled?**: yes/no
 
 
 # Logs
