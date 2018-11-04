@@ -301,6 +301,4 @@
     <string name="connectionWizard_summary_prev">Retour</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
     <string name="remove_tag">Supprimer tag</string>
-<string name="d_urlAction_copyToClipboard">Copier vers le presse papier</string>
-    <string name="markedAsRead">Article marqué comme lu</string>
     </resources>
