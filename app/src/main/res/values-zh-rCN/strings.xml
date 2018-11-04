@@ -1,0 +1,298 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="btnMarkRead">标记为已读</string>
+    <string name="btnMarkUnread">标记为未读</string>
+    <string name="add_to_favorites">添加到收藏</string>
+    <string name="remove_from_favorites">从收藏中移除</string>
+    <string name="menuShare">分享</string>
+    <string name="menuNext">下一篇文章</string>
+    <string name="menuPrevious">上一篇文章</string>
+    <string name="menuDelete">删除</string>
+    <string name="menuOpenOriginal">打开原始页面</string>
+    <string name="menuCopyOriginalURL">复制原始页面网址</string>
+    <string name="menuTTS">文字转语音</string>
+    <string name="ttsVolume">音量</string>
+    <string name="ttsLanguage">选择语言</string>
+    <string name="ttsVoice">选择声音</string>
+    <string name="ttsAutoplayNextArticle">自动播放下一篇文章</string>
+    <string name="ttsSpeed">速率</string>
+    <string name="ttsPitch">音高</string>
+    <string name="ttsError">文字转语音错误</string>
+    <string name="ttsFastRewind">快退</string>
+    <string name="ttsPlayPause">播放/暂停</string>
+    <string name="ttsFastForward">快进</string>
+    <string name="ttsOptions">选项</string>
+    <string name="menu_open_random_article">打开随机文章</string>
+    <string name="menu_syncLocalChanges">同步本地更改</string>
+    <string name="d_deleteArticle_title">删除文章？</string>
+    <string name="d_deleteArticle_message">您确定想要删除这篇文章吗？</string>
+    <string name="txtNetOffline">请检查网络连接！</string>
+    <string name="txtConfigNotSet">请在同步前配置应用。</string>
+    <string name="txtUrlCopied">文章 URL 已复制到剪贴板</string>
+    <string name="dialog_add_label">添加新文章</string>
+    <string name="page_url">页面 URL</string>
+    <string name="share_article_title">分享文章</string>
+    <string name="share_text_extra">" 分享自 @wallabagapp"</string>
+    <string name="positive_answer">是</string>
+    <string name="negative_answer">否</string>
+    <string name="no_articles">无文章</string>
+    <string name="loading_article_text">加载中…</string>
+    <string name="d_urlAction_title">为 URL 选择操作</string>
+    <string name="d_urlAction_openInBrowser">在浏览器中打开</string>
+    <string name="d_urlAction_addToWallabag">添加到 wallabag</string>
+    <string name="d_urlAction_copyToClipboard">复制到剪贴板</string>
+    <string name="ok">确定</string>
+    <string name="d_add_fail_title">失败</string>
+    <string name="d_add_fail_text">在分享的字符串中找不到 URL:
+\n</string>
+    <string name="d_configurationChanged_title">参数已更改</string>
+    <string name="d_configurationChanged_message">似乎有些参数已经改变了。建议执行连接测试。</string>
+    <string name="d_configurationChanged_answer_decline">稍后执行</string>
+    <string name="d_configurationIsQuestionable_title">检测到问题</string>
+    <string name="d_configurationIsQuestionable_message">刚刚发生了一个连接错误。建议执行连接测试。</string>
+    <string name="addLink_success_text">已添加</string>
+    <string name="settings_parametersAreOk">参数正常</string>
+    <string name="settings_parametersAutofilled">参数已填充</string>
+    <string name="testConnection_progressDialogMessage">正在测试连接…</string>
+    <string name="testConnection_errorMessage_incorrectUrl">URL 不正确</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">检测到不支持的服务器版本</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">未找到 wallabag 服务-检查 URL</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP 身份验证失败</string>
+    <string name="testConnection_errorMessage_noCSRF">登录表单解析错误</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">无法登录-请检查用户名和密码</string>
+    <string name="testConnection_errorMessage_authProblems">与授权相关的问题。这些问题通常由 HTTP 重定向引起。</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">登录后未知页面。这通常是由于启用了应用尚不支持的双因素验证</string>
+    <string name="testConnection_errorMessage_unknown">未知错误</string>
+    <string name="testConnection_errorMessage_unknownWithMessage">未知错误: %s</string>
+    <string name="d_testConnection_urlSuggestion_title">考虑更改 URL</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">使用建议</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">使用我的</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">取消</string>
+    <string name="d_testConnection_urlSuggestion_message">建议将URL更改为：%s，但也可以使用输入的 URL 。</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">建议将URL更改为：%s</string>
+    <string name="d_testConnection_fail_title">测试连接失败</string>
+    <string name="getCredentials_progressDialogMessage">正在获取 API 凭据…</string>
+    <string name="d_getCredentials_title_fail">无法获取 API 凭据</string>
+    <string name="d_getCredentials_title_message">发生了一些错误。请检查你的网络连接并重试。</string>
+    <string name="checkCredentials_progressDialogMessage">测试 API 访问…</string>
+    <string name="d_checkCredentials_title_fail">API 访问测试失败</string>
+    <string name="d_checkCredentials_errorMessage_notFound">未找到 API</string>
+    <string name="d_checkCredentials_errorMessage_notFoundWithMessage">未找到 API: %s</string>
+    <string name="d_checkCredentials_errorMessage_noAccess">无法访问 API</string>
+    <string name="d_checkCredentials_errorMessage_noAccessWithMessage">无法访问 API: %s</string>
+    <string name="d_checkCredentials_errorMessage_unknown">未知错误</string>
+    <string name="d_checkCredentials_errorMessage_unknownWithMessage">未知错误: %s</string>
+    <string name="wrongUsernameOrPassword_errorMessage">无法登录: 可能是错误的用户名或密码</string>
+    <string name="unsuccessfulRequest_errorMessage">请求失败；响应代码: %1$d，响应消息: %2$s</string>
+    <string name="previousUpdateNotFinished">上一个更新尚未完成</string>
+    <string name="feedName_favorites">收藏</string>
+    <string name="feedName_archived">存档</string>
+    <string name="feedName_unread">未读</string>
+    <string name="articleList_favoriteMark">收藏标记</string>
+    <string name="articleList_ArchivedMark">存档标记</string>
+    <string name="noPreviousArticle">当前列表中没有以前的文章</string>
+    <string name="scrolledOverBottom">再上划 %d 次将文章标为已读</string>
+    <string name="markedAsRead">文章已标记为已读</string>
+    <string name="noNextArticle">当前列表中没有更多文章了</string>
+    <string name="themeName_light">明亮</string>
+    <string name="themeName_light_contrast">明亮（高对比度）</string>
+    <string name="themeName_dark">黑暗</string>
+    <string name="themeName_dark_contrast">黑暗 (高对比度)</string>
+    <string name="themeName_solarized">过曝光</string>
+    <string name="menu_readArticle_increaseFontSize">增大字体</string>
+    <string name="menu_readArticle_decreaseFontSize">缩小字体</string>
+    <string name="aboutText"><b>适用于 Android 的 wallabag 应用</b><br/>wallabag 是一个自托管应用，使您不再错过任何内容。点击，保存并在闲暇时阅读提取的内容。</string>
+    <string name="readSpeed">朗读速度</string>
+    <string name="voiceHeight">语音音高</string>
+    <string name="readVolume">朗读音量</string>
+    <string name="menuDownloadAsFile">下载为文件</string>
+    <string name="dialog_title_downloadFileFormat">选择文件格式</string>
+    <string name="downloadAsFilePathStart">下载文章</string>
+    <string name="downloadAsFileArticleDownloaded">文章已下载</string>
+    <string name="downloadAsFileArticleDownloadedDetail">文章 %s 已下载</string>
+    <string name="downloadAsFileTouchToOpen">轻触打开</string>
+    <string name="downloadAsFileProgressDetail">wallabag 在 %2$s 中下载您的文章 %1$s</string>
+    <string name="downloadAsFileProgress">wallabag 在 %s 中下载您的文章</string>
+    <string name="notification_updatingArticles">更新文章</string>
+    <string name="notification_updatingArticles_full">执行完整更新</string>
+    <string name="notification_updatingArticles_fast">执行快速更新</string>
+    <string name="notification_sweepingDeletedArticles">彻底删除已删除文章</string>
+    <string name="notification_downloadingImages">下载图片</string>
+    <string name="notification_syncingQueue">同步本地更改</string>
+    <string name="notification_error">错误</string>
+    <string name="notification_incorrectCredentials">凭据不正确</string>
+    <string name="notification_incorrectConfiguration">配置不正确</string>
+    <string name="notification_serverError">服务器错误</string>
+    <string name="notification_unknownError">未知错误</string>
+    <string name="notification_expandedError">错误：%s</string>
+    <string name="menu_lists_search">搜索</string>
+    <string name="menu_lists_changeSortOrder">更改排序</string>
+    <string name="menu_lists_sweepDeletedArticles">“彻底删除”已删除的文章</string>
+    <string name="menu_lists_fullUpdate">完整更新</string>
+    <string name="other_searchHint">通过文章标题或文字搜索</string>
+    <string name="menu_changeTitle">更改标题</string>
+    <string name="menu_manageTags">管理标签</string>
+    <string name="manageTags_title">管理标签</string>
+    <string name="manageTags_save">保存</string>
+    <string name="manageTags_textField_hint">以逗号分隔的一个或多个标签</string>
+    <string name="manageTags_addNew">添加</string>
+    <string name="manageTags_currentTags">所选标签:</string>
+    <string name="content_estimatedReadingTime">预计阅读时间：%s 分钟</string>
+    <string name="lastUpdateTimeLabel">最后更新: %s</string>
+    <string name="listItem_estimatedReadingTime">%d 分钟</string>
+
+    <string name="navigation_drawer_open">打开导航菜单</string>
+    <string name="navigation_drawer_close">关闭导航菜单</string>
+
+    <string name="nav_main_articles">文章</string>
+    <string name="nav_main_tags">标签</string>
+    <string name="nav_main_tagged_articles">已标记文章</string>
+
+    <string name="nav_add">添加新条目</string>
+
+    <string name="nav_other_settings">设置</string>
+    <string name="nav_other_about">关于</string>
+
+    <string name="title_main_tag">标签: %s</string>
+
+    <string name="message_couldNotOpenUrl">无法打开此 URL</string>
+
+    <string name="message_disableTouch_inputDisabled">触摸输入已禁用</string>
+    <string name="message_disableTouch_inputEnabled">触摸输入已启用</string>
+    <string name="d_disableTouch_changeKey_title">禁用触摸输入按钮</string>
+    <string name="d_disableTouch_currentCode">当前选择的关键代码（点击按钮更改）：</string>
+
+    <string name="pref_name_runConnectionWizard">运行连接向导</string>
+    <string name="pref_desc_runConnectionWizard">帮助您进行基本连接设置</string>
+
+    <string name="pref_categoryName_connection">连接</string>
+    <string name="pref_name_connection_url">wallabag URL</string>
+    <string name="pref_desc_connection_url"> 示例:
+\n <i>https://wallabag.example.com</i>
+\n <i>https://example.com/wallabag</i>
+\n <i>https://app.wallabag.it</i>
+\n <i>https://framabag.org</i> </string>
+    <string name="pref_name_connection_username">用户名</string>
+    <string name="pref_name_connection_password">密码</string>
+    <string name="pref_name_connection_api_clientID">客户端 ID</string>
+    <string name="pref_name_connection_api_clientSecret">客户端密钥</string>
+    <string name="pref_name_connection_autofill">自动填充</string>
+    <string name="pref_desc_connection_autofill">测试连接并填写客户端 ID 和客户端机密</string>
+
+    <string name="pref_categoryName_connection_advanced">高级连接设置</string>
+    <string name="pref_name_connection_advanced_customSSLSettings">自定义 SSL 设置</string>
+    <string name="pref_desc_connection_advanced_customSSLSettings">在所有设备上禁用 SSL ，在 Android 4.1—4.4上启用 TLS 1.1 和 TLS 1.2</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP 基本身份验证</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">如果你不知道它是什么，请勿填写</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 认证用户名</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 认证密码</string>
+
+    <string name="pref_categoryName_ui">用户界面</string>
+    <string name="pref_name_ui_theme">应用主题</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">文章文字大小 (%)</string>
+    <string name="pref_name_ui_article_fontSerif">衬线字体</string>
+    <string name="pref_desc_ui_article_fontSerif">文章的衬线字体</string>
+    <string name="pref_name_ui_article_textAlignment_justify">文字对齐方式: 两端对齐</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">将线条延伸到相同宽度（如报纸）</string>
+    <string name="pref_name_ui_article_fullscreen">全屏文章视图</string>
+    <string name="pref_desc_ui_article_fullscreen">阅读文章时隐藏系统和应用程序栏</string>
+    <string name="pref_name_ui_readingSpeed">阅读速度</string>
+    <string name="pref_desc_ui_readingSpeed">您的阅读速度 (以每分钟字数计算)。用于计算估计的读取时间。</string>
+    <string name="pref_name_ui_keepScreenOn">阅读时保持屏幕开启</string>
+    <string name="pref_desc_ui_keepScreenOn">阅读文章时保持屏幕开启</string>
+    <string name="pref_categoryName_ui_screenScrolling">屏幕滚动</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">使用音量键滚动</string>
+    <string name="pref_name_ui_tapToScroll_enabled">点击滚动</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">通过点击屏幕左右两侧滚动屏幕</string>
+    <string name="pref_name_ui_screenScrolling_percent">屏幕滚动的高度百分比</string>
+    <string name="pref_name_ui_screenScrolling_smooth">使用平滑滚动</string>
+    <string name="pref_categoryName_ui_misc">杂项</string>
+    <string name="pref_name_ui_disableTouch_enabled">禁用触摸输入</string>
+    <string name="pref_desc_ui_disableTouch_enabled">按下已配置的按钮（默认为相机按钮）以阻止/取消阻止阅读屏幕上的触摸输入（系统控制不受影响）</string>
+    <string name="pref_name_ui_disableTouch_keyCode">禁用触摸输入按钮</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">按此处配置用于禁用/启用触摸输入的按钮</string>
+    <string name="pref_name_ui_scrollOverBottom">在底部上划以标记为已读</string>
+    <string name="pref_desc_ui_scrollOverBottom">按此处配置您需要在底部上划以标记文章为已读的次数</string>
+
+    <string name="pref_categoryName_sync">同步</string>
+    <string name="pref_name_sync_syncTypes">同步类型</string>
+    <string name="pref_desc_sync_syncTypes">按下以显示更多关于同步类型的信息</string>
+    <string name="pref_desc_sync_syncTypes_text">有两种主要的同步类型: \"完整\" 和 \"快速\"。
+\n
+\n \"完整\" 同步将删除所有本地内容并再次下载。可以从 \"选项\" 菜单中启动，作为最后的手段。
+\n
+\n \"快速\" 同步 (增量) 只下载自上一次同步以来所做的更改，减少了花费的时间和带宽。但是，此方法有缺点: 它无法检测远程删除的文章 (因此在 \"快速\" 同步期间没有删除任何本地文章)。在任何文章列表中的顶部位置下拉滚动条以启动 \"快速\" 同步。
+\n
+\n 为了弥补 \"快速\" 同步类型的缺点，\"扫描已删除文章\" 检查每个本地文章，并询问服务器此文章是否仍然存在于服务器上-如果没有, 则删除本地文章。根据您拥有文章的数量，它需要一段时间，但相比 \"完全\" 同步可以节省流量。
+\n
+\n 这些功能都不影响客户端到服务器的同步: 在更新本地内容之前，您的本地更改始终会发送到服务器。</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">在 \"快速\" 同步后启用 \"扫描已删除文章\"</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">阅读上述不同同步类型的说明以了解更多信息</string>
+    <string name="pref_categoryName_autoSync">自动同步</string>
+    <string name="pref_name_autoSync_onStartup_enabled">在应用启动时启用自动同步</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">应用会在打开时同步</string>
+    <string name="pref_name_autoSync_enabled">启用自动同步</string>
+    <string name="pref_desc_autoSync_enabled">这样就可以自动同步本地更改 (添加的链接、存档的文章等), 并根据时间表下载新文章</string>
+    <string name="pref_name_autoSync_interval">自动同步间隔</string>
+    <string name="pref_option_autoSync_interval_15m">15 分钟</string>
+    <string name="pref_option_autoSync_interval_30m">30 分钟</string>
+    <string name="pref_option_autoSync_interval_1h">1 小时</string>
+    <string name="pref_option_autoSync_interval_12h">12 小时</string>
+    <string name="pref_option_autoSync_interval_24h">24 小时</string>
+    <string name="pref_name_autoSync_type">自动同步类型</string>
+    <string name="pref_name_autoSyncQueue_enabled">本地更改的独立自动同步</string>
+    <string name="pref_desc_autoSyncQueue_enabled">这允许本地更改 (添加的链接、存档的文章等) 在网络可用后立即同步到服务器。</string>
+    <string name="pref_name_autoDlNew_enabled">下载新添加的文章</string>
+    <string name="pref_desc_autoDlNew_enabled">在新文章通过应用添加后自动下载。注意：如果您有未同步的离线更改，则不会进行抓取。</string>
+    <string name="pref_name_imageCache_enabled">将文章图片放入缓存中</string>
+    <string name="pref_desc_imageCache_enabled">自动下载每篇文章中的所有图片, 并将其保存到设备中。根据您的 wallabag 文章列表的长度, 这可能会花费大量的时间和空间。</string>
+
+    <string name="pref_name_storage_dbPath">数据库位置</string>
+    <string name="pref_name_storage_dbPath_internalStorage">内部存储</string>
+    <string name="pref_name_storage_dbPath_externalStorage">外部存储</string>
+    <string name="pref_name_storage_dbPath_dbMoved">数据库已移动</string>
+
+    <string name="pref_categoryName_miscellaneous">杂项</string>
+    <string name="pref_name_misc_appendWallabagMention">附加 walabag 水印</string>
+    <string name="pref_desc_misc_appendWallabagMention">将 \"分享自 @wallabagapp\" 附加到分享文本后</string>
+    <string name="pref_name_misc_handleHttpScheme">处理 HTTP 方案</string>
+    <string name="pref_desc_misc_handleHttpScheme">在 web 浏览器列表中显示 wallabag</string>
+    <string name="pref_name_misc_wipeDB">擦除数据库</string>
+    <string name="pref_desc_misc_wipeDB">擦除本地数据库中的所有文章，同时删除所有未同步的本地更改和 URL</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">擦除数据库？</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">您确定要擦除数据库吗？</string>
+
+    <string name="connectionWizard_misc_incorrectConnectionURI">使用的连接 URI 不正确</string>
+
+    <string name="connectionWizard_welcome_titleMessage">欢迎来到 wallabag 。</string>
+    <string name="connectionWizard_welcome_text">在您可以使用 wallabag 应用之前，您需要设置连接。连接向导将帮助您完成此设置。</string>
+    <string name="connectionWizard_welcome_rerunNotice">您始终可以从 \"设置\" 中重新运行 \"连接向导\"。</string>
+    <string name="connectionWizard_welcome_prev">跳过</string>
+    <string name="connectionWizard_welcome_next">下一步</string>
+
+    <string name="connectionWizard_providerSelection_titleMessage">选择 wallabag 提供商</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">其他</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">选择此选项以手动输入所需的设置</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">如果您在 https://wallabag.it 上有帐户，请选择此选项</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">如果您在 https://framabag.org 上有帐户，请选择此项</string>
+    <string name="connectionWizard_providerSelection_prev">跳过</string>
+    <string name="connectionWizard_providerSelection_next">下一步</string>
+
+    <string name="connectionWizard_provider_general_titleMessage">基本配置</string>
+    <string name="connectionWizard_provider_general_prev">上一步</string>
+    <string name="connectionWizard_provider_general_next">连接</string>
+
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 配置</string>
+    <string name="connectionWizard_provider_wallabagit_prev">上一步</string>
+    <string name="connectionWizard_provider_wallabagit_next">连接</string>
+
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag 配置</string>
+    <string name="connectionWizard_provider_framabag_prev">上一步</string>
+    <string name="connectionWizard_provider_framabag_next">连接</string>
+
+    <string name="connectionWizard_summary_titleMessage">全部完成。</string>
+    <string name="connectionWizard_summary_text">单击此处保存并转到主屏幕。</string>
+    <string name="connectionWizard_summary_toastMessage">设置完成</string>
+    <string name="connectionWizard_summary_prev">上一步</string>
+    <string name="connectionWizard_summary_next">保存设置</string>
+    <string name="remove_tag">移除标签</string>
+</resources>

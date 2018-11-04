@@ -294,4 +294,7 @@
     <string name="pref_name_ui_scrollOverBottom">最下部にスクロールすると既読としてマークします</string>
     <string name="pref_desc_ui_scrollOverBottom">記事を既読にするために必要な下へのスクロールの回数を設定するには、ここを押してください</string>
 
-</resources>
+<string name="pref_name_ui_article_fullscreen">全画面記事表示</string>
+    <string name="pref_desc_ui_article_fullscreen">記事を読むときに、システムとアプリバーを非表示します</string>
+    <string name="d_urlAction_copyToClipboard">クリップボードにコピー</string>
+    </resources>
