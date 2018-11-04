@@ -27,7 +27,7 @@
     <string name="d_deleteArticle_title">¿Eliminar artículo?</string>
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
     <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
-    <string name="txtConfigNotSet">¡Por favor, configura la aplicación antes de sincronizar!</string>
+    <string name="txtConfigNotSet">Por favor, configura la aplicación antes de sincronizar.</string>
     <string name="txtUrlCopied">URL copiada al portapapeles</string>
     <string name="dialog_add_label">Añadir un nuevo artículo</string>
     <string name="page_url">URL de la página</string>
@@ -59,7 +59,7 @@
     <string name="testConnection_errorMessage_noCSRF">Error al parsear el formulario de login</string>
     <string name="testConnection_errorMessage_incorrectCredentials">No se pudo iniciar sesión — revisa usuario y contraseña</string>
     <string name="testConnection_errorMessage_authProblems">Problemas relacionados con autorización. Estos son causados generalmente por redirecciones HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión. Esto suele suceder al activar la autenticación en dos pasos, que no está soportada por la aplicación</string>
     <string name="testConnection_errorMessage_unknown">Error desconocido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Considera cambiar de URL</string>
@@ -89,7 +89,7 @@
     <string name="articleList_favoriteMark">Marca de favorito</string>
     <string name="articleList_ArchivedMark">Marca de archivado</string>
     <string name="noPreviousArticle">No hay artículos previos en la lista actual</string>
-    <string name="noNextArticle">No hay artículos siguientes en la lista actual</string>
+    <string name="noNextArticle">No hay más artículos en la lista actual</string>
     <string name="themeName_light">Claro</string>
     <string name="themeName_light_contrast">Claro (alto contraste)</string>
     <string name="themeName_dark">Oscuro</string>
@@ -278,4 +278,9 @@
     <string name="connectionWizard_summary_toastMessage">Configuración completada</string>
     <string name="connectionWizard_summary_prev">Volver</string>
     <string name="connectionWizard_summary_next">Guardar configuración</string>
-</resources>
+<string name="scrolledOverBottom">Desciende %d veces más por debajo del final del artículo para marcarlo como leído</string>
+    <string name="markedAsRead">Artículo marcado como leído</string>
+    <string name="message_disableTouch_inputDisabled">Interfaz táctil desactivada</string>
+    <string name="message_disableTouch_inputEnabled">Interfaz táctil activada</string>
+    <string name="d_disableTouch_changeKey_title">Botón para desactivar la interfaz táctil</string>
+    </resources>
