@@ -29,7 +29,7 @@ public class WallabagWebService {
     private static final Pattern WALLABAG_LOGIN_FORM_V2 = compile("/login_check\"? method=\"?post\"? name=\"?loginform\"?>");
     private static final Pattern FRAMABAG_LOGIN_FORM = compile("/login_check\" class=\"form\" method=\"post\" name=\"loginform\">");
     private static final Pattern WALLABAG_LOGOUT_LINK_V2 = compile("/logout\"?>");
-    private static final Pattern WALLABAG_LOGO_V2 = compile("alt=\"wallabag logo\" ?/?>");
+    private static final Pattern WALLABAG_LOGO_V2 = compile("alt=\"wallabag logo\"");
     private static final Pattern FRAMABAG_MARKER = compile("<span class=\"frama\">Frama</span>");
     private static final Pattern WALLABAG_LOGIN_FORM_V1 = compile("<form method=\"?post\"? action=\"?\\?login\"? name=\"?loginform\"?>");
 
