@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Als gelesen markieren</string>
     <string name="btnMarkUnread">Als ungelesen markieren</string>
@@ -249,7 +249,7 @@
     <string name="pref_name_ui_readingSpeed">Lesegeschwindigkeit</string>
     <string name="pref_desc_ui_readingSpeed">Deine Lesegeschwindigkeit (gemessen in Wörtern pro Minute). Zum Berechnen der geschätzten Lesezeit genutzt.</string>
     <string name="pref_name_ui_keepScreenOn">Bildschirm während Lesens anlassen</string>
-    <string name="pref_desc_ui_keepScreenOn">Lasse den Bildschirm dauerhaft an, solange du einen Artikel liest. </string>
+    <string name="pref_desc_ui_keepScreenOn">Lasse den Bildschirm dauerhaft an, solange du einen Artikel liest</string>
     <string name="pref_categoryName_sync">Synchronisierung</string>
     <string name="pref_name_sync_syncTypes">Synchronisationsarten</string>
     <string name="pref_desc_sync_syncTypes">Drücke hier, um mehr Info über die Synchronisierungsarten zu zeigen</string>
@@ -293,10 +293,10 @@
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
     <string name="pref_desc_misc_appendWallabagMention">Hänge \"via @wallabagapp\" an geteilte Text an</string>
     <string name="remove_tag">Tag entfernen</string>
-<string name="scrolledOverBottom">Scrolle %d Male mehr über das Artikelende, um den Artikel als gelesen zu markieren</string>
+<string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
     <string name="markedAsRead">Artikel als gelesen markiert</string>
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
-    <string name="pref_desc_ui_scrollOverBottom">Drücke hier, um die Anzahl der Male zu konfigurieren, die beim über das Artikelende hinausscrollen benötigt werden, um den Artikel als gelesen zu markieren</string>
+    <string name="pref_desc_ui_scrollOverBottom">Hier klicken, um einzustellen, wie oft man über den Rand hinaus scrollen muss, um einen Artikel als gelesen zu markieren</string>
 
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
     <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>
