@@ -8,8 +8,8 @@ android {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 108
-        versionName "2.1.0-beta"
+        versionCode 109
+        versionName "2.1.0"
 
         javaCompileOptions {
             annotationProcessorOptions {
