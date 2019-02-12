@@ -119,6 +119,9 @@ public class TtsFragment
         //Log.d(LOG_TAG, "onAttach");
         super.onAttach(context);
         this.readArticleActivity = ((ReadArticleActivity) getActivity());
+        if ((this.readArticleActivity != null) && (webViewText != null)) {
+            webViewText.readArticleActivity = this.readArticleActivity;
+        }
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         if (volumeChangeReceiver == null) {
             volumeChangeReceiver = new BroadcastReceiver() {
@@ -538,6 +541,9 @@ public class TtsFragment
     public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
         //Log.d(LOG_TAG, "onDocumentLoadFinished");
         if (webViewText == null) {
+            if (readArticleActivity == null) {
+                Log.e(LOG_TAG, "onDocumentLoadFinished(): readArticleActivity is null");
+            }
             webViewText = new WebViewText(webView, scrollView, readArticleActivity);
             webViewText.setOnReadFinishedCallback(new Runnable() {
                 @Override
