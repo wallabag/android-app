@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">既読にする</string>
     <string name="btnMarkUnread">未読にする</string>
@@ -297,4 +297,6 @@
 <string name="pref_name_ui_article_fullscreen">全画面記事表示</string>
     <string name="pref_desc_ui_article_fullscreen">記事を読むときに、システムとアプリバーを非表示します</string>
     <string name="d_urlAction_copyToClipboard">クリップボードにコピー</string>
-    </resources>
+    <string name="pref_name_ui_keepScreenOn">読み込み中に画面を維持</string>
+    <string name="pref_desc_ui_keepScreenOn">記事を読んでいる間、画面を維持します</string>
+</resources>
