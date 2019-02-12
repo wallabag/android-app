@@ -66,8 +66,9 @@
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
 
     <style name="DarkThemeContrast" parent="DarkTheme">
-        <item name="android:background">#000000</item>
+        <item name="android:windowBackground">@color/darkContrastBlack</item>
         <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#000000</item>
     </style>
 
     <style name="DarkThemeContrast.NoActionBar">

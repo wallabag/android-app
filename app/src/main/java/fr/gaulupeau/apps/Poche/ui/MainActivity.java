@@ -5,6 +5,9 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
@@ -35,7 +38,9 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -127,6 +132,25 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             if(headerView != null) {
                 lastUpdateTimeView = (TextView)headerView.findViewById(R.id.lastUpdateTime);
+            }
+
+            // Set different colors for items in the navigation bar in dark (high contrast) theme
+            if (Themes.getCurrentTheme() != null && Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
+                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
+                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
+
+                    } else {
+                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
+                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
+                    }
+                } catch (XmlPullParserException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
