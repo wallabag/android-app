@@ -34,7 +34,7 @@ public class ImageCacheUtils {
     private static final String IMAGE_CACHE_DIR = "imagecache";
     private static final int MAXIMUM_FILE_EXT_LENGTH = 5; // incl. the dot
 
-    private static final String WALLABAG_RELATIVE_URL_PATH = "/assets/images/";
+    public static final String WALLABAG_RELATIVE_URL_PATH = "/assets/images/";
 
     private static final Pattern[] IMG_URL_PATTERNS = {
             Pattern.compile("<img[^>]+src\\s*=\\s*\"([^\"]+)\"[^>]*>", Pattern.CASE_INSENSITIVE),
@@ -302,7 +302,7 @@ public class ImageCacheUtils {
         return success;
     }
 
-    private static String getWallabagUrl() {
+    public static String getWallabagUrl() {
         if(wallabagUrl == null) {
             wallabagUrl = App.getInstance().getSettings().getUrl();
         }
