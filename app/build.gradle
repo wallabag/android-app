@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 28
         versionCode 214
         versionName "2.2.4"
@@ -16,11 +16,6 @@ android {
                 arguments = [ eventBusIndex : 'fr.gaulupeau.apps.Poche.EventBusIndex' ]
             }
         }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
