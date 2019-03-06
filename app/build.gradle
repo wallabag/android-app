@@ -8,7 +8,7 @@ android {
         applicationId "fr.gaulupeau.apps.InThePoche"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 214
+        versionCode 114
         versionName "2.2.4"
 
         javaCompileOptions {
@@ -56,8 +56,8 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.2'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.2'
+    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.mikepenz:aboutlibraries:6.0.2'
