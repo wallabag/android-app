@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 109
         versionName "2.1.0"
@@ -16,6 +16,11 @@ android {
                 arguments = [ eventBusIndex : 'fr.gaulupeau.apps.Poche.EventBusIndex' ]
             }
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     lintOptions {
@@ -56,8 +61,8 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.12.1'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.12.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.13.1'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.mikepenz:aboutlibraries:6.0.2'
