@@ -687,6 +687,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         String htmlContent = getHtmlContent();
+        List<String> imgURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
+        if(imgURLs != null && imgURLs.size() > 0) {
+            String wbgURL = ImageCacheUtils.getWallabagUrl();
+            for(String imageURL: imgURLs) {
+                if(imageURL.startsWith(ImageCacheUtils.WALLABAG_RELATIVE_URL_PATH)) {
+                    htmlContent = htmlContent.replace(imageURL, wbgURL + imageURL);
+                    Log.d(TAG, "getHtmlPage() prefixing wallabag server URL " + wbgURL + " to the image path " + imageURL);
+                }
+            }
+        }
 
         return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
                 articleUrl, articleDomain, htmlContent);
