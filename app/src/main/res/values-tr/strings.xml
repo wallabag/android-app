@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Okundu Olarak İşaretle</string>
     <string name="btnMarkUnread">Okunmadı Olarak İşaretle</string>
@@ -26,7 +26,7 @@
     <string name="d_deleteArticle_title">Makale silinsin mi?</string>
     <string name="d_deleteArticle_message">Makaleyi silmek istediğinizden emin misiniz?</string>
     <string name="txtNetOffline">Lütfen internet bağlantınızı kontrol edin!</string>
-    <string name="txtConfigNotSet">Lütfen senkron yapmadan önce ayarlarınızı kontrol edin!</string>
+    <string name="txtConfigNotSet">Lütfen senkron yapmadan önce ayarlarınızı kontrol edin.</string>
     <string name="dialog_add_label">Yeni bir makale ekle</string>
     <string name="page_url">Sayfa URL\'si</string>
     <string name="share_article_title">Makaleyi paylaş</string>
@@ -57,7 +57,7 @@
     <string name="testConnection_errorMessage_noCSRF">Giriş formu işleme hatası</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Giriş yapılamadı — lütfen kullanıcı adı ve parolanızı kontrol edin</string>
     <string name="testConnection_errorMessage_authProblems">Yetkilendirme ile ilgili sorunlar. Bunlar genellikle HTTP-yönlendirmeleri nedeniyle oluyor.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Giriş yaptıktan sonra bilinmeyen sayfa</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Giriş yaptıktan sonra bilinmeyen sayfa. Bu çoğu zaman iki aşamalı doğrulama aktifleştirildikten sonra olmakta, ve de bu doğrulama özelliği maalesef şimdilik uygulama tarafından desteklenmiyor</string>
     <string name="testConnection_errorMessage_unknown">Bilinmeyen hata</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Bilinmeyen hata: %s</string>
     <string name="d_testConnection_urlSuggestion_title">URL değiştirmeyi düşünün</string>
@@ -78,7 +78,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Api\'ye erişim yok: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Bilinmeyen hata</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Bilinmeyen hata: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Giriş yapılamadı: muhtemelen hatalı kullanıcı adı veya parola</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Giriş yapılamadı: Tahminen hatalı kullanıcı adı veya parola</string>
     <string name="unsuccessfulRequest_errorMessage">Başarısız istek; yanıt kodu: %1$d, yanıt iletisi: %2$s</string>
     <string name="previousUpdateNotFinished">Bir önceki güncelleme işlemi henüz bitmedi</string>
     <string name="feedName_favorites">Favoriler</string>
@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
-    <string name="aboutText">&lt;b>Android için wallabag&lt;/b>&lt;br/> wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+    <string name="aboutText">&lt;b&gt;Android için wallabag&lt;/b&gt;&lt;br/&gt; wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>
@@ -130,24 +130,17 @@
     <string name="manageTags_addNew">Ekle</string>
     <string name="manageTags_currentTags">Seçili etiketler:</string>
     <string name="content_estimatedReadingTime">Tahmini okuma süresi: %s dk</string>
-
     <string name="navigation_drawer_open">Navigasyon menüsünü aç</string>
     <string name="navigation_drawer_close">Navigasyon menüsünü kapat</string>
-
     <string name="nav_main_articles">Makaleler</string>
     <string name="nav_main_tags">Etiketler</string>
     <string name="nav_main_tagged_articles">Etiketli makaleler</string>
-
     <string name="nav_add">Yeni kayıt ekle</string>
-
     <string name="nav_other_settings">Ayarlar</string>
     <string name="nav_other_about">Hakkında</string>
-
     <string name="title_main_tag">Etiket: %s</string>
-
     <string name="pref_name_runConnectionWizard">Bağlantı Sihirbazı\'nı çalıştırın</string>
-    <string name="pref_desc_runConnectionWizard">Bağlantı sihirbazı temel bağlantı ayarları ayarlamak için size yardımcı olacaktır</string>
-
+    <string name="pref_desc_runConnectionWizard">Temel bağlantı ayarları ayarlamak için size yardımcı olacaktır</string>
     <string name="pref_categoryName_connection">Bağlantı</string>
     <string name="pref_name_connection_url">wallabag URL\'i</string>
     <string name="pref_desc_connection_url">
@@ -163,7 +156,6 @@
     <string name="pref_name_connection_api_clientSecret">İstemci gizli anahtarı</string>
     <string name="pref_name_connection_autofill">Otomatik Doldurma</string>
     <string name="pref_desc_connection_autofill">Bağlantıyı sına ve istemci ID kimlik ve gizli anahtarını otomatik doldur</string>
-
     <string name="pref_categoryName_connection_advanced">Gelişmiş bağlantı ayarları</string>
     <string name="pref_name_connection_advanced_customSSLSettings">Özel SSL ayarları</string>
     <string name="pref_desc_connection_advanced_customSSLSettings">SSL\'i tüm cihazlarda devre dışı bırakır, TLS 1.1 ve 1.2\'yi Android 4.1–4.4 arası için aktif eder</string>
@@ -171,13 +163,12 @@
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Eğer ne olduğunu bilmiyorsanız boş bırakın</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP kimlik doğrulama kullanıcı adı</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP kimlik Doğrulama parolası</string>
-
     <string name="pref_categoryName_ui">Arayüz</string>
     <string name="pref_name_ui_theme">Tema</string>
-    <string name="pref_name_ui_article_fontSize" formatted="false">Makale yazı tipi boyutu (%)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Makale metin boyutu (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif yazı tipi</string>
     <string name="pref_desc_ui_article_fontSerif">Makalelerde Serif yazı tipi</string>
-    <string name="pref_name_ui_article_textAlignment_justify">Metin hizalama: her iki tarafa da</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Metin hizalama: Her iki tarafa da</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Satırlardaki boşlukların genişliklerini değiştirerek her satırın aynı genişlikte olmasını sağlar (tıpkı gazetelerdeki gibi)</string>
     <string name="pref_name_ui_readingSpeed">Okuma hızı</string>
     <string name="pref_desc_ui_readingSpeed">Okuma hızınızı (dakikada kelime cinsinden). Tahmini okuma zamanı hesaplamak için kullanılır.</string>
@@ -187,7 +178,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Ekranın sol ve sağ kenarlarına hafifçe dokunarak makaleyi kaydırmanızı sağlar</string>
     <string name="pref_name_ui_screenScrolling_percent">Kaydırmak için ekran yüksekliği yüzdesi</string>
     <string name="pref_name_ui_screenScrolling_smooth">Yumuşak kaydırmayı kullan</string>
-
     <string name="pref_categoryName_sync">Senkronizasyon</string>
     <string name="pref_name_sync_syncTypes">Senkronizasyon türleri</string>
     <string name="pref_desc_sync_syncTypes">Senkronizasyon türleri hakkında daha fazla bilgi görmek için tıklayın</string>
@@ -198,7 +188,7 @@
         Unutmamak gerekir ki bu fonksiyonların hiç biri istemciden sunucuya olan senkronizasyonu etkilememektedir. Yerel değişiklikleriniz senkronizasyonlardan önce her zaman sunucuya gönderilmektedir.
     </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Hızlı\" senkronizasyon ardından \"Silinmiş yazıları temizleme\" özelliğini çalıştır</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Daha fazla detay için yukarıdan senkronizasyon türleri açıklamalarına göz atın</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Daha fazla senkronizasyon türleri detayı için açıklamalara göz atın</string>
     <string name="pref_categoryName_autoSync">Otomatik senkronizasyon</string>
     <string name="pref_name_autoSync_onStartup_enabled">Uygulama başladığında otomatik senkronizasyon etkinleşsin</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Uygulamayı açtığınızda senkron olacak</string>
@@ -215,9 +205,8 @@
     <string name="pref_desc_autoSyncQueue_enabled">Bu ayar yerel değişikliklerin (eklenen link, arşivlenen makale vs.) internet erişimi olduğu anda sunucuya senkron edilmesini sağlar.</string>
     <string name="pref_name_autoDlNew_enabled">Yeni makale eklendiğinde indir</string>
     <string name="pref_desc_autoDlNew_enabled">Uygulama üzerinden makale eklendiği anda otomatik olarak bu makaleleri indirir. Not: Eğer senkron edilmemiş çevrimdışı yerel değişiklikleriniz varsa bu işlem çalışmayacaktır.</string>
-    <string name="pref_name_imageCache_enabled">Makalelere gömülü resimleri önbellekle</string>
-    <string name="pref_desc_imageCache_enabled">Makalelerin içindeki tüm resimleri cihaza indirir. Makale uzunluğuna, adedine ve resim ebatlarına göre bu işlem zaman ve disk alanı kaplayabilir.</string>
-
+    <string name="pref_name_imageCache_enabled">Makalelerdeki resimleri önbellekle</string>
+    <string name="pref_desc_imageCache_enabled">Makalelerin içindeki tüm resimleri cihaza indirir. Makale uzunluğuna, adedine ve resim ebatlarına göre bu işlem uzun sürebilir ve büyük disk alanı kaplayabilir.</string>
     <string name="pref_categoryName_miscellaneous">Çeşitli</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP şemasını yönet</string>
     <string name="pref_desc_misc_handleHttpScheme">Wallabag\'i web tarayıcıları listesinde göster</string>
@@ -225,33 +214,70 @@
     <string name="pref_desc_misc_wipeDB">Tüm makaleleri yerel veritabanından siler, ayrıca tüm senkron edilmemiş değişiklikleri ve URL\'leri de siler</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Veritabanı sıfırlansın mı?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Veritabanını sıfırlamak istediğinize emin misiniz?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Hatalı bağlantı URI\'ı kullanılıyor</string>
-
-    <string name="connectionWizard_welcome_titleMessage">Wallabag\'e hoş geldiniz!</string>
+    <string name="connectionWizard_welcome_titleMessage">Wallabag\'e hoş geldiniz.</string>
     <string name="connectionWizard_welcome_text">Wallabag uygulamasını kullanmadan önce bağlantınızı ayarlamalısınız. Bu bağlantı sihirbazı size kurulumda yardımcı olacaktır.</string>
     <string name="connectionWizard_welcome_rerunNotice">Ayarlar sayfasından istediğiniz zaman bu bağlantı sihirbazını yeniden çalıştırabilirsiniz.</string>
     <string name="connectionWizard_welcome_prev">Atla</string>
     <string name="connectionWizard_welcome_next">Sonraki</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Wallabag sağlayıcınızı seçin</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Diğer</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">El ile gerekli ayarları girmek için bu seçeneği seçin</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">El ile gerekli ayarları girmek için bunu seçin</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Eğer https://wallabag.it adresinde bir hesabınız varsa bu seçeneği seçin</string>
     <string name="connectionWizard_providerSelection_prev">Atla</string>
     <string name="connectionWizard_providerSelection_next">Sonraki</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Temel yapılandırma</string>
     <string name="connectionWizard_provider_general_prev">Geri</string>
     <string name="connectionWizard_provider_general_next">Bağlan</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it yapılandırması</string>
     <string name="connectionWizard_provider_wallabagit_prev">Geri</string>
     <string name="connectionWizard_provider_wallabagit_next">Bağlan</string>
-
-    <string name="connectionWizard_summary_titleMessage">Hepsi tamam!</string>
+    <string name="connectionWizard_summary_titleMessage">Hepsi tamam.</string>
     <string name="connectionWizard_summary_text">Ayarları kaydetmek ve ana ekranına dönmek için düğmeye basın.</string>
     <string name="connectionWizard_summary_toastMessage">Kurulum tamamlandı</string>
     <string name="connectionWizard_summary_prev">Geri</string>
     <string name="connectionWizard_summary_next">Ayarları Kaydet</string>
+    <string name="menuCopyOriginalURL">Orijinal URL\'i kopyala</string>
+    <string name="txtUrlCopied">Makale linki panoya kopyalandı</string>
+    <string name="d_urlAction_copyToClipboard">Panoya kopyala</string>
+    <string name="scrolledOverBottom">Makaleyi okundu olarak işaretlemek için %d sefer daha aşağı kaydırın</string>
+    <string name="markedAsRead">Makale okundu olarak işaretlendi</string>
+    <string name="menuDownloadAsFile">Dosya olarak kaydet</string>
+    <string name="dialog_title_downloadFileFormat">Dosya tipi seç</string>
+    <string name="downloadAsFilePathStart">Makale indiriliyor</string>
+    <string name="downloadAsFileArticleDownloaded">Makale indirildi</string>
+    <string name="downloadAsFileArticleDownloadedDetail">Makale %s indirildi</string>
+    <string name="downloadAsFileTouchToOpen">Açmak için dokunun</string>
+    <string name="downloadAsFileProgressDetail">wallabag %1$s makalenizi %2$s içinde indirecek</string>
+    <string name="downloadAsFileProgress">wallabag makalenizi %s içinde indirecek</string>
+    <string name="notification_serverError">Sunucu hatası</string>
+    <string name="lastUpdateTimeLabel">Son güncelleme: %s</string>
+    <string name="listItem_estimatedReadingTime">%d dakika</string>
+    <string name="message_couldNotOpenUrl">Bu URL açılamadı</string>
+    <string name="message_disableTouch_inputDisabled">Dokunarak giriş yapma özelliği devre dışı</string>
+    <string name="message_disableTouch_inputEnabled">Dokunarak giriş yapma özelliği aktif</string>
+    <string name="d_disableTouch_changeKey_title">Dokunarak giriş yapma tuşunu devre dışı bırak</string>
+    <string name="d_disableTouch_currentCode">Mevcut ayarlanmış tuş (bir tuşa basarak değiştirin):</string>
+    <string name="pref_name_ui_article_fullscreen">Tam ekran Makale Görünümü</string>
+    <string name="pref_desc_ui_article_fullscreen">Makaleyi okurken sistem ve uygulama çubuklarını gizler</string>
+    <string name="pref_name_ui_keepScreenOn">Okurken ekranı açık tut</string>
+    <string name="pref_desc_ui_keepScreenOn">Makaleyi okurken ekranı sürekli açık tutar</string>
+    <string name="pref_categoryName_ui_misc">Çeşitli</string>
+    <string name="pref_name_ui_disableTouch_enabled">Dokunarak giriş yapmayı devre dışı bırak</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Dokunarak işlem yapmayı aktif/devre dışı yapmak için okuma ekranında ayarlanmış tuşa basın (varsayılan olarak kamera tuşu) (sistem kontrol ayarları bu işlemden etkilenmez)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Dokunarak giriş yapma tuşunu devre dışı bırak</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Buraya basarak, dokunarak giriş yapmayı aktif/pasifleştiren tuşu ayarlayabilirsiniz</string>
+    <string name="pref_name_ui_scrollOverBottom">Makaleyi okundu olarak işaretlemek için sayfanın en altına kaydırın</string>
+    <string name="pref_desc_ui_scrollOverBottom">Buraya basarak makaleyi okundu olarak işaretlemek için kaç kere aşağı kaydırmanız gerektiğini ayarlayabilirsiniz</string>
+    <string name="pref_name_storage_dbPath">Veritabanı konumu</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Dahili hafıza</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Harici hafıza</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Veritabanı taşındı</string>
+    <string name="pref_name_misc_appendWallabagMention">Wallabag alıntısını sonuna ekle</string>
+    <string name="pref_desc_misc_appendWallabagMention">Paylaşılan metinlerin sonuna \"via @wallabagapp\" ekle</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">Eğer https://framabag.org üzerinde bir hesabınız varsa bunu seçin</string>
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag ayarları</string>
+    <string name="connectionWizard_provider_framabag_prev">Geri</string>
+    <string name="connectionWizard_provider_framabag_next">Bağlan</string>
+    <string name="remove_tag">Etiketi kaldır</string>
 </resources>
