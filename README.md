@@ -73,7 +73,7 @@ wallabag app is a free and open source project developed by volunteers. Any cont
 
 ## Legacy Versions of the App
 
-We have two legacy branches, where old versions of this app can be found. Those old version of the app are not distributed via F-Droid or Google Play. For some releases you can find a compiled version of the app, e.g. for [version 2.2.0](https://github.com/wallabag/android-app/releases/tag/2.2.0). Of course you can build a legacy version from the source. 
+We have two legacy branches, where old versions of this app can be found. Those old versions of the app are not distributed via F-Droid or Google Play. For some releases you can find a compiled version of the app, e.g. for [version 2.2.0](https://github.com/wallabag/android-app/releases/tag/2.2.0). Of course you can build a legacy version from the source. 
 
 ### Branch legacy
 
@@ -83,7 +83,7 @@ The [legacy](https://github.com/wallabag/android-app/tree/legacy) branch was sta
 
 The branch [legacy-older-android-5.0](https://github.com/wallabag/android-app/tree/legacy-older-android-5.0) has been started on 2019-03-06. It keeps a version of the application, which still supports Android versions below 5.0 Lollipop.
 
-The dependency (okhttp) we use in this app forced us to upgrade the API level of the app to Android 5.0 as a minimum. That is what can be found in the master branch. According to the [okhttp Readme](https://github.com/square/okhttp#requirements), the okhttp team "will backport critical fixes to the 3.12.x branch through December 31, 2020."
+The dependency (okhttp 3.13.x++) we use in this app forced us to upgrade the API level of the app to Android 5.0 as a minimum. That is what can be found in the master branch. According to the [okhttp Readme](https://github.com/square/okhttp#requirements), the okhttp team "will backport critical fixes to the 3.12.x branch through December 31, 2020."
 
 ## License
 
