@@ -135,7 +135,7 @@
     <string name="nav_main_articles">Makaleler</string>
     <string name="nav_main_tags">Etiketler</string>
     <string name="nav_main_tagged_articles">Etiketli makaleler</string>
-    <string name="nav_add">Yeni kayıt ekle</string>
+    <string name="nav_add">Yeni makale ekle</string>
     <string name="nav_other_settings">Ayarlar</string>
     <string name="nav_other_about">Hakkında</string>
     <string name="title_main_tag">Etiket: %s</string>
