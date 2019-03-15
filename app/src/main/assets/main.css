@@ -20,7 +20,7 @@ body {
 
 .high-contrast {
   background: #FFF;
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 
 .serif-font {
