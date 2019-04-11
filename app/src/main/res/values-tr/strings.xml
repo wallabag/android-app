@@ -92,7 +92,7 @@
     <string name="themeName_light_contrast">Açık Renk (yüksek kontrast)</string>
     <string name="themeName_dark">Koyu Renk</string>
     <string name="themeName_dark_contrast">Koyu Renk (yüksek kontrast)</string>
-    <string name="themeName_solarized">Solarized</string>
+    <string name="themeName_solarized">Solarized Tema</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
     <string name="aboutText">&lt;b&gt;Android için wallabag&lt;/b&gt;&lt;br/&gt; wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
@@ -145,10 +145,10 @@
     <string name="pref_name_connection_url">wallabag URL\'i</string>
     <string name="pref_desc_connection_url">
         Örnekler:\n
-        <i>https://wallabag.example.com</i>\n
-        <i>https://example.com/wallabag</i>\n
-        <i>https://app.wallabag.it</i>\n
-        <i>https://framabag.org</i>
+        https://wallabag.example.com\n
+        https://example.com/wallabag\n
+        https://app.wallabag.it\n
+        https://framabag.org
     </string>
     <string name="pref_name_connection_username">Kullanıcı adı</string>
     <string name="pref_name_connection_password">Şifre</string>

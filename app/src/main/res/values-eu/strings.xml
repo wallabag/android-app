@@ -151,10 +151,10 @@
     <string name="pref_categoryName_connection">Konexioa</string>
     <string name="pref_name_connection_url">wallabagen URLa</string>
     <string name="pref_desc_connection_url">Adibideak:\n
-        <i>https://wallabag.example.com</i>\n
-        <i>https://example.com/wallabag</i>\n
-        <i>https://app.wallabag.it</i>\n
-        <i>https://framabag.org</i>
+        https://wallabag.example.com\n
+        https://example.com/wallabag\n
+        https://app.wallabag.it\n
+        https://framabag.org
     </string>
     <string name="pref_name_connection_username">Erabiltzaile-izena</string>
     <string name="pref_name_connection_password">Pasahitza</string>

@@ -82,10 +82,10 @@
     <string name="pref_name_connection_url">wallabag-URL</string>
     <string name="pref_desc_connection_url">
         Beispiele:\n
-        <i>https://wallabag.example.com</i>\n
-        <i>https://example.com/wallabag</i>\n
-        <i>https://app.wallabag.it</i>\n
-        <i>https://framabag.org</i>
+        https://wallabag.example.com\n
+        https://example.com/wallabag\n
+        https://app.wallabag.it\n
+        https://framabag.org
     </string>
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>

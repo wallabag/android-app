@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarizzato</string>
     <string name="menu_readArticle_increaseFontSize">Aumenta dimensione del font</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuisci dimensione del font</string>
-    <string name="aboutText">&lt;b>App wallabag per Android&lt;/b>&lt;br />wallabag é un\'applicazione self hostable che ti permette di non perdere più nessun contenuto. Clicca, salva e leggi quando puoi. Estrae il contenuto in modo che tu possa leggere quando puoi.</string>
+    <string name="aboutText">&lt;b&gt;App wallabag per Android&lt;/b&gt;&lt;br/&gt;wallabag é un\'applicazione self hostable che ti permette di non perdere più nessun contenuto. Clicca, salva e leggi quando puoi. Estrae il contenuto in modo che tu possa leggere quando puoi.</string>
     <string name="readSpeed">Velocità di lettura</string>
     <string name="voiceHeight">Tonalità della voce</string>
     <string name="readVolume">Volume di lettura</string>
@@ -148,10 +148,10 @@
     <string name="pref_name_connection_url">URL di wallabag</string>
     <string name="pref_desc_connection_url">
         Esempi:\n
-        <i>https://wallabag.example.com</i>\n
-        <i>https://example.com/wallabag</i>\n
-        <i>https://app.wallabag.it</i>\n
-        <i>https://framabag.org</i>
+        https://wallabag.example.com\n
+        https://example.com/wallabag\n
+        https://app.wallabag.it\n
+        https://framabag.org
     </string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
