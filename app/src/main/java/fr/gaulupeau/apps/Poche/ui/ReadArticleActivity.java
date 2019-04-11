@@ -638,7 +638,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String getHtmlPage() {
         String cssName;
         boolean highContrast = false;
+        boolean weightedFont = false;
         switch(Themes.getCurrentTheme()) {
+            case E_INK:
+                weightedFont = true;
             case LIGHT_CONTRAST:
                 highContrast = true;
             case LIGHT:
@@ -660,6 +663,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         List<String> additionalClasses = new ArrayList<>(1);
         if(highContrast) additionalClasses.add("high-contrast");
+        if(weightedFont) additionalClasses.add("weighted-font");
         if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
         if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
 

@@ -22,6 +22,10 @@ body {
   background: #FFF;
 }
 
+.weighted-font {
+  font-weight: 600;
+}
+
 .serif-font {
   font-family: serif;
 }
