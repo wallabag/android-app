@@ -100,7 +100,7 @@
     <string name="themeName_solarized">过曝光</string>
     <string name="menu_readArticle_increaseFontSize">增大字体</string>
     <string name="menu_readArticle_decreaseFontSize">缩小字体</string>
-    <string name="aboutText"><b>适用于 Android 的 wallabag 应用</b><br/>wallabag 是一个自托管应用，使您不再错过任何内容。点击，保存并在闲暇时阅读提取的内容。</string>
+    <string name="aboutText">&lt;b&gt;适用于 Android 的 wallabag 应用&lt;/b&gt;&lt;br/&gt;wallabag 是一个自托管应用，使您不再错过任何内容。点击，保存并在闲暇时阅读提取的内容。</string>
     <string name="readSpeed">朗读速度</string>
     <string name="voiceHeight">语音音高</string>
     <string name="readVolume">朗读音量</string>
@@ -166,11 +166,12 @@
 
     <string name="pref_categoryName_connection">连接</string>
     <string name="pref_name_connection_url">wallabag URL</string>
-    <string name="pref_desc_connection_url"> 示例:
-\n <i>https://wallabag.example.com</i>
-\n <i>https://example.com/wallabag</i>
-\n <i>https://app.wallabag.it</i>
-\n <i>https://framabag.org</i> </string>
+    <string name="pref_desc_connection_url"> 示例:\n
+        https://wallabag.example.com\n
+        https://example.com/wallabag\n
+        https://app.wallabag.it\n
+        https://framabag.org
+    </string>
     <string name="pref_name_connection_username">用户名</string>
     <string name="pref_name_connection_password">密码</string>
     <string name="pref_name_connection_api_clientID">客户端 ID</string>
