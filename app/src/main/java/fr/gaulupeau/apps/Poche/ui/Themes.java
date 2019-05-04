@@ -62,6 +62,13 @@ public class Themes {
                 R.style.ProxyTheme
         ),
 
+        E_INK(
+                R.string.themeName_eink,
+                R.style.LightThemeContrast,
+                R.style.LightThemeContrast_NoActionBar,
+                R.style.ProxyTheme
+        ),
+
         DARK(
                 R.string.themeName_dark,
                 R.style.DarkTheme,

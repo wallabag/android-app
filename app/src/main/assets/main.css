@@ -20,6 +20,9 @@ body {
 
 .high-contrast {
   background: #FFF;
+}
+
+.weighted-font {
   font-weight: 600;
 }
 

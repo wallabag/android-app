@@ -96,6 +96,7 @@
     <string name="noNextArticle">No more articles in current list</string>
     <string name="themeName_light">Light</string>
     <string name="themeName_light_contrast">Light (high contrast)</string>
+    <string name="themeName_eink">For e-ink displays</string>
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
     <string name="themeName_solarized">Solarized</string>

@@ -139,7 +139,7 @@ public class Settings {
                 }
 
                 Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
-                        ? Themes.Theme.LIGHT_CONTRAST : Themes.Theme.LIGHT;
+                        ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
                 prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
             }
 
