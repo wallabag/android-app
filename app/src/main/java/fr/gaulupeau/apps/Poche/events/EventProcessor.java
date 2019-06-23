@@ -33,6 +33,10 @@ import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
+import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_DOWNLOADING_ARTICLES;
+import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_ERRORS;
+import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_SYNC;
+
 // TODO: fix getters sync (AFAIK, not so important yet)
 public class EventProcessor {
 
@@ -170,7 +174,7 @@ public class EventProcessor {
 
         detailedMessage = prependAppName(detailedMessage);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
                 .setSmallIcon(R.drawable.ic_action_refresh)
                 .setContentTitle(context.getString(R.string.notification_updatingArticles))
                 .setContentText(detailedMessage)
@@ -210,7 +214,7 @@ public class EventProcessor {
 
         Context context = getContext();
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
                 .setSmallIcon(R.drawable.ic_action_refresh)
                 .setContentTitle(context.getString(R.string.notification_sweepingDeletedArticles))
                 .setOngoing(true);
@@ -254,7 +258,7 @@ public class EventProcessor {
         if(fetchImagesNotificationBuilder == null) {
             Context context = getContext();
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
                     .setSmallIcon(R.drawable.ic_action_refresh)
                     .setContentTitle(context.getString(R.string.notification_downloadingImages))
                     .setOngoing(true);
@@ -308,7 +312,7 @@ public class EventProcessor {
             if(notificationBuilder == null) {
                 Context context = getContext();
 
-                notificationBuilder = new NotificationCompat.Builder(context)
+                notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
                         .setSmallIcon(R.drawable.ic_action_refresh)
                         .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
                         .setOngoing(true);
@@ -349,7 +353,7 @@ public class EventProcessor {
 
         String formatString = event.getRequest().getDownloadFormat().toString();
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_DOWNLOADING_ARTICLES)
                 .setContentTitle(context.getString(R.string.downloadAsFilePathStart))
                 .setContentText(context.getString(R.string.downloadAsFileProgress, formatString))
                 .setSmallIcon(R.drawable.ic_file_download_24dp)
@@ -386,7 +390,7 @@ public class EventProcessor {
 
             PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_DOWNLOADING_ARTICLES)
                     .setContentTitle(context.getString(R.string.downloadAsFileArticleDownloaded))
                     .setContentText(context.getString(R.string.downloadAsFileTouchToOpen))
                     .setSmallIcon(R.drawable.ic_file_download_24dp)
@@ -483,7 +487,7 @@ public class EventProcessor {
                         detailedText = prependAppName(detailedText);
 
                         NotificationCompat.Builder notificationBuilder =
-                                new NotificationCompat.Builder(context)
+                                new NotificationCompat.Builder(context, CHANNEL_ID_ERRORS)
                                         .setSmallIcon(R.drawable.ic_warning_24dp)
                                         .setContentTitle(context.getString(R.string.notification_error))
                                         .setContentText(detailedText)
@@ -510,7 +514,7 @@ public class EventProcessor {
                     detailedText = prependAppName(detailedText);
 
                     NotificationCompat.Builder notificationBuilder =
-                            new NotificationCompat.Builder(context)
+                            new NotificationCompat.Builder(context, CHANNEL_ID_ERRORS)
                                     .setSmallIcon(R.drawable.ic_warning_24dp)
                                     .setContentTitle(context.getString(serverError
                                             ? R.string.notification_serverError
