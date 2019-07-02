@@ -1,8 +1,6 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -43,6 +41,7 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 
 /**
  * Text To Speech (TTS) Service.
@@ -141,13 +140,10 @@ public class TtsService
         }
     };
     private PendingIntent notificationPendingIntent;
-    private NotificationChannel notificationChannel;
 
     private static final String LOG_TAG="TtsService";
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
-    private static final String NOTIFICATION_CHANNEL_ID = "fr.gaulupeau.apps.Poche.tts";
-    private static final String NOTIFICATION_CHANNEL_NAME = "Wallabag TTS";
-
+    private static final int NOTIFICATION_ID = 1;
 
     private static volatile TtsService instance;
     public static TtsService getInstance() {
@@ -785,34 +781,21 @@ public class TtsService
                     break;
                 case WANT_TO_PLAY:
                 case PLAYING:
-                    createNotificationChannel();
-                    startForeground(1, generateNotification());
+                    startForeground(NOTIFICATION_ID, generateNotification());
                     break;
                 case PAUSED:
                     stopForeground(false);
-                    notificationManager.notify(1, generateNotification());
+                    notificationManager.notify(NOTIFICATION_ID, generateNotification());
                     break;
                 case STOPPED:
                 case ERROR:
                     stopForeground(true);
-                    notificationManager.cancel(1);
+                    notificationManager.cancel(NOTIFICATION_ID);
                     break;
             }
         } else {
             stopForeground(true);
-            notificationManager.cancel(1);
-        }
-    }
-
-    private void createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (notificationChannel == null) {
-                notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
-                notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                assert manager != null;
-                manager.createNotificationChannel(notificationChannel);
-            }
+            notificationManager.cancel(NOTIFICATION_ID);
         }
     }
 
@@ -846,8 +829,7 @@ public class TtsService
         MediaControllerCompat controller = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = controller.getMetadata();
         MediaDescriptionCompat description = mediaMetadata.getDescription();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID);
-        builder
+        return new NotificationCompat.Builder(context, NotificationsHelper.CHANNEL_ID_TTS)
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setSubText(description.getDescription())
@@ -855,7 +837,6 @@ public class TtsService
                 .setContentIntent(controller.getSessionActivity()) // always null...
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setDeleteIntent(generateActionIntent(context, KeyEvent.KEYCODE_MEDIA_STOP));
-        return builder;
     }
 
     private NotificationCompat.Action generateAction( int icon, String title, int mediaKeyEvent) {
