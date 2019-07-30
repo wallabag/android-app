@@ -373,19 +373,36 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
             }
 
+            boolean scroll = false;
+            boolean up = false;
+
             switch (code) {
                 case KeyEvent.KEYCODE_PAGE_UP:
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                    scroll(code == KeyEvent.KEYCODE_PAGE_UP, screenScrollingPercent, smoothScrolling, true);
-                    return true;
+                    scroll = true;
+                    up = code == KeyEvent.KEYCODE_PAGE_UP;
+                    break;
+
+                case KeyEvent.KEYCODE_DPAD_UP:
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    scroll = true;
+                    up = code == KeyEvent.KEYCODE_DPAD_UP || code == KeyEvent.KEYCODE_DPAD_LEFT;
+                    break;
 
                 case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     if (volumeButtonsScrolling) {
-                        scroll(code == KeyEvent.KEYCODE_VOLUME_UP, screenScrollingPercent, smoothScrolling, true);
-                        return true;
+                        scroll = true;
+                        up = code == KeyEvent.KEYCODE_VOLUME_UP;
                     }
                     break;
+            }
+
+            if (scroll) {
+                scroll(up, screenScrollingPercent, smoothScrolling, true);
+                return true;
             }
         }
 
