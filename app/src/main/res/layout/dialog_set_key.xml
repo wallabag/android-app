@@ -5,21 +5,20 @@
               android:padding="16dp"
               android:orientation="vertical">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="10sp"
-        android:layout_gravity="center"
-        android:gravity="center_horizontal"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="start"
+        android:textAppearance="?textAppearanceSubtitle1"
         android:text="@string/d_disableTouch_currentCode" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_keyCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="start"
+        android:textAppearance="?textAppearanceSubtitle1"
         android:text="" />
 
 </LinearLayout>

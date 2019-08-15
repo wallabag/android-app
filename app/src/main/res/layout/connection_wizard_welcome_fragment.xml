@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
@@ -20,78 +20,73 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal"
+                android:gravity="start"
                 android:weightSum="1">
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.3"
                     android:id="@+id/imageView"
-                    android:src="?attr/welcome_logo"
+                    android:src="@drawable/ic_wallabag_logo"
                     android:adjustViewBounds="true"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 
             <TextView
-                android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?android:attr/textColorPrimary"
-                android:text="@string/connectionWizard_welcome_titleMessage"/>
+                android:layout_margin="20dp"
+                android:gravity="start"
+                android:text="@string/connectionWizard_welcome_titleMessage"
+                android:textAppearance="?textAppearanceHeadline3" />
 
             <TextView
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?android:attr/textColorPrimary"
+                android:gravity="start"
+                android:textAppearance="?textAppearanceSubtitle1"
                 android:text="@string/connectionWizard_welcome_text"/>
 
             <TextView
                 android:layout_margin="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary"
+                android:gravity="start"
+                android:textAppearance="?textAppearanceSubtitle1"
                 android:text="@string/connectionWizard_welcome_rerunNotice"/>
 
         </LinearLayout>
-    </ScrollView>
-
-    <View android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerHorizontal" />
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/prev_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_welcome_prev" />
-
-        <View android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="?android:attr/dividerVertical" />
-
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/next_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_welcome_next" />
-
     </LinearLayout>
 
-</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

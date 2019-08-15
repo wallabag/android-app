@@ -2,7 +2,8 @@
         android:width="24dp"
         android:height="24dp"
         android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
+        android:viewportHeight="24.0"
+    android:tint="?colorOnSurface">
     <!-- This icon is a modification of the original
          https://commons.wikimedia.org/wiki/File:Running_icon_-_Noun_Project_17825.svg
          licensed under the Creative Commons Attribution 3.0 Unported license.

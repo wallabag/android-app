@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.collection.SparseArrayCompat;
+
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
 import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
@@ -135,7 +137,7 @@ public class Updater {
             tags = tagDao.queryBuilder().list();
         }
 
-        Map<Integer, Tag> tagIdMap = new HashMap<>(tags.size());
+        SparseArrayCompat<Tag> tagIdMap = new SparseArrayCompat(tags.size());
         Map<String, Tag> tagLabelMap = new HashMap<>(tags.size());
         for(Tag tag: tags) {
             if(tag.getTagId() != null) {

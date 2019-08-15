@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:padding="10dp"
-              android:background="?attr/selectableItemBackground">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical">
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tag_label"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textAppearance="?textAppearanceSubtitle1" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/tag_remove_button"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:contentDescription="@string/remove_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_delete_black_24dp"/>
+        android:gravity="center"
+        app:icon="@drawable/ic_delete_24dp"/>
 
 </LinearLayout>

@@ -5,35 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="fr.gaulupeau.apps.Poche.ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="?attr/appBarOverlayTheme">
-
-        <FrameLayout
+        app:elevation="0dp"
+        android:theme="@style/ThemeOverlay.MyTheme.AppBarLayout">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="?attr/popupOverlayTheme"/>
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:visibility="gone"
-                android:layout_gravity="bottom"
-                style="?android:attr/progressBarStyleHorizontal"/>
-
-        </FrameLayout>
-
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextColor="?colorOnBackground" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="fr.gaulupeau.apps.InThePoche"
-          android:installLocation="auto">
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="22"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- needed by TTS service for Android P or above -->
+    xmlns:tools="http://schemas.android.com/tools"
+    package="fr.gaulupeau.apps.InThePoche"
+    android:installLocation="auto">
 
     <application
         android:name="fr.gaulupeau.apps.Poche.App"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:theme="@style/LightTheme"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:theme="@style/MyTheme.DayNight">
         <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.MainActivity"
-            android:theme="@style/LightTheme.NoActionBar">
+            android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="fr.gaulupeau.apps.Poche.ui.MainActivity"
+            android:theme="@style/MyTheme.DayNight">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.gaulupeau.apps.Poche.ui.MainActivity" />
+        </activity>
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.MainActivity"
+            android:theme="@style/MyTheme.DayNight">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.SEARCH"/>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.SEARCH" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
-            android:hardwareAccelerated="true" />
-        <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"/>
+            android:hardwareAccelerated="true"
+            android:theme="@style/MyTheme.DayNight"/>
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddUrlProxyActivity"
-            android:theme="@style/ProxyTheme">
+            android:theme="@style/MyTheme.DayNight">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.SEND" />
 
@@ -52,7 +56,7 @@
             android:enabled="false"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:theme="@style/ProxyTheme">
+            android:theme="@style/MyTheme.DayNight">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -76,37 +80,40 @@
                 <data android:mimeType="application/vnd.wap.xhtml+xml" />
             </intent-filter>
         </activity>
-
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity$SyncFragment">
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity">
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity"
+            android:theme="@style/MyTheme.DayNight">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="wallabag"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="wallabag" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
         <receiver android:name="androidx.media.session.MediaButtonReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name="fr.gaulupeau.apps.Poche.tts.TtsService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />
-            </intent-filter>
-        </service>
-
         <receiver android:name="fr.gaulupeau.apps.Poche.ui.IconUnreadWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -120,8 +127,9 @@
             android:name="fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver"
             android:enabled="false">
             <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
-                        tools:ignore="BatteryLife" />
+                <action
+                    android:name="android.net.conn.CONNECTIVITY_CHANGE"
+                    tools:ignore="BatteryLife" />
             </intent-filter>
         </receiver>
         <receiver
@@ -136,27 +144,30 @@
             android:enabled="false" />
 
         <service
+            android:name="fr.gaulupeau.apps.Poche.tts.TtsService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </service>
+        <service
             android:name="fr.gaulupeau.apps.Poche.service.WallabagJobService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true" />
-
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name="fr.gaulupeau.apps.Poche.service.MainService"
             android:exported="false" />
-
         <service
             android:name="fr.gaulupeau.apps.Poche.service.SecondaryService"
             android:exported="false" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
-        </provider>
     </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="22" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

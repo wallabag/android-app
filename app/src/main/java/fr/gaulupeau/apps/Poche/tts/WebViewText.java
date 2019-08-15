@@ -4,7 +4,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
-import android.widget.ScrollView;
+import androidx.core.widget.NestedScrollView;
 
 import java.util.Vector;
 
@@ -17,7 +17,7 @@ public class WebViewText implements TextInterface {
 
     ReadArticleActivity readArticleActivity;
     private final WebView webView;
-    private final ScrollView scrollView;
+    private final NestedScrollView scrollView;
     private final Handler handler;
 
     private final Vector<TextItem> textList = new Vector<>();
@@ -81,7 +81,7 @@ public class WebViewText implements TextInterface {
     private static final String LOG_TAG = "WebViewText";
 
 
-    public WebViewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
+    public WebViewText(WebView webView, NestedScrollView scrollView, ReadArticleActivity readArticleActivity) {
         this.webView = webView;
         this.scrollView = scrollView;
         this.readArticleActivity = readArticleActivity;

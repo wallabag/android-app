@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -56,7 +58,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         OnItemButtonClickListener buttonClickListener;
 
         TextView label;
-        ImageButton button;
+        MaterialButton button;
 
         public ViewHolder(View itemView, OnItemClickListener listener,
                           OnItemButtonClickListener buttonClickListener) {
@@ -69,7 +71,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
 
             itemView.setOnClickListener(this);
 
-            button = (ImageButton)itemView.findViewById(R.id.tag_remove_button);
+            button = (MaterialButton)itemView.findViewById(R.id.tag_remove_button);
             if(button != null) {
                 button.setOnClickListener(this);
             }

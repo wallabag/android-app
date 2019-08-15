@@ -1,5 +1,9 @@
 package fr.gaulupeau.apps.Poche.events;
 
+import android.util.SparseArray;
+
+import androidx.collection.SparseArrayCompat;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +26,7 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
 
     }
 
-    private Map<Integer, ArticleEntry> changedArticlesMap = new HashMap<>();
+    private SparseArrayCompat<ArticleEntry> changedArticlesMap = new SparseArrayCompat<>();
 
     public ArticlesChangedEvent() {}
 
@@ -30,7 +34,7 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
         addArticleChange(article, changeType);
     }
 
-    public Map<Integer, ArticleEntry> getChangedArticles() {
+    public SparseArrayCompat<ArticleEntry> getChangedArticles() {
         return changedArticlesMap;
     }
 

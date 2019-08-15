@@ -6,23 +6,23 @@
     <item
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
-        android:icon="?attr/icon_read"
+        android:icon="@drawable/ic_done_24dp"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menuArticleMarkAsUnread"
         android:title="@string/btnMarkUnread"
-        android:icon="?attr/icon_read_undo"
+        android:icon="@drawable/ic_mark_unread_24dp"
         app:showAsAction="always"
         android:visible="false"/>
     <item
         android:id="@+id/menuArticleFavorite"
         android:title="@string/add_to_favorites"
-        android:icon="?attr/icon_favorite"
+        android:icon="@drawable/ic_favorite_outline_24dp"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/menuArticleUnfavorite"
         android:title="@string/remove_from_favorites"
-        android:icon="?icon_favorite_undo"
+        android:icon="@drawable/ic_favorite_24dp"
         app:showAsAction="ifRoom"
         android:visible="false"/>
     <item
@@ -44,7 +44,8 @@
         android:title="@string/menuOpenOriginal"/>
     <item
         android:id="@+id/menuCopyOriginalURL"
-        android:title="@string/menuCopyOriginalURL"/>
+        android:title="@string/menuCopyOriginalURL"
+        />
     <item
         android:id="@+id/menuDownloadAsFile"
         android:title="@string/menuDownloadAsFile"/>

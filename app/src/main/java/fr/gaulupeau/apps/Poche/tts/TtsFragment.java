@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -30,15 +31,17 @@ import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -62,7 +65,7 @@ public class TtsFragment
     private WebViewText webViewText;
     private Settings settings;
     private View viewTTSOption;
-    private ImageButton btnTTSPlayStop;
+    private MaterialButton btnTTSPlayStop;
     private SeekBar seekBarTTSSpeed;
     private SeekBar seekBarTTSPitch;
     private SeekBar seekBarTTSVolume;
@@ -71,8 +74,8 @@ public class TtsFragment
     private TextView textViewTTSPitch;
     private TextView textViewTTSVolume;
     private TextView textViewTTSSleep;
-    private Spinner spinnerLanguage;
-    private Spinner spinnerVoice;
+    private AutoCompleteTextView spinnerLanguage;
+    private AutoCompleteTextView spinnerVoice;
     private ArrayAdapter<String> spinnerLanguageAdapter;
     private ArrayAdapter<String> spinnerVoiceAdapter;
 
@@ -178,7 +181,7 @@ public class TtsFragment
         if(!this.settings.isTtsOptionsVisible()) {
             this.viewTTSOption.setVisibility(View.GONE);
         }
-        this.btnTTSPlayStop = ((ImageButton) view.findViewById(R.id.btnTTSPlayPause));
+        this.btnTTSPlayStop = ((MaterialButton) view.findViewById(R.id.btnTTSPlayPause));
         this.btnTTSPlayStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -188,7 +191,7 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSFastRewind = (ImageButton) view.findViewById(R.id.btnTTSFastRewind);
+        MaterialButton btnTTSFastRewind = (MaterialButton) view.findViewById(R.id.btnTTSFastRewind);
         btnTTSFastRewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,7 +201,7 @@ public class TtsFragment
             }
         });
 
-        ImageButton btnTTSFastForward = (ImageButton) view.findViewById(R.id.btnTTSFastForward);
+        MaterialButton btnTTSFastForward = (MaterialButton) view.findViewById(R.id.btnTTSFastForward);
         btnTTSFastForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,11 +212,11 @@ public class TtsFragment
 
         });
 
-        ImageButton btnTTSOptions = (ImageButton) view.findViewById(R.id.btnTTSOptions);
+        MaterialButton btnTTSOptions = (MaterialButton) view.findViewById(R.id.btnTTSOptions);
         btnTTSOptions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onTTSOptionsClicked((ImageButton) v);
+                onTTSOptionsClicked((MaterialButton) v);
             }
         });
 
@@ -353,13 +356,13 @@ public class TtsFragment
             }
         });
 
-        spinnerLanguage = (Spinner) view.findViewById(R.id.spinnerLanguage);
+        spinnerLanguage = (AutoCompleteTextView) view.findViewById(R.id.spinnerLanguage);
         spinnerLanguageAdapter = new ArrayAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item, new ArrayList<String>());
         spinnerLanguageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerLanguage.setAdapter(spinnerLanguageAdapter);
 
-        spinnerVoice = (Spinner) view.findViewById(R.id.spinnerVoice);
+        spinnerVoice = (AutoCompleteTextView) view.findViewById(R.id.spinnerVoice);
         spinnerVoiceAdapter = new ArrayAdapter(this.getContext(),
                 android.R.layout.simple_spinner_item, new ArrayList<String>());
         spinnerVoiceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -388,13 +391,13 @@ public class TtsFragment
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
                 switch (state.getState()) {
                     case PlaybackStateCompat.STATE_BUFFERING:
-                        btnTTSPlayStop.setImageResource(R.drawable.ic_more_horiz_24dp);
+                        btnTTSPlayStop.setIconResource(R.drawable.ic_more_horiz_24dp);
                         break;
                     case PlaybackStateCompat.STATE_PLAYING:
-                        btnTTSPlayStop.setImageResource(R.drawable.ic_stop_24dp);
+                        btnTTSPlayStop.setIconResource(R.drawable.ic_stop_24dp);
                         break;
                     case PlaybackStateCompat.STATE_PAUSED:
-                        btnTTSPlayStop.setImageResource(R.drawable.ic_play_arrow_24dp);
+                        btnTTSPlayStop.setIconResource(R.drawable.ic_play_arrow_24dp);
                         break;
                     case PlaybackStateCompat.STATE_STOPPED:
                         //Log.d(LOG_TAG, "onPlaybackStateChanged: STATE_STOPPED");
@@ -507,7 +510,7 @@ public class TtsFragment
     }
 
 
-    private void onTTSOptionsClicked(ImageButton btn) {
+    private void onTTSOptionsClicked(MaterialButton btn) {
         if (viewTTSOption.getVisibility() == View.VISIBLE) {
             viewTTSOption.setVisibility(View.GONE);
         } else {
@@ -538,7 +541,7 @@ public class TtsFragment
         this.selectLanguage(language);
     }
 
-    public void onDocumentLoadFinished(WebView webView, ScrollView scrollView) {
+    public void onDocumentLoadFinished(WebView webView, NestedScrollView scrollView) {
         //Log.d(LOG_TAG, "onDocumentLoadFinished");
         if (webViewText == null) {
             if (readArticleActivity == null) {
@@ -788,14 +791,13 @@ public class TtsFragment
         //Log.d(LOG_TAG, "onLanguageSelectionChanged");
         spinnerVoiceAdapter.setNotifyOnChange(false);
         spinnerVoiceAdapter.clear();
-        int languagePosition = spinnerLanguage.getSelectedItemPosition();
-        String language = ttsLanguages.get(languagePosition).name;
+        String language = spinnerLanguage.getText().toString();
         String languageVoicePreference = settings.getTtsLanguageVoice(language);
         int voicePositionToSelect = 0;
         for (VoiceInfo voiceInfo : ttsVoiceByLanguage.get(language)) {
             spinnerVoiceAdapter.add(voiceInfo.displayName);
             if (voiceInfo.displayName.equals(languageVoicePreference)) {
-                voicePositionToSelect = spinnerVoiceAdapter.getCount() - 1;
+                    voicePositionToSelect = spinnerVoiceAdapter.getCount() - 1;
             }
         }
         spinnerVoice.setSelection(voicePositionToSelect);
@@ -806,10 +808,19 @@ public class TtsFragment
 
     private void onVoiceSelectionChanged() {
         //Log.d(LOG_TAG, "onVoiceSelectionChanged");
-        int voicePosition = spinnerVoice.getSelectedItemPosition();
-        int languagePosition = spinnerLanguage.getSelectedItemPosition();
-        if ((voicePosition >=0) && (languagePosition >=0)) {
-            String language = ttsLanguages.get(languagePosition).name;
+        String languageVoicePreference = spinnerVoice.getText().toString();
+        String language = spinnerLanguage.getText().toString();
+        int voicePosition = 0;
+
+        for (VoiceInfo voiceInfo : ttsVoiceByLanguage.get(language)) {
+            spinnerVoiceAdapter.add(voiceInfo.displayName);
+            if (voiceInfo.displayName.equals(languageVoicePreference)) {
+                break;
+            } else {
+                voicePosition += 1;
+            }
+        }
+        if ((voicePosition >=0) && (!language.isEmpty())) {
             VoiceInfo voiceInfo = ttsVoiceByLanguage.get(language).get(voicePosition);
             if (voiceInfo != null) {
                 if (ttsService != null) {

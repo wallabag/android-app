@@ -3,15 +3,13 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:orientation="vertical"
-              android:padding="10dp"
-              android:background="?attr/selectableItemBackground">
+              android:padding="10dp">
 
     <TextView
         android:id="@+id/tag_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textAppearance="?textAppearanceSubtitle1" />
 
 </LinearLayout>

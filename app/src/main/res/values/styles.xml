@@ -1,127 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="Theme">
-        <attr name="appBarOverlayTheme" format="reference"/>
-        <attr name="popupOverlayTheme" format="reference"/>
-        <attr name="icon_favorite" format="reference"/>
-        <attr name="icon_favorite_list" format="reference"/> <!-- only used in list_item.xml -->
-        <attr name="icon_favorite_undo" format="reference"/>
-        <attr name="icon_read" format="reference"/>
-        <attr name="icon_read_list" format="reference"/> <!-- only used in list_item.xml -->
-        <attr name="icon_read_undo" format="reference"/>
-        <attr name="icon_search" format="reference"/>
-        <attr name="icon_sort" format="reference"/>
-        <attr name="welcome_logo" format="reference"/>
-    </declare-styleable>
+<!--
+~ Copyright (C) 2019 The Android Open Source Project
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~      http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
 
-    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="appBarOverlayTheme">@style/LightTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/LightTheme.PopupOverlay</item>
-        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
-        <item name="icon_favorite_list">@drawable/ic_star_black_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
-        <item name="icon_read">@drawable/ic_done_white_24dp</item>
-        <item name="icon_read_list">@drawable/ic_done_black_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
-        <item name="icon_search">@drawable/ic_search_white_24dp</item>
-        <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
-        <item name="welcome_logo">@drawable/welcome</item>
-    </style>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="LightTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <!--Components-->
 
-    <style name="LightThemeContrast" parent="LightTheme">
-        <item name="android:textColor">#000000</item>
-    </style>
-
-    <style name="LightThemeContrast.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="DarkTheme" parent="Theme.AppCompat">
-        <item name="appBarOverlayTheme">@style/DarkTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/DarkTheme.PopupOverlay</item>
-        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
-        <item name="icon_favorite_list">@drawable/ic_star_white_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
-        <item name="icon_read">@drawable/ic_done_white_24dp</item>
-        <item name="icon_read_list">@drawable/ic_done_white_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
-        <item name="icon_search">@drawable/ic_search_white_24dp</item>
-        <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
-        <item name="welcome_logo">@drawable/welcome_white</item>
-    </style>
-
-    <style name="DarkTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
-    <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
-
-    <style name="DarkThemeContrast" parent="DarkTheme">
-        <item name="android:windowBackground">@color/darkContrastBlack</item>
-        <item name="android:itemBackground">@color/darkContrastBlack</item> <!-- Background Color of Three-dots Menu -->
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="colorPrimary">#000000</item>
-    </style>
-
-    <style name="DarkThemeContrast.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
-        <!-- Attention: adjustments here need to be applied also to SolarizedTheme in styles.xml v21 -->
-        <item name="android:colorBackground">@color/solarizedBase3</item>
-        <item name="android:colorForeground">@color/solarizedBase01</item>
-        <item name="android:textColor">@color/solarizedBase00</item>
-        <item name="android:textColorPrimary">@color/solarizedBase01</item>
-        <item name="android:textColorSecondary">@color/solarizedBase01</item>
-        <item name="android:windowBackground">@color/solarizedBase3</item>
-        <item name="colorPrimary">@color/solarizedBase2</item>
-        <item name="colorAccent">@color/solarizedYellow</item>
-        <!--<item name="android:background">@color/solarizedBase3</item>-->
-        <item name="appBarOverlayTheme">@style/SolarizedTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/SolarizedTheme.PopupOverlay</item>
-        <item name="icon_favorite">@drawable/ic_star_border_solarized_24dp</item>
-        <item name="icon_favorite_list">@drawable/ic_star_solarized_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_solarized_24dp</item>
-        <item name="icon_read">@drawable/ic_done_solarized_24dp</item>
-        <item name="icon_read_list">@drawable/ic_done_solarized_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_solarized_24dp</item>
-        <item name="icon_search">@drawable/ic_search_solarized_24dp</item>
-        <item name="icon_sort">@drawable/ic_sort_solarized_24dp</item>
-    </style>
-
-    <style name="SolarizedTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
-    <style name="SolarizedTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorBackground">@color/solarizedBase3</item>
-    </style>
-
-    <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
+    <!--Bottom Sheets-->
+    <style name="ThemeOverlay.MyTheme.BottomSheetDialog" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowAnimationStyle">@style/Animation.MyTheme.BottomSheet.Modal</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="bottomSheetStyle">@style/Widget.MyTheme.BottomSheet.Modal</item>
+        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:navigationBarDividerColor" tools:ignore="NewApi">@android:color/transparent</item>
+    </style>
+    <style name="Widget.MyTheme.BottomSheet.Modal" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearanceOverlay">?shapeAppearanceLargeComponent</item>
     </style>
 
-    <style name="ProxyThemeDark" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+    <!--Navigation Drawer-->
+    <style name="Widget.MyTheme.NavigationView" parent="Widget.MaterialComponents.NavigationView">
+        <item name="itemTextAppearance">?textAppearanceBody2</item>
+        <item name="itemShapeAppearanceOverlay">@style/Widget.MyTheme.NavigationViewItemShapeAppearanceOverlay</item>
     </style>
+    <style name="Widget.MyTheme.NavigationViewItemShapeAppearanceOverlay" parent="">
+        <item name="android:colorPrimary">?colorSecondary</item>
+    </style>
+
+    <!-- Floating Action Button -->
+    <style name="Widget.MyTheme.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MyTheme.FloatingActionButton</item>
+    </style>
+    <style name="ShapeAppearanceOverlay.MyTheme.FloatingActionButton" parent="">
+        <item name="cornerSize">@null</item>
+    </style>
+
+    <!-- Chip -->
+    <style name="Widget.MyTheme.Chip" parent="Widget.MaterialComponents.Chip.Action">
+        <item name="shapeAppearanceOverlay">@null</item>
+        <item name="chipCornerRadius">@null</item>
+        <item name="cornerSize">0dp</item>
+    </style>
+
+
+    <!-- Hacks against default settings -->
+    <style name="ThemeOverlay.MyTheme.AppBarLayout" parent="">
+        <!--Toolbar should always be within an AppBarLayout which provides the background. -->
+        <item name="background">@null</item>
+        <item name="colorPrimary">?colorSurface</item>
+        <item name="android:titleTextColor">?colorPrimary</item>
+        <item name="colorControlNormal">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="ThemeOverlay.MyTheme.NavigationView" parent="">
+        <item name="colorPrimary">?colorSecondary</item>
+    </style>
+
+    <style name="Widget.MyTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"/>
+
 </resources>

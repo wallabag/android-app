@@ -6,8 +6,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_gravity="start"
+        android:textAppearance="?textAppearanceSubtitle1"
         android:text="@string/d_urlAction_title" />
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5sp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?textAppearanceCaption"
         android:text="" />
 
 </LinearLayout>
