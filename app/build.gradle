@@ -27,6 +27,10 @@ android {
         lintConfig file("lint.xml")
     }
 
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
