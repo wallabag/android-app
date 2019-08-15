@@ -7,12 +7,12 @@
     android:orientation="vertical"
     tools:context="fr.gaulupeau.apps.Poche.ui.MainActivity">
 
-    <android.support.design.widget.TabLayout
+    <com.google.android.material.tabs.TabLayout
         android:id="@+id/articles_list_tab_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize" />
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/articles_list_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

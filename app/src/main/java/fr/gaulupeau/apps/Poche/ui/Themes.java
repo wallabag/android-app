@@ -1,8 +1,8 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
-import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
+import androidx.annotation.StringRes;
+import androidx.annotation.StyleRes;
 
 import java.util.Map;
 import java.util.WeakHashMap;
