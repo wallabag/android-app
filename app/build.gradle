@@ -67,5 +67,5 @@ dependencies {
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.mikepenz:aboutlibraries:6.0.2'
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:3c987b1'
-    implementation 'org.slf4j:slf4j-android:1.7.25'
+    implementation 'org.slf4j:slf4j-android:1.7.28'
 }
