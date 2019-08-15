@@ -2,8 +2,8 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 
