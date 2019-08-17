@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.Settings;
 
 public abstract class RecyclerViewListFragment<T> extends Fragment
         implements Sortable, Searchable {
@@ -59,7 +60,16 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
                 searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
             }
         }
-        if(sortOrder == null) sortOrder = Sortable.SortOrder.DESC;
+
+        if(sortOrder == null) {
+            // Try getting sortOrder from settings
+            if(this.getContext() != null) {
+                Settings settings = new Settings(this.getContext());
+                sortOrder = settings.getListSortOrder();
+            } else {
+                sortOrder = Sortable.SortOrder.DESC;
+            }
+        }
 
         itemList = new ArrayList<>();
 
