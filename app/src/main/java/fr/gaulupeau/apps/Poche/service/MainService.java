@@ -260,7 +260,7 @@ public class MainService extends IntentServiceBase {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + action);
                 }
-            } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
+            } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException | IllegalArgumentException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
                 if(!r.isSuccess()) itemResult = r;
             } catch(Exception e) {
