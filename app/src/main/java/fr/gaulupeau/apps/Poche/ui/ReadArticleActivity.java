@@ -54,6 +54,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -88,6 +89,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ArticlesChangedEvent.ChangeType.CONTENT_CHANGED,
             ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
             ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED,
+            ArticlesChangedEvent.ChangeType.PUBLISHED_AT_CHANGED,
+            ArticlesChangedEvent.ChangeType.AUTHORS_CHANGED,
             ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
             ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
@@ -719,8 +722,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
         }
 
+        String dateAndAuthor = "";
+        Date publishedAt = article.getPublishedAt();
+        if (publishedAt != null) {
+            dateAndAuthor += android.text.format.DateFormat.getDateFormat(this).format(publishedAt)
+                    + " " + android.text.format.DateFormat.getTimeFormat(this).format(publishedAt);
+        }
+        if (!TextUtils.isEmpty(article.getAuthors())) {
+            dateAndAuthor += " " + article.getAuthors();
+        }
+
         return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
-                articleUrl, articleDomain, htmlContent);
+                articleUrl, articleDomain, dateAndAuthor, htmlContent);
     }
 
     private String getHtmlContent() {
