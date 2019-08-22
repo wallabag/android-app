@@ -2,7 +2,10 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import android.util.Log;
@@ -89,6 +92,13 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
         View view = inflater.inflate(R.layout.fragment_article_lists, container, false);
 
         adapter = new ArticleListsPagerAdapter(getChildFragmentManager(), tag);
+        getChildFragmentManager().registerFragmentLifecycleCallbacks(new FragmentManager.FragmentLifecycleCallbacks() {
+            @Override
+            public void onFragmentCreated(@NonNull FragmentManager fm, @NonNull Fragment f, @Nullable Bundle savedInstanceState) {
+                if (f instanceof ArticleListFragment)
+                    setParametersToFragment((ArticleListFragment) f);
+            }
+        }, false);
 
         viewPager = (ViewPager)view.findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);

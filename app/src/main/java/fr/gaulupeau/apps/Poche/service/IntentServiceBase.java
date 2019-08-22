@@ -75,6 +75,9 @@ public abstract class IntentServiceBase extends IntentService {
             }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
+        } else if(e instanceof IllegalArgumentException && !getSettings().isConfigurationOk()) {
+            result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
+            result.setMessage(e.toString());
         } else { // other exceptions meant to be handled outside
             result.setErrorType(ActionResult.ErrorType.UNKNOWN);
             result.setMessage(e.toString());
