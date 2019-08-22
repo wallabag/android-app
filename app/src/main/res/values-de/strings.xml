@@ -297,6 +297,8 @@
     <string name="markedAsRead">Artikel als gelesen markiert</string>
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
     <string name="pref_desc_ui_scrollOverBottom">Hier klicken, um einzustellen, wie oft man über den Rand hinaus scrollen muss, um einen Artikel als gelesen zu markieren</string>
+    <string name="pref_name_ui_swipeArticles">Artikel durch Wischen wechseln</string>
+    <string name="pref_desc_ui_swipeArticles">Hier klicken, um durch Wischen innerhalb eines Artikels zum vorherigen/nächsten Artikel zu wechseln</string>
 
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
     <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>

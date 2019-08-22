@@ -166,6 +166,11 @@
                 android:summary="@string/pref_desc_ui_scrollOverBottom"
                 android:inputType="number"
                 android:defaultValue="3"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_swipeArticles"
+                android:title="@string/pref_name_ui_swipeArticles"
+                android:summary="@string/pref_desc_ui_swipeArticles"
+                android:defaultValue="false"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
