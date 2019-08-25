@@ -388,6 +388,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_keepScreenOn, keepScreenOn);
     }
 
+    public boolean getSwipeArticles() {
+        return getBoolean(R.string.pref_key_ui_swipeArticles, false);
+    }
+
+    public void setSwipeArticles(boolean swipeArticles) {
+        setBoolean(R.string.pref_key_ui_swipeArticles, swipeArticles);
+    }
+
     public Sortable.SortOrder getListSortOrder() {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 

@@ -121,6 +121,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private float screenScrollingPercent;
     private boolean smoothScrolling;
     private int scrolledOverBottom;
+    private boolean swipeArticles;
 
     private ScrollView scrollView;
     private View scrollViewLastChild;
@@ -196,6 +197,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
         scrolledOverBottom = settings.getScrolledOverBottom();
+        swipeArticles = settings.getSwipeArticles();
 
         setTitle(articleTitle);
 
@@ -581,6 +583,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 // note: e1 - previous event, e2 - current event
                 // velocity* - velocity in pixels per second
 
+                if(!swipeArticles) return false;
                 if(e1 == null || e2 == null) return false;
                 if(e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
 

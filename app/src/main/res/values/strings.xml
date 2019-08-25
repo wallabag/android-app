@@ -223,6 +223,8 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
     <string name="pref_name_ui_scrollOverBottom">Scroll over bottom to mark as read</string>
     <string name="pref_desc_ui_scrollOverBottom">Press here to configure the number of times you need to "scroll over the bottom" to mark an article as read</string>
+    <string name="pref_name_ui_swipeArticles">Swipe Articles</string>
+    <string name="pref_desc_ui_swipeArticles">Press here to set swiping left or right inside an article to go to previous or next article</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
