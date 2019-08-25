@@ -7,7 +7,7 @@
         android:icon="?attr/icon_search"
         android:orderInCategory="5"
         app:showAsAction="collapseActionView|ifRoom"
-        app:actionViewClass="android.support.v7.widget.SearchView"/>
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
     <item
         android:id="@+id/menu_main_changeSortOrder"
         android:title="@string/menu_lists_changeSortOrder"

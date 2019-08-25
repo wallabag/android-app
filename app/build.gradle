@@ -27,6 +27,10 @@ android {
         lintConfig file("lint.xml")
     }
 
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -54,18 +58,18 @@ greendao {
 }
 
 dependencies {
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'org.greenrobot:greendao:3.2.2'
-    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.0.1'
-    implementation 'com.squareup.okhttp3:okhttp:3.14.2'
-    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.14.2'
-    implementation 'com.facebook.stetho:stetho:1.5.0'
-    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.mikepenz:aboutlibraries:6.0.2'
+    annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.1.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.1.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.1.0'
+    implementation 'com.facebook.stetho:stetho:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    implementation 'com.mikepenz:aboutlibraries:7.0.2'
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:bc22fca'
-    implementation 'org.slf4j:slf4j-android:1.7.25'
+    implementation 'org.slf4j:slf4j-android:1.7.28'
 }
