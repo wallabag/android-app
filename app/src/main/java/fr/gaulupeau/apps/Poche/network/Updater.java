@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -217,11 +218,17 @@ public class Updater {
                     article.setContent(apiArticle.content);
                     article.setDomain(apiArticle.domainName);
                     article.setUrl(apiArticle.url);
+                    article.setOriginUrl(apiArticle.originUrl);
                     article.setEstimatedReadingTime(apiArticle.readingTime);
                     article.setLanguage(apiArticle.language);
                     article.setPreviewPictureURL(apiArticle.previewPicture);
+                    article.setAuthors(formatAuthors(apiArticle.authors));
                     article.setCreationDate(apiArticle.createdAt);
                     article.setUpdateDate(apiArticle.updatedAt);
+                    article.setPublishedAt(apiArticle.publishedAt);
+                    article.setStarredAt(apiArticle.starredAt);
+                    article.setIsPublic(apiArticle.isPublic);
+                    article.setPublicUid(apiArticle.publicUid);
                     article.setArchive(apiArticle.archived);
                     article.setFavorite(apiArticle.starred);
                     article.setImagesDownloaded(false);
@@ -246,6 +253,10 @@ public class Updater {
                         article.setUrl(apiArticle.url);
                         articleChanges.add(ChangeType.URL_CHANGED);
                     }
+                    if(!equalOrEmpty(article.getOriginUrl(), apiArticle.originUrl)) {
+                        article.setOriginUrl(apiArticle.originUrl);
+                        articleChanges.add(ChangeType.ORIGIN_URL_CHANGED);
+                    }
                     if(article.getEstimatedReadingTime() != apiArticle.readingTime) {
                         article.setEstimatedReadingTime(apiArticle.readingTime);
                         articleChanges.add(ChangeType.ESTIMATED_READING_TIME_CHANGED);
@@ -258,6 +269,10 @@ public class Updater {
                         article.setPreviewPictureURL(apiArticle.previewPicture);
                         articleChanges.add(ChangeType.PREVIEW_PICTURE_URL_CHANGED);
                     }
+                    if(!equalOrEmpty(article.getAuthors(), formatAuthors(apiArticle.authors))) {
+                        article.setAuthors(formatAuthors(apiArticle.authors));
+                        articleChanges.add(ChangeType.AUTHORS_CHANGED);
+                    }
                     if(article.getCreationDate().getTime() != apiArticle.createdAt.getTime()) {
                         article.setCreationDate(apiArticle.createdAt);
                         articleChanges.add(ChangeType.CREATED_DATE_CHANGED);
@@ -265,6 +280,22 @@ public class Updater {
                     if(article.getUpdateDate().getTime() != apiArticle.updatedAt.getTime()) {
                         article.setUpdateDate(apiArticle.updatedAt);
                         articleChanges.add(ChangeType.UPDATED_DATE_CHANGED);
+                    }
+                    if(!Objects.equals(article.getPublishedAt(), apiArticle.publishedAt)) {
+                        article.setPublishedAt(apiArticle.publishedAt);
+                        articleChanges.add(ChangeType.PUBLISHED_AT_CHANGED);
+                    }
+                    if(!Objects.equals(article.getStarredAt(), apiArticle.starredAt)) {
+                        article.setStarredAt(apiArticle.starredAt);
+                        articleChanges.add(ChangeType.STARRED_AT_CHANGED);
+                    }
+                    if(!Objects.equals(article.getIsPublic(), apiArticle.isPublic)) {
+                        article.setIsPublic(apiArticle.isPublic);
+                        articleChanges.add(ChangeType.IS_PUBLIC_CHANGED);
+                    }
+                    if(!equalOrEmpty(article.getPublicUid(), apiArticle.publicUid)) {
+                        article.setPublicUid(apiArticle.publicUid);
+                        articleChanges.add(ChangeType.PUBLIC_UID_CHANGED);
                     }
                     if(article.getArchive() != apiArticle.archived) {
                         article.setArchive(apiArticle.archived);
@@ -463,6 +494,17 @@ public class Updater {
         }
 
         return latestUpdatedItemTimestamp;
+    }
+
+    private String formatAuthors(List<String> authorsList) {
+        if (authorsList == null || authorsList.isEmpty()) return null;
+
+        StringBuilder sb = new StringBuilder();
+        for (String author : authorsList) {
+            if (sb.length() != 0) sb.append(", ");
+            sb.append(author);
+        }
+        return sb.toString();
     }
 
     /**

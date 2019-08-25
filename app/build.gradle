@@ -49,7 +49,7 @@ android {
 }
 
 greendao {
-    schemaVersion 101
+    schemaVersion 102
     daoPackage 'fr.gaulupeau.apps.Poche.data.dao'
 }
 
@@ -66,6 +66,6 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
     implementation 'com.mikepenz:aboutlibraries:6.0.2'
-    implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:3c987b1'
+    implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:bc22fca'
     implementation 'org.slf4j:slf4j-android:1.7.25'
 }

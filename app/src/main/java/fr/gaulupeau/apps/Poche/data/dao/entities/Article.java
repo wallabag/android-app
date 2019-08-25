@@ -29,11 +29,15 @@ public class Article {
 
     private String url;
 
+    private String originUrl;
+
     private int estimatedReadingTime;
 
     private String language;
 
     private String previewPictureURL;
+
+    private String authors;
 
     private Boolean favorite;
 
@@ -42,6 +46,13 @@ public class Article {
     private Date creationDate;
 
     private Date updateDate;
+
+    private Date publishedAt;
+
+    private Date starredAt;
+
+    private Boolean isPublic;
+    private String publicUid;
 
     private Double articleProgress;
 
@@ -70,24 +81,31 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 768349527)
+    @Generated(hash = 180250343)
     public Article(Long id, Integer articleId, String content, String title, String domain, String url,
-            int estimatedReadingTime, String language, String previewPictureURL, Boolean favorite,
-            Boolean archive, Date creationDate, Date updateDate, Double articleProgress,
-            Boolean imagesDownloaded) {
+            String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
+            String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
+            Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
+            Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.content = content;
         this.title = title;
         this.domain = domain;
         this.url = url;
+        this.originUrl = originUrl;
         this.estimatedReadingTime = estimatedReadingTime;
         this.language = language;
         this.previewPictureURL = previewPictureURL;
+        this.authors = authors;
         this.favorite = favorite;
         this.archive = archive;
         this.creationDate = creationDate;
         this.updateDate = updateDate;
+        this.publishedAt = publishedAt;
+        this.starredAt = starredAt;
+        this.isPublic = isPublic;
+        this.publicUid = publicUid;
         this.articleProgress = articleProgress;
         this.imagesDownloaded = imagesDownloaded;
     }
@@ -140,6 +158,14 @@ public class Article {
         this.url = url;
     }
 
+    public String getOriginUrl() {
+        return originUrl;
+    }
+
+    public void setOriginUrl(String originUrl) {
+        this.originUrl = originUrl;
+    }
+
     public int getEstimatedReadingTime() {
         return this.estimatedReadingTime;
     }
@@ -166,6 +192,14 @@ public class Article {
 
     public void setPreviewPictureURL(String previewPictureURL) {
         this.previewPictureURL = previewPictureURL;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 
     public Boolean getFavorite() {
@@ -198,6 +232,38 @@ public class Article {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
+    public Date getStarredAt() {
+        return starredAt;
+    }
+
+    public void setStarredAt(Date starredAt) {
+        this.starredAt = starredAt;
+    }
+
+    public Boolean getIsPublic() {
+        return this.isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+
+    public String getPublicUid() {
+        return publicUid;
+    }
+
+    public void setPublicUid(String publicUid) {
+        this.publicUid = publicUid;
     }
 
     public Double getArticleProgress() {
