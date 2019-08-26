@@ -246,6 +246,12 @@
 
     <string name="pref_name_ui_article_textAlignment_justify">Textausrichtung: Blocksatz</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Streckt die Textzeilen, so dass jede Zeile die gleiche Breite hat (wie in Zeitungen)</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Umgang mit langen Textzeilen</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Standardoption im Umgang mit vorformatiertem Text, welcher nicht vollständig auf das Display passt.</string>
+    <string-array name="pref_option_handlePreformattedText">
+        <item>Scroll innerhalb des Fensters (overflow)</item>
+        <item>Breche Zeilen um (pre-wrap)</item>
+    </string-array>
     <string name="pref_name_ui_readingSpeed">Lesegeschwindigkeit</string>
     <string name="pref_desc_ui_readingSpeed">Deine Lesegeschwindigkeit (gemessen in Wörtern pro Minute). Zum Berechnen der geschätzten Lesezeit genutzt.</string>
     <string name="pref_name_ui_keepScreenOn">Bildschirm während Lesens anlassen</string>

@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="pref_option_handlePreformattedText_values" translatable="false">
+        <item>pre-overflow</item>
+        <item>pre-prewrap</item>
+    </string-array>
     <string-array name="pref_option_readingSpeed_values" translatable="false">
         <item>100</item>
         <item>150</item>

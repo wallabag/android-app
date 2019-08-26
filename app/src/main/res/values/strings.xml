@@ -204,6 +204,12 @@
     <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Handling Long Preformatted Text</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">How To handle preformatted text that is too long to show completely.</string>
+    <string-array name="pref_option_handlePreformattedText">
+        <item>Scroll inside window (overflow)</item>
+        <item>Break lines (pre-wrap)</item>
+    </string-array>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>

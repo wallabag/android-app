@@ -237,6 +237,14 @@ header.mbm {
   text-justify: none;
 }
 
+.pre-overflow #article pre {
+  overflow: auto;
+}
+
+.pre-prewrap #article pre {
+  white-space: pre-wrap;
+}
+
 #article blockquote *, #article pre * {
   background: inherit;
 }
