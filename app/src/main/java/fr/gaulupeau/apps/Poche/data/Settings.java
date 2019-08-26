@@ -364,6 +364,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_article_textAlignment_justify, value);
     }
 
+    public String getHandlePreformattedTextOption() {
+        return getString(R.string.pref_key_ui_article_handlePreformattedText, "pre-overflow");
+    }
+
+    public void setHandlePreformattedTextOption(String value) {
+        setString(R.string.pref_key_ui_article_handlePreformattedText, value);
+    }
+
     public boolean isFullscreenArticleView() {
         return getBoolean(R.string.pref_key_ui_article_fullscreen, false);
     }

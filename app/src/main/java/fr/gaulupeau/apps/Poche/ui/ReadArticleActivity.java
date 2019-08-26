@@ -683,6 +683,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(weightedFont) additionalClasses.add("weighted-font");
         if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
         if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
+        additionalClasses.add(settings.getHandlePreformattedTextOption());
 
         String classAttr;
         if(!additionalClasses.isEmpty()) {
