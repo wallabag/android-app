@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Segna come Già Letto</string>
     <string name="btnMarkUnread">Segna come Da Leggere</string>
@@ -26,7 +26,7 @@
     <string name="d_deleteArticle_title">Cancella articolo?</string>
     <string name="d_deleteArticle_message">Sei sicuro di voler cancellare l\'articolo?</string>
     <string name="txtNetOffline">Si prega di controllare la connessione ad Internet!</string>
-    <string name="txtConfigNotSet">Si prega di configurare l\'app prima di sincronizzare!</string>
+    <string name="txtConfigNotSet">Si prega di configurare l\'app prima di sincronizzare.</string>
     <string name="dialog_add_label">Salva pagina</string>
     <string name="page_url">URL pagina</string>
     <string name="share_article_title">Condividi articolo</string>
@@ -55,9 +55,9 @@
     <string name="testConnection_errorMessage_wallabagNotFound">Servizio wallabag non trovato — controlla l\' URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticazione HTTP fallita</string>
     <string name="testConnection_errorMessage_noCSRF">Errore analisi modulo login</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Impossibile eseguire il login — controlla username e password</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Accesso impossibile – controlla il nome utente e la password</string>
     <string name="testConnection_errorMessage_authProblems">Problemi legati all\'autorizzazione. Causati di solito da reindirizzamenti HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Pagina sconosciuta dopo il login</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Pagina sconosciuta dopo l\'accesso. Questo è in genere causato dall\'autenticazione a due fattori abilitata, che non è ancora supportata dall\'app</string>
     <string name="testConnection_errorMessage_unknown">Errore sconosciuto</string>
     <string name="testConnection_errorMessage_unknownWithMessage">errore sconosciuto: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Considera cambiare URL</string>
@@ -78,16 +78,16 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Nessun accesso all\'API: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Errore sconosciuto</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore sconosciuto: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Impossibile eseguire il login: eventuali username o password sbagliati</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Accesso impossibile: eventuali nome utente o password sbagliati</string>
     <string name="unsuccessfulRequest_errorMessage">"Richiesta senza successo; codice di risposta: %1$d, messaggio di risposta: %2$s"</string>
-    <string name="previousUpdateNotFinished">Operazione di aggiornamento precedente non ancora finita</string>
+    <string name="previousUpdateNotFinished">Aggiornamento precedente non ancora completato</string>
     <string name="feedName_favorites">Preferiti</string>
     <string name="feedName_archived">Archiviati</string>
     <string name="feedName_unread">Non letti</string>
     <string name="articleList_favoriteMark">Segno dei preferiti</string>
     <string name="articleList_ArchivedMark">Segno degli archiviati</string>
     <string name="noPreviousArticle">Non c\'é nessun articolo precedente nella lista corrente</string>
-    <string name="noNextArticle">Non c\'é nessun articolo successivo nella lista corrente</string>
+    <string name="noNextArticle">Non ci sono più articoli nell\'elenco corrente</string>
     <string name="themeName_light">Chiaro</string>
     <string name="themeName_light_contrast">Chiaro (alto contrasto)</string>
     <string name="themeName_dark">Scuro</string>
@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarizzato</string>
     <string name="menu_readArticle_increaseFontSize">Aumenta dimensione del font</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuisci dimensione del font</string>
-    <string name="aboutText">&lt;b&gt;App wallabag per Android&lt;/b&gt;&lt;br/&gt;wallabag é un\'applicazione self hostable che ti permette di non perdere più nessun contenuto. Clicca, salva e leggi quando puoi. Estrae il contenuto in modo che tu possa leggere quando puoi.</string>
+    <string name="aboutText">&lt;b&gt;App wallabag per Android&lt;/b&gt;&lt;br/&gt;wallabag è un\'app autoospidabile che ti permette non mancare più nessun contenuta. Clicca, salva e legge i contenuti estratti come vuoi.</string>
     <string name="readSpeed">Velocità di lettura</string>
     <string name="voiceHeight">Tonalità della voce</string>
     <string name="readVolume">Volume di lettura</string>
@@ -128,22 +128,16 @@
     <string name="manageTags_addNew">Aggiungi</string>
     <string name="manageTags_currentTags">Etichette selezionate:</string>
     <string name="content_estimatedReadingTime">Tempo di lettura stimato: %s min</string>
-
     <string name="navigation_drawer_open">Apri menù di navigazione</string>
     <string name="navigation_drawer_close">Chiudi menù di navigazione</string>
-
     <string name="nav_main_articles">Articoli</string>
     <string name="nav_main_tags">Etichette</string>
     <string name="nav_main_tagged_articles">Articoli etichettati</string>
-
     <string name="nav_add">Aggiungi nuova voce</string>
-
     <string name="nav_other_settings">Impostazioni</string>
     <string name="nav_other_about">Informazioni</string>
-
     <string name="pref_name_runConnectionWizard">Esegui assistente di connessione</string>
-    <string name="pref_desc_runConnectionWizard">L\'assistente di connessione ti aiuterà a creare un\'impostazione di connessione basica</string>
-
+    <string name="pref_desc_runConnectionWizard">Ti aiuta a impostare le impostazioni di base della connessione</string>
     <string name="pref_categoryName_connection">Connessione</string>
     <string name="pref_name_connection_url">URL di wallabag</string>
     <string name="pref_desc_connection_url">
@@ -158,18 +152,16 @@
     <string name="pref_name_connection_api_clientID">ID del Client</string>
     <string name="pref_name_connection_api_clientSecret">Segreto del Client</string>
     <string name="pref_name_connection_autofill">Riempimento automatico</string>
-
     <string name="pref_categoryName_connection_advanced">Impostazioni di connessione avanzate</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Autenticazione basica HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Se non sai cos\'é, lasciala vuota</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Username HTTP</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Password HTTP</string>
-
     <string name="pref_categoryName_ui">UI</string>
-    <string name="pref_name_ui_theme">Tema Applicazione</string>
-    <string name="pref_name_ui_article_fontSize" formatted="false">Dimensione font articolo (%)</string>
+    <string name="pref_name_ui_theme">Tema dell\'app</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Dimensione del testo dell\'articolo (%)</string>
     <string name="pref_name_ui_article_fontSerif">Carattere Serif</string>
-    <string name="pref_desc_ui_article_fontSerif">Carattere Serif per i font dell\'articolo</string>
+    <string name="pref_desc_ui_article_fontSerif">Carattere Serif per gli articoli</string>
     <string name="pref_name_ui_readingSpeed">Velocità di lettura</string>
     <string name="pref_desc_ui_readingSpeed">La tua velocità di lettura (misurata in parole al minuto). Usata per calcolare il tempo di lettura stimato.</string>
     <string name="pref_categoryName_ui_screenScrolling">Scorrimento schermo</string>
@@ -178,7 +170,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Scorri lo schermo toccando i lati destro e sinistro dello schermo</string>
     <string name="pref_name_ui_screenScrolling_percent">Percentuale dell\'altezza dello schermo da scorrere</string>
     <string name="pref_name_ui_screenScrolling_smooth">Usa scorrimento morbido</string>
-
     <string name="pref_categoryName_sync">Sincronizzazione</string>
     <string name="pref_name_sync_syncTypes">Tipi di sincronizzazione</string>
     <string name="pref_desc_sync_syncTypes">Premi per mostrare più informazioni sui tipi di sincronizzazione</string>
@@ -188,7 +179,7 @@
         Per rimediare a questo svantaggio del tipo di sincronizzazione \"Veloce\" c\'é un\'opzione detta \"Pulizia degli articoli cancellati\" che, per ogni articolo locale, chiede al server se é ancora presente su di esso - se non lo é, l\'articolo locale é rimosso. A seconda del numero di articoli che hai, questa operazione può richiedere del tempo, ma risparmia molto traffico Internet rispetto ad una sincronizzazzione  \"Completa\".\n\n
         Nessuna di queste azioni ha effetto sulla sincronizzazione client-to-server: le tue modifiche locali saranno sempre mandate al server prima di aggiornare il contenuto locale.
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Abilita \"Pulizia degli articoli cancellati\" dopo sincronizzazione \"veloce\"</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Abilita «Pulizia degli articoli cancellati» dopo sincronizzazione «veloce»</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Leggi la descrizione dei tipi di sincronizzazione soprastante per avere più informazioni</string>
     <string name="pref_categoryName_autoSync">Sincronizzazione automatica</string>
     <string name="pref_name_autoSync_onStartup_enabled">Abilita sincronizzazione automatica all\'avvio dell\'applicazione</string>
@@ -212,7 +203,6 @@
     <string name="pref_desc_autoDlNew_enabled">Scarica automaticamente nuovi articoli subito dopo essere stati aggiunti tramite l\'app. Nota: il download non ci sarà se avete modifiche offline non sincronizzate.</string>
     <string name="pref_name_imageCache_enabled">Salva in cache le immagini degli articoli</string>
     <string name="pref_desc_imageCache_enabled">Scarica automaticamente tutte le immagini in ogni articoli e le salva sul dispositivo. A seconda della lunghezza della tua lista di articoli di wallabag questo potrebbe richiedere molto tempo e consumare molto spazio.</string>
-
     <string name="pref_categoryName_miscellaneous">Varie</string>
     <string name="pref_name_misc_handleHttpScheme">Gestisci schema HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Mostra wallabag nella lista dei browser</string>
@@ -220,15 +210,12 @@
     <string name="pref_desc_misc_wipeDB">Cancella tutti gli articoli dal database locale, rimuove anche tutte le modifiche locali e gli URL non sincronizzati</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Cancella Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Sei sicuro di voler cancellare il database?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Usato URI di connessione sbagliato</string>
-
     <string name="connectionWizard_welcome_titleMessage">Benvenuto in wallabag!</string>
     <string name="connectionWizard_welcome_text">Prima di poter usare l\'app di wallabag devi configurare una connessione. Questo assistente di connessione cercherà di aiutarti.</string>
     <string name="connectionWizard_welcome_rerunNotice">Puoi comunque riavviare l\'assistente di connessione dalle Impostazioni.</string>
     <string name="connectionWizard_welcome_prev">Salta</string>
     <string name="connectionWizard_welcome_next">Successivo</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Seleziona il provider di wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Altro</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Seleziona questa opzione per inserire le impostazioni richieste manualmente</string>
@@ -236,22 +223,49 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Seleziona questa opzione se hai un account su https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Salta</string>
     <string name="connectionWizard_providerSelection_next">Successivo</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Configurazione base</string>
     <string name="connectionWizard_provider_general_prev">Indietro</string>
     <string name="connectionWizard_provider_general_next">Connetti</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">Configurazione di wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Indietro</string>
     <string name="connectionWizard_provider_wallabagit_next">Connetti</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Configurazione di Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Indietro</string>
     <string name="connectionWizard_provider_framabag_next">Connetti</string>
-
     <string name="connectionWizard_summary_titleMessage">Fatto!</string>
     <string name="connectionWizard_summary_text">Premi il bottone per salvare le impostazioni ed andare alla schermata principale.</string>
     <string name="connectionWizard_summary_toastMessage">Impostazione completata</string>
     <string name="connectionWizard_summary_prev">Indietro</string>
     <string name="connectionWizard_summary_next">Salva impostazioni</string>
+    <string name="menu_changeTitle">Cambia il titolo</string>
+    <string name="pref_desc_connection_autofill">Verifica la connessione e compila il client ID e il segreto del client</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Allineamento del testo: Giustifica</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">Allunga le linee alla stessa larghezza (come nei giornali)</string>
+    <string name="title_main_tag">Etichetta: %s</string>
+    <string name="menuCopyOriginalURL">Copia l\'URL originale</string>
+    <string name="txtUrlCopied">URL dell\'articolo copiato negli appunti</string>
+    <string name="menuDownloadAsFile">Scarica come file</string>
+    <string name="dialog_title_downloadFileFormat">Seleziona il formato di file</string>
+    <string name="notification_serverError">Errore del server</string>
+    <string name="lastUpdateTimeLabel">Ultimo aggiornamento: %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
+    <string name="message_couldNotOpenUrl">Impossibile aprire l\'URL</string>
+    <string name="message_disableTouch_inputDisabled">Ingresso tattile disattivato</string>
+    <string name="message_disableTouch_inputEnabled">Ingresso tattile abilitato</string>
+    <string name="d_disableTouch_changeKey_title">Disabilita il pulsante d\'ingresso tattile</string>
+    <string name="d_disableTouch_currentCode">Codice tasto attualmente selezionato (premere un pulsante per modificarlo):</string>
+    <string name="pref_categoryName_ui_misc">Diversi</string>
+    <string name="pref_name_ui_disableTouch_enabled">Disattiva l\'ingresso tattile</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Premi il pulsante configurato (pulsante della fotocamera per impostazione predefinita) per bloccare/sbloccare l\'ingresso tattile sullo schermo di lettura (i controlli di sistema non sono interessati)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Disabilita il pulsante d\'ingresso tattile</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Premi qui per configurare il pulsante utilizzato per disabilitare/abilitare l\'ingresso tattile</string>
+    <string name="scrolledOverBottom">Scorri %d tempo/tempi più in basso per contrassegnare l\'articolo come letto</string>
+    <string name="markedAsRead">Articolo contrassegnato come letto</string>
+    <string name="pref_name_ui_scrollOverBottom">Scorri verso il basso per contrassegnare come già letto</string>
+    <string name="pref_desc_ui_scrollOverBottom">Premi qui per configurare il numero di volte in cui è necessario scorrere il fondo per contrassegnare un articolo come letto</string>
+    <string name="pref_name_ui_article_fullscreen">Visualizzazione articolo a schermo intero</string>
+    <string name="pref_desc_ui_article_fullscreen">Nasconde le barre di sistema e dell\'app durante la lettura degli articoli</string>
+    <string name="d_urlAction_copyToClipboard">Copia negli appunti</string>
+    <string name="pref_name_ui_keepScreenOn">Mantieni lo schermo attivato durante la lettura</string>
+    <string name="pref_desc_ui_keepScreenOn">Tieni lo schermo attivato durante la lettura di un articolo</string>
 </resources>
