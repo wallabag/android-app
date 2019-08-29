@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        android:font="@font/merriweather_300" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="300"
+        android:font="@font/merriweather_300_italic" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        android:font="@font/merriweather_400" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="400"
+        android:font="@font/merriweather_400_italic" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        android:font="@font/merriweather_700" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="700"
+        android:font="@font/merriweather_700_italic" />
+    <font
+        android:fontStyle="normal"
+        android:fontWeight="900"
+        android:font="@font/merriweather_900" />
+    <font
+        android:fontStyle="italic"
+        android:fontWeight="900"
+        android:font="@font/merriweather_900_italic" />
+</font-family>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -15,10 +16,9 @@
         <requestFocus/>
     </View>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content" >
 
         <LinearLayout
             android:orientation="vertical"
@@ -29,13 +29,12 @@
             android:paddingTop="20dp">
 
             <TextView
-                android:paddingBottom="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?android:attr/textColorPrimary"
-                android:text="@string/connectionWizard_provider_wallabagit_titleMessage"/>
+                android:gravity="start"
+                android:paddingBottom="20dp"
+                android:text="@string/connectionWizard_provider_wallabagit_titleMessage"
+                android:textAppearance="?textAppearanceHeadline3" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -65,38 +64,34 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
-    </ScrollView>
-
-    <View android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerHorizontal" />
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/prev_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_provider_wallabagit_prev" />
-
-        <View android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="?android:attr/dividerVertical" />
-
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/next_button"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_provider_wallabagit_next" />
-
     </LinearLayout>
 
-</LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

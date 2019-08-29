@@ -1,0 +1,108 @@
+<!--
+  ~ Copyright 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="@string/pref_key_ui_category"
+        app:title="@string/pref_categoryName_ui"
+        app:persistent="false">
+        <ListPreference
+            app:key="@string/pref_key_ui_theme"
+            app:title="@string/pref_name_ui_theme"
+            app:dialogTitle="@string/pref_name_ui_theme"
+            app:defaultValue="LIGHT"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+            app:key="@string/pref_key_ui_article_fontSize"
+            app:title="@string/pref_name_ui_article_fontSize"
+            android:inputType="number"
+            app:defaultValue="100"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_article_fontSerif"
+            app:title="@string/pref_name_ui_article_fontSerif"
+            app:summary="@string/pref_desc_ui_article_fontSerif"
+            app:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_article_textAlignment_justify"
+            app:title="@string/pref_name_ui_article_textAlignment_justify"
+            app:summary="@string/pref_desc_ui_article_textAlignment_justify"
+            app:defaultValue="true"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
+            app:key="@string/pref_key_ui_readingSpeed"
+            app:title="@string/pref_name_ui_readingSpeed"
+            app:summary="@string/pref_desc_ui_readingSpeed"
+            app:dialogTitle="@string/pref_name_ui_readingSpeed"
+            app:entries="@array/pref_option_readingSpeed_values"
+            app:entryValues="@array/pref_option_readingSpeed_values"
+            app:defaultValue="200"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_keepScreenOn"
+            app:title="@string/pref_name_ui_keepScreenOn"
+            app:summary="@string/pref_desc_ui_keepScreenOn"
+            app:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="@string/pref_key_ui_screenScrolling"
+        app:title="@string/pref_categoryName_ui_screenScrolling"
+        app:persistent="false">
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_volumeButtonsScrolling_enabled"
+            app:title="@string/pref_name_ui_volumeButtonsScrolling_enabled"
+            app:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_tapToScroll_enabled"
+            app:title="@string/pref_name_ui_tapToScroll_enabled"
+            app:summary="@string/pref_desc_ui_tapToScroll_enabled"
+            app:defaultValue="false"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.FloatEditTextPreference
+            app:key="@string/pref_key_ui_screenScrolling_percent"
+            app:title="@string/pref_name_ui_screenScrolling_percent"
+            android:inputType="numberDecimal"
+            app:defaultValue="95"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_screenScrolling_smooth"
+            app:title="@string/pref_name_ui_screenScrolling_smooth"
+            app:defaultValue="true"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="@string/pref_key_ui_misc_category"
+        app:title="@string/pref_categoryName_ui_misc"
+        app:persistent="false">
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_article_fullscreen"
+            app:title="@string/pref_name_ui_article_fullscreen"
+            app:summary="@string/pref_desc_ui_article_fullscreen"
+            app:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_ui_disableTouch_enabled"
+            app:title="@string/pref_name_ui_disableTouch_enabled"
+            app:summary="@string/pref_desc_ui_disableTouch_enabled"
+            app:defaultValue="false"/>
+        <Preference
+            app:key="@string/pref_key_ui_disableTouch_keyCode"
+            app:title="@string/pref_name_ui_disableTouch_keyCode"
+            app:summary="@string/pref_desc_ui_disableTouch_keyCode"
+            app:persistent="false"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+            app:key="@string/pref_key_ui_scrollOverBottom"
+            app:title="@string/pref_name_ui_scrollOverBottom"
+            app:summary="@string/pref_desc_ui_scrollOverBottom"
+            android:inputType="number"
+            app:defaultValue="3"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

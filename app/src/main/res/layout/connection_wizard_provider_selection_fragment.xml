@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:orientation="vertical"
@@ -17,14 +17,13 @@
             android:paddingRight="30dp"
             android:paddingTop="20dp">
 
-            <TextView
-                android:layout_marginBottom="20dp"
+            <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?android:attr/textColorPrimary"
-                android:text="@string/connectionWizard_providerSelection_titleMessage"/>
+                android:layout_marginBottom="20dp"
+                android:gravity="start"
+                android:text="@string/connectionWizard_providerSelection_titleMessage"
+                android:textAppearance="?textAppearanceHeadline3" />
 
             <RadioGroup
                 android:id="@+id/providerRadioGroup"
@@ -37,9 +36,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/connectionWizard_providerSelection_provider_wallabagit_name"
                     android:checked="true" />
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceCaption"
                     android:text="@string/connectionWizard_providerSelection_provider_wallabagit_desc" />
 
                 <RadioButton
@@ -50,6 +50,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="?textAppearanceCaption"
                     android:text="@string/connectionWizard_providerSelection_provider_framabag_desc"/>
 
                 <RadioButton
@@ -60,41 +61,40 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/connectionWizard_providerSelection_provider_general_desc" />
+                    android:text="@string/connectionWizard_providerSelection_provider_general_desc"
+                    android:textAppearance="?textAppearanceCaption" />
             </RadioGroup>
         </LinearLayout>
-    </ScrollView>
-
-    <View android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerHorizontal" />
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/prev_button"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_providerSelection_prev" />
 
-        <View android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="?android:attr/dividerVertical" />
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/next_button"
-            android:layout_width="0dp"
             android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:insetLeft="16dp"
+            android:insetRight="16dp"
             android:text="@string/connectionWizard_providerSelection_next" />
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

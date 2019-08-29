@@ -50,44 +50,44 @@ public class Themes {
     public enum Theme {
         LIGHT(
                 R.string.themeName_light,
-                R.style.LightTheme,
-                R.style.LightTheme_NoActionBar,
-                R.style.ProxyTheme
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         ),
 
         LIGHT_CONTRAST(
                 R.string.themeName_light_contrast,
-                R.style.LightThemeContrast,
-                R.style.LightThemeContrast_NoActionBar,
-                R.style.ProxyTheme
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         ),
 
         E_INK(
                 R.string.themeName_eink,
-                R.style.LightThemeContrast,
-                R.style.LightThemeContrast_NoActionBar,
-                R.style.ProxyTheme
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         ),
 
         DARK(
                 R.string.themeName_dark,
-                R.style.DarkTheme,
-                R.style.DarkTheme_NoActionBar,
-                R.style.ProxyThemeDark
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         ),
 
         DARK_CONTRAST(
                 R.string.themeName_dark_contrast,
-                R.style.DarkThemeContrast,
-                R.style.DarkThemeContrast_NoActionBar,
-                R.style.ProxyThemeDark
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         ),
 
         SOLARIZED(
                 R.string.themeName_solarized,
-                R.style.SolarizedTheme,
-                R.style.SolarizedTheme_NoActionBar,
-                R.style.ProxyTheme
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight,
+                R.style.MyTheme_DayNight
         );
 
         private int nameId;

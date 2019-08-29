@@ -5,9 +5,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.content.res.XmlResourceParser;
-import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
@@ -20,7 +17,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
+import com.google.android.material.appbar.MaterialToolbar;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -30,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import androidx.core.widget.ContentLoadingProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,9 +37,7 @@ import com.mikepenz.aboutlibraries.LibsBuilder;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.xmlpull.v1.XmlPullParserException;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,8 +58,7 @@ import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        TagListFragment.OnFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener, TagListFragment.OnFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -80,7 +75,7 @@ public class MainActivity extends AppCompatActivity
 
     private ConfigurationTestHelper configurationTestHelper;
 
-    private ProgressBar progressBar;
+    private ContentLoadingProgressBar progressBar;
 
     private NavigationView navigationView;
     private TextView lastUpdateTimeView;
@@ -123,48 +118,53 @@ public class MainActivity extends AppCompatActivity
 
         settings = new Settings(this);
 
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        MaterialToolbar toolbar = (MaterialToolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navigationView = (NavigationView)findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(navigationView != null) {
+        if (navigationView != null) {
             View headerView = navigationView.getHeaderView(0);
-            if(headerView != null) {
-                lastUpdateTimeView = (TextView)headerView.findViewById(R.id.lastUpdateTime);
+            if (headerView != null) {
+                lastUpdateTimeView = (TextView) headerView.findViewById(R.id.lastUpdateTime);
             }
 
             // Set white logo in the navigation bar in dark and dark (high contrast) theme
             if (headerView != null && Themes.getCurrentTheme() != null && Themes.getCurrentTheme().isDark()) {
                 ImageView logo = headerView.findViewById(R.id.imageView);
-                logo.setImageDrawable(getDrawable(R.drawable.welcome_white));
+                logo.setImageDrawable(getDrawable(R.drawable.ic_wallabag_logo));
             }
 
-            // Set different colors for items in the navigation bar in dark (high contrast) theme
-            if (Themes.getCurrentTheme() != null && Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
-                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-
-                    } else {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
-                    }
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            // Set different colors for items in the navigation bar in dark (high contrast)
+            // theme
+            // if (Themes.getCurrentTheme() != null && Themes.getCurrentTheme() ==
+            // Themes.Theme.DARK_CONTRAST) {
+            // @SuppressLint("ResourceType") XmlResourceParser parser =
+            // getResources().getXml(R.color.dark_contrast_menu_item);
+            // try {
+            // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(),
+            // parser, getTheme()));
+            // navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(),
+            // parser, getTheme()));
+            //
+            // } else {
+            // navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(),
+            // parser));
+            // navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(),
+            // parser));
+            // }
+            // } catch (XmlPullParserException e) {
+            // e.printStackTrace();
+            // } catch (IOException e) {
+            // e.printStackTrace();
+            // }
+            // }
         }
 
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar,
-                R.string.navigation_drawer_open,
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -179,22 +179,23 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                if(newState == DrawerLayout.STATE_IDLE) updated = false;
+                if (newState == DrawerLayout.STATE_IDLE)
+                    updated = false;
             }
 
             private void updateTime() {
-                if(updated) return;
+                if (updated)
+                    return;
                 updated = true;
 
-                if(lastUpdateTimeView == null) return;
+                if (lastUpdateTimeView == null)
+                    return;
 
                 Log.d(TAG, "DrawerListener.updateTime() updating time");
 
                 updateLastUpdateTime();
             }
         });
-
-        progressBar = (ProgressBar)findViewById(R.id.progressBar);
 
         firstSyncDone = settings.isFirstSyncDone();
 
@@ -205,12 +206,12 @@ public class MainActivity extends AppCompatActivity
 
         String currentFragmentType = null;
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Log.v(TAG, "onCreate() restoring state");
 
             Bundle bundle = savedInstanceState.getBundle(STATE_SAVED_FRAGMENT_STATES);
-            if(bundle != null) {
-                for(String key: bundle.keySet()) {
+            if (bundle != null) {
+                for (String key : bundle.keySet()) {
                     savedFragmentStates.put(key, bundle.<Fragment.SavedState>getParcelable(key));
                 }
             }
@@ -221,11 +222,13 @@ public class MainActivity extends AppCompatActivity
 
             performSearch(savedInstanceState.getString(STATE_SEARCH_QUERY));
         }
-        if(searchQuery == null) performSearch("");
+        if (searchQuery == null)
+            performSearch("");
 
-        if(currentFragmentType == null) currentFragmentType = FRAGMENT_ARTICLE_LISTS;
+        if (currentFragmentType == null)
+            currentFragmentType = FRAGMENT_ARTICLE_LISTS;
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             setCurrentFragment(currentFragmentType);
         } else {
             currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentType);
@@ -244,7 +247,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void handleIntent(Intent intent) {
-        if(Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             Log.v(TAG, "handleIntent() search intent; query: " + query);
 
@@ -258,10 +261,10 @@ public class MainActivity extends AppCompatActivity
 
         Log.v(TAG, "onSaveInstanceState()");
 
-        if(!savedFragmentStates.isEmpty()) {
+        if (!savedFragmentStates.isEmpty()) {
             Bundle bundle = new Bundle(savedFragmentStates.size());
 
-            for(Map.Entry<String, Fragment.SavedState> e: savedFragmentStates.entrySet()) {
+            for (Map.Entry<String, Fragment.SavedState> e : savedFragmentStates.entrySet()) {
                 bundle.putParcelable(e.getKey(), e.getValue());
             }
 
@@ -289,18 +292,18 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         // TODO: check logic
-        if(checkConfigurationOnResume) {
+        if (checkConfigurationOnResume) {
             checkConfigurationOnResume = false;
 
-            if(!Settings.checkFirstRunInit(this)) {
-                if(!settings.isConfigurationOk() && checkConfigurationDialog == null) {
+            if (!Settings.checkFirstRunInit(this)) {
+                if (!settings.isConfigurationOk() && checkConfigurationDialog == null) {
                     AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                    messageBox.setTitle(settings.isConfigurationErrorShown()
-                            ? R.string.d_configurationIsQuestionable_title
-                            : R.string.d_configurationChanged_title);
-                    messageBox.setMessage(settings.isConfigurationErrorShown()
-                            ? R.string.d_configurationIsQuestionable_message
-                            : R.string.d_configurationChanged_message);
+                    messageBox.setTitle(
+                            settings.isConfigurationErrorShown() ? R.string.d_configurationIsQuestionable_title
+                                    : R.string.d_configurationChanged_title);
+                    messageBox.setMessage(
+                            settings.isConfigurationErrorShown() ? R.string.d_configurationIsQuestionable_message
+                                    : R.string.d_configurationChanged_message);
                     messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -319,10 +322,10 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        if(tryToUpdateOnResume) {
+        if (tryToUpdateOnResume) {
             tryToUpdateOnResume = false;
 
-            if(!firstSyncDone) {
+            if (!firstSyncDone) {
                 updateAllFeedsIfDbIsEmpty();
             } else {
                 updateOnStartup();
@@ -346,8 +349,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
-        if(drawer.isDrawerOpen(GravityCompat.START)) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -358,14 +361,14 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu()");
 
-        if(searchMenuItemExpanded) {
+        if (searchMenuItemExpanded) {
             // options menu invalidation happened when searchMenuItem was expanded
             searchMenuItemExpanded = false;
             searchMenuItem = null;
 
             Log.i(TAG, "onCreateOptionsMenu() searchMenuItem was not collapsed!");
-            Log.v(TAG, "onCreateOptionsMenu() searchQuery: " + searchQuery
-                    + ", searchQueryPrevious: " + searchQueryPrevious);
+            Log.v(TAG, "onCreateOptionsMenu() searchQuery: " + searchQuery + ", searchQueryPrevious: "
+                    + searchQueryPrevious);
 
             performSearch(searchQueryPrevious);
         }
@@ -373,8 +376,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
 
         searchMenuItem = menu.findItem(R.id.menu_main_search);
-        MenuItemCompat.setOnActionExpandListener(
-                searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 Log.v(TAG, "searchMenuItem expanded");
@@ -391,10 +393,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
-        if(searchView != null) {
-            searchView.setSearchableInfo(((SearchManager)getSystemService(Context.SEARCH_SERVICE))
-                    .getSearchableInfo(getComponentName()));
+        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        if (searchView != null) {
+            searchView.setSearchableInfo(
+                    ((SearchManager) getSystemService(Context.SEARCH_SERVICE)).getSearchableInfo(getComponentName()));
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -416,9 +418,9 @@ public class MainActivity extends AppCompatActivity
         }
         checkPendingSearchUI();
 
-        if(!offlineQueuePending) {
+        if (!offlineQueuePending) {
             MenuItem menuItem = menu.findItem(R.id.menu_main_syncQueue);
-            if(menuItem != null) {
+            if (menuItem != null) {
                 menuItem.setVisible(false);
             }
         }
@@ -428,22 +430,22 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.menu_main_changeSortOrder:
-                switchSortOrder();
-                return true;
+        switch (item.getItemId()) {
+        case R.id.menu_main_changeSortOrder:
+            switchSortOrder();
+            return true;
 
-            case R.id.menu_main_syncQueue:
-                syncQueue();
-                return true;
+        case R.id.menu_main_syncQueue:
+            syncQueue();
+            return true;
 
-            case R.id.menu_main_sweepDeletedArticles:
-                sweepDeletedArticles();
-                return true;
+        case R.id.menu_main_sweepDeletedArticles:
+            sweepDeletedArticles();
+            return true;
 
-            case R.id.menu_main_fullUpdate:
-                fullUpdate(true);
-                return true;
+        case R.id.menu_main_fullUpdate:
+            fullUpdate(true);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -451,45 +453,41 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.nav_mainLists:
-                setCurrentFragment(FRAGMENT_ARTICLE_LISTS);
+        switch (item.getItemId()) {
+        case R.id.nav_mainLists:
+            setCurrentFragment(FRAGMENT_ARTICLE_LISTS);
+            break;
+
+        case R.id.nav_tags:
+            setCurrentFragment(FRAGMENT_TAG_LIST);
+            break;
+
+        case R.id.nav_add:
+            showAddBagDialog();
+            break;
+
+        case R.id.nav_settings:
+            startActivity(new Intent(getBaseContext(), SettingsActivity.class));
+            break;
+
+        case R.id.nav_about:
+            Libs.ActivityStyle style;
+            switch (Themes.getCurrentTheme()) {
+            case DARK:
+            case DARK_CONTRAST:
+                style = Libs.ActivityStyle.DARK;
                 break;
 
-            case R.id.nav_tags:
-                setCurrentFragment(FRAGMENT_TAG_LIST);
+            default:
+                style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
                 break;
-
-            case R.id.nav_add:
-                showAddBagDialog();
-                break;
-
-            case R.id.nav_settings:
-                startActivity(new Intent(getBaseContext(), SettingsActivity.class));
-                break;
-
-            case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch(Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
-                new LibsBuilder()
-                        .withActivityStyle(style)
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withAboutDescription(getResources().getString(R.string.aboutText))
-                        .start(this);
-                break;
+            }
+            new LibsBuilder().withActivityStyle(style).withAboutIconShown(true).withAboutVersionShown(true)
+                    .withAboutDescription(getResources().getString(R.string.aboutText)).start(this);
+            break;
         }
 
-        DrawerLayout drawer = (DrawerLayout)findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -505,7 +503,7 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(TAG, "onOfflineQueueChangedEvent() offlineQueuePending: " + offlineQueuePending);
 
-        if(prevValue != offlineQueuePending) {
+        if (prevValue != offlineQueuePending) {
             Log.d(TAG, "onOfflineQueueChangedEvent() invalidating options menu");
             invalidateOptionsMenu();
         }
@@ -515,14 +513,14 @@ public class MainActivity extends AppCompatActivity
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "Got FeedsChangedEvent");
 
-        if(event.isInvalidateAll()) {
+        if (event.isInvalidateAll()) {
             firstSyncDone = settings.isFirstSyncDone();
         }
 
-        if(currentFragment instanceof ArticleListsFragment) {
-            ((ArticleListsFragment)currentFragment).onFeedsChangedEvent(event);
-        } else if(currentFragment instanceof RecyclerViewListFragment) {
-            ((RecyclerViewListFragment)currentFragment).invalidateList();
+        if (currentFragment instanceof ArticleListsFragment) {
+            ((ArticleListsFragment) currentFragment).onFeedsChangedEvent(event);
+        } else if (currentFragment instanceof RecyclerViewListFragment) {
+            ((RecyclerViewListFragment) currentFragment).invalidateList();
         }
     }
 
@@ -537,7 +535,8 @@ public class MainActivity extends AppCompatActivity
     public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
         Log.d(TAG, "onUpdateArticlesProgressEvent");
 
-        if(progressBar != null) {
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_bar);
+        if (progressBar != null) {
             progressBar.setIndeterminate(false);
             progressBar.setMax(event.getTotal());
             progressBar.setProgress(event.getCurrent());
@@ -548,7 +547,7 @@ public class MainActivity extends AppCompatActivity
     public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
         Log.d(TAG, "onUpdateArticlesFinishedEvent");
 
-        if(event.getResult().isSuccess()) {
+        if (event.getResult().isSuccess()) {
             firstSyncDone = true;
             tryToUpdateOnResume = false;
         }
@@ -559,25 +558,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateLastUpdateTime() {
-        if(lastUpdateTimeView == null) return;
+        if (lastUpdateTimeView == null)
+            return;
 
         Log.d(TAG, "updateLastUpdateTime() updating time");
 
         long timestamp = settings.getLatestUpdateRunTimestamp();
-        if(timestamp != 0) {
-            lastUpdateTimeView.setText(getString(R.string.lastUpdateTimeLabel,
-                    DateUtils.getRelativeTimeSpanString(timestamp)));
+        if (timestamp != 0) {
+            lastUpdateTimeView
+                    .setText(getString(R.string.lastUpdateTimeLabel, DateUtils.getRelativeTimeSpanString(timestamp)));
         } else {
             lastUpdateTimeView.setVisibility(View.INVISIBLE);
         }
     }
 
     private void updateStateChanged(boolean started) {
-        if(started == updateRunning) return;
+        if (started == updateRunning)
+            return;
 
         updateRunning = started;
 
-        if(progressBar != null) {
+        progressBar = (ContentLoadingProgressBar) findViewById(R.id.progress_bar);
+        if (progressBar != null) {
             progressBar.setVisibility(started ? View.VISIBLE : View.GONE);
             progressBar.setIndeterminate(true);
         }
@@ -586,15 +588,18 @@ public class MainActivity extends AppCompatActivity
     private void performSearch(String query) {
         setSearchQuery(query);
 
-        if(TextUtils.isEmpty(query)) return;
+        if (TextUtils.isEmpty(query))
+            return;
 
         searchUIPending = true;
         checkPendingSearchUI();
     }
 
     private void checkPendingSearchUI() {
-        if(searchMenuItem == null) return;
-        if(!searchUIPending) return;
+        if (searchMenuItem == null)
+            return;
+        if (!searchUIPending)
+            return;
 
         searchUIPending = false;
 
@@ -602,8 +607,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initSearchUI() {
-        final SearchView searchView = (SearchView)searchMenuItem.getActionView();
-        if(searchView == null) return;
+        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        if (searchView == null)
+            return;
 
         final String searchQueryToRestore = searchQuery;
 
@@ -620,23 +626,20 @@ public class MainActivity extends AppCompatActivity
 
     private void setParametersToFragment(Fragment fragment) {
         Log.v(TAG, "setParametersToFragment() started");
-        if(fragment == null) return;
+        if (fragment == null)
+            return;
 
         setSortOrder(fragment);
         setSearchQueryOnFragment(fragment, searchQuery);
     }
 
     private void switchSortOrder() {
-        if(FRAGMENT_TAG_LIST.equals(currentFragmentType)) {
-            tagsSortOrder = tagsSortOrder == Sortable.SortOrder.DESC
-                    ? Sortable.SortOrder.ASC
-                    : Sortable.SortOrder.DESC;
+        if (FRAGMENT_TAG_LIST.equals(currentFragmentType)) {
+            tagsSortOrder = tagsSortOrder == Sortable.SortOrder.DESC ? Sortable.SortOrder.ASC : Sortable.SortOrder.DESC;
 
             settings.setTagListSortOrder(tagsSortOrder);
         } else {
-            sortOrder = sortOrder == Sortable.SortOrder.DESC
-                    ? Sortable.SortOrder.ASC
-                    : Sortable.SortOrder.DESC;
+            sortOrder = sortOrder == Sortable.SortOrder.DESC ? Sortable.SortOrder.ASC : Sortable.SortOrder.DESC;
 
             settings.setListSortOrder(sortOrder);
         }
@@ -645,13 +648,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setSortOrder(Fragment fragment) {
-        setSortOrder(fragment, FRAGMENT_TAG_LIST.equals(currentFragmentType)
-                ? tagsSortOrder : sortOrder);
+        setSortOrder(fragment, FRAGMENT_TAG_LIST.equals(currentFragmentType) ? tagsSortOrder : sortOrder);
     }
 
     private void setSortOrder(Fragment fragment, Sortable.SortOrder sortOrder) {
-        if(fragment instanceof Sortable) {
-            ((Sortable)fragment).setSortOrder(sortOrder);
+        if (fragment instanceof Sortable) {
+            ((Sortable) fragment).setSortOrder(sortOrder);
         }
     }
 
@@ -663,13 +665,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setSearchQueryOnFragment(Fragment fragment, String searchQuery) {
-        if(fragment instanceof Searchable) {
-            ((Searchable)fragment).setSearchQuery(searchQuery);
+        if (fragment instanceof Searchable) {
+            ((Searchable) fragment).setSearchQuery(searchQuery);
         }
     }
 
     private void setCurrentFragment(String type) {
-        if(TextUtils.equals(currentFragmentType, type)) {
+        if (TextUtils.equals(currentFragmentType, type)) {
             Log.i(TAG, "setCurrentFragment() ignoring switch to the same type: " + type);
             return;
         }
@@ -680,16 +682,14 @@ public class MainActivity extends AppCompatActivity
     private void setCurrentFragment(Fragment fragment, String type) {
         updateNavigationUI(type);
 
-        if(currentFragment != null && isFragmentStateSavable(currentFragmentType)) {
+        if (currentFragment != null && isFragmentStateSavable(currentFragmentType)) {
             Log.d(TAG, "setCurrentFragment() saving fragment state: " + currentFragmentType);
 
-            savedFragmentStates.put(currentFragmentType, getSupportFragmentManager()
-                    .saveFragmentInstanceState(currentFragment));
+            savedFragmentStates.put(currentFragmentType,
+                    getSupportFragmentManager().saveFragmentInstanceState(currentFragment));
         }
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_content_frame, fragment, type)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_content_frame, fragment, type).commit();
 
         currentFragment = fragment;
         currentFragmentType = type;
@@ -702,27 +702,27 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(type);
 
-        if(fragment == null) {
+        if (fragment == null) {
             Log.d(TAG, "getFragment() creating new instance");
 
-            switch(type) {
-                case FRAGMENT_ARTICLE_LISTS:
-                    fragment = ArticleListsFragment.newInstance(null);
-                    break;
+            switch (type) {
+            case FRAGMENT_ARTICLE_LISTS:
+                fragment = ArticleListsFragment.newInstance(null);
+                break;
 
-                case FRAGMENT_TAG_LIST:
-                    fragment = new TagListFragment();
-                    break;
+            case FRAGMENT_TAG_LIST:
+                fragment = new TagListFragment();
+                break;
 
-                default:
-                    throw new IllegalArgumentException("Fragment type is not supported: " + type);
+            default:
+                throw new IllegalArgumentException("Fragment type is not supported: " + type);
             }
 
-            if(isFragmentStateSavable(type)) {
+            if (isFragmentStateSavable(type)) {
                 Log.d(TAG, "getFragment() fragment is savable");
 
                 Fragment.SavedState savedState = savedFragmentStates.get(type);
-                if(savedState != null) {
+                if (savedState != null) {
                     Log.d(TAG, "getFragment() restoring fragment state");
 
                     fragment.setInitialSavedState(savedState);
@@ -734,66 +734,70 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isFragmentStateSavable(String type) {
-        if(type == null) return false;
+        if (type == null)
+            return false;
 
-        switch(type) {
-            case FRAGMENT_ARTICLE_LISTS:
-            case FRAGMENT_TAG_LIST:
-                return true;
+        switch (type) {
+        case FRAGMENT_ARTICLE_LISTS:
+        case FRAGMENT_TAG_LIST:
+            return true;
         }
 
         return false;
     }
 
     private void updateNavigationUI(String type) {
-        if(type == null || navigationView == null) return;
+        if (type == null || navigationView == null)
+            return;
 
-        if(FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
+        if (FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
             MenuItem item = navigationView.getMenu().findItem(R.id.nav_taggedLists);
-            if(item != null) {
+            if (item != null) {
                 item.setVisible(false);
                 item.setEnabled(false);
             }
         }
 
         CharSequence title = null;
-        @IdRes int itemID = 0;
-        switch(type) {
-            case FRAGMENT_ARTICLE_LISTS:
-                itemID = R.id.nav_mainLists;
-                break;
+        @IdRes
+        int itemID = 0;
+        switch (type) {
+        case FRAGMENT_ARTICLE_LISTS:
+            itemID = R.id.nav_mainLists;
+            break;
 
-            case FRAGMENT_TAG_LIST:
-                itemID = R.id.nav_tags;
-                break;
+        case FRAGMENT_TAG_LIST:
+            itemID = R.id.nav_tags;
+            break;
 
-            case FRAGMENT_TAGGED_ARTICLE_LISTS:
-                itemID = R.id.nav_taggedLists;
+        case FRAGMENT_TAGGED_ARTICLE_LISTS:
+            itemID = R.id.nav_taggedLists;
 
-                if(selectedTag != null) {
-                    title = getString(R.string.title_main_tag, selectedTag);
-                }
+            if (selectedTag != null) {
+                title = getString(R.string.title_main_tag, selectedTag);
+            }
 
-                MenuItem item = navigationView.getMenu().findItem(itemID);
-                if(item != null) {
-                    if(title != null) item.setTitle(title);
-                    item.setVisible(true);
-                    item.setEnabled(true);
-                }
-                break;
+            MenuItem item = navigationView.getMenu().findItem(itemID);
+            if (item != null) {
+                if (title != null)
+                    item.setTitle(title);
+                item.setVisible(true);
+                item.setEnabled(true);
+            }
+            break;
         }
 
-        if(itemID != 0) {
+        if (itemID != 0) {
             navigationView.setCheckedItem(itemID);
 
-            if(title == null) {
+            if (title == null) {
                 MenuItem item = navigationView.getMenu().findItem(itemID);
-                if(item != null) {
+                if (item != null) {
                     title = item.getTitle();
                 }
             }
         }
-        if(title != null) {
+        if (title != null) {
             setTitle(title);
         }
     }
@@ -813,7 +817,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void syncQueue() {
-        if(!WallabagConnection.isNetworkAvailable()) {
+        if (!WallabagConnection.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -822,7 +826,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void sweepDeletedArticles() {
-        if(!WallabagConnection.isNetworkAvailable()) {
+        if (!WallabagConnection.isNetworkAvailable()) {
             Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -831,15 +835,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateAllFeedsIfDbIsEmpty() {
-        if(settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
+        if (settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
             fullUpdate(false);
         }
     }
 
     private void updateOnStartup() {
         long delay = 5 * 60 * 1000; // 5 minutes
-        if(settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk()
-                && settings.isFirstSyncDone()
+        if (settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk() && settings.isFirstSyncDone()
                 && settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
             updateArticles(false, Updater.UpdateType.FAST);
         }
@@ -852,20 +855,20 @@ public class MainActivity extends AppCompatActivity
     private boolean updateArticles(boolean showErrors, Updater.UpdateType updateType) {
         boolean result = false;
 
-        if(updateRunning) {
-            if(showErrors) {
+        if (updateRunning) {
+            if (showErrors) {
                 Toast.makeText(this, R.string.previousUpdateNotFinished, Toast.LENGTH_SHORT).show();
             }
-        } else if(!settings.isConfigurationOk()) {
-            if(showErrors) {
+        } else if (!settings.isConfigurationOk()) {
+            if (showErrors) {
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
-        } else if(WallabagConnection.isNetworkAvailable()) {
+        } else if (WallabagConnection.isNetworkAvailable()) {
             ServiceHelper.syncAndUpdate(this, settings, updateType, false);
 
             result = true;
         } else {
-            if(showErrors) {
+            if (showErrors) {
                 Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             }
         }
@@ -876,26 +879,26 @@ public class MainActivity extends AppCompatActivity
     private void testConfiguration() {
         cancelConfigurationTest();
 
-        configurationTestHelper = new ConfigurationTestHelper(
-                this, new ConfigurationTestHelper.ResultHandler() {
+        configurationTestHelper = new ConfigurationTestHelper(this, new ConfigurationTestHelper.ResultHandler() {
             @Override
             public void onConfigurationTestSuccess(String url) {
                 updateAllFeedsIfDbIsEmpty();
             }
 
             @Override
-            public void onConnectionTestFail(
-                    WallabagWebService.ConnectionTestResult result, String details) {}
+            public void onConnectionTestFail(WallabagWebService.ConnectionTestResult result, String details) {
+            }
 
             @Override
-            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {}
+            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {
+            }
         }, null, settings, true);
 
         configurationTestHelper.test();
     }
 
     private void cancelConfigurationTest() {
-        if(configurationTestHelper != null) {
+        if (configurationTestHelper != null) {
             configurationTestHelper.cancel();
             configurationTestHelper = null;
         }
@@ -913,7 +916,7 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView textView = (TextView)view.findViewById(R.id.page_url);
+                TextView textView = (TextView) view.findViewById(R.id.page_url);
                 ServiceHelper.addLink(getBaseContext(), textView.getText().toString());
             }
         });
@@ -924,19 +927,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(currentFragment instanceof ArticleListsFragment) {
+        if (currentFragment instanceof ArticleListsFragment) {
             switch (keyCode) {
-                case KeyEvent.KEYCODE_PAGE_UP:
-                case KeyEvent.KEYCODE_PAGE_DOWN:
-                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+            case KeyEvent.KEYCODE_PAGE_UP:
+            case KeyEvent.KEYCODE_PAGE_DOWN:
+                ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_UP:
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (settings.isVolumeButtonsScrollingEnabled()) {
+                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
                     return true;
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    if (settings.isVolumeButtonsScrollingEnabled()) {
-                        ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
-                        return true;
-                    }
-                    break;
+                }
+                break;
             }
         }
 

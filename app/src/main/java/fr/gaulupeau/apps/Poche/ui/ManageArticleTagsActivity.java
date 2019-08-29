@@ -182,12 +182,14 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         }
 
         suggestedTagsView = (RecyclerView)findViewById(R.id.manageTags_suggestionList);
+        suggestedTagsView.setHasFixedSize(true);
         if(suggestedTagsView != null) {
             suggestedTagsView.setLayoutManager(new LinearLayoutManager(this));
             suggestedTagsView.setAdapter(suggestedTagsAdapter);
         }
 
         currentTagsView = (RecyclerView)findViewById(R.id.manageTags_currentList);
+        currentTagsView.setHasFixedSize(true);
         if(currentTagsView != null) {
             currentTagsView.setLayoutManager(new LinearLayoutManager(this));
             currentTagsView.setAdapter(currentTagsAdapter);

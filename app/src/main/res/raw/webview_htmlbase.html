@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -10,13 +11,17 @@
 			<div id="content" class="w600p center">
 				<div id="article">
 					<header class="mbm">
-						<h1>%3$s</h1>
-						<img id="domainimg" src="file:///android_asset/ic_action_web_site.png" />
-						<em class="domain"><a href="%4$s">%5$s</a></em>
-						%6$s
+						<h2 class="no-bottom-margin">%3$s</h2>
+                        <!-- Domain-->
+						<img id="domainimg" src="file:///android_asset/ic_web.svg" />
+						<em class="domain caption"><a href="%4$s">%5$s</a></em>
+                        <!-- Date and author-->
+						<div class="caption">%6$s</div>
+                        <!-- Estimated Reading Time-->
+                        <div class="caption">%7$s</div>
 					</header>
 					<article>
-						%7$s
+                        %8$s
 					</article>
 				</div>
 			</div>

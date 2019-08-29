@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -29,24 +27,22 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
+
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import com.google.android.material.button.MaterialButton;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
-
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
-import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
-import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
-import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -58,6 +54,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -66,13 +63,16 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
-    public static final String EXTRA_ID = "ReadArticleActivity.id";
-    public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
+    public static final String EXTRA_ID             = "ReadArticleActivity.id";
+    public static final String EXTRA_LIST_ARCHIVED  = "ReadArticleActivity.archived";
     public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
@@ -80,30 +80,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private static final String TAG_TTS_FRAGMENT = "ttsFragment";
 
     private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_ACTIONS = EnumSet.of(
-            ArticlesChangedEvent.ChangeType.FAVORITED,
-            ArticlesChangedEvent.ChangeType.UNFAVORITED,
-            ArticlesChangedEvent.ChangeType.ARCHIVED,
-            ArticlesChangedEvent.ChangeType.UNARCHIVED);
+            ArticlesChangedEvent.ChangeType.FAVORITED, ArticlesChangedEvent.ChangeType.UNFAVORITED,
+            ArticlesChangedEvent.ChangeType.ARCHIVED, ArticlesChangedEvent.ChangeType.UNARCHIVED);
 
     private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_CONTENT = EnumSet.of(
-            ArticlesChangedEvent.ChangeType.CONTENT_CHANGED,
-            ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
-            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED,
+            ArticlesChangedEvent.ChangeType.CONTENT_CHANGED, ArticlesChangedEvent.ChangeType.TITLE_CHANGED,
+            ArticlesChangedEvent.ChangeType.DOMAIN_CHANGED, ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.PUBLISHED_AT_CHANGED,
             ArticlesChangedEvent.ChangeType.AUTHORS_CHANGED,
-            ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
             ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
 
     private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_PREV_NEXT = EnumSet.of(
-            ArticlesChangedEvent.ChangeType.UNSPECIFIED,
-            ArticlesChangedEvent.ChangeType.ADDED,
-            ArticlesChangedEvent.ChangeType.DELETED,
-            ArticlesChangedEvent.ChangeType.ARCHIVED,
-            ArticlesChangedEvent.ChangeType.UNARCHIVED,
-            ArticlesChangedEvent.ChangeType.FAVORITED,
-            ArticlesChangedEvent.ChangeType.UNFAVORITED,
-            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED);
+            ArticlesChangedEvent.ChangeType.UNSPECIFIED, ArticlesChangedEvent.ChangeType.ADDED,
+            ArticlesChangedEvent.ChangeType.DELETED, ArticlesChangedEvent.ChangeType.ARCHIVED,
+            ArticlesChangedEvent.ChangeType.UNARCHIVED, ArticlesChangedEvent.ChangeType.FAVORITED,
+            ArticlesChangedEvent.ChangeType.UNFAVORITED, ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED);
 
     private Boolean contextFavorites;
     private Boolean contextArchived;
@@ -112,36 +104,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private ArticleDao articleDao;
 
-    private int fontSize;
+    private int     fontSize;
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
     private boolean disableTouchOptionEnabled;
     private boolean disableTouch;
-    private int disableTouchKeyCode;
-    private float screenScrollingPercent;
+    private int     disableTouchKeyCode;
+    private float   screenScrollingPercent;
     private boolean smoothScrolling;
-    private int scrolledOverBottom;
-    private boolean swipeArticles;
+    private int     scrolledOverBottom;
 
-    private ScrollView scrollView;
-    private View scrollViewLastChild;
-    private WebView webViewContent;
-    private TextView loadingPlaceholder;
-    private LinearLayout bottomTools;
-    private View hrBar;
-    private TtsFragment ttsFragment;
+    private NestedScrollView scrollView;
+    private View             scrollViewLastChild;
+    private WebView          webViewContent;
+    private TextView         loadingPlaceholder;
+    private LinearLayout     bottomTools;
+    // private View hrBar;
+    private TtsFragment      ttsFragment;
 
     private Article article;
-    private String articleTitle;
-    private String articleDomain;
-    private String articleUrl;
-    private String articleLanguage;
-    private Double articleProgress;
+    private String  articleTitle;
+    private String  articleDomain;
+    private String  articleUrl;
+    private String  articleLanguage;
+    private Double  articleProgress;
 
     private Long previousArticleID;
     private Long nextArticleID;
 
-    private int webViewHeightBeforeUpdate;
+    private int      webViewHeightBeforeUpdate;
     private Runnable positionRestorationRunnable;
 
     private boolean isResumed;
@@ -152,17 +143,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         settings = App.getInstance().getSettings();
 
-        if(settings.isFullscreenArticleView()) {
+        if (settings.isFullscreenArticleView()) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-                    );
-            ActionBar actionBar = super.getSupportActionBar();
-            if(actionBar != null) actionBar.hide();
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            // if(toolbar != null) toolbar.();
+            // TODO: Hide app bar
         }
 
-        if(settings.isKeepScreenOn()) {
+        if (settings.isKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
@@ -172,17 +161,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent intent = getIntent();
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
         Log.d(TAG, "onCreate() articleId: " + articleID);
-        if(intent.hasExtra(EXTRA_LIST_FAVORITES)) {
+        if (intent.hasExtra(EXTRA_LIST_FAVORITES)) {
             contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
         }
-        if(intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
+        if (intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
             contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
         }
 
         DaoSession session = DbConnection.getSession();
         articleDao = session.getArticleDao();
 
-        if(!loadArticle(articleID)) {
+        if (!loadArticle(articleID)) {
             Log.e(TAG, "onCreate: Did not find article with ID: " + articleID);
             finish();
             return;
@@ -197,23 +186,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         screenScrollingPercent = settings.getScreenScrollingPercent();
         smoothScrolling = settings.isScreenScrollingSmooth();
         scrolledOverBottom = settings.getScrolledOverBottom();
-        swipeArticles = settings.getSwipeArticles();
-
-        setTitle(articleTitle);
 
         // article is loaded - update menu
         invalidateOptionsMenu();
 
-        scrollView = (ScrollView)findViewById(R.id.scroll);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        // display back arrow
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        // Must set on collapsing layout to enable the animation
+        // TODO: after MD library supports multi-line title should we set title here
+        // https://github.com/material-components/material-components-android/pull/413
+//        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
+//        collapsingToolbarLayout.setTitle(articleTitle);
+
+        scrollView = findViewById(R.id.scroll);
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
-        webViewContent = (WebView)findViewById(R.id.webViewContent);
-        loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
-        bottomTools = (LinearLayout)findViewById(R.id.bottomTools);
-        hrBar = findViewById(R.id.view1);
+        webViewContent = findViewById(R.id.webViewContent);
+        loadingPlaceholder = findViewById(R.id.tv_loading_article);
+        bottomTools = findViewById(R.id.bottomTools);
+        // hrBar = findViewById(R.id.view1);
 
         initWebView();
 
-        if(ttsFragment != null) {
+        if (ttsFragment != null) {
             // is it ever executed?
             ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
         }
@@ -222,16 +223,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         initButtons();
 
-        if(settings.isTtsVisible() && ttsFragment == null) {
-            ttsFragment = (TtsFragment)getSupportFragmentManager()
-                    .findFragmentByTag(TAG_TTS_FRAGMENT);
+        if (settings.isTtsVisible() && ttsFragment == null) {
+            ttsFragment = (TtsFragment) getSupportFragmentManager().findFragmentByTag(TAG_TTS_FRAGMENT);
 
-            if(ttsFragment == null) {
+            if (ttsFragment == null) {
                 toggleTTS(false);
             }
         }
 
-        if(disableTouch) {
+        if (disableTouch) {
             showDisableTouchToast();
         }
 
@@ -243,7 +243,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.onResume();
 
         isResumed = true;
-        if(onPageFinishedCallPostponedUntilResume) {
+        if (onPageFinishedCallPostponedUntilResume) {
             onPageFinishedCallPostponedUntilResume = false;
 
             onPageFinished();
@@ -259,7 +259,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onStop() {
-        if(loadingFinished && article != null) {
+        if (loadingFinished && article != null) {
             cancelPositionRestoration();
 
             OperationsHelper.setArticleProgress(this, article.getArticleId(), getReadingPosition());
@@ -283,7 +283,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         getMenuInflater().inflate(R.menu.option_article, menu);
 
-        if(article != null) {
+        if (article != null) {
             boolean unread = article.getArchive() != null && !article.getArchive();
             menu.findItem(R.id.menuArticleMarkAsRead).setVisible(unread);
             menu.findItem(R.id.menuArticleMarkAsUnread).setVisible(!unread);
@@ -300,7 +300,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
             case R.id.menuArticleMarkAsUnread:
                 markAsReadAndClose();
@@ -369,7 +369,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         if (triggerAction) {
-            if(code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
+            if (code == disableTouchKeyCode && (disableTouch || disableTouchOptionEnabled)) {
                 disableTouch = !disableTouch;
                 settings.setDisableTouchLastState(disableTouch);
 
@@ -424,13 +424,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
         boolean updatePrevNext = false;
-        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET_PREV_NEXT)) {
+        if (!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET_PREV_NEXT)) {
             updatePrevNext = true;
         } else {
             EnumSet<ArticlesChangedEvent.ChangeType> changes;
-            if(contextArchived != null) {
+            if (contextArchived != null) {
                 changes = contextArchived ? event.getArchiveFeedChanges() : event.getMainFeedChanges();
-            } else if(contextFavorites != null && contextFavorites) {
+            } else if (contextFavorites != null && contextFavorites) {
                 changes = event.getFavoriteFeedChanges();
             } else {
                 changes = EnumSet.copyOf(event.getMainFeedChanges());
@@ -438,19 +438,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 changes.addAll(event.getFavoriteFeedChanges());
             }
 
-            if(!Collections.disjoint(changes, CHANGE_SET_PREV_NEXT)) {
+            if (!Collections.disjoint(changes, CHANGE_SET_PREV_NEXT)) {
                 updatePrevNext = true;
             }
         }
 
-        if(updatePrevNext) {
+        if (updatePrevNext) {
             Log.d(TAG, "onArticleChangedEvent() prev/next buttons changed");
 
             updatePrevNextButtons();
         }
 
         EnumSet<ArticlesChangedEvent.ChangeType> changes = event.getArticleChanges(article);
-        if(changes == null) return;
+        if (changes == null)
+            return;
 
         Log.d(TAG, "onArticlesChangedEvent() changes: " + changes);
 
@@ -459,7 +460,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         boolean updateTitle;
         boolean updateURL;
 
-        if(changes.contains(FeedsChangedEvent.ChangeType.UNSPECIFIED)) {
+        if (changes.contains(FeedsChangedEvent.ChangeType.UNSPECIFIED)) {
             updateActions = true;
             updateContent = true;
             updateTitle = true;
@@ -471,7 +472,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             updateURL = changes.contains(FeedsChangedEvent.ChangeType.URL_CHANGED);
         }
 
-        if(updateActions) {
+        if (updateActions) {
             Log.d(TAG, "onArticleChangedEvent() actions changed");
 
             updateMarkAsReadButtonView();
@@ -479,34 +480,34 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             invalidateOptionsMenu();
         }
 
-        if(updateTitle) {
+        if (updateTitle) {
             Log.d(TAG, "onArticleChangedEvent() title changed");
 
-            articleTitle = article.getTitle();
-            setTitle(articleTitle);
+//            articleTitle = article.getTitle();
+//            CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsing_toolbar_layout);
+//            collapsingToolbarLayout.setTitle(articleTitle);
         }
 
-        if(updateURL) {
+        if (updateURL) {
             Log.d(TAG, "onArticleChangedEvent() URL changed");
 
             articleUrl = article.getUrl();
         }
 
-        if(updateContent) {
+        if (updateContent) {
             Log.d(TAG, "onArticleChangedEvent() content changed");
 
-//            prepareToRestorePosition(true);
+            // prepareToRestorePosition(true);
 
             loadArticleToWebView();
 
-//            restorePositionAfterUpdate();
+            // restorePositionAfterUpdate();
         }
     }
 
     private void showDisableTouchToast() {
-        Toast.makeText(this, disableTouch
-                        ? R.string.message_disableTouch_inputDisabled
-                        : R.string.message_disableTouch_inputEnabled,
+        Toast.makeText(this,
+                disableTouch ? R.string.message_disableTouch_inputDisabled : R.string.message_disableTouch_inputEnabled,
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -518,12 +519,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 boolean result = false;
-                if(ttsFragment != null) {
+                if (ttsFragment != null) {
                     result = ttsFragment.onWebViewConsoleMessage(cm);
                 }
-                if(!result) {
-                    Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
-                            cm.lineNumber(), cm.sourceId()));
+                if (!result) {
+                    Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(), cm.lineNumber(), cm.sourceId()));
                 }
                 return true;
             }
@@ -541,8 +541,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             @SuppressWarnings("deprecation") // can't use newer method until API 21
             @Override
             public boolean shouldOverrideUrlLoading(WebView webView, String url) {
-                // If we try to open current URL, do not propose to save it, directly open browser
-                if(url.equals(articleUrl)) {
+                // If we try to open current URL, do not propose to save it, directly open
+                // browser
+                if (url.equals(articleUrl)) {
                     openURL(url);
                 } else {
                     handleUrlClicked(url);
@@ -552,17 +553,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
 
             @Override
-            public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler,
-                                                  String host, String realm) {
+            public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
                 Log.d(TAG, "onReceivedHttpAuthRequest() host: " + host + ", realm: " + realm);
 
-                if(!TextUtils.isEmpty(host)) {
+                if (!TextUtils.isEmpty(host)) {
                     String httpAuthHost = settings.getUrl();
                     try {
                         httpAuthHost = new URL(httpAuthHost).getHost();
-                    } catch(Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
 
-                    if(host.contains(httpAuthHost)) {
+                    if (host.contains(httpAuthHost)) {
                         Log.d(TAG, "onReceivedHttpAuthRequest() host match");
                         handler.proceed(settings.getHttpAuthUsername(), settings.getHttpAuthPassword());
                         return;
@@ -574,42 +575,43 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         });
 
-        if(fontSize != 100) setFontSize(webViewContent, fontSize);
+        if (fontSize != 100)
+            setFontSize(webViewContent, fontSize);
 
-        GestureDetector.SimpleOnGestureListener gestureListener
-                = new GestureDetector.SimpleOnGestureListener() {
+        GestureDetector.SimpleOnGestureListener gestureListener = new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
                 // note: e1 - previous event, e2 - current event
                 // velocity* - velocity in pixels per second
 
-                if(!swipeArticles) return false;
-                if(e1 == null || e2 == null) return false;
-                if(e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
+                if (e1 == null || e2 == null)
+                    return false;
+                if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1)
+                    return false;
 
-//                if(Math.abs(e1.getY() - e2.getY()) > 150) {
-//                    Log.d("FLING", "not a horizontal fling (distance)");
-//                    return false; // not a horizontal move (distance)
-//                }
+                // if(Math.abs(e1.getY() - e2.getY()) > 150) {
+                // Log.d("FLING", "not a horizontal fling (distance)");
+                // return false; // not a horizontal move (distance)
+                // }
 
-                if(Math.abs(velocityX) < 80) {
+                if (Math.abs(velocityX) < 80) {
                     Log.v("FLING", "too slow");
                     return false; // too slow
                 }
 
-                if(Math.abs(velocityX / velocityY) < 3) {
+                if (Math.abs(velocityX / velocityY) < 3) {
                     Log.v("FLING", "not a horizontal fling");
                     return false; // not a horizontal fling
                 }
 
                 float diff = e1.getX() - e2.getX();
 
-                if(Math.abs(diff) < 80) { // configurable
+                if (Math.abs(diff) < 80) { // configurable
                     Log.v("FLING", "too small distance");
                     return false; // too small distance
                 }
 
-                if(diff > 0) { // right-to-left: next
+                if (diff > 0) { // right-to-left: next
                     Log.v("FLING", "right-to-left: next");
                     openNextArticle();
                 } else { // left-to-right: prev
@@ -621,20 +623,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                if(!tapToScroll) return false;
+                if (!tapToScroll)
+                    return false;
 
-                if(e.getPointerCount() > 1) return false;
+                if (e.getPointerCount() > 1)
+                    return false;
 
                 int viewHeight = scrollView.getHeight();
                 float y = e.getY() - scrollView.getScrollY();
 
-                if(y > viewHeight * 0.25 && y < viewHeight * 0.75) {
+                if (y > viewHeight * 0.25 && y < viewHeight * 0.75) {
                     int viewWidth = scrollView.getWidth();
                     float x = e.getX();
 
-                    if(x < viewWidth * 0.3) { // left part
+                    if (x < viewWidth * 0.3) { // left part
                         scroll(true, screenScrollingPercent, smoothScrolling, false);
-                    } else if(x > viewWidth * 0.7) { // right part
+                    } else if (x > viewWidth * 0.7) { // right part
                         scroll(false, screenScrollingPercent, smoothScrolling, false);
                     }
                 }
@@ -648,21 +652,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                v.performClick();
                 return gestureDetector.onTouchEvent(event);
             }
         });
     }
 
     private void loadArticleToWebView() {
-        webViewContent.loadDataWithBaseURL("file:///android_asset/", getHtmlPage(),
-                "text/html", "utf-8", null);
+        String page = getHtmlPage();
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", page, "text/html", "utf-8", null);
     }
 
     private String getHtmlPage() {
         String cssName;
         boolean highContrast = false;
         boolean weightedFont = false;
-        switch(Themes.getCurrentTheme()) {
+        switch (Themes.getCurrentTheme()) {
             case E_INK:
                 weightedFont = true;
             case LIGHT_CONTRAST:
@@ -685,18 +690,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         List<String> additionalClasses = new ArrayList<>(1);
-        if(highContrast) additionalClasses.add("high-contrast");
-        if(weightedFont) additionalClasses.add("weighted-font");
-        if(settings.isArticleFontSerif()) additionalClasses.add("serif-font");
-        if(settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
-        additionalClasses.add(settings.getHandlePreformattedTextOption());
+        if (highContrast)
+            additionalClasses.add("high-contrast");
+        if (weightedFont)
+            additionalClasses.add("weighted-font");
+        if (settings.isArticleFontSerif())
+            additionalClasses.add("serif-font");
+        if (settings.isArticleTextAlignmentJustify())
+            additionalClasses.add("text-align-justify");
 
         String classAttr;
-        if(!additionalClasses.isEmpty()) {
+        if (!additionalClasses.isEmpty()) {
             StringBuilder sb = new StringBuilder();
 
             sb.append(" class=\"");
-            for(String cl: additionalClasses) {
+            for (String cl : additionalClasses) {
                 sb.append(cl).append(' ');
             }
             sb.append('"');
@@ -709,19 +717,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String htmlBase;
         try {
             htmlBase = readRawString(R.raw.webview_htmlbase);
-        } catch(Exception e) {
+        } catch (Exception e) {
             // should not happen
             throw new RuntimeException("Couldn't load raw resource", e);
         }
 
         String htmlContent = getHtmlContent();
         List<String> imgURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
-        if(imgURLs != null && imgURLs.size() > 0) {
+        if (imgURLs != null && imgURLs.size() > 0) {
             String wbgURL = ImageCacheUtils.getWallabagUrl();
-            for(String imageURL: imgURLs) {
-                if(imageURL.startsWith(ImageCacheUtils.WALLABAG_RELATIVE_URL_PATH)) {
+            for (String imageURL : imgURLs) {
+                if (imageURL.startsWith(ImageCacheUtils.WALLABAG_RELATIVE_URL_PATH)) {
                     htmlContent = htmlContent.replace(imageURL, wbgURL + imageURL);
-                    Log.d(TAG, "getHtmlPage() prefixing wallabag server URL " + wbgURL + " to the image path " + imageURL);
+                    Log.d(TAG,
+                            "getHtmlPage() prefixing wallabag server URL " + wbgURL + " to the image path " + imageURL);
                 }
             }
         }
@@ -736,29 +745,29 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             dateAndAuthor += " " + article.getAuthors();
         }
 
-        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
-                articleUrl, articleDomain, dateAndAuthor, htmlContent);
+        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
+        String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
+
+        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle), articleUrl,
+                articleDomain, dateAndAuthor, estimatedReadingTimeString, htmlContent);
     }
 
     private String getHtmlContent() {
         String htmlContent = article.getContent();
 
-        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
-        String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
-                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
-
         String previewPicture = "";
-        if(!TextUtils.isEmpty(article.getPreviewPictureURL())) {
+        if (!TextUtils.isEmpty(article.getPreviewPictureURL())) {
             previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
         }
 
-        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent;
-        if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
+        htmlContent = previewPicture + htmlContent;
+        if (BuildConfig.DEBUG)
+            Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
-        if(settings.isImageCacheEnabled()) {
+        if (settings.isImageCacheEnabled()) {
             Log.d(TAG, "getHtmlContent() replacing image links to cached versions in htmlContent");
-            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
-                    htmlContent, article.getArticleId().longValue());
+            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(htmlContent, article.getArticleId().longValue());
         }
 
         return htmlContent;
@@ -770,20 +779,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void updateMarkAsReadButtonView() {
-        Button buttonMarkRead = (Button)findViewById(R.id.btnMarkRead);
-        Button buttonMarkUnread = (Button)findViewById(R.id.btnMarkUnread);
+        MaterialButton buttonMarkRead = findViewById(R.id.btnMarkRead);
+        MaterialButton buttonMarkUnread = findViewById(R.id.btnMarkUnread);
 
         boolean archived = article.getArchive();
-        buttonMarkRead.setVisibility(!archived ? View.VISIBLE: View.GONE);
-        buttonMarkUnread.setVisibility(archived ? View.VISIBLE: View.GONE);
+        buttonMarkRead.setVisibility(!archived ? View.VISIBLE : View.GONE);
+        buttonMarkUnread.setVisibility(archived ? View.VISIBLE : View.GONE);
 
-        OnClickListener onClickListener =
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        markAsReadAndClose();
-                    }
-                };
+        OnClickListener onClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                markAsReadAndClose();
+            }
+        };
 
         buttonMarkRead.setOnClickListener(onClickListener);
         buttonMarkUnread.setOnClickListener(onClickListener);
@@ -797,8 +805,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void updatePrevNextButtonViews() {
-        ImageButton buttonGoPrevious = (ImageButton)findViewById(R.id.btnGoPrevious);
-        ImageButton buttonGoNext = (ImageButton)findViewById(R.id.btnGoNext);
+        MaterialButton buttonGoPrevious = findViewById(R.id.btnGoPrevious);
+        MaterialButton buttonGoNext = findViewById(R.id.btnGoNext);
 
         buttonGoPrevious.setVisibility(previousArticleID == null ? View.GONE : View.VISIBLE);
         buttonGoNext.setVisibility(nextArticleID == null ? View.GONE : View.VISIBLE);
@@ -822,67 +830,65 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         loadingPlaceholder.setVisibility(View.GONE);
         bottomTools.setVisibility(View.VISIBLE);
-        hrBar.setVisibility(View.VISIBLE);
+        // hrBar.setVisibility(View.VISIBLE);
 
         // should there be a pause between visibility change and position restoration?
 
         restoreReadingPosition();
 
-        if(ttsFragment != null) {
+        if (ttsFragment != null) {
             ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
         }
     }
 
     private void handleUrlClicked(final String url) {
         Log.d(TAG, "handleUrlClicked() url: " + url);
-        if(TextUtils.isEmpty(url)) return;
+        if (TextUtils.isEmpty(url))
+            return;
 
         // TODO: fancy dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
-        View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
+                View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
 
-        TextView tv = (TextView)v.findViewById(R.id.tv_dialog_title_url);
+        TextView tv = v.findViewById(R.id.tv_dialog_title_url);
         tv.setText(url);
 
         builder.setCustomTitle(v);
 
-        builder.setItems(
-                new CharSequence[]{
-                        getString(R.string.d_urlAction_openInBrowser),
-                        getString(R.string.d_urlAction_addToWallabag),
-                        getString(R.string.d_urlAction_copyToClipboard),
-                        getString(R.string.menuShare)
-                }, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                openURL(url);
-                                break;
-                            case 1:
-                                ServiceHelper.addLink(ReadArticleActivity.this, url);
-                                break;
-                            case 2:
-                                copyURLToClipboard(url);
-                                break;
-                            case 3:
-                                shareArticle(null, url);
-                                break;
-                        }
-                    }
-                });
+        builder.setItems(new CharSequence[]{getString(R.string.d_urlAction_openInBrowser),
+                getString(R.string.d_urlAction_addToWallabag), getString(R.string.d_urlAction_copyToClipboard),
+                getString(R.string.menuShare)}, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        openURL(url);
+                        break;
+                    case 1:
+                        ServiceHelper.addLink(ReadArticleActivity.this, url);
+                        break;
+                    case 2:
+                        copyURLToClipboard(url);
+                        break;
+                    case 3:
+                        shareArticle(null, url);
+                        break;
+                }
+            }
+        });
 
         builder.show();
     }
 
     private void openURL(String url) {
         Log.d(TAG, "openURL() url: " + url);
-        if(TextUtils.isEmpty(url)) return;
+        if (TextUtils.isEmpty(url))
+            return;
 
         Uri uri = Uri.parse(url);
-        if(uri.getScheme() == null) {
+        if (uri.getScheme() == null) {
             Log.i(TAG, "openURL() scheme is null, appending default scheme");
             uri = Uri.parse("http://" + url);
         }
@@ -891,7 +897,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         try {
             startActivity(intent);
-        } catch(ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException e) {
             Log.w(TAG, "openURL() failed to open URL", e);
             Toast.makeText(this, R.string.message_couldNotOpenUrl, Toast.LENGTH_SHORT).show();
         }
@@ -908,21 +914,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void shareArticle() {
-       shareArticle(articleTitle, articleUrl);
+        shareArticle(articleTitle, articleUrl);
     }
 
-    private void shareArticle(String articleTitle , String articleUrl) {
+    private void shareArticle(String articleTitle, String articleUrl) {
         String shareText = articleUrl;
-        if(!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+        if (!TextUtils.isEmpty(articleTitle))
+            shareText = articleTitle + " " + shareText;
 
-
-        if(settings.isAppendWallabagMentionEnabled()) {
+        if (settings.isAppendWallabagMentionEnabled()) {
             shareText += getString(R.string.share_text_extra);
         }
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        if(!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        if (!TextUtils.isEmpty(articleTitle))
+            send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
@@ -953,14 +960,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         @SuppressLint("InflateParams") // ok for dialogs
         final View view = getLayoutInflater().inflate(R.layout.dialog_change_title, null);
 
-        ((TextView)view.findViewById(R.id.editText_title)).setText(articleTitle);
+        ((TextView) view.findViewById(R.id.editText_title)).setText(articleTitle);
 
         builder.setView(view);
 
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView textView = (TextView)view.findViewById(R.id.editText_title);
+                TextView textView = view.findViewById(R.id.editText_title);
                 changeTitle(textView.getText().toString());
             }
         });
@@ -985,21 +992,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void copyURLToClipboard() {
-       copyURLToClipboard(articleUrl);
+        copyURLToClipboard(articleUrl);
     }
 
     private void copyURLToClipboard(String url) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData urlClipData = ClipData.newPlainText("article URL", url);
-        clipboardManager.setPrimaryClip(urlClipData);
+        if (clipboardManager != null) {
+            clipboardManager.setPrimaryClip(urlClipData);
+        }
         Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
     }
 
     private void showDownloadFileDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.dialog_title_downloadFileFormat)
-                .setItems(R.array.options_downloadFormat_values,
-                        new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.dialog_title_downloadFileFormat).setItems(R.array.options_downloadFormat_values,
+                new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         String selectedFormat = getResources()
                                 .getStringArray(R.array.options_downloadFormat_values)[which];
@@ -1007,14 +1015,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         WallabagService.ResponseFormat format;
                         try {
                             format = WallabagService.ResponseFormat.valueOf(selectedFormat);
-                        } catch(IllegalArgumentException e) {
-                            Log.e(TAG, "showDownloadFileDialog() unknown selected format: "
-                                    + selectedFormat);
+                        } catch (IllegalArgumentException e) {
+                            Log.e(TAG, "showDownloadFileDialog() unknown selected format: " + selectedFormat);
                             format = WallabagService.ResponseFormat.PDF;
                         }
 
-                        ServiceHelper.downloadArticleAsFile(getApplicationContext(),
-                                article.getArticleId(), format, null);
+                        ServiceHelper.downloadArticleAsFile(getApplicationContext(), article.getArticleId(), format,
+                                null);
                     }
                 });
         builder.show();
@@ -1025,7 +1032,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         int step = 5;
         fontSize += step * (increase ? 1 : -1);
-        if(!increase && fontSize < 5) fontSize = 5;
+        if (!increase && fontSize < 5)
+            fontSize = 5;
 
         setFontSize(webViewContent, fontSize);
 
@@ -1035,21 +1043,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openArticle(Long id) {
-        if(ttsFragment != null) {
+        if (ttsFragment != null) {
             ttsFragment.onOpenNewArticle();
         }
 
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-        if(contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
-        if(contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
+        if (contextFavorites != null)
+            intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
+        if (contextArchived != null)
+            intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
 
         startActivity(intent);
     }
 
     public boolean openPreviousArticle() {
-        if(previousArticleID != null) {
+        if (previousArticleID != null) {
             openArticle(previousArticleID);
             return true;
         }
@@ -1059,7 +1069,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     public boolean openNextArticle() {
-        if(nextArticleID != null) {
+        if (nextArticleID != null) {
             openArticle(nextArticleID);
             return true;
         }
@@ -1069,32 +1079,33 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void scroll(boolean up, float percent, boolean smooth, boolean keyUsed) {
-        if(scrollView == null) return;
+        if (scrollView == null)
+            return;
 
         int viewHeight = scrollView.getHeight();
         int yOffset = scrollView.getScrollY();
 
         int newYOffset = yOffset;
-        int step = (int)(viewHeight * percent / 100);
-        if(up) {
+        int step = (int) (viewHeight * percent / 100);
+        if (up) {
             newYOffset -= step;
         } else {
             newYOffset += step;
         }
 
-        if(newYOffset != yOffset) {
-            if(smooth) {
+        if (newYOffset != yOffset) {
+            if (smooth) {
                 scrollView.smoothScrollTo(scrollView.getScrollX(), newYOffset);
             } else {
                 scrollView.scrollTo(scrollView.getScrollX(), newYOffset);
             }
         }
 
-        if(!up && keyUsed && newYOffset + viewHeight > scrollViewLastChild.getBottom()) {
-            if(scrolledOverBottom > 1) {
+        if (!up && keyUsed && newYOffset + viewHeight > scrollViewLastChild.getBottom()) {
+            if (scrolledOverBottom > 1) {
                 scrolledOverBottom--;
-                Toast.makeText(this, getString(R.string.scrolledOverBottom, scrolledOverBottom),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.scrolledOverBottom, scrolledOverBottom), Toast.LENGTH_SHORT)
+                        .show();
             } else {
                 Toast.makeText(this, R.string.markedAsRead, Toast.LENGTH_SHORT).show();
                 markAsReadAndClose();
@@ -1109,13 +1120,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         int viewHeight = scrollView.getHeight();
         int totalHeight = scrollView.getChildAt(0).getHeight();
 
-        Log.v(TAG, "getReadingPosition() yOffset: " + yOffset + ", viewHeight: " + viewHeight
-                + ", totalHeight: " + totalHeight);
+        Log.v(TAG, "getReadingPosition() yOffset: " + yOffset + ", viewHeight: " + viewHeight + ", totalHeight: "
+                + totalHeight);
 
         totalHeight -= viewHeight;
 
         double position = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
-        if(position > 100) position = 100;
+        if (position > 100)
+            position = 100;
 
         Log.d(TAG, "getReadingPosition() position: " + position);
 
@@ -1125,16 +1137,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void restoreReadingPosition() {
         Log.d(TAG, "restoreReadingPosition() articleProgress: " + articleProgress);
 
-        if(articleProgress != null) {
+        if (articleProgress != null) {
             int viewHeight = scrollView.getHeight();
             int totalHeight = scrollView.getChildAt(0).getHeight();
 
-            Log.v(TAG, "restoreReadingPosition() viewHeight: " + viewHeight
-                    + ", totalHeight: " + totalHeight);
+            Log.v(TAG, "restoreReadingPosition() viewHeight: " + viewHeight + ", totalHeight: " + totalHeight);
 
             totalHeight -= viewHeight;
 
-            int yOffset = totalHeight > 0 ? ((int)Math.round(articleProgress * totalHeight)) : 0;
+            int yOffset = totalHeight > 0 ? ((int) Math.round(articleProgress * totalHeight)) : 0;
 
             Log.v(TAG, "restoreReadingPosition() yOffset: " + yOffset);
 
@@ -1144,27 +1155,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     public boolean toggleTTS(boolean autoPlay) {
         boolean result;
-        if(ttsFragment == null) {
+        if (ttsFragment == null) {
             ttsFragment = TtsFragment.newInstance(autoPlay);
 
-            getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.viewMain, ttsFragment, TAG_TTS_FRAGMENT)
-                .commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.viewMain, ttsFragment, TAG_TTS_FRAGMENT).commit();
 
             settings.setTtsVisible(true);
 
             ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
-            if(loadingFinished) {
+            if (loadingFinished) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
 
             result = true;
         } else {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .remove(ttsFragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().remove(ttsFragment).commit();
 
             ttsFragment = null;
 
@@ -1181,7 +1186,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadArticle(long id) {
         article = getArticle(id);
 
-        if(article == null) return false;
+        if (article == null)
+            return false;
 
         articleTitle = article.getTitle();
         Log.d(TAG, "loadArticle() articleTitle: " + articleTitle);
@@ -1204,17 +1210,23 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Long getAdjacentArticle(boolean previous) {
         QueryBuilder<Article> qb = articleDao.queryBuilder();
 
-        if(previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
-        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+        if (previous)
+            qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
+        else
+            qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
 
-        if(contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        if(contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        if (contextFavorites != null)
+            qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        if (contextArchived != null)
+            qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
 
-        if(previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
-        else qb.orderDesc(ArticleDao.Properties.ArticleId);
+        if (previous)
+            qb.orderAsc(ArticleDao.Properties.ArticleId);
+        else
+            qb.orderDesc(ArticleDao.Properties.ArticleId);
 
         List<Article> l = qb.limit(1).list();
-        if(!l.isEmpty()) {
+        if (!l.isEmpty()) {
             return l.get(0).getId();
         }
 
@@ -1222,33 +1234,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private String readRawString(int id) throws IOException {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)))) {
 
             StringBuilder sb = new StringBuilder();
             String s;
-            while((s = reader.readLine()) != null) {
+            while ((s = reader.readLine()) != null) {
                 sb.append(s).append('\n');
             }
 
             return sb.toString();
-        } finally {
-            if(reader != null) {
-                try {
-                    reader.close();
-                } catch(IOException ignored) {}
-            }
         }
     }
 
     private void onPageFinished() {
         Log.d(TAG, "onPageFinished() started");
 
-        if(!isResumed) {
+        if (!isResumed) {
             onPageFinishedCallPostponedUntilResume = true;
 
-            if(ttsFragment != null) {
+            if (ttsFragment != null) {
                 ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
             }
             return;
@@ -1261,10 +1265,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             @Override
             public void run() {
                 // "< 50" is workaround for https://github.com/wallabag/android-app/issues/178
-                if(webViewContent.getHeight() < 50) {
-                    if(++counter > 1000) {
-                        Log.d(TAG, "onPageFinished() exiting by counter" +
-                                "; calling loadingFinished() anyway");
+                if (webViewContent.getHeight() < 50) {
+                    if (++counter > 1000) {
+                        Log.d(TAG, "onPageFinished() exiting by counter" + "; calling loadingFinished() anyway");
                         loadingFinished();
                         return;
                     }
@@ -1280,7 +1283,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void prepareToRestorePosition(boolean savePosition) {
-        if(savePosition) articleProgress = getReadingPosition();
+        if (savePosition)
+            articleProgress = getReadingPosition();
 
         webViewHeightBeforeUpdate = webViewContent.getHeight();
     }
@@ -1293,14 +1297,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public void run() {
-                if(webViewContent.getHeight() == webViewHeightBeforeUpdate) {
-                    if(++counter > 1000) {
+                if (webViewContent.getHeight() == webViewHeightBeforeUpdate) {
+                    if (++counter > 1000) {
                         Log.d(TAG, "restorePositionAfterUpdate() giving up");
                         return;
                     }
 
-                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay" +
-                            "; counter: " + counter);
+                    Log.v(TAG, "restorePositionAfterUpdate() scheduling another postDelay" + "; counter: " + counter);
                     webViewContent.postDelayed(this, 10);
                 } else {
                     Log.d(TAG, "restorePositionAfterUpdate() restoring position");
@@ -1311,29 +1314,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void cancelPositionRestoration() {
-        if(positionRestorationRunnable != null) {
+        if (positionRestorationRunnable != null) {
             Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
-            if(webViewContent != null) webViewContent.removeCallbacks(positionRestorationRunnable);
+            if (webViewContent != null)
+                webViewContent.removeCallbacks(positionRestorationRunnable);
             positionRestorationRunnable = null;
         }
     }
 
     private void setFontSize(WebView view, int size) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setFontSizeNew(view, size);
-        } else {
-            setFontSizeOld(view, size);
-        }
+        setFontSizeNew(view, size);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setFontSizeNew(WebView view, int size) {
         view.getSettings().setTextZoom(size);
-    }
-
-    @TargetApi(Build.VERSION_CODES.FROYO)
-    private void setFontSizeOld(WebView view, int size) {
-        view.getSettings().setDefaultFontSize(size);
     }
 
 }

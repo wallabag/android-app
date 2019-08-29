@@ -1,0 +1,76 @@
+<!--
+  ~ Copyright 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        app:key="@string/pref_key_connection_category"
+        app:title="@string/pref_categoryName_connection"
+        app:persistent="false">
+        <EditTextPreference
+            app:key="@string/pref_key_connection_url"
+            app:title="@string/pref_name_connection_url"
+            app:summary="@string/pref_desc_connection_url"
+            app:defaultValue="https://"/>
+        <EditTextPreference
+            app:key="@string/pref_key_connection_username"
+            app:title="@string/pref_name_connection_username"
+            app:defaultValue=""/>
+        <EditTextPreference
+            app:key="@string/pref_key_connection_password"
+            app:title="@string/pref_name_connection_password"
+            android:inputType="textPassword"/>
+        <Preference
+            app:key="@string/pref_key_connection_autofill"
+            app:title="@string/pref_name_connection_autofill"
+            app:summary="@string/pref_desc_connection_autofill"
+            app:persistent="false"/>
+        <EditTextPreference
+            app:key="@string/pref_key_connection_api_clientID"
+            app:title="@string/pref_name_connection_api_clientID"
+            app:defaultValue=""/>
+        <EditTextPreference
+            app:key="@string/pref_key_connection_api_clientSecret"
+            app:title="@string/pref_name_connection_api_clientSecret"
+            app:defaultValue=""/>
+        <PreferenceCategory
+            app:key="@string/pref_key_connection_advanced_category"
+            app:title="@string/pref_categoryName_connection_advanced"
+            app:persistent="false">
+            <SwitchPreferenceCompat
+                app:key="@string/pref_key_connection_advanced_customSSLSettings"
+                app:title="@string/pref_name_connection_advanced_customSSLSettings"
+                app:summary="@string/pref_desc_connection_advanced_customSSLSettings"
+                app:defaultValue="false"/>
+        </PreferenceCategory>
+        <PreferenceCategory
+            app:key="@string/pref_key_connection_advanced_httpAuth_category"
+            app:title="@string/pref_categoryName_connection_advanced_httpAuth"
+            app:summary="@string/pref_categoryDesc_connection_advanced_httpAuth"
+            app:persistent="false">
+            <EditTextPreference
+                app:key="@string/pref_key_connection_advanced_httpAuthUsername"
+                app:title="@string/pref_name_connection_advanced_httpAuthUsername"/>
+            <EditTextPreference
+                app:key="@string/pref_key_connection_advanced_httpAuthPassword"
+                app:title="@string/pref_name_connection_advanced_httpAuthPassword"
+                android:inputType="textPassword"/>
+        </PreferenceCategory>
+    </PreferenceCategory>
+</androidx.preference.PreferenceScreen>
+

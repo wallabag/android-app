@@ -75,6 +75,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
+        recyclerView.setHasFixedSize(true);
 
         scrollListener = new EndlessRecyclerViewScrollListener(recyclerViewLayoutManager) {
             @Override

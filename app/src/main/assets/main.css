@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  background: #EEE;
+  background: #FFF;
 }
 
 .high-contrast {
@@ -43,24 +43,19 @@ body {
   background: #000;
 }
 
-h2, h3, h4 {
-  font-family: 'PT Sans', sans-serif;
-  text-transform: uppercase;
-}
-
 p, li {
   color: #666;
 }
 
 table {
-  border-collapse: collapse;
+  border-collapse: collapse;align
   width: 100%;
 }
 
 table, th, td {
   border:1px solid #999;
   padding: 0.25em;
-  text-align: left;
+  text-align: start;
 }
 
 .high-contrast p,
@@ -102,7 +97,7 @@ h2:after {
   top: 0;
   width: 10em;
   left: 0;
-  text-align: right;
+  text-align: end;
   background: #333;
   padding-top: 9.5em;
   height: 100%;
@@ -176,7 +171,7 @@ h2:after {
 }
 
 footer {
-  text-align: right;
+  text-align: end;
   position: relative;
   bottom: 0;
   right: 5em;
@@ -195,14 +190,16 @@ footer a {
    5 = Article
    ========================================================================== */
 
+
 header.mbm {
-	text-align: left;
+	text-align: start;
 }
 
 #article {
   width: 70%;
 /*  margin-bottom: 3em; */
   word-wrap: break-word;
+  font: normal regular 1em/1.5 'Merriweather', serif;
 }
 
 #article .tags {
@@ -223,7 +220,7 @@ header.mbm {
 #article pre {
   font-family: monospace;
   white-space: pre;
-  text-justify: none;
+  text-justify: start;
 }
 
 .pre-overflow #article pre {
@@ -244,6 +241,55 @@ header.mbm {
 
 #article h2:after {
   content: none;
+}
+
+.no-bottom-margin {
+    margin-bottom:0px;
+}
+
+@font-face {
+  font-family: 'Libre Franklin';
+  src: url('file:///android_asset/fonts/librefranklin_400.ttf');
+}
+@font-face {
+  font-family: 'Merriweather';
+  src: url('file:///android_asset/fonts/merriweather_400.ttf');
+}
+
+
+h1{
+  font-size: 3rem;
+  line-height: 3.125rem;
+  font-family: 'Merriweather', serif;
+  font-style: italic;
+  font-weight: 900;
+}
+h2 {
+  font-size: 2.125rem;
+  line-height: 2.5rem;
+  font-family:  'Libre Franklin', sans-serif;
+}
+h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-family: 'Libre Franklin', sans-serif;
+}
+h4 {
+  font-size: 1.25rem;
+  line-height: 2rem;
+  font-family: 'Merriweather', serif;
+  font-style: italic;
+}
+p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-family: 'Merriweather', serif;
+}
+.caption {
+  font-size: .75rem;
+  line-height: 1.25rem;
+  font-family: 'Libre Franklin', sans-serif;
+  margin-bottom:0px;
 }
 
 /* ==========================================================================
@@ -287,8 +333,7 @@ header.mbm {
     width: 100%;
   }
 
-  #article h1 {
-    font-size: 1.2em;
+  #article h2 {
     margin-bottom:0px;
   }
 

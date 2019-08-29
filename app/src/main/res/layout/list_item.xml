@@ -17,22 +17,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorPrimary"/>
+            android:textAppearance="?textAppearanceSubtitle1"/>
 
         <ImageView
             android:id="@+id/favourite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_favoriteMark"
-            android:src="?attr/icon_favorite_list"/>
+            android:src="@drawable/ic_favorite_24dp"/>
 
         <ImageView
             android:id="@+id/read"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/articleList_ArchivedMark"
-            android:src="?attr/icon_read_list"/>
+            android:src="@drawable/ic_list_24dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -44,15 +43,17 @@
             android:id="@+id/url"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_weight="1"
-            android:text="New Text"/>
+            android:text="New Text"
+            android:textAppearance="?textAppearanceCaption"/>
 
         <TextView
             android:id="@+id/estimatedReadingTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
+            android:textAppearance="?textAppearanceCaption"
             android:text="@string/listItem_estimatedReadingTime"/>
     </LinearLayout>
 </LinearLayout>

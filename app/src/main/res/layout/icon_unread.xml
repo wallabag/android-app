@@ -23,7 +23,7 @@
             android:id="@+id/unread_count_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
+            android:layout_gravity="end|bottom"
             android:paddingTop="0.5dp"
             android:paddingBottom="0.5dp"
             android:paddingLeft="5dp"

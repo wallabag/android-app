@@ -1,0 +1,79 @@
+<!--
+  ~ Copyright 2018 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:key="@string/pref_key_sync_category"
+        app:title="@string/pref_categoryName_sync"
+        app:persistent="false">
+        <Preference
+            app:key="@string/pref_key_sync_syncTypes_description"
+            app:title="@string/pref_name_sync_syncTypes"
+            app:summary="@string/pref_desc_sync_syncTypes"
+            app:persistent="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_sync_sweepingAfterFastSync_enabled"
+            app:title="@string/pref_name_sync_sweepingAfterFastSync_enabled"
+            app:summary="@string/pref_desc_sync_sweepingAfterFastSync_enabled"
+            app:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_imageCache_enabled"
+            app:title="@string/pref_name_imageCache_enabled"
+            app:summary="@string/pref_desc_imageCache_enabled"
+            app:defaultValue="false"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:key="@string/pref_key_autoSync_category"
+        app:title="@string/pref_categoryName_autoSync"
+        app:persistent="false">
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_autoSync_onStartup_enabled"
+            app:title="@string/pref_name_autoSync_onStartup_enabled"
+            app:summary="@string/pref_decs_autoSync_onStartup_enabled"
+            app:defaultValue="true"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_autoSync_enabled"
+            app:title="@string/pref_name_autoSync_enabled"
+            app:summary="@string/pref_desc_autoSync_enabled"
+            app:defaultValue="false"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
+            app:dependency="@string/pref_key_autoSync_enabled"
+            app:key="@string/pref_key_autoSync_interval"
+            app:title="@string/pref_name_autoSync_interval"
+            app:dialogTitle="@string/pref_name_autoSync_interval"
+            app:defaultValue="86400000"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
+            app:dependency="@string/pref_key_autoSync_enabled"
+            app:key="@string/pref_key_autoSync_type"
+            app:title="@string/pref_name_autoSync_type"
+            app:dialogTitle="@string/pref_name_autoSync_type"
+            app:entries="@array/pref_option_autoSync_type"
+            app:entryValues="@array/pref_option_autoSync_type_values"
+            app:defaultValue="0"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_autoSyncQueue_enabled"
+            app:title="@string/pref_name_autoSyncQueue_enabled"
+            app:summary="@string/pref_desc_autoSyncQueue_enabled"
+            app:defaultValue="false"/>
+        <SwitchPreferenceCompat
+            app:key="@string/pref_key_autoDlNew_enabled"
+            app:title="@string/pref_name_autoDlNew_enabled"
+            app:summary="@string/pref_desc_autoDlNew_enabled"
+            app:defaultValue="false"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

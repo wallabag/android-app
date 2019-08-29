@@ -255,23 +255,19 @@
     <string name="pref_option_autoSync_interval_12h">12 hours</string>
     <string name="pref_option_autoSync_interval_24h">24 hours</string>
     <string name="pref_name_autoSync_type">Auto-sync type</string>
-    <string-array name="pref_option_autoSync_type">
-        <item>Fast</item>
-        <item>Full</item>
-    </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
     <string name="pref_name_autoDlNew_enabled">Download newly added articles</string>
     <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: Fetching will not occur if you have unsynchronized offline changes.</string>
     <string name="pref_name_imageCache_enabled">Put article images in cache</string>
     <string name="pref_desc_imageCache_enabled">Automatically downloads all images from every article and saves them to the device. Depending on the length of your wallabag article list, this can take up a lot of time and space.</string>
-
     <string name="pref_name_storage_dbPath">Database location</string>
+
     <string name="pref_name_storage_dbPath_internalStorage">Internal storage</string>
     <string name="pref_name_storage_dbPath_externalStorage">External storage</string>
     <string name="pref_name_storage_dbPath_dbMoved">Database moved</string>
-
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
+
     <string name="pref_name_misc_appendWallabagMention">Append wallabag mention</string>
     <string name="pref_desc_misc_appendWallabagMention">Append \"via @wallabagapp\" to shared texts</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
@@ -280,16 +276,16 @@
     <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe the database?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
     <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag.</string>
+
     <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up a connection. The connection wizard will help you do so.</string>
     <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from \"Settings\".</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
+
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this to input required settings manually</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
@@ -298,23 +294,43 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Basic configuration</string>
+
     <string name="connectionWizard_provider_general_prev">Back</string>
     <string name="connectionWizard_provider_general_next">Connect</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
+
     <string name="connectionWizard_provider_wallabagit_prev">Back</string>
     <string name="connectionWizard_provider_wallabagit_next">Connect</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
+
     <string name="connectionWizard_provider_framabag_prev">Back</string>
     <string name="connectionWizard_provider_framabag_next">Connect</string>
-
     <string name="connectionWizard_summary_titleMessage">All done.</string>
+
     <string name="connectionWizard_summary_text">Click to save and go to the main screen.</string>
     <string name="connectionWizard_summary_toastMessage">Setup complete</string>
     <string name="connectionWizard_summary_prev">Back</string>
     <string name="connectionWizard_summary_next">Save settings</string>
     <string name="remove_tag">Remove tag</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="messages_header">Messages</string>
+
+    <!-- Preference Titles -->
+    <string name="sync_header">Sync</string>
+    <string name="signature_title">Your signature</string>
+
+    <!-- Messages Preferences -->
+    <string name="reply_title">Default reply action</string>
+    <string name="sync_title">Sync email periodically</string>
+
+    <!-- Sync Preferences -->
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string-array name="pref_option_autoSync_type">
+        <item>Fast</item>
+        <item>Full</item>
+    </string-array>
 </resources>

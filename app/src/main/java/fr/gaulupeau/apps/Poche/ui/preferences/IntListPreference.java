@@ -3,7 +3,7 @@ package fr.gaulupeau.apps.Poche.ui.preferences;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.preference.ListPreference;
+import androidx.preference.ListPreference;
 import android.util.AttributeSet;
 
 /**
