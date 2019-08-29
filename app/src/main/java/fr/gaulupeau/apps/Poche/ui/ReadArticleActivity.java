@@ -11,15 +11,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.widget.NestedScrollView;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -36,11 +27,14 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 
 import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
 import com.google.android.material.button.MaterialButton;
@@ -49,11 +43,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
-
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
-import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
-import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
-import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -65,6 +54,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -73,6 +63,9 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
+import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
@@ -659,6 +652,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                v.performClick();
                 return gestureDetector.onTouchEvent(event);
             }
         });
@@ -755,10 +749,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
                 estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
 
-        String result = String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle), articleUrl,
+        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle), articleUrl,
                 articleDomain, dateAndAuthor, estimatedReadingTimeString, htmlContent);
-        int a = 1;
-        return result;
     }
 
     private String getHtmlContent() {
@@ -1006,7 +998,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void copyURLToClipboard(String url) {
         ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData urlClipData = ClipData.newPlainText("article URL", url);
-        clipboardManager.setPrimaryClip(urlClipData);
+        if (clipboardManager != null) {
+            clipboardManager.setPrimaryClip(urlClipData);
+        }
         Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
     }
 
@@ -1240,9 +1234,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private String readRawString(int id) throws IOException {
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)));
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)))) {
 
             StringBuilder sb = new StringBuilder();
             String s;
@@ -1251,13 +1243,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
 
             return sb.toString();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException ignored) {
-                }
-            }
         }
     }
 
@@ -1338,21 +1323,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void setFontSize(WebView view, int size) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            setFontSizeNew(view, size);
-        } else {
-            setFontSizeOld(view, size);
-        }
+        setFontSizeNew(view, size);
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void setFontSizeNew(WebView view, int size) {
         view.getSettings().setTextZoom(size);
-    }
-
-    @TargetApi(Build.VERSION_CODES.FROYO)
-    private void setFontSizeOld(WebView view, int size) {
-        view.getSettings().setDefaultFontSize(size);
     }
 
 }
