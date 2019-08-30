@@ -399,7 +399,6 @@ public class SettingsActivity extends BaseActionBarActivity {
                     autoSyncQueueChanged = true;
                     break;
 
-                case R.string.pref_key_connection_advanced_customSSLSettings:
                 case R.string.pref_key_connection_url:
                     Log.d(TAG, "onSharedPreferenceChanged() serviceWrapperReinitializationNeeded");
                     serviceWrapperReinitializationNeeded = true;

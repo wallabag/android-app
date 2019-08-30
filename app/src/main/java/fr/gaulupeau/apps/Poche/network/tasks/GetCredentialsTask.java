@@ -20,28 +20,25 @@ public class GetCredentialsTask extends AsyncTask<Void, Void, Boolean> {
     private final String password;
     private final String httpAuthUsername;
     private final String httpAuthPassword;
-    private final boolean customSSLSettings;
 
     private ClientCredentials credentials;
 
     public GetCredentialsTask(ResultHandler handler, String url,
                               String username, String password,
-                              String httpAuthUsername, String httpAuthPassword,
-                              boolean customSSLSettings) {
+                              String httpAuthUsername, String httpAuthPassword) {
         this.handler = handler;
         this.url = url;
         this.username = username;
         this.password = password;
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
-        this.customSSLSettings = customSSLSettings;
     }
 
     @Override
     protected Boolean doInBackground(Void... params) {
         WallabagWebService service = new WallabagWebService(url, username, password,
                 httpAuthUsername, httpAuthPassword,
-                WallabagConnection.createClient(true, customSSLSettings));
+                WallabagConnection.createClient());
         try {
             credentials = service.getApiClientCredentials();
 

@@ -12,8 +12,6 @@
     <string name="pref_key_connection_api_refreshToken" translatable="false">connection.api.refreshToken</string>
     <string name="pref_key_connection_api_accessToken" translatable="false">connection.api.accessToken</string>
     <string name="pref_key_connection_advanced" translatable="false">connection.advanced</string>
-    <string name="pref_key_connection_advanced_category" translatable="false">connection.advanced.category</string>
-    <string name="pref_key_connection_advanced_customSSLSettings" translatable="false">connection.advanced.customSSLSettings</string>
     <string name="pref_key_connection_advanced_httpAuth_category" translatable="false">connection.advanced.httpAuth.category</string>
     <string name="pref_key_connection_advanced_httpAuthUsername" translatable="false">connection.advanced.httpAuthUsername</string>
     <string name="pref_key_connection_advanced_httpAuthPassword" translatable="false">connection.advanced.httpAuthPassword</string>

@@ -173,8 +173,6 @@
     <string name="pref_desc_connection_autofill">Probar la conexión y llenar el ID y el secreto del cliente</string>
 
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Opciones de SSL personalizadas</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Desactiva SSL en todos los dispositivos, activa TLS 1.1 y TLS 1.2 en Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Autenticación básica HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes qué es, déjalo vacío</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Usuario HTTP</string>

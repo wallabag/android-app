@@ -44,7 +44,6 @@ public class ConfigurationTestHelper
     private String httpAuthUsername, httpAuthPassword;
     private String username, password;
     private String clientID, clientSecret;
-    private boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
 
     private boolean tryPossibleURLs;
     private boolean handleResult;
@@ -69,7 +68,7 @@ public class ConfigurationTestHelper
                 settings.getHttpAuthUsername(), settings.getHttpAuthPassword(),
                 settings.getUsername(), settings.getPassword(),
                 settings.getApiClientID(), settings.getApiClientSecret(),
-                settings.isCustomSSLSettings(), false, handleResult);
+                false, handleResult);
     }
 
     public ConfigurationTestHelper(Context context, ResultHandler handler,
@@ -77,8 +76,7 @@ public class ConfigurationTestHelper
                                    String httpAuthUsername, String httpAuthPassword,
                                    String username, String password,
                                    String clientID, String clientSecret,
-                                   boolean customSSLSettings, boolean tryPossibleURLs,
-                                   boolean handleResult) {
+                                   boolean tryPossibleURLs, boolean handleResult) {
         this.context = context;
         this.handler = handler;
         this.credentialsHandler = credentialsHandler;
@@ -89,7 +87,6 @@ public class ConfigurationTestHelper
         this.password = password;
         this.clientID = clientID;
         this.clientSecret = clientSecret;
-        this.customSSLSettings = customSSLSettings;
 
         this.tryPossibleURLs = tryPossibleURLs;
         this.handleResult = handleResult;
@@ -110,8 +107,7 @@ public class ConfigurationTestHelper
         progressDialog.show();
 
         testConnectionTask = new TestConnectionTask(url, username, password,
-                httpAuthUsername, httpAuthPassword,
-                customSSLSettings, tryPossibleURLs, this);
+                httpAuthUsername, httpAuthPassword, tryPossibleURLs, this);
         testConnectionTask.execute();
     }
 
@@ -275,8 +271,7 @@ public class ConfigurationTestHelper
 
         getCredentialsTask = new GetCredentialsTask(this, getUrl(),
                 username, password,
-                httpAuthUsername, httpAuthPassword,
-                customSSLSettings);
+                httpAuthUsername, httpAuthPassword);
         getCredentialsTask.execute();
     }
 
@@ -314,8 +309,7 @@ public class ConfigurationTestHelper
 
         testApiAccessTask = new TestApiAccessTask(getUrl(),
                 username, password,
-                clientID, clientSecret, null, null,
-                customSSLSettings, this);
+                clientID, clientSecret, null, null, this);
         testApiAccessTask.execute();
     }
 

@@ -123,8 +123,6 @@
     <string name="pref_name_connection_autofill">オートフィル</string>
 
     <string name="pref_categoryName_connection_advanced">高度な接続設定</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">カスタム SSL 設定</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">すべてのデバイスで、SSL を無効にし、Android 4.1–4.4 では TLS 1.1 および TLS 1.2 を有効にします</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP ベーシック認証</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">何かわからない場合は、空のままにしてください</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 認証ユーザー名</string>

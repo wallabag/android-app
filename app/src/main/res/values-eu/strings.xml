@@ -164,8 +164,6 @@
     <string name="pref_desc_connection_autofill">Probatu konexioa eta bete bezeroaren IDa eta bezeroaren sekretua</string>
 
     <string name="pref_categoryName_connection_advanced">Konexio ezarpen aurreratuak</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">SSL ezarpen pertsonalizatuak</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Desgaitu SLL gailu guztietan, TLS 1.1 eta TLS 1.2 gaitzen ditu Android 4.1–4.4n</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Oinarrizko HTTP Autentifikazioa</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ez badakizu zer den, utzi hutsik</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP erabiltzaile-izen Autentifikazioa</string>

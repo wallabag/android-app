@@ -180,8 +180,6 @@
     <string name="pref_desc_connection_autofill">测试连接并填写客户端 ID 和客户端机密</string>
 
     <string name="pref_categoryName_connection_advanced">高级连接设置</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">自定义 SSL 设置</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">在所有设备上禁用 SSL ，在 Android 4.1—4.4上启用 TLS 1.1 和 TLS 1.2</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP 基本身份验证</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">如果你不知道它是什么，请勿填写</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 认证用户名</string>

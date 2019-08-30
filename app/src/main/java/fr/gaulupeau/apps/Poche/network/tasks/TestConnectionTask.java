@@ -37,21 +37,18 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
     private final String password;
     private String httpAuthUsername;
     private String httpAuthPassword;
-    private boolean customSSLSettings;
     private boolean tryPossibleURLs;
 
     private ResultHandler resultHandler;
 
     public TestConnectionTask(String endpointUrl, String username, String password,
                               String httpAuthUsername, String httpAuthPassword,
-                              boolean customSSLSettings, boolean tryPossibleURLs,
-                              ResultHandler resultHandler) {
+                              boolean tryPossibleURLs, ResultHandler resultHandler) {
         this.endpointUrl = endpointUrl;
         this.username = username;
         this.password = password;
         this.httpAuthUsername = httpAuthUsername;
         this.httpAuthPassword = httpAuthPassword;
-        this.customSSLSettings = customSSLSettings;
         this.tryPossibleURLs = tryPossibleURLs;
         this.resultHandler = resultHandler;
     }
@@ -107,7 +104,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
             WallabagWebService service = new WallabagWebService(url, username, password,
                     httpAuthUsername, httpAuthPassword,
-                    WallabagConnection.createClient(true, customSSLSettings));
+                    WallabagConnection.createClient());
 
             try {
                 testResult.result = service.testConnection();
@@ -134,7 +131,7 @@ public class TestConnectionTask extends AsyncTask<Void, Void, List<TestConnectio
 
     // well, it's a mess
     private String detectRedirection(String url) throws IOException {
-        OkHttpClient client = WallabagConnection.createClient(true, customSSLSettings);
+        OkHttpClient client = WallabagConnection.createClient();
 
         HttpUrl httpUrl = HttpUrl.parse(url + "/");
         if(httpUrl == null) {
