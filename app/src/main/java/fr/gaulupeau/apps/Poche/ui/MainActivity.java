@@ -28,7 +28,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -133,12 +132,6 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             if(headerView != null) {
                 lastUpdateTimeView = (TextView)headerView.findViewById(R.id.lastUpdateTime);
-            }
-
-            // Set white logo in the navigation bar in dark and dark (high contrast) theme
-            if (headerView != null && Themes.getCurrentTheme() != null && Themes.getCurrentTheme().isDark()) {
-                ImageView logo = headerView.findViewById(R.id.imageView);
-                logo.setImageDrawable(getDrawable(R.drawable.welcome_white));
             }
 
             // Set different colors for items in the navigation bar in dark (high contrast) theme
