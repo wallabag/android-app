@@ -20,6 +20,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="keyline_2">8dp</dimen>
     <dimen name="keyline_4">16dp</dimen>
     <dimen name="keyline_5">24dp</dimen>
+    <dimen name="keyline_6">28dp</dimen>
+
 
     <dimen name="component_label_horizontal_margin">@dimen/keyline_4</dimen>
 
@@ -31,4 +33,9 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="alpha_emphasis_disabled">@dimen/mtrl_emphasis_disabled</dimen>
 
     <dimen name="collapsing_toolbar_height">192dp</dimen>
+
+    <dimen name="list_item_overline_top_to_baseline">@dimen/keyline_5</dimen>
+    <dimen name="list_item_title_top_to_baseline">44dp</dimen>
+    <dimen name="list_item_tail_caption_top_margin">48dp</dimen>
+    <dimen name="list_item_tail_icon_width">24dp</dimen>
 </resources>

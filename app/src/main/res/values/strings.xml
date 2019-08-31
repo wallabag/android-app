@@ -329,6 +329,8 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="example_domain">example.com</string>
+    <string name="untitled_title">Untitled</string>
     <string-array name="pref_option_autoSync_type">
         <item>Fast</item>
         <item>Full</item>

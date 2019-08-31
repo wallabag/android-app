@@ -1,14 +1,16 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import androidx.annotation.LayoutRes;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
+
+import androidx.annotation.LayoutRes;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         this.buttonClickListener = buttonClickListener;
     }
 
+    @NotNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -57,7 +60,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         OnItemClickListener listener;
         OnItemButtonClickListener buttonClickListener;
 
-        TextView label;
+        Chip chip;
         MaterialButton button;
 
         public ViewHolder(View itemView, OnItemClickListener listener,
@@ -67,18 +70,18 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
             this.listener = listener;
             this.buttonClickListener = buttonClickListener;
 
-            label = (TextView)itemView.findViewById(R.id.tag_label);
+            chip = itemView.findViewById(R.id.tag_label);
 
             itemView.setOnClickListener(this);
 
-            button = (MaterialButton)itemView.findViewById(R.id.tag_remove_button);
+            button = itemView.findViewById(R.id.tag_remove_button);
             if(button != null) {
                 button.setOnClickListener(this);
             }
         }
 
         public void bind(Tag tag) {
-            label.setText(tag.getLabel());
+            chip.setText(tag.getLabel());
         }
 
         @Override

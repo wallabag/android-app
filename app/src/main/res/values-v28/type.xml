@@ -119,6 +119,7 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textFontWeight">400</item>
         <item name="android:textStyle">italic</item>
+        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="TextAppearance.MyTheme.Overline" parent="TextAppearance.MaterialComponents.Overline">
