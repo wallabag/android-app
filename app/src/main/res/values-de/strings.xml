@@ -90,8 +90,6 @@
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>
 
-    <string name="pref_name_connection_advanced_customSSLSettings">Benutzerdefinierte SSL-Einstellungen</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Deaktiviert SSL auf allen Geräten, aktiviert TLS 1.1 und TLS 1.2 auf Android 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP-Basis-Authentifizierung</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierungsbenutzername</string>

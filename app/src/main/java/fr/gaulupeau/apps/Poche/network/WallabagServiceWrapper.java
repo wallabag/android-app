@@ -82,7 +82,7 @@ public class WallabagServiceWrapper {
 
                 return !TextUtils.isEmpty(token.accessToken);
             }
-        }, WallabagConnection.createClient(false, settings.isCustomSSLSettings()));
+        }, WallabagConnection.createClient(false));
     }
 
     public static Article executeModifyArticleCall(WallabagService.ModifyArticleBuilder builder)

@@ -126,8 +126,6 @@
     <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
 
     <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Egyéni SSL-beállítások</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Letiltja az SSL-t minden eszközön, engedélyezi a TLS 1.1 és TLS 1.2 használatát Android 4.1–4.4 verziókhoz</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP egyszerű hitelesítés</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP felhasználónév</string>

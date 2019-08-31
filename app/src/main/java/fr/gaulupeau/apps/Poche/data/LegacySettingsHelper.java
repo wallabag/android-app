@@ -11,7 +11,6 @@ class LegacySettingsHelper {
     static final String PREFS_NAME = "InThePoche";
 
     static final String URL = "pocheUrl";
-    static final String CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
     static final String FONT_SIZE = "font_size";
     static final String SERIF_FONT = "serif_font";
     static final String USERNAME = "username";
@@ -51,9 +50,6 @@ class LegacySettingsHelper {
                 R.string.pref_key_connection_advanced_httpAuthUsername, legacyPref, prefEditor);
         migrateStringPref(cx, HTTP_AUTH_PASSWORD,
                 R.string.pref_key_connection_advanced_httpAuthPassword, legacyPref, prefEditor);
-
-        migrateBooleanPref(cx, CUSTOM_SSL_SETTINGS,
-                R.string.pref_key_connection_advanced_customSSLSettings, legacyPref, prefEditor);
 
         if(legacyPref.contains(FONT_SIZE)) {
             int fontSize = legacyPref.getInt(FONT_SIZE, 100);

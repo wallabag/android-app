@@ -107,11 +107,6 @@ public class Settings {
                 PackageManager.DONT_KILL_APP);
     }
 
-    public static boolean getDefaultCustomSSLSettingsValue() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1
-                && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
-    }
-
     public Settings(Context context) {
         this.context = context.getApplicationContext();
         pref = PreferenceManager.getDefaultSharedPreferences(this.context);
@@ -133,11 +128,6 @@ public class Settings {
                 setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
-                if(getDefaultCustomSSLSettingsValue()) {
-                    prefEditor.putBoolean(context.getString(
-                            R.string.pref_key_connection_advanced_customSSLSettings), true);
-                }
-
                 Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
                         ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
                 prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
@@ -314,14 +304,6 @@ public class Settings {
 
     public void setApiAccessToken(String apiAccessToken) {
         setString(R.string.pref_key_connection_api_accessToken, apiAccessToken);
-    }
-
-    public boolean isCustomSSLSettings() {
-        return getBoolean(R.string.pref_key_connection_advanced_customSSLSettings, false);
-    }
-
-    public void setCustomSSLSettings(boolean value) {
-        setBoolean(R.string.pref_key_connection_advanced_customSSLSettings, value);
     }
 
     public String getHttpAuthUsername() {

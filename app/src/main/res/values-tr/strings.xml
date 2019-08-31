@@ -157,8 +157,6 @@
     <string name="pref_name_connection_autofill">Otomatik Doldurma</string>
     <string name="pref_desc_connection_autofill">Bağlantıyı sına ve istemci ID kimlik ve gizli anahtarını otomatik doldur</string>
     <string name="pref_categoryName_connection_advanced">Gelişmiş bağlantı ayarları</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Özel SSL ayarları</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">SSL\'i tüm cihazlarda devre dışı bırakır, TLS 1.1 ve 1.2\'yi Android 4.1–4.4 arası için aktif eder</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Temel kimlik Doğrulaması</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Eğer ne olduğunu bilmiyorsanız boş bırakın</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP kimlik doğrulama kullanıcı adı</string>

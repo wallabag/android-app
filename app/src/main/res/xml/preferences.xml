@@ -50,16 +50,6 @@
             android:title="@string/pref_categoryName_connection_advanced"
             android:persistent="false">
             <PreferenceCategory
-                android:key="@string/pref_key_connection_advanced_category"
-                android:title="@string/pref_categoryName_connection_advanced"
-                android:persistent="false">
-                <CheckBoxPreference
-                    android:key="@string/pref_key_connection_advanced_customSSLSettings"
-                    android:title="@string/pref_name_connection_advanced_customSSLSettings"
-                    android:summary="@string/pref_desc_connection_advanced_customSSLSettings"
-                    android:defaultValue="false"/>
-            </PreferenceCategory>
-            <PreferenceCategory
                 android:key="@string/pref_key_connection_advanced_httpAuth_category"
                 android:title="@string/pref_categoryName_connection_advanced_httpAuth"
                 android:summary="@string/pref_categoryDesc_connection_advanced_httpAuth"

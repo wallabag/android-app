@@ -42,7 +42,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String DATA_PASSWORD = "password";
     private static final String DATA_HTTP_AUTH_USERNAME = "http_auth_username";
     private static final String DATA_HTTP_AUTH_PASSWORD = "http_auth_password";
-    private static final String DATA_CUSTOM_SSL_SETTINGS = "custom_ssl_settings";
     private static final String DATA_API_CLIENT_ID = "api_client_id";
     private static final String DATA_API_CLIENT_SECRET = "api_client_secret";
 
@@ -385,7 +384,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         protected String username, password;
         protected String clientID, clientSecret;
         protected String httpAuthUsername, httpAuthPassword;
-        protected boolean customSSLSettings = Settings.getDefaultCustomSSLSettingsValue();
         protected boolean tryPossibleURLs = true;
 
         protected ConfigurationTestHelper configurationTestHelper;
@@ -447,8 +445,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             configurationTestHelper = new ConfigurationTestHelper(
                     activity, this, this, url, httpAuthUsername, httpAuthPassword,
-                    username, password, clientID, clientSecret,
-                    customSSLSettings, tryPossibleURLs, false);
+                    username, password, clientID, clientSecret, tryPossibleURLs, false);
             configurationTestHelper.test();
         }
 
@@ -503,7 +500,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             bundle.putString(DATA_API_CLIENT_SECRET, clientSecret);
             bundle.putString(DATA_HTTP_AUTH_USERNAME, httpAuthUsername);
             bundle.putString(DATA_HTTP_AUTH_PASSWORD, httpAuthPassword);
-            bundle.putBoolean(DATA_CUSTOM_SSL_SETTINGS, customSSLSettings);
         }
 
     }
@@ -610,7 +606,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             settings.setPassword(bundle.getString(DATA_PASSWORD));
             settings.setHttpAuthUsername(httpAuthUsername);
             settings.setHttpAuthPassword(bundle.getString(DATA_HTTP_AUTH_PASSWORD));
-            settings.setCustomSSLSettings(bundle.getBoolean(DATA_CUSTOM_SSL_SETTINGS));
             settings.setApiClientID(clientID);
             settings.setApiClientSecret(bundle.getString(DATA_API_CLIENT_SECRET));
             settings.setConfigurationOk(true);

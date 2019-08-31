@@ -32,7 +32,6 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
     private final String clientSecret;
     private final String refreshToken;
     private final String accessToken;
-    private final boolean customSSLSettings;
 
     private final ResultHandler resultHandler;
 
@@ -42,7 +41,7 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
     public TestApiAccessTask(String url, String username, String password,
                              String clientID, String clientSecret,
                              String refreshToken, String accessToken,
-                             boolean customSSLSettings, ResultHandler resultHandler) {
+                             ResultHandler resultHandler) {
         this.url = url;
         this.username = getNonNullString(username);
         this.password = getNonNullString(password);
@@ -50,7 +49,6 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
         this.clientSecret = getNonNullString(clientSecret);
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
-        this.customSSLSettings = customSSLSettings;
         this.resultHandler = resultHandler;
     }
 
@@ -97,7 +95,7 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
 
                 return !TextUtils.isEmpty(token.accessToken);
             }
-        }, WallabagConnection.createClient(false, customSSLSettings));
+        }, WallabagConnection.createClient(false));
 
         try {
             Log.d(TAG, "doInBackground() API version: " + wallabagService.getVersion());

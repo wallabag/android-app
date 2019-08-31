@@ -139,8 +139,6 @@
     <string name="pref_categoryName_connection">Подключение</string>
     <string name="pref_name_connection_autofill">Автозаполнение</string>
     <string name="pref_categoryName_connection_advanced">Расширенные параметры подключения</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Особые параметры SSL</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Отключает SSL на всех устройствах, включает TLS 1.1 и TLS 1.2 на Android 4.1–4.4</string>
 
     <string name="pref_categoryName_ui">Пользовательский интерфейс</string>
     <string name="pref_categoryName_ui_screenScrolling">Прокрутка экрана</string>

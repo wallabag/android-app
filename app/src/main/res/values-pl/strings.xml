@@ -160,8 +160,6 @@
     <string name="pref_name_connection_autofill">Autouzupełnnienie</string>
 
     <string name="pref_categoryName_connection_advanced">Zaawansowane ustawienia połączenią</string>
-    <string name="pref_name_connection_advanced_customSSLSettings">Niestandardowe ustawienia SSL</string>
-    <string name="pref_desc_connection_advanced_customSSLSettings">Wyłącza SSL dla wszystkich urządzeń, włącza TLS 1.1 i TLS 1.2 na Androidzie 4.1–4.4</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Podstawowe uwierzytelnienie HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Jeżeli nie wiesz co to jest, zostaw puste</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Nazwa użytkownika uwierzytelnienia HTTP</string>
