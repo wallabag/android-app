@@ -119,10 +119,6 @@ public class Themes {
             return proxyResId;
         }
 
-        public boolean isDark() {
-            return this == Themes.Theme.DARK || this == Themes.Theme.DARK_CONTRAST;
-        }
-
     }
 
 }
