@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView"
-                    android:src="@drawable/ic_running_24dp"
+                    android:src="?attr/icon_running"
                     android:layout_gravity="center"
                     android:contentDescription="@string/readSpeed"
                     android:layout_column="0" />
@@ -69,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView2"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_musical_notes_24dp"
+                    android:src="?attr/icon_notes"
                     android:contentDescription="@string/voiceHeight"
                     android:layout_column="0" />
 
@@ -102,7 +102,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/imageView3"
-                    android:src="@drawable/ic_volume_up_24dp"
+                    android:src="?attr/icon_volume"
                     android:layout_gravity="center"
                     android:contentDescription="@string/readVolume"
                     android:layout_column="0" />
@@ -193,7 +193,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imgviewTTSAutoplayNext"
-                android:src="@drawable/ic_redo_24dp"
+                android:src="?attr/icon_autoplay"
                 android:layout_gravity="center_vertical|right"
                 android:clickable="true"
                 android:focusable="true"
@@ -230,7 +230,7 @@
             android:id="@+id/btnTTSFastRewind"
             android:contentDescription="@string/ttsFastRewind"
             android:layout_weight="1"
-            android:src="@drawable/ic_fast_rewind_24dp"
+            android:src="?attr/icon_fast_rewind"
             android:layout_gravity="center_vertical" />
 
         <ImageButton
@@ -239,7 +239,7 @@
             android:id="@+id/btnTTSPlayPause"
             android:contentDescription="@string/ttsPlayPause"
             android:layout_weight="1"
-            android:src="@drawable/ic_play_arrow_24dp"
+            android:src="?attr/icon_play"
             android:layout_gravity="center_vertical" />
 
         <ImageButton
@@ -248,7 +248,7 @@
             android:id="@+id/btnTTSFastForward"
             android:contentDescription="@string/ttsFastForward"
             android:layout_weight="1"
-            android:src="@drawable/ic_fast_forward_24dp"
+            android:src="?attr/icon_fast_forward"
             android:layout_gravity="center_vertical" />
 
         <ImageButton
@@ -258,7 +258,7 @@
             android:contentDescription="@string/ttsOptions"
             android:layout_gravity="center_vertical"
             android:layout_weight="0.5"
-            android:src="@drawable/ic_menu_24dp" />
+            android:src="?attr/icon_menu" />
 
     </LinearLayout>
 
