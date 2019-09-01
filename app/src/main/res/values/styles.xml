@@ -12,6 +12,15 @@
         <attr name="icon_search" format="reference"/>
         <attr name="icon_sort" format="reference"/>
         <attr name="welcome_logo" format="reference"/>
+        <attr name="icon_running" format="reference"/>
+        <attr name="icon_volume" format="reference"/>
+        <attr name="icon_notes" format="reference"/>
+        <attr name="icon_fast_forward" format="reference"/>
+        <attr name="icon_play" format="reference"/>
+        <attr name="icon_fast_rewind" format="reference"/>
+        <attr name="icon_autoplay" format="reference"/>
+        <attr name="icon_menu" format="reference"/>
+
     </declare-styleable>
 
     <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -26,6 +35,15 @@
         <item name="icon_search">@drawable/ic_search_white_24dp</item>
         <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
         <item name="welcome_logo">@drawable/welcome</item>
+        <item name="icon_running">@drawable/ic_running_24dp</item>
+        <item name="icon_notes">@drawable/ic_musical_notes_24dp</item>
+        <item name="icon_volume">@drawable/ic_volume_up_24dp</item>
+        <item name="icon_fast_forward">@drawable/ic_fast_forward_24dp</item>
+        <item name="icon_play">@drawable/ic_play_arrow_24dp</item>
+        <item name="icon_fast_rewind">@drawable/ic_fast_rewind_24dp</item>
+        <item name="icon_autoplay">@drawable/ic_redo_24dp</item>
+        <item name="icon_menu">@drawable/ic_menu_24dp</item>
+
     </style>
 
     <style name="LightTheme.NoActionBar">
@@ -56,6 +74,14 @@
         <item name="icon_search">@drawable/ic_search_white_24dp</item>
         <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
         <item name="welcome_logo">@drawable/welcome_white</item>
+        <item name="icon_running">@drawable/ic_running_white_24dp</item>
+        <item name="icon_notes">@drawable/ic_musical_notes_white_24dp</item>
+        <item name="icon_volume">@drawable/ic_volume_up_white_24dp</item>
+        <item name="icon_fast_forward">@drawable/ic_fast_forward_white_24dp</item>
+        <item name="icon_play">@drawable/ic_play_arrow_white_24dp</item>
+        <item name="icon_fast_rewind">@drawable/ic_fast_rewind_white_24dp</item>
+        <item name="icon_autoplay">@drawable/ic_redo_white_24dp</item>
+        <item name="icon_menu">@drawable/ic_menu_white_24dp</item>
     </style>
 
     <style name="DarkTheme.NoActionBar">
@@ -98,6 +124,14 @@
         <item name="icon_read_undo">@drawable/ic_undo_solarized_24dp</item>
         <item name="icon_search">@drawable/ic_search_solarized_24dp</item>
         <item name="icon_sort">@drawable/ic_sort_solarized_24dp</item>
+        <item name="icon_running">@drawable/ic_running_solarized_24dp</item>
+        <item name="icon_notes">@drawable/ic_musical_notes_solarized_24dp</item>
+        <item name="icon_volume">@drawable/ic_volume_up_solarized_24dp</item>
+        <item name="icon_fast_forward">@drawable/ic_fast_forward_solarized_24dp</item>
+        <item name="icon_play">@drawable/ic_play_arrow_solarized_24dp</item>
+        <item name="icon_fast_rewind">@drawable/ic_fast_rewind_solarized_24dp</item>
+        <item name="icon_autoplay">@drawable/ic_redo_solarized_24dp</item>
+        <item name="icon_menu">@drawable/ic_menu_solarized_24dp</item>
     </style>
 
     <style name="SolarizedTheme.NoActionBar">
