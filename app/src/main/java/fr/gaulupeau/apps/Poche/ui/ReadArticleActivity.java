@@ -748,7 +748,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
 
         String previewPicture = "";
-        if(!TextUtils.isEmpty(article.getPreviewPictureURL())) {
+        if(settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
             previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
         }
 
