@@ -637,6 +637,14 @@ public class Settings {
         setString(R.string.pref_key_storage_dbPath, dbPath);
     }
 
+    public boolean isMathRenderingEnabled() {
+        return getBoolean(R.string.pref_key_ui_mathRendering_enabled, false);
+    }
+
+    public void setMathRenderingEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_mathRendering_enabled, value);
+    }
+
     public boolean isAppendWallabagMentionEnabled() {
         return getBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, true);
     }
