@@ -515,6 +515,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
+        if(settings.isMathRenderingEnabled()) {
+            // This is needed to avoid CORS-errors for the bundled katex-scripts
+            webViewContent.getSettings().setAllowUniversalAccessFromFileURLs(true);
+        }
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
             @Override
