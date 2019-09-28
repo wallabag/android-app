@@ -13,8 +13,10 @@ import android.view.KeyEvent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -248,6 +250,22 @@ public class Settings {
 
     public void setFloat(int keyResourceID, float value) {
         setFloat(context.getString(keyResourceID), value);
+    }
+
+    public Set<String> getStringSet(String key, Set<String> defValues) {
+        return pref.getStringSet(key, defValues);
+    }
+
+    public Set<String> getStringSet(int keyResourceID, Set<String> defValues) {
+        return pref.getStringSet(context.getString(keyResourceID), defValues);
+    }
+
+    public void setStringSet(String key, Set<String> values) {
+        pref.edit().putStringSet(key, values);
+    }
+
+    public void setStringSet(int keyResourceID, Set<String> values) {
+        setStringSet(context.getString(keyResourceID), values);
     }
 
     public String getUrl() {
@@ -643,6 +661,14 @@ public class Settings {
 
     public void setMathRenderingEnabled(boolean value) {
         setBoolean(R.string.pref_key_ui_mathRendering_enabled, value);
+    }
+
+    public Set<String> getMathRenderingDelimiters() {
+        return getStringSet(R.string.pref_key_ui_mathRendering_delimiters, Collections.emptySet());
+    }
+
+    public void setMathRenderingDelimiters(Set<String> values) {
+        setStringSet(R.string.pref_key_ui_mathRendering_delimiters, values);
     }
 
     public boolean isAppendWallabagMentionEnabled() {

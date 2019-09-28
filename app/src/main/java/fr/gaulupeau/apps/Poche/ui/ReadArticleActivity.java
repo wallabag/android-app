@@ -736,8 +736,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String scripts = "";
         if(settings.isMathRenderingEnabled()) {
             Log.d(TAG, "Adding KaTeX reference");
-            scripts += readRawString(R.raw.katex_part);
+            StringBuilder delimitersJoined = new StringBuilder();
+            Object[] delimiters = settings.getMathRenderingDelimiters().toArray();
+            for(int i = 0; i < delimiters.length; i++) {
+                if(i > 0) {
+                    delimitersJoined.append(",");
+                }
+                delimitersJoined.append((String) delimiters[i]);
+            }
+            scripts += String.format(readRawString(R.raw.katex_part), delimitersJoined.toString());
         }
+        Log.d(TAG, scripts);
 
         return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
                 articleUrl, articleDomain, dateAndAuthor, htmlContent, scripts);

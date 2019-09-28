@@ -231,6 +231,14 @@
     <string name="pref_desc_ui_swipeArticles">Press here to set swiping left or right inside an article to go to previous or next article</string>
     <string name="pref_name_ui_mathRendering_enabled">Math Rendering</string>
     <string name="pref_desc_ui_mathRendering_enabled">Enable LaTeX-Math rendering via KaTeX</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Math Delimiters</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Set the environment delimiters that KaTeX should use</string>
+    <string-array name="pref_option_mathRendering_delimiters">
+        <item>\\[ ... \\]</item>
+        <item>$$ ... $$</item>
+        <item>\\( ... \\)</item>
+        <item>$ ... $</item>
+    </string-array>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>

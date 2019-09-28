@@ -40,6 +40,7 @@
     <string name="pref_key_ui_scrollOverBottom" translatable="false">ui.scrollOverBottom</string>
     <string name="pref_key_ui_swipeArticles" translatable="false">ui.swipeArticles</string>
     <string name="pref_key_ui_mathRendering_enabled" translatable="false">ui.mathRendering.enabled</string>
+    <string name="pref_key_ui_mathRendering_delimiters" translatable="false">ui.mathRendering.delimiters</string>
 
     <string name="pref_key_tts_visible" translatable="false">tts.visible</string>
     <string name="pref_key_tts_optionsVisible" translatable="false">tts.optionsVisible</string>
