@@ -102,7 +102,8 @@
     <string name="themeName_solarized">Solarized</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
-    <string name="aboutText">&lt;b&gt;wallabag app for Android&lt;/b&gt;&lt;br/&gt;wallabag is a self-hostable app, allowing you to not miss any content anymore. Click, save and read the extracted content at your leisure.</string>
+    <string name="aboutText"><b>wallabag app for Android</b>\n
+        wallabag is a self-hostable app, allowing you to not miss any content anymore. Click, save and read the extracted content at your leisure.</string>
     <string name="readSpeed">Read speed</string>
     <string name="voiceHeight">Voice pitch</string>
     <string name="readVolume">Read volume</string>

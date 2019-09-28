@@ -88,7 +88,8 @@
     <string name="themeName_solarized">Gesolariseerd</string>
     <string name="menu_readArticle_increaseFontSize">Vergroot het lettertype</string>
     <string name="menu_readArticle_decreaseFontSize">Verklein het lettertype</string>
-    <string name="aboutText">&lt;b&gt;wallabag app voor Android&lt;/b&gt;&lt;br/&gt;wallabag is een \'self-hostable\' app, waarmee je geen content meer hoeft te missen. Klik, bewaar en lees de geëxtraheerde inhoud wanneer het je uitkomt.</string>
+    <string name="aboutText"><b>wallabag app voor Android</b>\n
+        wallabag is een \'self-hostable\' app, waarmee je geen content meer hoeft te missen. Klik, bewaar en lees de geëxtraheerde inhoud wanneer het je uitkomt.</string>
     <string name="readSpeed">Leessnelheid</string>
     <string name="voiceHeight">Stemhoogte</string>
     <string name="menuDownloadAsFile">Download als bestand</string>

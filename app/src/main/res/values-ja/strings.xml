@@ -82,7 +82,8 @@
     <string name="themeName_solarized">ソラリゼーション</string>
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
-    <string name="aboutText">&lt;b&gt;Android 用 wallabag アプリ&lt;/b&gt;&lt;br/&gt; wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
+    <string name="aboutText"><b>Android 用 wallabag アプリ</b>\n
+        wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声のピッチ</string>
     <string name="readVolume">読む音量</string>
