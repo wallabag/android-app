@@ -113,7 +113,8 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
     <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
-    <string name="aboutText">&lt;b&gt;Приложение wallabag для Android&lt;/b&gt;&lt;br/&gt;wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно.</string>
+    <string name="aboutText"><b>Приложение wallabag для Android</b>\n
+        wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Тембр голоса</string>
     <string name="readVolume">Громкость чтения</string>

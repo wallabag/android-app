@@ -1,2 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="menuShare">اشتراک گذاری</string>
+    <string name="menuNext">مقاله ی بعدی</string>
+    <string name="menuPrevious">مقاله ی قبلی</string>
+    <string name="menuDelete">حذف</string>
+    <string name="menuOpenOriginal">باز کردن اصلی</string>
+    <string name="menuCopyOriginalURL">کپی کردن آدرس (URL) اصلی</string>
+    <string name="ttsSpeed">امتیاز</string>
+    <string name="ttsLanguage">انتخاب زبان</string>
+    <string name="ttsVoice">انتخاب صدا</string>
+    <string name="ttsError">خطا در تبدیل متن به گفتار</string>
+    <string name="ttsOptions">گزینه ها</string>
+    <string name="menu_open_random_article">باز کردن تصادفی مقاله</string>
+    <string name="d_deleteArticle_title">مقاله حذف شود؟</string>
+    <string name="d_deleteArticle_message">آیا مطمئن هستید که میخواهید مقاله را حذف کنید؟</string>
+    <string name="txtNetOffline">لطفا اتصال به اینترنت را چک کنید!</string>
+    <string name="dialog_add_label">اضافه کردن مقاله ی جدید</string>
+    <string name="page_url">آدرس صفحه</string>
+    <string name="share_article_title">اشتراک مقاله</string>
+    <string name="positive_answer">بله</string>
+    <string name="negative_answer">خیر</string>
+    <string name="no_articles">هیچ مقاله ای نیست</string>
+    <string name="loading_article_text">بارگذاری…</string>
+    <string name="d_urlAction_title">اتخاب یم عمل برای آدرس</string>
+    <string name="d_urlAction_openInBrowser">باز کردن در مرورگر</string>
+    <string name="d_urlAction_addToWallabag">افزودن به والابگ</string>
+    <string name="d_urlAction_copyToClipboard">کپی کردن در کلیپبورد</string>
+    <string name="ok">اوکی</string>
+    <string name="d_configurationChanged_answer_decline">الآن نه</string>
+    <string name="addLink_success_text">افزوده شد</string>
+</resources>

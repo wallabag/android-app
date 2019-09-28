@@ -95,7 +95,8 @@
     <string name="themeName_solarized">Solarized Tema</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
-    <string name="aboutText">&lt;b&gt;Android için wallabag&lt;/b&gt;&lt;br/&gt; wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+    <string name="aboutText"><b>Android için wallabag</b>\n
+        wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>

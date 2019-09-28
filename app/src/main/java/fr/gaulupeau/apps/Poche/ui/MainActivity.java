@@ -21,6 +21,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+
+import android.text.Html;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -473,11 +476,15 @@ public class MainActivity extends AppCompatActivity
                         style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
                         break;
                 }
+                CharSequence aboutCharSequence = getText(R.string.aboutText);
+                String aboutString = aboutCharSequence instanceof Spanned
+                        ? Html.toHtml((Spanned) aboutCharSequence)
+                        : aboutCharSequence.toString();
                 new LibsBuilder()
                         .withActivityStyle(style)
                         .withAboutIconShown(true)
                         .withAboutVersionShown(true)
-                        .withAboutDescription(getResources().getString(R.string.aboutText))
+                        .withAboutDescription(aboutString)
                         .start(this);
                 break;
         }
