@@ -169,6 +169,11 @@
                 android:title="@string/pref_name_ui_swipeArticles"
                 android:summary="@string/pref_desc_ui_swipeArticles"
                 android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_previewImage_enabled"
+                android:title="@string/pref_name_ui_previewImage_enabled"
+                android:summary="@string/pref_desc_ui_previewImage_enabled"
+                android:defaultValue="true"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen

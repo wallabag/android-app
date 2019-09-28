@@ -228,7 +228,9 @@
     <string name="pref_name_ui_scrollOverBottom">Scroll over bottom to mark as read</string>
     <string name="pref_desc_ui_scrollOverBottom">Press here to configure the number of times you need to "scroll over the bottom" to mark an article as read</string>
     <string name="pref_name_ui_swipeArticles">Swipe Articles</string>
-    <string name="pref_desc_ui_swipeArticles">Press here to set swiping left or right inside an article to go to previous or next article</string>
+    <string name="pref_desc_ui_swipeArticles">Swipe left or right inside an article to go to previous or next article</string>
+    <string name="pref_name_ui_previewImage_enabled">Preview Image</string>
+    <string name="pref_desc_ui_previewImage_enabled">Display the preview image before the article</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>

@@ -445,6 +445,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_volumeButtonsScrolling_enabled, value);
     }
 
+    public boolean isPreviewImageEnabled() {
+        return getBoolean(R.string.pref_key_ui_previewImage_enabled, true);
+    }
+
+    public void setPreviewImageEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_previewImage_enabled, value);
+    }
+
     public boolean isTapToScrollEnabled() {
         return getBoolean(R.string.pref_key_ui_tapToScroll_enabled, false);
     }
