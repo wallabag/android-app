@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.RawRes;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
@@ -707,13 +709,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             classAttr = "";
         }
 
-        String htmlBase;
-        try {
-            htmlBase = readRawString(R.raw.webview_htmlbase);
-        } catch(Exception e) {
-            // should not happen
-            throw new RuntimeException("Couldn't load raw resource", e);
-        }
+        String htmlBase = readRawString(R.raw.webview_htmlbase);
 
         String htmlContent = getHtmlContent();
         List<String> imgURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
@@ -740,9 +736,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String scripts = "";
         if(settings.isMathRenderingEnabled()) {
             Log.d(TAG, "Adding KaTeX reference");
-            scripts += "<link rel=\"stylesheet\" href=\"katex/katex.min.css\" crossorigin=\"anonymous\">" +
-                    "<script defer src=\"katex/katex.min.js\" crossorigin=\"anonymous\"></script>" +
-                    "<script defer src=\"katex/contrib/auto-render.min.js\" crossorigin=\"anonymous\" onload=\"renderMathInElement(document.body);\"></script>";
+            scripts += readRawString(R.raw.katex_part);
         }
 
         return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
@@ -1230,7 +1224,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return null;
     }
 
-    private String readRawString(int id) throws IOException {
+    private String readRawString(@RawRes int id) {
+        try {
+            return readRawStringChecked(id);
+        } catch(Exception e) {
+            // should not happen
+            throw new RuntimeException("Couldn't load raw resource", e);
+        }
+    }
+
+    private String readRawStringChecked(@RawRes int id) throws IOException {
         BufferedReader reader = null;
         try {
             reader = new BufferedReader(new InputStreamReader(getResources().openRawResource(id)));
