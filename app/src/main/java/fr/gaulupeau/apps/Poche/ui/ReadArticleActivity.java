@@ -660,7 +660,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void loadArticleToWebView() {
-        Log.d(TAG, getHtmlPage());
         webViewContent.loadDataWithBaseURL("file:///android_asset/", getHtmlPage(),
                 "text/html", "utf-8", null);
     }
