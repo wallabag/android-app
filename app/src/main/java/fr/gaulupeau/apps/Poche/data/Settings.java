@@ -11,10 +11,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import androidx.core.util.Supplier;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -260,8 +263,13 @@ public class Settings {
         return pref.getStringSet(context.getString(keyResourceID), defValues);
     }
 
+    public Set<String> getStringSet(int keyResourceID, Supplier<Set<String>> defValueSupplier) {
+        Set<String> set = getStringSet(keyResourceID, (Set<String>) null);
+        return set != null ? set : defValueSupplier.get();
+    }
+
     public void setStringSet(String key, Set<String> values) {
-        pref.edit().putStringSet(key, values);
+        pref.edit().putStringSet(key, values).apply();
     }
 
     public void setStringSet(int keyResourceID, Set<String> values) {
@@ -664,7 +672,9 @@ public class Settings {
     }
 
     public Set<String> getMathRenderingDelimiters() {
-        return getStringSet(R.string.pref_key_ui_mathRendering_delimiters, Collections.emptySet());
+        return getStringSet(R.string.pref_key_ui_mathRendering_delimiters,
+                () -> new HashSet<>(Arrays.asList(context.getResources()
+                        .getStringArray(R.array.pref_option_mathRendering_delimiters_defaultvalues))));
     }
 
     public void setMathRenderingDelimiters(Set<String> values) {
