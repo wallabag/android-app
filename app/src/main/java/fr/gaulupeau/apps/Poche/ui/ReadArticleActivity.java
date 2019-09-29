@@ -739,15 +739,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String scripts = "";
         if(settings.isMathRenderingEnabled()) {
             Log.d(TAG, "Adding KaTeX reference");
-            StringBuilder delimitersJoined = new StringBuilder();
-            Object[] delimiters = settings.getMathRenderingDelimiters().toArray();
-            for(int i = 0; i < delimiters.length; i++) {
-                if(i > 0) {
-                    delimitersJoined.append(",");
-                }
-                delimitersJoined.append((String) delimiters[i]);
-            }
-            scripts += String.format(readRawString(R.raw.katex_part), delimitersJoined.toString());
+            String delimiters = TextUtils.join(",", settings.getMathRenderingDelimiters());
+            scripts += String.format(readRawString(R.raw.katex_part), delimiters);
         }
         Log.d(TAG, scripts);
 
