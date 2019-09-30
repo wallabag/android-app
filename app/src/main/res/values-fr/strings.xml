@@ -100,8 +100,9 @@
     <string name="themeName_solarized">Solarisé</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
-    <string name="aboutText"><b>Application wallabag pour Android</b>\n
-        wallabag est une application auto-hébergeable vous permettant de ne plus rater aucun contenu. Cliquez, enregistrez et lisez le contenu extrait au moment le plus opportun.</string>
+    <string name="aboutText">
+        <b>Application wallabag pour Android</b>
+        <br/>wallabag est une application auto-hébergeable vous permettant de ne plus rater aucun contenu. Cliquez, enregistrez et lisez le contenu extrait au moment le plus opportun.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
     <string name="readVolume">Volume de lecture</string>
