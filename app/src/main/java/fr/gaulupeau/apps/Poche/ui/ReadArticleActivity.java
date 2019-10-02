@@ -47,6 +47,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
@@ -529,6 +530,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
+
+        JsAnnotationController annotationController = new JsAnnotationController(
+                new JsAnnotationController.Callback() {
+                    @Override
+                    public List<Annotation> getAnnotations() {
+                        return article.getAnnotations();
+                    }
+                });
+
+        webViewContent.addJavascriptInterface(annotationController, "hostAnnotationController");
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
             private View customView;

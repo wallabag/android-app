@@ -4,6 +4,11 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="%1$s.css" media="all" id="main-theme">
 		<link rel="stylesheet" href="ratatouille.css" media="all" id="extra-theme">
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
+				alert(hostAnnotationController.getAnnotations());
+			});
+		</script>
 	</head>
 	<div id="main">
 		<body %2$s>
