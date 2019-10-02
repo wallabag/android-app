@@ -288,6 +288,8 @@ public class OperationsHelper {
         DaoSession daoSession = getDaoSession();
 
         FtsDao.deleteAllArticles(daoSession.getDatabase());
+        daoSession.getAnnotationRangeDao().deleteAll();
+        daoSession.getAnnotationDao().deleteAll();
         daoSession.getArticleContentDao().deleteAll();
         daoSession.getArticleDao().deleteAll();
         daoSession.getTagDao().deleteAll();

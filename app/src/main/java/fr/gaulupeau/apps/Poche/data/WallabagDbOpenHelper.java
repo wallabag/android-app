@@ -12,6 +12,8 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -45,7 +47,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 105) {
+        if (oldVersion >= 101 && newVersion <= 106) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -101,6 +103,13 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                             " select rowid, " + ArticleDao.Properties.Title.columnName +
                             ", " + ArticleContentDao.Properties.Content.columnName +
                             " from " + FtsDao.VIEW_FOR_FTS_NAME);
+                }
+
+                if (oldVersion < 106) {
+                    Log.i(TAG, "Migration to version " + 106);
+
+                    AnnotationDao.createTable(db, false);
+                    AnnotationRangeDao.createTable(db, false);
                 }
 
                 migrationDone = true;
