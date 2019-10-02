@@ -16,6 +16,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -943,6 +944,24 @@ public class Updater {
 
         if(!articlesToDelete.isEmpty()) {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
+
+            Log.d(TAG, "performSweep() deleting related entities");
+
+            // delete related tag joins
+            ArticleTagsJoin.getTagsJoinByArticleQueryBuilder(
+                    articlesToDelete, daoSession.getArticleTagsJoinDao())
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+
+            Collection<Long> annotationIds = Annotation.getAnnotationIdsByArticleIds(
+                    articlesToDelete, daoSession.getAnnotationDao());
+
+            // delete ranges of related annotations
+            AnnotationRange.getAnnotationRangesByAnnotationsQueryBuilder(
+                    annotationIds, daoSession.getAnnotationRangeDao())
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+
+            // delete related annotations
+            daoSession.getAnnotationDao().deleteByKeyInTx(annotationIds);
 
             Log.d(TAG, "performSweep() performing content delete");
             daoSession.getArticleContentDao().deleteByKeyInTx(articlesToDelete);

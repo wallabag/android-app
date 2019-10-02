@@ -1,16 +1,22 @@
 package fr.gaulupeau.apps.Poche.data.dao.entities;
 
+import android.database.Cursor;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.Unique;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.DaoException;
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
@@ -213,6 +219,22 @@ public class Annotation {
                 ", updatedAt=" + updatedAt +
                 ", annotatorSchemaVersion='" + annotatorSchemaVersion + '\'' +
                 '}';
+    }
+
+    public static Collection<Long> getAnnotationIdsByArticleIds(
+            Collection<Long> articleIds, AnnotationDao dao) {
+        List<Long> ids = new ArrayList<>();
+        try (Cursor cursor = getAnnotationByArticlesQueryBuilder(articleIds, dao).buildCursor().query()) {
+            while (cursor.moveToNext()) {
+                ids.add(cursor.getLong(cursor.getColumnIndex(AnnotationDao.Properties.Id.columnName)));
+            }
+        }
+        return ids;
+    }
+
+    public static QueryBuilder<Annotation> getAnnotationByArticlesQueryBuilder(
+            Collection<Long> articleIds, AnnotationDao dao) {
+        return dao.queryBuilder().where(AnnotationDao.Properties.ArticleId.in(articleIds));
     }
 
 }

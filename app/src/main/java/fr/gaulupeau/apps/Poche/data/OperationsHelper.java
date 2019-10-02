@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -13,6 +15,8 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
+import fr.gaulupeau.apps.Poche.data.dao.entities.AnnotationRange;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
@@ -261,6 +265,98 @@ public class OperationsHelper {
         Log.d(TAG, "setArticleTags() finished");
     }
 
+    public static void addAnnotation(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
+
+        Long annotationId = annotation.getId();
+
+        if (annotationId == null) {
+            DbConnection.getSession().getAnnotationDao().insert(annotation);
+            annotationId = annotation.getId();
+
+            List<AnnotationRange> ranges = annotation.getRanges();
+            if (!ranges.isEmpty()) {
+                for (AnnotationRange range : ranges) {
+                    range.setAnnotationId(annotationId);
+                }
+                DbConnection.getSession().getAnnotationRangeDao().insertInTx(ranges);
+            }
+
+            Log.d(TAG, "addAnnotation() annotation object inserted");
+        } else {
+            Log.d(TAG, "addAnnotation() annotation was already persisted");
+        }
+
+        Article article = getArticle(articleId, getArticleDao());
+        if (article != null) {
+            if (!article.getAnnotations().contains(annotation)) {
+                article.getAnnotations().add(annotation);
+            }
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
+        }
+
+        Log.d(TAG, "addAnnotation() ID: " + annotationId);
+        if (annotationId != null) {
+            ServiceHelper.addAnnotationToArticle(context, articleId, annotationId);
+        }
+
+        Log.d(TAG, "addAnnotation() finished");
+    }
+
+    public static void updateAnnotation(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("updateAnnotation(%d, %s) started", articleId, annotation));
+
+        Long annotationId = annotation.getId();
+
+        if (annotationId == null) {
+            throw new RuntimeException("Annotation wasn't persisted first");
+        }
+
+        DbConnection.getSession().getAnnotationDao().update(annotation);
+        Log.d(TAG, "updateAnnotation() annotation object updated");
+
+        Article article = getArticle(articleId, getArticleDao());
+        if (article != null) {
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
+        }
+
+        Log.d(TAG, "updateAnnotation() ID: " + annotationId);
+        ServiceHelper.updateAnnotationOnArticle(context, articleId, annotationId);
+
+        Log.d(TAG, "updateAnnotation() finished");
+    }
+
+    public static void deleteAnnotation(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("deleteAnnotation(%d, %s) started", articleId, annotation));
+
+        Integer remoteId = annotation.getAnnotationId();
+
+        if (annotation.getId() != null) {
+            List<AnnotationRange> ranges = annotation.getRanges();
+            if (!ranges.isEmpty()) {
+                DbConnection.getSession().getAnnotationRangeDao().deleteInTx(ranges);
+            }
+
+            DbConnection.getSession().getAnnotationDao().delete(annotation);
+            Log.d(TAG, "deleteAnnotation() annotation object deleted");
+        } else {
+            Log.d(TAG, "deleteAnnotation() annotation was not persisted");
+        }
+
+        Article article = getArticle(articleId, getArticleDao());
+        if (article != null) {
+            article.getAnnotations().remove(annotation);
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
+        }
+
+        Log.d(TAG, "deleteAnnotation() remote ID: " + remoteId);
+        if (remoteId != null) {
+            ServiceHelper.deleteAnnotationFromArticle(context, articleId, remoteId);
+        }
+
+        Log.d(TAG, "deleteAnnotation() finished");
+    }
+
     public static void deleteArticle(Context context, int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
@@ -268,11 +364,31 @@ public class OperationsHelper {
 
         Article article = getArticle(articleID, articleDao);
         if(article == null) {
-            Log.w(TAG, "favoriteArticle() article was not found");
+            Log.w(TAG, "deleteArticle() article was not found");
             return; // not an error?
         }
 
-        getDaoSession().getArticleContentDao().deleteByKey(article.getId());
+        List<Long> articleIds = Collections.singletonList(article.getId());
+
+        DaoSession daoSession = getDaoSession();
+
+        // delete related tag joins
+        ArticleTagsJoin.getTagsJoinByArticleQueryBuilder(
+                articleIds, daoSession.getArticleTagsJoinDao())
+                .buildDelete().executeDeleteWithoutDetachingEntities();
+
+        Collection<Long> annotationIds = Annotation.getAnnotationIdsByArticleIds(
+                articleIds, daoSession.getAnnotationDao());
+
+        // delete ranges of related annotations
+        AnnotationRange.getAnnotationRangesByAnnotationsQueryBuilder(
+                annotationIds, daoSession.getAnnotationRangeDao())
+                .buildDelete().executeDeleteWithoutDetachingEntities();
+
+        // delete related annotations
+        daoSession.getAnnotationDao().deleteByKeyInTx(annotationIds);
+
+        daoSession.getArticleContentDao().deleteByKey(article.getId());
         articleDao.delete(article);
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.DELETED);

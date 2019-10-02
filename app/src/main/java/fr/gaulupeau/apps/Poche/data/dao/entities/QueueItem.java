@@ -15,7 +15,8 @@ import java.util.Iterator;
 public class QueueItem {
 
     public enum Action {
-        ADD_LINK(1), ARTICLE_DELETE(2), ARTICLE_CHANGE(3), ARTICLE_TAGS_DELETE(4);
+        ADD_LINK(1), ARTICLE_DELETE(2), ARTICLE_CHANGE(3), ARTICLE_TAGS_DELETE(4),
+        ANNOTATION_ADD(5), ANNOTATION_UPDATE(6), ANNOTATION_DELETE(7);
 
         private final int id;
 
