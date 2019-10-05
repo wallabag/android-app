@@ -37,7 +37,7 @@
     <string name="loading_article_text">Yükleniyor…</string>
     <string name="d_urlAction_title">URL için bir eylem seçin</string>
     <string name="d_urlAction_openInBrowser">Tarayıcıda aç</string>
-    <string name="d_urlAction_addToWallabag">Wallabag\'e Ekle</string>
+    <string name="d_urlAction_addToWallabag">wallabag\'e Ekle</string>
     <string name="ok">Tamam</string>
     <string name="d_add_fail_title">Başarısız</string>
     <string name="d_add_fail_text">Paylaşım metninde bir URL bulunamadı\n</string>
@@ -96,7 +96,7 @@
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
     <string name="aboutText"><b>Android için wallabag</b>\n
-        wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. Wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+        wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>
@@ -208,18 +208,18 @@
     <string name="pref_desc_imageCache_enabled">Makalelerin içindeki tüm resimleri cihaza indirir. Makale uzunluğuna, adedine ve resim ebatlarına göre bu işlem uzun sürebilir ve büyük disk alanı kaplayabilir.</string>
     <string name="pref_categoryName_miscellaneous">Çeşitli</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP şemasını yönet</string>
-    <string name="pref_desc_misc_handleHttpScheme">Wallabag\'i web tarayıcıları listesinde göster</string>
+    <string name="pref_desc_misc_handleHttpScheme">wallabag\'i web tarayıcıları listesinde göster</string>
     <string name="pref_name_misc_wipeDB">Veritabanını Sıfırla</string>
     <string name="pref_desc_misc_wipeDB">Tüm makaleleri yerel veritabanından siler, ayrıca tüm senkron edilmemiş değişiklikleri ve URL\'leri de siler</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Veritabanı sıfırlansın mı?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Veritabanını sıfırlamak istediğinize emin misiniz?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Hatalı bağlantı URI\'ı kullanılıyor</string>
-    <string name="connectionWizard_welcome_titleMessage">Wallabag\'e hoş geldiniz.</string>
-    <string name="connectionWizard_welcome_text">Wallabag uygulamasını kullanmadan önce bağlantınızı ayarlamalısınız. Bu bağlantı sihirbazı size kurulumda yardımcı olacaktır.</string>
+    <string name="connectionWizard_welcome_titleMessage">wallabag\'e hoş geldiniz.</string>
+    <string name="connectionWizard_welcome_text">wallabag uygulamasını kullanmadan önce bağlantınızı ayarlamalısınız. Bu bağlantı sihirbazı size kurulumda yardımcı olacaktır.</string>
     <string name="connectionWizard_welcome_rerunNotice">Ayarlar sayfasından istediğiniz zaman bu bağlantı sihirbazını yeniden çalıştırabilirsiniz.</string>
     <string name="connectionWizard_welcome_prev">Atla</string>
     <string name="connectionWizard_welcome_next">Sonraki</string>
-    <string name="connectionWizard_providerSelection_titleMessage">Wallabag sağlayıcınızı seçin</string>
+    <string name="connectionWizard_providerSelection_titleMessage">wallabag sağlayıcınızı seçin</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Diğer</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">El ile gerekli ayarları girmek için bunu seçin</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Eğer https://wallabag.it adresinde bir hesabınız varsa bu seçeneği seçin</string>
@@ -272,7 +272,7 @@
     <string name="pref_name_storage_dbPath_internalStorage">Dahili hafıza</string>
     <string name="pref_name_storage_dbPath_externalStorage">Harici hafıza</string>
     <string name="pref_name_storage_dbPath_dbMoved">Veritabanı taşındı</string>
-    <string name="pref_name_misc_appendWallabagMention">Wallabag alıntısını sonuna ekle</string>
+    <string name="pref_name_misc_appendWallabagMention">wallabag alıntısını sonuna ekle</string>
     <string name="pref_desc_misc_appendWallabagMention">Paylaşılan metinlerin sonuna \"via @wallabagapp\" ekle</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Eğer https://framabag.org üzerinde bir hesabınız varsa bunu seçin</string>
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag ayarları</string>

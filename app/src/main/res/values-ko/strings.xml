@@ -93,7 +93,7 @@
     <string name="share_text_extra">" @wallabagapp을 통해"</string>
     <string name="testConnection_errorMessage_incorrectCredentials">로그인 할수없음 - 유저아이디와 패스워드를 확인바랍니다</string>
     <string name="navigation_drawer_open">drawer 열기</string>
-    <string name="downloadAsFileProgress">allabag에서 %s 단위로 기사를 다운로드하십시오</string>
+    <string name="downloadAsFileProgress">wallabag에서 %s 단위로 기사를 다운로드하십시오</string>
     <string name="pref_desc_misc_appendWallabagMention">공유 텍스트에 \"@wallabagapp을 통해\" 추가</string>
     <string name="pref_categoryName_ui_misc">미셀라네아</string>
     <string name="connectionWizard_provider_general_next">연결</string>
@@ -223,7 +223,7 @@
     <string name="connectionWizard_summary_toastMessage">설치 완료</string>
     <string name="connectionWizard_providerSelection_prev">스킵</string>
     <string name="manageTags_save">저장</string>
-    <string name="connectionWizard_welcome_text">Wallabag 앱을 사용하기 전에 연결을 설정해야 한다. 연결 마법사가 도움이 될 것이다.</string>
+    <string name="connectionWizard_welcome_text">wallabag 앱을 사용하기 전에 연결을 설정해야 한다. 연결 마법사가 도움이 될 것이다.</string>
     <string name="d_add_fail_title">실패</string>
     <string name="themeName_eink">e-link 디스플레이용</string>
     <string name="title_main_tag">태그 :%s</string>

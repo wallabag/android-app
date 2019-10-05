@@ -97,7 +97,7 @@ public class TtsFragment
     private static final float MAX_TTS_SPEED = 4.0F;
     private static final float MAX_TTS_PITCH = 2.0F;
     private static final int REQUEST_CODE_START_ACTIVITY_FOR_RESULT_TTS_SETTINGS = 60000;
-    private static final String METADATA_ALBUM = "Wallabag";
+    private static final String METADATA_ALBUM = "wallabag";
 
     protected ServiceConnection serviceConnection;
 

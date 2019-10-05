@@ -36,7 +36,7 @@
     <string name="loading_article_text">読み込んでいます…</string>
     <string name="d_urlAction_title">URL のアクションを選択</string>
     <string name="d_urlAction_openInBrowser">ブラウザーで開く</string>
-    <string name="d_urlAction_addToWallabag">Wallabag に追加</string>
+    <string name="d_urlAction_addToWallabag">wallabag に追加</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">失敗</string>
     <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:</string>
@@ -151,7 +151,7 @@
     <string name="pref_name_autoDlNew_enabled">新しく追加された記事をダウンロード</string>
     <string name="pref_desc_autoDlNew_enabled">アプリで、新しい記事が追加されたらすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、取得は行われません。</string>
     <string name="pref_name_imageCache_enabled">記事の画像をキャッシュに入れる</string>
-    <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。Wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
+    <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
     <string name="pref_categoryName_miscellaneous">その他</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP スキームの処理</string>
     <string name="pref_desc_misc_handleHttpScheme">Web ブラウザーのリストに wallabag を表示します</string>
@@ -261,7 +261,7 @@
     <string name="pref_name_storage_dbPath_internalStorage">内部ストレージ</string>
     <string name="pref_name_storage_dbPath_externalStorage">外部ストレージ</string>
     <string name="pref_name_storage_dbPath_dbMoved">データベースを移動しました</string>
-    <string name="pref_name_misc_appendWallabagMention">Wallabag のメンションを追加</string>
+    <string name="pref_name_misc_appendWallabagMention">wallabag のメンションを追加</string>
     <string name="pref_desc_misc_appendWallabagMention">共有テキストに \"via @wallabagapp\" を追加</string>
     <string name="remove_tag">タグを削除</string>
     <string name="scrolledOverBottom">%d 回以上下にスクロールすると記事を既読としてマークします</string>

@@ -163,7 +163,7 @@ public class TtsService
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
         ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
                 MediaButtonReceiver.class.getName());
-        mediaSession = new MediaSessionCompat(this, "Wallabag TTS", mediaButtonReceiverComponentName, null);
+        mediaSession = new MediaSessionCompat(this, "wallabag TTS", mediaButtonReceiverComponentName, null);
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override

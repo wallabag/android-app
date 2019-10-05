@@ -177,7 +177,7 @@
     <string name="connectionWizard_welcome_prev">Kihagyás</string>
     <string name="connectionWizard_welcome_next">Következő</string>
 
-    <string name="connectionWizard_providerSelection_titleMessage">Wallabag szolgáltató kiválasztása</string>
+    <string name="connectionWizard_providerSelection_titleMessage">wallabag szolgáltató kiválasztása</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt ha kézzel szeretné megadni a beállításokat</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
