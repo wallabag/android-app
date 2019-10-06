@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Oznacz jako przeczytane</string>
     <string name="btnMarkUnread">Oznacz jako nieprzeczytane</string>
@@ -95,7 +95,8 @@
     <string name="themeName_solarized">Prześwietlony (Solarized)</string>
     <string name="menu_readArticle_increaseFontSize">Zwiększ rozmiar czcionki</string>
     <string name="menu_readArticle_decreaseFontSize">Zmniejsz rozmiar czcionki</string>
-    <string name="aboutText"><b>Aplikacja wallabag dla Androida</b>\n
+    <string name="aboutText">
+        <b>Aplikacja wallabag dla Androida</b>\n
         wallabag to samodzielna aplikacja, dzięki której nie przegapisz już żadnych treści. Kliknij, zapisz i przeczytaj wyciągniętą treść w wolnym czasie.</string>
     <string name="readSpeed">Prędkość czytania</string>
     <string name="voiceHeight">Wysokość głosu</string>
@@ -129,22 +130,16 @@
     <string name="manageTags_addNew">Dodaj</string>
     <string name="manageTags_currentTags">Wybrane tagi:</string>
     <string name="content_estimatedReadingTime">Szacowany czas czytania: %s min</string>
-
     <string name="navigation_drawer_open">Otwórz szufladę nawigacyjną</string>
     <string name="navigation_drawer_close">Zamknij szufladę nawigacyjną</string>
-
     <string name="nav_main_articles">Artykuły</string>
     <string name="nav_main_tags">Tagi</string>
     <string name="nav_main_tagged_articles">Otagowane artykuły</string>
-
     <string name="nav_add">Dodaj nowy wpis</string>
-
     <string name="nav_other_settings">Ustawienia</string>
     <string name="nav_other_about">O</string>
-
     <string name="pref_name_runConnectionWizard">Uruchom kreatora połączenia</string>
     <string name="pref_desc_runConnectionWizard">Pomaga skonfigurować podstawowe ustawienia połączenia</string>
-
     <string name="pref_categoryName_connection">Połączenie</string>
     <string name="pref_name_connection_url">Adres URL wallabag</string>
     <string name="pref_desc_connection_url">
@@ -159,13 +154,11 @@
     <string name="pref_name_connection_api_clientID">ID klienta</string>
     <string name="pref_name_connection_api_clientSecret">Secret klienta</string>
     <string name="pref_name_connection_autofill">Autouzupełnnienie</string>
-
     <string name="pref_categoryName_connection_advanced">Zaawansowane ustawienia połączenią</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Podstawowe uwierzytelnienie HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Jeżeli nie wiesz co to jest, zostaw puste</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Nazwa użytkownika uwierzytelnienia HTTP</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Hasło uwierzytelnienia HTTP</string>
-
     <string name="pref_categoryName_ui">Interfejs użytkownika</string>
     <string name="pref_name_ui_theme">Motyw aplikacji</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Rozmiar tekstu artykułu (%)</string>
@@ -179,7 +172,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Przewijanie przez puknięcie w lewą i prawą krawędź ekranu</string>
     <string name="pref_name_ui_screenScrolling_percent">Procent wysokości ekranu do przewinięcia</string>
     <string name="pref_name_ui_screenScrolling_smooth">Użyj płynnego przewijania</string>
-
     <string name="pref_categoryName_sync">Synchronizacja</string>
     <string name="pref_name_sync_syncTypes">Rodzaje synchronizacji</string>
     <string name="pref_desc_sync_syncTypes">Naciśnij aby uzyskać więcej informacji o rodzajach synchronizacji</string>
@@ -213,7 +205,6 @@
     <string name="pref_desc_autoDlNew_enabled">Automatycznie pobieraj nowe artykuły zaraz po ich dodaniu za pośrednictwem aplikacji. Uwaga: pobieranie nie nastąpi, jeśli masz niezsynchronizowane zmiany w trybie offline.</string>
     <string name="pref_name_imageCache_enabled">Umieść obrazy artykułów w pamięci podręcznej</string>
     <string name="pref_desc_imageCache_enabled">Automatycznie pobiera wszystkie obrazy z każdego artykułu i zapisuje je na urządzeniu. W zależności od długości Twojej listy artykułów na wallabag może to zająć dużo czasu i miejsca.</string>
-
     <string name="pref_categoryName_miscellaneous">Różne</string>
     <string name="pref_name_misc_handleHttpScheme">Obsłuż schemat HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Pokaż wallabag na liście przeglądarek www</string>
@@ -221,15 +212,12 @@
     <string name="pref_desc_misc_wipeDB">Wymazuje wszystkie artykuły z lokalnej bazy danych, usuwa również wszystkie niezsynchronizowane lokalne zmiany i adresy URL</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wymazać bazę danych?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Czy na pewno chcesz wyczyścić bazę danych?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Użyty niepoprawny adres URI połączenia</string>
-
     <string name="connectionWizard_welcome_titleMessage">Witaj w wallabag.</string>
     <string name="connectionWizard_welcome_text">Zanim będziesz mógł korzystać z aplikacji wallabag, musisz skonfigurować połączenie. Kreator połączeń pomoże Ci to zrobić.</string>
     <string name="connectionWizard_welcome_rerunNotice">Zawsze możesz ponownie uruchomić kreatora połączenia w \"Ustawienia\".</string>
     <string name="connectionWizard_welcome_prev">Pomiń</string>
     <string name="connectionWizard_welcome_next">Dalej</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Wybierz dostawcę wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Inny</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Wybierz tę opcję, aby ręcznie wprowadzić wymagane ustawienia</string>
@@ -237,34 +225,26 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Wybierz tę opcję jeżeli posiadasz konto na https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Pomiń</string>
     <string name="connectionWizard_providerSelection_next">Dalej</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Podstawowa konfiguracja</string>
     <string name="connectionWizard_provider_general_prev">Wróć</string>
     <string name="connectionWizard_provider_general_next">Połącz</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">Konfiguracja wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Wróć</string>
     <string name="connectionWizard_provider_wallabagit_next">Połącz</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Konfiguracja Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Wróć</string>
     <string name="connectionWizard_provider_framabag_next">Połącz</string>
-
     <string name="connectionWizard_summary_titleMessage">Wszystko gotowe.</string>
     <string name="connectionWizard_summary_text">Kliknij, aby zapisać i przejdź do głównego ekranu.</string>
     <string name="connectionWizard_summary_toastMessage">Konfiguracja zakończona</string>
     <string name="connectionWizard_summary_prev">Wróć</string>
     <string name="connectionWizard_summary_next">Zapisz ustawienia</string>
-
     <string name="pref_desc_connection_autofill">Testuj połączenie i uzupełnij ID klienta oraz sekret klienta</string>
-
     <string name="pref_name_ui_article_textAlignment_justify">Wyrównanie tekstu: Justowanie</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Rozciąga linie na jednakową szerokość (jak w gazetach)</string>
-
     <string name="menu_changeTitle">Zmień tytuł</string>
     <string name="title_main_tag">Tag: %s</string>
-
-<string name="menuCopyOriginalURL">Skopiuj oryginalny adres URL</string>
+    <string name="menuCopyOriginalURL">Skopiuj oryginalny adres URL</string>
     <string name="txtUrlCopied">Adres URL artykułu skopiowany do schowka</string>
     <string name="d_urlAction_copyToClipboard">Skopiuj do schowka</string>
     <string name="scrolledOverBottom">Przewijaj %d czas(u) więcej na dole, aby oznaczyć artykuł jako przeczytany</string>
@@ -274,14 +254,11 @@
     <string name="notification_serverError">Błąd serwera</string>
     <string name="lastUpdateTimeLabel">Ostatnia aktualizacja: %s</string>
     <string name="listItem_estimatedReadingTime">%d minut</string>
-
     <string name="message_couldNotOpenUrl">Nie można otworzyć tego adresu URL</string>
-
     <string name="message_disableTouch_inputDisabled">Wyłącz funkcję wprowadzania dotykowego</string>
     <string name="message_disableTouch_inputEnabled">Włącz funkcję wprowadzania dotykowego</string>
     <string name="d_disableTouch_changeKey_title">Wyłącz przycisk wprowadzania dotykowego</string>
     <string name="d_disableTouch_currentCode">Aktualnie wybrany kod klawisza (naciśnij przycisk, aby go zmienić):</string>
-
     <string name="pref_name_ui_article_fullscreen">Pełny widok artykułu</string>
     <string name="pref_desc_ui_article_fullscreen">Ukrywa paski systemowe i aplikacje podczas czytania artykułów</string>
     <string name="pref_name_ui_keepScreenOn">Zachowaj ekran podczas czytania</string>
@@ -293,13 +270,25 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Naciśnij tutaj, aby skonfigurować przycisk używany do wyłączania/włączania wprowadzania dotykowego</string>
     <string name="pref_name_ui_scrollOverBottom">Przewiń w dół, aby oznaczyć jako przeczytane</string>
     <string name="pref_desc_ui_scrollOverBottom">Naciśnij tutaj, aby skonfigurować ile razy trzeba przewinąć w dół, aby oznaczyć artykuł jako przeczytany</string>
-
     <string name="pref_name_storage_dbPath">Lokalizacja bazy danych</string>
     <string name="pref_name_storage_dbPath_internalStorage">Pamięć wewnętrzna</string>
     <string name="pref_name_storage_dbPath_externalStorage">Dysk zewnętrzny</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza danych została przeniesiona</string>
-
     <string name="pref_name_misc_appendWallabagMention">Dołącz wzmiankę o wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Dołącz \"via @wallabagapp\" do udostępnionych tekstów</string>
     <string name="remove_tag">Usuń tag</string>
+    <string name="themeName_eink">Dla ekranów e-ink</string>
+    <string name="notification_channel_group_name_tts">Czytaj tekst (TTS)</string>
+    <string name="notification_channel_group_name_sync">Synchronizacja</string>
+    <string name="notification_channel_group_name_other">Inne</string>
+    <string name="notification_channel_name_tts">wallabag Tekst na mowę</string>
+    <string name="notification_channel_name_sync">Synchronizacja</string>
+    <string name="notification_channel_name_downloading_articles">Pobieranie pdfów</string>
+    <string name="notification_channel_name_error">Błędy</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Obsługa Długiego preformatowanego tekstu</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Jak obsłużyć preformatowany tekst, który jest zbyt długi do wyświetlenia w całości.</string>
+    <string name="pref_name_ui_swipeArticles">Przewiń artykuły</string>
+    <string name="pref_desc_ui_swipeArticles">Przewiń w lewo lub prawo wewnątrz artykułu, aby przejść do poprzedniego lub następnego</string>
+    <string name="pref_name_ui_previewImage_enabled">Podgląd obrazka</string>
+    <string name="pref_desc_ui_previewImage_enabled">Wyświetl podgląd obrazka przed artykułem</string>
 </resources>
