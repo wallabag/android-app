@@ -225,7 +225,7 @@
     <string name="connectionWizard_misc_incorrectConnectionURI">Użyty niepoprawny adres URI połączenia</string>
 
     <string name="connectionWizard_welcome_titleMessage">Witaj w wallabag.</string>
-    <string name="connectionWizard_welcome_text">Zanim będziesz mógł korzystać z aplikacji Wallabag, musisz skonfigurować połączenie. Kreator połączeń pomoże Ci to zrobić.</string>
+    <string name="connectionWizard_welcome_text">Zanim będziesz mógł korzystać z aplikacji wallabag, musisz skonfigurować połączenie. Kreator połączeń pomoże Ci to zrobić.</string>
     <string name="connectionWizard_welcome_rerunNotice">Zawsze możesz ponownie uruchomić kreatora połączenia w \"Ustawienia\".</string>
     <string name="connectionWizard_welcome_prev">Pomiń</string>
     <string name="connectionWizard_welcome_next">Dalej</string>
