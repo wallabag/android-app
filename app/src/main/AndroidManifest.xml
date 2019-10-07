@@ -32,7 +32,8 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"
+            android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"/>
         <activity
