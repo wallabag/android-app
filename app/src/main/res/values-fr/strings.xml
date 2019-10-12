@@ -100,7 +100,8 @@
     <string name="themeName_solarized">Solarisé</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
-    <string name="aboutText"><b>Application wallabag pour Android</b>\n
+    <string name="aboutText">
+        <b>Application wallabag pour Android</b>\n
         wallabag est une application auto-hébergeable vous permettant de ne plus rater aucun contenu. Cliquez, enregistrez et lisez le contenu extrait au moment le plus opportun.</string>
     <string name="readSpeed">Vitesse de lecture</string>
     <string name="voiceHeight">Hauteur de voix</string>
@@ -158,13 +159,11 @@
     <string name="pref_desc_runConnectionWizard">Vous aide à configurer les informations de connexion de base</string>
     <string name="pref_categoryName_connection">Connexion</string>
     <string name="pref_name_connection_url">Votre URL wallabag</string>
-    <string name="pref_desc_connection_url">
-        Exemples:\n
-        https://wallabag.example.com\n
-        https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
-    </string>
+    <string name="pref_desc_connection_url">Exemples :
+\n https://wallabag.example.com
+\n https://example.com/wallabag
+\n https://app.wallabag.it
+\n https://framabag.org</string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
@@ -276,4 +275,18 @@
     <string name="remove_tag">Supprimer tag</string>
     <string name="pref_name_ui_keepScreenOn">Empêcher la mise en veille</string>
     <string name="pref_desc_ui_keepScreenOn">Garder l\'écran allumé durant la lecture d\'un article</string>
+    <string name="themeName_eink">Pour les affichages à encre électronique</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="notification_channel_group_name_sync">Synchronisation</string>
+    <string name="notification_channel_group_name_other">Autre</string>
+    <string name="notification_channel_name_tts">wallabag TTS</string>
+    <string name="notification_channel_name_sync">Synchronisation</string>
+    <string name="notification_channel_name_downloading_articles">Téléchargement de fichiers PDF</string>
+    <string name="notification_channel_name_error">Erreurs</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Traitement du texte long préformaté</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Comment gérer un texte préformaté qui est trop long pour être affiché complètement.</string>
+    <string name="pref_name_ui_swipeArticles">Faire glisser les articles</string>
+    <string name="pref_desc_ui_swipeArticles">Faites glisser vers la gauche ou vers la droite pour aller à l\'article précédent ou suivant</string>
+    <string name="pref_name_ui_previewImage_enabled">Aperçu de l\'image</string>
+    <string name="pref_desc_ui_previewImage_enabled">Afficher l\'image de prévisualisation avant l\'article</string>
 </resources>
