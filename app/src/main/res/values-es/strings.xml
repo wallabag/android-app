@@ -282,4 +282,14 @@
     <string name="message_disableTouch_inputDisabled">Interfaz táctil desactivada</string>
     <string name="message_disableTouch_inputEnabled">Interfaz táctil activada</string>
     <string name="d_disableTouch_changeKey_title">Botón para desactivar la interfaz táctil</string>
-    </resources>
+    <string name="remove_tag">Eliminar etiqueta</string>
+    <string name="d_urlAction_copyToClipboard">Copiar al portapapeles</string>
+    <string name="pref_name_ui_previewImage_enabled">Vista previa de la imagen</string>
+    <string name="notification_channel_name_error">Errores</string>
+    <string name="notification_channel_name_sync">Sincronización</string>
+    <string name="notification_channel_group_name_sync">Sincronización</string>
+    <string name="notification_channel_group_name_other">Otro</string>
+    <string name="notification_channel_name_downloading_articles">Descargando PDFs</string>
+    <string name="pref_desc_ui_swipeArticles">Desliza a la derecha o a la izquierda dentro de un artículo para ir al artículo anterior o al siguiente</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Botón para desactivar la interfaz táctil</string>
+</resources>
