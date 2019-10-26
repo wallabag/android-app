@@ -37,10 +37,10 @@ public class WallabagWebService {
 
     private static final Pattern CLIENT_PATTERN = compile(
             "<div class=\"collapsible-header\">([^<]+?)</div>" +
-                    ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
-                    ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
-                    ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
-                    ".*?<td><strong><code>([^<]+?)</code></strong></td>" +
+                    ".*?<strong><code>([^<]+?)</code></strong>" +
+                    ".*?<strong><code>([^<]+?)</code></strong>" +
+                    ".*?<strong><code>([^<]+?)</code></strong>" +
+                    ".*?<strong><code>([^<]+?)</code></strong>" +
                     ".*?/developer/client/delete/");
 
     private static final Pattern CLIENT_TOKEN_PATTERN = compile(
