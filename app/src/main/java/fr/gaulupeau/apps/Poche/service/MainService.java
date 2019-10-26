@@ -204,7 +204,7 @@ public class MainService extends IntentServiceBase {
 
         int counter = 0, totalNumber = queueItems.size();
         for(QueueItem item: queueItems) {
-            Log.d(TAG, "syncOfflineQueue() processing " + counter + " out of " + totalNumber);
+            Log.d(TAG, "syncOfflineQueue() current QueueItem(" + (counter+1) + " out of " + totalNumber+ "): " + item);
             postEvent(new SyncQueueProgressEvent(actionRequest, counter, totalNumber));
 
             Integer articleIdInteger = item.getArticleId();
@@ -246,13 +246,16 @@ public class MainService extends IntentServiceBase {
 
                     case ADD_LINK: {
                         String link = item.getExtra();
+                        Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link);
                         if(link != null && !link.isEmpty()) {
                             if(getWallabagServiceWrapper().addArticle(link) == null) {
                                 itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
                             }
-                            if(itemResult == null || itemResult.isSuccess()) urlUploaded = true;
+                            if(itemResult == null || itemResult.isSuccess()) {
+                                urlUploaded = true;
+                            }
                         } else {
-                            Log.w(TAG, "syncOfflineQueue() item has no link; skipping");
+                            Log.w(TAG, "syncOfflineQueue() action is ADD_LINK, but item has no link; skipping");
                         }
                         break;
                     }

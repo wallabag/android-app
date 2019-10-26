@@ -154,4 +154,15 @@ public class QueueItem {
 
     }
 
+    @Override
+    public String toString() {
+        return "QueueItem{" +
+                "id=" + id +
+                ", queueNumber=" + queueNumber +
+                ", action=" + action +
+                ", articleId=" + articleId +
+                ", extra='" + extra + '\'' +
+                '}';
+    }
+
 }
