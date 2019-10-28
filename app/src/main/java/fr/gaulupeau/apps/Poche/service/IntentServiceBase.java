@@ -3,8 +3,8 @@ package fr.gaulupeau.apps.Poche.service;
 import android.app.IntentService;
 import android.util.Log;
 
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.AuthorizationException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.exceptions.AuthorizationException;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 

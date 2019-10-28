@@ -6,9 +6,9 @@ import android.os.Process;
 import android.util.Log;
 import android.util.Pair;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.ModifyArticleBuilder;
+import wallabag.apiwrapper.exceptions.NotFoundException;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -345,8 +345,7 @@ public class MainService extends IntentServiceBase {
                     "Article is not found locally");
         }
 
-        WallabagService.ModifyArticleBuilder builder
-                = getWallabagServiceWrapper().getWallabagService()
+        ModifyArticleBuilder builder = getWallabagServiceWrapper().getWallabagService()
                 .modifyArticleBuilder(articleID);
 
         for(QueueItem.ArticleChangeType changeType:

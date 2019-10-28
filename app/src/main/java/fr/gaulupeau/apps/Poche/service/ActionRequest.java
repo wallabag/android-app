@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.WallabagService;
 
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;

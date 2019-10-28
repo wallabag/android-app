@@ -6,8 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.di72nn.stuff.wallabag.apiwrapper.CompatibilityHelper;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.CompatibilityHelper;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.query.QueryBuilder;

@@ -2,12 +2,12 @@ package fr.gaulupeau.apps.Poche.network;
 
 import android.text.TextUtils;
 
-import com.di72nn.stuff.wallabag.apiwrapper.*;
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
-import com.di72nn.stuff.wallabag.apiwrapper.models.Article;
-import com.di72nn.stuff.wallabag.apiwrapper.models.TokenResponse;
+import wallabag.apiwrapper.*;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.NotFoundException;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.models.Article;
+import wallabag.apiwrapper.models.TokenResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,27 +42,27 @@ public class WallabagServiceWrapper {
         final Settings settings = App.getInstance().getSettings();
 
         String url = settings.getUrl();
-        if(url == null || url.isEmpty()) throw new IncorrectConfigurationException("URL is empty");
+        if(TextUtils.isEmpty(url)) throw new IncorrectConfigurationException("URL is empty");
 
-        wallabagService = new WallabagService(url, new ParameterHandler() {
+        wallabagService = WallabagService.instance(url, new ParameterHandler() {
             @Override
             public String getUsername() {
-                return getNonNullString(settings.getUsername());
+                return settings.getUsername();
             }
 
             @Override
             public String getPassword() {
-                return getNonNullString(settings.getPassword());
+                return settings.getPassword();
             }
 
             @Override
             public String getClientID() {
-                return getNonNullString(settings.getApiClientID());
+                return settings.getApiClientID();
             }
 
             @Override
             public String getClientSecret() {
-                return getNonNullString(settings.getApiClientSecret());
+                return settings.getApiClientSecret();
             }
 
             @Override
@@ -85,7 +85,7 @@ public class WallabagServiceWrapper {
         }, WallabagConnection.createClient(false));
     }
 
-    public static Article executeModifyArticleCall(WallabagService.ModifyArticleBuilder builder)
+    public static Article executeModifyArticleCall(ModifyArticleBuilder builder)
             throws UnsuccessfulResponseException, IOException {
         try {
             return builder.execute();
@@ -113,10 +113,6 @@ public class WallabagServiceWrapper {
 
     public WallabagService getWallabagService() {
         return wallabagService;
-    }
-
-    private static String getNonNullString(String s) {
-        return s == null ? "" : s;
     }
 
 }
