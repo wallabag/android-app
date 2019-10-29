@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
@@ -30,6 +31,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -515,6 +517,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.getSettings().setJavaScriptEnabled(true);
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
+            private View customView;
+
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
                 boolean result = false;
@@ -526,6 +530,31 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                             cm.lineNumber(), cm.sourceId()));
                 }
                 return true;
+            }
+
+            //Necessary for enabling watching youtube videos in fullscreen
+            public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback) {
+                customView = paramView;
+
+                //Hide action bar and bottom buttons while in fullscreen
+                ReadArticleActivity.this.getSupportActionBar().hide();
+                LinearLayout bottom = findViewById(R.id.bottomTools);
+                bottom.setVisibility(View.GONE);
+
+                FrameLayout.LayoutParams fullscreen = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
+                        .addView(customView, fullscreen);
+            }
+
+            //Necessary for enabling watching youtube videos in fullscreen
+            public void onHideCustomView() {
+                //Show action bar and bottom buttons when leaving fullscreen
+                ReadArticleActivity.this.getSupportActionBar().show();
+                LinearLayout bottom = findViewById(R.id.bottomTools);
+                bottom.setVisibility(View.VISIBLE);
+
+                ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
+                        .removeView(customView);
             }
         });
 
