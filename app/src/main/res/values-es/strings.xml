@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Marcar como leído</string>
     <string name="btnMarkUnread">Marcar como no leído</string>
@@ -97,7 +97,8 @@
     <string name="themeName_solarized">Solarizado</string>
     <string name="menu_readArticle_increaseFontSize">Aumentar tamaño de letra</string>
     <string name="menu_readArticle_decreaseFontSize">Disminuir tamaño de letra</string>
-    <string name="aboutText"><b>Aplicación de wallabag para Android</b>\n
+    <string name="aboutText">
+        <b>Aplicación de wallabag para Android</b>\n
         wallabag es una aplicación self hosted que te ayuda a no perderte contenidos nunca más. Haz clic, guarda y lee cuando puedas. Extrae contenido de forma automática para que puedas leerlo cuando tengas tiempo.</string>
     <string name="readSpeed">Velocidad de lectura</string>
     <string name="voiceHeight">Tono de voz</string>
@@ -137,26 +138,18 @@
     <string name="content_estimatedReadingTime">Tiempo estimado de lectura: %s min</string>
     <string name="lastUpdateTimeLabel">Última actualización: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
-
     <string name="navigation_drawer_open">Abrir caja de navegación</string>
     <string name="navigation_drawer_close">Cerrar caja de navegación</string>
-
     <string name="nav_main_articles">Artículos</string>
     <string name="nav_main_tags">Etiquetas</string>
     <string name="nav_main_tagged_articles">Artículos etiquetados</string>
-
     <string name="nav_add">Añadir un artículo</string>
-
     <string name="nav_other_settings">Configuración</string>
     <string name="nav_other_about">Acerca de</string>
-
     <string name="title_main_tag">Etiqueta: %s</string>
-
     <string name="message_couldNotOpenUrl">No se puede abrir la URL</string>
-
     <string name="pref_name_runConnectionWizard">Lanzar asistente de conexión</string>
     <string name="pref_desc_runConnectionWizard">El asistente de conexión te ayudará a realizar una configuración de conexión básica</string>
-
     <string name="pref_categoryName_connection">Conexión</string>
     <string name="pref_name_connection_url">URL de wallabag</string>
     <string name="pref_desc_connection_url">
@@ -172,13 +165,11 @@
     <string name="pref_name_connection_api_clientSecret">Secreto del cliente</string>
     <string name="pref_name_connection_autofill">Autocompletar</string>
     <string name="pref_desc_connection_autofill">Probar la conexión y llenar el ID y el secreto del cliente</string>
-
     <string name="pref_categoryName_connection_advanced">Opciones avanzadas de conexión</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Autenticación básica HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Si no sabes qué es, déjalo vacío</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Usuario HTTP</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Contraseña HTTP</string>
-
     <string name="pref_categoryName_ui">Interfaz</string>
     <string name="pref_name_ui_theme">Tema de la aplicación</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Tamaño de letra del artículo (%)</string>
@@ -194,7 +185,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Desplaza la pantalla tocando en los lados izquierdo y derecho de la pantalla</string>
     <string name="pref_name_ui_screenScrolling_percent">Porcentaje de altura de pantalla a deslizar</string>
     <string name="pref_name_ui_screenScrolling_smooth">Usar desplazamiento suave</string>
-
     <string name="pref_categoryName_sync">Sincronización</string>
     <string name="pref_name_sync_syncTypes">Tipos de sincronización</string>
     <string name="pref_desc_sync_syncTypes">Pulsa para obtener más información sobre los tipos de sincronización</string>
@@ -228,12 +218,10 @@
     <string name="pref_desc_autoDlNew_enabled">Descargar artículos nuevos automáticamente justo después de añadirlos desde la app. Nota: no se descargarán si tienes cambios locales pendientes de sincronizar.</string>
     <string name="pref_name_imageCache_enabled">Cachear imágenes de los artículos</string>
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
-
     <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>
     <string name="pref_name_storage_dbPath_internalStorage">Almacenamiento interno</string>
     <string name="pref_name_storage_dbPath_externalStorage">Almacenamiento externo</string>
     <string name="pref_name_storage_dbPath_dbMoved">Base de datos reubicada</string>
-
     <string name="pref_categoryName_miscellaneous">Misceláneos</string>
     <string name="pref_name_misc_appendWallabagMention">Añadir mención a wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Añade \"via @wallabagapp\" a los artículos compartidos</string>
@@ -243,15 +231,12 @@
     <string name="pref_desc_misc_wipeDB">Limpia todos los artículos de la base de datos local, también elimina cambios locales no sincronizados y URLs</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">¿Limpiar base de datos?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que quieres limpiar la base de datos?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de conexión incorrecta</string>
-
     <string name="connectionWizard_welcome_titleMessage">¡Bienvenido a wallabag!</string>
     <string name="connectionWizard_welcome_text">Antes de usar la aplicación wallabag necesitas configurar una conexión. Este asistente de conexión tratará de ayudarte a hacerlo.</string>
     <string name="connectionWizard_welcome_rerunNotice">Siempre puedes volver a ejecutar el asistente de conexión desde el menú de Ajustes.</string>
     <string name="connectionWizard_welcome_prev">Saltar</string>
     <string name="connectionWizard_welcome_next">Siguiente</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Selecciona un proveedor de wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir los ajustes requeridos manualmente</string>
@@ -259,25 +244,21 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecciona esta opción si tienes una cuenta en https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Saltar</string>
     <string name="connectionWizard_providerSelection_next">Siguiente</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Configuración básica</string>
     <string name="connectionWizard_provider_general_prev">Volver</string>
     <string name="connectionWizard_provider_general_next">Conectar</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">Configuración de wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Volver</string>
     <string name="connectionWizard_provider_wallabagit_next">Conectar</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Configuración de Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Volver</string>
     <string name="connectionWizard_provider_framabag_next">Conectar</string>
-
     <string name="connectionWizard_summary_titleMessage">¡Todo listo!</string>
     <string name="connectionWizard_summary_text">Presiona el botón para guardar los ajustes e ir a la pantalla principal.</string>
     <string name="connectionWizard_summary_toastMessage">Configuración completada</string>
     <string name="connectionWizard_summary_prev">Volver</string>
     <string name="connectionWizard_summary_next">Guardar configuración</string>
-<string name="scrolledOverBottom">Desciende %d veces más por debajo del final del artículo para marcarlo como leído</string>
+    <string name="scrolledOverBottom">Desciende %d veces más por debajo del final del artículo para marcarlo como leído</string>
     <string name="markedAsRead">Artículo marcado como leído</string>
     <string name="message_disableTouch_inputDisabled">Interfaz táctil desactivada</string>
     <string name="message_disableTouch_inputEnabled">Interfaz táctil activada</string>
