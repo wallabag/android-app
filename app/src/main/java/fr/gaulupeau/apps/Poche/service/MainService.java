@@ -238,7 +238,7 @@ public class MainService extends IntentServiceBase {
                     case ARTICLE_DELETE: {
                         canTolerateNotFound = true;
 
-                        if(getWallabagServiceWrapper().deleteArticle(articleID) == null) {
+                        if(!getWallabagServiceWrapper().deleteArticle(articleID)) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;

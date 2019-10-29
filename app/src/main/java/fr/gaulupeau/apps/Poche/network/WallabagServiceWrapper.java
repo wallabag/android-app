@@ -100,15 +100,23 @@ public class WallabagServiceWrapper {
         return wallabagService.addArticle(url);
     }
 
-    public Article deleteArticle(int articleID)
+    public boolean deleteArticle(int articleID)
             throws UnsuccessfulResponseException, IOException {
+        boolean found = false;
+
         try {
-            return wallabagService.deleteArticle(articleID);
+            if (CompatibilityHelper.isDeleteArticleWithIdSupported(wallabagService)) {
+                wallabagService.deleteArticleWithId(articleID);
+                found = true;
+            } else {
+                LOG.debug("deleteArticle() using older API method");
+                found = wallabagService.deleteArticle(articleID) != null;
+            }
         } catch(NotFoundException e) {
-            LOG.info("Ignoring not found exception for article ID: " + articleID, e);
+            LOG.info("deleteArticle() Ignoring not found exception for article ID: " + articleID, e);
         }
 
-        return null;
+        return found;
     }
 
     public WallabagService getWallabagService() {
