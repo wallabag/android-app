@@ -77,9 +77,7 @@
     <string name="downloadAsFileTouchToOpen">Zum Öffnen tippen</string>
     <string name="downloadAsFileProgressDetail">wallabag lädt deinen Artikel %1$s als %2$s herunter</string>
     <string name="downloadAsFileProgress">wallabag lädt deinen Artikel als %s herunter</string>
-
     <string name="notification_error">Fehler</string>
-
     <string name="pref_name_connection_url">wallabag-URL</string>
     <string name="pref_desc_connection_url">
         Beispiele:\n
@@ -90,17 +88,14 @@
     </string>
     <string name="pref_name_connection_username">Benutzername</string>
     <string name="pref_name_connection_password">Passwort</string>
-
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP-Basis-Authentifizierung</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Leer lassen, wenn du nicht weißt was das ist</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-Authentifizierungsbenutzername</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-Authentifizierungspasswort</string>
-
     <string name="pref_name_ui_theme">Thema</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Schriftgröße für Artikel (in %)</string>
     <string name="pref_name_ui_article_fontSerif">Serifenschrift</string>
     <string name="pref_desc_ui_article_fontSerif">Serifenschrift für Artikel</string>
-
     <string name="pref_name_misc_handleHttpScheme">HTTP-Schema benutzen</string>
     <string name="pref_desc_misc_handleHttpScheme">Zeige wallabag in der Liste der Webbrowser</string>
     <string name="pref_name_misc_wipeDB">Datenbank leeren</string>
@@ -187,20 +182,15 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Scrolle den Bildschirm durch Antippen der linken und rechten Bildschirmseite</string>
     <string name="pref_name_ui_screenScrolling_percent">Prozentsatz der Bildschirmhöhe, um zu scrollen</string>
     <string name="pref_name_ui_screenScrolling_smooth">Nutze sanftes Scrollen</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Falsche Verbindungs-URL genutzt</string>
-
     <string name="notification_downloadingImages">Bilder herunterladen</string>
     <string name="menu_lists_search">Suchen</string>
     <string name="menu_lists_changeSortOrder">Ändere Sortierung</string>
     <string name="other_searchHint">Suche nach Artikelüberschrift oder -text</string>
-
     <string name="pref_name_imageCache_enabled">Speichere Artikelbilder im Cache</string>
     <string name="pref_desc_imageCache_enabled">Lädt automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
-
     <string name="nav_other_settings">Einstellungen</string>
     <string name="nav_other_about">Über</string>
-
     <string name="testConnection_errorMessage_unsupportedServerVersion">Nicht unterstütze Server Version entdeckt</string>
     <string name="getCredentials_progressDialogMessage">API-Anmeldeinformationen werden abgerufen…</string>
     <string name="d_getCredentials_title_fail">API-Anmeldeinformationen konnten nicht abgerufen werden</string>
@@ -227,22 +217,16 @@
     <string name="manageTags_addNew">Hinzufügen</string>
     <string name="manageTags_currentTags">Ausgewählte Tags:</string>
     <string name="content_estimatedReadingTime">Geschätzte Lesezeit: %s min</string>
-
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
-
     <string name="nav_main_articles">Artikel</string>
     <string name="nav_main_tags">Tags</string>
     <string name="nav_main_tagged_articles">Artikel mit Tags</string>
-
     <string name="nav_add">Neuen Artikel hinzufügen</string>
-
     <string name="title_main_tag">Tag: %s</string>
-
     <string name="pref_name_connection_api_clientID">Client-ID</string>
     <string name="pref_name_connection_api_clientSecret">Clientschlüssel</string>
     <string name="pref_desc_connection_autofill">Verbindung testen und Client-ID und Clientschlüssel ausfüllen</string>
-
     <string name="pref_name_ui_article_textAlignment_justify">Textausrichtung: Blocksatz</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Streckt die Textzeilen, so dass jede Zeile die gleiche Breite hat (wie in Zeitungen)</string>
     <string name="pref_name_ui_article_handlePreformattedText">Umgang mit langen Textzeilen</string>
@@ -268,7 +252,6 @@
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lies die Synchronisierungsartenbeschreibung oben für weitere Informationen</string>
     <string name="pref_name_autoSync_onStartup_enabled">Aktiviert die automatische Synchronisierung beim Start der Anwendung</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Die App synchronisiert sich mit dem Server, wenn sie geöffnet wird</string>
-
     <string name="menuCopyOriginalURL">URL kopieren</string>
     <string name="txtUrlCopied">Artikel-URL in Zwischenablage kopiert</string>
     <string name="menuDownloadAsFile">als Datei herunterladen</string>
@@ -276,35 +259,39 @@
     <string name="notification_serverError">Serverfehler</string>
     <string name="lastUpdateTimeLabel">Letzte Aktualisierung: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
-
     <string name="message_couldNotOpenUrl">Konnte die URL nicht öffnen</string>
-
     <string name="message_disableTouch_inputDisabled">Toucheingabe deaktiviert</string>
     <string name="message_disableTouch_inputEnabled">Toucheingabe aktiviert</string>
     <string name="d_disableTouch_changeKey_title">Deaktiviere Toucheingaben</string>
     <string name="d_disableTouch_currentCode">Aktuell gewählte Taste (drücke eine Taste, um es zu ändern):</string>
-
     <string name="pref_categoryName_ui_misc">Verschiedenes</string>
     <string name="pref_name_ui_disableTouch_enabled">Deaktiviere Toucheingaben</string>
     <string name="pref_desc_ui_disableTouch_enabled">Drücke die konfigurierte Taste (Standard ist die Kamerataste), um Toucheingaben auf dem Lesebildschirm zu de-/aktivieren (Systemtasteneingaben sind nicht betroffen)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Deaktiviere Taste für Toucheingaben</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Drücke hier, um die Taste für De-/Aktivierung von Toucheingaben zu wählen</string>
-
     <string name="pref_name_storage_dbPath">Datenbankspeicherort</string>
     <string name="pref_name_storage_dbPath_internalStorage">Interner Speicher</string>
     <string name="pref_name_storage_dbPath_externalStorage">Externer Speicher</string>
     <string name="pref_name_storage_dbPath_dbMoved">Datenbank verschoben</string>
-
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
     <string name="pref_desc_misc_appendWallabagMention">Hänge \"via @wallabagapp\" an geteilte Text an</string>
     <string name="remove_tag">Tag entfernen</string>
-<string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
+    <string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
     <string name="markedAsRead">Artikel als gelesen markiert</string>
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
     <string name="pref_desc_ui_scrollOverBottom">Hier klicken, um einzustellen, wie oft man über den Rand hinaus scrollen muss, um einen Artikel als gelesen zu markieren</string>
     <string name="pref_name_ui_swipeArticles">Artikel durch Wischen wechseln</string>
     <string name="pref_desc_ui_swipeArticles">Hier klicken, um durch Wischen innerhalb eines Artikels zum vorherigen/nächsten Artikel zu wechseln</string>
-
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
     <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>
-    </resources>
+    <string name="themeName_eink">Für E-Ink Displays</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="notification_channel_group_name_sync">Synchronisierung</string>
+    <string name="notification_channel_group_name_other">Sonstige</string>
+    <string name="notification_channel_name_tts">wallabag TTS</string>
+    <string name="notification_channel_name_sync">Synchronisierung</string>
+    <string name="notification_channel_name_downloading_articles">PDFs werden heruntergeladen</string>
+    <string name="notification_channel_name_error">Fehler</string>
+    <string name="pref_name_ui_previewImage_enabled">Vorschaubild</string>
+    <string name="pref_desc_ui_previewImage_enabled">Zeige das Vorschaubild vor dem Artikeltext an</string>
+</resources>
