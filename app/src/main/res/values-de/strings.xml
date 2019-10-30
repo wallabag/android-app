@@ -292,4 +292,6 @@
     <string name="notification_channel_name_sync">Synchronisierung</string>
     <string name="notification_channel_name_downloading_articles">PDFs werden heruntergeladen</string>
     <string name="notification_channel_name_error">Fehler</string>
+    <string name="pref_name_ui_previewImage_enabled">Vorschaubild</string>
+    <string name="pref_desc_ui_previewImage_enabled">Zeige das Vorschaubild vor dem Artikeltext an</string>
 </resources>
