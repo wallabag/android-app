@@ -73,4 +73,5 @@ dependencies {
     implementation 'com.mikepenz:aboutlibraries:7.0.4'
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:bc22fca'
     implementation 'org.slf4j:slf4j-android:1.7.28'
+    implementation 'net.zetetic:android-database-sqlcipher:4.2.0'
 }
