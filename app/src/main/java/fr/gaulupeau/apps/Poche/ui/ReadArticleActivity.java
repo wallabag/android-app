@@ -151,17 +151,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadingFinished;
 
     public void onCreate(Bundle savedInstanceState) {
-
         settings = App.getInstance().getSettings();
 
-        if(settings.isFullscreenArticleView()) {
+        boolean fullscreenArticleView = settings.isFullscreenArticleView();
+        if(fullscreenArticleView) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-                    );
-            ActionBar actionBar = super.getSupportActionBar();
-            if(actionBar != null) actionBar.hide();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         if(settings.isKeepScreenOn()) {
@@ -170,6 +165,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
+
+        if(fullscreenArticleView) {
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null) actionBar.hide();
+        }
 
         Intent intent = getIntent();
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
