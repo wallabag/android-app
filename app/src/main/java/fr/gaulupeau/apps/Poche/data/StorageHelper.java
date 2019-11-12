@@ -3,9 +3,13 @@ package fr.gaulupeau.apps.Poche.data;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 
@@ -112,6 +116,90 @@ public class StorageHelper {
 
     public static boolean deleteFile(String path) {
         return new File(path).delete();
+    }
+
+    private static File getArticlesDir() {
+        File dir = new File(App.getInstance().getFilesDir(), "articles");
+        if (!dir.exists()) {
+            Log.d(TAG, "getArticlesDir() dir does not exist, creating");
+            if (!dir.mkdir()) {
+                Log.e(TAG, "getArticlesDir() couldn't create dir");
+            }
+        }
+        return dir;
+    }
+
+    private static String getArticleFileExtension() {
+        return ".html";
+    }
+
+    private static File getArticleFile(String id) {
+        return new File(getArticlesDir(), id + getArticleFileExtension());
+    }
+
+    public static void storeContentUnsafe(int id, String content) throws IOException {
+        storeContentUnsafe(String.valueOf(id), content);
+    }
+
+    public static void storeContentUnsafe(String id, String content) throws IOException {
+        Log.d(TAG, "storeContentUnsafe(" + id + ") started");
+
+        File file = getArticleFile(id);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content);
+        }
+    }
+
+    public static String loadArticleContent(int id) {
+        return loadArticleContent(String.valueOf(id));
+    }
+
+    public static String loadArticleContent(String id) {
+        try {
+            return loadArticleContentUnsafe(id);
+        } catch (IOException e) {
+            Log.w(TAG, "loadArticleContent() loading exception", e);
+            return null;
+        }
+    }
+
+    public static String loadArticleContentUnsafe(String id) throws IOException {
+        Log.d(TAG, "loadArticleContentUnsafe(" + id + ") started");
+
+        File file = getArticleFile(id);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            StringBuilder sb = new StringBuilder();
+
+            char[] buffer = new char[8192];
+            int read;
+            while ((read = reader.read(buffer, 0, buffer.length)) > 0) {
+                sb.append(buffer, 0, read);
+            }
+
+            return sb.toString();
+        }
+    }
+
+    public static void deleteArticleContent(int id) {
+        deleteArticleContent(String.valueOf(id));
+    }
+
+    public static void deleteArticleContent(String id) {
+        Log.d(TAG, "deleteArticleContent(" + id + ") started");
+
+        Log.d(TAG, "deleteArticleContent() deletion result: " + getArticleFile(id).delete());
+    }
+
+    public static void deleteAllArticleContent() {
+        Log.d(TAG, "deleteAllArticleContent() started");
+
+        File[] files = getArticlesDir()
+                .listFiles((d, name) -> name.endsWith(getArticleFileExtension()));
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
+        }
     }
 
 }

@@ -21,6 +21,7 @@ public class Article {
     @Unique
     private Integer articleId;
 
+    @Transient
     private String content;
 
     private String title;
@@ -81,15 +82,14 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 180250343)
-    public Article(Long id, Integer articleId, String content, String title, String domain, String url,
+    @Generated(hash = 1512174298)
+    public Article(Long id, Integer articleId, String title, String domain, String url,
             String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
             String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
             Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
             Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
-        this.content = content;
         this.title = title;
         this.domain = domain;
         this.url = url;

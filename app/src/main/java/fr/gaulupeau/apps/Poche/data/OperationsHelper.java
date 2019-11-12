@@ -271,6 +271,7 @@ public class OperationsHelper {
         }
 
         articleDao.delete(article);
+        StorageHelper.deleteArticleContent(articleID);
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.DELETED);
 
@@ -286,6 +287,7 @@ public class OperationsHelper {
         DbConnection.getSession().getTagDao().deleteAll();
         DbConnection.getSession().getArticleTagsJoinDao().deleteAll();
         DbConnection.getSession().getQueueItemDao().deleteAll();
+        StorageHelper.deleteAllArticleContent();
 
         settings.setLatestUpdatedItemTimestamp(0);
         settings.setLatestUpdateRunTimestamp(0);

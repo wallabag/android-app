@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -72,6 +73,7 @@ public class Updater {
                 daoSession.getArticleTagsJoinDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();
                 daoSession.getTagDao().deleteAll();
+                StorageHelper.deleteAllArticleContent();
 
                 event.invalidateAll(ChangeType.DELETED);
             }
@@ -206,6 +208,10 @@ public class Updater {
                 if(!full) {
                     article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
+
+                    if (article != null) {
+                        article.setContent(StorageHelper.loadArticleContent(article.getArticleId()));
+                    }
                 }
 
                 boolean existing = true;
@@ -215,7 +221,7 @@ public class Updater {
                     article = new Article(null);
                     article.setArticleId(id);
                     article.setTitle(apiArticle.title);
-                    article.setContent(apiArticle.content);
+                    article.setContent(fixArticleContent(apiArticle.content));
                     article.setDomain(apiArticle.domainName);
                     article.setUrl(apiArticle.url);
                     article.setOriginUrl(apiArticle.originUrl);
@@ -238,8 +244,10 @@ public class Updater {
 
                 if(existing) {
                     if(!equalOrEmpty(article.getContent(), apiArticle.content)) {
-                        article.setContent(apiArticle.content);
+                        article.setContent(fixArticleContent(apiArticle.content));
                         articleChanges.add(ChangeType.CONTENT_CHANGED);
+                    } else {
+                        article.setContent(null);
                     }
                     if(!equalOrEmpty(article.getTitle(), apiArticle.title)) {
                         article.setTitle(apiArticle.title);
@@ -426,6 +434,13 @@ public class Updater {
                 articleDao.updateInTx(articlesToUpdate);
                 Log.v(TAG, "performUpdate() done articleDao.updateInTx()");
 
+                Log.v(TAG, "performUpdate() storing articles content");
+                for (Article article : articlesToUpdate) {
+                    if (article.getContent() == null) continue;
+                    StorageHelper.storeContentUnsafe(article.getArticleId(), article.getContent());
+                }
+                Log.v(TAG, "performUpdate() done storing articles content");
+
                 articlesToUpdate.clear();
             }
 
@@ -433,6 +448,12 @@ public class Updater {
                 Log.v(TAG, "performUpdate() performing articleDao.insertInTx()");
                 articleDao.insertInTx(articlesToInsert);
                 Log.v(TAG, "performUpdate() done articleDao.insertInTx()");
+
+                Log.v(TAG, "performUpdate() storing articles content");
+                for (Article article : articlesToInsert) {
+                    StorageHelper.storeContentUnsafe(article.getArticleId(), article.getContent());
+                }
+                Log.v(TAG, "performUpdate() done storing articles content");
 
                 articlesToInsert.clear();
             }
@@ -522,11 +543,14 @@ public class Updater {
 
     private void fixArticleNullValues(Article article) {
         if(article.getTitle() == null) article.setTitle("");
-        if(article.getContent() == null) article.setContent("");
         if(article.getDomain() == null) article.setDomain("");
         if(article.getUrl() == null) article.setUrl("");
         if(article.getLanguage() == null) article.setLanguage("");
         if(article.getPreviewPictureURL() == null) article.setPreviewPictureURL("");
+    }
+
+    private String fixArticleContent(String content) {
+        return content != null ? content : "";
     }
 
     private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByID(
@@ -582,6 +606,7 @@ public class Updater {
                 .orderDesc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
 
         List<Long> articlesToDelete = new ArrayList<>();
+        List<Integer> articleIdsToDelete = new ArrayList<>();
 
         LinkedList<Article> articleQueue = new LinkedList<>();
         List<Article> addedArticles = new ArrayList<>();
@@ -667,6 +692,7 @@ public class Updater {
                             Log.v(TAG, "performSweep() article not found by ID");
 
                             articlesToDelete.add(a.getId());
+                            articleIdsToDelete.add(a.getArticleId());
 
                             event.addArticleChangeWithoutObject(a, ChangeType.DELETED);
                         }
@@ -690,6 +716,12 @@ public class Updater {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
             articleDao.deleteByKeyInTx(articlesToDelete);
             Log.d(TAG, "performSweep() articles deleted");
+
+            Log.d(TAG, "performSweep() removing content");
+            for (Integer id : articleIdsToDelete) {
+                StorageHelper.deleteArticleContent(id);
+            }
+            Log.d(TAG, "performSweep() content removed");
         }
     }
 

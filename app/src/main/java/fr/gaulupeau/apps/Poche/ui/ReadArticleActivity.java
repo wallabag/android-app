@@ -46,6 +46,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
@@ -770,7 +771,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private String getHtmlContent() {
-        String htmlContent = article.getContent();
+        String htmlContent = StorageHelper.loadArticleContent(article.getArticleId());
 
         int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
         String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,

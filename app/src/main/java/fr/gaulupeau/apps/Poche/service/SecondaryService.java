@@ -291,7 +291,7 @@ public class SecondaryService extends IntentServiceBase {
                         + ". articleID: " + article.getArticleId());
                 postEvent(new FetchImagesProgressEvent(actionRequest, index, totalNumber));
 
-                String content = article.getContent();
+                String content = StorageHelper.loadArticleContent(article.getArticleId());
 
                 // append preview picture URL to content to fetch it too
                 // should probably be handled separately

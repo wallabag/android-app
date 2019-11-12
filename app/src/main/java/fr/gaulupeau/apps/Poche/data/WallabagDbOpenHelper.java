@@ -33,7 +33,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 102) {
+        if (oldVersion >= 101 && newVersion <= 103) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -49,6 +49,13 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                     for (String col : columnsToAdd) {
                         db.execSQL("ALTER TABLE \"ARTICLE\" ADD COLUMN " + col + ";");
                     }
+                }
+
+                if (oldVersion < 103) {
+                    Log.i(TAG, "Migrating to version " + 103);
+
+                    // SQLite can't drop columns; just removing the data
+                    db.execSQL("UPDATE \"ARTICLE\" SET \"CONTENT\" = null;");
                 }
 
                 migrationDone = true;
