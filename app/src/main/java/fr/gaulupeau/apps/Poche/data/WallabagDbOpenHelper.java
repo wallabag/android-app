@@ -42,35 +42,12 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 104) {
+        if (oldVersion >= 104 && newVersion <= 104) {
             try {
-                if (oldVersion < 102) {
-                    Log.i(TAG, "Migrating to version " + 102);
-
-                    String[] columnsToAdd = new String[]{
-                            "\"ORIGIN_URL\" TEXT",
-                            "\"AUTHORS\" TEXT",
-                            "\"PUBLISHED_AT\" INTEGER",
-                            "\"STARRED_AT\" INTEGER",
-                            "\"IS_PUBLIC\" INTEGER",
-                            "\"PUBLIC_UID\" TEXT"
-                    };
-                    for (String col : columnsToAdd) {
-                        db.execSQL("ALTER TABLE \"ARTICLE\" ADD COLUMN " + col + ";");
-                    }
-                }
-
-                if (oldVersion < 103) {
-                    Log.i(TAG, "Migrating to version " + 103);
-
-                    // SQLite can't drop columns; just removing the data
-                    db.execSQL("UPDATE \"ARTICLE\" SET \"CONTENT\" = null;");
-                }
-
                 if (oldVersion < 104) {
                     Log.i(TAG, "Migrating to version " + 104);
 
-                    FtsDao.createTable(db, false);
+                    // update versions above and put your migration code here
                 }
 
                 migrationDone = true;
