@@ -10,6 +10,8 @@ import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
+import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -120,6 +122,7 @@ public class OperationsHelper {
 
         article.setTitle(title);
         articleDao.update(article);
+        FtsDao.updateArticle(getDaoSession().getDatabase(), article);
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TITLE_CHANGED);
 
@@ -270,6 +273,7 @@ public class OperationsHelper {
             return; // not an error?
         }
 
+        FtsDao.deleteArticle(getDaoSession().getDatabase(), article.getId());
         articleDao.delete(article);
         StorageHelper.deleteArticleContent(articleID);
 
@@ -283,10 +287,13 @@ public class OperationsHelper {
     }
 
     public static void wipeDB(Settings settings) {
-        DbConnection.getSession().getArticleDao().deleteAll();
-        DbConnection.getSession().getTagDao().deleteAll();
-        DbConnection.getSession().getArticleTagsJoinDao().deleteAll();
-        DbConnection.getSession().getQueueItemDao().deleteAll();
+        DaoSession daoSession = DbConnection.getSession();
+
+        FtsDao.deleteAllArticles(daoSession.getDatabase());
+        daoSession.getArticleDao().deleteAll();
+        daoSession.getTagDao().deleteAll();
+        daoSession.getArticleTagsJoinDao().deleteAll();
+        daoSession.getQueueItemDao().deleteAll();
         StorageHelper.deleteAllArticleContent();
 
         settings.setLatestUpdatedItemTimestamp(0);
@@ -297,7 +304,11 @@ public class OperationsHelper {
     }
 
     private static ArticleDao getArticleDao() {
-        return DbConnection.getSession().getArticleDao();
+        return getDaoSession().getArticleDao();
+    }
+
+    private static DaoSession getDaoSession() {
+        return DbConnection.getSession();
     }
 
     private static Article getArticle(int articleID, ArticleDao articleDao) {

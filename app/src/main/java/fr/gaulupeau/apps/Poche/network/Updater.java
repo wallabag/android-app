@@ -26,6 +26,7 @@ import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -70,6 +71,7 @@ public class Updater {
         try {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
+                FtsDao.deleteAllArticles(daoSession.getDatabase());
                 daoSession.getArticleTagsJoinDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();
                 daoSession.getTagDao().deleteAll();
@@ -441,6 +443,10 @@ public class Updater {
                 }
                 Log.v(TAG, "performUpdate() done storing articles content");
 
+                Log.v(TAG, "performUpdate() updating articles in FTS");
+                FtsDao.updateArticles(daoSession.getDatabase(), articlesToUpdate);
+                Log.v(TAG, "performUpdate() done updating articles in FTS");
+
                 articlesToUpdate.clear();
             }
 
@@ -454,6 +460,10 @@ public class Updater {
                     StorageHelper.storeContentUnsafe(article.getArticleId(), article.getContent());
                 }
                 Log.v(TAG, "performUpdate() done storing articles content");
+
+                Log.v(TAG, "performUpdate() adding articles to FTS");
+                FtsDao.addArticles(daoSession.getDatabase(), articlesToInsert);
+                Log.v(TAG, "performUpdate() done adding articles to FTS");
 
                 articlesToInsert.clear();
             }
@@ -714,6 +724,12 @@ public class Updater {
 
         if(!articlesToDelete.isEmpty()) {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
+
+            Log.d(TAG, "performSweep() deleting from FTS");
+            FtsDao.deleteArticles(daoSession.getDatabase(), articlesToDelete);
+            Log.d(TAG, "performSweep() deleted from FTS");
+
+            Log.d(TAG, "performSweep() performing delete");
             articleDao.deleteByKeyInTx(articlesToDelete);
             Log.d(TAG, "performSweep() articles deleted");
 
