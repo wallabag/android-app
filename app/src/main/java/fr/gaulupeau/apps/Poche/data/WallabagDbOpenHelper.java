@@ -33,24 +33,28 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        try {
-            if (oldVersion == 101 && newVersion == 102) {
-                String[] columnsToAdd = new String[]{
-                        "\"ORIGIN_URL\" TEXT",
-                        "\"AUTHORS\" TEXT",
-                        "\"PUBLISHED_AT\" INTEGER",
-                        "\"STARRED_AT\" INTEGER",
-                        "\"IS_PUBLIC\" INTEGER",
-                        "\"PUBLIC_UID\" TEXT"
-                };
-                for (String col : columnsToAdd) {
-                    db.execSQL("ALTER TABLE \"ARTICLE\" ADD COLUMN " + col + ";");
+        if (oldVersion >= 101 && newVersion <= 102) {
+            try {
+                if (oldVersion < 102) {
+                    Log.i(TAG, "Migrating to version " + 102);
+
+                    String[] columnsToAdd = new String[]{
+                            "\"ORIGIN_URL\" TEXT",
+                            "\"AUTHORS\" TEXT",
+                            "\"PUBLISHED_AT\" INTEGER",
+                            "\"STARRED_AT\" INTEGER",
+                            "\"IS_PUBLIC\" INTEGER",
+                            "\"PUBLIC_UID\" TEXT"
+                    };
+                    for (String col : columnsToAdd) {
+                        db.execSQL("ALTER TABLE \"ARTICLE\" ADD COLUMN " + col + ";");
+                    }
                 }
 
                 migrationDone = true;
+            } catch (Exception e) {
+                Log.e(TAG, "Migration error", e);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "Migration error", e);
         }
 
         if (!migrationDone) genericMigration(db, oldVersion, newVersion);
