@@ -185,7 +185,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return removeContent(detachObjects(qb.list()));
+        return detachObjects(qb.list());
     }
 
     private QueryBuilder<Article> getQueryBuilder() {
@@ -212,8 +212,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         }
 
         if(!TextUtils.isEmpty(searchQuery)) {
-            qb.whereOr(ArticleDao.Properties.Title.like("%" + searchQuery + "%"),
-                    ArticleDao.Properties.Content.like("%" + searchQuery + "%"));
+            qb.where(ArticleDao.Properties.Title.like("%" + searchQuery + "%"));
         }
 
         switch(sortOrder) {
@@ -236,15 +235,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private List<Article> detachObjects(List<Article> articles) {
         for(Article article: articles) {
             articleDao.detach(article);
-        }
-
-        return articles;
-    }
-
-    // removes content from article objects in order to free memory
-    private List<Article> removeContent(List<Article> articles) {
-        for(Article article: articles) {
-            article.setContent(null);
         }
 
         return articles;

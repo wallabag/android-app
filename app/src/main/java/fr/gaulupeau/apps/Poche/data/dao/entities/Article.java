@@ -8,6 +8,7 @@ import org.greenrobot.greendao.DaoException;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 
 /**
  * Entity mapped to table "ARTICLE".
@@ -21,7 +22,8 @@ public class Article {
     @Unique
     private Integer articleId;
 
-    private String content;
+    @Transient
+    private ArticleContent content;
 
     private String title;
 
@@ -81,15 +83,14 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 180250343)
-    public Article(Long id, Integer articleId, String content, String title, String domain, String url,
+    @Generated(hash = 1512174298)
+    public Article(Long id, Integer articleId, String title, String domain, String url,
             String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
             String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
             Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
             Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
-        this.content = content;
         this.title = title;
         this.domain = domain;
         this.url = url;
@@ -127,11 +128,37 @@ public class Article {
     }
 
     public String getContent() {
-        return content;
+        return getArticleContent().getContent();
     }
 
     public void setContent(String content) {
-        this.content = content;
+        getArticleContent().setContent(content);
+    }
+
+    public ArticleContent getArticleContent() {
+        ArticleContent content = this.content;
+        if (content == null) {
+            if (id == null) {
+                throw new IllegalStateException("Can't fetch content for a not persisted Article");
+            }
+
+            DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+
+            ArticleContentDao targetDao = daoSession.getArticleContentDao();
+            this.content = content = targetDao.load(id);
+        }
+        return content;
+    }
+
+    public void setArticleContent(ArticleContent articleContent) {
+        this.content = articleContent;
+    }
+
+    public boolean isArticleContentLoaded() {
+        return content != null;
     }
 
     public String getTitle() {
