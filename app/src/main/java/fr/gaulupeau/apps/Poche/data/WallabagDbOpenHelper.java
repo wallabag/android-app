@@ -12,6 +12,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
@@ -33,7 +34,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 102) {
+        if (oldVersion >= 101 && newVersion <= 103) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -49,6 +50,17 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                     for (String col : columnsToAdd) {
                         db.execSQL("ALTER TABLE \"ARTICLE\" ADD COLUMN " + col + ";");
                     }
+                }
+
+                if (oldVersion < 103) {
+                    Log.i(TAG, "Migrating to version " + 103);
+
+                    db.execSQL("create index IDX_ARTICLE_TAGS_JOIN_ARTICLE_ID on " +
+                            ArticleTagsJoinDao.TABLENAME +
+                            " (" + ArticleTagsJoinDao.Properties.ArticleId.columnName + " asc);");
+                    db.execSQL("create index IDX_ARTICLE_TAGS_JOIN_TAG_ID on " +
+                            ArticleTagsJoinDao.TABLENAME +
+                            " (" + ArticleTagsJoinDao.Properties.TagId.columnName + " asc);");
                 }
 
                 migrationDone = true;
