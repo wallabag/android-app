@@ -389,10 +389,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuTTS:
                 toggleTTS(true);
                 break;
-            case R.id.magnifer:
-
-                break;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

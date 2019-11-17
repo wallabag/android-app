@@ -158,7 +158,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths"/>
         </provider>
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.Zoomactivity"/>
     </application>
 
 </manifest>
