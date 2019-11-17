@@ -28,6 +28,7 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleContent;
@@ -73,6 +74,7 @@ public class Updater {
         try {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
+                FtsDao.deleteAllArticles(daoSession.getDatabase());
                 daoSession.getArticleTagsJoinDao().deleteAll();
                 daoSession.getArticleContentDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();

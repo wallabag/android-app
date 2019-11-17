@@ -16,6 +16,7 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
@@ -32,11 +33,19 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
     }
 
     @Override
+    public void onCreate(Database db) {
+        Log.d(TAG, "onCreate() creating tables");
+
+        super.onCreate(db);
+        FtsDao.createAll(db, false);
+    }
+
+    @Override
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 104) {
+        if (oldVersion >= 101 && newVersion <= 105) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -80,6 +89,20 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                     db.execSQL("update " + ArticleContentDao.TABLENAME + " set CONTENT = null;");
                 }
 
+                if (oldVersion < 105) {
+                    Log.i(TAG, "Migrating to version " + 105);
+
+                    FtsDao.createAll(db, false);
+
+                    db.execSQL("insert into " + FtsDao.TABLE_NAME +
+                            "(" + FtsDao.COLUMN_ID +
+                            ", " + FtsDao.COLUMN_TITLE +
+                            ", " + FtsDao.COLUMN_CONTENT + ")" +
+                            " select rowid, " + ArticleDao.Properties.Title.columnName +
+                            ", " + ArticleContentDao.Properties.Content.columnName +
+                            " from " + FtsDao.VIEW_FOR_FTS_NAME);
+                }
+
                 migrationDone = true;
             } catch (Exception e) {
                 Log.e(TAG, "Migration error", e);
@@ -113,6 +136,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
             }
         }
 
+        FtsDao.dropAll(db, true);
         DaoMaster.dropAllTables(db, true);
         onCreate(db);
 

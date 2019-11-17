@@ -11,6 +11,7 @@ import java.util.List;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -286,6 +287,7 @@ public class OperationsHelper {
     public static void wipeDB(Settings settings) {
         DaoSession daoSession = getDaoSession();
 
+        FtsDao.deleteAllArticles(daoSession.getDatabase());
         daoSession.getArticleContentDao().deleteAll();
         daoSession.getArticleDao().deleteAll();
         daoSession.getTagDao().deleteAll();
