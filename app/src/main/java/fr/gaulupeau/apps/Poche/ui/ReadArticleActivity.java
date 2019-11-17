@@ -21,11 +21,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.ScaleAnimation;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
@@ -79,7 +81,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     public static final String EXTRA_ID = "ReadArticleActivity.id";
     public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
     public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
-
+    private  float mscale= 1f;
+    private ScaleGestureDetector mScaleDetector;
+    GestureDetector gestureDetector;
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
     private static final String TAG_TTS_FRAGMENT = "ttsFragment";
@@ -174,6 +178,26 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
+        gestureDetector= new GestureDetector(this,new GesturerListener());
+        mScaleDetector = new ScaleGestureDetector(this,new ScaleGestureDetector.SimpleOnScaleGestureListener(){
+            public boolean onScale(ScaleGestureDetector detector){
+                float scale= 1-detector.getScaleFactor();
+                float prevscale = mscale;
+                mscale += scale;
+
+                if(mscale < 0.1f)
+                    mscale=0.1f;
+
+                if(mscale > 10f)
+                    mscale=10f;
+                ScaleAnimation scaleAnimation= new ScaleAnimation(1f/prevscale, 1f/mscale,1f/prevscale, 1f/mscale,detector.getFocusX(),detector.getFocusY());
+                scaleAnimation.setDuration(0);
+                scaleAnimation.setFillAfter(true);
+                scrollView.startAnimation(scaleAnimation);
+                return true;
+            }
+        });
+
 
         Intent intent = getIntent();
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
@@ -213,6 +237,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         scrollView = (ScrollView)findViewById(R.id.scroll);
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
         webViewContent = (WebView)findViewById(R.id.webViewContent);
+        webViewContent.getSettings().setDisplayZoomControls(true);
+        webViewContent.getSettings().setSupportZoom(true);
         loadingPlaceholder = (TextView)findViewById(R.id.tv_loading_article);
         bottomTools = (LinearLayout)findViewById(R.id.bottomTools);
         hrBar = findViewById(R.id.view1);
@@ -225,7 +251,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         loadArticleToWebView();
-
+        webViewContent.getSettings().setSupportZoom(true);
+        webViewContent.getSettings().getTextZoom();
+        webViewContent.getSettings().setDisplayZoomControls(true);
+        webViewContent.getSettings().getDisplayZoomControls();
+        webViewContent.getSettings().supportZoom();
         initButtons();
 
         if(settings.isTtsVisible() && ttsFragment == null) {
@@ -240,6 +270,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if(disableTouch) {
             showDisableTouchToast();
         }
+
+
+
 
         EventBus.getDefault().register(this);
     }
@@ -356,12 +389,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuTTS:
                 toggleTTS(true);
                 break;
+            case R.id.magnifer:
+
+                break;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
 
         return true;
+    }
+    public boolean dispatchTouchEvent(MotionEvent ev){
+        super.dispatchTouchEvent(ev);
+        mScaleDetector.onTouchEvent(ev);
+        gestureDetector.onTouchEvent(ev);
+        return gestureDetector.onTouchEvent(ev);
     }
 
     @Override
@@ -420,10 +462,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return super.dispatchKeyEvent(event);
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        return disableTouch || super.dispatchTouchEvent(ev);
-    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
@@ -1368,5 +1407,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void setFontSizeOld(WebView view, int size) {
         view.getSettings().setDefaultFontSize(size);
     }
+    private class GesturerListener extends GestureDetector.SimpleOnGestureListener{
+        public boolean onDown(MotionEvent e){
+            return true;
+        }
+    }
 
 }
+

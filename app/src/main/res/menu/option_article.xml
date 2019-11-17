@@ -58,4 +58,7 @@
         android:id="@+id/menuTTS"
         android:checkable="true"
         android:title="@string/menuTTS"/>
+    <item
+        android:id="@+id/magnifer"
+        android:title="zoomin and out "/>
 </menu>
