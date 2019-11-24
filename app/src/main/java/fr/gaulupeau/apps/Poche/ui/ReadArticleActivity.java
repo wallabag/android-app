@@ -176,21 +176,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 float scale = 1 - detector.getScaleFactor();
                 float prevscale = mscale;
                 mscale += scale;
-
                 if (mscale < 0.1f)
                     mscale = 0.1f;
-
                 if (mscale > 10f)
                     mscale = 10f;
                 ScaleAnimation scaleAnimation = new ScaleAnimation(1f / prevscale, 1f / mscale, 1f / prevscale, 1f / mscale, detector.getFocusX(), detector.getFocusY());
                 scaleAnimation.setDuration(0);
-                scaleAnimation.setFillAfter(true);
+                scaleAnimation.setFillAfter(false);
                 scrollView.startAnimation(scaleAnimation);
                 return true;
             }
         });
-
-
         Intent intent = getIntent();
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
         Log.d(TAG, "onCreate() articleId: " + articleID);
@@ -390,6 +386,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.dispatchTouchEvent(ev);
         mScaleDetector.onTouchEvent(ev);
         gestureDetector.onTouchEvent(ev);
+
         return gestureDetector.onTouchEvent(ev);
     }
 
