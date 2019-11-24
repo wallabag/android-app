@@ -181,9 +181,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 if (mscale > 10f)
                     mscale = 10f;
                 ScaleAnimation scaleAnimation = new ScaleAnimation(1f / prevscale, 1f / mscale, 1f / prevscale, 1f / mscale, detector.getFocusX(), detector.getFocusY());
-                scaleAnimation.setDuration(0);
-                scaleAnimation.setFillAfter(false);
+                scaleAnimation.setDuration(1000);
+                //1second after return original size
                 scrollView.startAnimation(scaleAnimation);
+
+                scaleAnimation.setFillAfter(false);
                 return true;
             }
         });
