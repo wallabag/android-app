@@ -149,6 +149,11 @@
                 android:summary="@string/pref_desc_ui_article_fullscreen"
                 android:defaultValue="false"/>
             <CheckBoxPreference
+                android:key="@string/pref_key_ui_article_fullscreen_auto"
+                android:title="@string/pref_name_ui_article_fullscreen_auto"
+                android:summary="@string/pref_desc_ui_article_fullscreen_auto"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_ui_disableTouch_enabled"
                 android:title="@string/pref_name_ui_disableTouch_enabled"
                 android:summary="@string/pref_desc_ui_disableTouch_enabled"

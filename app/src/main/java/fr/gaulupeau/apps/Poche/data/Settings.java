@@ -358,6 +358,10 @@ public class Settings {
         return getBoolean(R.string.pref_key_ui_article_fullscreen, false);
     }
 
+    public boolean isAutoFullscreenArticleView() {
+        return getBoolean(R.string.pref_key_ui_article_fullscreen_auto, true);
+    }
+
     public void setFullScreenArticleView(boolean value) {
         setBoolean(R.string.pref_key_ui_article_fullscreen, value);
     }
