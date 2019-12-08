@@ -7,7 +7,7 @@ import android.util.Log;
 import wallabag.apiwrapper.ArticlesPageIterator;
 import wallabag.apiwrapper.ArticlesQueryBuilder;
 import wallabag.apiwrapper.BatchExistQueryBuilder;
-import wallabag.apiwrapper.exceptions.NotFoundException;
+import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 import wallabag.apiwrapper.models.Articles;
 
@@ -50,11 +50,11 @@ public class Updater {
     private static final String TAG = Updater.class.getSimpleName();
 
     private final DaoSession daoSession;
-    private final WallabagServiceWrapper wallabagServiceWrapper;
+    private final WallabagService wallabagService;
 
-    public Updater(DaoSession daoSession, WallabagServiceWrapper wallabagServiceWrapper) {
+    public Updater(DaoSession daoSession, WallabagService wallabagService) {
         this.daoSession = daoSession;
-        this.wallabagServiceWrapper = wallabagServiceWrapper;
+        this.wallabagService = wallabagService;
     }
 
     public ArticlesChangedEvent update(UpdateType updateType, long latestUpdatedItemTimestamp,
@@ -123,8 +123,7 @@ public class Updater {
 
         List<Tag> tags;
         if(full) {
-            List<wallabag.apiwrapper.models.Tag> apiTags
-                    = wallabagServiceWrapper.getWallabagService().getTags();
+            List<wallabag.apiwrapper.models.Tag> apiTags = wallabagService.getTags();
 
             tags = new ArrayList<>(apiTags.size());
 
@@ -149,8 +148,7 @@ public class Updater {
 
         int perPage = 30;
 
-        ArticlesQueryBuilder queryBuilder
-                = wallabagServiceWrapper.getWallabagService()
+        ArticlesQueryBuilder queryBuilder = wallabagService
                 .getArticlesBuilder()
                 .perPage(perPage);
 
@@ -562,8 +560,11 @@ public class Updater {
             return;
         }
 
-        int remoteTotal = wallabagServiceWrapper.getWallabagService()
-                .getArticlesBuilder().perPage(1).execute().total;
+        int remoteTotal = wallabagService
+                .getArticlesBuilder()
+                .perPage(1)
+                .detailLevel(ArticlesQueryBuilder.DetailLevel.METADATA)
+                .execute().total;
 
         Log.d(TAG, String.format("performSweep() local total: %d, remote total: %d",
                 totalNumber, remoteTotal));
@@ -623,7 +624,7 @@ public class Updater {
                 }
 
                 if(existQueryBuilder == null) {
-                    existQueryBuilder = wallabagServiceWrapper.getWallabagService()
+                    existQueryBuilder = wallabagService
                             .getArticlesExistQueryBuilder(7950);
                 }
 
@@ -660,11 +661,11 @@ public class Updater {
                                 "; articleID: %d, article URL: %s", a.getArticleId(), a.getUrl()));
 
                         Log.v(TAG, "performSweep() trying to find article by ID");
-                        try {
-                            // we could use `getArticle(int)`, but `getTags()` is lighter
-                            wallabagServiceWrapper.getWallabagService().getTags(a.getArticleId());
+
+                        // we could use `getArticle(int)`, but `getTags()` is lighter
+                        if(wallabagService.getTags(a.getArticleId()) != null) {
                             Log.v(TAG, "performSweep() article found by ID");
-                        } catch(NotFoundException nfe) {
+                        } else {
                             Log.v(TAG, "performSweep() article not found by ID");
 
                             articlesToDelete.add(a.getId());

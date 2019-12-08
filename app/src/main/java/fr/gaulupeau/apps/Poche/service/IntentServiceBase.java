@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.service;
 import android.app.IntentService;
 import android.util.Log;
 
+import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.AuthorizationException;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
@@ -11,8 +12,8 @@ import java.io.IOException;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 public abstract class IntentServiceBase extends IntentService {
@@ -111,9 +112,9 @@ public abstract class IntentServiceBase extends IntentService {
         return wallabagWebService;
     }
 
-    protected WallabagServiceWrapper getWallabagServiceWrapper()
+    protected WallabagService getWallabagService()
             throws IncorrectConfigurationException {
-        return WallabagServiceWrapper.getInstance();
+        return WallabagConnection.getWallabagService();
     }
 
 }

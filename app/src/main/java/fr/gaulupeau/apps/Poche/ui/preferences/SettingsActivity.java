@@ -31,8 +31,8 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
@@ -311,8 +311,8 @@ public class SettingsActivity extends BaseActionBarActivity {
             if(serviceWrapperReinitializationNeeded) {
                 serviceWrapperReinitializationNeeded = false;
 
-                Log.i(TAG, "applyChanges() calling WallabagServiceWrapper.resetInstance()");
-                WallabagServiceWrapper.resetInstance();
+                Log.i(TAG, "applyChanges() calling WallabagConnection.resetWallabagService()");
+                WallabagConnection.resetWallabagService();
             }
 
             if(imageCachingChanged) {

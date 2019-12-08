@@ -95,7 +95,7 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
 
                 return !TextUtils.isEmpty(token.accessToken);
             }
-        }, WallabagConnection.createClient(false));
+        }, WallabagConnection.createClient(false), null);
 
         try {
             Log.d(TAG, "doInBackground() API version: " + wallabagService.getVersion());
@@ -116,11 +116,12 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
         if(result != null) return null;
 
         try {
-            wallabagService.getArticlesBuilder().perPage(1).execute();
+            wallabagService.testServerAccessibility();
             result = Result.OK;
-        } catch(NotFoundException e) { // no articles, but we have access
-            Log.i(TAG, "doInBackground() NotFoundException (that means we have access)", e);
-            result = Result.OK;
+        } catch(NotFoundException e) {
+            Log.w(TAG, "doInBackground() NotFoundException on accessibility test," +
+                    "probably not wallabag", e);
+            result = Result.NOT_FOUND;
         } catch(AuthorizationException e) {
             Log.w(TAG, "doInBackground() AuthorizationException", e);
             result = Result.NO_ACCESS;

@@ -3,10 +3,13 @@ package fr.gaulupeau.apps.Poche.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import okhttp3.Interceptor;
 import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
@@ -20,10 +23,76 @@ import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
+import wallabag.apiwrapper.ParameterHandler;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.models.TokenResponse;
 
 public class WallabagConnection {
 
-    private static final String TAG = WallabagConnection.class.getSimpleName();
+    private static WallabagService wallabagService;
+    private static final Object wallabagServiceLock = new Object();
+
+    public static WallabagService getWallabagService() throws IncorrectConfigurationException {
+        synchronized(wallabagServiceLock) {
+            if(wallabagService == null) {
+                wallabagService = createWallabagService();
+            }
+            return wallabagService;
+        }
+    }
+
+    public static void resetWallabagService() {
+        synchronized(wallabagServiceLock) {
+            wallabagService = null;
+        }
+    }
+
+    private static WallabagService createWallabagService() throws IncorrectConfigurationException {
+        final Settings settings = App.getInstance().getSettings();
+
+        String url = settings.getUrl();
+        if(TextUtils.isEmpty(url)) throw new IncorrectConfigurationException("URL is empty");
+
+        return WallabagService.instance(url, new ParameterHandler() {
+            @Override
+            public String getUsername() {
+                return settings.getUsername();
+            }
+
+            @Override
+            public String getPassword() {
+                return settings.getPassword();
+            }
+
+            @Override
+            public String getClientID() {
+                return settings.getApiClientID();
+            }
+
+            @Override
+            public String getClientSecret() {
+                return settings.getApiClientSecret();
+            }
+
+            @Override
+            public String getRefreshToken() {
+                return settings.getApiRefreshToken();
+            }
+
+            @Override
+            public String getAccessToken() {
+                return settings.getApiAccessToken();
+            }
+
+            @Override
+            public boolean tokensUpdated(TokenResponse token) {
+                if(token.refreshToken != null) settings.setApiRefreshToken(token.refreshToken);
+                settings.setApiAccessToken(token.accessToken);
+
+                return !TextUtils.isEmpty(token.accessToken);
+            }
+        }, createClient(false), null);
+    }
 
     public static boolean isNetworkAvailable() {
         ConnectivityManager cm = (ConnectivityManager) App.getInstance()
