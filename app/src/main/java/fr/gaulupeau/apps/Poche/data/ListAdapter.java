@@ -2,6 +2,9 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +72,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
 
         public void bind(Article article) {
-            title.setText(article.getTitle());
+            if (Build.VERSION.SDK_INT >= 24) {
+                title.setText(Html.fromHtml(article.getTitle(), Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                title.setText(Html.fromHtml(article.getTitle()));
+            }
             url.setText(article.getDomain());
 
             boolean showFavourite = false;

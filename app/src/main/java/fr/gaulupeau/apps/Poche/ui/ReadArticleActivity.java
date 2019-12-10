@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -1225,7 +1227,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if(article == null) return false;
 
-        articleTitle = article.getTitle();
+        if (Build.VERSION.SDK_INT >= 24) {
+            articleTitle = Html.fromHtml(article.getTitle(), Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            articleTitle = Html.fromHtml(article.getTitle()).toString();
+        }
         Log.d(TAG, "loadArticle() articleTitle: " + articleTitle);
         articleDomain = article.getDomain();
         Log.d(TAG, "loadArticle() articleDomain: " + articleDomain);
