@@ -320,4 +320,7 @@
     <string name="remove_tag">Remove tag</string>
 
     <string name="notification_stacktrace">Stacktrace:</string>
+    <string name="notification_copyToClipboard">Copy to clipboard</string>
+    <string name="notification_clipboardLabel">Error details</string>
+    <string name="copiedToClipboard">Copied to clipboard</string>
 </resources>

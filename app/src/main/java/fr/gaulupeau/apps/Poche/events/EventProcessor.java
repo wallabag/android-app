@@ -33,6 +33,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
+import fr.gaulupeau.apps.Poche.service.NotificationActionReceiver;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
@@ -540,6 +541,14 @@ public class EventProcessor {
                     if(!TextUtils.isEmpty(extra)) {
                         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
                                 .bigText(context.getString(R.string.notification_expandedError, extra)));
+
+                        extra = detailedText + "\n" + extra;
+
+                        PendingIntent copyIntent = NotificationActionReceiver
+                                .getCopyToClipboardPendingIntent(context,
+                                        context.getString(R.string.notification_clipboardLabel), extra);
+                        notificationBuilder.addAction(0,
+                                context.getString(R.string.notification_copyToClipboard), copyIntent);
                     }
 
                     notification = notificationBuilder.build();

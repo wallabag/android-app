@@ -135,6 +135,9 @@
         <receiver
             android:name="fr.gaulupeau.apps.Poche.service.AlarmReceiver"
             android:enabled="false" />
+        <receiver
+            android:name="fr.gaulupeau.apps.Poche.service.NotificationActionReceiver"
+            android:exported="false"/>
 
         <service
             android:name="fr.gaulupeau.apps.Poche.service.WallabagJobService"
