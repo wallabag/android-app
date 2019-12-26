@@ -78,6 +78,11 @@ a:hover, a:focus {
   text-decoration: none;
 }
 
+.high-contrast a, a:hover, a:focus {
+  color: #000;
+  text-decoration: underline;
+}
+
 h2:after {
   content: "";
   height: 4px;
