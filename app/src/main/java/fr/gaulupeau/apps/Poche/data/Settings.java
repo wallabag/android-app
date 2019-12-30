@@ -128,8 +128,8 @@ public class Settings {
                 setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
-                Themes.Theme theme = android.os.Build.MODEL.equals("NOOK")
-                        ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
+                boolean isEreader = Build.MODEL.equals("NOOK") || Build.MANUFACTURER.equals("Onyx");
+                Themes.Theme theme = isEreader ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
                 prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
             }
 
