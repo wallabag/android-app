@@ -115,6 +115,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private ArticleDao articleDao;
 
+    private boolean fullscreenArticleView;
     private int fontSize;
     private boolean volumeButtonsScrolling;
     private boolean tapToScroll;
@@ -164,17 +165,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-
         settings = App.getInstance().getSettings();
 
-        if(settings.isFullscreenArticleView()) {
+        fullscreenArticleView = settings.isFullscreenArticleView();
+        if(fullscreenArticleView) {
             requestWindowFeature(Window.FEATURE_NO_TITLE);
-            getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-                    );
-            ActionBar actionBar = super.getSupportActionBar();
-            if(actionBar != null) actionBar.hide();
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         if(settings.isKeepScreenOn()) {
@@ -183,6 +179,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
+
+        if(fullscreenArticleView) {
+            ActionBar actionBar = getSupportActionBar();
+            if(actionBar != null) actionBar.hide();
+        }
 
         Intent intent = getIntent();
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
@@ -550,9 +551,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 customView = paramView;
 
                 //Hide action bar and bottom buttons while in fullscreen
-                ReadArticleActivity.this.getSupportActionBar().hide();
-                LinearLayout bottom = findViewById(R.id.bottomTools);
-                bottom.setVisibility(View.GONE);
+                hideUi(true);
 
                 FrameLayout.LayoutParams fullscreen = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
@@ -562,12 +561,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             //Necessary for enabling watching youtube videos in fullscreen
             public void onHideCustomView() {
                 //Show action bar and bottom buttons when leaving fullscreen
-                ReadArticleActivity.this.getSupportActionBar().show();
-                LinearLayout bottom = findViewById(R.id.bottomTools);
-                bottom.setVisibility(View.VISIBLE);
+                hideUi(false);
 
                 ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
                         .removeView(customView);
+            }
+
+            private void hideUi(boolean hide) {
+                if(!fullscreenArticleView) {
+                    ActionBar actionBar = getSupportActionBar();
+                    if(actionBar != null) {
+                        if(hide) actionBar.hide();
+                        else actionBar.show();
+                    }
+                }
+                LinearLayout bottom = findViewById(R.id.bottomTools);
+                if(bottom != null) bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
             }
         });
 
