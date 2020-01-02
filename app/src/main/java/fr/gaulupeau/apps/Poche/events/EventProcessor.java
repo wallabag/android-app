@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Handler;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.FileProvider;
+
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
@@ -17,6 +19,8 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
@@ -29,6 +33,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
+import fr.gaulupeau.apps.Poche.service.NotificationActionReceiver;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
@@ -521,10 +526,29 @@ public class EventProcessor {
                                             : R.string.notification_error))
                                     .setContentText(detailedText);
 
-                    if(result.getMessage() != null) {
+                    String extra = "";
+                    if(!TextUtils.isEmpty(result.getMessage())) {
+                        extra += result.getMessage() + "\n";
+                    }
+                    if(result.getException() != null) {
+                        StringWriter sw = new StringWriter();
+
+                        sw.append(context.getString(R.string.notification_stacktrace)).append("\n");
+                        result.getException().printStackTrace(new PrintWriter(sw));
+
+                        extra += sw.toString();
+                    }
+                    if(!TextUtils.isEmpty(extra)) {
                         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(context.getString(R.string.notification_expandedError,
-                                        result.getMessage())));
+                                .bigText(context.getString(R.string.notification_expandedError, extra)));
+
+                        extra = detailedText + "\n" + extra;
+
+                        PendingIntent copyIntent = NotificationActionReceiver
+                                .getCopyToClipboardPendingIntent(context,
+                                        context.getString(R.string.notification_clipboardLabel), extra);
+                        notificationBuilder.addAction(0,
+                                context.getString(R.string.notification_copyToClipboard), copyIntent);
                     }
 
                     notification = notificationBuilder.build();

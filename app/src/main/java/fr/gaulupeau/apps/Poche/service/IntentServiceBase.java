@@ -43,6 +43,7 @@ public abstract class IntentServiceBase extends IntentService {
                         ? ActionResult.ErrorType.SERVER_ERROR
                         : ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
+                result.setException(e);
             }
         } else if(e instanceof IncorrectConfigurationException) {
             result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
@@ -72,6 +73,7 @@ public abstract class IntentServiceBase extends IntentService {
             if(!handled) {
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
+                result.setException(e);
             }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
@@ -81,6 +83,7 @@ public abstract class IntentServiceBase extends IntentService {
         } else { // other exceptions meant to be handled outside
             result.setErrorType(ActionResult.ErrorType.UNKNOWN);
             result.setMessage(e.toString());
+            result.setException(e);
         }
 
         return result;

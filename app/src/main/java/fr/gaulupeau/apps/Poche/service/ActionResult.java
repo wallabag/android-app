@@ -11,16 +11,26 @@ public class ActionResult {
     private boolean success = true;
     private ErrorType errorType;
     private String message;
+    private Exception exception;
 
     public ActionResult() {}
 
     public ActionResult(ErrorType errorType) {
-        setErrorType(errorType);
+        this(errorType, null, null);
     }
 
     public ActionResult(ErrorType errorType, String message) {
-        this(errorType);
+        this(errorType, message, null);
+    }
+
+    public ActionResult(ErrorType errorType, Exception exception) {
+        this(errorType, exception.toString(), exception);
+    }
+
+    public ActionResult(ErrorType errorType, String message, Exception exception) {
+        setErrorType(errorType);
         this.message = message;
+        this.exception = exception;
     }
 
     public boolean isSuccess() {
@@ -48,12 +58,21 @@ public class ActionResult {
         this.message = message;
     }
 
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
+    }
+
     void updateWith(ActionResult r) {
         if(r == null || r.isSuccess()) return;
 
         success = false;
         errorType = r.getErrorType();
         message = r.getMessage();
+        exception = r.getException();
     }
 
 }

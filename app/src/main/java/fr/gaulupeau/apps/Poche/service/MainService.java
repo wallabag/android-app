@@ -269,7 +269,7 @@ public class MainService extends IntentServiceBase {
             } catch(Exception e) {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
-                itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN, e.toString());
+                itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN, e);
             }
 
             if(itemResult != null && !itemResult.isSuccess() && canTolerateNotFound
@@ -440,6 +440,7 @@ public class MainService extends IntentServiceBase {
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
+                result.setException(e);
             }
         } else {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
@@ -478,6 +479,7 @@ public class MainService extends IntentServiceBase {
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
+                result.setException(e);
             }
         } else {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
