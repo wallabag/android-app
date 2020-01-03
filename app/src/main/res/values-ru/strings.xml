@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Отметить как прочитанное</string>
     <string name="btnMarkUnread">Отметить как непрочитанное</string>
@@ -65,12 +65,9 @@
     <string name="ttsFastRewind">Назад</string>
     <string name="ttsFastForward">Вперёд</string>
     <string name="ttsError">Ошибка генерации речи</string>
-
     <string name="notification_error">Ошибка</string>
-
     <string name="nav_other_settings">Настройки</string>
     <string name="nav_other_about">О приложении</string>
-
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url">
         Например:\n
@@ -81,17 +78,14 @@
     </string>
     <string name="pref_name_connection_username">Имя пользователя</string>
     <string name="pref_name_connection_password">Пароль</string>
-
     <string name="pref_categoryName_connection_advanced_httpAuth">Простая HTTP-аутентификация</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Если вы не знаете, что это, оставьте поля пустыми</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">Имя пользователя для HTTP-аутентификации</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Пароль для HTTP-аутентификации</string>
-
     <string name="pref_name_ui_theme">Тема приложения</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Размер текста статей (%)</string>
     <string name="pref_name_ui_article_fontSerif">Шрифт с засечками</string>
     <string name="pref_desc_ui_article_fontSerif">Шрифт с засечками для статей</string>
-
     <string name="pref_name_misc_wipeDB">Очистить базу данных</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Удалить данные?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Вы уверены, что хотите очистить базу данных?</string>
@@ -113,7 +107,8 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Отменить</string>
     <string name="d_testConnection_urlSuggestion_message">Рекомендуется изменить URL на: %s. Но вы можете оставить URL введённый вами.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Предлагается изменить URL на: %s</string>
-    <string name="aboutText"><b>Приложение wallabag для Android</b>\n
+    <string name="aboutText">
+        <b>Приложение wallabag для Android</b>\n
         wallabag — это приложение, которое вы можете установить на собственном сервере, благодаря которому вы больше не пропустите никакой контент. Сохраните и читайте когда угодно.</string>
     <string name="readSpeed">Скорость чтения</string>
     <string name="voiceHeight">Тембр голоса</string>
@@ -133,14 +128,11 @@
     <string name="menu_lists_search">Поиск</string>
     <string name="menu_lists_changeSortOrder">Изменить порядок сортировки</string>
     <string name="other_searchHint">Поиск по названию статьи или тексту</string>
-
     <string name="pref_name_runConnectionWizard">Запустить мастер подключения</string>
     <string name="pref_desc_runConnectionWizard">Помогает настроить основные параметры подключения</string>
-
     <string name="pref_categoryName_connection">Подключение</string>
     <string name="pref_name_connection_autofill">Автозаполнение</string>
     <string name="pref_categoryName_connection_advanced">Расширенные параметры подключения</string>
-
     <string name="pref_categoryName_ui">Пользовательский интерфейс</string>
     <string name="pref_categoryName_ui_screenScrolling">Прокрутка экрана</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Прокрутка клавишами громкости</string>
@@ -148,7 +140,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Прокручивайте экран нажимая на левую или правую сторону экрана</string>
     <string name="pref_name_ui_screenScrolling_percent">Процент высоты экрана для прокрутки</string>
     <string name="pref_name_ui_screenScrolling_smooth">Использовать плавную прокрутку</string>
-
     <string name="pref_categoryName_autoSync">Автоматическая синхронизация</string>
     <string name="pref_name_autoSync_enabled">Включить автоматическую синхронизацию</string>
     <string name="pref_desc_autoSync_enabled">Это обеспечивает автоматическую синхронизацию локальных изменений (добавленные ссылки, архивированные статьи и т.п.) и загрузку новых статей по расписанию</string>
@@ -165,19 +156,16 @@
     <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
     <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
     <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
-
     <string name="pref_categoryName_miscellaneous">Прочее</string>
     <string name="pref_name_misc_handleHttpScheme">Обрабатывать HTTP-схему</string>
     <string name="pref_desc_misc_handleHttpScheme">Показывать wallabag в списке веб-браузеров</string>
     <string name="pref_desc_misc_wipeDB">Стирает все статьи из локальной базы данных, также удаляет все не синхронизированные локальные изменения и добавленные URL-адреса</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Использован неправильный URI подключения</string>
-
     <string name="connectionWizard_welcome_titleMessage">Добро пожаловать в wallabag.</string>
     <string name="connectionWizard_welcome_text">Перед тем, как вы сможете использовать wallabag, необходимо настроить соединение. Мастер подключения поможет вам сделать это.</string>
     <string name="connectionWizard_welcome_rerunNotice">Вы всегда можете повторно запустить мастер подключения из Настроек.</string>
     <string name="connectionWizard_welcome_prev">Пропустить</string>
     <string name="connectionWizard_welcome_next">Дальше</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Выберите поставщика wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Другой</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Выберите этот вариант для ввода необходимых параметров вручную</string>
@@ -185,25 +173,20 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Выберите этот вариант, если у вас есть аккаунт на https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Пропустить</string>
     <string name="connectionWizard_providerSelection_next">Дальше</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Основные параметры</string>
     <string name="connectionWizard_provider_general_prev">Назад</string>
     <string name="connectionWizard_provider_general_next">Подключиться</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">Настройка wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Назад</string>
     <string name="connectionWizard_provider_wallabagit_next">Подключиться</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Настройка Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Назад</string>
     <string name="connectionWizard_provider_framabag_next">Подключиться</string>
-
     <string name="connectionWizard_summary_titleMessage">Готово.</string>
     <string name="connectionWizard_summary_text">Нажмите на кнопку, чтобы сохранить настройки и перейти к главному экрану.</string>
     <string name="connectionWizard_summary_toastMessage">Настройка завершена</string>
     <string name="connectionWizard_summary_prev">Назад</string>
     <string name="connectionWizard_summary_next">Сохранить настройки</string>
-
     <string name="testConnection_errorMessage_unsupportedServerVersion">Обнаружена неподдерживаемая версия сервера</string>
     <string name="getCredentials_progressDialogMessage">Получение учётных данных API…</string>
     <string name="d_getCredentials_title_fail">Не удалось получить учётные данные API</string>
@@ -230,22 +213,16 @@
     <string name="manageTags_addNew">Добавить</string>
     <string name="manageTags_currentTags">Выбранные теги:</string>
     <string name="content_estimatedReadingTime">Время чтения: %s мин</string>
-
     <string name="navigation_drawer_open">Открыть панель навигации</string>
     <string name="navigation_drawer_close">Закрыть панель навигации</string>
-
     <string name="nav_main_articles">Статьи</string>
     <string name="nav_main_tags">Теги</string>
     <string name="nav_main_tagged_articles">Статьи с тегами</string>
-
     <string name="nav_add">Добавить новую запись</string>
-
     <string name="title_main_tag">Тег: %s</string>
-
     <string name="pref_name_connection_api_clientID">ID клиента</string>
     <string name="pref_name_connection_api_clientSecret">Секрет клиента</string>
     <string name="pref_desc_connection_autofill">Проверить подключение и заполнить ID и секрет клиента</string>
-
     <string name="pref_name_ui_article_textAlignment_justify">Выравнивание текста по ширине</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Растягивает строки до одинаковой ширины (как в газетах)</string>
     <string name="pref_name_ui_readingSpeed">Скорость чтения</string>
@@ -263,25 +240,21 @@
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Прочитайте описание разных типов синхронизации выше для получения дополнительной информации</string>
     <string name="pref_name_autoSync_onStartup_enabled">Включить авто-синхронизацию при запуске приложения</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Приложение выполнит синхронизацию, когда вы его открываете</string>
-
-<string name="menuCopyOriginalURL">Скопировать оригинальный URL</string>
+    <string name="menuCopyOriginalURL">Скопировать оригинальный URL</string>
     <string name="txtUrlCopied">Ссылка на статью скопирована в буфер обмена</string>
     <string name="d_urlAction_copyToClipboard">Копировать в буфер обмена</string>
-    <string name="scrolledOverBottom">Прокрутите вниз ещё %d раз, чтобы отменить статью как прочитанную</string>
+    <string name="scrolledOverBottom">Прокрутите вниз ещё %d раз, чтобы отметить статью как прочитанную</string>
     <string name="markedAsRead">Статья отмечена как прочитанная</string>
     <string name="menuDownloadAsFile">Скачать как файл</string>
     <string name="dialog_title_downloadFileFormat">Выберите формат файла</string>
     <string name="notification_serverError">"Ошибка сервера "</string>
     <string name="lastUpdateTimeLabel">Последнее обновление: %s</string>
     <string name="listItem_estimatedReadingTime">%d мин</string>
-
     <string name="message_couldNotOpenUrl">Не удалось открыть этот URL</string>
-
     <string name="message_disableTouch_inputDisabled">Сенсорный ввод отключён</string>
     <string name="message_disableTouch_inputEnabled">Сенсорный ввод включён</string>
     <string name="d_disableTouch_changeKey_title">Кнопка отключения сенсорного ввода</string>
     <string name="d_disableTouch_currentCode">Текущий выбранный код клавиши (нажмите кнопку, чтобы изменить его):</string>
-
     <string name="pref_name_ui_article_fullscreen">Полноэкранный просмотр статей</string>
     <string name="pref_desc_ui_article_fullscreen">Скрывает системную панель и панель приложения при чтении статей</string>
     <string name="pref_categoryName_ui_misc">Разное</string>
@@ -291,13 +264,31 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Нажмите здесь, чтобы настроить кнопку отключения/включения сенсорного ввода</string>
     <string name="pref_name_ui_scrollOverBottom">Отмечать как прочитанное прокруткой вниз</string>
     <string name="pref_desc_ui_scrollOverBottom">Нажмите здесь, чтобы настроить количество раз, которое вам нужно прокрутить вниз, чтобы отметить статью как прочитанную</string>
-
     <string name="pref_name_storage_dbPath">Расположение базы данных</string>
     <string name="pref_name_storage_dbPath_internalStorage">Внутренняя память</string>
     <string name="pref_name_storage_dbPath_externalStorage">Внешний накопитель</string>
     <string name="pref_name_storage_dbPath_dbMoved">База данных перемещена</string>
-
     <string name="pref_name_misc_appendWallabagMention">Добавлять упоминание wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Добавлять \"через @wallabagapp\" к тексту</string>
     <string name="remove_tag">Удалить тег</string>
+    <string name="pref_name_ui_keepScreenOn">Не выключать экран при чтении</string>
+    <string name="pref_desc_ui_keepScreenOn">Не выключать экран при чтении статьи</string>
+    <string name="themeName_eink">Для e-ink экранов</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="notification_channel_group_name_sync">Синхронизация</string>
+    <string name="notification_channel_group_name_other">Прочее</string>
+    <string name="notification_channel_name_tts">TTS</string>
+    <string name="notification_channel_name_sync">Синхронизация</string>
+    <string name="notification_channel_name_downloading_articles">Загрузка PDF</string>
+    <string name="notification_channel_name_error">Ошибки</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Обработка отформатированного текста</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Как обрабатывать отформатированный текст, который является слишком длинным, чтобы отобразить полностью.</string>
+    <string name="pref_name_ui_swipeArticles">Переключение статей \"смахиванием\"</string>
+    <string name="pref_desc_ui_swipeArticles">Используйте \"свайп\" влево или вправо при чтении статьи для перехода к предыдущей или следующей статье</string>
+    <string name="pref_name_ui_previewImage_enabled">Изображение предварительного просмотра</string>
+    <string name="pref_desc_ui_previewImage_enabled">Отображать изображение предпросмотра в начале статьи</string>
+    <string name="notification_stacktrace">Стектрейс:</string>
+    <string name="notification_copyToClipboard">Скопировать</string>
+    <string name="notification_clipboardLabel">Детали ошибки</string>
+    <string name="copiedToClipboard">Скопировано в буфер обмена</string>
 </resources>
