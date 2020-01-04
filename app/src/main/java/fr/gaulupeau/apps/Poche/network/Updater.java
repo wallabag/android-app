@@ -24,11 +24,14 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleContent;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
@@ -71,7 +74,9 @@ public class Updater {
         try {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
+                FtsDao.deleteAllArticles(daoSession.getDatabase());
                 daoSession.getArticleTagsJoinDao().deleteAll();
+                daoSession.getArticleContentDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();
                 daoSession.getTagDao().deleteAll();
 
@@ -118,6 +123,7 @@ public class Updater {
                 full, latestUpdatedItemTimestamp));
 
         ArticleDao articleDao = daoSession.getArticleDao();
+        ArticleContentDao articleContentDao = daoSession.getArticleContentDao();
         TagDao tagDao = daoSession.getTagDao();
         ArticleTagsJoinDao articleTagsJoinDao = daoSession.getArticleTagsJoinDao();
 
@@ -167,6 +173,8 @@ public class Updater {
 
         List<Article> articlesToUpdate = new ArrayList<>();
         List<Article> articlesToInsert = new ArrayList<>();
+        List<ArticleContent> articleContentToUpdate = new ArrayList<>();
+        List<ArticleContent> articleContentToInsert = new ArrayList<>();
         Set<Tag> tagsToUpdate = new HashSet<>();
         List<Tag> tagsToInsert = new ArrayList<>();
         Map<Article, List<Tag>> articleTagJoinsToRemove = new HashMap<>();
@@ -190,6 +198,8 @@ public class Updater {
 
             articlesToUpdate.clear();
             articlesToInsert.clear();
+            articleContentToUpdate.clear();
+            articleContentToInsert.clear();
             tagsToUpdate.clear();
             tagsToInsert.clear();
             articleTagJoinsToRemove.clear();
@@ -214,7 +224,7 @@ public class Updater {
                     article = new Article(null);
                     article.setArticleId(id);
                     article.setTitle(apiArticle.title);
-                    article.setContent(apiArticle.content);
+                    article.setArticleContent(new ArticleContent(null, apiArticle.content));
                     article.setDomain(apiArticle.domainName);
                     article.setUrl(apiArticle.url);
                     article.setOriginUrl(apiArticle.originUrl);
@@ -238,6 +248,7 @@ public class Updater {
                 if(existing) {
                     if(!equalOrEmpty(article.getContent(), apiArticle.content)) {
                         article.setContent(apiArticle.content);
+                        articleContentToUpdate.add(article.getArticleContent());
                         articleChanges.add(ChangeType.CONTENT_CHANGED);
                     }
                     if(!equalOrEmpty(article.getTitle(), apiArticle.title)) {
@@ -428,12 +439,34 @@ public class Updater {
                 articlesToUpdate.clear();
             }
 
+            if(!articleContentToUpdate.isEmpty()) {
+                Log.v(TAG, "performUpdate() performing articleContentDao.updateInTx()");
+                articleContentDao.updateInTx(articleContentToUpdate);
+                Log.v(TAG, "performUpdate() done articleContentDao.updateInTx()");
+
+                articleContentToUpdate.clear();
+            }
+
             if(!articlesToInsert.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing articleDao.insertInTx()");
                 articleDao.insertInTx(articlesToInsert);
                 Log.v(TAG, "performUpdate() done articleDao.insertInTx()");
 
+                for (Article article : articlesToInsert) {
+                    ArticleContent content = article.getArticleContent();
+                    content.setId(article.getId());
+                    articleContentToInsert.add(content);
+                }
+
                 articlesToInsert.clear();
+            }
+
+            if(!articleContentToInsert.isEmpty()) {
+                Log.v(TAG, "performUpdate() performing articleContentDao.insertInTx()");
+                articleContentDao.insertInTx(articleContentToInsert);
+                Log.v(TAG, "performUpdate() done articleContentDao.insertInTx()");
+
+                articleContentToInsert.clear();
             }
 
             if(!tagsToUpdate.isEmpty()) {
@@ -521,7 +554,9 @@ public class Updater {
 
     private void fixArticleNullValues(Article article) {
         if(article.getTitle() == null) article.setTitle("");
-        if(article.getContent() == null) article.setContent("");
+        if(article.isArticleContentLoaded() && article.getContent() == null) {
+            article.setContent("");
+        }
         if(article.getDomain() == null) article.setDomain("");
         if(article.getUrl() == null) article.setUrl("");
         if(article.getLanguage() == null) article.setLanguage("");
@@ -690,6 +725,12 @@ public class Updater {
 
         if(!articlesToDelete.isEmpty()) {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
+
+            Log.d(TAG, "performSweep() performing content delete");
+            daoSession.getArticleContentDao().deleteByKeyInTx(articlesToDelete);
+            Log.d(TAG, "performSweep() articles content deleted");
+
+            Log.d(TAG, "performSweep() performing articles delete");
             articleDao.deleteByKeyInTx(articlesToDelete);
             Log.d(TAG, "performSweep() articles deleted");
         }

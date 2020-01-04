@@ -10,6 +10,8 @@ import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
+import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -270,6 +272,7 @@ public class OperationsHelper {
             return; // not an error?
         }
 
+        getDaoSession().getArticleContentDao().deleteByKey(article.getId());
         articleDao.delete(article);
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.DELETED);
@@ -282,10 +285,14 @@ public class OperationsHelper {
     }
 
     public static void wipeDB(Settings settings) {
-        DbConnection.getSession().getArticleDao().deleteAll();
-        DbConnection.getSession().getTagDao().deleteAll();
-        DbConnection.getSession().getArticleTagsJoinDao().deleteAll();
-        DbConnection.getSession().getQueueItemDao().deleteAll();
+        DaoSession daoSession = getDaoSession();
+
+        FtsDao.deleteAllArticles(daoSession.getDatabase());
+        daoSession.getArticleContentDao().deleteAll();
+        daoSession.getArticleDao().deleteAll();
+        daoSession.getTagDao().deleteAll();
+        daoSession.getArticleTagsJoinDao().deleteAll();
+        daoSession.getQueueItemDao().deleteAll();
 
         settings.setLatestUpdatedItemTimestamp(0);
         settings.setLatestUpdateRunTimestamp(0);
@@ -295,7 +302,11 @@ public class OperationsHelper {
     }
 
     private static ArticleDao getArticleDao() {
-        return DbConnection.getSession().getArticleDao();
+        return getDaoSession().getArticleDao();
+    }
+
+    private static DaoSession getDaoSession() {
+        return DbConnection.getSession();
     }
 
     private static Article getArticle(int articleID, ArticleDao articleDao) {

@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
@@ -30,11 +33,19 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
     }
 
     @Override
+    public void onCreate(Database db) {
+        Log.d(TAG, "onCreate() creating tables");
+
+        super.onCreate(db);
+        FtsDao.createAll(db, false);
+    }
+
+    @Override
     public void onUpgrade(Database db, int oldVersion, int newVersion) {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 103) {
+        if (oldVersion >= 101 && newVersion <= 105) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -61,6 +72,35 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                     db.execSQL("create index IDX_ARTICLE_TAGS_JOIN_TAG_ID on " +
                             ArticleTagsJoinDao.TABLENAME +
                             " (" + ArticleTagsJoinDao.Properties.TagId.columnName + " asc);");
+                }
+
+                if (oldVersion < 104) {
+                    Log.i(TAG, "Migrating to version " + 104);
+
+                    ArticleContentDao.createTable(db, false);
+
+                    db.execSQL("insert into " + ArticleContentDao.TABLENAME +
+                            "(" + ArticleContentDao.Properties.Id.columnName +
+                            ", " + ArticleContentDao.Properties.Content.columnName + ")" +
+                            " select " + ArticleDao.Properties.Id.columnName + ", CONTENT" +
+                            " from " + ArticleDao.TABLENAME);
+
+                    // SQLite can't drop columns; just removing the data
+                    db.execSQL("update " + ArticleContentDao.TABLENAME + " set CONTENT = null;");
+                }
+
+                if (oldVersion < 105) {
+                    Log.i(TAG, "Migrating to version " + 105);
+
+                    FtsDao.createAll(db, false);
+
+                    db.execSQL("insert into " + FtsDao.TABLE_NAME +
+                            "(" + FtsDao.COLUMN_ID +
+                            ", " + FtsDao.COLUMN_TITLE +
+                            ", " + FtsDao.COLUMN_CONTENT + ")" +
+                            " select rowid, " + ArticleDao.Properties.Title.columnName +
+                            ", " + ArticleContentDao.Properties.Content.columnName +
+                            " from " + FtsDao.VIEW_FOR_FTS_NAME);
                 }
 
                 migrationDone = true;
@@ -96,6 +136,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
             }
         }
 
+        FtsDao.dropAll(db, true);
         DaoMaster.dropAllTables(db, true);
         onCreate(db);
 

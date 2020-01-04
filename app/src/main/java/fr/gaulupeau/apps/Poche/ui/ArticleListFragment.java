@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -185,7 +188,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return removeContent(detachObjects(qb.list()));
+        return detachObjects(qb.list());
     }
 
     private QueryBuilder<Article> getQueryBuilder() {
@@ -212,8 +215,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         }
 
         if(!TextUtils.isEmpty(searchQuery)) {
-            qb.whereOr(ArticleDao.Properties.Title.like("%" + searchQuery + "%"),
-                    ArticleDao.Properties.Content.like("%" + searchQuery + "%"));
+            qb.where(new WhereCondition.StringCondition(ArticleDao.Properties.Id.columnName + " IN (" +
+                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
         }
 
         switch(sortOrder) {
@@ -236,15 +239,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private List<Article> detachObjects(List<Article> articles) {
         for(Article article: articles) {
             articleDao.detach(article);
-        }
-
-        return articles;
-    }
-
-    // removes content from article objects in order to free memory
-    private List<Article> removeContent(List<Article> articles) {
-        for(Article article: articles) {
-            article.setContent(null);
         }
 
         return articles;
