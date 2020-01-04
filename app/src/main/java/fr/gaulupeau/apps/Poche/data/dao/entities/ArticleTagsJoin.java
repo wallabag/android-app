@@ -3,6 +3,7 @@ package fr.gaulupeau.apps.Poche.data.dao.entities;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Index;
 
 @Entity
 public class ArticleTagsJoin {
@@ -10,7 +11,9 @@ public class ArticleTagsJoin {
     @Id
     private Long id;
 
+    @Index
     private Long articleId;
+    @Index
     private Long tagId;
 
     @Generated(hash = 444901753)
