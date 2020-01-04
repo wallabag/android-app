@@ -282,6 +282,8 @@
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe the database?</string>
 
+    <string name="connectionWizard_misc_scanQrCode">Scan a QR code</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Please install a QR-code scanner</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
     <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag.</string>

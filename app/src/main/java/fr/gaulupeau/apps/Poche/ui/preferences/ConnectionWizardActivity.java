@@ -1,8 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     public static final String EXTRA_FILL_OUT_FROM_SETTINGS = "fill_out_from_settings";
 
     private static final String TAG = "ConnectionWizard";
+
+    private static final int REQUEST_CODE_QR_CODE = 1;
 
     private static final String DATA_PROVIDER = "provider";
     private static final String DATA_URL = "url";
@@ -95,6 +99,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
                     url = connectionData.url;
                     username = connectionData.username;
+                    password = connectionData.password;
 
                     fillOutData = true;
                 } catch(IllegalArgumentException e) {
@@ -152,6 +157,34 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_QR_CODE) {
+            if(resultCode == RESULT_OK) {
+                String resultString = data.getStringExtra("SCAN_RESULT");
+                Log.d(TAG, "onActivityResult() got string: " + resultString);
+
+                if(resultString == null) return;
+
+                Uri uri = Uri.parse(resultString);
+                if(!"wallabag".equals(uri.getScheme())) {
+                    Log.i(TAG, "onActivityResult() unrecognized URI scheme: " + uri.getScheme());
+                    Toast.makeText(this, R.string.connectionWizard_misc_incorrectConnectionURI,
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Intent intent = getIntent();
+                intent.setData(uri);
+                intent.removeExtra(EXTRA_FILL_OUT_FROM_SETTINGS);
+                startActivity(intent);
+                finish();
+            }
+        }
+    }
+
     private ConnectionData parseLoginData(String connectionUri) {
         // wallabag://user@server.tld
         String prefix = "wallabag://";
@@ -170,7 +203,35 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             throw new IllegalArgumentException("Illegal number of login URL elements detected: " + values.length);
         }
 
-        return new ConnectionData(values[0], values[1]);
+        String username = values[0];
+        String password = null;
+        if(username.contains(":")) {
+            int index = username.indexOf(":");
+            password = username.substring(index + 1);
+            username = username.substring(0, index);
+        }
+
+        return new ConnectionData(username, password, values[1]);
+    }
+
+    private void scanQrCode() {
+        try {
+            Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+            intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+
+            startActivityForResult(intent, REQUEST_CODE_QR_CODE);
+        } catch(ActivityNotFoundException e) {
+            Log.i(TAG, "scanQrCode() exception", e);
+
+            Toast.makeText(this, R.string.connectionWizard_misc_installQrCodeScanner,
+                    Toast.LENGTH_LONG).show();
+
+            Uri marketUri = Uri.parse("market://details?id=de.markusfisch.android.binaryeye");
+            Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+            startActivity(marketIntent);
+        } catch(Exception e) {
+            Log.w(TAG, "scanQrCode() exception", e);
+        }
     }
 
     public void prev(WizardPageFragment fragment, Bundle bundle) {
@@ -344,6 +405,16 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         @Override
         protected int getLayoutResourceID() {
             return R.layout.connection_wizard_provider_selection_fragment;
+        }
+
+        @Override
+        protected void initButtons(View v) {
+            super.initButtons(v);
+
+            Button scanCodeButton = (Button)v.findViewById(R.id.scanQrCodeButton);
+            if(scanCodeButton != null) {
+                scanCodeButton.setOnClickListener(v1 -> activity.scanQrCode());
+            }
         }
 
         @Override
@@ -628,10 +699,12 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     private class ConnectionData {
         String username;
+        String password;
         String url;
 
-        ConnectionData(String username, String url) {
+        ConnectionData(String username, String password, String url) {
             this.username = username;
+            this.password = password;
             this.url = url;
         }
     }
