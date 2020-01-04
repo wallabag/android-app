@@ -4,10 +4,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
-import com.di72nn.stuff.wallabag.apiwrapper.models.Articles;
+import wallabag.apiwrapper.ArticlesPageIterator;
+import wallabag.apiwrapper.ArticlesQueryBuilder;
+import wallabag.apiwrapper.BatchExistQueryBuilder;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.models.Articles;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -48,11 +50,11 @@ public class Updater {
     private static final String TAG = Updater.class.getSimpleName();
 
     private final DaoSession daoSession;
-    private final WallabagServiceWrapper wallabagServiceWrapper;
+    private final WallabagService wallabagService;
 
-    public Updater(DaoSession daoSession, WallabagServiceWrapper wallabagServiceWrapper) {
+    public Updater(DaoSession daoSession, WallabagService wallabagService) {
         this.daoSession = daoSession;
-        this.wallabagServiceWrapper = wallabagServiceWrapper;
+        this.wallabagService = wallabagService;
     }
 
     public ArticlesChangedEvent update(UpdateType updateType, long latestUpdatedItemTimestamp,
@@ -121,12 +123,11 @@ public class Updater {
 
         List<Tag> tags;
         if(full) {
-            List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> apiTags
-                    = wallabagServiceWrapper.getWallabagService().getTags();
+            List<wallabag.apiwrapper.models.Tag> apiTags = wallabagService.getTags();
 
             tags = new ArrayList<>(apiTags.size());
 
-            for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag: apiTags) {
+            for(wallabag.apiwrapper.models.Tag apiTag: apiTags) {
                 tags.add(new Tag(null, apiTag.id, apiTag.label));
             }
 
@@ -145,26 +146,24 @@ public class Updater {
             }
         }
 
-        WallabagService.ArticlesQueryBuilder articlesQueryBuilder
-                = wallabagServiceWrapper.getWallabagService().getArticlesBuilder();
+        int perPage = 30;
+
+        ArticlesQueryBuilder queryBuilder = wallabagService
+                .getArticlesBuilder()
+                .perPage(perPage);
 
         if(full) {
-            articlesQueryBuilder
-                    .sortCriterion(WallabagService.SortCriterion.CREATED)
-                    .sortOrder(WallabagService.SortOrder.ASCENDING);
+            queryBuilder
+                    .sortCriterion(ArticlesQueryBuilder.SortCriterion.CREATED)
+                    .sortOrder(ArticlesQueryBuilder.SortOrder.ASCENDING);
 
             latestUpdatedItemTimestamp = 0;
         } else {
-            articlesQueryBuilder
-                    .sortCriterion(WallabagService.SortCriterion.UPDATED)
-                    .sortOrder(WallabagService.SortOrder.ASCENDING)
-                    .since(latestUpdatedItemTimestamp / 1000); // convert milliseconds to seconds
+            queryBuilder
+                    .sortCriterion(ArticlesQueryBuilder.SortCriterion.UPDATED)
+                    .sortOrder(ArticlesQueryBuilder.SortOrder.ASCENDING)
+                    .since(latestUpdatedItemTimestamp);
         }
-
-        int perPage = 30;
-
-        WallabagService.ArticlesPageIterator pageIterator = articlesQueryBuilder
-                .perPage(perPage).pageIterator();
 
         List<Article> articlesToUpdate = new ArrayList<>();
         List<Article> articlesToInsert = new ArrayList<>();
@@ -174,7 +173,7 @@ public class Updater {
         Map<Article, List<Tag>> articleTagJoinsToInsert = new HashMap<>();
 
         Log.d(TAG, "performUpdate() starting to iterate though pages");
-        while(pageIterator.hasNext()) {
+        for(ArticlesPageIterator pageIterator = queryBuilder.pageIterator(); pageIterator.hasNext();) {
             Articles articles = pageIterator.next();
 
             Log.d(TAG, String.format("performUpdate() page: %d/%d, total articles: %d",
@@ -196,7 +195,7 @@ public class Updater {
             articleTagJoinsToRemove.clear();
             articleTagJoinsToInsert.clear();
 
-            for(com.di72nn.stuff.wallabag.apiwrapper.models.Article apiArticle: articles.embedded.items) {
+            for(wallabag.apiwrapper.models.Article apiArticle: articles.embedded.items) {
                 int id = apiArticle.id;
 
                 Article article = null;
@@ -355,7 +354,7 @@ public class Updater {
                 if(!apiArticle.tags.isEmpty()) {
                     List<Tag> tagJoinsToInsert = new ArrayList<>(apiArticle.tags.size());
 
-                    for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag apiTag: apiArticle.tags) {
+                    for(wallabag.apiwrapper.models.Tag apiTag: apiArticle.tags) {
                         Tag tag = tagIdMap.get(apiTag.id);
 
                         if(tag == null) {
@@ -529,18 +528,18 @@ public class Updater {
         if(article.getPreviewPictureURL() == null) article.setPreviewPictureURL("");
     }
 
-    private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByID(
-            Integer id, List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> tags) {
-        for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag tag: tags) {
+    private wallabag.apiwrapper.models.Tag findApiTagByID(
+            Integer id, List<wallabag.apiwrapper.models.Tag> tags) {
+        for(wallabag.apiwrapper.models.Tag tag: tags) {
             if(id.equals(tag.id)) return tag;
         }
 
         return null;
     }
 
-    private com.di72nn.stuff.wallabag.apiwrapper.models.Tag findApiTagByLabel(
-            String label, List<com.di72nn.stuff.wallabag.apiwrapper.models.Tag> tags) {
-        for(com.di72nn.stuff.wallabag.apiwrapper.models.Tag tag: tags) {
+    private wallabag.apiwrapper.models.Tag findApiTagByLabel(
+            String label, List<wallabag.apiwrapper.models.Tag> tags) {
+        for(wallabag.apiwrapper.models.Tag tag: tags) {
             if(TextUtils.equals(tag.label, label)) return tag;
         }
 
@@ -561,8 +560,11 @@ public class Updater {
             return;
         }
 
-        int remoteTotal = wallabagServiceWrapper.getWallabagService()
-                .getArticlesBuilder().perPage(1).execute().total;
+        int remoteTotal = wallabagService
+                .getArticlesBuilder()
+                .perPage(1)
+                .detailLevel(ArticlesQueryBuilder.DetailLevel.METADATA)
+                .execute().total;
 
         Log.d(TAG, String.format("performSweep() local total: %d, remote total: %d",
                 totalNumber, remoteTotal));
@@ -585,7 +587,7 @@ public class Updater {
 
         LinkedList<Article> articleQueue = new LinkedList<>();
         List<Article> addedArticles = new ArrayList<>();
-        WallabagService.BatchExistQueryBuilder existQueryBuilder = null;
+        BatchExistQueryBuilder existQueryBuilder = null;
 
         int offset = 0;
 
@@ -622,7 +624,7 @@ public class Updater {
                 }
 
                 if(existQueryBuilder == null) {
-                    existQueryBuilder = wallabagServiceWrapper.getWallabagService()
+                    existQueryBuilder = wallabagService
                             .getArticlesExistQueryBuilder(7950);
                 }
 
@@ -659,11 +661,11 @@ public class Updater {
                                 "; articleID: %d, article URL: %s", a.getArticleId(), a.getUrl()));
 
                         Log.v(TAG, "performSweep() trying to find article by ID");
-                        try {
-                            // we could use `getArticle(int)`, but `getTags()` is lighter
-                            wallabagServiceWrapper.getWallabagService().getTags(a.getArticleId());
+
+                        // we could use `getArticle(int)`, but `getTags()` is lighter
+                        if(wallabagService.getTags(a.getArticleId()) != null) {
                             Log.v(TAG, "performSweep() article found by ID");
-                        } catch(NotFoundException nfe) {
+                        } else {
                             Log.v(TAG, "performSweep() article not found by ID");
 
                             articlesToDelete.add(a.getId());

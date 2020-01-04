@@ -39,7 +39,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.WallabagService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.WallabagService;
 
 import java.util.Collection;
 

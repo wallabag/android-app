@@ -6,8 +6,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.di72nn.stuff.wallabag.apiwrapper.CompatibilityHelper;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.CompatibilityHelper;
+import wallabag.apiwrapper.NotFoundPolicy;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import org.greenrobot.greendao.DaoException;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -142,12 +143,10 @@ public class SecondaryService extends IntentServiceBase {
         BufferedSource source = null;
         File resultFile = null;
         try {
-            if(CompatibilityHelper.isExportArticleSupported(
-                    getWallabagServiceWrapper().getWallabagService())) {
-
-                // TODO: fix: not synchronized
-                source = getWallabagServiceWrapper().getWallabagService()
-                        .exportArticle(articleID, actionRequest.getDownloadFormat()).source();
+            if(CompatibilityHelper.isExportArticleSupported(getWallabagService())) {
+                source = getWallabagService().exportArticle(
+                        articleID, actionRequest.getDownloadFormat(), NotFoundPolicy.THROW)
+                        .source();
             } else {
                 Log.d(TAG, "downloadAsFile() downloading via API is not supported");
             }

@@ -4,12 +4,12 @@ import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.di72nn.stuff.wallabag.apiwrapper.ParameterHandler;
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.AuthorizationException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
-import com.di72nn.stuff.wallabag.apiwrapper.models.TokenResponse;
+import wallabag.apiwrapper.ParameterHandler;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.AuthorizationException;
+import wallabag.apiwrapper.exceptions.NotFoundException;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.models.TokenResponse;
 
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 
@@ -43,10 +43,10 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
                              String refreshToken, String accessToken,
                              ResultHandler resultHandler) {
         this.url = url;
-        this.username = getNonNullString(username);
-        this.password = getNonNullString(password);
-        this.clientID = getNonNullString(clientID);
-        this.clientSecret = getNonNullString(clientSecret);
+        this.username = username;
+        this.password = password;
+        this.clientID = clientID;
+        this.clientSecret = clientSecret;
         this.refreshToken = refreshToken;
         this.accessToken = accessToken;
         this.resultHandler = resultHandler;
@@ -54,7 +54,7 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... params) {
-        WallabagService wallabagService = new WallabagService(url, new ParameterHandler() {
+        WallabagService wallabagService = WallabagService.instance(url, new ParameterHandler() {
             String localRefreshToken;
             String localAccessToken;
 
@@ -95,7 +95,7 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
 
                 return !TextUtils.isEmpty(token.accessToken);
             }
-        }, WallabagConnection.createClient(false));
+        }, WallabagConnection.createClient(false), null);
 
         try {
             Log.d(TAG, "doInBackground() API version: " + wallabagService.getVersion());
@@ -116,11 +116,12 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
         if(result != null) return null;
 
         try {
-            wallabagService.getArticlesBuilder().perPage(1).execute();
+            wallabagService.testServerAccessibility();
             result = Result.OK;
-        } catch(NotFoundException e) { // no articles, but we have access
-            Log.i(TAG, "doInBackground() NotFoundException (that means we have access)", e);
-            result = Result.OK;
+        } catch(NotFoundException e) {
+            Log.w(TAG, "doInBackground() NotFoundException on accessibility test," +
+                    "probably not wallabag", e);
+            result = Result.NOT_FOUND;
         } catch(AuthorizationException e) {
             Log.w(TAG, "doInBackground() AuthorizationException", e);
             result = Result.NO_ACCESS;
@@ -142,10 +143,6 @@ public class TestApiAccessTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void ignored) {
         if(resultHandler != null) resultHandler.onTestApiAccessTaskResult(result, details);
-    }
-
-    private static String getNonNullString(String s) {
-        return s == null ? "" : s;
     }
 
 }

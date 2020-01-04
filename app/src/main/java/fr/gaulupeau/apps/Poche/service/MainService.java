@@ -3,16 +3,16 @@ package fr.gaulupeau.apps.Poche.service;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Process;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import com.di72nn.stuff.wallabag.apiwrapper.WallabagService;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.NotFoundException;
-import com.di72nn.stuff.wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.ModifyArticleBuilder;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
@@ -37,7 +37,6 @@ import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagServiceWrapper;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
@@ -238,7 +237,7 @@ public class MainService extends IntentServiceBase {
                     case ARTICLE_DELETE: {
                         canTolerateNotFound = true;
 
-                        if(getWallabagServiceWrapper().deleteArticle(articleID) == null) {
+                        if(!getWallabagService().deleteArticle(articleID)) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
@@ -247,13 +246,9 @@ public class MainService extends IntentServiceBase {
                     case ADD_LINK: {
                         String link = item.getExtra();
                         Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link);
-                        if(link != null && !link.isEmpty()) {
-                            if(getWallabagServiceWrapper().addArticle(link) == null) {
-                                itemResult = new ActionResult(ActionResult.ErrorType.NEGATIVE_RESPONSE);
-                            }
-                            if(itemResult == null || itemResult.isSuccess()) {
-                                urlUploaded = true;
-                            }
+                        if(!TextUtils.isEmpty(link)) {
+                            getWallabagService().addArticle(link);
+                            urlUploaded = true;
                         } else {
                             Log.w(TAG, "syncOfflineQueue() action is ADD_LINK, but item has no link; skipping");
                         }
@@ -263,7 +258,8 @@ public class MainService extends IntentServiceBase {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + action);
                 }
-            } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException | IllegalArgumentException e) {
+            } catch(IncorrectConfigurationException | UnsuccessfulResponseException
+                    | IOException | IllegalArgumentException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
                 if(!r.isSuccess()) itemResult = r;
             } catch(Exception e) {
@@ -345,8 +341,7 @@ public class MainService extends IntentServiceBase {
                     "Article is not found locally");
         }
 
-        WallabagService.ModifyArticleBuilder builder
-                = getWallabagServiceWrapper().getWallabagService()
+        ModifyArticleBuilder builder = getWallabagService()
                 .modifyArticleBuilder(articleID);
 
         for(QueueItem.ArticleChangeType changeType:
@@ -378,7 +373,7 @@ public class MainService extends IntentServiceBase {
 
         ActionResult itemResult = null;
 
-        if(WallabagServiceWrapper.executeModifyArticleCall(builder) == null) {
+        if(builder.execute() == null) {
             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
         }
 
@@ -387,19 +382,18 @@ public class MainService extends IntentServiceBase {
 
     private ActionResult syncDeleteTagsFromArticle(QueueItem item, int articleID)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
-        WallabagServiceWrapper wallabagServiceWrapper = getWallabagServiceWrapper();
+        WallabagService wallabagService = getWallabagService();
 
-        for(String tag: Arrays.asList(item.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER))) {
-            try {
-                wallabagServiceWrapper.getWallabagService()
-                        .deleteTag(articleID, Integer.parseInt(tag));
-            } catch(NotFoundException e) {
-                Log.w(TAG, String.format("HTTP 404 while removing tag %s from article %d",
-                        tag, articleID));
+        ActionResult itemResult = null;
+
+        for(String tag: item.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER)) {
+            if(wallabagService.deleteTag(articleID, Integer.parseInt(tag)) == null
+                    && itemResult == null) {
+                itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
             }
         }
 
-        return null;
+        return itemResult;
     }
 
     private ActionResult updateArticles(final ActionRequest actionRequest) {
@@ -495,7 +489,7 @@ public class MainService extends IntentServiceBase {
 
     private Updater getUpdater() throws IncorrectConfigurationException {
         if(updater == null) {
-            updater = new Updater(getDaoSession(), getWallabagServiceWrapper());
+            updater = new Updater(getDaoSession(), getWallabagService());
         }
 
         return updater;
