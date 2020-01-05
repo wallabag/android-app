@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Markatu irakurritako gisa</string>
     <string name="btnMarkUnread">Markatu irakurri gabeko gisa</string>
@@ -95,18 +95,12 @@
     <string name="themeName_solarized">Solarizatuta</string>
     <string name="menu_readArticle_increaseFontSize">Handiagotu letra-tamaina</string>
     <string name="menu_readArticle_decreaseFontSize">Txikiagotu letra-tamaina</string>
-    <string name="aboutText"><b>wallabag aplikazioa Androiderako</b>\n
+    <string name="aboutText">
+        <b>wallabag aplikazioa Androiderako</b>\n
         "wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri  bat da. Klikatu, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko."</string>
     <string name="readSpeed">Irakurketa abiadura</string>
     <string name="voiceHeight">Ahots tonua</string>
     <string name="readVolume">Irakurketa bolumena</string>
-    <string name="menuDownloadPdf">Deskargatu PDF gisa</string>
-    <string name="downloadPdfPathStart">Artikulua deskargatzen</string>
-    <string name="downloadPdfArticleDownloaded">Artikulua deskargatuta</string>
-    <string name="downloadPdfArticleDownloadedDetail">%s artikulua deskargatuta</string>
-    <string name="downloadPdfTouchToOpen">Ukitu irekitzeko</string>
-    <string name="downloadPdfProgressDetail">wallabag zure %s artikulua PDF gisa deskargatzen ari da</string>
-    <string name="downloadPdfProgress">wallabag zure artikulua PDF gisa deskargatzen ari da</string>
     <string name="notification_updatingArticles">Artikuluak eguneratzen</string>
     <string name="notification_updatingArticles_full">Eguneratze osoa burutzen</string>
     <string name="notification_updatingArticles_fast">Eguneratze bizkorra burutzen</string>
@@ -131,24 +125,17 @@
     <string name="manageTags_addNew">Gehitu</string>
     <string name="manageTags_currentTags">Etiketa hautatuak:</string>
     <string name="content_estimatedReadingTime">Irakurketa denbora estimatua: %s min</string>
-
     <string name="navigation_drawer_open">Ireki nabigatzeko menu lerrakorra</string>
     <string name="navigation_drawer_close">Itxi nabigatzeko menu lerrakorra</string>
-
     <string name="nav_main_articles">Artikuluak</string>
     <string name="nav_main_tags">Etiketak</string>
     <string name="nav_main_tagged_articles">Artikulu etiketatuak</string>
-
     <string name="nav_add">Gehitu sarrera berria</string>
-
     <string name="nav_other_settings">Ezarpenak</string>
     <string name="nav_other_about">Honi buruz</string>
-
     <string name="title_main_tag">Etiketa: %s</string>
-
     <string name="pref_name_runConnectionWizard">Exekutatu konexio morroia</string>
     <string name="pref_desc_runConnectionWizard">Konexio morroiak oinarrizko konexio ezarpenak konfiguratzen lagunduko dizu</string>
-
     <string name="pref_categoryName_connection">Konexioa</string>
     <string name="pref_name_connection_url">wallabagen URLa</string>
     <string name="pref_desc_connection_url">Adibideak:\n
@@ -163,13 +150,11 @@
     <string name="pref_name_connection_api_clientSecret">Bezeroaren sekretua</string>
     <string name="pref_name_connection_autofill">Bete automatikoki</string>
     <string name="pref_desc_connection_autofill">Probatu konexioa eta bete bezeroaren IDa eta bezeroaren sekretua</string>
-
     <string name="pref_categoryName_connection_advanced">Konexio ezarpen aurreratuak</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Oinarrizko HTTP Autentifikazioa</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ez badakizu zer den, utzi hutsik</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP erabiltzaile-izen Autentifikazioa</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP pasahitz Autentifikazioa</string>
-
     <string name="pref_categoryName_ui">Interfazea</string>
     <string name="pref_name_ui_theme">Aplikazioaren gaia</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Artikuluaren letra-tamaina (%)</string>
@@ -185,7 +170,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Korritu pantaila pantailaren ezker eta eskuin alboetan sakatuz</string>
     <string name="pref_name_ui_screenScrolling_percent">Korritzeko pantaila altueraren ehunekoa</string>
     <string name="pref_name_ui_screenScrolling_smooth">Erabili korritze leuna</string>
-
     <string name="pref_categoryName_sync">Sinkronizazioa</string>
     <string name="pref_name_sync_syncTypes">Sinkronizazio motak</string>
     <string name="pref_desc_sync_syncTypes">Sakatu sinkronizazio motei buruzko informazio gehiago erakusteko</string>
@@ -215,7 +199,6 @@
     <string name="pref_desc_autoDlNew_enabled">Gehitu artikulu berriak automatikoki aplikazioaren bidez gehituak izan berritan. Oharra: deskargak ez dira gauzatuko sinkronizatu gabeko lineaz kanpoko aldaketak badin badituzu.</string>
     <string name="pref_name_imageCache_enabled">Egin artikuluetan kapsulatutako irudien cachea</string>
     <string name="pref_desc_imageCache_enabled">Artikulu bakoitzeko irudi guztian automatikoki deskargatzen ditu eta gailuan gordetzen ditu. Zure wallabageko artikulu zerrendaren luzeraren arabera honek oso luze jo dezake eta leku asko erabil dezake.</string>
-
     <string name="pref_categoryName_miscellaneous">Hainbat</string>
     <string name="pref_name_misc_handleHttpScheme">Maneiatu HTTP eskema</string>
     <string name="pref_desc_misc_handleHttpScheme">Erakutsi wallabag web-arakatzaileen zerrendan</string>
@@ -223,30 +206,24 @@
     <string name="pref_desc_misc_wipeDB">Datu-base lokaletik artikulu guztiak ekortzen ditu, sinkronizatu gabeko aldaketa lokal eta URL guztiak ere kentzen ditu</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Ekortu datu-basea?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Ziur zaude datu-basea ekortu nahi duzula?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Konexio URI okerra erabili da</string>
-
     <string name="connectionWizard_welcome_titleMessage">Ongi etorri wallabag-era!</string>
     <string name="connectionWizard_welcome_text">wallabag aplikazioa erabili aurretik konexioa konfiguratu behar duzu. Konexio morroi hau honekin laguntzen saiatuko da.</string>
     <string name="connectionWizard_welcome_rerunNotice">Beti exekutatu dezakezu berriro konexio morroia ezarpenen pantailatik.</string>
     <string name="connectionWizard_welcome_prev">Saltatu</string>
     <string name="connectionWizard_welcome_next">Hurrengoa</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">Hautatu wallabag hornitzailea</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Besteak</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Hautatu aukera hau beharrezko ezarpenak eskuz sartzeko</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Hautatu aukera hau kontu bat baduzu https://wallabag.it-en</string>
     <string name="connectionWizard_providerSelection_prev">Saltatu</string>
     <string name="connectionWizard_providerSelection_next">Hurrengoa</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Oinarrizko konfigurazioa</string>
     <string name="connectionWizard_provider_general_prev">Atzera</string>
     <string name="connectionWizard_provider_general_next">Konektatu</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfigurazioa</string>
     <string name="connectionWizard_provider_wallabagit_prev">Atzera</string>
     <string name="connectionWizard_provider_wallabagit_next">Konektatu</string>
-
     <string name="connectionWizard_summary_titleMessage">Dena eginda!</string>
     <string name="connectionWizard_summary_text">Sakatu botoia ezarpenak gordetzeko eta pantaila nagusira joateko.</string>
     <string name="connectionWizard_summary_toastMessage">Konfigurazioa osatu da</string>
@@ -265,11 +242,8 @@
     <string name="notification_serverError">Errorea zerbitzarian</string>
     <string name="lastUpdateTimeLabel">Azken eguneratzea: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
-
     <string name="message_couldNotOpenUrl">Ezin izan da URL hau ireki</string>
-
     <string name="message_disableTouch_inputDisabled">Ukipen sarrera desgaituta</string>
     <string name="message_disableTouch_inputEnabled">Ukipen sarrera gaituta</string>
     <string name="d_disableTouch_changeKey_title">Desgaitu ukipen sarreraren botoia</string>
-
 </resources>
