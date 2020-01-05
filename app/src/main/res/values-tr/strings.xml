@@ -95,18 +95,12 @@
     <string name="themeName_solarized">Solarized Tema</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
-    <string name="aboutText"><b>Android için wallabag</b>\n
+    <string name="aboutText">
+        <b>Android için wallabag</b>\n
         wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>
-    <string name="menuDownloadPdf">PDF indir</string>
-    <string name="downloadPdfPathStart">Makale İndiriyor</string>
-    <string name="downloadPdfArticleDownloaded">Makale indirildi</string>
-    <string name="downloadPdfArticleDownloadedDetail">Makale %s indirildi</string>
-    <string name="downloadPdfTouchToOpen">Açmak için dokunun</string>
-    <string name="downloadPdfProgressDetail">wallabag %s makalenizi PDF formatında indirir</string>
-    <string name="downloadPdfProgress">wallabag makalenizi PDF formatında indirir</string>
     <string name="notification_updatingArticles">Makaleler güncelleniyor</string>
     <string name="notification_updatingArticles_full">Tam güncelleme çalışıyor</string>
     <string name="notification_updatingArticles_fast">Hızlı güncelleme çalışıyor</string>
