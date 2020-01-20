@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="btnMarkRead">Megjelölés olvasottként</string>
     <string name="btnMarkUnread">Megjelölés olvasandóként</string>
@@ -106,13 +106,10 @@
     <string name="menu_lists_search">Keresés</string>
     <string name="menu_lists_changeSortOrder">Rendezési sorrend módosítása</string>
     <string name="other_searchHint">Keresett cikk címe vagy szövege</string>
-
     <string name="nav_other_settings">Beállítások</string>
     <string name="nav_other_about">Névjegy</string>
-
     <string name="pref_name_runConnectionWizard">Kapcsolat varázsló futtatása</string>
     <string name="pref_desc_runConnectionWizard">Segít az alapvető csatlakozási beállításokban</string>
-
     <string name="pref_categoryName_connection">Kapcsolat</string>
     <string name="pref_name_connection_url">A wallabag URL-címe</string>
     <string name="pref_desc_connection_url">
@@ -125,13 +122,11 @@
     <string name="pref_name_connection_username">Felhasználónév</string>
     <string name="pref_name_connection_password">Jelszó</string>
     <string name="pref_name_connection_autofill">Automatikus kitöltés</string>
-
     <string name="pref_categoryName_connection_advanced">Speciális csatlakozási beállítások</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP egyszerű hitelesítés</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ha nem tudja, hogy mi ez, hagyja üresen</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP felhasználónév</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP jelszó</string>
-
     <string name="pref_categoryName_ui">Felület</string>
     <string name="pref_name_ui_theme">Alkalmazás kinézete</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Cikk szövegmérete (%-ban)</string>
@@ -143,7 +138,6 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Görgessen a képernyő bal és jobb oldalának megérintésével</string>
     <string name="pref_name_ui_screenScrolling_percent">Képernyőmagasság százaléka a görgetéshez</string>
     <string name="pref_name_ui_screenScrolling_smooth">Finom görgetés használata</string>
-
     <string name="pref_categoryName_autoSync">Automatikus szinkronizálás</string>
     <string name="pref_name_autoSync_enabled">Automata szinkron engedélyezése</string>
     <string name="pref_desc_autoSync_enabled">Lehetővé teszi a helyi változások automatikus szinkronizálást (linkek, archivált cikkek, stb.) és letölti az új cikkeket a megadott ütemezés szerint</string>
@@ -160,7 +154,6 @@
     <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a lekérés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
     <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek képeihez</string>
     <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez sok időt és tárhelyet igényelhet.</string>
-
     <string name="pref_categoryName_miscellaneous">Egyéb</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP rendszer kezelése</string>
     <string name="pref_desc_misc_handleHttpScheme">A wallabag megjelenítése a web böngészők között</string>
@@ -168,15 +161,12 @@
     <string name="pref_desc_misc_wipeDB">Töröl minden cikket a helyi adatbázisból, eltávolítja az összes nem szinkronizált helyi változást és URL-t</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Törli az adatbázist?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Biztos benne, hogy törölni szeretné az adatbázist?</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">Helytelen kapcsolat URI-t használt</string>
-
     <string name="connectionWizard_welcome_titleMessage">Üdvözöljük a wallabag-ban.</string>
     <string name="connectionWizard_welcome_text">A wallabag használata előtt be kell állítani egy kapcsolatot a szerverrel. A varázsló megpróbál ebben segíteni.</string>
     <string name="connectionWizard_welcome_rerunNotice">Bármikor újra futtathatja a kapcsolat varázslót a beállításokból.</string>
     <string name="connectionWizard_welcome_prev">Kihagyás</string>
     <string name="connectionWizard_welcome_next">Következő</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">wallabag szolgáltató kiválasztása</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt ha kézzel szeretné megadni a beállításokat</string>
@@ -184,19 +174,15 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
     <string name="connectionWizard_providerSelection_next">Következő</string>
-
     <string name="connectionWizard_provider_general_titleMessage">Alapkonfiguráció</string>
     <string name="connectionWizard_provider_general_prev">Vissza</string>
     <string name="connectionWizard_provider_general_next">Csatlakozás</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfiguráció</string>
     <string name="connectionWizard_provider_wallabagit_prev">Vissza</string>
     <string name="connectionWizard_provider_wallabagit_next">Csatlakozás</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguráció</string>
     <string name="connectionWizard_provider_framabag_prev">Vissza</string>
     <string name="connectionWizard_provider_framabag_next">Csatlakozás</string>
-
     <string name="connectionWizard_summary_titleMessage">Minden kész.</string>
     <string name="connectionWizard_summary_text">Kattintson a mentéshez, és a fő képernyőhöz való visszajutáshoz.</string>
     <string name="connectionWizard_summary_toastMessage">Beállítás kész</string>
@@ -226,16 +212,12 @@
     <string name="manageTags_addNew">Hozzáad</string>
     <string name="manageTags_currentTags">Választott címkék:</string>
     <string name="content_estimatedReadingTime">Becsült olvasási idő: %s perc</string>
-
     <string name="navigation_drawer_open">Navigációs fiók megnyitása</string>
     <string name="navigation_drawer_close">Navigációs fiók bezárása</string>
-
     <string name="nav_main_articles">Cikkek</string>
     <string name="nav_main_tags">Címkék</string>
     <string name="nav_main_tagged_articles">Címkézett cikkek</string>
-
     <string name="nav_add">Új bejegyzés</string>
-
     <string name="pref_name_connection_api_clientID">Ügyfél Azonosító</string>
     <string name="pref_name_connection_api_clientSecret">Ügyfél titok</string>
     <string name="pref_name_ui_article_textAlignment_justify">Szöveg igazítása: Sorkizárt</string>
@@ -256,9 +238,7 @@
     <string name="pref_name_autoSync_onStartup_enabled">Automata szinkron induláskor</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Az alkalmazás szinkronizálni fog megnyitáskor</string>
     <string name="pref_desc_connection_autofill">Teszteli a kapcsolatot, kitölti az ügyfél azonosítót és ügyfél titkot</string>
-
     <string name="title_main_tag">Címke: %s</string>
-
     <string name="menuCopyOriginalURL">Eredeti URL másolása</string>
     <string name="txtUrlCopied">A cikk URL-je a vágólapra másolva</string>
     <string name="menuDownloadAsFile">Letöltés fájlként</string>
@@ -266,25 +246,20 @@
     <string name="notification_serverError">Szerver hiba</string>
     <string name="lastUpdateTimeLabel">Utolsó frissítés: %s</string>
     <string name="listItem_estimatedReadingTime">%d perc</string>
-
     <string name="message_couldNotOpenUrl">Nem sikerült megnyitni ezt az URL-t</string>
-
     <string name="message_disableTouch_inputDisabled">Érintéses bevitel le van tiltva</string>
     <string name="message_disableTouch_inputEnabled">Érintéses bevitel engedélyezve</string>
     <string name="d_disableTouch_changeKey_title">Érintéses bevitel tiltásának gombja</string>
     <string name="d_disableTouch_currentCode">Jelenleg kiválasztott kulcs kód (a gomb megnyomásával változtathatja meg):</string>
-
     <string name="pref_categoryName_ui_misc">Vegyes beállítások</string>
     <string name="pref_name_ui_disableTouch_enabled">Érintéses bevitel tiltása</string>
     <string name="pref_desc_ui_disableTouch_enabled">Nyomja meg a konfigurált gombot (kamera gomb alapértelmezés szerint) az érintéses bevitel blokkolásához/feloldásához a képernyőn (a rendszervezérlők nem érintettek)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Érintéses bevitel tiltásának gombja</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Nyomja meg itt az érintéses bevitelt tiltó/engedélyező gomb beállításához</string>
-
     <string name="pref_name_storage_dbPath">Adatbázis helye</string>
     <string name="pref_name_storage_dbPath_internalStorage">Belső tárhely</string>
     <string name="pref_name_storage_dbPath_externalStorage">Külső tárhely</string>
     <string name="pref_name_storage_dbPath_dbMoved">Az adatbázis elköltözött</string>
-
     <string name="pref_name_misc_appendWallabagMention">Mellékelje a wallabag-ra való utalást</string>
     <string name="pref_desc_misc_appendWallabagMention">Hozzáfűzi \"a @wallabagapp segítségével\"-t a megosztott szövegekhez</string>
     <string name="remove_tag">Címke eltávolítása</string>
@@ -292,10 +267,29 @@
     <string name="markedAsRead">Cikk megjelölve olvasottként</string>
     <string name="pref_name_ui_scrollOverBottom">Görgessen lefelé az olvasottnak jelöléshez</string>
     <string name="pref_desc_ui_scrollOverBottom">Nyomja meg itt, hogy megadja hányszor kelljen görgetnie lefelé egy cikk olvasottnak jelöléséhez</string>
-
-<string name="pref_name_ui_article_fullscreen">Teljes képernyős cikknézet</string>
+    <string name="pref_name_ui_article_fullscreen">Teljes képernyős cikknézet</string>
     <string name="pref_desc_ui_article_fullscreen">Cikkek olvasásakor elrejti a rendszer és az alkalmazássávokat</string>
     <string name="d_urlAction_copyToClipboard">Másolás vágólapra</string>
     <string name="pref_name_ui_keepScreenOn">Képernyő ébrentartása</string>
     <string name="pref_desc_ui_keepScreenOn">Képernyő ébrentartása cikk olvasásakor</string>
-    </resources>
+    <string name="themeName_eink">E-tinta kijelzőkhöz</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="notification_channel_group_name_sync">Szinkronizálás</string>
+    <string name="notification_channel_group_name_other">Egyéb</string>
+    <string name="notification_channel_name_tts">wallabag TTS</string>
+    <string name="notification_channel_name_sync">Szinkronizálás</string>
+    <string name="notification_channel_name_downloading_articles">PDF-fájlok letöltése</string>
+    <string name="notification_channel_name_error">Hibák</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Hosszú, előre formázott szöveg kezelése</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Hogyan kezelje az előformázott szöveget, amely túl hosszú a teljes megjelenítéshez.</string>
+    <string name="pref_name_ui_swipeArticles">Cikkek lapozása</string>
+    <string name="pref_desc_ui_swipeArticles">Húzza balra vagy jobbra egy cikk belsejében, az előző vagy a következő cikkre lépéshez</string>
+    <string name="pref_name_ui_previewImage_enabled">Előnézeti kép</string>
+    <string name="pref_desc_ui_previewImage_enabled">Előnézeti kép megjelenítése a cikk előtt</string>
+    <string name="notification_stacktrace">Stacktrace:</string>
+    <string name="notification_copyToClipboard">Másolás vágólapra</string>
+    <string name="notification_clipboardLabel">Hiba részletei</string>
+    <string name="copiedToClipboard">Vágólapra másolva</string>
+    <string name="connectionWizard_misc_scanQrCode">QR-kód beolvasása</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Kérjük, telepítsen egy QR-kód olvasót</string>
+</resources>
