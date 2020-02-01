@@ -291,4 +291,9 @@
     <string name="pref_desc_ui_swipeArticles">Przewiń w lewo lub prawo wewnątrz artykułu, aby przejść do poprzedniego lub następnego</string>
     <string name="pref_name_ui_previewImage_enabled">Podgląd obrazka</string>
     <string name="pref_desc_ui_previewImage_enabled">Wyświetl podgląd obrazka przed artykułem</string>
+    <string name="notification_copyToClipboard">Kopiuj do schowka</string>
+    <string name="notification_clipboardLabel">Szczegóły błędu</string>
+    <string name="copiedToClipboard">Skopiowano do schowka</string>
+    <string name="connectionWizard_misc_scanQrCode">Skanuj kod QR</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Proszę zainstaluj skaner kodów QR</string>
 </resources>
