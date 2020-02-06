@@ -86,7 +86,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                             " from " + ArticleDao.TABLENAME);
 
                     // SQLite can't drop columns; just removing the data
-                    db.execSQL("update " + ArticleContentDao.TABLENAME + " set CONTENT = null;");
+                    db.execSQL("update " + ArticleDao.TABLENAME + " set CONTENT = null;");
                 }
 
                 if (oldVersion < 105) {
