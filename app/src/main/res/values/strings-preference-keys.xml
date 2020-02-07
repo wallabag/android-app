@@ -71,6 +71,11 @@
     <string name="pref_key_misc_appendWallabagMention_enabled" translatable="false">misc.appendWallabagMention.enabled</string>
     <string name="pref_key_misc_handleHttpScheme" translatable="false">misc.handleHttpScheme</string>
     <string name="pref_key_misc_wipeDB" translatable="false">misc.wipeDB</string>
+    <string name="pref_key_misc_localQueue" translatable="false">misc.localQueue</string>
+    <string name="pref_key_misc_localQueue_category" translatable="false">misc.localQueue.category</string>
+    <string name="pref_key_misc_localQueue_notice" translatable="false">misc.localQueue.notice</string>
+    <string name="pref_key_misc_localQueue_dumpToFile" translatable="false">misc.localQueue.dumpToFile</string>
+    <string name="pref_key_misc_localQueue_removeFirstItem" translatable="false">misc.localQueue.removeFirstItem</string>
 
     <string name="pref_key_internal_preferencesVersion" translatable="false">internal.preferencesVersion</string>
     <string name="pref_key_internal_firstRun" translatable="false">internal.firstRun</string>
