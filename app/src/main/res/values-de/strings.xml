@@ -182,7 +182,7 @@
     <string name="pref_desc_ui_tapToScroll_enabled">Scrolle den Bildschirm durch Antippen der linken und rechten Bildschirmseite</string>
     <string name="pref_name_ui_screenScrolling_percent">Prozentsatz der Bildschirmhöhe, um zu scrollen</string>
     <string name="pref_name_ui_screenScrolling_smooth">Nutze sanftes Scrollen</string>
-    <string name="connectionWizard_misc_incorrectConnectionURI">Falsche Verbindungs-URL genutzt</string>
+    <string name="connectionWizard_misc_incorrectConnectionURI">Falsche Webadresse benutzt</string>
     <string name="notification_downloadingImages">Bilder herunterladen</string>
     <string name="menu_lists_search">Suchen</string>
     <string name="menu_lists_changeSortOrder">Ändere Sortierung</string>
@@ -294,4 +294,22 @@
     <string name="notification_channel_name_error">Fehler</string>
     <string name="pref_name_ui_previewImage_enabled">Vorschaubild</string>
     <string name="pref_desc_ui_previewImage_enabled">Zeige das Vorschaubild vor dem Artikeltext an</string>
+    <string name="notification_stacktrace">Stacktrace:</string>
+    <string name="notification_copyToClipboard">In Zwischenablage kopieren</string>
+    <string name="notification_clipboardLabel">Fehlerdetails</string>
+    <string name="copiedToClipboard">In Zwischenablage kopiert</string>
+    <string name="connectionWizard_misc_scanQrCode">Scanne einen QR-Code</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Bitte installieren einen QR-Codescanner</string>
+    <string name="pref_categoryName_misc_localQueue">Lokale Änderungen</string>
+    <string name="pref_name_misc_localQueue_notice">WARNUNG</string>
+    <string name="pref_desc_misc_localQueue_notice">Tu hier nichts bevor du nicht weißt, was du hier tust</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">In eine Datei schreiben</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Schreibt alle lokalen Änderungen in eine txt-Datei (du kannst diese anschauen oder zu einem Fehlerbericht hinzufügen)</string>
+    <string name="pref_name_misc_localQueue_removeFirstItem">Entferne ersten lokalen Eintrag der Wartschlange</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Entfernt den ersten nicht synchronisierten Eintrag. Es könnte helfen, wenn du wiederholende Fehlerbenachrichtigungen beim Synchronisieren bekommst. Vergiss nicht, vorher alle lokalen Änderungen in eine Datei zu schreiben</string>
+    <string name="misc_localQueue_empty">Keine lokalen Änderungen</string>
+    <string name="misc_localQueue_removeFirstItem_done">Fertig</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Geschrieben in %s</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Fehler: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Wenn du Probleme beim Synchronisieren hast, erstelle bitte einen Fehlerbericht hier: %s</string>
 </resources>
