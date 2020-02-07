@@ -18,15 +18,20 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.OperationsHelper;
+import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.StorageHelper;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
@@ -121,6 +126,8 @@ public class SettingsActivity extends BaseActionBarActivity {
             setOnClickListener(R.string.pref_key_sync_syncTypes_description);
             setOnClickListener(R.string.pref_key_ui_disableTouch_keyCode);
             setOnClickListener(R.string.pref_key_misc_wipeDB);
+            setOnClickListener(R.string.pref_key_misc_localQueue_dumpToFile);
+            setOnClickListener(R.string.pref_key_misc_localQueue_removeFirstItem);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
                     getString(R.string.pref_key_ui_theme));
@@ -499,9 +506,79 @@ public class SettingsActivity extends BaseActionBarActivity {
                     }
                     return true;
                 }
+                case R.string.pref_key_misc_localQueue_dumpToFile: {
+                    dumpOfflineQueue();
+                    return true;
+                }
+                case R.string.pref_key_misc_localQueue_removeFirstItem: {
+                    removeFirstOfflineQueueItem();
+                    return true;
+                }
             }
 
             return false;
+        }
+
+        private void dumpOfflineQueue() {
+            Activity activity = getActivity();
+            if (activity == null) return;
+
+            QueueHelper queueHelper = new QueueHelper(DbConnection.getSession());
+            List<QueueItem> items = queueHelper.getQueueItems();
+            if (items.isEmpty()) {
+                Toast.makeText(activity, R.string.misc_localQueue_empty, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String string = getString(R.string.misc_localQueue_dumpToFile_header,
+                    getString(R.string.issues_url)) + "\r\n\r\n"
+                    + queueItemsToString(items);
+
+            try {
+                File file = StorageHelper.dumpQueueData(string);
+                Toast.makeText(activity, getString(R.string.misc_localQueue_dumpToFile_result_dumped,
+                        file.getAbsolutePath()), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Log.w(TAG, "Error during dumping offline queue", e);
+                Toast.makeText(activity, getString(R.string.misc_localQueue_dumpToFile_result_error,
+                        e.toString()), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        private String queueItemsToString(List<QueueItem> items) {
+            String nl = "\r\n";
+            String delim = "; ";
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("id").append(delim)
+                    .append("action").append(delim)
+                    .append("articleId").append(delim)
+                    .append("extra").append(nl);
+
+            for (QueueItem item : items) {
+                sb.append(item.getId()).append(delim)
+                        .append(item.getAction()).append(delim)
+                        .append(item.getArticleId()).append(delim)
+                        .append(item.getExtra()).append(nl);
+            }
+
+            return sb.toString();
+        }
+
+        private void removeFirstOfflineQueueItem() {
+            Activity activity = getActivity();
+            if (activity == null) return;
+
+            QueueHelper queueHelper = new QueueHelper(DbConnection.getSession());
+            List<QueueItem> items = queueHelper.getQueueItems();
+            if (items.isEmpty()) {
+                Toast.makeText(activity, R.string.misc_localQueue_empty, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            queueHelper.dequeueItems(Collections.singletonList(items.get(0)));
+            Toast.makeText(activity, R.string.misc_localQueue_removeFirstItem_done, Toast.LENGTH_SHORT).show();
         }
 
         private void showDisableTouchSetKeyCodeDialog() {

@@ -269,6 +269,31 @@
                 android:title="@string/pref_name_misc_wipeDB"
                 android:summary="@string/pref_desc_misc_wipeDB"
                 android:persistent="false"/>
+            <PreferenceScreen
+                android:key="@string/pref_key_misc_localQueue"
+                android:persistent="false"
+                android:title="@string/pref_categoryName_misc_localQueue">
+                <PreferenceCategory
+                    android:key="@string/pref_key_misc_localQueue_category"
+                    android:persistent="false"
+                    android:title="@string/pref_categoryName_misc_localQueue">
+                    <Preference
+                        android:key="@string/pref_key_misc_localQueue_notice"
+                        android:persistent="false"
+                        android:summary="@string/pref_desc_misc_localQueue_notice"
+                        android:title="@string/pref_name_misc_localQueue_notice" />
+                    <Preference
+                        android:key="@string/pref_key_misc_localQueue_dumpToFile"
+                        android:persistent="false"
+                        android:summary="@string/pref_desc_misc_localQueue_dumpToFile"
+                        android:title="@string/pref_name_misc_localQueue_dumpToFile" />
+                    <Preference
+                        android:key="@string/pref_key_misc_localQueue_removeFirstItem"
+                        android:persistent="false"
+                        android:summary="@string/pref_desc_misc_localQueue_removeFirstItem"
+                        android:title="@string/pref_name_misc_localQueue_removeFirstItem" />
+                </PreferenceCategory>
+            </PreferenceScreen>
         </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>

@@ -3,11 +3,16 @@ package fr.gaulupeau.apps.Poche.data;
 import androidx.core.content.ContextCompat;
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import fr.gaulupeau.apps.Poche.App;
 
@@ -112,6 +117,27 @@ public class StorageHelper {
 
     public static boolean deleteFile(String path) {
         return new File(path).delete();
+    }
+
+    public static File dumpQueueData(String data) throws IOException {
+        if (!isExternalStorageWritable()) {
+            throw new IllegalStateException("External storage is not writable!");
+        }
+
+        String path = getExternalStoragePath() + "/"
+                + "Local_changes_"
+                + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
+                + ".txt";
+        File file = new File(path);
+
+        //noinspection ResultOfMethodCallIgnored: should exist either way
+        file.createNewFile();
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(data);
+        }
+
+        return file;
     }
 
 }
