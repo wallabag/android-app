@@ -29,7 +29,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
 
     private final Context context;
 
-    public WallabagDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+    WallabagDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
         this.context = context;
     }
@@ -126,22 +126,16 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
 
         List<String> offlineUrls = null;
         if(oldVersion >= 2) {
-            Cursor c = null;
-            try {
-                c = db.rawQuery(oldVersion == 2
-                        ? "select url from offline_url order by _id"
-                        : "select extra from QUEUE_ITEM where action = 1 order by _id", null);
+            try (Cursor c = db.rawQuery(oldVersion == 2
+                    ? "select url from offline_url order by _id"
+                    : "select extra from QUEUE_ITEM where action = 1 order by _id", null)) {
 
                 offlineUrls = new ArrayList<>();
-                while(c.moveToNext()) {
-                    if(!c.isNull(0)) offlineUrls.add(c.getString(0));
+                while (c.moveToNext()) {
+                    if (!c.isNull(0)) offlineUrls.add(c.getString(0));
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Exception while migrating from version " + oldVersion, e);
-            } finally {
-                if(c != null) {
-                    c.close();
-                }
             }
         }
 

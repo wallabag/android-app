@@ -568,13 +568,9 @@ public class MainService extends IntentServiceBase {
 
         if(WallabagConnection.isNetworkAvailable()) {
             try {
-                Updater.ProgressListener progressListener = new Updater.ProgressListener() {
-                    @Override
-                    public void onProgress(int current, int total) {
+                Updater.ProgressListener progressListener = (current, total) ->
                         postEvent(new SweepDeletedArticlesProgressEvent(
                                 actionRequest, current, total));
-                    }
-                };
 
                 event = getUpdater().sweepDeletedArticles(progressListener);
             } catch(UnsuccessfulResponseException | IOException e) {
