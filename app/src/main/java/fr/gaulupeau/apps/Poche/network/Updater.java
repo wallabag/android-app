@@ -1,6 +1,8 @@
 package fr.gaulupeau.apps.Poche.network;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -223,7 +225,7 @@ public class Updater {
 
                     article = new Article(null);
                     article.setArticleId(id);
-                    article.setTitle(apiArticle.title);
+                    article.setTitle(unescapeHtml(apiArticle.title));
                     article.setArticleContent(new ArticleContent(null, apiArticle.content));
                     article.setDomain(apiArticle.domainName);
                     article.setUrl(apiArticle.url);
@@ -251,8 +253,8 @@ public class Updater {
                         articleContentToUpdate.add(article.getArticleContent());
                         articleChanges.add(ChangeType.CONTENT_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getTitle(), apiArticle.title)) {
-                        article.setTitle(apiArticle.title);
+                    if(!equalOrEmpty(article.getTitle(), unescapeHtml(apiArticle.title))) {
+                        article.setTitle(unescapeHtml(apiArticle.title));
                         articleChanges.add(ChangeType.TITLE_CHANGED);
                     }
                     if(!equalOrEmpty(article.getDomain(), apiArticle.domainName)) {
@@ -550,6 +552,14 @@ public class Updater {
     private boolean equalOrEmpty(CharSequence s1, CharSequence s2) {
         return (TextUtils.isEmpty(s1) && TextUtils.isEmpty(s2))
                 || TextUtils.equals(s1, s2);
+    }
+
+    private String unescapeHtml(String s) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(s).toString();
+        }
     }
 
     private void fixArticleNullValues(Article article) {
