@@ -12,10 +12,13 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -436,6 +439,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return disableTouch || super.dispatchTouchEvent(ev);
     }
 
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        Menu menu = mode.getMenu();
+
+        mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
+
+        MenuItem item = menu.findItem(R.id.menu_annotate);
+        item.setOnMenuItemClickListener(i -> {
+            webViewContent.evaluateJavascript("invokeAnnotator();", null);
+            mode.finish(); // TODO: check: may reset selection too early
+            return true;
+        });
+
+        super.onActionModeStarted(mode);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
@@ -536,6 +555,27 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     @Override
                     public List<Annotation> getAnnotations() {
                         return article.getAnnotations();
+                    }
+
+                    @Override
+                    public Annotation createAnnotation(Annotation annotation) {
+                        OperationsHelper.addAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
+                    }
+
+                    @Override
+                    public Annotation updateAnnotation(Annotation annotation) {
+                        OperationsHelper.updateAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
+                    }
+
+                    @Override
+                    public Annotation deleteAnnotation(Annotation annotation) {
+                        OperationsHelper.deleteAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
                     }
                 });
 
@@ -814,7 +854,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
         }
 
-        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent;
+        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent; // TODO: check: added content may break annotations (ranges)
         if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
         if(settings.isImageCacheEnabled()) {

@@ -340,4 +340,6 @@
     <string name="notification_copyToClipboard">Copy to clipboard</string>
     <string name="notification_clipboardLabel">Error details</string>
     <string name="copiedToClipboard">Copied to clipboard</string>
+
+    <string name="menu_annotate">Annotate</string>
 </resources>
