@@ -465,7 +465,8 @@ public class MainService extends IntentServiceBase {
 
         annotation.setAnnotationId(remoteAnnotation.id);
 
-        Log.d(TAG, "syncAddAnnotationToArticle() updating annotation with remote ID");
+        Log.d(TAG, "syncAddAnnotationToArticle() updating annotation with remote ID: "
+                + annotation.getAnnotationId());
         annotationDao.update(annotation);
         Log.d(TAG, "syncAddAnnotationToArticle() updated annotation with remote ID");
 

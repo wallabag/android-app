@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -268,9 +269,13 @@ public class OperationsHelper {
     public static void addAnnotation(Context context, int articleId, Annotation annotation) {
         Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
 
+        Article article = getArticle(articleId, getArticleDao());
+
         Long annotationId = annotation.getId();
 
         if (annotationId == null) {
+            annotation.setArticleId(article.getId());
+
             DbConnection.getSession().getAnnotationDao().insert(annotation);
             annotationId = annotation.getId();
 
@@ -287,7 +292,6 @@ public class OperationsHelper {
             Log.d(TAG, "addAnnotation() annotation was already persisted");
         }
 
-        Article article = getArticle(articleId, getArticleDao());
         if (article != null) {
             if (!article.getAnnotations().contains(annotation)) {
                 article.getAnnotations().add(annotation);
@@ -312,7 +316,21 @@ public class OperationsHelper {
             throw new RuntimeException("Annotation wasn't persisted first");
         }
 
-        DbConnection.getSession().getAnnotationDao().update(annotation);
+        String newText = annotation.getText();
+
+        AnnotationDao annotationDao = DbConnection.getSession().getAnnotationDao();
+        annotation = annotationDao.queryBuilder()
+                .where(AnnotationDao.Properties.Id.eq(annotationId)).unique();
+
+        if (TextUtils.equals(annotation.getText(), newText)) {
+            Log.w(TAG, "updateAnnotation() annotation ID=" + annotationId
+                    + " already has text=" + newText);
+            return;
+        }
+
+        annotation.setText(newText);
+
+        annotationDao.update(annotation);
         Log.d(TAG, "updateAnnotation() annotation object updated");
 
         Article article = getArticle(articleId, getArticleDao());
