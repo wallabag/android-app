@@ -448,7 +448,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         MenuItem item = menu.findItem(R.id.menu_annotate);
         item.setOnMenuItemClickListener(i -> {
             webViewContent.evaluateJavascript("invokeAnnotator();", null);
-            mode.finish(); // TODO: check: may reset selection too early
+//            mode.finish(); // TODO: check: seems to reset selection too early (not on emulator though)
             return true;
         });
 
