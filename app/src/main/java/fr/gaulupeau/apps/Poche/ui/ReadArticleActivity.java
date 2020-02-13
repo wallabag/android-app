@@ -76,6 +76,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
+import static android.text.Html.escapeHtml;
+
 public class ReadArticleActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_ID = "ReadArticleActivity.id";
@@ -816,54 +818,64 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             throw new RuntimeException("Couldn't load raw resource", e);
         }
 
+        String header = getHeader();
         String htmlContent = getHtmlContent();
-        List<String> imgURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
-        if(imgURLs != null && imgURLs.size() > 0) {
-            String wbgURL = ImageCacheUtils.getWallabagUrl();
-            for(String imageURL: imgURLs) {
-                if(imageURL.startsWith(ImageCacheUtils.WALLABAG_RELATIVE_URL_PATH)) {
-                    htmlContent = htmlContent.replace(imageURL, wbgURL + imageURL);
-                    Log.d(TAG, "getHtmlPage() prefixing wallabag server URL " + wbgURL + " to the image path " + imageURL);
-                }
-            }
-        }
 
-        String dateAndAuthor = "";
+        return String.format(htmlBase, cssName, classAttr, escapeHtml(articleTitle),
+                escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent);
+    }
+
+    private String getHeader() {
+        StringBuilder header = new StringBuilder();
+
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
-            dateAndAuthor += android.text.format.DateFormat.getDateFormat(this).format(publishedAt)
-                    + " " + android.text.format.DateFormat.getTimeFormat(this).format(publishedAt);
-        }
-        if (!TextUtils.isEmpty(article.getAuthors())) {
-            dateAndAuthor += " " + article.getAuthors();
+            header.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
+                    .append(' ')
+                    .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));
         }
 
-        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
-                articleUrl, articleDomain, dateAndAuthor, htmlContent);
+        if (!TextUtils.isEmpty(article.getAuthors())) {
+            header.append(' ');
+            header.append(escapeHtml(article.getAuthors()));
+        }
+
+        header.append("<br>\n");
+
+        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
+        header.append(escapeHtml(getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "< 1")));
+
+        if (settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
+            header.append("<br>\n");
+            header.append("<img src=\"")
+                    .append(escapeHtml(article.getPreviewPictureURL()))
+                    .append("\"/>");
+        }
+
+        String headerString = header.toString();
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
+
+        return doImageUrlReplacements(headerString);
     }
 
     private String getHtmlContent() {
         String htmlContent = article.getContent();
 
-        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
-        String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
-                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
-        String previewPicture = "";
-        if(settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
-            previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
+        return doImageUrlReplacements(htmlContent);
+    }
+
+    private String doImageUrlReplacements(String content) {
+        if (settings.isImageCacheEnabled()) {
+            Log.d(TAG, "doImageUrlReplacements() replacing image links to cached versions");
+            content = ImageCacheUtils.replaceImagesInHtmlContent(
+                    content, article.getArticleId().longValue());
         }
 
-        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent; // TODO: check: added content may break annotations (ranges)
-        if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
-
-        if(settings.isImageCacheEnabled()) {
-            Log.d(TAG, "getHtmlContent() replacing image links to cached versions in htmlContent");
-            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
-                    htmlContent, article.getArticleId().longValue());
-        }
-
-        return htmlContent;
+        return ImageCacheUtils.replaceWallabagRelativeImgUrls(content);
     }
 
     private void initButtons() {
