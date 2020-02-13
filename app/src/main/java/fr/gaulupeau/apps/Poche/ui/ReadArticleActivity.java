@@ -102,6 +102,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ArticlesChangedEvent.ChangeType.AUTHORS_CHANGED,
             ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
+//            ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED, TODO: fix: own changes will cause reload
             ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
 
     private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_PREV_NEXT = EnumSet.of(
