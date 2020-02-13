@@ -453,6 +453,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_previewImage_enabled, value);
     }
 
+    public boolean isAnnotationsEnabled() {
+        return getBoolean(R.string.pref_key_ui_annotations_enabled, false);
+    }
+
+    public void setAnnotationsEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_annotations_enabled, value);
+    }
+
     public boolean isTapToScrollEnabled() {
         return getBoolean(R.string.pref_key_ui_tapToScroll_enabled, false);
     }

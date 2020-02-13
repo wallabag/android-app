@@ -133,6 +133,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean smoothScrolling;
     private int scrolledOverBottom;
     private boolean swipeArticles;
+    private boolean annotationsEnabled;
 
     private ScrollView scrollView;
     private View scrollViewLastChild;
@@ -221,6 +222,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         smoothScrolling = settings.isScreenScrollingSmooth();
         scrolledOverBottom = settings.getScrolledOverBottom();
         swipeArticles = settings.getSwipeArticles();
+        annotationsEnabled = settings.isAnnotationsEnabled();
 
         setTitle(articleTitle);
 
@@ -444,16 +446,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onActionModeStarted(ActionMode mode) {
-        Menu menu = mode.getMenu();
+        if (annotationsEnabled) {
+            Menu menu = mode.getMenu();
 
-        mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
+            mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
 
-        MenuItem item = menu.findItem(R.id.menu_annotate);
-        item.setOnMenuItemClickListener(i -> {
-            webViewContent.evaluateJavascript("invokeAnnotator();", null);
-//            mode.finish(); // TODO: check: seems to reset selection too early (not on emulator though)
-            return true;
-        });
+            MenuItem item = menu.findItem(R.id.menu_annotate);
+            item.setOnMenuItemClickListener(i -> {
+                webViewContent.evaluateJavascript("invokeAnnotator();", null);
+//                mode.finish(); // seems to reset selection too early (not on emulator though)
+                return true;
+            });
+        }
 
         super.onActionModeStarted(mode);
     }
@@ -819,11 +823,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             throw new RuntimeException("Couldn't load raw resource", e);
         }
 
+        String extraHead = getExtraHead();
         String header = getHeader();
         String htmlContent = getHtmlContent();
 
         return String.format(htmlBase, cssName, classAttr, escapeHtml(articleTitle),
-                escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent);
+                escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent, extraHead);
+    }
+
+    private String getExtraHead() {
+        String extra = "";
+
+        if (annotationsEnabled) {
+            extra += "\n" +
+                    "\t\t<script src=\"annotator.min.js\"></script>" +
+                    "\n" +
+                    "\t\t<script src=\"annotations-android-app.js\"></script>";
+        }
+
+        return extra;
     }
 
     private String getHeader() {
