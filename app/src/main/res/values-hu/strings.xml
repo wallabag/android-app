@@ -292,4 +292,16 @@
     <string name="copiedToClipboard">Vágólapra másolva</string>
     <string name="connectionWizard_misc_scanQrCode">QR-kód beolvasása</string>
     <string name="connectionWizard_misc_installQrCodeScanner">Kérjük, telepítsen egy QR-kód olvasót</string>
+    <string name="pref_categoryName_misc_localQueue">Helyi változások</string>
+    <string name="pref_name_misc_localQueue_notice">FIGYELMEZTETÉS</string>
+    <string name="pref_desc_misc_localQueue_notice">Ne csinálj itt semmit, hacsak nem tudod, mit csinálsz</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Kiírás fájlba</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Kiírja az összes helyi változást egy txt fájlba(tanulmányozhatja, vagy csatolhatja egy hibajelentéshez)</string>
+    <string name="pref_name_misc_localQueue_removeFirstItem">Távolítsa el az első elemét a helyi sornak</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Eltávolítja az első nem szinkronizált elemet. Segíthet, ha a szinkronizálás során ismétlődő hibajelentéseket kap. Ne felejtse el először az összes helyi változást fájlba kiírni</string>
+    <string name="misc_localQueue_empty">Nincs helyi változás</string>
+    <string name="misc_localQueue_removeFirstItem_done">Kész</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">A(z) %s fájlba kiírva</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Hiba: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Ha szinkronizálási problémákat tapasztal, kérjük, jelentse a problémát itt: %s</string>
 </resources>
