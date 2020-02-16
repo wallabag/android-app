@@ -1,0 +1,13 @@
+- Basic search is replaced with full-text search (on article title and content). Full update is needed to index existing articles.
+- Minor list performance improvements.
+- Slightly improved sync.
+- Added ability to export local changes to deal with stuck sync.
+- Updated translations.
+- Updated dependencies.
+- Minor fixes and improvements.
+
+Fixes:
+
+- Fix WebView crash on Android 5.
+- Fix some theme elements not being applied correctly in fullscreen.
+- Corrected special characters in title.
