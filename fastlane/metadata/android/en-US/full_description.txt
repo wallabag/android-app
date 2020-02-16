@@ -1,8 +1,7 @@
 A self hosted read-it-later app which is made for you to comfortably read and
 archive your articles. Unlike to other services, the server software is
 MIT-licensed, so you can set it up on your own: Just follow the instructions at
-[http://www.wallabag.org wallabag.org]. Optionally you can find a hosting
-service in the [https://www.wallabag.org/frequently-asked-questions/ FAQ].
+[http://www.wallabag.org wallabag.org].
 
 This android application allows you read and manage your articles and
 automatically syncs them to the wallabag server. Next time you find an article
