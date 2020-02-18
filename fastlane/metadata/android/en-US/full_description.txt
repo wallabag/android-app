@@ -1,0 +1,20 @@
+A self hosted read-it-later app which is made for you to comfortably read and
+archive your articles. Unlike to other services, the server software is
+MIT-licensed, so you can set it up on your own: Just follow the instructions at
+[http://www.wallabag.org wallabag.org].
+
+This android application allows you read and manage your articles and
+automatically syncs them to the wallabag server. Next time you find an article
+you want to read later, save it into wallabag. It will be automatically synced
+on your phone, your tablet, your e-reader or your computer. Therefore, your can
+read it anytime anywhere, even offline.
+
+You can save an article into wallabag from nearly everywhere, including your
+computer and your favorite RSS reader apps.
+
+'''Bonus features:'''
+
+* Automatic synchronization between the server and the apps
+* Downloading pictures for offline reading
+* Tags to manage your content
+* Speech synthesis to listen to your articles
