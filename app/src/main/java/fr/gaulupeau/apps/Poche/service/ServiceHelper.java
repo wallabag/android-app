@@ -49,11 +49,32 @@ public class ServiceHelper {
 
     public static void deleteTagsFromArticle(Context context, int articleID,
                                              Collection<String> tags) {
-        Log.d(TAG, "deleteTagsFromArticle() started");
+        startGenericArticleAction(context, ActionRequest.Action.ARTICLE_TAGS_DELETE,
+                articleID, TextUtils.join(QueueItem.DELETED_TAGS_DELIMITER, tags));
+    }
 
-        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_TAGS_DELETE);
-        request.setArticleID(articleID);
-        request.setExtra(TextUtils.join(QueueItem.DELETED_TAGS_DELIMITER, tags));
+    public static void addAnnotationToArticle(Context context, int articleId, long annotationId) {
+        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_ADD,
+                articleId, String.valueOf(annotationId));
+    }
+
+    public static void updateAnnotationOnArticle(Context context, int articleId, long annotationId) {
+        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_UPDATE,
+                articleId, String.valueOf(annotationId));
+    }
+
+    public static void deleteAnnotationFromArticle(Context context, int articleId, int remoteAnnotationId) {
+        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_DELETE,
+                articleId, String.valueOf(remoteAnnotationId));
+    }
+
+    private static void startGenericArticleAction(Context context, ActionRequest.Action action,
+                                                  int articleId, String extra) {
+        Log.d(TAG, String.format("startGenericArticleAction(%s, %d, %s) started", action, articleId, extra));
+
+        ActionRequest request = new ActionRequest(action);
+        request.setArticleID(articleId);
+        request.setExtra(extra);
 
         startService(context, request);
     }
@@ -197,6 +218,9 @@ public class ServiceHelper {
             case ADD_LINK:
             case ARTICLE_CHANGE:
             case ARTICLE_TAGS_DELETE:
+            case ANNOTATION_ADD:
+            case ANNOTATION_UPDATE:
+            case ANNOTATION_DELETE:
             case ARTICLE_DELETE:
             case SYNC_QUEUE:
             case UPDATE_ARTICLES:

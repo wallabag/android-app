@@ -5,6 +5,7 @@ import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 
 import wallabag.apiwrapper.ArticlesPageIterator;
 import wallabag.apiwrapper.ArticlesQueryBuilder;
@@ -17,6 +18,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,12 +28,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
+import fr.gaulupeau.apps.Poche.data.dao.entities.AnnotationRange;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleContent;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
@@ -77,6 +83,8 @@ public class Updater {
             if(clean) {
                 Log.d(TAG, "update() deleting old DB entries");
                 FtsDao.deleteAllArticles(daoSession.getDatabase());
+                daoSession.getAnnotationRangeDao().deleteAll();
+                daoSession.getAnnotationDao().deleteAll();
                 daoSession.getArticleTagsJoinDao().deleteAll();
                 daoSession.getArticleContentDao().deleteAll();
                 daoSession.getArticleDao().deleteAll();
@@ -128,6 +136,8 @@ public class Updater {
         ArticleContentDao articleContentDao = daoSession.getArticleContentDao();
         TagDao tagDao = daoSession.getTagDao();
         ArticleTagsJoinDao articleTagsJoinDao = daoSession.getArticleTagsJoinDao();
+        AnnotationDao annotationDao = daoSession.getAnnotationDao();
+        AnnotationRangeDao annotationRangeDao = daoSession.getAnnotationRangeDao();
 
         List<Tag> tags;
         if(full) {
@@ -181,6 +191,14 @@ public class Updater {
         List<Tag> tagsToInsert = new ArrayList<>();
         Map<Article, List<Tag>> articleTagJoinsToRemove = new HashMap<>();
         Map<Article, List<Tag>> articleTagJoinsToInsert = new HashMap<>();
+        List<Annotation> annotationsToUpdate = new ArrayList<>();
+        List<Pair<Article, Annotation>> annotationsToInsert = new ArrayList<>();
+        List<Annotation> annotationsToRemove = new ArrayList<>();
+        List<Pair<Annotation, AnnotationRange>> annotationRangesToInsert = new ArrayList<>();
+        List<AnnotationRange> annotationRangesToRemove = new ArrayList<>();
+
+        Set<wallabag.apiwrapper.models.Annotation> processedApiAnnotations = new HashSet<>();
+        Set<wallabag.apiwrapper.models.Annotation.Range> presentApiAnnotationRanges = new HashSet<>();
 
         Log.d(TAG, "performUpdate() starting to iterate though pages");
         for(ArticlesPageIterator pageIterator = queryBuilder.pageIterator(); pageIterator.hasNext();) {
@@ -206,6 +224,11 @@ public class Updater {
             tagsToInsert.clear();
             articleTagJoinsToRemove.clear();
             articleTagJoinsToInsert.clear();
+            annotationsToUpdate.clear();
+            annotationsToInsert.clear();
+            annotationsToRemove.clear();
+            annotationRangesToInsert.clear();
+            annotationRangesToRemove.clear();
 
             for(wallabag.apiwrapper.models.Article apiArticle: articles.embedded.items) {
                 int id = apiArticle.id;
@@ -213,6 +236,7 @@ public class Updater {
                 Article article = null;
 
                 EnumSet<ChangeType> articleChanges = EnumSet.noneOf(ChangeType.class);
+                boolean annotationsChanged = false;
 
                 if(!full) {
                     article = articleDao.queryBuilder()
@@ -408,6 +432,113 @@ public class Updater {
                     }
                 }
 
+                processedApiAnnotations.clear();
+
+                if (existing) {
+                    List<Annotation> annotations = article.getAnnotations();
+                    List<Annotation> aToRemove = null;
+
+                    for (Annotation annotation : annotations) {
+                        wallabag.apiwrapper.models.Annotation apiAnnotation
+                                = findApiAnnotation(annotation.getAnnotationId(), apiArticle.annotations);
+
+                        if (apiAnnotation == null) {
+                            if (aToRemove == null) aToRemove = new ArrayList<>();
+                            aToRemove.add(annotation);
+                        } else {
+                            processedApiAnnotations.add(apiAnnotation);
+
+                            boolean annotationChanged = false;
+
+                            if (!equalOrEmpty(annotation.getText(), apiAnnotation.text)) {
+                                annotation.setText(apiAnnotation.text);
+                                annotationChanged = true;
+                            }
+                            if (!equalOrEmpty(annotation.getQuote(), apiAnnotation.quote)) {
+                                annotation.setQuote(apiAnnotation.quote);
+                                annotationChanged = true;
+                            }
+                            if (!Objects.equals(annotation.getCreatedAt(), apiAnnotation.createdAt)) {
+                                annotation.setCreatedAt(apiAnnotation.createdAt);
+                                annotationChanged = true;
+                            }
+                            if (!Objects.equals(annotation.getUpdatedAt(), apiAnnotation.updatedAt)) {
+                                annotation.setUpdatedAt(apiAnnotation.updatedAt);
+                                annotationChanged = true;
+                            }
+                            if (!equalOrEmpty(annotation.getAnnotatorSchemaVersion(), apiAnnotation.annotatorSchemaVersion)) {
+                                annotation.setAnnotatorSchemaVersion(apiAnnotation.annotatorSchemaVersion);
+                                annotationChanged = true;
+                            }
+
+                            if (annotationChanged) {
+                                annotationsToUpdate.add(annotation);
+                                annotationsChanged = true;
+                            }
+
+                            presentApiAnnotationRanges.clear();
+                            List<AnnotationRange> rToRemove = null;
+                            for (AnnotationRange range : annotation.getRanges()) {
+                                wallabag.apiwrapper.models.Annotation.Range apiRange
+                                        = findApiAnnotationRange(range, apiAnnotation.ranges);
+                                if (apiRange == null) {
+                                    if (rToRemove == null)
+                                        rToRemove = new ArrayList<>(annotation.getRanges().size());
+                                    rToRemove.add(range);
+                                } else {
+                                    presentApiAnnotationRanges.add(apiRange);
+                                }
+                            }
+                            for (wallabag.apiwrapper.models.Annotation.Range apiRange : apiAnnotation.ranges) {
+                                if (presentApiAnnotationRanges.contains(apiRange)) continue;
+
+                                AnnotationRange range = new AnnotationRange(null, annotation.getId(),
+                                        apiRange.start, apiRange.end, apiRange.startOffset, apiRange.endOffset);
+                                annotation.getRanges().add(range);
+                                annotationRangesToInsert.add(new Pair<>(null, range));
+                                annotationsChanged = true;
+                            }
+
+                            if (rToRemove != null) {
+                                annotationRangesToRemove.addAll(rToRemove);
+                                annotation.getRanges().removeAll(rToRemove);
+                                annotationsChanged = true;
+                            }
+                        }
+                    }
+
+                    if (aToRemove != null) {
+                        for (Annotation annotation : aToRemove) {
+                            annotationRangesToRemove.addAll(annotation.getRanges());
+                        }
+                        annotationsToRemove.addAll(aToRemove);
+                        annotations.removeAll(aToRemove);
+                        annotationsChanged = true;
+                    }
+                } else {
+                    article.setAnnotations(new ArrayList<>(apiArticle.annotations.size()));
+                }
+
+                for (wallabag.apiwrapper.models.Annotation apiAnnotation : apiArticle.annotations) {
+                    if (processedApiAnnotations.contains(apiAnnotation)) continue;
+
+                    Annotation annotation = new Annotation(null, apiAnnotation.id,
+                            article.getId(), apiAnnotation.text, apiAnnotation.quote,
+                            apiAnnotation.createdAt, apiAnnotation.updatedAt,
+                            apiAnnotation.annotatorSchemaVersion);
+
+                    annotationsToInsert.add(new Pair<>(existing ? null : article, annotation));
+                    article.getAnnotations().add(annotation);
+
+                    for (wallabag.apiwrapper.models.Annotation.Range apiRange : apiAnnotation.ranges) {
+                        AnnotationRange range = new AnnotationRange(null, null,
+                                apiRange.start, apiRange.end, apiRange.startOffset, apiRange.endOffset);
+                        annotationRangesToInsert.add(new Pair<>(annotation, range));
+                    }
+
+                    annotationsChanged = true;
+                }
+
                 if(apiArticle.updatedAt.getTime() > latestUpdatedItemTimestamp) {
                     latestUpdatedItemTimestamp = apiArticle.updatedAt.getTime();
                 }
@@ -418,10 +549,15 @@ public class Updater {
                     Log.d(TAG, "performUpdate() article wasn't changed");
                 }
 
+                // TODO: fix - this is incorrect
                 if(!tagsToUpdate.isEmpty() || !tagsToInsert.isEmpty()
                         || !articleTagJoinsToRemove.isEmpty()
                         || !articleTagJoinsToInsert.isEmpty()) {
                     articleChanges.add(ChangeType.TAGS_CHANGED);
+                }
+
+                if (annotationsChanged) {
+                    articleChanges.add(ChangeType.ANNOTATIONS_CHANGED);
                 }
 
                 if(!articleChanges.isEmpty()) {
@@ -522,6 +658,64 @@ public class Updater {
                 Log.v(TAG, "performUpdate() done articleTagsJoinDao.insertInTx()");
             }
 
+            if(!annotationRangesToRemove.isEmpty()) {
+                Log.v(TAG, "performUpdate() performing annotationRangeDao.deleteInTx()");
+                annotationRangeDao.deleteInTx(annotationRangesToRemove);
+                Log.v(TAG, "performUpdate() done annotationRangeDao.deleteInTx()");
+
+                annotationRangesToRemove.clear();
+            }
+
+            if(!annotationsToRemove.isEmpty()) {
+                Log.v(TAG, "performUpdate() performing annotationDao.deleteInTx()");
+                annotationDao.deleteInTx(annotationsToRemove);
+                Log.v(TAG, "performUpdate() done annotationDao.deleteInTx()");
+
+                annotationsToRemove.clear();
+            }
+
+            if(!annotationsToUpdate.isEmpty()) {
+                Log.v(TAG, "performUpdate() performing annotationDao.updateInTx()");
+                annotationDao.updateInTx(annotationsToUpdate);
+                Log.v(TAG, "performUpdate() done annotationDao.updateInTx()");
+
+                annotationsToUpdate.clear();
+            }
+
+            if(!annotationsToInsert.isEmpty()) {
+                List<Annotation> annotations = new ArrayList<>(annotationsToInsert.size());
+
+                for (Pair<Article, Annotation> entry : annotationsToInsert) {
+                    Article article = entry.first;
+                    Annotation annotation = entry.second;
+                    if (article != null) annotation.setArticleId(article.getId());
+                    annotations.add(annotation);
+                }
+
+                Log.v(TAG, "performUpdate() performing annotationDao.insertInTx()");
+                annotationDao.insertInTx(annotations);
+                Log.v(TAG, "performUpdate() done annotationDao.insertInTx()");
+
+                annotationsToInsert.clear();
+            }
+
+            if(!annotationRangesToInsert.isEmpty()) {
+                List<AnnotationRange> ranges = new ArrayList<>(annotationRangesToInsert.size());
+
+                for (Pair<Annotation, AnnotationRange> entry : annotationRangesToInsert) {
+                    Annotation annotation = entry.first;
+                    AnnotationRange range = entry.second;
+                    if (annotation != null) range.setAnnotationId(annotation.getId());
+                    ranges.add(range);
+                }
+
+                Log.v(TAG, "performUpdate() performing annotationRangeDao.insertInTx()");
+                annotationRangeDao.insertInTx(ranges);
+                Log.v(TAG, "performUpdate() done annotationRangeDao.insertInTx()");
+
+                annotationRangesToInsert.clear();
+            }
+
             if(updateListener != null) {
                 updateListener.onProgress(articles.page * perPage, articles.total);
             }
@@ -586,6 +780,31 @@ public class Updater {
             String label, List<wallabag.apiwrapper.models.Tag> tags) {
         for(wallabag.apiwrapper.models.Tag tag: tags) {
             if(TextUtils.equals(tag.label, label)) return tag;
+        }
+
+        return null;
+    }
+
+    private wallabag.apiwrapper.models.Annotation findApiAnnotation(
+            Integer annotationId, List<wallabag.apiwrapper.models.Annotation> annotations) {
+        if (annotationId == null) return null;
+
+        for (wallabag.apiwrapper.models.Annotation annotation : annotations) {
+            if (annotation.id == annotationId) return annotation;
+        }
+
+        return null;
+    }
+
+    private wallabag.apiwrapper.models.Annotation.Range findApiAnnotationRange(
+            AnnotationRange range, List<wallabag.apiwrapper.models.Annotation.Range> ranges) {
+        for (wallabag.apiwrapper.models.Annotation.Range apiRange : ranges) {
+            if (equalOrEmpty(apiRange.start, range.getStart())
+                    && equalOrEmpty(apiRange.end, range.getEnd())
+                    && apiRange.startOffset == range.getStartOffset()
+                    && apiRange.endOffset == range.getEndOffset()) {
+                return apiRange;
+            }
         }
 
         return null;
@@ -735,6 +954,24 @@ public class Updater {
 
         if(!articlesToDelete.isEmpty()) {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
+
+            Log.d(TAG, "performSweep() deleting related entities");
+
+            // delete related tag joins
+            ArticleTagsJoin.getTagsJoinByArticleQueryBuilder(
+                    articlesToDelete, daoSession.getArticleTagsJoinDao())
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+
+            Collection<Long> annotationIds = Annotation.getAnnotationIdsByArticleIds(
+                    articlesToDelete, daoSession.getAnnotationDao());
+
+            // delete ranges of related annotations
+            AnnotationRange.getAnnotationRangesByAnnotationsQueryBuilder(
+                    annotationIds, daoSession.getAnnotationRangeDao())
+                    .buildDelete().executeDeleteWithoutDetachingEntities();
+
+            // delete related annotations
+            daoSession.getAnnotationDao().deleteByKeyInTx(annotationIds);
 
             Log.d(TAG, "performSweep() performing content delete");
             daoSession.getArticleContentDao().deleteByKeyInTx(articlesToDelete);

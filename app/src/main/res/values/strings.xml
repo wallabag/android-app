@@ -232,6 +232,8 @@
     <string name="pref_desc_ui_swipeArticles">Swipe left or right inside an article to go to previous or next article</string>
     <string name="pref_name_ui_previewImage_enabled">Preview Image</string>
     <string name="pref_desc_ui_previewImage_enabled">Display the preview image before the article</string>
+    <string name="pref_name_ui_annotations_enabled">Annotations support</string>
+    <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
@@ -340,4 +342,6 @@
     <string name="notification_copyToClipboard">Copy to clipboard</string>
     <string name="notification_clipboardLabel">Error details</string>
     <string name="copiedToClipboard">Copied to clipboard</string>
+
+    <string name="menu_annotate">Annotate</string>
 </resources>

@@ -134,6 +134,64 @@ public class QueueHelper {
         return true;
     }
 
+    public boolean addAnnotationToArticle(int articleId, long annotationId) {
+        Log.d(TAG, String.format("addAnnotationToArticle(%d, %d) started", articleId, annotationId));
+
+        for (QueueItem item : getQueuedItemsForArticle(articleId)) {
+            switch (item.getAction()) {
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "addAnnotationToArticle(): article is already in queue for Deleting; ignoring");
+                    return false;
+            }
+        }
+
+        enqueueGenericAction(articleId, Action.ANNOTATION_ADD, String.valueOf(annotationId));
+
+        Log.d(TAG, "addAnnotationToArticle() finished");
+        return true;
+    }
+
+    public boolean updateAnnotationOnArticle(int articleId, long annotationId) {
+            Log.d(TAG, String.format("updateAnnotationOnArticle(%d, %d) started", articleId, annotationId));
+
+        for (QueueItem item : getQueuedItemsForArticle(articleId)) {
+            switch (item.getAction()) {
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "updateAnnotationOnArticle(): article is already in queue for Deleting; ignoring");
+                    return false;
+            }
+        }
+
+        enqueueGenericAction(articleId, Action.ANNOTATION_UPDATE, String.valueOf(annotationId));
+
+        Log.d(TAG, "updateAnnotationOnArticle() finished");
+        return true;
+    }
+
+    public boolean deleteAnnotationFromArticle(int articleId, int remoteAnnotationId) {
+        Log.d(TAG, String.format("deleteAnnotationFromArticle(%d, %d) started", articleId, remoteAnnotationId));
+
+        for (QueueItem item : getQueuedItemsForArticle(articleId)) {
+            switch (item.getAction()) {
+                case ANNOTATION_DELETE:
+                    if (item.getExtra().equals(String.valueOf(remoteAnnotationId))) {
+                        Log.d(TAG, "deleteAnnotationFromArticle() found existing annotation delete item");
+                        return false;
+                    }
+                    break;
+
+                case ARTICLE_DELETE:
+                    Log.d(TAG, "deleteAnnotationFromArticle(): article is already in queue for Deleting; ignoring");
+                    return false;
+            }
+        }
+
+        enqueueGenericAction(articleId, Action.ANNOTATION_DELETE, String.valueOf(remoteAnnotationId));
+
+        Log.d(TAG, "deleteAnnotationFromArticle() finished");
+        return true;
+    }
+
     public boolean deleteArticle(int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
@@ -143,6 +201,9 @@ public class QueueHelper {
         for(QueueItem item: getQueuedItemsForArticle(articleID)) {
             switch(item.getAction()) {
                 case ARTICLE_CHANGE:
+                case ANNOTATION_ADD:
+                case ANNOTATION_UPDATE:
+                case ANNOTATION_DELETE:
                     Log.d(TAG, "deleteArticle(): going to dequeue item with action id: " +
                             item.getAction());
                     itemsToCancel.add(item);
@@ -188,31 +249,25 @@ public class QueueHelper {
         return !cancel;
     }
 
-    private void enqueueArticleChange(int articleID, ArticleChangeType articleChangeType) {
-        Log.d(TAG, String.format("enqueueArticleChange(%d, %s) started",
-                articleID, articleChangeType));
-
-        QueueItem item = new QueueItem();
-        item.setAction(Action.ARTICLE_CHANGE);
-        item.setArticleId(articleID);
-        item.setExtra(articleChangeType.name());
-
-        enqueue(item);
-
-        Log.d(TAG, "enqueueArticleChange() finished");
+    private void enqueueArticleChange(int articleId, ArticleChangeType articleChangeType) {
+        enqueueGenericAction(articleId, Action.ARTICLE_CHANGE, articleChangeType.name());
     }
 
-    private void enqueueDeleteTagsFromArticle(int articleID, String tags) {
-        Log.d(TAG, String.format("enqueueDeleteTagsFromArticle(%d, %s) started", articleID, tags));
+    private void enqueueDeleteTagsFromArticle(int articleId, String tags) {
+        enqueueGenericAction(articleId, Action.ARTICLE_TAGS_DELETE, tags);
+    }
+
+    private void enqueueGenericAction(int articleId, QueueItem.Action action, String extra) {
+        Log.d(TAG, String.format("enqueueGenericAction(%d, %s, %s) started", articleId, action, extra));
 
         QueueItem item = new QueueItem();
-        item.setAction(Action.ARTICLE_TAGS_DELETE);
-        item.setArticleId(articleID);
-        item.setExtra(tags);
+        item.setAction(action);
+        item.setArticleId(articleId);
+        item.setExtra(extra);
 
         enqueue(item);
 
-        Log.d(TAG, "enqueueDeleteTagsFromArticle() finished");
+        Log.d(TAG, "enqueueGenericAction() finished");
     }
 
     private void enqueueDeleteArticle(int articleID) {

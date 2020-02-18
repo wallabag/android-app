@@ -12,10 +12,13 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -47,6 +50,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
@@ -72,6 +76,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
+import static android.text.Html.escapeHtml;
+
 public class ReadArticleActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_ID = "ReadArticleActivity.id";
@@ -96,6 +102,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ArticlesChangedEvent.ChangeType.AUTHORS_CHANGED,
             ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
+//            ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED, TODO: fix: own changes will cause reload
             ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
 
     private static final EnumSet<ArticlesChangedEvent.ChangeType> CHANGE_SET_PREV_NEXT = EnumSet.of(
@@ -126,6 +133,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean smoothScrolling;
     private int scrolledOverBottom;
     private boolean swipeArticles;
+    private boolean annotationsEnabled;
 
     private ScrollView scrollView;
     private View scrollViewLastChild;
@@ -214,6 +222,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         smoothScrolling = settings.isScreenScrollingSmooth();
         scrolledOverBottom = settings.getScrolledOverBottom();
         swipeArticles = settings.getSwipeArticles();
+        annotationsEnabled = settings.isAnnotationsEnabled();
 
         setTitle(articleTitle);
 
@@ -435,6 +444,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return disableTouch || super.dispatchTouchEvent(ev);
     }
 
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        if (annotationsEnabled) {
+            Menu menu = mode.getMenu();
+
+            mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
+
+            MenuItem item = menu.findItem(R.id.menu_annotate);
+            item.setOnMenuItemClickListener(i -> {
+                webViewContent.evaluateJavascript("invokeAnnotator();", null);
+//                mode.finish(); // seems to reset selection too early (not on emulator though)
+                return true;
+            });
+        }
+
+        super.onActionModeStarted(mode);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
@@ -529,6 +556,37 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
+
+        JsAnnotationController annotationController = new JsAnnotationController(
+                new JsAnnotationController.Callback() {
+                    @Override
+                    public List<Annotation> getAnnotations() {
+                        return article.getAnnotations();
+                    }
+
+                    @Override
+                    public Annotation createAnnotation(Annotation annotation) {
+                        OperationsHelper.addAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
+                    }
+
+                    @Override
+                    public Annotation updateAnnotation(Annotation annotation) {
+                        OperationsHelper.updateAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
+                    }
+
+                    @Override
+                    public Annotation deleteAnnotation(Annotation annotation) {
+                        OperationsHelper.deleteAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation);
+                        return annotation;
+                    }
+                });
+
+        webViewContent.addJavascriptInterface(annotationController, "hostAnnotationController");
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
             private View customView;
@@ -765,54 +823,78 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             throw new RuntimeException("Couldn't load raw resource", e);
         }
 
+        String extraHead = getExtraHead();
+        String header = getHeader();
         String htmlContent = getHtmlContent();
-        List<String> imgURLs = ImageCacheUtils.findImageUrlsInHtml(htmlContent);
-        if(imgURLs != null && imgURLs.size() > 0) {
-            String wbgURL = ImageCacheUtils.getWallabagUrl();
-            for(String imageURL: imgURLs) {
-                if(imageURL.startsWith(ImageCacheUtils.WALLABAG_RELATIVE_URL_PATH)) {
-                    htmlContent = htmlContent.replace(imageURL, wbgURL + imageURL);
-                    Log.d(TAG, "getHtmlPage() prefixing wallabag server URL " + wbgURL + " to the image path " + imageURL);
-                }
-            }
+
+        return String.format(htmlBase, cssName, classAttr, escapeHtml(articleTitle),
+                escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent, extraHead);
+    }
+
+    private String getExtraHead() {
+        String extra = "";
+
+        if (annotationsEnabled) {
+            extra += "\n" +
+                    "\t\t<script src=\"annotator.min.js\"></script>" +
+                    "\n" +
+                    "\t\t<script src=\"annotations-android-app.js\"></script>";
         }
 
-        String dateAndAuthor = "";
+        return extra;
+    }
+
+    private String getHeader() {
+        StringBuilder header = new StringBuilder();
+
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
-            dateAndAuthor += android.text.format.DateFormat.getDateFormat(this).format(publishedAt)
-                    + " " + android.text.format.DateFormat.getTimeFormat(this).format(publishedAt);
-        }
-        if (!TextUtils.isEmpty(article.getAuthors())) {
-            dateAndAuthor += " " + article.getAuthors();
+            header.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
+                    .append(' ')
+                    .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));
         }
 
-        return String.format(htmlBase, cssName, classAttr, TextUtils.htmlEncode(articleTitle),
-                articleUrl, articleDomain, dateAndAuthor, htmlContent);
+        if (!TextUtils.isEmpty(article.getAuthors())) {
+            header.append(' ');
+            header.append(escapeHtml(article.getAuthors()));
+        }
+
+        header.append("<br>\n");
+
+        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
+        header.append(escapeHtml(getString(R.string.content_estimatedReadingTime,
+                estimatedReadingTime > 0 ? estimatedReadingTime : "< 1")));
+
+        if (settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
+            header.append("<br>\n");
+            header.append("<img src=\"")
+                    .append(escapeHtml(article.getPreviewPictureURL()))
+                    .append("\"/>");
+        }
+
+        String headerString = header.toString();
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
+
+        return doImageUrlReplacements(headerString);
     }
 
     private String getHtmlContent() {
         String htmlContent = article.getContent();
 
-        int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
-        String estimatedReadingTimeString = getString(R.string.content_estimatedReadingTime,
-                estimatedReadingTime > 0 ? estimatedReadingTime : "&lt; 1");
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
-        String previewPicture = "";
-        if(settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
-            previewPicture = "<br><img src=\"" + article.getPreviewPictureURL() + "\"/>";
+        return doImageUrlReplacements(htmlContent);
+    }
+
+    private String doImageUrlReplacements(String content) {
+        if (settings.isImageCacheEnabled()) {
+            Log.d(TAG, "doImageUrlReplacements() replacing image links to cached versions");
+            content = ImageCacheUtils.replaceImagesInHtmlContent(
+                    content, article.getArticleId().longValue());
         }
 
-        htmlContent = estimatedReadingTimeString + previewPicture + htmlContent;
-        if(BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
-
-        if(settings.isImageCacheEnabled()) {
-            Log.d(TAG, "getHtmlContent() replacing image links to cached versions in htmlContent");
-            htmlContent = ImageCacheUtils.replaceImagesInHtmlContent(
-                    htmlContent, article.getArticleId().longValue());
-        }
-
-        return htmlContent;
+        return ImageCacheUtils.replaceWallabagRelativeImgUrls(content);
     }
 
     private void initButtons() {

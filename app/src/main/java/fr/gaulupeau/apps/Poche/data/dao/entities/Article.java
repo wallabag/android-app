@@ -1,12 +1,14 @@
 package fr.gaulupeau.apps.Poche.data.dao.entities;
 
-import org.greenrobot.greendao.annotation.*;
-
 import java.util.Date;
 import java.util.List;
+
+import org.greenrobot.greendao.annotation.*;
 import org.greenrobot.greendao.DaoException;
+
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 
@@ -67,6 +69,9 @@ public class Article {
             targetProperty = "tagId"
     )
     private List<Tag> tags;
+
+    @ToMany(referencedJoinProperty = "articleId")
+    private List<Annotation> annotations;
 
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -382,6 +387,48 @@ public class Article {
     public void __setDaoSession(DaoSession daoSession) {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getArticleDao() : null;
+    }
+
+    /**
+     * To-many relationship, resolved on first access (and after reset).
+     * Changes to to-many relations are not persisted, make changes to the target entity.
+     */
+    @Generated(hash = 1777328383)
+    public List<Annotation> getAnnotations() {
+        if (annotations == null) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            AnnotationDao targetDao = daoSession.getAnnotationDao();
+            List<Annotation> annotationsNew = targetDao._queryArticle_Annotations(id);
+            synchronized (this) {
+                if (annotations == null) {
+                    annotations = annotationsNew;
+                }
+            }
+        }
+        return annotations;
+    }
+
+    public void setAnnotations(List<Annotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    /** Resets a to-many relationship, making the next get call to query for a fresh result. */
+    @Generated(hash = 2105118966)
+    public synchronized void resetAnnotations() {
+        annotations = null;
+    }
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", articleId=" + articleId +
+                ", title='" + title + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 
 }

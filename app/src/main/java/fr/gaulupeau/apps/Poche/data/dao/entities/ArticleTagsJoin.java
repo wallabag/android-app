@@ -4,6 +4,11 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.query.QueryBuilder;
+
+import java.util.Collection;
+
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 
 @Entity
 public class ArticleTagsJoin {
@@ -48,6 +53,11 @@ public class ArticleTagsJoin {
 
     public void setArticleId(Long articleId) {
         this.articleId = articleId;
+    }
+
+    public static QueryBuilder<ArticleTagsJoin> getTagsJoinByArticleQueryBuilder(
+            Collection<Long> articleIds, ArticleTagsJoinDao dao) {
+        return dao.queryBuilder().where(ArticleTagsJoinDao.Properties.ArticleId.in(articleIds));
     }
 
 }

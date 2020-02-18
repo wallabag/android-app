@@ -127,6 +127,21 @@ public class ImageCacheUtils {
         return source.toString();
     }
 
+    public static String replaceWallabagRelativeImgUrls(String content) {
+        List<String> imgURLs = findImageUrlsInHtml(content);
+        if (!imgURLs.isEmpty()) {
+            String wbgURL = getWallabagUrl();
+            for (String imageURL : imgURLs) {
+                if (imageURL.startsWith(WALLABAG_RELATIVE_URL_PATH)) {
+                    content = content.replace(imageURL, wbgURL + imageURL);
+                    Log.d(TAG, "replaceWallabagRelativeImgUrls() prefixing wallabag server URL "
+                            + wbgURL + " to the image path " + imageURL);
+                }
+            }
+        }
+        return content;
+    }
+
     public static boolean cacheImages(long articleId, String articleContent) {
         Log.d(TAG, "cacheImages: articleId=" + articleId + " and is articleContent empty="
                 + (articleContent == null || articleContent.isEmpty()));

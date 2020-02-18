@@ -12,6 +12,8 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
+import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -27,7 +29,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
 
     private final Context context;
 
-    public WallabagDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
+    WallabagDbOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory) {
         super(context, name, factory);
         this.context = context;
     }
@@ -45,7 +47,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 105) {
+        if (oldVersion >= 101 && newVersion <= 106) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -103,6 +105,13 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                             " from " + FtsDao.VIEW_FOR_FTS_NAME);
                 }
 
+                if (oldVersion < 106) {
+                    Log.i(TAG, "Migration to version " + 106);
+
+                    AnnotationDao.createTable(db, false);
+                    AnnotationRangeDao.createTable(db, false);
+                }
+
                 migrationDone = true;
             } catch (Exception e) {
                 Log.e(TAG, "Migration error", e);
@@ -117,22 +126,16 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
 
         List<String> offlineUrls = null;
         if(oldVersion >= 2) {
-            Cursor c = null;
-            try {
-                c = db.rawQuery(oldVersion == 2
-                        ? "select url from offline_url order by _id"
-                        : "select extra from QUEUE_ITEM where action = 1 order by _id", null);
+            try (Cursor c = db.rawQuery(oldVersion == 2
+                    ? "select url from offline_url order by _id"
+                    : "select extra from QUEUE_ITEM where action = 1 order by _id", null)) {
 
                 offlineUrls = new ArrayList<>();
-                while(c.moveToNext()) {
-                    if(!c.isNull(0)) offlineUrls.add(c.getString(0));
+                while (c.moveToNext()) {
+                    if (!c.isNull(0)) offlineUrls.add(c.getString(0));
                 }
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.w(TAG, "Exception while migrating from version " + oldVersion, e);
-            } finally {
-                if(c != null) {
-                    c.close();
-                }
             }
         }
 
