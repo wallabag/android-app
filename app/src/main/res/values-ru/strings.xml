@@ -292,4 +292,19 @@
     <string name="copiedToClipboard">Скопировано в буфер обмена</string>
     <string name="connectionWizard_misc_scanQrCode">Сканировать QR-код</string>
     <string name="connectionWizard_misc_installQrCodeScanner">Пожалуйста, установите сканер QR-кодов</string>
+    <string name="pref_categoryName_misc_localQueue">Локальные изменения</string>
+    <string name="pref_name_misc_localQueue_notice">ПРЕДУПРЕЖДЕНИЕ</string>
+    <string name="pref_desc_misc_localQueue_notice">Не делайте здесь ничего, если вы не знаете, что делаете</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Сохранить в файл</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Сохраняет все локальные изменения в txt файл (вы можете изучить его самостоятельно или прикрепить к отчёту об ошибке)</string>
+    <string name="pref_name_misc_localQueue_removeFirstItem">Удалить первый элемент локальной очереди</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Удаляет первый не синхронизированный элемент. Может помочь, если вы получаете повторяющиеся уведомления об ошибке во время синхронизации. Не забудьте сначала сохранить локальные изменения в файл</string>
+    <string name="misc_localQueue_empty">Локальных изменений нет</string>
+    <string name="misc_localQueue_removeFirstItem_done">Готово</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Сохранено в %s</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Ошибка: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Если у вас возникли проблемы с синхронизацией, пожалуйста, сообщите о проблеме здесь: %s</string>
+    <string name="pref_name_ui_annotations_enabled">Поддержка аннотаций</string>
+    <string name="pref_desc_ui_annotations_enabled">Экспериментальная функция! Просмотр, редактирование и создание аннотаций</string>
+    <string name="menu_annotate">Комментировать</string>
 </resources>
