@@ -1,9 +1,9 @@
-- Basic search is replaced with full-text search (on article title and content). Full update is needed to index existing articles.
+- Basic search is replaced with full-text search. "Full update" is recommended.
+- Experimental annotations support (can be enabled in settings).
 - Minor list performance improvements.
 - Slightly improved sync.
 - Added ability to export local changes to deal with stuck sync.
 - Updated translations.
-- Updated dependencies.
 - Minor fixes and improvements.
 
 Fixes:
