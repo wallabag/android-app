@@ -232,15 +232,15 @@ public class QueueHelper {
         return queueChanged;
     }
 
-    public boolean addLink(String link) {
-        Log.d(TAG, String.format("addLink(\"%s\") started", link));
+    public boolean addLink(String link, String origin) {
+        Log.d(TAG, String.format("addLink(\"%s\", \"%s\") started", link, origin));
 
         boolean cancel = queueItemDao.queryBuilder()
                 .where(QueueItemDao.Properties.Action.eq(Action.ADD_LINK.getId()),
                         QueueItemDao.Properties.Extra.eq(link)).count() != 0;
 
         if(!cancel) {
-            enqueueAddLink(link);
+            enqueueAddLink(link, origin);
         } else {
             Log.d(TAG, "addLink() the link is already in queue");
         }
@@ -282,12 +282,13 @@ public class QueueHelper {
         Log.d(TAG, "enqueueDeleteArticle() finished");
     }
 
-    private void enqueueAddLink(String link) {
-        Log.d(TAG, String.format("enqueueAddLink(%s) started", link));
+    private void enqueueAddLink(String link, String origin) {
+        Log.d(TAG, String.format("enqueueAddLink(%s, %s) started", link, origin));
 
         QueueItem item = new QueueItem();
         item.setAction(Action.ADD_LINK);
         item.setExtra(link);
+        item.setExtra2(origin);
 
         enqueue(item);
 

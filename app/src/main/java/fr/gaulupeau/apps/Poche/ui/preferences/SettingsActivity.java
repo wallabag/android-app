@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -554,13 +553,15 @@ public class SettingsActivity extends BaseActionBarActivity {
             sb.append("id").append(delim)
                     .append("action").append(delim)
                     .append("articleId").append(delim)
-                    .append("extra").append(nl);
+                    .append("extra").append(delim)
+                    .append("extra2").append(nl);
 
             for (QueueItem item : items) {
                 sb.append(item.getId()).append(delim)
                         .append(item.getAction()).append(delim)
                         .append(item.getArticleId()).append(delim)
-                        .append(item.getExtra()).append(nl);
+                        .append(item.getExtra()).append(delim)
+                        .append(item.getExtra2()).append(nl);
             }
 
             return sb.toString();

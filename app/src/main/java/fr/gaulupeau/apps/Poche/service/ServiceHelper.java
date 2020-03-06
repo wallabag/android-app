@@ -21,11 +21,16 @@ public class ServiceHelper {
         addLink(context, link, null);
     }
 
-    private static void addLink(Context context, String link, Long operationID) {
+    public static void addLink(Context context, String link, String origin) {
+        addLink(context, link, origin, null);
+    }
+
+    private static void addLink(Context context, String link, String origin, Long operationID) {
         Log.d(TAG, "addLink() started");
 
         ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
         request.setExtra(link);
+        request.setExtra2(origin);
         request.setOperationID(operationID);
 
         startService(context, request);

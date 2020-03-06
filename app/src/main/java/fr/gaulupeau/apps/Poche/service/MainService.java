@@ -136,8 +136,10 @@ public class MainService extends IntentServiceBase {
     }
 
     private Long serveSimpleRequest(ActionRequest actionRequest) {
-        Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s, link: %s",
-                actionRequest.getAction(), actionRequest.getArticleID(), actionRequest.getExtra()));
+        Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s" +
+                        ", extra: %s, extra2: %s",
+                actionRequest.getAction(), actionRequest.getArticleID(),
+                actionRequest.getExtra(), actionRequest.getExtra2()));
 
         Long queueChangedLength = null;
 
@@ -191,7 +193,7 @@ public class MainService extends IntentServiceBase {
                     break;
 
                 case ADD_LINK:
-                    if(queueHelper.addLink(actionRequest.getExtra())) {
+                    if(queueHelper.addLink(actionRequest.getExtra(), actionRequest.getExtra2())) {
                         queueChangedLength = queueHelper.getQueueLength();
                     }
                     break;
@@ -277,9 +279,15 @@ public class MainService extends IntentServiceBase {
                         canTolerateNotFound = false;
 
                         String link = item.getExtra();
-                        Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link);
+                        String origin = item.getExtra2();
+                        Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link
+                                + ", origin=" + origin);
+
                         if(!TextUtils.isEmpty(link)) {
-                            getWallabagService().addArticle(link);
+                            getWallabagService()
+                                    .addArticleBuilder(link)
+                                    .originUrl(origin)
+                                    .execute();
                             urlUploaded = true;
                         } else {
                             Log.w(TAG, "syncOfflineQueue() action is ADD_LINK, but item has no link; skipping");
