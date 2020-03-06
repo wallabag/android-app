@@ -30,6 +30,7 @@ public class ActionRequest implements Parcelable {
     private Integer articleID;
     private QueueItem.ArticleChangeType articleChangeType;
     private String extra;
+    private String extra2;
     private Updater.UpdateType updateType;
     private WallabagService.ResponseFormat downloadFormat;
 
@@ -91,6 +92,14 @@ public class ActionRequest implements Parcelable {
         this.extra = extra;
     }
 
+    public String getExtra2() {
+        return extra2;
+    }
+
+    public void setExtra2(String extra2) {
+        this.extra2 = extra2;
+    }
+
     public Updater.UpdateType getUpdateType() {
         return updateType;
     }
@@ -131,6 +140,7 @@ public class ActionRequest implements Parcelable {
         writeInteger(articleID, out);
         writeInteger(articleChangeType != null ? articleChangeType.ordinal() : null, out);
         writeString(extra, out);
+        writeString(extra2, out);
         writeInteger(updateType != null ? updateType.ordinal() : null, out);
         writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
         out.writeParcelable(nextRequest, 0);
@@ -147,6 +157,7 @@ public class ActionRequest implements Parcelable {
             articleChangeType = QueueItem.ArticleChangeType.values()[articleChangeTypeInteger];
         }
         extra = readString(in);
+        extra2 = readString(in);
         Integer feedUpdateUpdateTypeInteger = readInteger(in);
         if(feedUpdateUpdateTypeInteger != null) {
             updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];

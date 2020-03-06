@@ -75,6 +75,7 @@ public class QueueItem {
 
     private Integer articleId;
     private String extra;
+    private String extra2;
 
     @Generated(hash = 1112811270)
     public QueueItem() {}
@@ -83,14 +84,15 @@ public class QueueItem {
         this.id = id;
     }
 
-    @Generated(hash = 1681630945)
+    @Generated(hash = 1707604388)
     public QueueItem(Long id, Long queueNumber, QueueItem.Action action, Integer articleId,
-                     String extra) {
+                     String extra, String extra2) {
         this.id = id;
         this.queueNumber = queueNumber;
         this.action = action;
         this.articleId = articleId;
         this.extra = extra;
+        this.extra2 = extra2;
     }
 
     public Long getId() {
@@ -133,6 +135,14 @@ public class QueueItem {
         this.extra = extra;
     }
 
+    public String getExtra2() {
+        return extra2;
+    }
+
+    public void setExtra2(String extra2) {
+        this.extra2 = extra2;
+    }
+
     public static class ActionConverter implements PropertyConverter<Action, Integer> {
 
         @Override
@@ -163,6 +173,7 @@ public class QueueItem {
                 ", action=" + action +
                 ", articleId=" + articleId +
                 ", extra='" + extra + '\'' +
+                ", extra2='" + extra2 + '\'' +
                 '}';
     }
 
