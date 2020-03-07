@@ -10,6 +10,8 @@ import java.util.Iterator;
 
 /**
  * Entity mapped to table "QUEUE_ITEM".
+ * <p>Avoid using fields of this class directly - prefer action-specific classes
+ * available via {@link #asSpecificItem()}.
  */
 @Entity
 public class QueueItem {
@@ -80,8 +82,8 @@ public class QueueItem {
     @Generated(hash = 1112811270)
     public QueueItem() {}
 
-    public QueueItem(Long id) {
-        this.id = id;
+    public QueueItem(QueueItem.Action action) {
+        this.action = action;
     }
 
     @Generated(hash = 1707604388)
@@ -93,6 +95,34 @@ public class QueueItem {
         this.articleId = articleId;
         this.extra = extra;
         this.extra2 = extra2;
+    }
+
+    public <T extends SpecificItem> T asSpecificItem() {
+        @SuppressWarnings("unchecked") // cast will fail for incorrect type, but it is desired
+        T item = (T) getView();
+        return item;
+    }
+
+    private SpecificItem getView() {
+        if (action == null) throw new RuntimeException("action is not set!");
+
+        switch (action) {
+            case ADD_LINK:
+                return new AddLinkItem(this);
+            case ARTICLE_DELETE:
+                return new ArticleDeleteItem(this);
+            case ARTICLE_CHANGE:
+                return new ArticleChangeItem(this);
+            case ARTICLE_TAGS_DELETE:
+                return new ArticleTagsDeleteItem(this);
+            case ANNOTATION_ADD:
+            case ANNOTATION_UPDATE:
+                return new AddOrUpdateAnnotationItem(this);
+            case ANNOTATION_DELETE:
+                return new DeleteAnnotationItem(this);
+            default:
+                throw new RuntimeException("Not implemented for action=" + action);
+        }
     }
 
     public Long getId() {
