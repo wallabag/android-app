@@ -7,10 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
-import wallabag.apiwrapper.ModifyArticleBuilder;
-import wallabag.apiwrapper.WallabagService;
-import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +19,13 @@ import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.AnnotationRange;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
-import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
+import fr.gaulupeau.apps.Poche.data.dao.entities.AddLinkItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.AddOrUpdateAnnotationItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleChangeItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsDeleteItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.DeleteAnnotationItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
 import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
@@ -41,6 +42,10 @@ import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+
+import wallabag.apiwrapper.ModifyArticleBuilder;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
@@ -247,30 +252,29 @@ public class MainService extends IntentServiceBase {
 
             ActionResult itemResult = null;
             try {
-                QueueItem.Action action = item.getAction();
-                switch(action) {
+                switch (item.getAction()) {
                     case ARTICLE_CHANGE:
-                        itemResult = syncArticleChange(item, articleID);
+                        itemResult = syncArticleChange(item.asSpecificItem(), articleID);
                         break;
 
                     case ARTICLE_TAGS_DELETE:
-                        itemResult = syncDeleteTagsFromArticle(item, articleID);
+                        itemResult = syncDeleteTagsFromArticle(item.asSpecificItem(), articleID);
                         break;
 
                     case ANNOTATION_ADD:
-                        itemResult = syncAddAnnotationToArticle(item, articleID);
+                        itemResult = syncAddAnnotationToArticle(item.asSpecificItem(), articleID);
                         break;
 
                     case ANNOTATION_UPDATE:
-                        itemResult = syncUpdateAnnotationOnArticle(item, articleID);
+                        itemResult = syncUpdateAnnotationOnArticle(item.asSpecificItem(), articleID);
                         break;
 
                     case ANNOTATION_DELETE:
-                        itemResult = syncDeleteAnnotationFromArticle(item, articleID);
+                        itemResult = syncDeleteAnnotationFromArticle(item.asSpecificItem(), articleID);
                         break;
 
                     case ARTICLE_DELETE:
-                        if(!getWallabagService().deleteArticle(articleID)) {
+                        if (!getWallabagService().deleteArticle(articleID)) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
@@ -278,12 +282,13 @@ public class MainService extends IntentServiceBase {
                     case ADD_LINK: {
                         canTolerateNotFound = false;
 
-                        String link = item.getExtra();
-                        String origin = item.getExtra2();
+                        AddLinkItem addLinkItem = item.asSpecificItem();
+                        String link = addLinkItem.getUrl();
+                        String origin = addLinkItem.getOrigin();
                         Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link
                                 + ", origin=" + origin);
 
-                        if(!TextUtils.isEmpty(link)) {
+                        if (!TextUtils.isEmpty(link)) {
                             getWallabagService()
                                     .addArticleBuilder(link)
                                     .originUrl(origin)
@@ -296,7 +301,7 @@ public class MainService extends IntentServiceBase {
                     }
 
                     default:
-                        throw new IllegalArgumentException("Unknown action: " + action);
+                        throw new IllegalArgumentException("Unknown action: " + item.getAction());
                 }
             } catch(IncorrectConfigurationException | UnsuccessfulResponseException
                     | IOException | IllegalArgumentException e) {
@@ -371,12 +376,12 @@ public class MainService extends IntentServiceBase {
         return new Pair<>(result, queueLength);
     }
 
-    private ActionResult syncArticleChange(QueueItem item, int articleID)
+    private ActionResult syncArticleChange(ArticleChangeItem item, int articleID)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
         Article article = getDaoSession().getArticleDao().queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.eq(articleID)).unique();
 
-        if(article == null) {
+        if (article == null) {
             return new ActionResult(ActionResult.ErrorType.NOT_FOUND_LOCALLY,
                     "Article is not found locally");
         }
@@ -386,9 +391,8 @@ public class MainService extends IntentServiceBase {
 
         boolean changed = false;
 
-        for(QueueItem.ArticleChangeType changeType:
-                QueueItem.ArticleChangeType.stringToEnumSet(item.getExtra())) {
-            switch(changeType) {
+        for (QueueItem.ArticleChangeType changeType : item.getArticleChanges()) {
+            switch (changeType) {
                 case ARCHIVE:
                     builder.archive(Boolean.TRUE.equals(article.getArchive()));
                     changed = true;
@@ -406,7 +410,7 @@ public class MainService extends IntentServiceBase {
 
                 case TAGS:
                     // all tags are pushed
-                    for(Tag tag: article.getTags()) {
+                    for (Tag tag : article.getTags()) {
                         builder.tag(tag.getLabel());
                         changed = true;
                     }
@@ -423,21 +427,21 @@ public class MainService extends IntentServiceBase {
             Log.w(TAG, "syncArticleChange() no changes to send is item " + item.toString());
         }
 
-        if(changed && builder.execute() == null) {
+        if (changed && builder.execute() == null) {
             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
         }
 
         return itemResult;
     }
 
-    private ActionResult syncDeleteTagsFromArticle(QueueItem item, int articleID)
+    private ActionResult syncDeleteTagsFromArticle(ArticleTagsDeleteItem item, int articleID)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
         WallabagService wallabagService = getWallabagService();
 
         ActionResult itemResult = null;
 
-        for(String tag: item.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER)) {
-            if(wallabagService.deleteTag(articleID, Integer.parseInt(tag)) == null
+        for (String tag : item.getTagIds()) {
+            if (wallabagService.deleteTag(articleID, Integer.parseInt(tag)) == null
                     && itemResult == null) {
                 itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
             }
@@ -446,11 +450,11 @@ public class MainService extends IntentServiceBase {
         return itemResult;
     }
 
-    private ActionResult syncAddAnnotationToArticle(QueueItem item, int articleId)
+    private ActionResult syncAddAnnotationToArticle(AddOrUpdateAnnotationItem item, int articleId)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
         AnnotationDao annotationDao = getDaoSession().getAnnotationDao();
         Annotation annotation = annotationDao.queryBuilder()
-                .where(AnnotationDao.Properties.Id.eq(Long.parseLong(item.getExtra()))).unique();
+                .where(AnnotationDao.Properties.Id.eq(item.getLocalAnnotationId())).unique();
 
         if (annotation == null) {
             return new ActionResult(ActionResult.ErrorType.NOT_FOUND_LOCALLY,
@@ -491,10 +495,10 @@ public class MainService extends IntentServiceBase {
         return null;
     }
 
-    private ActionResult syncUpdateAnnotationOnArticle(QueueItem item, int articleId)
+    private ActionResult syncUpdateAnnotationOnArticle(AddOrUpdateAnnotationItem item, int articleId)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
         Annotation annotation = getDaoSession().getAnnotationDao().queryBuilder()
-                .where(AnnotationDao.Properties.Id.eq(Long.parseLong(item.getExtra()))).unique();
+                .where(AnnotationDao.Properties.Id.eq(item.getLocalAnnotationId())).unique();
 
         if (annotation == null) {
             return new ActionResult(ActionResult.ErrorType.NOT_FOUND_LOCALLY,
@@ -516,11 +520,11 @@ public class MainService extends IntentServiceBase {
         return null;
     }
 
-    private ActionResult syncDeleteAnnotationFromArticle(QueueItem item, int articleId)
+    private ActionResult syncDeleteAnnotationFromArticle(DeleteAnnotationItem item, int articleId)
             throws IncorrectConfigurationException, UnsuccessfulResponseException, IOException {
-        if (getWallabagService().deleteAnnotation(Integer.parseInt(item.getExtra())) == null) {
-            Log.w(TAG, String.format("Couldn't remove annotationId %s from article %d",
-                    item.getExtra(), articleId));
+        if (getWallabagService().deleteAnnotation(item.getRemoteAnnotationId()) == null) {
+            Log.w(TAG, String.format("Couldn't remove annotationId %d from article %d",
+                    item.getRemoteAnnotationId(), articleId));
             return new ActionResult(ActionResult.ErrorType.NOT_FOUND);
         }
 
