@@ -152,6 +152,10 @@
             android:name="fr.gaulupeau.apps.Poche.service.SecondaryService"
             android:exported="false" />
 
+        <service
+            android:name="fr.gaulupeau.apps.Poche.service.TaskService"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

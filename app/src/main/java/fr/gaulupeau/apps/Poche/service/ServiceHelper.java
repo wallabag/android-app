@@ -1,17 +1,23 @@
 package fr.gaulupeau.apps.Poche.service;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 
-import wallabag.apiwrapper.WallabagService;
+import androidx.core.util.Consumer;
 
 import java.util.Collection;
 
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
+
+import wallabag.apiwrapper.WallabagService;
 
 public class ServiceHelper {
 
@@ -248,6 +254,61 @@ public class ServiceHelper {
         intent.putExtra(ActionRequest.ACTION_REQUEST, request);
 
         context.startService(intent);
+    }
+
+    public static void enqueueSimpleServiceTask(Context context, ActionRequest request) {
+        Intent intent = TaskService.newSimpleTaskIntent(context);
+        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
+
+        context.startService(intent);
+    }
+
+    public static void enqueueServiceTask(Context context, TaskService.Task task,
+                                          Runnable postCallCallback) {
+        performBoundServiceCall(context, binder -> {
+            TaskService.TaskServiceBinder service = (TaskService.TaskServiceBinder) binder;
+            service.enqueueTask(task);
+        }, postCallCallback);
+    }
+
+    public static void performBoundServiceCall(Context context, Consumer<IBinder> action,
+                                               Runnable postCallCallback) {
+        Log.d(TAG, "performBoundServiceCall() started");
+
+        ServiceConnection serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                Log.d(TAG, "onServiceConnected() name=" + name);
+
+                try {
+                    Log.v(TAG, "onServiceConnected() executing action");
+                    action.accept(service);
+                    Log.v(TAG, "onServiceConnected() finished executing action");
+                } catch (Exception e) {
+                    Log.w(TAG, "onServiceConnected() exception", e);
+                    throw e; // ignore?
+                } finally {
+                    Log.v(TAG, "onServiceConnected() unbinding service");
+                    context.unbindService(this);
+                    Log.v(TAG, "onServiceConnected() posting postCallCallback");
+                    if (postCallCallback != null) {
+                        new Handler(context.getMainLooper()).post(postCallCallback);
+                    }
+                }
+                Log.v(TAG, "onServiceConnected() finished");
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                Log.d(TAG, "onServiceDisconnected() name=" + name);
+            }
+        };
+
+        Log.d(TAG, "performBoundServiceCall() binding service");
+        Intent serviceIntent = new Intent(context, TaskService.class);
+        context.bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        Log.d(TAG, "performBoundServiceCall() finished");
     }
 
 }
