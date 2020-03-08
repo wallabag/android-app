@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,76 +22,73 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
+import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
+import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueSimpleServiceTask;
 
 public class OperationsHelper {
 
     private static final String TAG = OperationsHelper.class.getSimpleName();
 
-    // we should not perform long/heavy operations on the main thread, hence verbosity
-    // TODO: remove excessive logging after tested
-    public static void archiveArticle(Context context, int articleID, boolean archive) {
-        Log.d(TAG, String.format("archiveArticle(%d, %s) started", articleID, archive));
+    public static void archiveArticle(Context context, int articleID, boolean archive,
+                                      Runnable postCallCallback) {
+        enqueueServiceTask(context,
+                ctx -> archiveArticleBG(ctx, articleID, archive),
+                postCallCallback);
+    }
 
-        long timestamp = SystemClock.elapsedRealtime();
+    private static void archiveArticleBG(Context context, int articleID, boolean archive) {
+        Log.d(TAG, String.format("archiveArticleBG(%d, %s) started", articleID, archive));
 
-        Log.v(TAG, "archiveArticle() before getArticleDao()");
         ArticleDao articleDao = getArticleDao();
-        Log.v(TAG, "archiveArticle() after getArticleDao()");
 
-        Log.v(TAG, "archiveArticle() before getArticle()");
         Article article = getArticle(articleID, articleDao);
-        Log.v(TAG, "archiveArticle() after getArticle()");
-        if(article == null) {
-            Log.w(TAG, "archiveArticle() article was not found");
+        if (article == null) {
+            Log.w(TAG, "archiveArticleBG() article was not found");
             return; // not an error?
         }
 
-        Log.v(TAG, "archiveArticle() before local changes");
-        if(article.getArchive() != archive) {
+        if (article.getArchive() != archive) {
             article.setArchive(archive);
-            Log.v(TAG, "archiveArticle() before getArticleDao().update()");
             articleDao.update(article);
-            Log.v(TAG, "archiveArticle() after getArticleDao().update()");
 
             ArticlesChangedEvent.ChangeType changeType = archive
                     ? ArticlesChangedEvent.ChangeType.ARCHIVED
                     : ArticlesChangedEvent.ChangeType.UNARCHIVED;
 
-            Log.v(TAG, "archiveArticle() before notifyAboutArticleChange()");
             notifyAboutArticleChange(article, changeType);
-            Log.v(TAG, "archiveArticle() after notifyAboutArticleChange()");
 
-            Log.d(TAG, "archiveArticle() article object updated");
+            Log.d(TAG, "archiveArticleBG() article object updated");
         } else {
-            Log.d(TAG, "archiveArticle(): article state was not changed");
+            Log.d(TAG, "archiveArticleBG(): article state was not changed");
 
             // do we need to continue with the sync part? Probably yes
         }
-        Log.v(TAG, "archiveArticle() after local changes");
-
-        Log.d(TAG, "archiveArticle() local changes took (ms): "
-                + (SystemClock.elapsedRealtime() - timestamp));
 
         ServiceHelper.archiveArticle(context, articleID);
 
-        Log.d(TAG, "archiveArticle() finished");
+        Log.d(TAG, "archiveArticleBG() finished");
     }
 
     public static void favoriteArticle(Context context, int articleID, boolean favorite) {
-        Log.d(TAG, String.format("favoriteArticle(%d, %s) started", articleID, favorite));
+        enqueueServiceTask(context, ctx -> favoriteArticleBG(ctx, articleID, favorite), null);
+    }
+
+    private static void favoriteArticleBG(Context context, int articleID, boolean favorite) {
+        Log.d(TAG, String.format("favoriteArticleBG(%d, %s) started", articleID, favorite));
 
         ArticleDao articleDao = getArticleDao();
 
         Article article = getArticle(articleID, articleDao);
-        if(article == null) {
-            Log.w(TAG, "favoriteArticle() article was not found");
+        if (article == null) {
+            Log.w(TAG, "favoriteArticleBG() article was not found");
             return; // not an error?
         }
 
-        if(article.getFavorite() != favorite) {
+        if (article.getFavorite() != favorite) {
             article.setFavorite(favorite);
             articleDao.update(article);
 
@@ -102,26 +98,30 @@ public class OperationsHelper {
 
             notifyAboutArticleChange(article, changeType);
 
-            Log.d(TAG, "favoriteArticle() article object updated");
+            Log.d(TAG, "favoriteArticleBG() article object updated");
         } else {
-            Log.d(TAG, "favoriteArticle(): article state was not changed");
+            Log.d(TAG, "favoriteArticleBG(): article state was not changed");
 
-            // TODO: do we need to continue with the sync part? Probably yes
+            // do we need to continue with the sync part? Probably yes
         }
 
         ServiceHelper.favoriteArticle(context, articleID);
 
-        Log.d(TAG, "archiveArticle() finished");
+        Log.d(TAG, "favoriteArticleBG() finished");
     }
 
     public static void changeArticleTitle(Context context, int articleID, String title) {
-        Log.d(TAG, String.format("changeArticleTitle(%d, %s) started", articleID, title));
+        enqueueServiceTask(context, ctx -> changeArticleTitleBG(ctx, articleID, title), null);
+    }
+
+    private static void changeArticleTitleBG(Context context, int articleID, String title) {
+        Log.d(TAG, String.format("changeArticleTitleBG(%d, %s) started", articleID, title));
 
         ArticleDao articleDao = getArticleDao();
 
         Article article = getArticle(articleID, articleDao);
-        if(article == null) {
-            Log.w(TAG, "changeArticleTitle() article was not found");
+        if (article == null) {
+            Log.w(TAG, "changeArticleTitleBG() article was not found");
             return; // not an error?
         }
 
@@ -132,28 +132,43 @@ public class OperationsHelper {
 
         ServiceHelper.changeArticleTitle(context, article.getArticleId());
 
-        Log.d(TAG, "changeArticleTitle() finished");
+        Log.d(TAG, "changeArticleTitleBG() finished");
     }
 
     public static void setArticleProgress(Context context, int articleID, double progress) {
-        Log.d(TAG, String.format("setArticleProgress(%d, %g) started", articleID, progress));
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SET_ARTICLE_PROGRESS);
+        request.setArticleID(articleID);
+        request.setExtra(String.valueOf(progress));
+
+        enqueueSimpleServiceTask(context, request);
+    }
+
+    public static void setArticleProgressBG(Context context, int articleID, double progress) {
+        Log.d(TAG, String.format("changeArticleTitleBG(%d, %g) started", articleID, progress));
 
         ArticleDao articleDao = getArticleDao();
 
         Article article = getArticle(articleID, articleDao);
-        if(article == null) {
-            Log.w(TAG, "setArticleProgress() article was not found");
+        if (article == null) {
+            Log.w(TAG, "changeArticleTitleBG() article was not found");
             return; // not an error?
         }
 
         article.setArticleProgress(progress);
         articleDao.update(article);
 
-        Log.d(TAG, "setArticleProgress() finished");
+        Log.d(TAG, "changeArticleTitleBG() finished");
     }
 
-    public static void setArticleTags(Context context, int articleID, List<Tag> newTags) {
-        Log.d(TAG, String.format("setArticleTags(%d, %s) started", articleID, newTags));
+    public static void setArticleTags(Context context, int articleID, List<Tag> newTags,
+                                      Runnable postCallCallback) {
+        enqueueServiceTask(context,
+                ctx -> setArticleTagsBG(ctx, articleID, newTags),
+                postCallCallback);
+    }
+
+    private static void setArticleTagsBG(Context context, int articleID, List<Tag> newTags) {
+        Log.d(TAG, String.format("setArticleTagsBG(%d, %s) started", articleID, newTags));
 
         boolean tagsChanged = false;
 
@@ -162,8 +177,8 @@ public class OperationsHelper {
         TagDao tagDao = DbConnection.getSession().getTagDao();
         ArticleTagsJoinDao joinDao = DbConnection.getSession().getArticleTagsJoinDao();
 
-        if(article == null) {
-            Log.w(TAG, "setArticleTags() article was not found");
+        if (article == null) {
+            Log.w(TAG, "setArticleTagsBG() article was not found");
             return; // not an error?
         }
 
@@ -176,20 +191,20 @@ public class OperationsHelper {
         List<Long> joinsToDelete = new ArrayList<>();
         List<ArticleTagsJoin> joinsToCreate = new ArrayList<>();
 
-        if(!currentTags.isEmpty()) {
+        if (!currentTags.isEmpty()) {
             List<Tag> tagsToRemove = new ArrayList<>();
 
-            for(Tag oldTag: currentTags) {
+            for (Tag oldTag : currentTags) {
                 Tag newTag = null;
-                for(Tag t: newTags) {
-                    if(TextUtils.equals(t.getLabel(), oldTag.getLabel())) {
+                for (Tag t : newTags) {
+                    if (TextUtils.equals(t.getLabel(), oldTag.getLabel())) {
                         newTag = t;
                         break;
                     }
                 }
 
-                if(newTag == null) {
-                    if(oldTag.getTagId() != null) tagsToDelete.add(oldTag.getTagId().toString());
+                if (newTag == null) {
+                    if (oldTag.getTagId() != null) tagsToDelete.add(oldTag.getTagId().toString());
                     tagsToRemove.add(oldTag);
                     joinsToDelete.add(oldTag.getId());
                 } else {
@@ -197,24 +212,24 @@ public class OperationsHelper {
                 }
             }
 
-            if(!tagsToRemove.isEmpty()) {
+            if (!tagsToRemove.isEmpty()) {
                 currentTags.removeAll(tagsToRemove);
             }
         }
 
-        if(!newTags.isEmpty()) {
+        if (!newTags.isEmpty()) {
             List<Tag> tags = tagDao.queryBuilder().list();
 
-            for(Tag tag: newTags) {
+            for (Tag tag : newTags) {
                 Tag existingTag = null;
-                for(Tag t: tags) {
-                    if(TextUtils.equals(t.getLabel(), tag.getLabel())) {
+                for (Tag t : tags) {
+                    if (TextUtils.equals(t.getLabel(), tag.getLabel())) {
                         existingTag = t;
                         break;
                     }
                 }
 
-                if(existingTag != null) {
+                if (existingTag != null) {
                     currentTags.add(existingTag);
                     joinsToCreate.add(new ArticleTagsJoin(
                             null, article.getId(), existingTag.getId()));
@@ -225,16 +240,16 @@ public class OperationsHelper {
             }
         }
 
-        if(!tagsToInsert.isEmpty()) {
+        if (!tagsToInsert.isEmpty()) {
             tagsChanged = true;
             tagDao.insertInTx(tagsToInsert);
 
-            for(Tag tag: tagsToInsert) {
+            for (Tag tag : tagsToInsert) {
                 joinsToCreate.add(new ArticleTagsJoin(null, article.getId(), tag.getId()));
             }
         }
 
-        if(!joinsToDelete.isEmpty()) {
+        if (!joinsToDelete.isEmpty()) {
             tagsChanged = true;
 
             List<ArticleTagsJoin> joins = joinDao.queryBuilder().where(
@@ -244,30 +259,34 @@ public class OperationsHelper {
             joinDao.deleteInTx(joins);
         }
 
-        if(!joinsToCreate.isEmpty()) {
+        if (!joinsToCreate.isEmpty()) {
             tagsChanged = true;
             joinDao.insertInTx(joinsToCreate, false);
         }
 
-        if(!tagsToDelete.isEmpty()) {
+        if (!tagsToDelete.isEmpty()) {
             tagsChanged = true;
 
-            Log.d(TAG, "setArticleTags() storing deleted tags to offline queue");
+            Log.d(TAG, "setArticleTagsBG() storing deleted tags to offline queue");
             ServiceHelper.deleteTagsFromArticle(context, articleID, tagsToDelete);
         }
 
-        if(tagsChanged) {
+        if (tagsChanged) {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
 
-            Log.d(TAG, "setArticleTags() storing tags change to offline queue");
+            Log.d(TAG, "setArticleTagsBG() storing tags change to offline queue");
             ServiceHelper.changeArticleTags(context, articleID);
         }
 
-        Log.d(TAG, "setArticleTags() finished");
+        Log.d(TAG, "setArticleTagsBG() finished");
     }
 
     public static void addAnnotation(Context context, int articleId, Annotation annotation) {
-        Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
+        enqueueServiceTask(context, ctx -> addAnnotationBG(ctx, articleId, annotation), null);
+    }
+
+    private static void addAnnotationBG(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("addAnnotationBG(%d, %s) started", articleId, annotation));
 
         Article article = getArticle(articleId, getArticleDao());
 
@@ -287,9 +306,9 @@ public class OperationsHelper {
                 DbConnection.getSession().getAnnotationRangeDao().insertInTx(ranges);
             }
 
-            Log.d(TAG, "addAnnotation() annotation object inserted");
+            Log.d(TAG, "addAnnotationBG() annotation object inserted");
         } else {
-            Log.d(TAG, "addAnnotation() annotation was already persisted");
+            Log.d(TAG, "addAnnotationBG() annotation was already persisted");
         }
 
         if (article != null) {
@@ -299,16 +318,20 @@ public class OperationsHelper {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
         }
 
-        Log.d(TAG, "addAnnotation() ID: " + annotationId);
+        Log.d(TAG, "addAnnotationBG() ID: " + annotationId);
         if (annotationId != null) {
             ServiceHelper.addAnnotationToArticle(context, articleId, annotationId);
         }
 
-        Log.d(TAG, "addAnnotation() finished");
+        Log.d(TAG, "addAnnotationBG() finished");
     }
 
     public static void updateAnnotation(Context context, int articleId, Annotation annotation) {
-        Log.d(TAG, String.format("updateAnnotation(%d, %s) started", articleId, annotation));
+        enqueueServiceTask(context, ctx -> updateAnnotationBG(ctx, articleId, annotation), null);
+    }
+
+    private static void updateAnnotationBG(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("updateAnnotationBG(%d, %s) started", articleId, annotation));
 
         Long annotationId = annotation.getId();
 
@@ -323,7 +346,7 @@ public class OperationsHelper {
                 .where(AnnotationDao.Properties.Id.eq(annotationId)).unique();
 
         if (TextUtils.equals(annotation.getText(), newText)) {
-            Log.w(TAG, "updateAnnotation() annotation ID=" + annotationId
+            Log.w(TAG, "updateAnnotationBG() annotation ID=" + annotationId
                     + " already has text=" + newText);
             return;
         }
@@ -331,21 +354,25 @@ public class OperationsHelper {
         annotation.setText(newText);
 
         annotationDao.update(annotation);
-        Log.d(TAG, "updateAnnotation() annotation object updated");
+        Log.d(TAG, "updateAnnotationBG() annotation object updated");
 
         Article article = getArticle(articleId, getArticleDao());
         if (article != null) {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
         }
 
-        Log.d(TAG, "updateAnnotation() ID: " + annotationId);
+        Log.d(TAG, "updateAnnotationBG() ID: " + annotationId);
         ServiceHelper.updateAnnotationOnArticle(context, articleId, annotationId);
 
-        Log.d(TAG, "updateAnnotation() finished");
+        Log.d(TAG, "updateAnnotationBG() finished");
     }
 
     public static void deleteAnnotation(Context context, int articleId, Annotation annotation) {
-        Log.d(TAG, String.format("deleteAnnotation(%d, %s) started", articleId, annotation));
+        enqueueServiceTask(context, ctx -> deleteAnnotationBG(ctx, articleId, annotation), null);
+    }
+
+    private static void deleteAnnotationBG(Context context, int articleId, Annotation annotation) {
+        Log.d(TAG, String.format("deleteAnnotationBG(%d, %s) started", articleId, annotation));
 
         Integer remoteId = annotation.getAnnotationId();
 
@@ -356,9 +383,9 @@ public class OperationsHelper {
             }
 
             DbConnection.getSession().getAnnotationDao().delete(annotation);
-            Log.d(TAG, "deleteAnnotation() annotation object deleted");
+            Log.d(TAG, "deleteAnnotationBG() annotation object deleted");
         } else {
-            Log.d(TAG, "deleteAnnotation() annotation was not persisted");
+            Log.d(TAG, "deleteAnnotationBG() annotation was not persisted");
         }
 
         Article article = getArticle(articleId, getArticleDao());
@@ -367,22 +394,26 @@ public class OperationsHelper {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED);
         }
 
-        Log.d(TAG, "deleteAnnotation() remote ID: " + remoteId);
+        Log.d(TAG, "deleteAnnotationBG() remote ID: " + remoteId);
         if (remoteId != null) {
             ServiceHelper.deleteAnnotationFromArticle(context, articleId, remoteId);
         }
 
-        Log.d(TAG, "deleteAnnotation() finished");
+        Log.d(TAG, "deleteAnnotationBG() finished");
     }
 
-    public static void deleteArticle(Context context, int articleID) {
-        Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
+    public static void deleteArticle(Context context, int articleID, Runnable postCallCallback) {
+        enqueueServiceTask(context, ctx -> deleteArticleBG(ctx, articleID), postCallCallback);
+    }
+
+    private static void deleteArticleBG(Context context, int articleID) {
+        Log.d(TAG, String.format("deleteArticleBG(%d) started", articleID));
 
         ArticleDao articleDao = getArticleDao();
 
         Article article = getArticle(articleID, articleDao);
-        if(article == null) {
-            Log.w(TAG, "deleteArticle() article was not found");
+        if (article == null) {
+            Log.w(TAG, "deleteArticleBG() article was not found");
             return; // not an error?
         }
 
@@ -411,11 +442,11 @@ public class OperationsHelper {
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.DELETED);
 
-        Log.d(TAG, "deleteArticle() article object deleted");
+        Log.d(TAG, "deleteArticleBG() article object deleted");
 
         ServiceHelper.deleteArticle(context, articleID);
 
-        Log.d(TAG, "deleteArticle() finished");
+        Log.d(TAG, "deleteArticleBG() finished");
     }
 
     public static void wipeDB(Settings settings) {
