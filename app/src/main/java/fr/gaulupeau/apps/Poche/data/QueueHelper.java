@@ -2,7 +2,6 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.util.Log;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.LinkedList;
@@ -47,7 +46,7 @@ public class QueueHelper {
         }
     }
 
-    public boolean changeArticle(int articleID, ArticleChangeType articleChangeType) {
+    boolean changeArticle(int articleID, ArticleChangeType articleChangeType) {
         Log.d(TAG, String.format("changeArticle(%d, %s) started", articleID, articleChangeType));
 
         ArticleChangeItem existingChangeItem = null;
@@ -99,8 +98,9 @@ public class QueueHelper {
         return queueChanged;
     }
 
-    public boolean deleteTagsFromArticle(int articleID, String tagsString) {
-        Log.d(TAG, String.format("deleteTagsFromArticle(%d, %s) started", articleID, tagsString));
+    boolean deleteTagsFromArticle(int articleID, Collection<String> tags) {
+        Log.d(TAG, String.format("deleteTagsFromArticle(%d, %s) started",
+                articleID, tags.toString()));
 
         ArticleTagsDeleteItem queueItem = null;
 
@@ -117,8 +117,6 @@ public class QueueHelper {
                     return false;
             }
         }
-
-        Collection<String> tags = Arrays.asList(tagsString.split(DELETED_TAGS_DELIMITER));
 
         if (queueItem != null) {
             Set<String> existingDeletedTags = queueItem.getTagIds();
@@ -144,7 +142,7 @@ public class QueueHelper {
         return true;
     }
 
-    public boolean addAnnotationToArticle(int articleId, long annotationId) {
+    boolean addAnnotationToArticle(int articleId, long annotationId) {
         Log.d(TAG, String.format("addAnnotationToArticle(%d, %d) started", articleId, annotationId));
 
         for (QueueItem item : getQueuedItemsForArticle(articleId)) {
@@ -167,7 +165,7 @@ public class QueueHelper {
         return true;
     }
 
-    public boolean updateAnnotationOnArticle(int articleId, long annotationId) {
+    boolean updateAnnotationOnArticle(int articleId, long annotationId) {
         Log.d(TAG, String.format("updateAnnotationOnArticle(%d, %d) started",
                 articleId, annotationId));
 
@@ -191,7 +189,7 @@ public class QueueHelper {
         return true;
     }
 
-    public boolean deleteAnnotationFromArticle(int articleId, int remoteAnnotationId) {
+    boolean deleteAnnotationFromArticle(int articleId, int remoteAnnotationId) {
         Log.d(TAG, String.format("deleteAnnotationFromArticle(%d, %d) started",
                 articleId, remoteAnnotationId));
 
@@ -224,7 +222,7 @@ public class QueueHelper {
         return true;
     }
 
-    public boolean deleteArticle(int articleID) {
+    boolean deleteArticle(int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
         boolean ignore = false;
@@ -269,7 +267,7 @@ public class QueueHelper {
         return queueChanged;
     }
 
-    public boolean addLink(String link, String origin) {
+    boolean addLink(String link, String origin) {
         Log.d(TAG, String.format("addLink(%s, %s) started", link, origin));
 
         boolean cancel = queueItemDao.queryBuilder()

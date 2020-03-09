@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -19,13 +20,15 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.AnnotationRange;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
+import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueSimpleServiceTask;
 
@@ -33,14 +36,30 @@ public class OperationsHelper {
 
     private static final String TAG = OperationsHelper.class.getSimpleName();
 
-    public static void archiveArticle(Context context, int articleID, boolean archive,
-                                      Runnable postCallCallback) {
-        enqueueServiceTask(context,
-                ctx -> archiveArticleBG(ctx, articleID, archive),
-                postCallCallback);
+    public static void addArticle(Context context, String url) {
+        addArticle(context, url, null);
     }
 
-    private static void archiveArticleBG(Context context, int articleID, boolean archive) {
+    public static void addArticle(Context context, String url, String originUrl) {
+        Log.d(TAG, "addArticle() started");
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
+        request.setExtra(url);
+        request.setExtra2(originUrl);
+
+        enqueueSimpleServiceTask(context, request);
+    }
+
+    public static void addArticleBG(String link, String origin) {
+        queueOfflineChange(queueHelper -> queueHelper.addLink(link, origin));
+    }
+
+    public static void archiveArticle(Context context, int articleID, boolean archive,
+                                      Runnable postCallCallback) {
+        enqueueServiceTask(context, ctx -> archiveArticleBG(articleID, archive), postCallCallback);
+    }
+
+    private static void archiveArticleBG(int articleID, boolean archive) {
         Log.d(TAG, String.format("archiveArticleBG(%d, %s) started", articleID, archive));
 
         ArticleDao articleDao = getArticleDao();
@@ -68,16 +87,16 @@ public class OperationsHelper {
             // do we need to continue with the sync part? Probably yes
         }
 
-        ServiceHelper.archiveArticle(context, articleID);
+        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.ARCHIVE);
 
         Log.d(TAG, "archiveArticleBG() finished");
     }
 
     public static void favoriteArticle(Context context, int articleID, boolean favorite) {
-        enqueueServiceTask(context, ctx -> favoriteArticleBG(ctx, articleID, favorite), null);
+        enqueueServiceTask(context, ctx -> favoriteArticleBG(articleID, favorite), null);
     }
 
-    private static void favoriteArticleBG(Context context, int articleID, boolean favorite) {
+    private static void favoriteArticleBG(int articleID, boolean favorite) {
         Log.d(TAG, String.format("favoriteArticleBG(%d, %s) started", articleID, favorite));
 
         ArticleDao articleDao = getArticleDao();
@@ -105,16 +124,16 @@ public class OperationsHelper {
             // do we need to continue with the sync part? Probably yes
         }
 
-        ServiceHelper.favoriteArticle(context, articleID);
+        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.FAVORITE);
 
         Log.d(TAG, "favoriteArticleBG() finished");
     }
 
     public static void changeArticleTitle(Context context, int articleID, String title) {
-        enqueueServiceTask(context, ctx -> changeArticleTitleBG(ctx, articleID, title), null);
+        enqueueServiceTask(context, ctx -> changeArticleTitleBG(articleID, title), null);
     }
 
-    private static void changeArticleTitleBG(Context context, int articleID, String title) {
+    private static void changeArticleTitleBG(int articleID, String title) {
         Log.d(TAG, String.format("changeArticleTitleBG(%d, %s) started", articleID, title));
 
         ArticleDao articleDao = getArticleDao();
@@ -130,7 +149,7 @@ public class OperationsHelper {
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TITLE_CHANGED);
 
-        ServiceHelper.changeArticleTitle(context, article.getArticleId());
+        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.TITLE);
 
         Log.d(TAG, "changeArticleTitleBG() finished");
     }
@@ -143,7 +162,7 @@ public class OperationsHelper {
         enqueueSimpleServiceTask(context, request);
     }
 
-    public static void setArticleProgressBG(Context context, int articleID, double progress) {
+    public static void setArticleProgressBG(int articleID, double progress) {
         Log.d(TAG, String.format("changeArticleTitleBG(%d, %g) started", articleID, progress));
 
         ArticleDao articleDao = getArticleDao();
@@ -162,12 +181,10 @@ public class OperationsHelper {
 
     public static void setArticleTags(Context context, int articleID, List<Tag> newTags,
                                       Runnable postCallCallback) {
-        enqueueServiceTask(context,
-                ctx -> setArticleTagsBG(ctx, articleID, newTags),
-                postCallCallback);
+        enqueueServiceTask(context, ctx -> setArticleTagsBG(articleID, newTags), postCallCallback);
     }
 
-    private static void setArticleTagsBG(Context context, int articleID, List<Tag> newTags) {
+    private static void setArticleTagsBG(int articleID, List<Tag> newTags) {
         Log.d(TAG, String.format("setArticleTagsBG(%d, %s) started", articleID, newTags));
 
         boolean tagsChanged = false;
@@ -268,24 +285,25 @@ public class OperationsHelper {
             tagsChanged = true;
 
             Log.d(TAG, "setArticleTagsBG() storing deleted tags to offline queue");
-            ServiceHelper.deleteTagsFromArticle(context, articleID, tagsToDelete);
+            queueOfflineChange(queueHelper
+                    -> queueHelper.deleteTagsFromArticle(articleID, tagsToDelete));
         }
 
         if (tagsChanged) {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
 
             Log.d(TAG, "setArticleTagsBG() storing tags change to offline queue");
-            ServiceHelper.changeArticleTags(context, articleID);
+            queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.TAGS);
         }
 
         Log.d(TAG, "setArticleTagsBG() finished");
     }
 
     public static void addAnnotation(Context context, int articleId, Annotation annotation) {
-        enqueueServiceTask(context, ctx -> addAnnotationBG(ctx, articleId, annotation), null);
+        enqueueServiceTask(context, ctx -> addAnnotationBG(articleId, annotation), null);
     }
 
-    private static void addAnnotationBG(Context context, int articleId, Annotation annotation) {
+    private static void addAnnotationBG(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("addAnnotationBG(%d, %s) started", articleId, annotation));
 
         Article article = getArticle(articleId, getArticleDao());
@@ -320,17 +338,19 @@ public class OperationsHelper {
 
         Log.d(TAG, "addAnnotationBG() ID: " + annotationId);
         if (annotationId != null) {
-            ServiceHelper.addAnnotationToArticle(context, articleId, annotationId);
+            long finalAnnotationId = annotationId;
+            queueOfflineChange(queueHelper
+                    -> queueHelper.addAnnotationToArticle(articleId, finalAnnotationId));
         }
 
         Log.d(TAG, "addAnnotationBG() finished");
     }
 
     public static void updateAnnotation(Context context, int articleId, Annotation annotation) {
-        enqueueServiceTask(context, ctx -> updateAnnotationBG(ctx, articleId, annotation), null);
+        enqueueServiceTask(context, ctx -> updateAnnotationBG(articleId, annotation), null);
     }
 
-    private static void updateAnnotationBG(Context context, int articleId, Annotation annotation) {
+    private static void updateAnnotationBG(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("updateAnnotationBG(%d, %s) started", articleId, annotation));
 
         Long annotationId = annotation.getId();
@@ -362,16 +382,17 @@ public class OperationsHelper {
         }
 
         Log.d(TAG, "updateAnnotationBG() ID: " + annotationId);
-        ServiceHelper.updateAnnotationOnArticle(context, articleId, annotationId);
+        queueOfflineChange(queueHelper
+                -> queueHelper.updateAnnotationOnArticle(articleId, annotationId));
 
         Log.d(TAG, "updateAnnotationBG() finished");
     }
 
     public static void deleteAnnotation(Context context, int articleId, Annotation annotation) {
-        enqueueServiceTask(context, ctx -> deleteAnnotationBG(ctx, articleId, annotation), null);
+        enqueueServiceTask(context, ctx -> deleteAnnotationBG(articleId, annotation), null);
     }
 
-    private static void deleteAnnotationBG(Context context, int articleId, Annotation annotation) {
+    private static void deleteAnnotationBG(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("deleteAnnotationBG(%d, %s) started", articleId, annotation));
 
         Integer remoteId = annotation.getAnnotationId();
@@ -396,17 +417,18 @@ public class OperationsHelper {
 
         Log.d(TAG, "deleteAnnotationBG() remote ID: " + remoteId);
         if (remoteId != null) {
-            ServiceHelper.deleteAnnotationFromArticle(context, articleId, remoteId);
+            queueOfflineChange(queueHelper
+                    -> queueHelper.deleteAnnotationFromArticle(articleId, remoteId));
         }
 
         Log.d(TAG, "deleteAnnotationBG() finished");
     }
 
     public static void deleteArticle(Context context, int articleID, Runnable postCallCallback) {
-        enqueueServiceTask(context, ctx -> deleteArticleBG(ctx, articleID), postCallCallback);
+        enqueueServiceTask(context, ctx -> deleteArticleBG(articleID), postCallCallback);
     }
 
-    private static void deleteArticleBG(Context context, int articleID) {
+    private static void deleteArticleBG(int articleID) {
         Log.d(TAG, String.format("deleteArticleBG(%d) started", articleID));
 
         ArticleDao articleDao = getArticleDao();
@@ -444,7 +466,7 @@ public class OperationsHelper {
 
         Log.d(TAG, "deleteArticleBG() article object deleted");
 
-        ServiceHelper.deleteArticle(context, articleID);
+        queueOfflineChange(queueHelper -> queueHelper.deleteArticle(articleID));
 
         Log.d(TAG, "deleteArticleBG() finished");
     }
@@ -466,6 +488,38 @@ public class OperationsHelper {
         settings.setFirstSyncDone(false);
 
         EventHelper.notifyEverythingRemoved();
+    }
+
+    private static void queueOfflineArticleChange(int articleID,
+                                                  QueueItem.ArticleChangeType changeType) {
+        queueOfflineChange(queueHelper -> queueHelper.changeArticle(articleID, changeType));
+    }
+
+    private interface QueueAction {
+        boolean run(QueueHelper queueHelper);
+    }
+
+    private static void queueOfflineChange(QueueAction action) {
+        Long queueChangedLength = null;
+
+        DaoSession daoSession = getDaoSession();
+        SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
+        sqliteDatabase.beginTransactionNonExclusive();
+        try {
+            QueueHelper queueHelper = new QueueHelper(daoSession);
+
+            if (action.run(queueHelper)) {
+                queueChangedLength = queueHelper.getQueueLength();
+            }
+
+            sqliteDatabase.setTransactionSuccessful();
+        } finally {
+            sqliteDatabase.endTransaction();
+        }
+
+        if (queueChangedLength != null) {
+            postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
+        }
     }
 
     private static ArticleDao getArticleDao() {

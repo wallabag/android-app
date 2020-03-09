@@ -12,8 +12,8 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 
 public class AddUrlProxyActivity extends AppCompatActivity {
 
@@ -54,7 +54,7 @@ public class AddUrlProxyActivity extends AppCompatActivity {
 
         Log.d(TAG, "Bagging " + pageUrl);
 
-        ServiceHelper.addLink(this, pageUrl);
+        OperationsHelper.addArticle(this, pageUrl);
 
         Toast.makeText(getApplicationContext(),
                 R.string.addLink_success_text, Toast.LENGTH_SHORT).show();

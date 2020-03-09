@@ -65,8 +65,6 @@ public class QueueItem {
 
     }
 
-    public static final String DELETED_TAGS_DELIMITER = ",";
-
     @Id
     private Long id;
 

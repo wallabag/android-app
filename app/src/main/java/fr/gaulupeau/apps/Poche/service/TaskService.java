@@ -96,10 +96,14 @@ public class TaskService extends Service {
             return null;
         }
 
+        // TODO: rewrite
         switch (request.getAction()) {
+            case ADD_LINK:
+                return c -> OperationsHelper.addArticleBG(request.getExtra(), request.getExtra2());
+
             case SET_ARTICLE_PROGRESS:
                 return c -> OperationsHelper.setArticleProgressBG(
-                        c, request.getArticleID(), Float.parseFloat(request.getExtra()));
+                        request.getArticleID(), Float.parseFloat(request.getExtra()));
 
             default:
                 Log.e(TAG, "Unknown action requested: " + request.getAction());

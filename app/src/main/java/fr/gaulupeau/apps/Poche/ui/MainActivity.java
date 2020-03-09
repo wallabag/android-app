@@ -48,6 +48,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
@@ -914,7 +915,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 TextView textView = (TextView)view.findViewById(R.id.page_url);
-                ServiceHelper.addLink(getBaseContext(), textView.getText().toString());
+                OperationsHelper.addArticle(getBaseContext(), textView.getText().toString());
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
