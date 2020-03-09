@@ -85,9 +85,9 @@ public class OfflineChangesSynchronizer extends BaseWorker {
         DaoSession daoSession = getDaoSession();
         QueueHelper queueHelper = new QueueHelper(daoSession);
 
-        List<QueueItem> queueItems = queueHelper.getQueueItems();
+        QueueHelper.QueueState queueState = queueHelper.getQueueState();
 
-        List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
+        List<QueueItem> queueItems = queueState.getQueueItems();
 
         int counter = 0, totalNumber = queueItems.size();
         for (QueueItem item : queueItems) {
@@ -100,7 +100,7 @@ public class OfflineChangesSynchronizer extends BaseWorker {
                     "syncOfflineQueue() processing: queue item ID: %d, article ID: \"%s\"",
                     item.getId(), articleIdInteger));
 
-            int articleID = articleIdInteger != null ? articleIdInteger : -1;
+            int articleId = articleIdInteger != null ? articleIdInteger : -1;
 
             boolean canTolerateNotFound = true;
 
@@ -108,27 +108,27 @@ public class OfflineChangesSynchronizer extends BaseWorker {
             try {
                 switch (item.getAction()) {
                     case ARTICLE_CHANGE:
-                        itemResult = syncArticleChange(item.asSpecificItem(), articleID);
+                        itemResult = syncArticleChange(item.asSpecificItem(), articleId);
                         break;
 
                     case ARTICLE_TAGS_DELETE:
-                        itemResult = syncDeleteTagsFromArticle(item.asSpecificItem(), articleID);
+                        itemResult = syncDeleteTagsFromArticle(item.asSpecificItem(), articleId);
                         break;
 
                     case ANNOTATION_ADD:
-                        itemResult = syncAddAnnotationToArticle(item.asSpecificItem(), articleID);
+                        itemResult = syncAddAnnotationToArticle(item.asSpecificItem(), articleId);
                         break;
 
                     case ANNOTATION_UPDATE:
-                        itemResult = syncUpdateAnnotationOnArticle(item.asSpecificItem(), articleID);
+                        itemResult = syncUpdateAnnotationOnArticle(item.asSpecificItem(), articleId);
                         break;
 
                     case ANNOTATION_DELETE:
-                        itemResult = syncDeleteAnnotationFromArticle(item.asSpecificItem(), articleID);
+                        itemResult = syncDeleteAnnotationFromArticle(item.asSpecificItem(), articleId);
                         break;
 
                     case ARTICLE_DELETE:
-                        if (!getWallabagService().deleteArticle(articleID)) {
+                        if (!getWallabagService().deleteArticle(articleId)) {
                             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
                         }
                         break;
@@ -174,7 +174,7 @@ public class OfflineChangesSynchronizer extends BaseWorker {
             }
 
             if (itemResult == null || itemResult.isSuccess()) {
-                completedQueueItems.add(item);
+                queueState.completed(item);
             } else if (itemResult.getErrorType() != null) {
                 ActionResult.ErrorType itemError = itemResult.getErrorType();
 
@@ -202,11 +202,11 @@ public class OfflineChangesSynchronizer extends BaseWorker {
 
         Long queueLength = null;
 
-        if (!completedQueueItems.isEmpty()) {
+        if (queueState.hasChanges()) {
             SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
             sqliteDatabase.beginTransactionNonExclusive();
             try {
-                queueHelper.dequeueItems(completedQueueItems);
+                queueHelper.save(queueState);
 
                 queueLength = queueHelper.getQueueLength();
 
@@ -219,7 +219,7 @@ public class OfflineChangesSynchronizer extends BaseWorker {
         if (queueLength != null) {
             postEvent(new OfflineQueueChangedEvent(queueLength));
         } else {
-            queueLength = (long) queueItems.size();
+            queueLength = (long) queueState.itemsLeft();
         }
 
         if (urlUploaded) {
