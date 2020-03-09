@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.core.util.Consumer;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -489,12 +491,8 @@ public class OperationsHelper {
         queueOfflineChange(queueHelper -> queueHelper.changeArticle(articleId, changeType));
     }
 
-    private interface QueueAction {
-        boolean run(QueueHelper queueHelper);
-    }
-
-    private static void queueOfflineChange(QueueAction action) {
-        Long queueChangedLength = null;
+    private static void queueOfflineChange(Consumer<QueueHelper> action) {
+        long queueChangedLength;
 
         DaoSession daoSession = getDaoSession();
         SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
@@ -502,18 +500,16 @@ public class OperationsHelper {
         try {
             QueueHelper queueHelper = new QueueHelper(daoSession);
 
-            if (action.run(queueHelper)) {
-                queueChangedLength = queueHelper.getQueueLength();
-            }
+            action.accept(queueHelper);
+
+            queueChangedLength = queueHelper.getQueueLength();
 
             sqliteDatabase.setTransactionSuccessful();
         } finally {
             sqliteDatabase.endTransaction();
         }
 
-        if (queueChangedLength != null) {
-            postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
-        }
+        postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
     }
 
     private static ArticleDao getArticleDao() {
