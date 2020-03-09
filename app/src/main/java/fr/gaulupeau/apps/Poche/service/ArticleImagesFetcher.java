@@ -54,7 +54,7 @@ public class ArticleImagesFetcher extends BaseWorker {
     private void fetchImages(ActionRequest actionRequest) {
         Log.d(TAG, "fetchImages() started");
 
-        if(!StorageHelper.isExternalStorageWritable()) {
+        if (!StorageHelper.isExternalStorageWritable()) {
             Log.w(TAG, "fetchImages() external storage is not writable");
             return;
         }
@@ -65,10 +65,10 @@ public class ArticleImagesFetcher extends BaseWorker {
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
                 .orderAsc(ArticleDao.Properties.ArticleId);
 
-        int totalNumber = (int)queryBuilder.count();
+        int totalNumber = (int) queryBuilder.count();
         Log.d(TAG, "fetchImages() total number: " + totalNumber);
 
-        if(totalNumber == 0) {
+        if (totalNumber == 0) {
             Log.d(TAG, "fetchImages() nothing to do");
             return;
         }
@@ -84,18 +84,18 @@ public class ArticleImagesFetcher extends BaseWorker {
 
         int offset = 0;
 
-        while(true) {
+        while (true) {
             Log.d(TAG, "fetchImages() looping; offset: " + offset);
 
             List<Article> articleList = queryBuilder.list();
 
-            if(articleList.isEmpty()) {
+            if (articleList.isEmpty()) {
                 Log.d(TAG, "fetchImages() no more articles");
                 break;
             }
 
             int i = 0;
-            for(Article article: articleList) {
+            for (Article article : articleList) {
                 int index = offset + i++;
                 Log.d(TAG, "fetchImages() processing " + index
                         + ". articleID: " + article.getArticleId());
@@ -105,11 +105,11 @@ public class ArticleImagesFetcher extends BaseWorker {
 
                 // append preview picture URL to content to fetch it too
                 // should probably be handled separately
-                if(!TextUtils.isEmpty(article.getPreviewPictureURL())) {
+                if (!TextUtils.isEmpty(article.getPreviewPictureURL())) {
                     content = "<img src=\"" + article.getPreviewPictureURL() + "\"/>" + content;
                 }
 
-                if(ImageCacheUtils.cacheImages(article.getArticleId().longValue(), content)) {
+                if (ImageCacheUtils.cacheImages(article.getArticleId().longValue(), content)) {
                     changedArticles.add(article.getArticleId());
                 }
 
@@ -122,28 +122,28 @@ public class ArticleImagesFetcher extends BaseWorker {
             queryBuilder.offset(offset);
         }
 
-        for(Integer articleID: processedArticles) {
+        for (Integer articleID : processedArticles) {
             try {
                 Article article = articleDao.queryBuilder()
                         .where(ArticleDao.Properties.ArticleId.eq(articleID))
                         .unique();
 
-                if(article != null) {
+                if (article != null) {
                     article.setImagesDownloaded(true);
                     articleDao.update(article);
 
-                    if(changedArticles.contains(articleID)) {
+                    if (changedArticles.contains(articleID)) {
                         // maybe add another change type for unsuccessful articles?
                         event.addArticleChangeWithoutObject(article,
                                 FeedsChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
                     }
                 }
-            } catch(DaoException e) {
+            } catch (DaoException e) {
                 Log.e(TAG, "fetchImages() Exception while updating articles", e);
             }
         }
 
-        if(event.isAnythingChanged()) {
+        if (event.isAnythingChanged()) {
             postEvent(event);
         }
 

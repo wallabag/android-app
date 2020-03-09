@@ -34,9 +34,9 @@ public class BaseWorker {
 
         Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
 
-        if(e instanceof UnsuccessfulResponseException) {
-            UnsuccessfulResponseException ure = (UnsuccessfulResponseException)e;
-            if(ure instanceof AuthorizationException) {
+        if (e instanceof UnsuccessfulResponseException) {
+            UnsuccessfulResponseException ure = (UnsuccessfulResponseException) e;
+            if (ure instanceof AuthorizationException) {
                 result.setErrorType(ActionResult.ErrorType.INCORRECT_CREDENTIALS);
                 result.setMessage(ure.getResponseBody()); // TODO: fix message
             } else {
@@ -46,24 +46,24 @@ public class BaseWorker {
                 result.setMessage(e.toString());
                 result.setException(e);
             }
-        } else if(e instanceof IncorrectConfigurationException) {
+        } else if (e instanceof IncorrectConfigurationException) {
             result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
             result.setMessage(e.getMessage());
-        } else if(e instanceof IOException) {
+        } else if (e instanceof IOException) {
             boolean handled = false;
 
-            if(getSettings().isConfigurationOk()) {
-                if(e instanceof java.net.UnknownHostException
+            if (getSettings().isConfigurationOk()) {
+                if (e instanceof java.net.UnknownHostException
                         || e instanceof java.net.ConnectException // TODO: maybe filter by message
                         || e instanceof java.net.SocketTimeoutException) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
-                } else if(e instanceof javax.net.ssl.SSLException
+                } else if (e instanceof javax.net.ssl.SSLException
                         && e.getMessage() != null
                         && e.getMessage().contains("Connection timed out")) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
-                } else if(e instanceof java.net.SocketException
+                } else if (e instanceof java.net.SocketException
                         && e.getMessage() != null
                         && e.getMessage().contains("Software caused connection abort")) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
@@ -71,14 +71,14 @@ public class BaseWorker {
                 }
             }
 
-            if(!handled) {
+            if (!handled) {
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
                 result.setException(e);
             }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
-        } else if(e instanceof IllegalArgumentException && !getSettings().isConfigurationOk()) {
+        } else if (e instanceof IllegalArgumentException && !getSettings().isConfigurationOk()) {
             result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
             result.setMessage(e.toString());
         } else { // other exceptions meant to be handled outside
@@ -95,7 +95,7 @@ public class BaseWorker {
     }
 
     protected Settings getSettings() {
-        if(settings == null) {
+        if (settings == null) {
             settings = new Settings(context);
         }
 
@@ -103,7 +103,7 @@ public class BaseWorker {
     }
 
     protected DaoSession getDaoSession() {
-        if(daoSession == null) {
+        if (daoSession == null) {
             daoSession = DbConnection.getSession();
         }
 

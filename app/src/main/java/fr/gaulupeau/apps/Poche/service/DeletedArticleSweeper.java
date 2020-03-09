@@ -37,7 +37,7 @@ public class DeletedArticleSweeper extends BaseWorker {
         } finally {
             removeStickyEvent(startEvent);
 
-            if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+            if (result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
             postEvent(new SweepDeletedArticlesFinishedEvent(actionRequest, result));
         }
 
@@ -50,17 +50,17 @@ public class DeletedArticleSweeper extends BaseWorker {
         ActionResult result = new ActionResult();
         ArticlesChangedEvent event = null;
 
-        if(WallabagConnection.isNetworkAvailable()) {
+        if (WallabagConnection.isNetworkAvailable()) {
             try {
                 Updater.ProgressListener progressListener = (current, total) ->
                         postEvent(new SweepDeletedArticlesProgressEvent(
                                 actionRequest, current, total));
 
                 event = getUpdater().sweepDeletedArticles(progressListener);
-            } catch(UnsuccessfulResponseException | IOException e) {
+            } catch (UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "sweepDeletedArticles()");
                 result.updateWith(r);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "sweepDeletedArticles() exception", e);
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
@@ -71,7 +71,7 @@ public class DeletedArticleSweeper extends BaseWorker {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
         }
 
-        if(event != null && event.isAnythingChanged()) {
+        if (event != null && event.isAnythingChanged()) {
             postEvent(event);
         }
 

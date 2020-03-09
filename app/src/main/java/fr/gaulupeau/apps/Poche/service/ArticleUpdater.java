@@ -37,7 +37,7 @@ public class ArticleUpdater extends BaseWorker {
         } finally {
             removeStickyEvent(startEvent);
 
-            if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+            if (result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
             postEvent(new UpdateArticlesFinishedEvent(actionRequest, result));
         }
 
@@ -51,7 +51,7 @@ public class ArticleUpdater extends BaseWorker {
         ActionResult result = new ActionResult();
         ArticlesChangedEvent event = null;
 
-        if(WallabagConnection.isNetworkAvailable()) {
+        if (WallabagConnection.isNetworkAvailable()) {
             final Settings settings = getSettings();
 
             try {
@@ -74,10 +74,10 @@ public class ArticleUpdater extends BaseWorker {
 
                 event = getUpdater().update(updateType,
                         settings.getLatestUpdatedItemTimestamp(), updateListener);
-            } catch(UnsuccessfulResponseException | IOException e) {
+            } catch (UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateArticles()");
                 result.updateWith(r);
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Log.e(TAG, "updateArticles() exception", e);
 
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
@@ -88,7 +88,7 @@ public class ArticleUpdater extends BaseWorker {
             result.setErrorType(ActionResult.ErrorType.NO_NETWORK);
         }
 
-        if(event != null && event.isAnythingChanged()) {
+        if (event != null && event.isAnythingChanged()) {
             postEvent(event);
         }
 
