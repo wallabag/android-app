@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
-import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.core.util.Consumer;
 
-import java.util.Collection;
-
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.network.Updater;
 
 import wallabag.apiwrapper.WallabagService;
@@ -22,82 +18,6 @@ import wallabag.apiwrapper.WallabagService;
 public class ServiceHelper {
 
     private static final String TAG = ServiceHelper.class.getSimpleName();
-
-    public static void addLink(Context context, String link) {
-        addLink(context, link, null);
-    }
-
-    public static void addLink(Context context, String link, String origin) {
-        addLink(context, link, origin, null);
-    }
-
-    private static void addLink(Context context, String link, String origin, Long operationID) {
-        Log.d(TAG, "addLink() started");
-
-        ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
-        request.setExtra(link);
-        request.setExtra2(origin);
-        request.setOperationID(operationID);
-
-        startService(context, request);
-    }
-
-    public static void archiveArticle(Context context, int articleID) {
-        changeArticle(context, articleID, QueueItem.ArticleChangeType.ARCHIVE);
-    }
-
-    public static void favoriteArticle(Context context, int articleID) {
-        changeArticle(context, articleID, QueueItem.ArticleChangeType.FAVORITE);
-    }
-
-    public static void changeArticleTitle(Context context, int articleID) {
-        changeArticle(context, articleID, QueueItem.ArticleChangeType.TITLE);
-    }
-
-    public static void changeArticleTags(Context context, int articleID) {
-        changeArticle(context, articleID, QueueItem.ArticleChangeType.TAGS);
-    }
-
-    public static void deleteTagsFromArticle(Context context, int articleID,
-                                             Collection<String> tags) {
-        startGenericArticleAction(context, ActionRequest.Action.ARTICLE_TAGS_DELETE,
-                articleID, TextUtils.join(QueueItem.DELETED_TAGS_DELIMITER, tags));
-    }
-
-    public static void addAnnotationToArticle(Context context, int articleId, long annotationId) {
-        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_ADD,
-                articleId, String.valueOf(annotationId));
-    }
-
-    public static void updateAnnotationOnArticle(Context context, int articleId, long annotationId) {
-        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_UPDATE,
-                articleId, String.valueOf(annotationId));
-    }
-
-    public static void deleteAnnotationFromArticle(Context context, int articleId, int remoteAnnotationId) {
-        startGenericArticleAction(context, ActionRequest.Action.ANNOTATION_DELETE,
-                articleId, String.valueOf(remoteAnnotationId));
-    }
-
-    private static void startGenericArticleAction(Context context, ActionRequest.Action action,
-                                                  int articleId, String extra) {
-        Log.d(TAG, String.format("startGenericArticleAction(%s, %d, %s) started", action, articleId, extra));
-
-        ActionRequest request = new ActionRequest(action);
-        request.setArticleID(articleId);
-        request.setExtra(extra);
-
-        startService(context, request);
-    }
-
-    public static void deleteArticle(Context context, int articleID) {
-        Log.d(TAG, "deleteArticle() started");
-
-        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_DELETE);
-        request.setArticleID(articleID);
-
-        startService(context, request);
-    }
 
     public static void syncAndUpdate(Context context, Settings settings,
                                      Updater.UpdateType updateType, boolean auto) {
@@ -207,17 +127,6 @@ public class ServiceHelper {
         return new ActionRequest(ActionRequest.Action.FETCH_IMAGES);
     }
 
-    private static void changeArticle(Context context, int articleID,
-                                      QueueItem.ArticleChangeType articleChangeType) {
-        Log.d(TAG, "changeArticle() started; articleChangeType: " + articleChangeType);
-
-        ActionRequest request = new ActionRequest(ActionRequest.Action.ARTICLE_CHANGE);
-        request.setArticleID(articleID);
-        request.setArticleChangeType(articleChangeType);
-
-        startService(context, request);
-    }
-
     private static void addNextRequest(ActionRequest actionRequest, ActionRequest nextRequest) {
         while(actionRequest.getNextRequest() != null) actionRequest = actionRequest.getNextRequest();
 
@@ -226,13 +135,6 @@ public class ServiceHelper {
 
     public static void startService(Context context, ActionRequest request) {
         switch(request.getAction()) {
-            case ADD_LINK:
-            case ARTICLE_CHANGE:
-            case ARTICLE_TAGS_DELETE:
-            case ANNOTATION_ADD:
-            case ANNOTATION_UPDATE:
-            case ANNOTATION_DELETE:
-            case ARTICLE_DELETE:
             case SYNC_QUEUE:
             case UPDATE_ARTICLES:
             case SWEEP_DELETED_ARTICLES:

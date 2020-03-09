@@ -74,19 +74,6 @@ public class MainService extends IntentServiceBase {
         ActionResult result = null;
 
         switch(actionRequest.getAction()) {
-            case ARTICLE_CHANGE:
-            case ARTICLE_TAGS_DELETE:
-            case ANNOTATION_ADD:
-            case ANNOTATION_UPDATE:
-            case ANNOTATION_DELETE:
-            case ARTICLE_DELETE:
-            case ADD_LINK:
-                Long queueChangedLength = serveSimpleRequest(actionRequest);
-                if(queueChangedLength != null) {
-                    postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
-                }
-                break;
-
             case SYNC_QUEUE: {
                 SyncQueueStartedEvent startEvent = new SyncQueueStartedEvent(actionRequest);
                 postStickyEvent(startEvent);
@@ -138,83 +125,6 @@ public class MainService extends IntentServiceBase {
         postEvent(new ActionResultEvent(actionRequest, result));
 
         Log.d(TAG, "onHandleIntent() finished");
-    }
-
-    private Long serveSimpleRequest(ActionRequest actionRequest) {
-        Log.d(TAG, String.format("serveSimpleRequest() started; action: %s, articleID: %s" +
-                        ", extra: %s, extra2: %s",
-                actionRequest.getAction(), actionRequest.getArticleID(),
-                actionRequest.getExtra(), actionRequest.getExtra2()));
-
-        Long queueChangedLength = null;
-
-        DaoSession daoSession = getDaoSession();
-        SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
-        sqliteDatabase.beginTransactionNonExclusive();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
-
-            ActionRequest.Action action = actionRequest.getAction();
-            switch(action) {
-                case ARTICLE_CHANGE:
-                    if(queueHelper.changeArticle(actionRequest.getArticleID(),
-                            actionRequest.getArticleChangeType())) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ARTICLE_TAGS_DELETE:
-                    if(queueHelper.deleteTagsFromArticle(actionRequest.getArticleID(),
-                            actionRequest.getExtra())) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ANNOTATION_ADD:
-                    if (queueHelper.addAnnotationToArticle(actionRequest.getArticleID(),
-                            Long.parseLong(actionRequest.getExtra()))) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ANNOTATION_UPDATE:
-                    if (queueHelper.updateAnnotationOnArticle(actionRequest.getArticleID(),
-                            Long.parseLong(actionRequest.getExtra()))) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ANNOTATION_DELETE:
-                    if (queueHelper.deleteAnnotationFromArticle(actionRequest.getArticleID(),
-                            Integer.parseInt(actionRequest.getExtra()))) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ARTICLE_DELETE:
-                    if(queueHelper.deleteArticle(actionRequest.getArticleID())) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                case ADD_LINK:
-                    if(queueHelper.addLink(actionRequest.getExtra(), actionRequest.getExtra2())) {
-                        queueChangedLength = queueHelper.getQueueLength();
-                    }
-                    break;
-
-                default:
-                    Log.w(TAG, "serveSimpleRequest() action is not implemented: " + action);
-                    break;
-            }
-
-            sqliteDatabase.setTransactionSuccessful();
-        } finally {
-            sqliteDatabase.endTransaction();
-        }
-
-        Log.d(TAG, "serveSimpleRequest() finished");
-        return queueChangedLength;
     }
 
     private Pair<ActionResult, Long> syncOfflineQueue(ActionRequest actionRequest) {

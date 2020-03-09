@@ -995,7 +995,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                                 openURL(url);
                                 break;
                             case 1:
-                                ServiceHelper.addLink(ReadArticleActivity.this, url, articleUrl);
+                                OperationsHelper.addArticle(ReadArticleActivity.this, url, articleUrl);
                                 break;
                             case 2:
                                 copyURLToClipboard(url);

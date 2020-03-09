@@ -8,6 +8,8 @@ import java.util.Set;
 
 public class ArticleTagsDeleteItem extends ArticleIdItem<ArticleTagsDeleteItem> {
 
+    private static final String DELIMITER = ",";
+
     ArticleTagsDeleteItem(QueueItem queueItem) {
         super(queueItem);
     }
@@ -18,12 +20,11 @@ public class ArticleTagsDeleteItem extends ArticleIdItem<ArticleTagsDeleteItem> 
     }
 
     public Set<String> getTagIds() {
-        return new HashSet<>(Arrays.asList(
-                queueItem.getExtra().split(QueueItem.DELETED_TAGS_DELIMITER)));
+        return new HashSet<>(Arrays.asList(queueItem.getExtra().split(DELIMITER)));
     }
 
     public ArticleTagsDeleteItem setTagIds(Iterable<String> tagIds) {
-        queueItem.setExtra(TextUtils.join(QueueItem.DELETED_TAGS_DELIMITER, tagIds));
+        queueItem.setExtra(TextUtils.join(DELIMITER, tagIds));
         return this;
     }
 
