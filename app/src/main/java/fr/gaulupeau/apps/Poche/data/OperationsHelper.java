@@ -25,7 +25,8 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
-import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.AddArticleTask;
+import fr.gaulupeau.apps.Poche.service.UpdateArticleProgressTask;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
@@ -43,11 +44,7 @@ public class OperationsHelper {
     public static void addArticle(Context context, String url, String originUrl) {
         Log.d(TAG, "addArticle() started");
 
-        ActionRequest request = new ActionRequest(ActionRequest.Action.ADD_LINK);
-        request.setExtra(url);
-        request.setExtra2(originUrl);
-
-        enqueueSimpleServiceTask(context, request);
+        enqueueSimpleServiceTask(context, new AddArticleTask(url, originUrl));
     }
 
     public static void addArticleBG(String link, String origin) {
@@ -154,12 +151,8 @@ public class OperationsHelper {
         Log.d(TAG, "changeArticleTitleBG() finished");
     }
 
-    public static void setArticleProgress(Context context, int articleID, double progress) {
-        ActionRequest request = new ActionRequest(ActionRequest.Action.SET_ARTICLE_PROGRESS);
-        request.setArticleID(articleID);
-        request.setExtra(String.valueOf(progress));
-
-        enqueueSimpleServiceTask(context, request);
+    public static void setArticleProgress(Context context, int articleId, double progress) {
+        enqueueSimpleServiceTask(context, new UpdateArticleProgressTask(articleId, progress));
     }
 
     public static void setArticleProgressBG(int articleID, double progress) {

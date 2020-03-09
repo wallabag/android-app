@@ -14,8 +14,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
-
 public class TaskService extends Service {
 
     public static final String ACTION_SIMPLE_TASK = "action_simple_task";
@@ -49,9 +47,10 @@ public class TaskService extends Service {
         return new Intent(context, TaskService.class);
     }
 
-    public static Intent newSimpleTaskIntent(Context context) {
+    public static Intent newSimpleTaskIntent(Context context, SimpleTask task) {
         Intent intent = newStartIntent(context);
         intent.setAction(ACTION_SIMPLE_TASK);
+        intent.putExtra(SimpleTask.SIMPLE_TASK, task);
         return intent;
     }
 
@@ -77,7 +76,7 @@ public class TaskService extends Service {
         Log.d(TAG, "onStartCommand()");
 
         if (ACTION_SIMPLE_TASK.equals(intent.getAction())) {
-            Task task = taskFromActionRequest(ActionRequest.fromIntent(intent));
+            Task task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
             if (task != null) {
                 enqueueTask(task, false);
             }
@@ -90,27 +89,13 @@ public class TaskService extends Service {
         return START_NOT_STICKY;
     }
 
-    private Task taskFromActionRequest(ActionRequest request) {
-        if (request == null) {
+    private Task taskFromSimpleTask(SimpleTask simpleTask) {
+        if (simpleTask == null) {
             Log.d(TAG, "taskFromActionRequest() request is null");
             return null;
         }
 
-        // TODO: rewrite
-        switch (request.getAction()) {
-            case ADD_LINK:
-                return c -> OperationsHelper.addArticleBG(request.getExtra(), request.getExtra2());
-
-            case SET_ARTICLE_PROGRESS:
-                return c -> OperationsHelper.setArticleProgressBG(
-                        request.getArticleID(), Float.parseFloat(request.getExtra()));
-
-            default:
-                Log.e(TAG, "Unknown action requested: " + request.getAction());
-                break;
-        }
-
-        return null;
+        return simpleTask::run;
     }
 
     @Nullable
