@@ -158,11 +158,8 @@ public class ServiceHelper {
         context.startService(intent);
     }
 
-    public static void enqueueSimpleServiceTask(Context context, ActionRequest request) {
-        Intent intent = TaskService.newSimpleTaskIntent(context);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+    public static void enqueueSimpleServiceTask(Context context, SimpleTask task) {
+        context.startService(TaskService.newSimpleTaskIntent(context, task));
     }
 
     public static void enqueueServiceTask(Context context, TaskService.Task task,
