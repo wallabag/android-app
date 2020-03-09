@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.service;
 
-import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,11 +10,9 @@ import fr.gaulupeau.apps.Poche.network.Updater;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readLong;
-import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readString;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeLong;
-import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeString;
 
 public class ActionRequest implements Parcelable {
 
@@ -27,22 +24,15 @@ public class ActionRequest implements Parcelable {
         AUTO, MANUAL, MANUAL_BY_OPERATION
     }
 
-    public static final String ACTION_REQUEST = "wallabag.extra.action_request";
-
     private Action action;
     private RequestType requestType = RequestType.MANUAL;
     private Long operationID;
 
     private Integer articleID;
-    private String extra;
     private Updater.UpdateType updateType;
     private WallabagService.ResponseFormat downloadFormat;
 
     private ActionRequest nextRequest;
-
-    public static ActionRequest fromIntent(Intent intent) {
-        return intent.getParcelableExtra(ACTION_REQUEST);
-    }
 
     public ActionRequest(Action action) {
         this.action = action;
@@ -78,14 +68,6 @@ public class ActionRequest implements Parcelable {
 
     public void setArticleID(Integer articleID) {
         this.articleID = articleID;
-    }
-
-    public String getExtra() {
-        return extra;
-    }
-
-    public void setExtra(String extra) {
-        this.extra = extra;
     }
 
     public Updater.UpdateType getUpdateType() {
@@ -126,7 +108,6 @@ public class ActionRequest implements Parcelable {
         writeLong(operationID, out);
 
         writeInteger(articleID, out);
-        writeString(extra, out);
         writeEnum(updateType, out);
         writeEnum(downloadFormat, out);
         out.writeParcelable(nextRequest, 0);
@@ -138,7 +119,6 @@ public class ActionRequest implements Parcelable {
         operationID = readLong(in);
 
         articleID = readInteger(in);
-        extra = readString(in);
         updateType = readEnum(Updater.UpdateType.class, in);
         downloadFormat = readEnum(WallabagService.ResponseFormat.class, in);
         nextRequest = in.readParcelable(getClass().getClassLoader());

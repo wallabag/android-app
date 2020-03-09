@@ -134,43 +134,68 @@ public class ServiceHelper {
     }
 
     public static void startService(Context context, ActionRequest request) {
+        ActionRequestTask task;
+        boolean mainService = false;
+
         switch(request.getAction()) {
             case SYNC_QUEUE:
+                task = new SyncOfflineChangesTask(request);
+                mainService = true;
+                break;
+
             case UPDATE_ARTICLES:
+                task = new UpdateArticlesTask(request);
+                mainService = true;
+                break;
+
             case SWEEP_DELETED_ARTICLES:
-                startService(context, request, true);
+                task = new SweepDeletedArticlesTask(request);
+                mainService = true;
                 break;
 
             case FETCH_IMAGES:
+                task = new FetchArticleImagesTask(request);
+                break;
+
             case DOWNLOAD_AS_FILE:
-                startService(context, request, false);
+                task = new DownloadArticleAsFileTask(request);
                 break;
 
             default:
-                throw new IllegalStateException("Action is not implemented: " + request.getAction());
+                throw new RuntimeException("Action is not implemented: " + request.getAction());
         }
-    }
 
-    private static void startService(Context context, ActionRequest request, boolean mainService) {
-        Intent intent = new Intent(context, mainService ? MainService.class : SecondaryService.class);
-        intent.putExtra(ActionRequest.ACTION_REQUEST, request);
-
-        context.startService(intent);
+        enqueueSimpleServiceTask(context, mainService ? MainService.class : SecondaryService.class, task);
     }
 
     public static void enqueueSimpleServiceTask(Context context, SimpleTask task) {
-        context.startService(TaskService.newSimpleTaskIntent(context, task));
+        enqueueSimpleServiceTask(context, MainService.class, task);
+    }
+
+    public static void enqueueSimpleServiceTask(Context context,
+                                                Class<? extends TaskService> serviceClass,
+                                                SimpleTask task) {
+        context.startService(TaskService.newSimpleTaskIntent(context, serviceClass, task));
     }
 
     public static void enqueueServiceTask(Context context, TaskService.Task task,
                                           Runnable postCallCallback) {
-        performBoundServiceCall(context, binder -> {
+        enqueueServiceTask(context, MainService.class, task, postCallCallback);
+    }
+
+    public static void enqueueServiceTask(Context context,
+                                          Class<? extends TaskService> serviceClass,
+                                          TaskService.Task task,
+                                          Runnable postCallCallback) {
+        performBoundServiceCall(context, serviceClass, binder -> {
             TaskService.TaskServiceBinder service = (TaskService.TaskServiceBinder) binder;
             service.enqueueTask(task);
         }, postCallCallback);
     }
 
-    public static void performBoundServiceCall(Context context, Consumer<IBinder> action,
+    public static void performBoundServiceCall(Context context,
+                                               Class<? extends TaskService> serviceClass,
+                                               Consumer<IBinder> action,
                                                Runnable postCallCallback) {
         Log.d(TAG, "performBoundServiceCall() started");
 
@@ -204,7 +229,7 @@ public class ServiceHelper {
         };
 
         Log.d(TAG, "performBoundServiceCall() binding service");
-        Intent serviceIntent = new Intent(context, TaskService.class);
+        Intent serviceIntent = new Intent(context, serviceClass);
         context.bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
 
         Log.d(TAG, "performBoundServiceCall() finished");

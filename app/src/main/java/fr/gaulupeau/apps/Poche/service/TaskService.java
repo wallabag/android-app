@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Process;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -28,13 +29,13 @@ public class TaskService extends Service {
         }
     }
 
-    private static final String TAG = TaskService.class.getSimpleName();
-
     /**
      * The time to wait for more tasks before stopping the service (in milliseconds).
      * The setting is not precise.
      */
     private static final int WAIT_TIME = 1000;
+
+    private String tag;
 
     private Thread taskThread;
 
@@ -43,20 +44,31 @@ public class TaskService extends Service {
 
     private BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
 
-    public static Intent newStartIntent(Context context) {
-        return new Intent(context, TaskService.class);
+    public static Intent newStartIntent(Context context,
+                                        Class<? extends TaskService> serviceClass) {
+        return new Intent(context, serviceClass);
     }
 
-    public static Intent newSimpleTaskIntent(Context context, SimpleTask task) {
-        Intent intent = newStartIntent(context);
+    public static Intent newSimpleTaskIntent(Context context,
+                                             Class<? extends TaskService> serviceClass,
+                                             SimpleTask task) {
+        Intent intent = newStartIntent(context, serviceClass);
         intent.setAction(ACTION_SIMPLE_TASK);
         intent.putExtra(SimpleTask.SIMPLE_TASK, task);
         return intent;
     }
 
+    public TaskService(String name) {
+        this.tag = name;
+    }
+
+    protected int getThreadPriority() {
+        return Process.THREAD_PRIORITY_BACKGROUND;
+    }
+
     @Override
     public void onCreate() {
-        Log.d(TAG, "onCreate()");
+        Log.d(tag, "onCreate()");
 
         taskThread = new Thread(this::run, "TaskService-taskThread");
         taskThread.start();
@@ -64,7 +76,7 @@ public class TaskService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.d(TAG, "onDestroy()");
+        Log.d(tag, "onDestroy()");
 
         if (taskThread != null) {
             taskThread.interrupt();
@@ -73,7 +85,7 @@ public class TaskService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand()");
+        Log.d(tag, "onStartCommand()");
 
         if (ACTION_SIMPLE_TASK.equals(intent.getAction())) {
             Task task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
@@ -91,7 +103,7 @@ public class TaskService extends Service {
 
     private Task taskFromSimpleTask(SimpleTask simpleTask) {
         if (simpleTask == null) {
-            Log.d(TAG, "taskFromActionRequest() request is null");
+            Log.d(tag, "taskFromActionRequest() request is null");
             return null;
         }
 
@@ -101,45 +113,47 @@ public class TaskService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind()");
+        Log.d(tag, "onBind()");
 
         return new TaskServiceBinder();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(TAG, "onUnbind()");
+        Log.d(tag, "onUnbind()");
         return true;
     }
 
     @Override
     public void onRebind(Intent intent) {
-        Log.d(TAG, "onRebind()");
+        Log.d(tag, "onRebind()");
     }
 
     private void run() {
+        Process.setThreadPriority(getThreadPriority());
+
         while (true) {
             Task task;
             try {
                 task = taskQueue.poll(WAIT_TIME, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                Log.d(TAG, "run() interrupted");
+                Log.d(tag, "run() interrupted");
                 break;
             }
 
             if (task != null) {
                 try {
-                    Log.v(TAG, "run() running a task");
+                    Log.v(tag, "run() running a task");
                     task.run(this);
-                    Log.v(TAG, "run() finished a task");
+                    Log.v(tag, "run() finished a task");
                 } catch (Exception e) {
-                    Log.e(TAG, "run() exception during task execution", e);
+                    Log.e(tag, "run() exception during task execution", e);
                 }
             }
 
             synchronized (startIdLock) {
                 if (taskQueue.isEmpty()) {
-                    Log.d(TAG, "run() no more tasks; notifying that we are ready to stop");
+                    Log.d(tag, "run() no more tasks; notifying that we are ready to stop");
                     readyToStop();
                 }
             }
@@ -147,30 +161,30 @@ public class TaskService extends Service {
     }
 
     private void ensureStarted() {
-        Log.d(TAG, "ensureStarted()");
+        Log.d(tag, "ensureStarted()");
 
-        startService(newStartIntent(this));
+        startService(newStartIntent(this, getClass()));
     }
 
     private void readyToStop() {
-        Log.d(TAG, "readyToStop()");
+        Log.d(tag, "readyToStop()");
 
         if (!stopSelfResult(lastStartId)) {
-            Log.d(TAG, "readyToStop() startId didn't match");
+            Log.d(tag, "readyToStop() startId didn't match");
         }
     }
 
     private void enqueueTask(Task task, boolean ensureStarted) {
-        Log.d(TAG, "enqueueTask()");
+        Log.d(tag, "enqueueTask()");
         Objects.requireNonNull(task, "task is null");
 
-        Log.v(TAG, "enqueueTask() enqueueing task");
+        Log.v(tag, "enqueueTask() enqueueing task");
         taskQueue.add(task);
 
         if (ensureStarted) {
-            Log.v(TAG, "enqueueTask() starting service");
+            Log.v(tag, "enqueueTask() starting service");
             ensureStarted();
-            Log.v(TAG, "enqueueTask() started service");
+            Log.v(tag, "enqueueTask() started service");
         }
     }
 

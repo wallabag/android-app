@@ -1,32 +1,32 @@
 package fr.gaulupeau.apps.Poche.service;
 
-import android.app.IntentService;
+import android.content.Context;
 import android.util.Log;
-
-import wallabag.apiwrapper.WallabagService;
-import wallabag.apiwrapper.exceptions.AuthorizationException;
-import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import java.io.IOException;
 
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.AuthorizationException;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
-public abstract class IntentServiceBase extends IntentService {
+public class BaseWorker {
 
-    private static final String TAG = MainService.class.getSimpleName();
+    private static final String TAG = BaseWorker.class.getSimpleName();
+
+    private final Context context;
 
     private Settings settings;
 
     private DaoSession daoSession;
-    private WallabagWebService wallabagWebService;
 
-    public IntentServiceBase(String name) {
-        super(name);
+    public BaseWorker(Context context) {
+        this.context = context;
     }
 
     protected ActionResult processException(Exception e, String scope) {
@@ -90,9 +90,13 @@ public abstract class IntentServiceBase extends IntentService {
         return result;
     }
 
+    protected Context getContext() {
+        return context;
+    }
+
     protected Settings getSettings() {
         if(settings == null) {
-            settings = new Settings(this);
+            settings = new Settings(context);
         }
 
         return settings;
@@ -106,18 +110,13 @@ public abstract class IntentServiceBase extends IntentService {
         return daoSession;
     }
 
-    protected WallabagWebService getWallabagWebService() {
-        if(wallabagWebService == null) {
-            Settings settings = getSettings();
-            wallabagWebService = WallabagWebService.fromSettings(settings);
-        }
-
-        return wallabagWebService;
-    }
-
     protected WallabagService getWallabagService()
             throws IncorrectConfigurationException {
         return WallabagConnection.getWallabagService();
+    }
+
+    protected Updater getUpdater() throws IncorrectConfigurationException {
+        return new Updater(getDaoSession(), getWallabagService());
     }
 
 }
