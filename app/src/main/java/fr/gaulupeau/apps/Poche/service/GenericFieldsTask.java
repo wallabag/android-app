@@ -2,10 +2,12 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.os.Parcel;
 
+import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readBoolean;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readDouble;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readLong;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readString;
+import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeBoolean;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeDouble;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeLong;
@@ -18,6 +20,8 @@ public class GenericFieldsTask extends SimpleTask {
 
     protected String genericStringField1;
     protected String genericStringField2;
+
+    protected Boolean genericBooleanField1;
 
     protected Double genericDoubleField1;
 
@@ -33,6 +37,8 @@ public class GenericFieldsTask extends SimpleTask {
         writeString(genericStringField1, dest);
         writeString(genericStringField2, dest);
 
+        writeBoolean(genericBooleanField1, dest);
+
         writeDouble(genericDoubleField1, dest);
     }
 
@@ -45,6 +51,8 @@ public class GenericFieldsTask extends SimpleTask {
 
         genericStringField1 = readString(in);
         genericStringField2 = readString(in);
+
+        genericBooleanField1 = readBoolean(in);
 
         genericDoubleField1 = readDouble(in);
     }

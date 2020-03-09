@@ -26,6 +26,8 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.service.AddArticleTask;
+import fr.gaulupeau.apps.Poche.service.ArticleChangeTask;
+import fr.gaulupeau.apps.Poche.service.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.service.UpdateArticleProgressTask;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
@@ -51,17 +53,16 @@ public class OperationsHelper {
         queueOfflineChange(queueHelper -> queueHelper.addLink(link, origin));
     }
 
-    public static void archiveArticle(Context context, int articleID, boolean archive,
-                                      Runnable postCallCallback) {
-        enqueueServiceTask(context, ctx -> archiveArticleBG(articleID, archive), postCallCallback);
+    public static void archiveArticle(Context context, int articleId, boolean archive) {
+        enqueueSimpleServiceTask(context, ArticleChangeTask.newArchiveTask(articleId, archive));
     }
 
-    private static void archiveArticleBG(int articleID, boolean archive) {
-        Log.d(TAG, String.format("archiveArticleBG(%d, %s) started", articleID, archive));
+    public static void archiveArticleBG(int articleId, boolean archive) {
+        Log.d(TAG, String.format("archiveArticleBG(%d, %s) started", articleId, archive));
 
         ArticleDao articleDao = getArticleDao();
 
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         if (article == null) {
             Log.w(TAG, "archiveArticleBG() article was not found");
             return; // not an error?
@@ -84,21 +85,21 @@ public class OperationsHelper {
             // do we need to continue with the sync part? Probably yes
         }
 
-        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.ARCHIVE);
+        queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.ARCHIVE);
 
         Log.d(TAG, "archiveArticleBG() finished");
     }
 
-    public static void favoriteArticle(Context context, int articleID, boolean favorite) {
-        enqueueServiceTask(context, ctx -> favoriteArticleBG(articleID, favorite), null);
+    public static void favoriteArticle(Context context, int articleId, boolean favorite) {
+        enqueueSimpleServiceTask(context, ArticleChangeTask.newFavoriteTask(articleId, favorite));
     }
 
-    private static void favoriteArticleBG(int articleID, boolean favorite) {
-        Log.d(TAG, String.format("favoriteArticleBG(%d, %s) started", articleID, favorite));
+    public static void favoriteArticleBG(int articleId, boolean favorite) {
+        Log.d(TAG, String.format("favoriteArticleBG(%d, %s) started", articleId, favorite));
 
         ArticleDao articleDao = getArticleDao();
 
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         if (article == null) {
             Log.w(TAG, "favoriteArticleBG() article was not found");
             return; // not an error?
@@ -121,21 +122,21 @@ public class OperationsHelper {
             // do we need to continue with the sync part? Probably yes
         }
 
-        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.FAVORITE);
+        queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.FAVORITE);
 
         Log.d(TAG, "favoriteArticleBG() finished");
     }
 
-    public static void changeArticleTitle(Context context, int articleID, String title) {
-        enqueueServiceTask(context, ctx -> changeArticleTitleBG(articleID, title), null);
+    public static void changeArticleTitle(Context context, int articleId, String title) {
+        enqueueSimpleServiceTask(context, ArticleChangeTask.newChangeTitleTask(articleId, title));
     }
 
-    private static void changeArticleTitleBG(int articleID, String title) {
-        Log.d(TAG, String.format("changeArticleTitleBG(%d, %s) started", articleID, title));
+    public static void changeArticleTitleBG(int articleId, String title) {
+        Log.d(TAG, String.format("changeArticleTitleBG(%d, %s) started", articleId, title));
 
         ArticleDao articleDao = getArticleDao();
 
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         if (article == null) {
             Log.w(TAG, "changeArticleTitleBG() article was not found");
             return; // not an error?
@@ -146,7 +147,7 @@ public class OperationsHelper {
 
         notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TITLE_CHANGED);
 
-        queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.TITLE);
+        queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.TITLE);
 
         Log.d(TAG, "changeArticleTitleBG() finished");
     }
@@ -155,35 +156,35 @@ public class OperationsHelper {
         enqueueSimpleServiceTask(context, new UpdateArticleProgressTask(articleId, progress));
     }
 
-    public static void setArticleProgressBG(int articleID, double progress) {
-        Log.d(TAG, String.format("changeArticleTitleBG(%d, %g) started", articleID, progress));
+    public static void setArticleProgressBG(int articleId, double progress) {
+        Log.d(TAG, String.format("setArticleProgressBG(%d, %g) started", articleId, progress));
 
         ArticleDao articleDao = getArticleDao();
 
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         if (article == null) {
-            Log.w(TAG, "changeArticleTitleBG() article was not found");
+            Log.w(TAG, "setArticleProgressBG() article was not found");
             return; // not an error?
         }
 
         article.setArticleProgress(progress);
         articleDao.update(article);
 
-        Log.d(TAG, "changeArticleTitleBG() finished");
+        Log.d(TAG, "setArticleProgressBG() finished");
     }
 
-    public static void setArticleTags(Context context, int articleID, List<Tag> newTags,
+    public static void setArticleTags(Context context, int articleId, List<Tag> newTags,
                                       Runnable postCallCallback) {
-        enqueueServiceTask(context, ctx -> setArticleTagsBG(articleID, newTags), postCallCallback);
+        enqueueServiceTask(context, ctx -> setArticleTagsBG(articleId, newTags), postCallCallback);
     }
 
-    private static void setArticleTagsBG(int articleID, List<Tag> newTags) {
-        Log.d(TAG, String.format("setArticleTagsBG(%d, %s) started", articleID, newTags));
+    private static void setArticleTagsBG(int articleId, List<Tag> newTags) {
+        Log.d(TAG, String.format("setArticleTagsBG(%d, %s) started", articleId, newTags));
 
         boolean tagsChanged = false;
 
         ArticleDao articleDao = getArticleDao();
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         TagDao tagDao = DbConnection.getSession().getTagDao();
         ArticleTagsJoinDao joinDao = DbConnection.getSession().getArticleTagsJoinDao();
 
@@ -279,14 +280,14 @@ public class OperationsHelper {
 
             Log.d(TAG, "setArticleTagsBG() storing deleted tags to offline queue");
             queueOfflineChange(queueHelper
-                    -> queueHelper.deleteTagsFromArticle(articleID, tagsToDelete));
+                    -> queueHelper.deleteTagsFromArticle(articleId, tagsToDelete));
         }
 
         if (tagsChanged) {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
 
             Log.d(TAG, "setArticleTagsBG() storing tags change to offline queue");
-            queueOfflineArticleChange(articleID, QueueItem.ArticleChangeType.TAGS);
+            queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.TAGS);
         }
 
         Log.d(TAG, "setArticleTagsBG() finished");
@@ -417,16 +418,16 @@ public class OperationsHelper {
         Log.d(TAG, "deleteAnnotationBG() finished");
     }
 
-    public static void deleteArticle(Context context, int articleID, Runnable postCallCallback) {
-        enqueueServiceTask(context, ctx -> deleteArticleBG(articleID), postCallCallback);
+    public static void deleteArticle(Context context, int articleId) {
+        enqueueSimpleServiceTask(context, new DeleteArticleTask(articleId));
     }
 
-    private static void deleteArticleBG(int articleID) {
-        Log.d(TAG, String.format("deleteArticleBG(%d) started", articleID));
+    public static void deleteArticleBG(int articleId) {
+        Log.d(TAG, String.format("deleteArticleBG(%d) started", articleId));
 
         ArticleDao articleDao = getArticleDao();
 
-        Article article = getArticle(articleID, articleDao);
+        Article article = getArticle(articleId, articleDao);
         if (article == null) {
             Log.w(TAG, "deleteArticleBG() article was not found");
             return; // not an error?
@@ -459,7 +460,7 @@ public class OperationsHelper {
 
         Log.d(TAG, "deleteArticleBG() article object deleted");
 
-        queueOfflineChange(queueHelper -> queueHelper.deleteArticle(articleID));
+        queueOfflineChange(queueHelper -> queueHelper.deleteArticle(articleId));
 
         Log.d(TAG, "deleteArticleBG() finished");
     }
@@ -483,9 +484,9 @@ public class OperationsHelper {
         EventHelper.notifyEverythingRemoved();
     }
 
-    private static void queueOfflineArticleChange(int articleID,
+    private static void queueOfflineArticleChange(int articleId,
                                                   QueueItem.ArticleChangeType changeType) {
-        queueOfflineChange(queueHelper -> queueHelper.changeArticle(articleID, changeType));
+        queueOfflineChange(queueHelper -> queueHelper.changeArticle(articleId, changeType));
     }
 
     private interface QueueAction {
@@ -523,9 +524,9 @@ public class OperationsHelper {
         return DbConnection.getSession();
     }
 
-    private static Article getArticle(int articleID, ArticleDao articleDao) {
+    private static Article getArticle(int articleId, ArticleDao articleDao) {
         return articleDao.queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.eq(articleID))
+                .where(ArticleDao.Properties.ArticleId.eq(articleId))
                 .build().unique();
     }
 
