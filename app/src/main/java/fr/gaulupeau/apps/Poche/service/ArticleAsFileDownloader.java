@@ -50,11 +50,11 @@ public class ArticleAsFileDownloader extends BaseWorker {
             article = getDaoSession().getArticleDao().queryBuilder()
                     .where(ArticleDao.Properties.ArticleId.eq(actionRequest.getArticleID()))
                     .build().unique();
-        } catch(DaoException e) {
+        } catch (DaoException e) {
             Log.w(TAG, "onHandleIntent()", e);
         }
 
-        if(article == null) {
+        if (article == null) {
             return new ActionResult(ActionResult.ErrorType.UNKNOWN, "Couldn't find the article"); // TODO: string
         }
 
@@ -70,7 +70,7 @@ public class ArticleAsFileDownloader extends BaseWorker {
         } finally {
             removeStickyEvent(startEvent);
 
-            if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+            if (result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
 
             postEvent(new DownloadFileFinishedEvent(actionRequest, result, article,
                     downloadResult != null ? downloadResult.second : null));
@@ -85,7 +85,7 @@ public class ArticleAsFileDownloader extends BaseWorker {
 
         int articleID = actionRequest.getArticleID();
 
-        if(!WallabagConnection.isNetworkAvailable()) {
+        if (!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "downloadAsFile() not on-line; exiting");
             return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
@@ -93,7 +93,7 @@ public class ArticleAsFileDownloader extends BaseWorker {
         BufferedSource source = null;
         File resultFile = null;
         try {
-            if(CompatibilityHelper.isExportArticleSupported(getWallabagService())) {
+            if (CompatibilityHelper.isExportArticleSupported(getWallabagService())) {
                 source = getWallabagService().exportArticle(
                         articleID, actionRequest.getDownloadFormat(), NotFoundPolicy.THROW)
                         .source();
@@ -104,19 +104,19 @@ public class ArticleAsFileDownloader extends BaseWorker {
             String fileExt = actionRequest.getDownloadFormat().toString().toLowerCase(Locale.US);
 
             // TODO: remove fallback
-            if(source == null) {
+            if (source == null) {
                 Log.i(TAG, "Failed to get article via API, falling back to plain URL");
 
                 WallabagWebService service = getWallabagWebService();
                 WallabagWebService.ConnectionTestResult connectionTestResult
                         = service.testConnection();
                 Log.d(TAG, "downloadAsFile() connectionTestResult: " + connectionTestResult);
-                if(connectionTestResult != WallabagWebService.ConnectionTestResult.OK) {
+                if (connectionTestResult != WallabagWebService.ConnectionTestResult.OK) {
                     Log.w(TAG, "downloadAsFile() testing connection failed with value "
                             + connectionTestResult);
 
                     ActionResult.ErrorType errorType;
-                    switch(connectionTestResult) {
+                    switch (connectionTestResult) {
                         case INCORRECT_URL:
                         case UNSUPPORTED_SERVER_VERSION:
                         case WALLABAG_NOT_FOUND:
@@ -145,7 +145,7 @@ public class ArticleAsFileDownloader extends BaseWorker {
 
                 Response response = service.getClient().newCall(request).execute();
 
-                if(!response.isSuccessful()) {
+                if (!response.isSuccessful()) {
                     return new Pair<>(new ActionResult(ActionResult.ErrorType.UNKNOWN,
                             "Response code: " + response.code()
                                     + ", response message: " + response.message()), null);
@@ -166,24 +166,24 @@ public class ArticleAsFileDownloader extends BaseWorker {
                 sink = Okio.buffer(Okio.sink(file));
                 sink.writeAll(source);
             } finally {
-                if(sink != null) {
+                if (sink != null) {
                     try {
                         sink.close();
-                    } catch(IOException e) {
+                    } catch (IOException e) {
                         Log.w(TAG, "downloadAsFile() IOException while closing sink", e);
                     }
                 }
             }
 
             resultFile = file;
-        } catch(IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
+        } catch (IncorrectConfigurationException | UnsuccessfulResponseException | IOException e) {
             ActionResult r = processException(e, "downloadAsFile()");
-            if(!r.isSuccess()) return new Pair<>(r, null);
+            if (!r.isSuccess()) return new Pair<>(r, null);
         } finally {
-            if(source != null) {
+            if (source != null) {
                 try {
                     source.close();
-                } catch(IOException ignored) {}
+                } catch (IOException ignored) {}
             }
         }
 

@@ -62,7 +62,7 @@ public class OfflineChangesSynchronizer extends BaseWorker {
         } finally {
             removeStickyEvent(startEvent);
 
-            if(result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
+            if (result == null) result = new ActionResult(ActionResult.ErrorType.UNKNOWN);
             postEvent(new SyncQueueFinishedEvent(actionRequest, result,
                     syncResult != null ? syncResult.second : null));
         }
@@ -74,7 +74,7 @@ public class OfflineChangesSynchronizer extends BaseWorker {
     private Pair<ActionResult, Long> syncOfflineQueue(ActionRequest actionRequest) {
         Log.d(TAG, "syncOfflineQueue() started");
 
-        if(!WallabagConnection.isNetworkAvailable()) {
+        if (!WallabagConnection.isNetworkAvailable()) {
             Log.i(TAG, "syncOfflineQueue() not on-line; exiting");
             return new Pair<>(new ActionResult(ActionResult.ErrorType.NO_NETWORK), null);
         }
@@ -90,8 +90,8 @@ public class OfflineChangesSynchronizer extends BaseWorker {
         List<QueueItem> completedQueueItems = new ArrayList<>(queueItems.size());
 
         int counter = 0, totalNumber = queueItems.size();
-        for(QueueItem item: queueItems) {
-            Log.d(TAG, "syncOfflineQueue() current QueueItem(" + (counter+1) + " out of " + totalNumber+ "): " + item);
+        for (QueueItem item : queueItems) {
+            Log.d(TAG, "syncOfflineQueue() current QueueItem(" + (counter + 1) + " out of " + totalNumber + "): " + item);
             postEvent(new SyncQueueProgressEvent(actionRequest, counter, totalNumber));
 
             Integer articleIdInteger = item.getArticleId();
@@ -157,38 +157,38 @@ public class OfflineChangesSynchronizer extends BaseWorker {
                     default:
                         throw new IllegalArgumentException("Unknown action: " + item.getAction());
                 }
-            } catch(IncorrectConfigurationException | UnsuccessfulResponseException
+            } catch (IncorrectConfigurationException | UnsuccessfulResponseException
                     | IOException | IllegalArgumentException e) {
                 ActionResult r = processException(e, "syncOfflineQueue()");
-                if(!r.isSuccess()) itemResult = r;
-            } catch(Exception e) {
+                if (!r.isSuccess()) itemResult = r;
+            } catch (Exception e) {
                 Log.e(TAG, "syncOfflineQueue() item processing exception", e);
 
                 itemResult = new ActionResult(ActionResult.ErrorType.UNKNOWN, e);
             }
 
-            if(itemResult != null && !itemResult.isSuccess() && canTolerateNotFound
+            if (itemResult != null && !itemResult.isSuccess() && canTolerateNotFound
                     && itemResult.getErrorType() == ActionResult.ErrorType.NOT_FOUND) {
                 Log.i(TAG, "syncOfflineQueue() ignoring NOT_FOUND");
                 itemResult = null;
             }
 
-            if(itemResult == null || itemResult.isSuccess()) {
+            if (itemResult == null || itemResult.isSuccess()) {
                 completedQueueItems.add(item);
-            } else if(itemResult.getErrorType() != null) {
+            } else if (itemResult.getErrorType() != null) {
                 ActionResult.ErrorType itemError = itemResult.getErrorType();
 
                 Log.i(TAG, "syncOfflineQueue() itemError: " + itemError);
 
                 boolean stop = true;
-                switch(itemError) {
+                switch (itemError) {
                     case NOT_FOUND_LOCALLY:
                     case NEGATIVE_RESPONSE:
                         stop = false;
                         break;
                 }
 
-                if(stop) {
+                if (stop) {
                     result.updateWith(itemResult);
                     Log.i(TAG, "syncOfflineQueue() the itemError is a showstopper; breaking");
                     break;
@@ -202,8 +202,8 @@ public class OfflineChangesSynchronizer extends BaseWorker {
 
         Long queueLength = null;
 
-        if(!completedQueueItems.isEmpty()) {
-            SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+        if (!completedQueueItems.isEmpty()) {
+            SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
             sqliteDatabase.beginTransactionNonExclusive();
             try {
                 queueHelper.dequeueItems(completedQueueItems);
@@ -216,13 +216,13 @@ public class OfflineChangesSynchronizer extends BaseWorker {
             }
         }
 
-        if(queueLength != null) {
+        if (queueLength != null) {
             postEvent(new OfflineQueueChangedEvent(queueLength));
         } else {
-            queueLength = (long)queueItems.size();
+            queueLength = (long) queueItems.size();
         }
 
-        if(urlUploaded) {
+        if (urlUploaded) {
             postEvent(new LinkUploadedEvent(new ActionResult()));
         }
 
