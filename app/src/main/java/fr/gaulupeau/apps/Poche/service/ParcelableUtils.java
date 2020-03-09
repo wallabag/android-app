@@ -52,4 +52,28 @@ public class ParcelableUtils {
         return in.readString();
     }
 
+    public static void writeBoolean(Boolean value, Parcel out) {
+        out.writeByte((byte) (value == null ? 0 : 1));
+
+        if (value != null) out.writeByte((byte) (value ? 1 : 0));
+    }
+
+    public static Boolean readBoolean(Parcel in) {
+        if (in.readByte() == 0) return null;
+
+        return in.readByte() == 0 ? Boolean.FALSE : Boolean.TRUE;
+    }
+
+    public static void writeEnum(Enum value, Parcel out) {
+        out.writeByte((byte) (value == null ? 0 : 1));
+
+        if (value != null) out.writeInt(value.ordinal());
+    }
+
+    public static <T extends Enum> T readEnum(Class<T> enumClass, Parcel in) {
+        if (in.readByte() == 0) return null;
+
+        return enumClass.getEnumConstants()[in.readInt()];
+    }
+
 }

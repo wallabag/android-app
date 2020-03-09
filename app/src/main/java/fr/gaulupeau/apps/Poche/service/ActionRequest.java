@@ -8,9 +8,11 @@ import wallabag.apiwrapper.WallabagService;
 
 import fr.gaulupeau.apps.Poche.network.Updater;
 
+import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readLong;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readString;
+import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeInteger;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeLong;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeString;
@@ -125,8 +127,8 @@ public class ActionRequest implements Parcelable {
 
         writeInteger(articleID, out);
         writeString(extra, out);
-        writeInteger(updateType != null ? updateType.ordinal() : null, out);
-        writeInteger(downloadFormat != null ? downloadFormat.ordinal() : null, out);
+        writeEnum(updateType, out);
+        writeEnum(downloadFormat, out);
         out.writeParcelable(nextRequest, 0);
     }
 
@@ -137,14 +139,8 @@ public class ActionRequest implements Parcelable {
 
         articleID = readInteger(in);
         extra = readString(in);
-        Integer feedUpdateUpdateTypeInteger = readInteger(in);
-        if(feedUpdateUpdateTypeInteger != null) {
-            updateType = Updater.UpdateType.values()[feedUpdateUpdateTypeInteger];
-        }
-        Integer downloadFormatInteger = readInteger(in);
-        if(downloadFormatInteger != null) {
-            downloadFormat = WallabagService.ResponseFormat.values()[downloadFormatInteger];
-        }
+        updateType = readEnum(Updater.UpdateType.class, in);
+        downloadFormat = readEnum(WallabagService.ResponseFormat.class, in);
         nextRequest = in.readParcelable(getClass().getClassLoader());
     }
 

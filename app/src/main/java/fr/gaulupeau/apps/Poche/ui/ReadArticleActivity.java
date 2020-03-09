@@ -1031,8 +1031,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void markAsReadAndClose() {
-        OperationsHelper.archiveArticle(this, article.getArticleId(), !article.getArchive(),
-                this::finish);
+        OperationsHelper.archiveArticle(this, article.getArticleId(), !article.getArchive());
+
+        finish();
     }
 
     private void toggleFavorite() {
@@ -1069,8 +1070,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         b.setPositiveButton(R.string.positive_answer, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                OperationsHelper.deleteArticle(ReadArticleActivity.this, article.getArticleId(),
-                        ReadArticleActivity.this::finish);
+                OperationsHelper.deleteArticle(ReadArticleActivity.this, article.getArticleId());
+
+                finish();
             }
         });
         b.setNegativeButton(R.string.negative_answer, null);
