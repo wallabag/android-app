@@ -21,13 +21,13 @@ import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 
 // TODO: split classes?
 public class ConnectionWizardActivity extends BaseActionBarActivity {
