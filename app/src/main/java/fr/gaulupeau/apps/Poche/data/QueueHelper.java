@@ -67,9 +67,11 @@ public class QueueHelper {
 
     private static final String TAG = QueueHelper.class.getSimpleName();
 
+    private final DaoSession daoSession;
     private final QueueItemDao queueItemDao;
 
     public QueueHelper(DaoSession daoSession) {
+        this.daoSession = daoSession;
         queueItemDao = daoSession.getQueueItemDao();
     }
 
@@ -307,9 +309,11 @@ public class QueueHelper {
     private void enqueue(QueueItem item) {
         Log.d(TAG, "enqueue() started for item: " + item);
 
-        item.setQueueNumber(getNewQueueNumber());
+        DbUtils.runInNonExclusiveTx(daoSession, session -> {
+            item.setQueueNumber(getNewQueueNumber());
 
-        queueItemDao.insertWithoutSettingPk(item);
+            queueItemDao.insertWithoutSettingPk(item);
+        });
 
         Log.d(TAG, "enqueue() finished");
     }
