@@ -12,8 +12,8 @@ import android.widget.Toast;
 import java.util.regex.Matcher;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 
 public class AddUrlProxyActivity extends AppCompatActivity {
 

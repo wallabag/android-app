@@ -1,10 +1,13 @@
-package fr.gaulupeau.apps.Poche.data;
+package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
 import android.util.Log;
 
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.DbUtils;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;

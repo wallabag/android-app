@@ -23,12 +23,12 @@ import java.util.Locale;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.TagListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 
 import static fr.gaulupeau.apps.Poche.data.dao.entities.Tag.sortTagListByLabel;
 
