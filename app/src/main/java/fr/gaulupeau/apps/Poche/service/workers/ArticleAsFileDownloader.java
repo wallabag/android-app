@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,6 +19,8 @@ import fr.gaulupeau.apps.Poche.events.DownloadFileStartedEvent;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 import okhttp3.Request;
 import okhttp3.Response;
 import okio.BufferedSink;

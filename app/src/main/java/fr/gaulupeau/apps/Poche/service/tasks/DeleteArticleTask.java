@@ -1,6 +1,8 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.tasks;
 
 import android.content.Context;
+
+import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
 
 public class DeleteArticleTask extends GenericFieldsTask {
 

@@ -16,6 +16,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import fr.gaulupeau.apps.Poche.service.tasks.SimpleTask;
+
 @SuppressLint("Registered") // subclassed
 public class TaskService extends Service {
 

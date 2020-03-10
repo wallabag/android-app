@@ -9,11 +9,11 @@ import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
-import fr.gaulupeau.apps.Poche.service.AddArticleTask;
-import fr.gaulupeau.apps.Poche.service.ArticleChangeTask;
-import fr.gaulupeau.apps.Poche.service.DeleteArticleTask;
-import fr.gaulupeau.apps.Poche.service.OperationsWorker;
-import fr.gaulupeau.apps.Poche.service.UpdateArticleProgressTask;
+import fr.gaulupeau.apps.Poche.service.tasks.AddArticleTask;
+import fr.gaulupeau.apps.Poche.service.tasks.ArticleChangeTask;
+import fr.gaulupeau.apps.Poche.service.tasks.DeleteArticleTask;
+import fr.gaulupeau.apps.Poche.service.tasks.UpdateArticleProgressTask;
+import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
 
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueSimpleServiceTask;

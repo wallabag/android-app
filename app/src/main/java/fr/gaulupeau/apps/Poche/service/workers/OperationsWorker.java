@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.text.TextUtils;

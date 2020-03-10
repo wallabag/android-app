@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -21,6 +21,8 @@ import fr.gaulupeau.apps.Poche.events.FetchImagesFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.FetchImagesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;

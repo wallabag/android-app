@@ -1,9 +1,10 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.tasks;
 
 import android.content.Context;
 import android.os.Parcel;
 
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
 
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.writeEnum;
