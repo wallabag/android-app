@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -468,16 +467,16 @@ public class OperationsHelper {
     }
 
     public static void wipeDB(Settings settings) {
-        DaoSession daoSession = getDaoSession();
-
-        FtsDao.deleteAllArticles(daoSession.getDatabase());
-        daoSession.getAnnotationRangeDao().deleteAll();
-        daoSession.getAnnotationDao().deleteAll();
-        daoSession.getArticleContentDao().deleteAll();
-        daoSession.getArticleDao().deleteAll();
-        daoSession.getTagDao().deleteAll();
-        daoSession.getArticleTagsJoinDao().deleteAll();
-        daoSession.getQueueItemDao().deleteAll();
+        DbUtils.runInNonExclusiveTx(getDaoSession(), session -> {
+            FtsDao.deleteAllArticles(session.getDatabase());
+            session.getAnnotationRangeDao().deleteAll();
+            session.getAnnotationDao().deleteAll();
+            session.getArticleContentDao().deleteAll();
+            session.getArticleDao().deleteAll();
+            session.getTagDao().deleteAll();
+            session.getArticleTagsJoinDao().deleteAll();
+            session.getQueueItemDao().deleteAll();
+        });
 
         settings.setLatestUpdatedItemTimestamp(0);
         settings.setLatestUpdateRunTimestamp(0);
@@ -494,20 +493,13 @@ public class OperationsHelper {
     private static void queueOfflineChange(Consumer<QueueHelper> action) {
         long queueChangedLength;
 
-        DaoSession daoSession = getDaoSession();
-        SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
-        sqliteDatabase.beginTransactionNonExclusive();
-        try {
-            QueueHelper queueHelper = new QueueHelper(daoSession);
+        queueChangedLength = DbUtils.callInNonExclusiveTx(getDaoSession(), session -> {
+            QueueHelper queueHelper = new QueueHelper(session);
 
             action.accept(queueHelper);
 
-            queueChangedLength = queueHelper.getQueueLength();
-
-            sqliteDatabase.setTransactionSuccessful();
-        } finally {
-            sqliteDatabase.endTransaction();
-        }
+            return queueHelper.getQueueLength();
+        });
 
         postEvent(new OfflineQueueChangedEvent(queueChangedLength, true));
     }

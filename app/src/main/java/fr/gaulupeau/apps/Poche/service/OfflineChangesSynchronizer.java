@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.data.DbUtils;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -203,17 +203,11 @@ public class OfflineChangesSynchronizer extends BaseWorker {
         Long queueLength = null;
 
         if (queueState.hasChanges()) {
-            SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
-            sqliteDatabase.beginTransactionNonExclusive();
-            try {
+            queueLength = DbUtils.callInNonExclusiveTx(daoSession, (s) -> {
                 queueHelper.save(queueState);
 
-                queueLength = queueHelper.getQueueLength();
-
-                sqliteDatabase.setTransactionSuccessful();
-            } finally {
-                sqliteDatabase.endTransaction();
-            }
+                return queueHelper.getQueueLength();
+            });
         }
 
         if (queueLength != null) {
