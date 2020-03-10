@@ -12,14 +12,17 @@ import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
+import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.service.tasks.AddArticleTask;
 import fr.gaulupeau.apps.Poche.service.tasks.ArticleChangeTask;
 import fr.gaulupeau.apps.Poche.service.tasks.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.service.tasks.UpdateArticleProgressTask;
 import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
+import wallabag.apiwrapper.WallabagService;
 
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueSimpleServiceTask;
+import static fr.gaulupeau.apps.Poche.service.ServiceHelper.startService;
 
 public class OperationsHelper {
 
@@ -93,6 +96,121 @@ public class OperationsHelper {
         settings.setFirstSyncDone(false);
 
         EventHelper.notifyEverythingRemoved();
+    }
+
+    public static void syncAndUpdate(Context context, Settings settings,
+                                     Updater.UpdateType updateType, boolean auto) {
+        syncAndUpdate(context, settings, updateType, auto, null);
+    }
+
+    private static void syncAndUpdate(Context context, Settings settings,
+                                      Updater.UpdateType updateType,
+                                      boolean auto, Long operationID) {
+        Log.d(TAG, "syncAndUpdate() started");
+
+        if (settings != null && settings.isOfflineQueuePending()) {
+            Log.d(TAG, "syncAndUpdate() running sync and update");
+
+            ActionRequest syncRequest = getSyncQueueRequest(auto, false);
+            syncRequest.setNextRequest(getUpdateArticlesRequest(settings, updateType, auto, operationID));
+
+            startService(context, syncRequest);
+        } else {
+            updateArticles(context, settings, updateType, auto, operationID);
+        }
+    }
+
+    public static void syncQueue(Context context) {
+        syncQueue(context, false, false);
+    }
+
+    public static void syncQueue(Context context, boolean auto) {
+        syncQueue(context, auto, false);
+    }
+
+    public static void syncQueue(Context context, boolean auto, boolean byOperation) {
+        Log.d(TAG, "syncQueue() started");
+
+        startService(context, getSyncQueueRequest(auto, byOperation));
+    }
+
+    private static ActionRequest getSyncQueueRequest(boolean auto, boolean byOperation) {
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SYNC_QUEUE);
+        if (auto) request.setRequestType(ActionRequest.RequestType.AUTO);
+        else if (byOperation) request.setRequestType(ActionRequest.RequestType.MANUAL_BY_OPERATION);
+
+        return request;
+    }
+
+    public static void updateArticles(Context context, Settings settings,
+                                      Updater.UpdateType updateType,
+                                      boolean auto, Long operationID) {
+        Log.d(TAG, "updateArticles() started");
+
+        startService(context, getUpdateArticlesRequest(settings, updateType, auto, operationID));
+    }
+
+    private static ActionRequest getUpdateArticlesRequest(Settings settings,
+                                                          Updater.UpdateType updateType,
+                                                          boolean auto, Long operationID) {
+        ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_ARTICLES);
+        request.setUpdateType(updateType);
+        request.setOperationID(operationID);
+        if (auto) request.setRequestType(ActionRequest.RequestType.AUTO);
+
+        if (updateType == Updater.UpdateType.FAST && settings.isSweepingAfterFastSyncEnabled()) {
+            request.setNextRequest(getSweepDeletedArticlesRequest(auto, operationID));
+        }
+
+        if (settings.isImageCacheEnabled()) {
+            addNextRequest(request, getFetchImagesRequest());
+        }
+
+        return request;
+    }
+
+    public static void sweepDeletedArticles(Context context) {
+        Log.d(TAG, "sweepDeletedArticles() started");
+
+        startService(context, getSweepDeletedArticlesRequest(false, null));
+    }
+
+    private static ActionRequest getSweepDeletedArticlesRequest(boolean auto, Long operationID) {
+        ActionRequest request = new ActionRequest(ActionRequest.Action.SWEEP_DELETED_ARTICLES);
+        request.setOperationID(operationID);
+        if (auto) request.setRequestType(ActionRequest.RequestType.AUTO);
+
+        return request;
+    }
+
+    public static void downloadArticleAsFile(Context context, int articleID,
+                                             WallabagService.ResponseFormat downloadFormat,
+                                             Long operationID) {
+        Log.d(TAG, "downloadArticleAsFile() started; download format: " + downloadFormat);
+
+        ActionRequest request = new ActionRequest(ActionRequest.Action.DOWNLOAD_AS_FILE);
+        request.setArticleID(articleID);
+        request.setDownloadFormat(downloadFormat);
+        request.setOperationID(operationID);
+
+        startService(context, request);
+    }
+
+    public static void fetchImages(Context context) {
+        Log.d(TAG, "fetchImages() started");
+
+        startService(context, getFetchImagesRequest());
+    }
+
+    private static ActionRequest getFetchImagesRequest() {
+        return new ActionRequest(ActionRequest.Action.FETCH_IMAGES);
+    }
+
+    private static void addNextRequest(ActionRequest actionRequest, ActionRequest nextRequest) {
+        while (actionRequest.getNextRequest() != null)
+            actionRequest = actionRequest.getNextRequest();
+
+        actionRequest.setNextRequest(nextRequest);
     }
 
 }
