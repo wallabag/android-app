@@ -34,6 +34,7 @@ import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.NotificationActionReceiver;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
@@ -121,7 +122,7 @@ public class EventProcessor {
         Updater.UpdateType updateType = settings.getAutoSyncType() == 0
                 ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
 
-        ServiceHelper.syncAndUpdate(getContext(), settings, updateType, true);
+        OperationsHelper.syncAndUpdate(getContext(), settings, updateType, true);
     }
 
     @Subscribe
@@ -150,7 +151,7 @@ public class EventProcessor {
         settings.setOfflineQueuePending(!queueIsEmpty);
 
         if(event.isTriggeredByOperation() && WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncQueue(getContext(), false, true);
+            OperationsHelper.syncQueue(getContext(), false, true);
         } else if(settings.isAutoSyncQueueEnabled()) {
             enableConnectivityChangeReceiver(!queueIsEmpty);
         }
@@ -587,7 +588,7 @@ public class EventProcessor {
                     && !settings.isOfflineQueuePending()) {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
-                ServiceHelper.updateArticles(getContext(), settings,
+                OperationsHelper.updateArticles(getContext(), settings,
                         Updater.UpdateType.FAST, true, null);
             }
         }
@@ -604,7 +605,7 @@ public class EventProcessor {
             if(delayed) {
                 Log.d(TAG, "networkChanged() requesting SyncQueue operation");
 
-                ServiceHelper.syncQueue(getContext(), true);
+                OperationsHelper.syncQueue(getContext(), true);
 
                 delayedNetworkChangedTask = false;
             } else {

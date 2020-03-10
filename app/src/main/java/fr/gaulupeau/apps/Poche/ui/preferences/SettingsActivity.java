@@ -39,7 +39,6 @@ import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 
@@ -327,7 +326,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 if(!oldImageCacheEnabled && settings.isImageCacheEnabled()
                         && settings.isFirstSyncDone()) {
                     Log.i(TAG, "applyChanges() image caching changed, starting image fetching");
-                    ServiceHelper.fetchImages(App.getInstance());
+                    OperationsHelper.fetchImages(App.getInstance());
                 }
             }
 

@@ -73,7 +73,6 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 
 import static android.text.Html.escapeHtml;
@@ -1146,7 +1145,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                             format = WallabagService.ResponseFormat.PDF;
                         }
 
-                        ServiceHelper.downloadArticleAsFile(getApplicationContext(),
+                        OperationsHelper.downloadArticleAsFile(getApplicationContext(),
                                 article.getArticleId(), format, null);
                     }
                 });

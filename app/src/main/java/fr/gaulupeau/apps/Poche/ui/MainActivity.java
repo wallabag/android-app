@@ -60,7 +60,6 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
@@ -819,7 +818,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        ServiceHelper.syncQueue(this);
+        OperationsHelper.syncQueue(this);
     }
 
     private void sweepDeletedArticles() {
@@ -828,7 +827,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        ServiceHelper.sweepDeletedArticles(this);
+        OperationsHelper.sweepDeletedArticles(this);
     }
 
     private void updateAllFeedsIfDbIsEmpty() {
@@ -862,7 +861,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if(WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncAndUpdate(this, settings, updateType, false);
+            OperationsHelper.syncAndUpdate(this, settings, updateType, false);
 
             result = true;
         } else {
