@@ -2,8 +2,6 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
 
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
-
 public class DeleteArticleTask extends GenericFieldsTask {
 
     public DeleteArticleTask(int articleId) {
@@ -12,7 +10,7 @@ public class DeleteArticleTask extends GenericFieldsTask {
 
     @Override
     public void run(Context context) {
-        OperationsHelper.deleteArticleBG(genericIntField1);
+        new OperationsWorker(context).deleteArticle(genericIntField1);
     }
 
     // Parcelable implementation

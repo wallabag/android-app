@@ -17,7 +17,7 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class DeletedArticleSweeper extends BaseWorker {
+public class DeletedArticleSweeper extends BaseNetworkWorker {
 
     private static final String TAG = DeletedArticleSweeper.class.getSimpleName();
 

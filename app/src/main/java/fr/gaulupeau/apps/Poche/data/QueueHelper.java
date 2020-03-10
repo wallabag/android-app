@@ -205,7 +205,7 @@ public class QueueHelper {
         }
     }
 
-    void changeArticle(int articleID, ArticleChangeType articleChangeType) {
+    public void changeArticle(int articleID, ArticleChangeType articleChangeType) {
         Log.d(TAG, String.format("changeArticle(%d, %s) started", articleID, articleChangeType));
 
         ArticleChangeItem item = new QueueItem(Action.ARTICLE_CHANGE)
@@ -218,7 +218,7 @@ public class QueueHelper {
         Log.d(TAG, "changeArticle() finished");
     }
 
-    void deleteTagsFromArticle(int articleID, Collection<String> tags) {
+    public void deleteTagsFromArticle(int articleID, Collection<String> tags) {
         Log.d(TAG, String.format("deleteTagsFromArticle(%d, %s) started",
                 articleID, tags.toString()));
 
@@ -232,7 +232,7 @@ public class QueueHelper {
         Log.d(TAG, "deleteTagsFromArticle() finished");
     }
 
-    void addAnnotationToArticle(int articleId, long annotationId) {
+    public void addAnnotationToArticle(int articleId, long annotationId) {
         Log.d(TAG, String.format("addAnnotationToArticle(%d, %d) started", articleId, annotationId));
 
         AddOrUpdateAnnotationItem item = new QueueItem(Action.ANNOTATION_ADD)
@@ -245,7 +245,7 @@ public class QueueHelper {
         Log.d(TAG, "addAnnotationToArticle() finished");
     }
 
-    void updateAnnotationOnArticle(int articleId, long annotationId) {
+    public void updateAnnotationOnArticle(int articleId, long annotationId) {
         Log.d(TAG, String.format("updateAnnotationOnArticle(%d, %d) started",
                 articleId, annotationId));
 
@@ -259,7 +259,7 @@ public class QueueHelper {
         Log.d(TAG, "updateAnnotationOnArticle() finished");
     }
 
-    void deleteAnnotationFromArticle(int articleId, int remoteAnnotationId) {
+    public void deleteAnnotationFromArticle(int articleId, int remoteAnnotationId) {
         Log.d(TAG, String.format("deleteAnnotationFromArticle(%d, %d) started",
                 articleId, remoteAnnotationId));
 
@@ -273,7 +273,7 @@ public class QueueHelper {
         Log.d(TAG, "deleteAnnotationFromArticle() finished");
     }
 
-    void deleteArticle(int articleID) {
+    public void deleteArticle(int articleID) {
         Log.d(TAG, String.format("deleteArticle(%d) started", articleID));
 
         ArticleDeleteItem item = new QueueItem(Action.ARTICLE_DELETE)
@@ -285,7 +285,7 @@ public class QueueHelper {
         Log.d(TAG, "deleteArticle() finished");
     }
 
-    void addLink(String link, String origin) {
+    public void addLink(String link, String origin) {
         Log.d(TAG, String.format("addLink(%s, %s) started", link, origin));
 
         AddLinkItem item = new QueueItem(Action.ADD_LINK)
