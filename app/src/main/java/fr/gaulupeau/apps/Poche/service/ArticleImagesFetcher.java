@@ -26,7 +26,7 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class ArticleImagesFetcher extends BaseWorker {
+public class ArticleImagesFetcher extends BaseNetworkWorker {
 
     private static final String TAG = ArticleImagesFetcher.class.getSimpleName();
 

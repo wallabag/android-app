@@ -32,7 +32,7 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class ArticleAsFileDownloader extends BaseWorker {
+public class ArticleAsFileDownloader extends BaseNetworkWorker {
 
     private static final String TAG = ArticleAsFileDownloader.class.getSimpleName();
 

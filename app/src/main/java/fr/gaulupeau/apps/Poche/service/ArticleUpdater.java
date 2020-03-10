@@ -18,7 +18,7 @@ import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postStickyEvent;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.removeStickyEvent;
 
-public class ArticleUpdater extends BaseWorker {
+public class ArticleUpdater extends BaseNetworkWorker {
 
     private static final String TAG = ArticleUpdater.class.getSimpleName();
 

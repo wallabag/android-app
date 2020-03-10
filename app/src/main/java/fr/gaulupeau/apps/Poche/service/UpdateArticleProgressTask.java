@@ -2,8 +2,6 @@ package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
 
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
-
 public class UpdateArticleProgressTask extends GenericFieldsTask {
 
     public UpdateArticleProgressTask(int articleId, double progress) {
@@ -13,7 +11,7 @@ public class UpdateArticleProgressTask extends GenericFieldsTask {
 
     @Override
     public void run(Context context) {
-        OperationsHelper.setArticleProgressBG(genericIntField1, genericDoubleField1);
+        new OperationsWorker(context).setArticleProgress(genericIntField1, genericDoubleField1);
     }
 
     // Parcelable implementation

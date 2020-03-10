@@ -3,7 +3,6 @@ package fr.gaulupeau.apps.Poche.service;
 import android.content.Context;
 import android.os.Parcel;
 
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readEnum;
@@ -38,17 +37,19 @@ public class ArticleChangeTask extends GenericFieldsTask {
 
     @Override
     public void run(Context context) {
+        OperationsWorker operationsWorker = new OperationsWorker(context);
+
         switch (articleChangeType) {
             case ARCHIVE:
-                OperationsHelper.archiveArticleBG(genericIntField1, genericBooleanField1);
+                operationsWorker.archiveArticle(genericIntField1, genericBooleanField1);
                 return;
 
             case FAVORITE:
-                OperationsHelper.favoriteArticleBG(genericIntField1, genericBooleanField1);
+                operationsWorker.favoriteArticle(genericIntField1, genericBooleanField1);
                 return;
 
             case TITLE:
-                OperationsHelper.changeArticleTitleBG(genericIntField1, genericStringField1);
+                operationsWorker.changeArticleTitle(genericIntField1, genericStringField1);
                 return;
 
             default:
