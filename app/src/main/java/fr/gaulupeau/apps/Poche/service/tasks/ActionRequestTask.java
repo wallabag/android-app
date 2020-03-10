@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.tasks;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -6,6 +6,8 @@ import android.os.Parcel;
 import java.util.Objects;
 
 import fr.gaulupeau.apps.Poche.events.ActionResultEvent;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 

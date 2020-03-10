@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,6 +8,7 @@ import java.io.IOException;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.AuthorizationException;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;

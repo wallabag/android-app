@@ -66,7 +66,7 @@ public class ActionResult {
         this.exception = exception;
     }
 
-    void updateWith(ActionResult r) {
+    public void updateWith(ActionResult r) {
         if(r == null || r.isSuccess()) return;
 
         success = false;

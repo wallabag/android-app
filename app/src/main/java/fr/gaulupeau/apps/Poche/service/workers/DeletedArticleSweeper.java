@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,8 @@ import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.SweepDeletedArticlesStartedEvent;
 import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;

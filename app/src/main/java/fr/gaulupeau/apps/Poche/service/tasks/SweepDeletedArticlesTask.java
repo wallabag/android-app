@@ -1,6 +1,10 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.tasks;
 
 import android.content.Context;
+
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
+import fr.gaulupeau.apps.Poche.service.workers.DeletedArticleSweeper;
 
 public class SweepDeletedArticlesTask extends ActionRequestTask {
 

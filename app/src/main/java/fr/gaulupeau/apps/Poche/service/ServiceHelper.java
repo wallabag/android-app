@@ -13,6 +13,13 @@ import androidx.core.util.Consumer;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.Updater;
 
+import fr.gaulupeau.apps.Poche.service.tasks.ActionRequestTask;
+import fr.gaulupeau.apps.Poche.service.tasks.DownloadArticleAsFileTask;
+import fr.gaulupeau.apps.Poche.service.tasks.FetchArticleImagesTask;
+import fr.gaulupeau.apps.Poche.service.tasks.SimpleTask;
+import fr.gaulupeau.apps.Poche.service.tasks.SweepDeletedArticlesTask;
+import fr.gaulupeau.apps.Poche.service.tasks.SyncOfflineChangesTask;
+import fr.gaulupeau.apps.Poche.service.tasks.UpdateArticlesTask;
 import wallabag.apiwrapper.WallabagService;
 
 public class ServiceHelper {

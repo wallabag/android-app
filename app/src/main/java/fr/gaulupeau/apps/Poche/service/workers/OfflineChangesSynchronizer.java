@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -31,6 +31,8 @@ import fr.gaulupeau.apps.Poche.events.SyncQueueProgressEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueStartedEvent;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.service.ActionRequest;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 import wallabag.apiwrapper.ModifyArticleBuilder;
 import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
