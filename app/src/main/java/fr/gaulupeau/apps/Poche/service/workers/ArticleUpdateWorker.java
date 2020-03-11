@@ -10,7 +10,6 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
-import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
@@ -47,7 +46,7 @@ public class ArticleUpdateWorker extends BaseNetworkWorker {
     }
 
     private ActionResult updateArticles(final ActionRequest actionRequest) {
-        Updater.UpdateType updateType = actionRequest.getUpdateType();
+        ArticleUpdater.UpdateType updateType = actionRequest.getUpdateType();
         Log.d(TAG, String.format("updateArticles(%s) started", updateType));
 
         ActionResult result = new ActionResult();
@@ -57,7 +56,7 @@ public class ArticleUpdateWorker extends BaseNetworkWorker {
             final Settings settings = getSettings();
 
             try {
-                Updater.UpdateListener updateListener = new Updater.UpdateListener() {
+                ArticleUpdater.UpdateListener updateListener = new ArticleUpdater.UpdateListener() {
                     @Override
                     public void onProgress(int current, int total) {
                         postEvent(new UpdateArticlesProgressEvent(
@@ -74,7 +73,8 @@ public class ArticleUpdateWorker extends BaseNetworkWorker {
                     }
                 };
 
-                event = getUpdater().update(updateType,
+                ArticleUpdater updater = new ArticleUpdater(getDaoSession(), getWallabagService());
+                event = updater.update(updateType,
                         settings.getLatestUpdatedItemTimestamp(), updateListener);
             } catch (UnsuccessfulResponseException | IOException e) {
                 ActionResult r = processException(e, "updateArticles()");

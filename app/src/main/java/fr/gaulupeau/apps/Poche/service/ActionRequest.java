@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import wallabag.apiwrapper.WallabagService;
 
-import fr.gaulupeau.apps.Poche.network.Updater;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readEnum;
 import static fr.gaulupeau.apps.Poche.service.ParcelableUtils.readInteger;
@@ -29,7 +29,7 @@ public class ActionRequest implements Parcelable {
     private Long operationID;
 
     private Integer articleID;
-    private Updater.UpdateType updateType;
+    private ArticleUpdater.UpdateType updateType;
     private WallabagService.ResponseFormat downloadFormat;
 
     private ActionRequest nextRequest;
@@ -70,11 +70,11 @@ public class ActionRequest implements Parcelable {
         this.articleID = articleID;
     }
 
-    public Updater.UpdateType getUpdateType() {
+    public ArticleUpdater.UpdateType getUpdateType() {
         return updateType;
     }
 
-    public void setUpdateType(Updater.UpdateType updateType) {
+    public void setUpdateType(ArticleUpdater.UpdateType updateType) {
         this.updateType = updateType;
     }
 
@@ -119,7 +119,7 @@ public class ActionRequest implements Parcelable {
         operationID = readLong(in);
 
         articleID = readInteger(in);
-        updateType = readEnum(Updater.UpdateType.class, in);
+        updateType = readEnum(ArticleUpdater.UpdateType.class, in);
         downloadFormat = readEnum(WallabagService.ResponseFormat.class, in);
         nextRequest = in.readParcelable(getClass().getClassLoader());
     }

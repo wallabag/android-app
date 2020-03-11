@@ -55,7 +55,7 @@ import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesProgressEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesStartedEvent;
-import fr.gaulupeau.apps.Poche.network.Updater;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
@@ -809,7 +809,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRecyclerViewListSwipeUpdate() {
-        updateArticles(true, Updater.UpdateType.FAST);
+        updateArticles(true, ArticleUpdater.UpdateType.FAST);
     }
 
     private void syncQueue() {
@@ -841,15 +841,15 @@ public class MainActivity extends AppCompatActivity
         if(settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk()
                 && settings.isFirstSyncDone()
                 && settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
-            updateArticles(false, Updater.UpdateType.FAST);
+            updateArticles(false, ArticleUpdater.UpdateType.FAST);
         }
     }
 
     private void fullUpdate(boolean showErrors) {
-        updateArticles(showErrors, Updater.UpdateType.FULL);
+        updateArticles(showErrors, ArticleUpdater.UpdateType.FULL);
     }
 
-    private boolean updateArticles(boolean showErrors, Updater.UpdateType updateType) {
+    private boolean updateArticles(boolean showErrors, ArticleUpdater.UpdateType updateType) {
         boolean result = false;
 
         if(updateRunning) {

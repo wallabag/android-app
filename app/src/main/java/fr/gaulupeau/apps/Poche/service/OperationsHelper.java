@@ -12,11 +12,11 @@ import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
-import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.service.tasks.AddArticleTask;
 import fr.gaulupeau.apps.Poche.service.tasks.ArticleChangeTask;
 import fr.gaulupeau.apps.Poche.service.tasks.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.service.tasks.UpdateArticleProgressTask;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
 import wallabag.apiwrapper.WallabagService;
 
@@ -99,12 +99,12 @@ public class OperationsHelper {
     }
 
     public static void syncAndUpdate(Context context, Settings settings,
-                                     Updater.UpdateType updateType, boolean auto) {
+                                     ArticleUpdater.UpdateType updateType, boolean auto) {
         syncAndUpdate(context, settings, updateType, auto, null);
     }
 
     private static void syncAndUpdate(Context context, Settings settings,
-                                      Updater.UpdateType updateType,
+                                      ArticleUpdater.UpdateType updateType,
                                       boolean auto, Long operationID) {
         Log.d(TAG, "syncAndUpdate() started");
 
@@ -143,7 +143,7 @@ public class OperationsHelper {
     }
 
     public static void updateArticles(Context context, Settings settings,
-                                      Updater.UpdateType updateType,
+                                      ArticleUpdater.UpdateType updateType,
                                       boolean auto, Long operationID) {
         Log.d(TAG, "updateArticles() started");
 
@@ -151,14 +151,14 @@ public class OperationsHelper {
     }
 
     private static ActionRequest getUpdateArticlesRequest(Settings settings,
-                                                          Updater.UpdateType updateType,
+                                                          ArticleUpdater.UpdateType updateType,
                                                           boolean auto, Long operationID) {
         ActionRequest request = new ActionRequest(ActionRequest.Action.UPDATE_ARTICLES);
         request.setUpdateType(updateType);
         request.setOperationID(operationID);
         if (auto) request.setRequestType(ActionRequest.RequestType.AUTO);
 
-        if (updateType == Updater.UpdateType.FAST && settings.isSweepingAfterFastSyncEnabled()) {
+        if (updateType == ArticleUpdater.UpdateType.FAST && settings.isSweepingAfterFastSyncEnabled()) {
             request.setNextRequest(getSweepDeletedArticlesRequest(auto, operationID));
         }
 
