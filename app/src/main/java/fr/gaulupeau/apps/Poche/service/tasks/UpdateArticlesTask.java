@@ -4,7 +4,7 @@ import android.content.Context;
 
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
-import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdateWorker;
 
 public class UpdateArticlesTask extends ActionRequestTask {
 
@@ -14,7 +14,7 @@ public class UpdateArticlesTask extends ActionRequestTask {
 
     @Override
     protected ActionResult run(Context context, ActionRequest actionRequest) {
-        return new ArticleUpdater(context).update(actionRequest);
+        return new ArticleUpdateWorker(context).update(actionRequest);
     }
 
     // Parcelable implementation
