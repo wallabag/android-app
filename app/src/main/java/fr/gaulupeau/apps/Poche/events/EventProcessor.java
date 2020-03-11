@@ -28,7 +28,6 @@ import java.util.Locale;
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
@@ -36,6 +35,7 @@ import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.NotificationActionReceiver;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 
@@ -119,8 +119,8 @@ public class EventProcessor {
             return;
         }
 
-        Updater.UpdateType updateType = settings.getAutoSyncType() == 0
-                ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
+        ArticleUpdater.UpdateType updateType = settings.getAutoSyncType() == 0
+                ? ArticleUpdater.UpdateType.FAST : ArticleUpdater.UpdateType.FULL;
 
         OperationsHelper.syncAndUpdate(getContext(), settings, updateType, true);
     }
@@ -174,7 +174,7 @@ public class EventProcessor {
         Context context = getContext();
 
         String detailedMessage = context.getString(
-                event.getRequest().getUpdateType() != Updater.UpdateType.FAST
+                event.getRequest().getUpdateType() != ArticleUpdater.UpdateType.FAST
                         ? R.string.notification_updatingArticles_full
                         : R.string.notification_updatingArticles_fast);
 
@@ -589,7 +589,7 @@ public class EventProcessor {
                 Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
 
                 OperationsHelper.updateArticles(getContext(), settings,
-                        Updater.UpdateType.FAST, true, null);
+                        ArticleUpdater.UpdateType.FAST, true, null);
             }
         }
     }

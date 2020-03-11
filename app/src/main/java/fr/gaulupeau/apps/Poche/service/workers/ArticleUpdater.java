@@ -1,4 +1,4 @@
-package fr.gaulupeau.apps.Poche.network;
+package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -39,9 +39,9 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 
-import static fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent.ChangeType;
+import static fr.gaulupeau.apps.Poche.events.FeedsChangedEvent.ChangeType;
 
-public class Updater {
+public class ArticleUpdater {
 
     public enum UpdateType {FULL, FAST}
 
@@ -53,12 +53,12 @@ public class Updater {
         void onSuccess(long latestUpdatedItemTimestamp);
     }
 
-    private static final String TAG = Updater.class.getSimpleName();
+    private static final String TAG = ArticleUpdater.class.getSimpleName();
 
     private final DaoSession daoSession;
     private final WallabagService wallabagService;
 
-    public Updater(DaoSession daoSession, WallabagService wallabagService) {
+    public ArticleUpdater(DaoSession daoSession, WallabagService wallabagService) {
         this.daoSession = daoSession;
         this.wallabagService = wallabagService;
     }

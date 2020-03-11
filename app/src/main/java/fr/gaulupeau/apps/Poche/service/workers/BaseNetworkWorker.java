@@ -5,7 +5,6 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
@@ -85,10 +84,6 @@ public class BaseNetworkWorker extends BaseWorker {
     protected WallabagService getWallabagService()
             throws IncorrectConfigurationException {
         return WallabagConnection.getWallabagService();
-    }
-
-    protected Updater getUpdater() throws IncorrectConfigurationException {
-        return new Updater(getDaoSession(), getWallabagService());
     }
 
 }
