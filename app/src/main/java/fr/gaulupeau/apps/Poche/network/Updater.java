@@ -48,7 +48,7 @@ import static fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent.ChangeType;
 
 public class Updater {
 
-    public enum UpdateType { FULL, FAST }
+    public enum UpdateType {FULL, FAST}
 
     public interface ProgressListener {
         void onProgress(int current, int total);
@@ -77,10 +77,10 @@ public class Updater {
 
         ArticlesChangedEvent event = new ArticlesChangedEvent();
 
-        SQLiteDatabase sqliteDatabase = (SQLiteDatabase)daoSession.getDatabase().getRawDatabase();
+        SQLiteDatabase sqliteDatabase = (SQLiteDatabase) daoSession.getDatabase().getRawDatabase();
         sqliteDatabase.beginTransactionNonExclusive();
         try {
-            if(clean) {
+            if (clean) {
                 Log.d(TAG, "update() deleting old DB entries");
                 FtsDao.deleteAllArticles(daoSession.getDatabase());
                 daoSession.getAnnotationRangeDao().deleteAll();
@@ -106,7 +106,7 @@ public class Updater {
             sqliteDatabase.endTransaction();
         }
 
-        if(updateListener != null) updateListener.onSuccess(latestUpdatedItemTimestamp);
+        if (updateListener != null) updateListener.onSuccess(latestUpdatedItemTimestamp);
 
         Log.i(TAG, "update() finished");
 
@@ -140,12 +140,12 @@ public class Updater {
         AnnotationRangeDao annotationRangeDao = daoSession.getAnnotationRangeDao();
 
         List<Tag> tags;
-        if(full) {
+        if (full) {
             List<wallabag.apiwrapper.models.Tag> apiTags = wallabagService.getTags();
 
             tags = new ArrayList<>(apiTags.size());
 
-            for(wallabag.apiwrapper.models.Tag apiTag: apiTags) {
+            for (wallabag.apiwrapper.models.Tag apiTag : apiTags) {
                 tags.add(new Tag(null, apiTag.id, apiTag.label));
             }
 
@@ -156,8 +156,8 @@ public class Updater {
 
         Map<Integer, Tag> tagIdMap = new HashMap<>(tags.size());
         Map<String, Tag> tagLabelMap = new HashMap<>(tags.size());
-        for(Tag tag: tags) {
-            if(tag.getTagId() != null) {
+        for (Tag tag : tags) {
+            if (tag.getTagId() != null) {
                 tagIdMap.put(tag.getTagId(), tag);
             } else {
                 tagLabelMap.put(tag.getLabel(), tag);
@@ -170,7 +170,7 @@ public class Updater {
                 .getArticlesBuilder()
                 .perPage(perPage);
 
-        if(full) {
+        if (full) {
             queryBuilder
                     .sortCriterion(ArticlesQueryBuilder.SortCriterion.CREATED)
                     .sortOrder(ArticlesQueryBuilder.SortOrder.ASCENDING);
@@ -201,17 +201,17 @@ public class Updater {
         Set<wallabag.apiwrapper.models.Annotation.Range> presentApiAnnotationRanges = new HashSet<>();
 
         Log.d(TAG, "performUpdate() starting to iterate though pages");
-        for(ArticlesPageIterator pageIterator = queryBuilder.pageIterator(); pageIterator.hasNext();) {
+        for (ArticlesPageIterator pageIterator = queryBuilder.pageIterator(); pageIterator.hasNext(); ) {
             Articles articles = pageIterator.next();
 
             Log.d(TAG, String.format("performUpdate() page: %d/%d, total articles: %d",
                     articles.page, articles.pages, articles.total));
 
-            if(updateListener != null) {
+            if (updateListener != null) {
                 updateListener.onProgress((articles.page - 1) * perPage, articles.total);
             }
 
-            if(articles.embedded.items.isEmpty()) {
+            if (articles.embedded.items.isEmpty()) {
                 Log.d(TAG, "performUpdate() no items; skipping");
                 continue;
             }
@@ -230,7 +230,7 @@ public class Updater {
             annotationRangesToInsert.clear();
             annotationRangesToRemove.clear();
 
-            for(wallabag.apiwrapper.models.Article apiArticle: articles.embedded.items) {
+            for (wallabag.apiwrapper.models.Article apiArticle : articles.embedded.items) {
                 int id = apiArticle.id;
 
                 Article article = null;
@@ -238,13 +238,13 @@ public class Updater {
                 EnumSet<ChangeType> articleChanges = EnumSet.noneOf(ChangeType.class);
                 boolean annotationsChanged = false;
 
-                if(!full) {
+                if (!full) {
                     article = articleDao.queryBuilder()
                             .where(ArticleDao.Properties.ArticleId.eq(id)).build().unique();
                 }
 
                 boolean existing = true;
-                if(article == null) {
+                if (article == null) {
                     existing = false;
 
                     article = new Article(null);
@@ -271,85 +271,85 @@ public class Updater {
                     articleChanges.add(ChangeType.ADDED);
                 }
 
-                if(existing) {
-                    if(!equalOrEmpty(article.getContent(), apiArticle.content)) {
+                if (existing) {
+                    if (!equalOrEmpty(article.getContent(), apiArticle.content)) {
                         article.setContent(apiArticle.content);
                         articleContentToUpdate.add(article.getArticleContent());
                         articleChanges.add(ChangeType.CONTENT_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getTitle(), unescapeHtml(apiArticle.title))) {
+                    if (!equalOrEmpty(article.getTitle(), unescapeHtml(apiArticle.title))) {
                         article.setTitle(unescapeHtml(apiArticle.title));
                         articleChanges.add(ChangeType.TITLE_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getDomain(), apiArticle.domainName)) {
+                    if (!equalOrEmpty(article.getDomain(), apiArticle.domainName)) {
                         article.setDomain(apiArticle.domainName);
                         articleChanges.add(ChangeType.DOMAIN_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getUrl(), apiArticle.url)) {
+                    if (!equalOrEmpty(article.getUrl(), apiArticle.url)) {
                         article.setUrl(apiArticle.url);
                         articleChanges.add(ChangeType.URL_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getOriginUrl(), apiArticle.originUrl)) {
+                    if (!equalOrEmpty(article.getOriginUrl(), apiArticle.originUrl)) {
                         article.setOriginUrl(apiArticle.originUrl);
                         articleChanges.add(ChangeType.ORIGIN_URL_CHANGED);
                     }
-                    if(article.getEstimatedReadingTime() != apiArticle.readingTime) {
+                    if (article.getEstimatedReadingTime() != apiArticle.readingTime) {
                         article.setEstimatedReadingTime(apiArticle.readingTime);
                         articleChanges.add(ChangeType.ESTIMATED_READING_TIME_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getLanguage(), apiArticle.language)) {
+                    if (!equalOrEmpty(article.getLanguage(), apiArticle.language)) {
                         article.setLanguage(apiArticle.language);
                         articleChanges.add(ChangeType.LANGUAGE_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getPreviewPictureURL(), apiArticle.previewPicture)) {
+                    if (!equalOrEmpty(article.getPreviewPictureURL(), apiArticle.previewPicture)) {
                         article.setPreviewPictureURL(apiArticle.previewPicture);
                         articleChanges.add(ChangeType.PREVIEW_PICTURE_URL_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getAuthors(), formatAuthors(apiArticle.authors))) {
+                    if (!equalOrEmpty(article.getAuthors(), formatAuthors(apiArticle.authors))) {
                         article.setAuthors(formatAuthors(apiArticle.authors));
                         articleChanges.add(ChangeType.AUTHORS_CHANGED);
                     }
-                    if(article.getCreationDate().getTime() != apiArticle.createdAt.getTime()) {
+                    if (article.getCreationDate().getTime() != apiArticle.createdAt.getTime()) {
                         article.setCreationDate(apiArticle.createdAt);
                         articleChanges.add(ChangeType.CREATED_DATE_CHANGED);
                     }
-                    if(article.getUpdateDate().getTime() != apiArticle.updatedAt.getTime()) {
+                    if (article.getUpdateDate().getTime() != apiArticle.updatedAt.getTime()) {
                         article.setUpdateDate(apiArticle.updatedAt);
                         articleChanges.add(ChangeType.UPDATED_DATE_CHANGED);
                     }
-                    if(!Objects.equals(article.getPublishedAt(), apiArticle.publishedAt)) {
+                    if (!Objects.equals(article.getPublishedAt(), apiArticle.publishedAt)) {
                         article.setPublishedAt(apiArticle.publishedAt);
                         articleChanges.add(ChangeType.PUBLISHED_AT_CHANGED);
                     }
-                    if(!Objects.equals(article.getStarredAt(), apiArticle.starredAt)) {
+                    if (!Objects.equals(article.getStarredAt(), apiArticle.starredAt)) {
                         article.setStarredAt(apiArticle.starredAt);
                         articleChanges.add(ChangeType.STARRED_AT_CHANGED);
                     }
-                    if(!Objects.equals(article.getIsPublic(), apiArticle.isPublic)) {
+                    if (!Objects.equals(article.getIsPublic(), apiArticle.isPublic)) {
                         article.setIsPublic(apiArticle.isPublic);
                         articleChanges.add(ChangeType.IS_PUBLIC_CHANGED);
                     }
-                    if(!equalOrEmpty(article.getPublicUid(), apiArticle.publicUid)) {
+                    if (!equalOrEmpty(article.getPublicUid(), apiArticle.publicUid)) {
                         article.setPublicUid(apiArticle.publicUid);
                         articleChanges.add(ChangeType.PUBLIC_UID_CHANGED);
                     }
-                    if(article.getArchive() != apiArticle.archived) {
+                    if (article.getArchive() != apiArticle.archived) {
                         article.setArchive(apiArticle.archived);
                         articleChanges.add(apiArticle.archived
                                 ? ChangeType.ARCHIVED
                                 : ChangeType.UNARCHIVED);
                     }
-                    if(article.getFavorite() != apiArticle.starred) {
+                    if (article.getFavorite() != apiArticle.starred) {
                         article.setFavorite(apiArticle.starred);
                         articleChanges.add(apiArticle.starred
                                 ? ChangeType.FAVORITED
                                 : ChangeType.UNFAVORITED);
                     }
 
-                    if(articleChanges.contains(ChangeType.CONTENT_CHANGED)
+                    if (articleChanges.contains(ChangeType.CONTENT_CHANGED)
                             || articleChanges.contains(ChangeType.PREVIEW_PICTURE_URL_CHANGED)) {
 
-                        if(article.getImagesDownloaded() != null && article.getImagesDownloaded()) {
+                        if (article.getImagesDownloaded() != null && article.getImagesDownloaded()) {
                             articleChanges.add(ChangeType.FETCHED_IMAGES_CHANGED);
                         }
 
@@ -360,26 +360,26 @@ public class Updater {
                 fixArticleNullValues(article);
 
                 List<Tag> articleTags;
-                if(existing) {
+                if (existing) {
                     articleTags = article.getTags();
                     List<Tag> tagJoinsToRemove = null;
 
-                    for(Tag tag: articleTags) {
+                    for (Tag tag : articleTags) {
                         boolean found;
-                        if(tag.getTagId() != null) {
+                        if (tag.getTagId() != null) {
                             found = findApiTagByID(tag.getTagId(), apiArticle.tags) != null;
                         } else {
                             found = findApiTagByLabel(tag.getLabel(), apiArticle.tags) != null;
                         }
 
-                        if(!found) {
-                            if(tagJoinsToRemove == null) tagJoinsToRemove = new ArrayList<>();
+                        if (!found) {
+                            if (tagJoinsToRemove == null) tagJoinsToRemove = new ArrayList<>();
 
                             tagJoinsToRemove.add(tag);
                         }
                     }
 
-                    if(tagJoinsToRemove != null && !tagJoinsToRemove.isEmpty()) {
+                    if (tagJoinsToRemove != null && !tagJoinsToRemove.isEmpty()) {
                         articleTags.removeAll(tagJoinsToRemove);
                         articleTagJoinsToRemove.put(article, tagJoinsToRemove);
                     }
@@ -388,16 +388,16 @@ public class Updater {
                     article.setTags(articleTags);
                 }
 
-                if(!apiArticle.tags.isEmpty()) {
+                if (!apiArticle.tags.isEmpty()) {
                     List<Tag> tagJoinsToInsert = new ArrayList<>(apiArticle.tags.size());
 
-                    for(wallabag.apiwrapper.models.Tag apiTag: apiArticle.tags) {
+                    for (wallabag.apiwrapper.models.Tag apiTag : apiArticle.tags) {
                         Tag tag = tagIdMap.get(apiTag.id);
 
-                        if(tag == null) {
+                        if (tag == null) {
                             tag = tagLabelMap.get(apiTag.label);
 
-                            if(tag == null) {
+                            if (tag == null) {
                                 tag = new Tag(null, apiTag.id, apiTag.label);
 
                                 tagIdMap.put(tag.getTagId(), tag);
@@ -411,9 +411,9 @@ public class Updater {
 
                                 tagsToUpdate.add(tag);
                             }
-                        } else if(!TextUtils.equals(tag.getLabel(), apiTag.label)) {
+                        } else if (!TextUtils.equals(tag.getLabel(), apiTag.label)) {
                             Log.w(TAG, String.format("performUpdate() tag label mismatch: " +
-                                    "tag ID: %s, local label: %s, remote label: %s",
+                                            "tag ID: %s, local label: %s, remote label: %s",
                                     tag.getId(), tag.getLabel(), apiTag.label));
 
                             tag.setLabel(apiTag.label);
@@ -421,13 +421,13 @@ public class Updater {
                             tagsToUpdate.add(tag);
                         }
 
-                        if(!articleTags.contains(tag)) {
+                        if (!articleTags.contains(tag)) {
                             articleTags.add(tag);
                             tagJoinsToInsert.add(tag);
                         }
                     }
 
-                    if(!tagJoinsToInsert.isEmpty()) {
+                    if (!tagJoinsToInsert.isEmpty()) {
                         articleTagJoinsToInsert.put(article, tagJoinsToInsert);
                     }
                 }
@@ -539,18 +539,18 @@ public class Updater {
                     annotationsChanged = true;
                 }
 
-                if(apiArticle.updatedAt.getTime() > latestUpdatedItemTimestamp) {
+                if (apiArticle.updatedAt.getTime() > latestUpdatedItemTimestamp) {
                     latestUpdatedItemTimestamp = apiArticle.updatedAt.getTime();
                 }
 
-                if(!articleChanges.isEmpty()) {
+                if (!articleChanges.isEmpty()) {
                     (existing ? articlesToUpdate : articlesToInsert).add(article);
                 } else {
                     Log.d(TAG, "performUpdate() article wasn't changed");
                 }
 
                 // TODO: fix - this is incorrect
-                if(!tagsToUpdate.isEmpty() || !tagsToInsert.isEmpty()
+                if (!tagsToUpdate.isEmpty() || !tagsToInsert.isEmpty()
                         || !articleTagJoinsToRemove.isEmpty()
                         || !articleTagJoinsToInsert.isEmpty()) {
                     articleChanges.add(ChangeType.TAGS_CHANGED);
@@ -560,16 +560,16 @@ public class Updater {
                     articleChanges.add(ChangeType.ANNOTATIONS_CHANGED);
                 }
 
-                if(!articleChanges.isEmpty()) {
+                if (!articleChanges.isEmpty()) {
                     Log.d(TAG, "performUpdate() articleChanges: " + articleChanges);
 
-                    if(event != null) {
+                    if (event != null) {
                         event.addArticleChangeWithoutObject(article, articleChanges);
                     }
                 }
             }
 
-            if(!articlesToUpdate.isEmpty()) {
+            if (!articlesToUpdate.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing articleDao.updateInTx()");
                 articleDao.updateInTx(articlesToUpdate);
                 Log.v(TAG, "performUpdate() done articleDao.updateInTx()");
@@ -577,7 +577,7 @@ public class Updater {
                 articlesToUpdate.clear();
             }
 
-            if(!articleContentToUpdate.isEmpty()) {
+            if (!articleContentToUpdate.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing articleContentDao.updateInTx()");
                 articleContentDao.updateInTx(articleContentToUpdate);
                 Log.v(TAG, "performUpdate() done articleContentDao.updateInTx()");
@@ -585,7 +585,7 @@ public class Updater {
                 articleContentToUpdate.clear();
             }
 
-            if(!articlesToInsert.isEmpty()) {
+            if (!articlesToInsert.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing articleDao.insertInTx()");
                 articleDao.insertInTx(articlesToInsert);
                 Log.v(TAG, "performUpdate() done articleDao.insertInTx()");
@@ -599,7 +599,7 @@ public class Updater {
                 articlesToInsert.clear();
             }
 
-            if(!articleContentToInsert.isEmpty()) {
+            if (!articleContentToInsert.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing articleContentDao.insertInTx()");
                 articleContentDao.insertInTx(articleContentToInsert);
                 Log.v(TAG, "performUpdate() done articleContentDao.insertInTx()");
@@ -607,7 +607,7 @@ public class Updater {
                 articleContentToInsert.clear();
             }
 
-            if(!tagsToUpdate.isEmpty()) {
+            if (!tagsToUpdate.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing tagDao.updateInTx()");
                 tagDao.updateInTx(tagsToUpdate);
                 Log.v(TAG, "performUpdate() done tagDao.updateInTx()");
@@ -615,7 +615,7 @@ public class Updater {
                 tagsToUpdate.clear();
             }
 
-            if(!tagsToInsert.isEmpty()) {
+            if (!tagsToInsert.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing tagDao.insertInTx()");
                 tagDao.insertInTx(tagsToInsert);
                 Log.v(TAG, "performUpdate() done tagDao.insertInTx()");
@@ -623,12 +623,12 @@ public class Updater {
                 tagsToInsert.clear();
             }
 
-            if(!articleTagJoinsToRemove.isEmpty()) {
+            if (!articleTagJoinsToRemove.isEmpty()) {
                 List<ArticleTagsJoin> joins = new ArrayList<>();
 
-                for(Map.Entry<Article, List<Tag>> entry: articleTagJoinsToRemove.entrySet()) {
+                for (Map.Entry<Article, List<Tag>> entry : articleTagJoinsToRemove.entrySet()) {
                     List<Long> tagIDsToRemove = new ArrayList<>(entry.getValue().size());
-                    for(Tag tag: entry.getValue()) tagIDsToRemove.add(tag.getId());
+                    for (Tag tag : entry.getValue()) tagIDsToRemove.add(tag.getId());
 
                     joins.addAll(articleTagsJoinDao.queryBuilder().where(
                             ArticleTagsJoinDao.Properties.ArticleId.eq(entry.getKey().getId()),
@@ -642,11 +642,11 @@ public class Updater {
                 Log.v(TAG, "performUpdate() done articleTagsJoinDao.deleteInTx()");
             }
 
-            if(!articleTagJoinsToInsert.isEmpty()) {
+            if (!articleTagJoinsToInsert.isEmpty()) {
                 List<ArticleTagsJoin> joins = new ArrayList<>();
 
-                for(Map.Entry<Article, List<Tag>> entry: articleTagJoinsToInsert.entrySet()) {
-                    for(Tag tag: entry.getValue()) {
+                for (Map.Entry<Article, List<Tag>> entry : articleTagJoinsToInsert.entrySet()) {
+                    for (Tag tag : entry.getValue()) {
                         joins.add(new ArticleTagsJoin(null, entry.getKey().getId(), tag.getId()));
                     }
                 }
@@ -658,7 +658,7 @@ public class Updater {
                 Log.v(TAG, "performUpdate() done articleTagsJoinDao.insertInTx()");
             }
 
-            if(!annotationRangesToRemove.isEmpty()) {
+            if (!annotationRangesToRemove.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing annotationRangeDao.deleteInTx()");
                 annotationRangeDao.deleteInTx(annotationRangesToRemove);
                 Log.v(TAG, "performUpdate() done annotationRangeDao.deleteInTx()");
@@ -666,7 +666,7 @@ public class Updater {
                 annotationRangesToRemove.clear();
             }
 
-            if(!annotationsToRemove.isEmpty()) {
+            if (!annotationsToRemove.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing annotationDao.deleteInTx()");
                 annotationDao.deleteInTx(annotationsToRemove);
                 Log.v(TAG, "performUpdate() done annotationDao.deleteInTx()");
@@ -674,7 +674,7 @@ public class Updater {
                 annotationsToRemove.clear();
             }
 
-            if(!annotationsToUpdate.isEmpty()) {
+            if (!annotationsToUpdate.isEmpty()) {
                 Log.v(TAG, "performUpdate() performing annotationDao.updateInTx()");
                 annotationDao.updateInTx(annotationsToUpdate);
                 Log.v(TAG, "performUpdate() done annotationDao.updateInTx()");
@@ -682,7 +682,7 @@ public class Updater {
                 annotationsToUpdate.clear();
             }
 
-            if(!annotationsToInsert.isEmpty()) {
+            if (!annotationsToInsert.isEmpty()) {
                 List<Annotation> annotations = new ArrayList<>(annotationsToInsert.size());
 
                 for (Pair<Article, Annotation> entry : annotationsToInsert) {
@@ -699,7 +699,7 @@ public class Updater {
                 annotationsToInsert.clear();
             }
 
-            if(!annotationRangesToInsert.isEmpty()) {
+            if (!annotationRangesToInsert.isEmpty()) {
                 List<AnnotationRange> ranges = new ArrayList<>(annotationRangesToInsert.size());
 
                 for (Pair<Annotation, AnnotationRange> entry : annotationRangesToInsert) {
@@ -716,7 +716,7 @@ public class Updater {
                 annotationRangesToInsert.clear();
             }
 
-            if(updateListener != null) {
+            if (updateListener != null) {
                 updateListener.onProgress(articles.page * perPage, articles.total);
             }
         }
@@ -757,20 +757,20 @@ public class Updater {
     }
 
     private void fixArticleNullValues(Article article) {
-        if(article.getTitle() == null) article.setTitle("");
-        if(article.isArticleContentLoaded() && article.getContent() == null) {
+        if (article.getTitle() == null) article.setTitle("");
+        if (article.isArticleContentLoaded() && article.getContent() == null) {
             article.setContent("");
         }
-        if(article.getDomain() == null) article.setDomain("");
-        if(article.getUrl() == null) article.setUrl("");
-        if(article.getLanguage() == null) article.setLanguage("");
-        if(article.getPreviewPictureURL() == null) article.setPreviewPictureURL("");
+        if (article.getDomain() == null) article.setDomain("");
+        if (article.getUrl() == null) article.setUrl("");
+        if (article.getLanguage() == null) article.setLanguage("");
+        if (article.getPreviewPictureURL() == null) article.setPreviewPictureURL("");
     }
 
     private wallabag.apiwrapper.models.Tag findApiTagByID(
             Integer id, List<wallabag.apiwrapper.models.Tag> tags) {
-        for(wallabag.apiwrapper.models.Tag tag: tags) {
-            if(id.equals(tag.id)) return tag;
+        for (wallabag.apiwrapper.models.Tag tag : tags) {
+            if (id.equals(tag.id)) return tag;
         }
 
         return null;
@@ -778,8 +778,8 @@ public class Updater {
 
     private wallabag.apiwrapper.models.Tag findApiTagByLabel(
             String label, List<wallabag.apiwrapper.models.Tag> tags) {
-        for(wallabag.apiwrapper.models.Tag tag: tags) {
-            if(TextUtils.equals(tag.label, label)) return tag;
+        for (wallabag.apiwrapper.models.Tag tag : tags) {
+            if (TextUtils.equals(tag.label, label)) return tag;
         }
 
         return null;
@@ -817,9 +817,9 @@ public class Updater {
 
         ArticleDao articleDao = daoSession.getArticleDao();
 
-        int totalNumber = (int)articleDao.queryBuilder().count();
+        int totalNumber = (int) articleDao.queryBuilder().count();
 
-        if(totalNumber == 0) {
+        if (totalNumber == 0) {
             Log.d(TAG, "performSweep() no articles");
             return;
         }
@@ -833,10 +833,10 @@ public class Updater {
         Log.d(TAG, String.format("performSweep() local total: %d, remote total: %d",
                 totalNumber, remoteTotal));
 
-        if(totalNumber <= remoteTotal) {
+        if (totalNumber <= remoteTotal) {
             Log.d(TAG, "performSweep() local number is not greater than remote");
 
-            if(!force) {
+            if (!force) {
                 Log.d(TAG, "performSweep() aborting sweep");
                 return;
             }
@@ -855,11 +855,11 @@ public class Updater {
 
         int offset = 0;
 
-        while(true) {
-            if(articleQueue.isEmpty()) {
+        while (true) {
+            if (articleQueue.isEmpty()) {
                 Log.d(TAG, String.format("performSweep() %d/%d", offset, totalNumber));
 
-                if(progressListener != null) {
+                if (progressListener != null) {
                     progressListener.onProgress(offset, totalNumber);
                 }
 
@@ -869,17 +869,17 @@ public class Updater {
                 queryBuilder.offset(offset);
             }
 
-            if(articleQueue.isEmpty() && addedArticles.isEmpty()) break;
+            if (articleQueue.isEmpty() && addedArticles.isEmpty()) break;
 
             boolean runQuery = true;
 
-            while(!articleQueue.isEmpty()) {
+            while (!articleQueue.isEmpty()) {
                 runQuery = false;
 
                 Article article = articleQueue.element();
 
                 String url = article.getUrl();
-                if(TextUtils.isEmpty(url)) {
+                if (TextUtils.isEmpty(url)) {
                     Log.w(TAG, "performSweep() empty or null URL on article with ArticleID: "
                             + article.getArticleId());
 
@@ -887,15 +887,15 @@ public class Updater {
                     continue;
                 }
 
-                if(existQueryBuilder == null) {
+                if (existQueryBuilder == null) {
                     existQueryBuilder = wallabagService
                             .getArticlesExistQueryBuilder(7950);
                 }
 
-                if(existQueryBuilder.addUrl(url)) {
+                if (existQueryBuilder.addUrl(url)) {
                     addedArticles.add(article);
                     articleQueue.remove();
-                } else if(addedArticles.isEmpty()) {
+                } else if (addedArticles.isEmpty()) {
                     Log.e(TAG, "performSweep() can't check article with ArticleID: "
                             + article.getArticleId());
 
@@ -908,26 +908,26 @@ public class Updater {
                 }
             }
 
-            if(runQuery && existQueryBuilder != null) {
+            if (runQuery && existQueryBuilder != null) {
                 Log.d(TAG, "performSweep() checking articles; number of articles: "
                         + addedArticles.size());
 
                 Map<String, Boolean> articlesMap = existQueryBuilder.execute();
                 existQueryBuilder.reset();
 
-                for(Article a: addedArticles) {
+                for (Article a : addedArticles) {
                     Boolean value = articlesMap.get(a.getUrl());
                     Log.v(TAG, String.format("performSweep() articleID: %d, exists: %s",
                             a.getArticleId(), value));
 
-                    if(value != null && !value) {
+                    if (value != null && !value) {
                         Log.v(TAG, String.format("performSweep() article not found remotely" +
                                 "; articleID: %d, article URL: %s", a.getArticleId(), a.getUrl()));
 
                         Log.v(TAG, "performSweep() trying to find article by ID");
 
                         // we could use `getArticle(int)`, but `getTags()` is lighter
-                        if(wallabagService.getTags(a.getArticleId()) != null) {
+                        if (wallabagService.getTags(a.getArticleId()) != null) {
                             Log.v(TAG, "performSweep() article found by ID");
                         } else {
                             Log.v(TAG, "performSweep() article not found by ID");
@@ -941,10 +941,10 @@ public class Updater {
 
                 addedArticles.clear();
 
-                if(articlesToDelete.size() >= totalNumber - remoteTotal) {
+                if (articlesToDelete.size() >= totalNumber - remoteTotal) {
                     Log.d(TAG, "performSweep() number of found deleted articles >= expected number");
 
-                    if(!force) {
+                    if (!force) {
                         Log.d(TAG, "performSweep() finishing sweep");
                         break;
                     }
@@ -952,7 +952,7 @@ public class Updater {
             }
         }
 
-        if(!articlesToDelete.isEmpty()) {
+        if (!articlesToDelete.isEmpty()) {
             Log.d(TAG, String.format("performSweep() deleting %d articles", articlesToDelete.size()));
 
             Log.d(TAG, "performSweep() deleting related entities");
