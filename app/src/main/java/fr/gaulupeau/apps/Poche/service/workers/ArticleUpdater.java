@@ -380,9 +380,16 @@ public class ArticleUpdater {
 
         fixArticleNullValues(article);
 
-        processTags(apiArticle, article, existing);
+        Pair<Boolean, Boolean> tagsChanges = processTags(apiArticle, article, existing);
+        boolean tagsChangedGlobally = tagsChanges.first;
 
-        boolean annotationsChanged = processAnnotations(apiArticle, article, existing);
+        if (tagsChanges.second) {
+            articleChanges.add(ChangeType.TAGS_CHANGED);
+        }
+
+        if (processAnnotations(apiArticle, article, existing)) {
+            articleChanges.add(ChangeType.ANNOTATIONS_CHANGED);
+        }
 
         if (!articleChanges.isEmpty()) {
             (existing ? articlesToUpdate : articlesToInsert).add(article);
@@ -390,15 +397,8 @@ public class ArticleUpdater {
             Log.d(TAG, "processArticle() article wasn't changed");
         }
 
-        // TODO: fix - this is incorrect
-        if (!tagsToUpdate.isEmpty() || !tagsToInsert.isEmpty()
-                || !articleTagJoinsToRemove.isEmpty()
-                || !articleTagJoinsToInsert.isEmpty()) {
-            articleChanges.add(ChangeType.TAGS_CHANGED);
-        }
-
-        if (annotationsChanged) {
-            articleChanges.add(ChangeType.ANNOTATIONS_CHANGED);
+        if (tagsChangedGlobally) {
+            // TODO: event
         }
 
         if (!articleChanges.isEmpty()) {
@@ -410,9 +410,12 @@ public class ArticleUpdater {
         }
     }
 
-    private void processTags(wallabag.apiwrapper.models.Article apiArticle,
-                             Article article, boolean existing) {
+    private Pair<Boolean, Boolean> processTags(wallabag.apiwrapper.models.Article apiArticle,
+                                               Article article, boolean existing) {
         initTagMapsLocally();
+
+        boolean tagsChangedGlobally = false;
+        boolean articleTagsChanged = false;
 
         List<Tag> articleTags;
         if (existing) {
@@ -437,6 +440,7 @@ public class ArticleUpdater {
             if (notFoundTags != null && !notFoundTags.isEmpty()) {
                 articleTags.removeAll(notFoundTags);
                 articleTagJoinsToRemove.put(article, notFoundTags);
+                articleTagsChanged = true;
             }
         } else {
             articleTags = new ArrayList<>(apiArticle.tags.size());
@@ -456,6 +460,7 @@ public class ArticleUpdater {
                                 tag.getId(), tag.getLabel(), apiTag.label));
 
                         tag.setLabel(apiTag.label);
+                        tagsChangedGlobally = true;
 
                         tagsToUpdate.add(tag);
                     }
@@ -464,6 +469,7 @@ public class ArticleUpdater {
 
                     if (tag != null) {
                         tag.setTagId(apiTag.id);
+                        tagsChangedGlobally = true;
 
                         tagIdMap.put(tag.getTagId(), tag);
                         tagLabelMap.remove(tag.getLabel());
@@ -471,6 +477,7 @@ public class ArticleUpdater {
                         tagsToUpdate.add(tag);
                     } else {
                         tag = new Tag(null, apiTag.id, apiTag.label);
+                        tagsChangedGlobally = true;
 
                         tagIdMap.put(tag.getTagId(), tag);
 
@@ -481,6 +488,7 @@ public class ArticleUpdater {
                 if (!articleTags.contains(tag)) {
                     articleTags.add(tag);
                     tagJoinsToInsert.add(tag);
+                    articleTagsChanged = true;
                 }
             }
 
@@ -488,6 +496,10 @@ public class ArticleUpdater {
                 articleTagJoinsToInsert.put(article, tagJoinsToInsert);
             }
         }
+
+        if (tagsChangedGlobally) articleTagsChanged = true;
+
+        return new Pair<>(tagsChangedGlobally, articleTagsChanged);
     }
 
     private boolean processAnnotations(wallabag.apiwrapper.models.Article apiArticle,
