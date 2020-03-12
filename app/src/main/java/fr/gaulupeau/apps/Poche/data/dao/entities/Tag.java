@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 public class Tag {
 
-    private static final Comparator<Tag> labelComparator = new Comparator<Tag>() {
+    private static final Comparator<Tag> LABEL_COMPARATOR = new Comparator<Tag>() {
         @Override
         public int compare(Tag o1, Tag o2) {
             String s1 = o1.getLabel(), s2 = o2.getLabel();
@@ -69,7 +69,7 @@ public class Tag {
     }
 
     public static void sortTagListByLabel(List<Tag> list) {
-        Collections.sort(list, labelComparator);
+        Collections.sort(list, LABEL_COMPARATOR);
     }
 
 }
