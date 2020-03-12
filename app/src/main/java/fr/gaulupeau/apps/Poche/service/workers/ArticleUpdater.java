@@ -449,31 +449,33 @@ public class ArticleUpdater {
             for (wallabag.apiwrapper.models.Tag apiTag : apiArticle.tags) {
                 Tag tag = tagIdMap.get(apiTag.id);
 
-                if (tag == null) {
+                if (tag != null) {
+                    if (!TextUtils.equals(tag.getLabel(), apiTag.label)) {
+                        Log.w(TAG, String.format("processTags() tag label mismatch: " +
+                                        "tag ID: %s, local label: %s, remote label: %s",
+                                tag.getId(), tag.getLabel(), apiTag.label));
+
+                        tag.setLabel(apiTag.label);
+
+                        tagsToUpdate.add(tag);
+                    }
+                } else {
                     tag = tagLabelMap.get(apiTag.label);
 
-                    if (tag == null) {
-                        tag = new Tag(null, apiTag.id, apiTag.label);
-
-                        tagIdMap.put(tag.getTagId(), tag);
-
-                        tagsToInsert.add(tag);
-                    } else {
+                    if (tag != null) {
                         tag.setTagId(apiTag.id);
 
                         tagIdMap.put(tag.getTagId(), tag);
                         tagLabelMap.remove(tag.getLabel());
 
                         tagsToUpdate.add(tag);
+                    } else {
+                        tag = new Tag(null, apiTag.id, apiTag.label);
+
+                        tagIdMap.put(tag.getTagId(), tag);
+
+                        tagsToInsert.add(tag);
                     }
-                } else if (!TextUtils.equals(tag.getLabel(), apiTag.label)) {
-                    Log.w(TAG, String.format("processTags() tag label mismatch: " +
-                                    "tag ID: %s, local label: %s, remote label: %s",
-                            tag.getId(), tag.getLabel(), apiTag.label));
-
-                    tag.setLabel(apiTag.label);
-
-                    tagsToUpdate.add(tag);
                 }
 
                 if (!articleTags.contains(tag)) {
