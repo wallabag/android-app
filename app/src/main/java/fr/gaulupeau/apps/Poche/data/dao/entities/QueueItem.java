@@ -74,6 +74,7 @@ public class QueueItem {
     private QueueItem.Action action;
 
     private Integer articleId;
+    private Long localArticleId;
     private String extra;
     private String extra2;
 
@@ -84,13 +85,14 @@ public class QueueItem {
         this.action = action;
     }
 
-    @Generated(hash = 1707604388)
+    @Generated(hash = 20035817)
     public QueueItem(Long id, Long queueNumber, QueueItem.Action action, Integer articleId,
-                     String extra, String extra2) {
+                     Long localArticleId, String extra, String extra2) {
         this.id = id;
         this.queueNumber = queueNumber;
         this.action = action;
         this.articleId = articleId;
+        this.localArticleId = localArticleId;
         this.extra = extra;
         this.extra2 = extra2;
     }
@@ -155,6 +157,14 @@ public class QueueItem {
         this.articleId = articleId;
     }
 
+    public Long getLocalArticleId() {
+        return localArticleId;
+    }
+
+    public void setLocalArticleId(Long localArticleId) {
+        this.localArticleId = localArticleId;
+    }
+
     public String getExtra() {
         return extra;
     }
@@ -200,6 +210,7 @@ public class QueueItem {
                 ", queueNumber=" + queueNumber +
                 ", action=" + action +
                 ", articleId=" + articleId +
+                ", localArticleId=" + localArticleId +
                 ", extra='" + extra + '\'' +
                 ", extra2='" + extra2 + '\'' +
                 '}';

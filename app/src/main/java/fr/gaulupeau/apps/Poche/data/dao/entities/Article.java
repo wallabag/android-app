@@ -33,6 +33,8 @@ public class Article {
 
     private String url;
 
+    private String givenUrl;
+
     private String originUrl;
 
     private int estimatedReadingTime;
@@ -88,17 +90,18 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 1512174298)
-    public Article(Long id, Integer articleId, String title, String domain, String url,
-            String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
-            String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
-            Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
-            Double articleProgress, Boolean imagesDownloaded) {
+    @Generated(hash = 1498635781)
+    public Article(Long id, Integer articleId, String title, String domain, String url, String givenUrl,
+                   String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
+                   String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
+                   Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
+                   Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.title = title;
         this.domain = domain;
         this.url = url;
+        this.givenUrl = givenUrl;
         this.originUrl = originUrl;
         this.estimatedReadingTime = estimatedReadingTime;
         this.language = language;
@@ -188,6 +191,14 @@ public class Article {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getGivenUrl() {
+        return givenUrl;
+    }
+
+    public void setGivenUrl(String givenUrl) {
+        this.givenUrl = givenUrl;
     }
 
     public String getOriginUrl() {

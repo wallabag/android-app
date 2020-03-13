@@ -575,25 +575,6 @@ public class EventProcessor {
         }
     }
 
-    @Subscribe
-    public void onLinkUploadedEvent(LinkUploadedEvent event) {
-        Log.d(TAG, "onLinkUploadedEvent() started");
-
-        ActionResult result = event.getResult();
-        if(result == null || result.isSuccess()) {
-            Log.d(TAG, "onLinkUploadedEvent() result is null or success");
-
-            Settings settings = getSettings();
-            if(settings.isAutoDownloadNewArticlesEnabled()
-                    && !settings.isOfflineQueuePending()) {
-                Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
-
-                OperationsHelper.updateArticles(getContext(), settings,
-                        ArticleUpdater.UpdateType.FAST, true, null);
-            }
-        }
-    }
-
     private void networkChanged(boolean delayed) {
         if(!delayed && delayedNetworkChangedTask) return;
 

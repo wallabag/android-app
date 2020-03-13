@@ -151,8 +151,6 @@
     <string name="pref_name_autoSync_type">Тип автоматической синхронизации</string>
     <string name="pref_name_autoSyncQueue_enabled">Отдельная автоматическая синхронизация для локальных изменений</string>
     <string name="pref_desc_autoSyncQueue_enabled">Это позволяет синхронизировать локальные изменения (добавленные ссылки, архивированные статьи, т. п.), как только подключение к сети станет доступным.</string>
-    <string name="pref_name_autoDlNew_enabled">Загружать статьи при добавлении</string>
-    <string name="pref_desc_autoDlNew_enabled">Автоматически загрузить новые статьи сразу после того, как они были добавлены через приложение. Примечание: загрузка не произойдёт, если есть несинхронизированные локальные изменения.</string>
     <string name="pref_name_imageCache_enabled">Кэшировать изображения из статей</string>
     <string name="pref_desc_imageCache_enabled">Автоматически загружать все изображения из каждой статьи и сохранять их на устройстве. В зависимости от размера списка статей в wallabag, это может занять много времени и памяти.</string>
     <string name="pref_categoryName_miscellaneous">Прочее</string>

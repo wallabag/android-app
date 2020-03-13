@@ -148,8 +148,6 @@
     <string name="pref_name_autoSync_type">自動同期の種類</string>
     <string name="pref_name_autoSyncQueue_enabled">ローカルの変更の自動同期を分離</string>
     <string name="pref_desc_autoSyncQueue_enabled">これは、ネットワークが利用可能になるとすぐにローカルの変更 (追加されたリンク、アーカイブされた記事等) をサーバーに同期することができます。</string>
-    <string name="pref_name_autoDlNew_enabled">新しく追加された記事をダウンロード</string>
-    <string name="pref_desc_autoDlNew_enabled">アプリで、新しい記事が追加されたらすぐに自動的にダウンロードします。注: オフラインの変更を同期していない場合、取得は行われません。</string>
     <string name="pref_name_imageCache_enabled">記事の画像をキャッシュに入れる</string>
     <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
     <string name="pref_categoryName_miscellaneous">その他</string>

@@ -227,8 +227,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
     <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
-    <string name="pref_name_autoDlNew_enabled">Télécharger les nouveaux articles</string>
-    <string name="pref_desc_autoDlNew_enabled">Télécharger automatiquement les nouveaux articles lors de leur ajout dans l\'application. Note : le téléchargement ne se fera pas si vous avez des changements locaux non synchronisés.</string>
     <string name="pref_name_imageCache_enabled">Mettre les images de l\'article en cache</string>
     <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images dans chaque article et les sauvegarde sur l\'appareil. En fonction du nombre d\'articles de votre instance wallabag, cela peut prendre un moment et utiliser beaucoup d\'espace disque sur votre appareil.</string>
     <string name="pref_name_storage_dbPath">Emplacement de la base de données</string>

@@ -149,12 +149,10 @@
     <string name="pref_categoryName_connection_advanced">Erweiterte Verbindungseinstellungen</string>
     <string name="pref_categoryName_miscellaneous">Sonstiges</string>
     <string name="pref_categoryName_ui">Benutzeroberfläche</string>
-    <string name="pref_desc_autoDlNew_enabled">Lade neue Artikel automatisch herunter sobald sie mit der App hinzugefügt wurden. Beachte: Der Download findet nicht statt, wenn du ausstehende unsynchronisierte Änderungen hast.</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dies erlaubt, lokale Änderungen (hinzugefügte Links, archivierte Artikel, etc.) mit dem Server zu synchronisieren, sobald die Internetverbindung verfügbar wird.</string>
     <string name="pref_desc_autoSync_enabled">Dies erlaubt lokale Änderungen zu synchronisieren (hinzugefügte Links, archivierte Artikel, etc.) und lädt neue Artikel basierend auf einem Zeitplan herunter</string>
     <string name="pref_desc_misc_wipeDB">Löscht alle Artikel vom Gerät, löscht auch alle nicht synchronisierten lokalen Änderungen und URLs</string>
     <string name="pref_desc_runConnectionWizard">Hilft dir die grundlegenden Verbindungsdaten einzurichten</string>
-    <string name="pref_name_autoDlNew_enabled">Download neu hinzugefügter Artikel</string>
     <string name="pref_name_autoSync_enabled">Aktiviere automatische Synchronisation</string>
     <string name="pref_name_autoSync_interval">Zeitintervall für automatische Synchronisation</string>
     <string name="pref_name_autoSync_type">Art der automatischen Synchronisation</string>

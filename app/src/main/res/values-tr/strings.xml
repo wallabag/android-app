@@ -196,8 +196,6 @@
     <string name="pref_name_autoSync_type">Otomatik senkronizasyon türü</string>
     <string name="pref_name_autoSyncQueue_enabled">Yerel değişiklikleride otomatik senkronizasyonu ayır</string>
     <string name="pref_desc_autoSyncQueue_enabled">Bu ayar yerel değişikliklerin (eklenen link, arşivlenen makale vs.) internet erişimi olduğu anda sunucuya senkron edilmesini sağlar.</string>
-    <string name="pref_name_autoDlNew_enabled">Yeni makale eklendiğinde indir</string>
-    <string name="pref_desc_autoDlNew_enabled">Uygulama üzerinden makale eklendiği anda otomatik olarak bu makaleleri indirir. Not: Eğer senkron edilmemiş çevrimdışı yerel değişiklikleriniz varsa bu işlem çalışmayacaktır.</string>
     <string name="pref_name_imageCache_enabled">Makalelerdeki resimleri önbellekle</string>
     <string name="pref_desc_imageCache_enabled">Makalelerin içindeki tüm resimleri cihaza indirir. Makale uzunluğuna, adedine ve resim ebatlarına göre bu işlem uzun sürebilir ve büyük disk alanı kaplayabilir.</string>
     <string name="pref_categoryName_miscellaneous">Çeşitli</string>

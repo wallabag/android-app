@@ -38,8 +38,47 @@ public class OperationsWorker extends BaseWorker {
         super(context);
     }
 
+    private Article findArticleByUrl(String url) {
+        List<Article> articles = getArticleDao().queryBuilder()
+                .where(ArticleDao.Properties.GivenUrl.eq(url))
+                .orderDesc(ArticleDao.Properties.Id)
+                .limit(1)
+                .list();
+
+        if (!articles.isEmpty()) return articles.get(0);
+
+        articles = getArticleDao().queryBuilder()
+                .where(ArticleDao.Properties.Url.eq(url))
+                .orderAsc(ArticleDao.Properties.CreationDate)
+                .limit(1)
+                .list();
+
+        if (!articles.isEmpty()) return articles.get(0);
+
+        return null;
+    }
+
     public void addArticle(String link, String origin) {
-        queueOfflineChange(queueHelper -> queueHelper.addLink(link, origin));
+        Log.d(TAG, String.format("addArticle(%s, %s) started", link, origin));
+
+        Article article = findArticleByUrl(link);
+
+        if (article != null) {
+            Log.i(TAG, "addArticle() found article for the given URL; articleId: "
+                    + article.getArticleId());
+            // TODO: update origin?
+            return;
+        }
+
+        article = new Article();
+        article.setGivenUrl(link);
+        article.setOriginUrl(origin);
+
+        long id = getArticleDao().insertWithoutSettingPk(article);
+
+        queueOfflineChange(queueHelper -> queueHelper.addLink(link, origin, id));
+
+        Log.d(TAG, "addArticle() finished");
     }
 
     public void archiveArticle(int articleId, boolean archive) {

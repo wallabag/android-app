@@ -192,7 +192,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     }
 
     private QueryBuilder<Article> getQueryBuilder() {
-        QueryBuilder<Article> qb = articleDao.queryBuilder();
+        QueryBuilder<Article> qb = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull());
 
         if(tagIDs != null && !tagIDs.isEmpty()) {
             // TODO: try subquery

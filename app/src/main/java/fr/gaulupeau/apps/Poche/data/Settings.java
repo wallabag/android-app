@@ -629,14 +629,6 @@ public class Settings {
         setBoolean(R.string.pref_key_autoSyncQueue_enabled, value);
     }
 
-    public boolean isAutoDownloadNewArticlesEnabled() {
-        return getBoolean(R.string.pref_key_autoDlNew_enabled, false);
-    }
-
-    public void setAutoDownloadNewArticlesEnabled(boolean value) {
-        setBoolean(R.string.pref_key_autoDlNew_enabled, value);
-    }
-
     public boolean isImageCacheEnabled() {
         return getBoolean(R.string.pref_key_imageCache_enabled, false);
     }

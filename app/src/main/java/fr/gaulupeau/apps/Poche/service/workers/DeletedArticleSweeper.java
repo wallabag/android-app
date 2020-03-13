@@ -112,7 +112,9 @@ public class DeletedArticleSweeper extends BaseNetworkWorker {
 
         ArticleDao articleDao = daoSession.getArticleDao();
 
-        int totalNumber = (int) articleDao.queryBuilder().count();
+        int totalNumber = (int) articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull())
+                .count();
 
         if (totalNumber == 0) {
             Log.d(TAG, "performSweep() no articles");
@@ -142,6 +144,7 @@ public class DeletedArticleSweeper extends BaseNetworkWorker {
         int dbQuerySize = 50;
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull())
                 .orderDesc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
 
         List<Long> articlesToDelete = new ArrayList<>();

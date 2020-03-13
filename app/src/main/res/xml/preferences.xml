@@ -238,11 +238,6 @@
                 android:title="@string/pref_name_autoSyncQueue_enabled"
                 android:summary="@string/pref_desc_autoSyncQueue_enabled"
                 android:defaultValue="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_autoDlNew_enabled"
-                android:title="@string/pref_name_autoDlNew_enabled"
-                android:summary="@string/pref_desc_autoDlNew_enabled"
-                android:defaultValue="false"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen

@@ -195,8 +195,6 @@
     <string name="pref_name_autoSync_type">Sinkronizazio automatiko mota</string>
     <string name="pref_name_autoSyncQueue_enabled">Sinkronizatu automatikoki aldaketa lokalak bereizita</string>
     <string name="pref_desc_autoSyncQueue_enabled">Honek aldaketa lokalak sinkronizatzen ditu (gehitu estekak, artxibatu artikuluak, etab.) zerbitzariarekin sarea erabilgarri egon bezain laster.</string>
-    <string name="pref_name_autoDlNew_enabled">Deskargatu artikulu berriak gehitzean</string>
-    <string name="pref_desc_autoDlNew_enabled">Gehitu artikulu berriak automatikoki aplikazioaren bidez gehituak izan berritan. Oharra: deskargak ez dira gauzatuko sinkronizatu gabeko lineaz kanpoko aldaketak badin badituzu.</string>
     <string name="pref_name_imageCache_enabled">Egin artikuluetan kapsulatutako irudien cachea</string>
     <string name="pref_desc_imageCache_enabled">Artikulu bakoitzeko irudi guztian automatikoki deskargatzen ditu eta gailuan gordetzen ditu. Zure wallabageko artikulu zerrendaren luzeraren arabera honek oso luze jo dezake eta leku asko erabil dezake.</string>
     <string name="pref_categoryName_miscellaneous">Hainbat</string>

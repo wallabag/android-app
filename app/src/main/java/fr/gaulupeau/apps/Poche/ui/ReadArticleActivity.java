@@ -1334,7 +1334,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private Long getAdjacentArticle(boolean previous) {
-        QueryBuilder<Article> qb = articleDao.queryBuilder();
+        QueryBuilder<Article> qb = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull());
 
         if(previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
         else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));

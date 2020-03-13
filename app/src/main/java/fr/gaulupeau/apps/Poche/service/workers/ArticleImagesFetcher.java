@@ -64,6 +64,7 @@ public class ArticleImagesFetcher extends BaseNetworkWorker {
         ArticleDao articleDao = getDaoSession().getArticleDao();
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull())
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
                 .orderAsc(ArticleDao.Properties.ArticleId);
 

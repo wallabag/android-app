@@ -195,8 +195,6 @@
     <string name="pref_name_autoSync_type">Automatisk synkroniseringstype</string>
     <string name="pref_name_autoSyncQueue_enabled">Separer automatisk synkronisering for lokale endringer</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dette tillater lokale endringer (tillagte lenker, arkiverte artkler, osv.) å synkroniseres til tjeneren så snart nettverk blir tilgjengelig.</string>
-    <string name="pref_name_autoDlNew_enabled">Last ned nylig tillagte artikler</string>
-    <string name="pref_desc_autoDlNew_enabled">Last ned nye artikler automatisk rett etter at de har blitt lagt til i programmet. Merk: Henting vil ikke finne sted hvis du har usynkroniserte frakoblede endringer.</string>
     <string name="pref_name_imageCache_enabled">Legg bilder fra artikler i hurtiglager</string>
     <string name="pref_desc_imageCache_enabled">Laster ned bilder fra hver artikkel automatisk og lagrer dem på enheten. Avhengig av lengden på din wallabag-artikkelliste, kan dette ta veldig lang tid og bruke mye plass.</string>
     <string name="pref_categoryName_miscellaneous">Ymse</string>
