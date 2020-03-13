@@ -7,12 +7,15 @@ import android.util.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import fr.gaulupeau.apps.Poche.data.DbUtils;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 import fr.gaulupeau.apps.Poche.data.dao.entities.AddLinkItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.AddOrUpdateAnnotationItem;
@@ -21,10 +24,12 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.AnnotationRange;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleChangeItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsDeleteItem;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.DeleteAnnotationItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
-import fr.gaulupeau.apps.Poche.events.LinkUploadedEvent;
+import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.LocalArticleReplacedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueFinishedEvent;
 import fr.gaulupeau.apps.Poche.events.SyncQueueProgressEvent;
@@ -33,6 +38,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
+import wallabag.apiwrapper.AddArticleBuilder;
 import wallabag.apiwrapper.ModifyArticleBuilder;
 import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
@@ -82,7 +88,6 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
         }
 
         ActionResult result = new ActionResult();
-        boolean urlUploaded = false;
 
         DaoSession daoSession = getDaoSession();
         QueueHelper queueHelper = new QueueHelper(daoSession);
@@ -138,21 +143,7 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
                     case ADD_LINK: {
                         canTolerateNotFound = false;
 
-                        AddLinkItem addLinkItem = item.asSpecificItem();
-                        String link = addLinkItem.getUrl();
-                        String origin = addLinkItem.getOrigin();
-                        Log.d(TAG, "syncOfflineQueue() action ADD_LINK link=" + link
-                                + ", origin=" + origin);
-
-                        if (!TextUtils.isEmpty(link)) {
-                            getWallabagService()
-                                    .addArticleBuilder(link)
-                                    .originUrl(origin)
-                                    .execute();
-                            urlUploaded = true;
-                        } else {
-                            Log.w(TAG, "syncOfflineQueue() action is ADD_LINK, but item has no link; skipping");
-                        }
+                        addLink(item.asSpecificItem());
                         break;
                     }
 
@@ -218,12 +209,108 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
             queueLength = (long) queueState.itemsLeft();
         }
 
-        if (urlUploaded) {
-            postEvent(new LinkUploadedEvent(new ActionResult()));
-        }
-
         Log.d(TAG, "syncOfflineQueue() finished");
         return new Pair<>(result, queueLength);
+    }
+
+    private void addLink(AddLinkItem item) throws IncorrectConfigurationException,
+            UnsuccessfulResponseException, IOException {
+        String link = item.getUrl();
+        String origin = item.getOrigin();
+        Log.d(TAG, "addLink() link=" + link + ", origin=" + origin);
+
+        if (TextUtils.isEmpty(link)) {
+            Log.w(TAG, "addLink() action has no link; skipping");
+            return;
+        }
+
+        ArticleDao articleDao = getDaoSession().getArticleDao();
+
+        Article local = null;
+        if (item.getLocalArticleId() != null) {
+            local = articleDao.queryBuilder()
+                    .where(ArticleDao.Properties.Id.eq(item.getLocalArticleId()))
+                    .unique();
+        }
+
+        WallabagService wallabagService = getWallabagService();
+
+        AddArticleBuilder addArticleBuilder = wallabagService
+                .addArticleBuilder(link)
+                .originUrl(origin);
+
+        if (local != null) {
+            addArticleBuilder
+                    .archive(local.getArchive())
+                    .starred(local.getFavorite());
+
+            for (Tag tag : local.getTags()) {
+                addArticleBuilder.tag(tag.getLabel());
+            }
+        }
+
+        wallabag.apiwrapper.models.Article article = addArticleBuilder.execute();
+
+        LocalArticleReplacedEvent articleReplacedEvent = null;
+        if (local != null) {
+            articleReplacedEvent = new LocalArticleReplacedEvent(
+                    local.getId(), article.id, local.getGivenUrl());
+        }
+
+        Article existing = articleDao.queryBuilder()
+                .where(ArticleDao.Properties.ArticleId.eq(article.id))
+                .unique();
+
+        if (existing != null) {
+            Log.i(TAG, "addLink() the article was already bagged as " + article.id);
+
+            if (local != null) {
+                updateGivenUrl(existing, local.getGivenUrl());
+            }
+
+            // don't store the received article due to the risk of overwriting local changes
+            // (that may be further in the queue)
+            article = null;
+        }
+
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+
+        if (article != null) {
+            new ArticleUpdater(getDaoSession(), wallabagService)
+                    .updateArticles(event, Collections.singleton(article));
+
+            if (local != null) {
+                Article newArticle = articleDao.queryBuilder()
+                        .where(ArticleDao.Properties.ArticleId.eq(article.id))
+                        .unique();
+
+                if (newArticle != null) {
+                    updateGivenUrl(newArticle, local.getGivenUrl());
+                }
+            }
+        }
+
+        if (local != null) {
+            articleDao.delete(local);
+
+            ArticleTagsJoinDao articleTagsJoinDao = getDaoSession().getArticleTagsJoinDao();
+
+            List<ArticleTagsJoin> joins = articleTagsJoinDao.queryBuilder()
+                    .where(ArticleTagsJoinDao.Properties.ArticleId.eq(local.getId()))
+                    .list();
+
+            articleTagsJoinDao.deleteInTx(joins);
+        }
+
+        if (event.isAnythingChanged()) postEvent(event);
+        if (articleReplacedEvent != null) postEvent(articleReplacedEvent);
+    }
+
+    private void updateGivenUrl(Article article, String givenUrl) {
+        if (!Objects.equals(article.getGivenUrl(), givenUrl)) {
+            article.setGivenUrl(givenUrl);
+            article.update();
+        }
     }
 
     private ActionResult syncArticleChange(ArticleChangeItem item, int articleID)

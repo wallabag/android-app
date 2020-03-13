@@ -264,8 +264,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
-    <string name="pref_name_autoDlNew_enabled">Download newly added articles</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: Fetching will not occur if you have unsynchronized offline changes.</string>
     <string name="pref_name_imageCache_enabled">Put article images in cache</string>
     <string name="pref_desc_imageCache_enabled">Automatically downloads all images from every article and saves them to the device. Depending on the length of your wallabag article list, this can take up a lot of time and space.</string>
 

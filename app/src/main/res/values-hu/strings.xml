@@ -150,8 +150,6 @@
     <string name="pref_name_autoSync_type">Automata szinkron típusa</string>
     <string name="pref_name_autoSyncQueue_enabled">Külön szinkron a helyi változásoknak</string>
     <string name="pref_desc_autoSyncQueue_enabled">Lehetővé teszi a helyi változások (linkek, archivált cikkek, stb.) szinkronizálását a szerverrel, amint a hálózat elérhető lesz.</string>
-    <string name="pref_name_autoDlNew_enabled">Cikkek letöltése hozzáadásuk után</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatikusan letölti az új cikkeket, egyből a hozzáadásuk után. Megjegyzés: a lekérés nem fog megtörténni, ha szinkronizálatlan offline változások vannak.</string>
     <string name="pref_name_imageCache_enabled">Gyorsítótár a cikkek képeihez</string>
     <string name="pref_desc_imageCache_enabled">Automatikusan letölt minden képet a cikkekben, és elmenti őket az eszközre. A wallabag cikk lista hosszától függően ez sok időt és tárhelyet igényelhet.</string>
     <string name="pref_categoryName_miscellaneous">Egyéb</string>

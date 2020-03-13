@@ -47,7 +47,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         Log.i(TAG, "Upgrading schema from version " + oldVersion + " to " + newVersion);
 
         boolean migrationDone = false;
-        if (oldVersion >= 101 && newVersion <= 107) {
+        if (oldVersion >= 101 && newVersion <= 108) {
             try {
                 if (oldVersion < 102) {
                     Log.i(TAG, "Migrating to version " + 102);
@@ -116,6 +116,14 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                     Log.i(TAG, "Migration to version " + 107);
 
                     db.execSQL("alter table QUEUE_ITEM add column EXTRA2 TEXT;");
+                }
+
+                if (oldVersion < 108) {
+                    Log.i(TAG, "Migration to version " + 108);
+
+                    db.execSQL("alter table ARTICLE add column GIVEN_URL TEXT;");
+
+                    db.execSQL("alter table QUEUE_ITEM add column LOCAL_ARTICLE_ID INTEGER;");
                 }
 
                 migrationDone = true;

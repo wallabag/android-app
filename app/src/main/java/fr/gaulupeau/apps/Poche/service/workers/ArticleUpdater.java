@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import fr.gaulupeau.apps.Poche.data.DbUtils;
 import wallabag.apiwrapper.ArticlesPageIterator;
 import wallabag.apiwrapper.ArticlesQueryBuilder;
 import wallabag.apiwrapper.WallabagService;
@@ -15,6 +16,7 @@ import wallabag.apiwrapper.models.Articles;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,6 +139,17 @@ public class ArticleUpdater {
         Log.i(TAG, "update() finished");
 
         return event;
+    }
+
+    public void updateArticles(
+            ArticlesChangedEvent event,
+            Collection<wallabag.apiwrapper.models.Article> articles) {
+        Log.i(TAG, "updateArticles() started");
+
+        DbUtils.runInNonExclusiveTx(daoSession, (session)
+                -> processArticles(event, false, articles));
+
+        Log.i(TAG, "updateArticles() finished");
     }
 
     private long performUpdate(ArticlesChangedEvent event, boolean full,
@@ -274,6 +287,7 @@ public class ArticleUpdater {
             article.setArticleContent(new ArticleContent(null, apiArticle.content));
             article.setDomain(apiArticle.domainName);
             article.setUrl(apiArticle.url);
+            article.setGivenUrl(apiArticle.givenUrl);
             article.setOriginUrl(apiArticle.originUrl);
             article.setEstimatedReadingTime(apiArticle.readingTime);
             article.setLanguage(apiArticle.language);
@@ -309,6 +323,10 @@ public class ArticleUpdater {
             if (!equalOrEmpty(article.getUrl(), apiArticle.url)) {
                 article.setUrl(apiArticle.url);
                 articleChanges.add(ChangeType.URL_CHANGED);
+            }
+            if (!equalOrEmpty(article.getGivenUrl(), apiArticle.givenUrl)
+                    && !TextUtils.isEmpty(apiArticle.givenUrl)) {
+                article.setGivenUrl(apiArticle.givenUrl);
             }
             if (!equalOrEmpty(article.getOriginUrl(), apiArticle.originUrl)) {
                 article.setOriginUrl(apiArticle.originUrl);
@@ -387,7 +405,7 @@ public class ArticleUpdater {
             articleChanges.add(ChangeType.TAGS_CHANGED);
         }
 
-        if (processAnnotations(apiArticle, article, existing)) {
+        if (apiArticle.annotations != null && processAnnotations(apiArticle, article, existing)) {
             articleChanges.add(ChangeType.ANNOTATIONS_CHANGED);
         }
 

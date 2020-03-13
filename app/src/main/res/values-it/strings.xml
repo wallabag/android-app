@@ -200,8 +200,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Sincronizzazione automatica separata per le modifiche locali</string>
     <string name="pref_desc_autoSyncQueue_enabled">Questa opzione permette alle modifiche locali (link aggiunti, articoli archiviati, etc.) di essere sincronizzate sul server non appena venga resa disponibile una connessione.</string>
-    <string name="pref_name_autoDlNew_enabled">Scarica nuovi articoli all\'aggiunta</string>
-    <string name="pref_desc_autoDlNew_enabled">Scarica automaticamente nuovi articoli subito dopo essere stati aggiunti tramite l\'app. Nota: il download non ci sarà se avete modifiche offline non sincronizzate.</string>
     <string name="pref_name_imageCache_enabled">Salva in cache le immagini degli articoli</string>
     <string name="pref_desc_imageCache_enabled">Scarica automaticamente tutte le immagini in ogni articoli e le salva sul dispositivo. A seconda della lunghezza della tua lista di articoli di wallabag questo potrebbe richiedere molto tempo e consumare molto spazio.</string>
     <string name="pref_categoryName_miscellaneous">Varie</string>

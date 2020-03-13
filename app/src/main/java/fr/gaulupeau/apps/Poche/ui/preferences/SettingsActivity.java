@@ -552,6 +552,7 @@ public class SettingsActivity extends BaseActionBarActivity {
             sb.append("id").append(delim)
                     .append("action").append(delim)
                     .append("articleId").append(delim)
+                    .append("localArticleId").append(delim)
                     .append("extra").append(delim)
                     .append("extra2").append(nl);
 
@@ -559,6 +560,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 sb.append(item.getId()).append(delim)
                         .append(item.getAction()).append(delim)
                         .append(item.getArticleId()).append(delim)
+                        .append(item.getLocalArticleId()).append(delim)
                         .append(item.getExtra()).append(delim)
                         .append(item.getExtra2()).append(nl);
             }

@@ -24,4 +24,13 @@ public class AddLinkItem extends SpecificItem {
         return this;
     }
 
+    public Long getLocalArticleId() {
+        return queueItem.getLocalArticleId();
+    }
+
+    public AddLinkItem setLocalArticleId(long articleId) {
+        queueItem.setLocalArticleId(articleId);
+        return this;
+    }
+
 }

@@ -285,13 +285,17 @@ public class QueueHelper {
         Log.d(TAG, "deleteArticle() finished");
     }
 
-    public void addLink(String link, String origin) {
-        Log.d(TAG, String.format("addLink(%s, %s) started", link, origin));
+    public void addLink(String link, String origin, Long localArticleId) {
+        Log.d(TAG, String.format("addLink(%s, %s, %d) started", link, origin, localArticleId));
 
         AddLinkItem item = new QueueItem(Action.ADD_LINK)
                 .<AddLinkItem>asSpecificItem()
                 .setUrl(link)
                 .setOrigin(origin);
+
+        if (localArticleId != null) {
+            item.setLocalArticleId(localArticleId);
+        }
 
         enqueue(item);
 

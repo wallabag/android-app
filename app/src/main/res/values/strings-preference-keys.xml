@@ -62,7 +62,6 @@
     <string name="pref_key_autoSync_interval" translatable="false">autoSync.interval</string>
     <string name="pref_key_autoSync_type" translatable="false">autoSync.type</string>
     <string name="pref_key_autoSyncQueue_enabled" translatable="false">autoSyncQueue.enabled</string>
-    <string name="pref_key_autoDlNew_enabled" translatable="false">autoDlNew.enabled</string>
     <string name="pref_key_imageCache_enabled" translatable="false">imageCache.enabled</string>
 
     <string name="pref_key_storage_dbPath" translatable="false">storage.dbPath</string>

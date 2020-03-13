@@ -20,7 +20,6 @@
     <string name="notification_serverError">서버 에러</string>
     <string name="notification_sweepingDeletedArticles">"전면적인 문서  삭제"</string>
     <string name="notification_incorrectCredentials">잘못된 자격 증명</string>
-    <string name="pref_desc_autoDlNew_enabled">앱을 통해 새 문서를 추가한 직후 자동으로 다운로드하십시오. 참고: 동기화되지 않은 오프라인 변경 사항이 있는 경우에는 페치가 발생하지 않음.</string>
     <string name="connectionWizard_providerSelection_titleMessage">wallabag 제공자 선택</string>
     <string name="pref_desc_misc_wipeDB">로컬 데이터베이스의 모든 문서 지우기, 동기화되지 않은 로컬 변경 사항 및 URL 모두 제거</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag 서비스를 찾을수없음 -URL 확인바람</string>
@@ -108,7 +107,6 @@
     <string name="menu_lists_changeSortOrder">정렬 변경</string>
     <string name="d_testConnection_urlSuggestion_message">다음 %s(으)로 URL을 변경하는 것이 좋다. 그러나 입력된 것도 사용할 수 있다.</string>
     <string name="settings_parametersAreOk">매개변수가 양호</string>
-    <string name="pref_name_autoDlNew_enabled">새로 추가된 기사 다운로드</string>
     <string name="pref_desc_autoSyncQueue_enabled">이를 통해 네트워크를 사용할 수 있게 되는 즉시 로컬 변경사항(추가 링크, 보관된 문서 등)을 서버에 동기화할 수 있다.</string>
     <string name="menu_readArticle_decreaseFontSize">글씨크기 감소</string>
     <string name="testConnection_errorMessage_authProblems">인증관려문제. 대게 HTTP-리디렉션에 의해 발생.</string>
