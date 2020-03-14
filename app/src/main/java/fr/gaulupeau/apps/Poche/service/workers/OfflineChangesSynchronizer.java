@@ -326,24 +326,30 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
         ModifyArticleBuilder builder = getWallabagService()
                 .modifyArticleBuilder(articleID);
 
+        boolean changed = false;
+
         for (QueueItem.ArticleChangeType changeType : item.getArticleChanges()) {
             switch (changeType) {
                 case ARCHIVE:
-                    builder.archive(article.getArchive());
+                    builder.archive(Boolean.TRUE.equals(article.getArchive()));
+                    changed = true;
                     break;
 
                 case FAVORITE:
-                    builder.starred(article.getFavorite());
+                    builder.starred(Boolean.TRUE.equals(article.getFavorite()));
+                    changed = true;
                     break;
 
                 case TITLE:
                     builder.title(article.getTitle());
+                    changed = true;
                     break;
 
                 case TAGS:
                     // all tags are pushed
                     for (Tag tag : article.getTags()) {
                         builder.tag(tag.getLabel());
+                        changed = true;
                     }
                     break;
 
@@ -354,7 +360,12 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
 
         ActionResult itemResult = null;
 
-        if (builder.execute() == null) {
+        if (!changed) {
+            Log.w(TAG, "syncArticleChange() no changes to send is item "
+                    + item.genericItem().toString());
+        }
+
+        if (changed && builder.execute() == null) {
             itemResult = new ActionResult(ActionResult.ErrorType.NOT_FOUND);
         }
 
