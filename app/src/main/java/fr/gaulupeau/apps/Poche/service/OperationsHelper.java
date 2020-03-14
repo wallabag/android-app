@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.service;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import fr.gaulupeau.apps.Poche.data.DbUtils;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.service.tasks.AddArticleTask;
@@ -18,6 +20,7 @@ import fr.gaulupeau.apps.Poche.service.tasks.DeleteArticleTask;
 import fr.gaulupeau.apps.Poche.service.tasks.UpdateArticleProgressTask;
 import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.service.workers.OperationsWorker;
+import fr.gaulupeau.apps.Poche.ui.AddUrlProxyActivity;
 import wallabag.apiwrapper.WallabagService;
 
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
@@ -28,18 +31,28 @@ public class OperationsHelper {
 
     private static final String TAG = OperationsHelper.class.getSimpleName();
 
-    public static void addArticle(Context context, String url) {
-        addArticle(context, url, null);
+    public static void addArticleWithUI(Context context, String url, String originUrl) {
+        Intent intent = new Intent(context, AddUrlProxyActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, url);
+        if (originUrl != null) intent.putExtra(AddUrlProxyActivity.PARAM_ORIGIN_URL, originUrl);
+
+        context.startActivity(intent);
     }
 
     public static void addArticle(Context context, String url, String originUrl) {
-        Log.d(TAG, "addArticle() started");
-
         enqueueSimpleServiceTask(context, new AddArticleTask(url, originUrl));
+    }
+
+    public static void archiveArticle(Context context, String url, boolean archive) {
+        enqueueSimpleServiceTask(context, ArticleChangeTask.newArchiveTask(url, archive));
     }
 
     public static void archiveArticle(Context context, int articleId, boolean archive) {
         enqueueSimpleServiceTask(context, ArticleChangeTask.newArchiveTask(articleId, archive));
+    }
+
+    public static void favoriteArticle(Context context, String url, boolean favorite) {
+        enqueueSimpleServiceTask(context, ArticleChangeTask.newFavoriteTask(url, favorite));
     }
 
     public static void favoriteArticle(Context context, int articleId, boolean favorite) {
@@ -54,10 +67,10 @@ public class OperationsHelper {
         enqueueSimpleServiceTask(context, new UpdateArticleProgressTask(articleId, progress));
     }
 
-    public static void setArticleTags(Context context, int articleId, List<Tag> newTags,
+    public static void setArticleTags(Context context, Article article, List<Tag> newTags,
                                       Runnable postCallCallback) {
         enqueueServiceTask(context, ctx -> new OperationsWorker(ctx)
-                .setArticleTags(articleId, newTags), postCallCallback);
+                .setArticleTags(article, newTags), postCallCallback);
     }
 
     public static void addAnnotation(Context context, int articleId, Annotation annotation) {

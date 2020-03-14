@@ -209,6 +209,8 @@
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
+    <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog that allows to favorite/archive/tag a newly added article. A toast message will be displayed instead if the option is disabled.</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
@@ -342,4 +344,6 @@
     <string name="copiedToClipboard">Copied to clipboard</string>
 
     <string name="menu_annotate">Annotate</string>
+
+    <string name="articleEdit_openArticle">Open article</string>
 </resources>

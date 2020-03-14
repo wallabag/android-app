@@ -19,8 +19,20 @@ public class ArticleChangeTask extends GenericFieldsTask {
         return task;
     }
 
+    public static ArticleChangeTask newArchiveTask(String url, boolean archive) {
+        ArticleChangeTask task = new ArticleChangeTask(url, QueueItem.ArticleChangeType.ARCHIVE);
+        task.genericBooleanField1 = archive;
+        return task;
+    }
+
     public static ArticleChangeTask newFavoriteTask(int articleId, boolean favorite) {
         ArticleChangeTask task = new ArticleChangeTask(articleId, QueueItem.ArticleChangeType.FAVORITE);
+        task.genericBooleanField1 = favorite;
+        return task;
+    }
+
+    public static ArticleChangeTask newFavoriteTask(String url, boolean favorite) {
+        ArticleChangeTask task = new ArticleChangeTask(url, QueueItem.ArticleChangeType.FAVORITE);
         task.genericBooleanField1 = favorite;
         return task;
     }
@@ -36,18 +48,35 @@ public class ArticleChangeTask extends GenericFieldsTask {
         this.articleChangeType = articleChangeType;
     }
 
+    protected ArticleChangeTask(String url, QueueItem.ArticleChangeType articleChangeType) {
+        this.genericStringField1 = url;
+        this.articleChangeType = articleChangeType;
+    }
+
     @Override
     public void run(Context context) {
         OperationsWorker operationsWorker = new OperationsWorker(context);
 
         switch (articleChangeType) {
-            case ARCHIVE:
-                operationsWorker.archiveArticle(genericIntField1, genericBooleanField1);
+            case ARCHIVE: {
+                boolean archive = this.genericBooleanField1;
+                if (genericIntField1 != null) {
+                    operationsWorker.archiveArticle(genericIntField1, archive);
+                } else {
+                    operationsWorker.archiveArticle(genericStringField1, archive);
+                }
                 return;
+            }
 
-            case FAVORITE:
-                operationsWorker.favoriteArticle(genericIntField1, genericBooleanField1);
+            case FAVORITE: {
+                boolean favorite = this.genericBooleanField1;
+                if (genericIntField1 != null) {
+                    operationsWorker.favoriteArticle(genericIntField1, favorite);
+                } else {
+                    operationsWorker.favoriteArticle(genericStringField1, favorite);
+                }
                 return;
+            }
 
             case TITLE:
                 operationsWorker.changeArticleTitle(genericIntField1, genericStringField1);

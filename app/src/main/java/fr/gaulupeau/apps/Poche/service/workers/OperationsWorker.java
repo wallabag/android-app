@@ -38,7 +38,7 @@ public class OperationsWorker extends BaseWorker {
         super(context);
     }
 
-    private Article findArticleByUrl(String url) {
+    public Article findArticleByUrl(String url) {
         List<Article> articles = getArticleDao().queryBuilder()
                 .where(ArticleDao.Properties.GivenUrl.eq(url))
                 .orderDesc(ArticleDao.Properties.Id)
@@ -58,10 +58,10 @@ public class OperationsWorker extends BaseWorker {
         return null;
     }
 
-    public void addArticle(String link, String origin) {
-        Log.d(TAG, String.format("addArticle(%s, %s) started", link, origin));
+    public void addArticle(String url, String origin) {
+        Log.d(TAG, String.format("addArticle(%s, %s) started", url, origin));
 
-        Article article = findArticleByUrl(link);
+        Article article = findArticleByUrl(url);
 
         if (article != null) {
             Log.i(TAG, "addArticle() found article for the given URL; articleId: "
@@ -71,14 +71,32 @@ public class OperationsWorker extends BaseWorker {
         }
 
         article = new Article();
-        article.setGivenUrl(link);
+        article.setGivenUrl(url);
         article.setOriginUrl(origin);
 
         long id = getArticleDao().insertWithoutSettingPk(article);
 
-        queueOfflineChange(queueHelper -> queueHelper.addLink(link, origin, id));
+        queueOfflineChange(queueHelper -> queueHelper.addLink(url, origin, id));
 
         Log.d(TAG, "addArticle() finished");
+    }
+
+    public void archiveArticle(String url, boolean archive) {
+        Log.d(TAG, String.format("archiveArticle(%s, %s) started", url, archive));
+
+        Article article = findArticleByUrl(url);
+
+        if (article == null) {
+            Log.w(TAG, "archiveArticle() couldn't find article");
+            return;
+        }
+
+        if (article.getArticleId() != null) {
+            archiveArticle(article.getArticleId(), archive);
+        } else {
+            article.setArchive(archive);
+            article.update();
+        }
     }
 
     public void archiveArticle(int articleId, boolean archive) {
@@ -110,6 +128,24 @@ public class OperationsWorker extends BaseWorker {
         queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.ARCHIVE);
 
         Log.d(TAG, "archiveArticle() finished");
+    }
+
+    public void favoriteArticle(String url, boolean favorite) {
+        Log.d(TAG, String.format("favoriteArticle(%s, %s) started", url, favorite));
+
+        Article article = findArticleByUrl(url);
+
+        if (article == null) {
+            Log.w(TAG, "favoriteArticle() couldn't find article");
+            return;
+        }
+
+        if (article.getArticleId() != null) {
+            favoriteArticle(article.getArticleId(), favorite);
+        } else {
+            article.setFavorite(favorite);
+            article.update();
+        }
     }
 
     public void favoriteArticle(int articleId, boolean favorite) {
@@ -218,19 +254,39 @@ public class OperationsWorker extends BaseWorker {
         Log.d(TAG, "deleteArticle() finished");
     }
 
-    public void setArticleTags(int articleId, List<Tag> newTags) {
-        Log.d(TAG, String.format("setArticleTags(%d, %s) started", articleId, newTags));
+    public void setArticleTags(Article article, List<Tag> newTags) {
+        if (article.getArticleId() != null) {
+            setArticleTags(article.getArticleId(), newTags);
+            return;
+        }
 
-        boolean tagsChanged = false;
+        Article updatedArticle = findArticleByUrl(article.getGivenUrl());
+        if (updatedArticle != null) {
+            setArticleTagsInternal(updatedArticle, newTags);
+        } else {
+            Log.w(TAG, "setArticleTags() article not found by the given url");
+        }
+    }
 
+    private void setArticleTags(int articleId, List<Tag> newTags) {
         Article article = getArticle(articleId);
-        TagDao tagDao = getDaoSession().getTagDao();
-        ArticleTagsJoinDao joinDao = getDaoSession().getArticleTagsJoinDao();
 
         if (article == null) {
             Log.w(TAG, "setArticleTags() article was not found");
             return; // not an error?
         }
+
+        setArticleTagsInternal(article, newTags);
+    }
+
+    private void setArticleTagsInternal(Article article, List<Tag> newTags) {
+        Log.d(TAG, String.format("setArticleTagsInternal(%s, %s) started",
+                article.getArticleId(), newTags));
+
+        boolean tagsChanged = false;
+
+        TagDao tagDao = getDaoSession().getTagDao();
+        ArticleTagsJoinDao joinDao = getDaoSession().getArticleTagsJoinDao();
 
         article.resetTags();
         List<Tag> currentTags = article.getTags();
@@ -314,10 +370,17 @@ public class OperationsWorker extends BaseWorker {
             joinDao.insertInTx(joinsToCreate, false);
         }
 
+        if (article.getArticleId() == null) {
+            Log.v(TAG, "setArticleTagsInternal() articleId is null - no queueing or events");
+            return;
+        }
+
+        int articleId = article.getArticleId();
+
         if (!tagsToDelete.isEmpty()) {
             tagsChanged = true;
 
-            Log.d(TAG, "setArticleTags() storing deleted tags to offline queue");
+            Log.d(TAG, "setArticleTagsInternal() storing deleted tags to offline queue");
             queueOfflineChange(queueHelper
                     -> queueHelper.deleteTagsFromArticle(articleId, tagsToDelete));
         }
@@ -325,11 +388,11 @@ public class OperationsWorker extends BaseWorker {
         if (tagsChanged) {
             notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
 
-            Log.d(TAG, "setArticleTags() storing tags change to offline queue");
+            Log.d(TAG, "setArticleTagsInternal() storing tags change to offline queue");
             queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.TAGS);
         }
 
-        Log.d(TAG, "setArticleTags() finished");
+        Log.d(TAG, "setArticleTagsInternal() finished");
     }
 
     public void addAnnotation(int articleId, Annotation annotation) {

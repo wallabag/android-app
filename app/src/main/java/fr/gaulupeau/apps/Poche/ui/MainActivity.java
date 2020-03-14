@@ -913,8 +913,9 @@ public class MainActivity extends AppCompatActivity
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TextView textView = (TextView)view.findViewById(R.id.page_url);
-                OperationsHelper.addArticle(getBaseContext(), textView.getText().toString());
+                TextView textView = view.findViewById(R.id.page_url);
+                OperationsHelper.addArticleWithUI(getBaseContext(),
+                        textView.getText().toString(), null);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);

@@ -144,6 +144,11 @@
             android:title="@string/pref_categoryName_ui_misc"
             android:persistent="false">
             <CheckBoxPreference
+                android:key="@string/pref_key_ui_showArticleAddedDialog_enabled"
+                android:title="@string/pref_name_ui_showArticleAddedDialog"
+                android:summary="@string/pref_desc_ui_showArticleAddedDialog"
+                android:defaultValue="true"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_ui_article_fullscreen"
                 android:title="@string/pref_name_ui_article_fullscreen"
                 android:summary="@string/pref_desc_ui_article_fullscreen"

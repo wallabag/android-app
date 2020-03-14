@@ -35,9 +35,13 @@
             android:hardwareAccelerated="true"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"/>
+            android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"
+            android:label="@string/manageTags_title" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.AddUrlProxyActivity"
+            android:autoRemoveFromRecents="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
             android:theme="@style/ProxyTheme">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.SEND" />
@@ -77,6 +81,10 @@
                 <data android:mimeType="application/vnd.wap.xhtml+xml" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.EditAddedArticleActivity"
+            android:theme="@style/DialogTheme" />
 
         <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
             <intent-filter>
