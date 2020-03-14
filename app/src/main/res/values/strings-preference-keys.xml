@@ -33,6 +33,7 @@
     <string name="pref_key_ui_screenScrolling_percent" translatable="false">ui.screenScrolling.percent</string>
     <string name="pref_key_ui_screenScrolling_smooth" translatable="false">ui.screenScrolling.smooth</string>
     <string name="pref_key_ui_misc_category" translatable="false">ui.misc.category</string>
+    <string name="pref_key_ui_showArticleAddedDialog_enabled" translatable="false">ui.article.showArticleAddedDialog</string>
     <string name="pref_key_ui_article_fullscreen" translatable="false">ui.article.fullscreen</string>
     <string name="pref_key_ui_disableTouch_enabled" translatable="false">ui.disableTouch.enabled</string>
     <string name="pref_key_ui_disableTouch_lastState" translatable="false">ui.disableTouch.lastState</string>

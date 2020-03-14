@@ -354,6 +354,14 @@ public class Settings {
         setString(R.string.pref_key_ui_article_handlePreformattedText, value);
     }
 
+    public boolean isShowArticleAddedDialog() {
+        return getBoolean(R.string.pref_key_ui_showArticleAddedDialog_enabled, true);
+    }
+
+    public void setShowArticleAddedDialog(boolean value) {
+        setBoolean(R.string.pref_key_ui_showArticleAddedDialog_enabled, value);
+    }
+
     public boolean isFullscreenArticleView() {
         return getBoolean(R.string.pref_key_ui_article_fullscreen, false);
     }

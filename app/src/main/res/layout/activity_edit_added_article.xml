@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="fr.gaulupeau.apps.Poche.ui.EditAddedArticleActivity">
+
+    <TextView
+        android:id="@+id/editActivity_articleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="4dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary"
+        tools:text="https://example.com/some-article" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/editActivity_favoriteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/add_to_favorites"
+            android:onClick="onFavoriteClick"
+            app:srcCompat="@drawable/ic_star_border_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/editActivity_archiveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/btnMarkRead"
+            android:onClick="onArchiveClick"
+            app:srcCompat="@drawable/ic_done_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/editActivity_tagButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/menu_manageTags"
+            android:onClick="onTagClick"
+            app:srcCompat="@drawable/ic_tag_black_24dp" />
+
+        <ImageButton
+            android:id="@+id/editActivity_openButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="4dp"
+            android:contentDescription="@string/articleEdit_openArticle"
+            android:enabled="false"
+            android:onClick="onOpenClick"
+            app:srcCompat="?attr/icon_open" />
+    </LinearLayout>
+
+</LinearLayout>
