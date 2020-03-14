@@ -284,6 +284,7 @@ public class OperationsWorker extends BaseWorker {
                 article.getArticleId(), newTags));
 
         boolean tagsChanged = false;
+        boolean enqueueTagChanges = false;
 
         TagDao tagDao = getDaoSession().getTagDao();
         ArticleTagsJoinDao joinDao = getDaoSession().getArticleTagsJoinDao();
@@ -348,6 +349,8 @@ public class OperationsWorker extends BaseWorker {
 
         if (!tagsToInsert.isEmpty()) {
             tagsChanged = true;
+            enqueueTagChanges = true;
+
             tagDao.insertInTx(tagsToInsert);
 
             for (Tag tag : tagsToInsert) {
@@ -367,6 +370,8 @@ public class OperationsWorker extends BaseWorker {
 
         if (!joinsToCreate.isEmpty()) {
             tagsChanged = true;
+            enqueueTagChanges = true;
+
             joinDao.insertInTx(joinsToCreate, false);
         }
 
@@ -378,18 +383,18 @@ public class OperationsWorker extends BaseWorker {
         int articleId = article.getArticleId();
 
         if (!tagsToDelete.isEmpty()) {
-            tagsChanged = true;
-
             Log.d(TAG, "setArticleTagsInternal() storing deleted tags to offline queue");
             queueOfflineChange(queueHelper
                     -> queueHelper.deleteTagsFromArticle(articleId, tagsToDelete));
         }
 
-        if (tagsChanged) {
-            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
-
+        if (enqueueTagChanges) {
             Log.d(TAG, "setArticleTagsInternal() storing tags change to offline queue");
             queueOfflineArticleChange(articleId, QueueItem.ArticleChangeType.TAGS);
+        }
+
+        if (tagsChanged) {
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
         }
 
         Log.d(TAG, "setArticleTagsInternal() finished");
