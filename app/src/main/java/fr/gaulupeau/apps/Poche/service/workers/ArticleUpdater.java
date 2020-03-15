@@ -119,6 +119,7 @@ public class ArticleUpdater {
                 daoSession.getTagDao().deleteAll();
 
                 event.invalidateAll(ChangeType.DELETED);
+                event.invalidateAll(ChangeType.UNSPECIFIED);
             }
 
             Log.v(TAG, "update() latestUpdatedItemTimestamp: " + latestUpdatedItemTimestamp);
@@ -402,7 +403,7 @@ public class ArticleUpdater {
         boolean tagsChangedGlobally = tagsChanges.first;
 
         if (tagsChanges.second) {
-            articleChanges.add(ChangeType.TAGS_CHANGED);
+            articleChanges.add(ChangeType.TAG_SET_CHANGED);
         }
 
         if (apiArticle.annotations != null && processAnnotations(apiArticle, article, existing)) {
@@ -416,7 +417,7 @@ public class ArticleUpdater {
         }
 
         if (tagsChangedGlobally) {
-            // TODO: event
+            event.invalidateAll(ChangeType.TAGS_CHANGED_GLOBALLY);
         }
 
         if (!articleChanges.isEmpty()) {

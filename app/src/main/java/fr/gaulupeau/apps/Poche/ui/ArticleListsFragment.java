@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.Collections;
 import java.util.EnumSet;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -176,23 +175,22 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     }
 
     private void invalidateLists(FeedsChangedEvent event) {
-        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET)) {
-            updateAllLists(!Collections.disjoint(event.getInvalidateAllChanges(),
-                    CHANGE_SET_FORCE_CONTENT_UPDATE));
+        if (event.containsAny(CHANGE_SET)) {
+            updateAllLists(event.containsAny(CHANGE_SET_FORCE_CONTENT_UPDATE));
             return;
         }
 
-        if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET)) {
+        if (FeedsChangedEvent.containsAny(event.getMainFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.MAIN),
-                    !Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
+                    FeedsChangedEvent.containsAny(event.getMainFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
-        if(!Collections.disjoint(event.getFavoriteFeedChanges(), CHANGE_SET)) {
+        if (FeedsChangedEvent.containsAny(event.getFavoriteFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.FAVORITE),
-                    !Collections.disjoint(event.getFavoriteFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
+                    FeedsChangedEvent.containsAny(event.getFavoriteFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
-        if(!Collections.disjoint(event.getArchiveFeedChanges(), CHANGE_SET)) {
+        if (FeedsChangedEvent.containsAny(event.getArchiveFeedChanges(), CHANGE_SET)) {
             updateList(ArticleListsPagerAdapter.positionByFeedType(FeedsChangedEvent.FeedType.ARCHIVE),
-                    !Collections.disjoint(event.getArchiveFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
+                    FeedsChangedEvent.containsAny(event.getArchiveFeedChanges(), CHANGE_SET_FORCE_CONTENT_UPDATE));
         }
     }
 

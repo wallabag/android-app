@@ -27,7 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -191,16 +191,15 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onArticlesChangedEvent(ArticlesChangedEvent articlesChangedEvent) {
+    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
         if (article.getArticleId() == null) return;
 
-        EnumSet<FeedsChangedEvent.ChangeType> changes
-                = articlesChangedEvent.getArticleChanges(article);
-
-        if (changes != null && changes.contains(FeedsChangedEvent.ChangeType.TAGS_CHANGED)) { // TODO: proper check
-            reload();
+        if (event.isChanged(article, FeedsChangedEvent.ChangeType.TAG_SET_CHANGED)) {
+            reload(true);
+        } else if (event.contains(FeedsChangedEvent.ChangeType.TAGS_CHANGED_GLOBALLY)) {
+            reload(false);
         }
     }
 
@@ -213,7 +212,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         if (TextUtils.equals(article.getGivenUrl(), event.getGivenUrl())) {
             discoveredArticleId = event.getArticleId();
 
-            reload();
+            reload(true);
         }
     }
 
@@ -264,7 +263,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         sortTagListByLabel(availableTags);
     }
 
-    private void reload() {
+    private void reload(boolean resetRemoved) {
         if (!loadArticle()) {
             Log.w(TAG, "reload() couldn't reload article");
             finish();
@@ -273,7 +272,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
         article.resetTags();
 
-        reloadTags(article.getTags());
+        reloadTags(resetRemoved ? article.getTags() : Collections.emptyList());
     }
 
     private void reloadTags(List<Tag> baseTags) {

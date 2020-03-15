@@ -394,7 +394,7 @@ public class OperationsWorker extends BaseWorker {
         }
 
         if (tagsChanged) {
-            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAGS_CHANGED);
+            notifyAboutArticleChange(article, ArticlesChangedEvent.ChangeType.TAG_SET_CHANGED);
         }
 
         Log.d(TAG, "setArticleTagsInternal() finished");
