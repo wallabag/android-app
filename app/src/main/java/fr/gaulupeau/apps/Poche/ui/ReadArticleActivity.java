@@ -877,9 +877,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
+            header.append("<span style=\"white-space: nowrap;\">");
+
             header.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
                     .append(' ')
                     .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));
+
+            header.append("</span>");
         }
 
         if (!TextUtils.isEmpty(article.getAuthors())) {
