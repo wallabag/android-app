@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editText_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textMultiLine"/>
+        android:hint="@string/title"
+        android:inputType="textMultiLine"
+        tools:text="Some article title" />
 
-</LinearLayout>
+</com.google.android.material.textfield.TextInputLayout>
