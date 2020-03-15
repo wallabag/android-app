@@ -30,6 +30,27 @@ public class ArticlesChangedEvent extends FeedsChangedEvent {
         addArticleChange(article, changeType);
     }
 
+    public boolean isChanged(Article article, ChangeType change) {
+        return isChanged(article.getArticleId(), change);
+    }
+
+    public boolean isChanged(int articleId, ChangeType change) {
+        EnumSet<ChangeType> articleChanges = getArticleChanges(articleId);
+
+        return articleChanges != null && articleChanges.contains(change);
+    }
+
+    public boolean isChangedAny(Article article, EnumSet<ChangeType> changes) {
+        return isChangedAny(article.getArticleId(), changes);
+    }
+
+    public boolean isChangedAny(int articleId, EnumSet<ChangeType> changes) {
+        EnumSet<ChangeType> articleChanges = getArticleChanges(articleId);
+
+        return articleChanges != null && !articleChanges.isEmpty()
+                && containsAny(articleChanges, changes);
+    }
+
     public Map<Integer, ArticleEntry> getChangedArticles() {
         return changedArticlesMap;
     }

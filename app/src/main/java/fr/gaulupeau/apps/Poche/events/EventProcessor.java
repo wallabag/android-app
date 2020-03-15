@@ -21,7 +21,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
 
@@ -161,7 +160,7 @@ public class EventProcessor {
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "onFeedsChangedEvent() started");
 
-        if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET_UNREAD_WIDGET)) {
+        if (FeedsChangedEvent.containsAny(event.getMainFeedChanges(), CHANGE_SET_UNREAD_WIDGET)) {
             Log.d(TAG, "onFeedsChangedEvent() triggering update for IconUnreadWidget");
             IconUnreadWidget.triggerWidgetUpdate(getContext());
         }

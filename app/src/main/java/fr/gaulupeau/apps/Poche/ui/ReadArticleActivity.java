@@ -60,7 +60,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
@@ -466,7 +465,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
         boolean updatePrevNext = false;
-        if(!Collections.disjoint(event.getInvalidateAllChanges(), CHANGE_SET_PREV_NEXT)) {
+        if (event.containsAny(CHANGE_SET_PREV_NEXT)) {
             updatePrevNext = true;
         } else {
             EnumSet<ArticlesChangedEvent.ChangeType> changes;
@@ -480,7 +479,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 changes.addAll(event.getFavoriteFeedChanges());
             }
 
-            if(!Collections.disjoint(changes, CHANGE_SET_PREV_NEXT)) {
+            if (ArticlesChangedEvent.containsAny(changes, CHANGE_SET_PREV_NEXT)) {
                 updatePrevNext = true;
             }
         }
@@ -507,8 +506,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             updateTitle = true;
             updateURL = true;
         } else {
-            updateActions = !Collections.disjoint(changes, CHANGE_SET_ACTIONS);
-            updateContent = !Collections.disjoint(changes, CHANGE_SET_CONTENT);
+            updateActions = ArticlesChangedEvent.containsAny(changes, CHANGE_SET_ACTIONS);
+            updateContent = ArticlesChangedEvent.containsAny(changes, CHANGE_SET_CONTENT);
             updateTitle = changes.contains(FeedsChangedEvent.ChangeType.TITLE_CHANGED);
             updateURL = changes.contains(FeedsChangedEvent.ChangeType.URL_CHANGED);
         }

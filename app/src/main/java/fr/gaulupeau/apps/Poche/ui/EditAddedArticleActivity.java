@@ -43,6 +43,15 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     private static final String STATE_ARCHIVED = "archived";
     private static final String STATE_FAVORITE = "favorite";
 
+    private final EnumSet<FeedsChangedEvent.ChangeType> CHANGE_SET_FOR_REINIT = EnumSet.of(
+            FeedsChangedEvent.ChangeType.TITLE_CHANGED,
+            FeedsChangedEvent.ChangeType.FAVORITED,
+            FeedsChangedEvent.ChangeType.UNFAVORITED,
+            FeedsChangedEvent.ChangeType.ARCHIVED,
+            FeedsChangedEvent.ChangeType.UNARCHIVED,
+            FeedsChangedEvent.ChangeType.DELETED
+    );
+
     private TextView articleTitleTv;
     private ImageButton favoriteButton;
     private ImageButton archiveButton;
@@ -105,15 +114,12 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onArticlesChangedEvent(ArticlesChangedEvent articlesChangedEvent) {
+    public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
 
         if (articleId == -1) return;
 
-        EnumSet<FeedsChangedEvent.ChangeType> changes
-                = articlesChangedEvent.getArticleChanges(articleId);
-
-        if (changes != null) { // TODO: proper check
+        if (event.isChangedAny(articleId, CHANGE_SET_FOR_REINIT)) {
             init();
         }
     }

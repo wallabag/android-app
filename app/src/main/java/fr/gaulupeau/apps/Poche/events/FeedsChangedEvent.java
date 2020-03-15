@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.events;
 
+import java.util.Collections;
 import java.util.EnumSet;
 
 public class FeedsChangedEvent {
@@ -11,8 +12,8 @@ public class FeedsChangedEvent {
         ORIGIN_URL_CHANGED, ESTIMATED_READING_TIME_CHANGED, LANGUAGE_CHANGED,
         PREVIEW_PICTURE_URL_CHANGED, AUTHORS_CHANGED, CREATED_DATE_CHANGED, UPDATED_DATE_CHANGED,
         PUBLISHED_AT_CHANGED, STARRED_AT_CHANGED, IS_PUBLIC_CHANGED, PUBLIC_UID_CHANGED,
-        TAGS_CHANGED, ANNOTATIONS_CHANGED, CONTENT_CHANGED, FETCHED_IMAGES_CHANGED,
-        ADDED, DELETED, UNSPECIFIED
+        TAG_SET_CHANGED, TAGS_CHANGED_GLOBALLY, ANNOTATIONS_CHANGED, CONTENT_CHANGED,
+        FETCHED_IMAGES_CHANGED, ADDED, DELETED, UNSPECIFIED
     }
 
     protected EnumSet<ChangeType> invalidateAllChanges = EnumSet.noneOf(ChangeType.class);
@@ -22,6 +23,20 @@ public class FeedsChangedEvent {
     protected EnumSet<ChangeType> archiveFeedChanges = EnumSet.noneOf(ChangeType.class);
 
     public FeedsChangedEvent() {}
+
+    public static boolean containsAny(EnumSet<ChangeType> set1, EnumSet<ChangeType> set2) {
+        return !Collections.disjoint(set1, set2);
+    }
+
+    public boolean contains(ChangeType change) {
+        return invalidateAllChanges.contains(change)
+                || invalidateAllChanges.contains(ChangeType.UNSPECIFIED);
+    }
+
+    public boolean containsAny(EnumSet<ChangeType> changes) {
+        return containsAny(invalidateAllChanges, changes)
+                || invalidateAllChanges.contains(ChangeType.UNSPECIFIED);
+    }
 
     public boolean isInvalidateAll() {
         return !invalidateAllChanges.isEmpty();
