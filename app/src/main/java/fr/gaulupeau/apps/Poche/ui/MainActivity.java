@@ -3,7 +3,6 @@ package fr.gaulupeau.apps.Poche.ui;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
@@ -30,7 +29,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -46,6 +44,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -125,39 +124,36 @@ public class MainActivity extends AppCompatActivity
 
         settings = new Settings(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         if (navigationView != null) {
             View headerView = navigationView.getHeaderView(0);
             if (headerView != null) {
-                lastUpdateTimeView = (TextView) headerView.findViewById(R.id.lastUpdateTime);
+                lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
             }
 
             // Set different colors for items in the navigation bar in dark (high contrast) theme
-            if (Themes.getCurrentTheme() != null && Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
+            if (Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
                 @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
                         navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-
                     } else {
                         navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
                         navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
                     }
-                } catch (XmlPullParserException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (XmlPullParserException | IOException e) {
+                    Log.e(TAG, "onCreate()", e);
                 }
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.navigation_drawer_open,
@@ -190,7 +186,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         firstSyncDone = settings.isFirstSyncDone();
 
@@ -207,7 +203,8 @@ public class MainActivity extends AppCompatActivity
             Bundle bundle = savedInstanceState.getBundle(STATE_SAVED_FRAGMENT_STATES);
             if (bundle != null) {
                 for (String key : bundle.keySet()) {
-                    savedFragmentStates.put(key, bundle.<Fragment.SavedState>getParcelable(key));
+                    //noinspection ConstantConditions
+                    savedFragmentStates.put(key, bundle.getParcelable(key));
                 }
             }
 
@@ -249,7 +246,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Log.v(TAG, "onSaveInstanceState()");
@@ -297,19 +294,9 @@ public class MainActivity extends AppCompatActivity
                     messageBox.setMessage(settings.isConfigurationErrorShown()
                             ? R.string.d_configurationIsQuestionable_message
                             : R.string.d_configurationChanged_message);
-                    messageBox.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            testConfiguration();
-                        }
-                    });
+                    messageBox.setPositiveButton(R.string.ok, (dialog, which) -> testConfiguration());
                     messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
-                    messageBox.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            checkConfigurationDialog = null;
-                        }
-                    });
+                    messageBox.setOnDismissListener(dialog -> checkConfigurationDialog = null);
                     checkConfigurationDialog = messageBox.show();
                 }
             }
@@ -342,7 +329,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -369,8 +356,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
 
         searchMenuItem = menu.findItem(R.id.menu_main_search);
-        MenuItemCompat.setOnActionExpandListener(
-                searchMenuItem, new MenuItemCompat.OnActionExpandListener() {
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 Log.v(TAG, "searchMenuItem expanded");
@@ -489,14 +475,13 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        this.<DrawerLayout>findViewById(R.id.drawer_layout).closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
     public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
-        Log.d(TAG, "onOfflineQueueChangedEvent() started");
+        Log.d(TAG, "onOfflineQueueChangedEvent()");
 
         Long queueLength = event.getQueueLength();
 
@@ -513,7 +498,7 @@ public class MainActivity extends AppCompatActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
-        Log.d(TAG, "Got FeedsChangedEvent");
+        Log.d(TAG, "onFeedsChangedEvent()");
 
         if (event.isInvalidateAll()) {
             firstSyncDone = settings.isFirstSyncDone();
@@ -528,14 +513,14 @@ public class MainActivity extends AppCompatActivity
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onUpdateArticlesStartedEvent(UpdateArticlesStartedEvent event) {
-        Log.d(TAG, "onUpdateArticlesStartedEvent");
+        Log.d(TAG, "onUpdateArticlesStartedEvent()");
 
         updateStateChanged(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
-        Log.d(TAG, "onUpdateArticlesProgressEvent");
+        Log.d(TAG, "onUpdateArticlesProgressEvent()");
 
         if (progressBar != null) {
             progressBar.setIndeterminate(false);
@@ -607,14 +592,11 @@ public class MainActivity extends AppCompatActivity
 
         final String searchQueryToRestore = searchQuery;
 
-        MenuItemCompat.expandActionView(searchMenuItem);
+        searchMenuItem.expandActionView();
 
-        searchView.post(new Runnable() {
-            @Override
-            public void run() {
-                Log.v(TAG, "searchView.post() restoring search string: " + searchQueryToRestore);
-                searchView.setQuery(searchQueryToRestore, false);
-            }
+        searchView.post(() -> {
+            Log.v(TAG, "searchView.post() restoring search string: " + searchQueryToRestore);
+            searchView.setQuery(searchQueryToRestore, false);
         });
     }
 
@@ -683,6 +665,7 @@ public class MainActivity extends AppCompatActivity
         if (currentFragment != null && isFragmentStateSavable(currentFragmentType)) {
             Log.d(TAG, "setCurrentFragment() saving fragment state: " + currentFragmentType);
 
+            //noinspection ConstantConditions
             savedFragmentStates.put(currentFragmentType, getSupportFragmentManager()
                     .saveFragmentInstanceState(currentFragment));
         }
@@ -837,7 +820,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateOnStartup() {
-        long delay = 5 * 60 * 1000; // 5 minutes
+        long delay = TimeUnit.MINUTES.toMillis(5);
         if (settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk()
                 && settings.isFirstSyncDone()
                 && settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
@@ -849,9 +832,7 @@ public class MainActivity extends AppCompatActivity
         updateArticles(showErrors, ArticleUpdater.UpdateType.FULL);
     }
 
-    private boolean updateArticles(boolean showErrors, ArticleUpdater.UpdateType updateType) {
-        boolean result = false;
-
+    private void updateArticles(boolean showErrors, ArticleUpdater.UpdateType updateType) {
         if (updateRunning) {
             if (showErrors) {
                 Toast.makeText(this, R.string.previousUpdateNotFinished, Toast.LENGTH_SHORT).show();
@@ -862,15 +843,11 @@ public class MainActivity extends AppCompatActivity
             }
         } else if (WallabagConnection.isNetworkAvailable()) {
             OperationsHelper.syncAndUpdate(this, settings, updateType, false);
-
-            result = true;
         } else {
             if (showErrors) {
                 Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             }
         }
-
-        return result;
     }
 
     private void testConfiguration() {
@@ -910,13 +887,10 @@ public class MainActivity extends AppCompatActivity
 
         builder.setView(view);
 
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                TextView textView = view.findViewById(R.id.page_url);
-                OperationsHelper.addArticleWithUI(getBaseContext(),
-                        textView.getText().toString(), null);
-            }
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            TextView textView = view.findViewById(R.id.page_url);
+            OperationsHelper.addArticleWithUI(getBaseContext(),
+                    textView.getText().toString(), null);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
 
@@ -931,6 +905,7 @@ public class MainActivity extends AppCompatActivity
                 case KeyEvent.KEYCODE_PAGE_DOWN:
                     ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
                     return true;
+
                 case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
                     if (settings.isVolumeButtonsScrollingEnabled()) {
