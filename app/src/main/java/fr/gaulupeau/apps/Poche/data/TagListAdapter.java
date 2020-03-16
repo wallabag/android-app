@@ -1,12 +1,14 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import androidx.annotation.LayoutRes;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
@@ -14,6 +16,14 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 
 public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHolder> {
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface OnItemButtonClickListener {
+        void onItemButtonClick(int position);
+    }
 
     private final @LayoutRes int itemLayoutResID;
     private final List<Tag> tags;
@@ -33,6 +43,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         this.buttonClickListener = buttonClickListener;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -50,7 +61,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         return tags.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         OnItemClickListener listener;
         OnItemButtonClickListener buttonClickListener;
@@ -58,31 +69,31 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         TextView label;
         ImageButton button;
 
-        public ViewHolder(View itemView, OnItemClickListener listener,
-                          OnItemButtonClickListener buttonClickListener) {
+        ViewHolder(View itemView, OnItemClickListener listener,
+                   OnItemButtonClickListener buttonClickListener) {
             super(itemView);
 
             this.listener = listener;
             this.buttonClickListener = buttonClickListener;
 
-            label = (TextView)itemView.findViewById(R.id.tag_label);
+            label = itemView.findViewById(R.id.tag_label);
 
             itemView.setOnClickListener(this);
 
-            button = (ImageButton)itemView.findViewById(R.id.tag_remove_button);
-            if(button != null) {
+            button = itemView.findViewById(R.id.tag_remove_button);
+            if (button != null) {
                 button.setOnClickListener(this);
             }
         }
 
-        public void bind(Tag tag) {
+        void bind(Tag tag) {
             label.setText(tag.getLabel());
         }
 
         @Override
         public void onClick(View v) {
-            if(button != null && v == button) {
-                if(buttonClickListener != null) {
+            if (button != null && v == button) {
+                if (buttonClickListener != null) {
                     buttonClickListener.onItemButtonClick(getAdapterPosition());
                 }
             } else {
@@ -90,14 +101,6 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
             }
         }
 
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public interface OnItemButtonClickListener {
-        void onItemButtonClick(int position);
     }
 
 }

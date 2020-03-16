@@ -1,28 +1,36 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 
-import static fr.gaulupeau.apps.Poche.data.ListTypes.*;
+import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
+import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
+import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_UNREAD;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
 
     private Context context;
     private Settings settings;
 
     private List<Article> articles;
     private OnItemClickListener listener;
-    private int listType = -1;
+    private int listType;
 
     public ListAdapter(Context context, Settings settings,
                        List<Article> articles, OnItemClickListener listener, int listType) {
@@ -33,8 +41,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         this.listType = listType;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view, listener);
     }
@@ -57,24 +66,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ImageView read;
         TextView readingTime;
 
-        public ViewHolder(View itemView, OnItemClickListener listener) {
+        ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
-            title = (TextView) itemView.findViewById(R.id.title);
-            url = (TextView) itemView.findViewById(R.id.url);
-            favourite = (ImageView) itemView.findViewById(R.id.favourite);
-            read = (ImageView) itemView.findViewById(R.id.read);
-            readingTime = (TextView) itemView.findViewById(R.id.estimatedReadingTime);
+            title = itemView.findViewById(R.id.title);
+            url = itemView.findViewById(R.id.url);
+            favourite = itemView.findViewById(R.id.favourite);
+            read = itemView.findViewById(R.id.read);
+            readingTime = itemView.findViewById(R.id.estimatedReadingTime);
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Article article) {
+        void bind(Article article) {
             title.setText(article.getTitle());
             url.setText(article.getDomain());
 
             boolean showFavourite = false;
             boolean showRead = false;
-            switch(listType) {
+            switch (listType) {
                 case LIST_TYPE_UNREAD:
                 case LIST_TYPE_ARCHIVED:
                     showFavourite = article.getFavorite();
@@ -101,7 +110,4 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         }
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
 }
