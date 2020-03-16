@@ -348,4 +348,5 @@
     <string name="articleEdit_openArticle">Open article</string>
 
     <string name="title">Title</string>
+    <string name="untagged"><![CDATA[<untagged>]]></string>
 </resources>

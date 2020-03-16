@@ -13,6 +13,7 @@ import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
+import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.TagListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
@@ -76,7 +77,13 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return detachObjects(qb.list());
+        List<Tag> tags = detachObjects(qb.list());
+
+        if (page == 0 && TextUtils.isEmpty(searchQuery)) {
+            tags.add(0, new Tag(null, null, getString(R.string.untagged)));
+        }
+
+        return tags;
     }
 
     private QueryBuilder<Tag> getQueryBuilder() {
