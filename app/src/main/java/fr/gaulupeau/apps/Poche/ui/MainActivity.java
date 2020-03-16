@@ -66,6 +66,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TagListFragment.OnFragmentInteractionListener {
 
+    public static final String PARAM_TAG_LABEL = "tag_label";
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String STATE_SAVED_FRAGMENT_STATES = "saved_fragment_states";
@@ -117,8 +119,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-
-        handleIntent(getIntent());
 
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
@@ -197,7 +197,19 @@ public class MainActivity extends AppCompatActivity
 
         String currentFragmentType = null;
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
+            Intent intent = getIntent();
+
+            selectedTag = intent.getStringExtra(PARAM_TAG_LABEL);
+
+            if (!TextUtils.isEmpty(selectedTag)) {
+                currentFragmentType = FRAGMENT_TAGGED_ARTICLE_LISTS;
+            }
+
+            if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+                searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            }
+        } else {
             Log.v(TAG, "onCreate() restoring state");
 
             Bundle bundle = savedInstanceState.getBundle(STATE_SAVED_FRAGMENT_STATES);
@@ -212,9 +224,11 @@ public class MainActivity extends AppCompatActivity
 
             selectedTag = savedInstanceState.getString(STATE_SELECTED_TAG);
 
-            performSearch(savedInstanceState.getString(STATE_SEARCH_QUERY));
+            searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
         }
-        if (searchQuery == null) performSearch("");
+
+        if (searchQuery == null) searchQuery = "";
+        performSearch(searchQuery);
 
         if (currentFragmentType == null) currentFragmentType = FRAGMENT_ARTICLE_LISTS;
 
@@ -232,14 +246,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent()");
 
-        handleIntent(intent);
-    }
+        String tag = intent.getStringExtra(PARAM_TAG_LABEL);
+        if (!TextUtils.isEmpty(tag)) {
+            openTag(tag);
+        }
 
-    private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.v(TAG, "handleIntent() search intent; query: " + query);
+            Log.v(TAG, "onNewIntent() search intent; query: " + query);
 
             performSearch(query);
         }
@@ -651,7 +667,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setCurrentFragment(String type) {
-        if (TextUtils.equals(currentFragmentType, type)) {
+        setCurrentFragment(type, false);
+    }
+
+    private void setCurrentFragment(String type, boolean force) {
+        Log.d(TAG, String.format("setCurrentFragment(%s, %s)", type, force));
+
+        if (!force && TextUtils.equals(currentFragmentType, type)) {
             Log.i(TAG, "setCurrentFragment() ignoring switch to the same type: " + type);
             return;
         }
@@ -685,12 +707,16 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(type);
 
-        if (fragment == null) {
+        if (fragment == null || !isFragmentReusable(type)) {
             Log.d(TAG, "getFragment() creating new instance");
 
             switch (type) {
                 case FRAGMENT_ARTICLE_LISTS:
                     fragment = ArticleListsFragment.newInstance(null);
+                    break;
+
+                case FRAGMENT_TAGGED_ARTICLE_LISTS:
+                    fragment = ArticleListsFragment.newInstance(selectedTag);
                     break;
 
                 case FRAGMENT_TAG_LIST:
@@ -714,6 +740,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         return fragment;
+    }
+
+    private boolean isFragmentReusable(String type) {
+        return !type.equals(FRAGMENT_TAGGED_ARTICLE_LISTS);
     }
 
     private boolean isFragmentStateSavable(String type) {
@@ -783,11 +813,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onTagSelected(Tag tag) {
-        selectedTag = tag.getLabel();
+        openTag(tag.getLabel());
+    }
 
-        Fragment fragment = ArticleListsFragment.newInstance(tag.getLabel());
+    private void openTag(String tagLabel) {
+        selectedTag = tagLabel;
 
-        setCurrentFragment(fragment, FRAGMENT_TAGGED_ARTICLE_LISTS);
+        setCurrentFragment(FRAGMENT_TAGGED_ARTICLE_LISTS, true);
     }
 
     @Override

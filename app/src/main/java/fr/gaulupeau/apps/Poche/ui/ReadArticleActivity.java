@@ -58,6 +58,7 @@ import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
@@ -91,6 +92,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ArticlesChangedEvent.ChangeType.AUTHORS_CHANGED,
             ArticlesChangedEvent.ChangeType.URL_CHANGED,
             ArticlesChangedEvent.ChangeType.ESTIMATED_READING_TIME_CHANGED,
+            ArticlesChangedEvent.ChangeType.TAG_SET_CHANGED,
+            ArticlesChangedEvent.ChangeType.TAGS_CHANGED_GLOBALLY,
 //            ArticlesChangedEvent.ChangeType.ANNOTATIONS_CHANGED, TODO: fix: own changes will cause reload
             ArticlesChangedEvent.ChangeType.FETCHED_IMAGES_CHANGED);
 
@@ -250,6 +253,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.d(TAG, "onNewIntent()");
+
+        // a proper reinitialization is needed to do without a restart
+
+        finish();
+        startActivity(intent);
     }
 
     @Override
@@ -897,6 +911,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         header.append(escapeHtml(getString(R.string.content_estimatedReadingTime,
                 estimatedReadingTime > 0 ? estimatedReadingTime : "< 1")));
 
+        addTags(header);
+
         if (settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
             header.append("<br>\n");
             header.append("<img src=\"")
@@ -909,6 +925,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
 
         return doImageUrlReplacements(headerString);
+    }
+
+    private void addTags(StringBuilder header) {
+        if (!article.getTags().isEmpty()) {
+            Tag.sortTagListByLabel(article.getTags());
+
+            header.append("<br>");
+
+            for (Tag tag : article.getTags()) {
+                header.append("<div class=\"tag\">");
+                header.append("<a href=\"tag://").append(tag.getId()).append("\">")
+                        .append(escapeHtml(tag.getLabel()))
+                        .append("</a>");
+                header.append("</div>");
+            }
+        }
     }
 
     private String getHtmlContent() {
@@ -949,6 +981,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.d(TAG, "handleUrlClicked() url: " + url);
         if (TextUtils.isEmpty(url)) return;
 
+        if (handleTagClicked(url)) return;
+
         @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
 
@@ -981,6 +1015,42 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 });
 
         builder.show();
+    }
+
+    private boolean handleTagClicked(String url) {
+        final String tagUrlPrefix = "tag://";
+
+        if (!url.startsWith(tagUrlPrefix)) return false;
+
+        long tagId;
+        try {
+            tagId = Long.parseLong(url.substring(tagUrlPrefix.length()));
+        } catch (NumberFormatException nfe) {
+            Log.w(TAG, "handleTagClicked() couldn't handle tag URL: " + url);
+            return true;
+        }
+
+        Tag tag = null;
+        for (Tag t : article.getTags()) {
+            if (t.getId() == tagId) {
+                tag = t;
+                break;
+            }
+        }
+
+        if (tag == null) {
+            Log.w(TAG, "handleTagClicked() couldn't find tag by ID: " + tagId);
+            return true;
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra(MainActivity.PARAM_TAG_LABEL, tag.getLabel());
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(intent);
+
+        return true;
     }
 
     private void openURL(String url) {
@@ -1131,7 +1201,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         Intent intent = new Intent(this, ReadArticleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
         if (contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
         if (contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
