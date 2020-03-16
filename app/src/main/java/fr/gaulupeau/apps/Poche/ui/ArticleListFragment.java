@@ -52,10 +52,15 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
     private static final String LIST_TYPE_PARAM = "list_type";
     private static final String TAG_PARAM = "tag";
 
+    private static final String UNTAGGED_WHERE = ArticleDao.Properties.Id.columnName + " not in "
+            + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
+            + " from " + ArticleTagsJoinDao.TABLENAME + ")";
+
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
     private String tagLabel;
+    private boolean untagged;
     private List<Long> tagIDs;
 
     private OnFragmentInteractionListener host;
@@ -159,7 +164,12 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
 
     @Override
     protected void resetContent() {
-        if (tagLabel != null) {
+        untagged = false;
+        tagIDs = null;
+
+        if (getString(R.string.untagged).equals(tagLabel)) {
+            untagged = true;
+        } else if (tagLabel != null) {
             List<Tag> tags = tagDao.queryBuilder()
                     .where(TagDao.Properties.Label.eq(tagLabel))
                     .orderDesc(TagDao.Properties.Label)
@@ -169,8 +179,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
             for (Tag t : tags) {
                 tagIDs.add(t.getId());
             }
-        } else {
-            tagIDs = null;
         }
 
         super.resetContent();
@@ -194,7 +202,9 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (tagIDs != null && !tagIDs.isEmpty()) {
+        if (untagged) {
+            qb.where(new WhereCondition.StringCondition(UNTAGGED_WHERE));
+        } else if (tagIDs != null && !tagIDs.isEmpty()) {
             // TODO: try subquery
             qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
                     .where(ArticleTagsJoinDao.Properties.TagId.in(tagIDs));
