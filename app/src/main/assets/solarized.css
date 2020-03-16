@@ -262,6 +262,24 @@ header.mbm {
   content: none;
 }
 
+.tag {
+  display: inline-block;
+  border: 1px solid #657B83;
+  border-radius: 8px;
+  padding: 1px 3px;
+  margin: 2px;
+  white-space: nowrap;
+}
+
+.tag a {
+  color: #657B83;
+  text-decoration: none;
+}
+
+.tag a:hover, a:focus {
+  text-decoration: none;
+}
+
 /* ==========================================================================
    6 = Media Queries
    ========================================================================== */
