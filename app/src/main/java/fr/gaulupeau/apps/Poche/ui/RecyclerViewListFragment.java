@@ -1,18 +1,20 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.os.Bundle;
-import androidx.annotation.IdRes;
-import androidx.annotation.LayoutRes;
-import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,17 +51,17 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         Log.v(TAG, "onCreate()");
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Log.v(TAG, "onCreate() restoring state");
 
-            if(sortOrder == null) {
+            if (sortOrder == null) {
                 sortOrder = Sortable.SortOrder.values()[savedInstanceState.getInt(STATE_SORT_ORDER)];
             }
-            if(searchQuery == null) {
+            if (searchQuery == null) {
                 searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
             }
         }
-        if(sortOrder == null) sortOrder = Sortable.SortOrder.DESC;
+        if (sortOrder == null) sortOrder = Sortable.SortOrder.DESC;
 
         itemList = new ArrayList<>();
 
@@ -69,9 +71,9 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view =  inflater.inflate(getLayoutResID(), container, false);
+        View view = inflater.inflate(getLayoutResID(), container, false);
 
-        recyclerView = (RecyclerView) view.findViewById(getRecyclerViewResID());
+        recyclerView = view.findViewById(getRecyclerViewResID());
 
         recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
@@ -86,13 +88,8 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         recyclerView.addOnScrollListener(scrollListener);
         recyclerView.setAdapter(listAdapter);
 
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(getSwipeContainerResID());
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                onSwipeRefresh();
-            }
-        });
+        refreshLayout = view.findViewById(getSwipeContainerResID());
+        refreshLayout.setOnRefreshListener(this::onSwipeRefresh);
 
         return view;
     }
@@ -112,7 +109,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         active = false;
 
-        if(refreshLayout != null) {
+        if (refreshLayout != null) {
             // http://stackoverflow.com/a/27073879
             refreshLayout.setRefreshing(false);
             refreshLayout.clearAnimation();
@@ -120,13 +117,13 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Log.v(TAG, "onSaveInstanceState()");
 
-        if(sortOrder != null) outState.putInt(STATE_SORT_ORDER, sortOrder.ordinal());
-        if(searchQuery != null) outState.putString(STATE_SEARCH_QUERY, searchQuery);
+        if (sortOrder != null) outState.putInt(STATE_SORT_ORDER, sortOrder.ordinal());
+        if (searchQuery != null) outState.putString(STATE_SEARCH_QUERY, searchQuery);
     }
 
     @Override
@@ -134,7 +131,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         Sortable.SortOrder oldSortOrder = this.sortOrder;
         this.sortOrder = sortOrder;
 
-        if(sortOrder != oldSortOrder) invalidateList();
+        if (sortOrder != oldSortOrder) invalidateList();
     }
 
     @Override
@@ -142,17 +139,17 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         String oldSearchQuery = this.searchQuery;
         this.searchQuery = searchQuery;
 
-        if(!TextUtils.equals(oldSearchQuery, searchQuery)) invalidateList();
+        if (!TextUtils.equals(oldSearchQuery, searchQuery)) invalidateList();
     }
 
     public void invalidateList() {
         invalidList = true;
 
-        if(active) checkList();
+        if (active) checkList();
     }
 
     protected void checkList() {
-        if(invalidList) {
+        if (invalidList) {
             invalidList = false;
 
             resetContent();
@@ -177,7 +174,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         List<T> items = getItems(0);
 
         boolean scrollToTop = false;
-        if(recyclerViewLayoutManager != null) {
+        if (recyclerViewLayoutManager != null) {
             scrollToTop = recyclerViewLayoutManager.findFirstCompletelyVisibleItemPosition() == 0;
         }
 
@@ -188,9 +185,9 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         diffResult.dispatchUpdatesTo(listAdapter);
 
-        if(scrollListener != null) scrollListener.resetState();
+        if (scrollListener != null) scrollListener.resetState();
 
-        if(scrollToTop && recyclerView != null) {
+        if (scrollToTop && recyclerView != null) {
             recyclerView.scrollToPosition(0);
         }
     }
@@ -203,12 +200,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         itemList.addAll(items);
 
-        recyclerView.post(new Runnable() {
-            @Override
-            public void run() {
-                listAdapter.notifyItemRangeInserted(totalItemsCount, addedItemsCount);
-            }
-        });
+        recyclerView.post(() -> listAdapter.notifyItemRangeInserted(totalItemsCount, addedItemsCount));
     }
 
     protected abstract List<T> getItems(int page);
@@ -216,7 +208,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
     protected abstract DiffUtil.Callback getDiffUtilCallback(List<T> oldItems, List<T> newItems);
 
     protected void onSwipeRefresh() {
-        if(refreshLayout != null) {
+        if (refreshLayout != null) {
             refreshLayout.setRefreshing(false);
         }
     }
