@@ -292,7 +292,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     private void save() {
         Log.d(TAG, "save() started");
 
-        OperationsHelper.setArticleTags(this, article, currentTags, this::finish);
+        OperationsHelper.setArticleTags(this, article, new ArrayList<>(currentTags), this::finish);
     }
 
     private void textChanged(String text) {
