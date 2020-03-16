@@ -41,7 +41,8 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_UNREAD;
 
-public class ArticleListFragment extends RecyclerViewListFragment<Article> {
+public class ArticleListFragment extends RecyclerViewListFragment<Article>
+        implements ContextMenuItemHandler {
 
     public interface OnFragmentInteractionListener {
         void onRecyclerViewListSwipeUpdate();
@@ -141,6 +142,11 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article> {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean handleContextItemSelected(Activity activity, MenuItem item) {
+        return ((ListAdapter) listAdapter).handleContextItemSelected(activity, item);
     }
 
     public void forceContentUpdate() {

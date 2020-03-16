@@ -40,7 +40,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
     protected RecyclerView.Adapter listAdapter;
     protected EndlessRecyclerViewScrollListener scrollListener;
 
-    protected boolean active = false;
+    protected boolean active = false; // TODO: check: doesn't work as expected in PagerAdapter
     protected boolean invalidList = true;
 
     public RecyclerViewListFragment() {}
