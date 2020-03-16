@@ -2,10 +2,12 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -41,13 +43,13 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         Log.v(TAG, "onAttach()");
 
-        if(context instanceof OnFragmentInteractionListener) {
-            host = (OnFragmentInteractionListener)context;
+        if (context instanceof OnFragmentInteractionListener) {
+            host = (OnFragmentInteractionListener) context;
         }
     }
 
@@ -62,12 +64,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
 
     @Override
     protected RecyclerView.Adapter getListAdapter(List<Tag> list) {
-        return new TagListAdapter(list, new TagListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                TagListFragment.this.onItemClick(position);
-            }
-        });
+        return new TagListAdapter(list, TagListFragment.this::onItemClick);
     }
 
     @Override
@@ -75,7 +72,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
         QueryBuilder<Tag> qb = getQueryBuilder()
                 .limit(PER_PAGE_LIMIT);
 
-        if(page > 0) {
+        if (page > 0) {
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
@@ -85,11 +82,11 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
     private QueryBuilder<Tag> getQueryBuilder() {
         QueryBuilder<Tag> qb = tagDao.queryBuilder();
 
-        if(!TextUtils.isEmpty(searchQuery)) {
+        if (!TextUtils.isEmpty(searchQuery)) {
             qb.where(TagDao.Properties.Label.like("%" + searchQuery + "%"));
         }
 
-        switch(sortOrder) {
+        switch (sortOrder) {
             case ASC:
                 qb.orderAsc(TagDao.Properties.Label);
                 break;
@@ -107,7 +104,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
 
     // removes tags from cache: necessary for DiffUtil to work
     private List<Tag> detachObjects(List<Tag> tags) {
-        for(Tag tag: tags) {
+        for (Tag tag : tags) {
             tagDao.detach(tag);
         }
 
@@ -118,11 +115,11 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
     protected void onSwipeRefresh() {
         super.onSwipeRefresh();
 
-        if(host != null) host.onRecyclerViewListSwipeUpdate();
+        if (host != null) host.onRecyclerViewListSwipeUpdate();
     }
 
     private void onItemClick(int position) {
-        if(host != null) host.onTagSelected(itemList.get(position));
+        if (host != null) host.onTagSelected(itemList.get(position));
     }
 
     @Override
@@ -157,7 +154,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
             Integer tagID1 = tag1.getTagId();
             Integer tagID2 = tag2.getTagId();
 
-            if(tagID1 == null && tagID2 == null) {
+            if (tagID1 == null && tagID2 == null) {
                 return TextUtils.equals(tag1.getLabel(), tag2.getLabel());
             }
 

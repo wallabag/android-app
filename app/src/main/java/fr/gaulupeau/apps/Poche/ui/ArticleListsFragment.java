@@ -1,17 +1,19 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.EnumSet;
 
@@ -68,21 +70,21 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(getArguments() != null) {
+        if (getArguments() != null) {
             tag = getArguments().getString(PARAM_TAG);
         }
 
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Log.v(TAG, "onCreate() restoring state");
 
-            if(sortOrder == null) {
+            if (sortOrder == null) {
                 sortOrder = Sortable.SortOrder.values()[savedInstanceState.getInt(STATE_SORT_ORDER)];
             }
-            if(searchQuery == null) {
+            if (searchQuery == null) {
                 searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
             }
         }
-        if(sortOrder == null) sortOrder = SortOrder.DESC;
+        if (sortOrder == null) sortOrder = SortOrder.DESC;
     }
 
     @Override
@@ -99,7 +101,7 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
             }
         }, false);
 
-        viewPager = (ViewPager)view.findViewById(R.id.articles_list_pager);
+        viewPager = view.findViewById(R.id.articles_list_pager);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -110,7 +112,7 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
             }
         });
 
-        TabLayout tabLayout = (TabLayout)view.findViewById(R.id.articles_list_tab_layout);
+        TabLayout tabLayout = view.findViewById(R.id.articles_list_tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(1);
@@ -119,13 +121,13 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Log.v(TAG, "onSaveInstanceState()");
 
-        if(sortOrder != null) outState.putInt(STATE_SORT_ORDER, sortOrder.ordinal());
-        if(searchQuery != null) outState.putString(STATE_SEARCH_QUERY, searchQuery);
+        if (sortOrder != null) outState.putInt(STATE_SORT_ORDER, sortOrder.ordinal());
+        if (searchQuery != null) outState.putString(STATE_SEARCH_QUERY, searchQuery);
     }
 
     @Override
@@ -150,7 +152,7 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
 
     private void setParametersToFragment(ArticleListFragment fragment) {
         Log.v(TAG, "setParametersToFragment() started");
-        if(fragment == null) return;
+        if (fragment == null) return;
 
         setSortOrder(fragment, sortOrder);
         setSearchQueryOnFragment(fragment, searchQuery);
@@ -158,11 +160,11 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
 
     private void setSortOrder(ArticleListFragment fragment,
                               Sortable.SortOrder sortOrder) {
-        if(fragment != null) fragment.setSortOrder(sortOrder);
+        if (fragment != null) fragment.setSortOrder(sortOrder);
     }
 
     private void setSearchQueryOnFragment(ArticleListFragment fragment, String searchQuery) {
-        if(fragment != null) fragment.setSearchQuery(searchQuery);
+        if (fragment != null) fragment.setSearchQuery(searchQuery);
     }
 
     private ArticleListFragment getCurrentFragment() {
@@ -197,10 +199,10 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     private void updateAllLists(boolean forceContentUpdate) {
         Log.d(TAG, "updateAllLists() started; forceContentUpdate: " + forceContentUpdate);
 
-        for(int i = 0; i < ArticleListsPagerAdapter.PAGES.length; i++) {
+        for (int i = 0; i < ArticleListsPagerAdapter.PAGES.length; i++) {
             ArticleListFragment f = getFragment(i);
-            if(f != null) {
-                if(forceContentUpdate) f.forceContentUpdate();
+            if (f != null) {
+                if (forceContentUpdate) f.forceContentUpdate();
                 f.invalidateList();
             } else {
                 Log.w(TAG, "updateAllLists() fragment is null; position: " + i);
@@ -212,10 +214,10 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
         Log.d(TAG, String.format("updateList() position: %d, forceContentUpdate: %s",
                 position, forceContentUpdate));
 
-        if(position != -1) {
+        if (position != -1) {
             ArticleListFragment f = getFragment(position);
-            if(f != null) {
-                if(forceContentUpdate) f.forceContentUpdate();
+            if (f != null) {
+                if (forceContentUpdate) f.forceContentUpdate();
                 f.invalidateList();
             } else {
                 Log.w(TAG, "updateList() fragment is null");
@@ -226,10 +228,9 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
     }
 
     public void scroll(boolean up) {
-
         ArticleListFragment currentFragment = getCurrentFragment();
 
-        if( currentFragment != null && currentFragment.recyclerViewLayoutManager != null) {
+        if (currentFragment != null && currentFragment.recyclerViewLayoutManager != null) {
             LinearLayoutManager listLayout = currentFragment.recyclerViewLayoutManager;
 
             int numberOfVisibleItems =
