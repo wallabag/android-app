@@ -1,8 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,7 +23,8 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 
-public class ArticleListsFragment extends Fragment implements Sortable, Searchable {
+public class ArticleListsFragment extends Fragment
+        implements Sortable, Searchable, ContextMenuItemHandler {
 
     private static final String TAG = ArticleListsFragment.class.getSimpleName();
 
@@ -142,6 +145,12 @@ public class ArticleListsFragment extends Fragment implements Sortable, Searchab
         this.searchQuery = searchQuery;
 
         setSearchQueryOnFragment(getCurrentFragment(), searchQuery);
+    }
+
+    @Override
+    public boolean handleContextItemSelected(Activity activity, MenuItem item) {
+        ArticleListFragment fragment = getCurrentFragment();
+        return fragment != null && fragment.handleContextItemSelected(activity, item);
     }
 
     public void onFeedsChangedEvent(FeedsChangedEvent event) {

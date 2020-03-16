@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuArticleMarkAsRead"
+        android:title="@string/btnMarkRead" />
+    <item
+        android:id="@+id/menuArticleMarkAsUnread"
+        android:title="@string/btnMarkUnread"
+        android:visible="false" />
+    <item
+        android:id="@+id/menuArticleFavorite"
+        android:title="@string/add_to_favorites" />
+    <item
+        android:id="@+id/menuArticleUnfavorite"
+        android:title="@string/remove_from_favorites"
+        android:visible="false" />
+    <item
+        android:id="@+id/menuShare"
+        android:title="@string/menuShare" />
+    <item
+        android:id="@+id/menuChangeTitle"
+        android:title="@string/menu_changeTitle" />
+    <item
+        android:id="@+id/menuManageTags"
+        android:title="@string/menu_manageTags" />
+    <item
+        android:id="@+id/menuDelete"
+        android:title="@string/menuDelete" />
+    <item
+        android:id="@+id/menuOpenOriginal"
+        android:title="@string/menuOpenOriginal" />
+    <item
+        android:id="@+id/menuCopyOriginalURL"
+        android:title="@string/menuCopyOriginalURL" />
+    <item
+        android:id="@+id/menuDownloadAsFile"
+        android:title="@string/menuDownloadAsFile" />
+
+</menu>

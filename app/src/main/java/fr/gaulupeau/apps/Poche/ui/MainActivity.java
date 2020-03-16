@@ -495,6 +495,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return handleContextMenuItemInFragment(item) || super.onContextItemSelected(item);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
     public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
         Log.d(TAG, "onOfflineQueueChangedEvent()");
@@ -664,6 +669,11 @@ public class MainActivity extends AppCompatActivity
         if (fragment instanceof Searchable) {
             ((Searchable) fragment).setSearchQuery(searchQuery);
         }
+    }
+
+    private boolean handleContextMenuItemInFragment(MenuItem item) {
+        return currentFragment instanceof ContextMenuItemHandler
+                && ((ContextMenuItemHandler) currentFragment).handleContextItemSelected(this, item);
     }
 
     private void setCurrentFragment(String type) {

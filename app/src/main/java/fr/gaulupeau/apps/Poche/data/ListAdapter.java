@@ -1,7 +1,11 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,6 +18,7 @@ import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.ui.ArticleActionsHelper;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
@@ -27,10 +32,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private Context context;
     private Settings settings;
+    private ArticleActionsHelper articleActionsHelper = new ArticleActionsHelper();
 
     private List<Article> articles;
     private OnItemClickListener listener;
     private int listType;
+
+    private Article articleWithContextMenu;
 
     public ListAdapter(Context context, Settings settings,
                        List<Article> articles, OnItemClickListener listener, int listType) {
@@ -58,8 +66,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return articles.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public boolean handleContextItemSelected(Activity activity, MenuItem item) {
+        return articleWithContextMenu != null && articleActionsHelper
+                .handleContextItemSelected(activity, articleWithContextMenu, item);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener, View.OnCreateContextMenuListener {
+
         OnItemClickListener listener;
+
+        Article article;
+
         TextView title;
         TextView url;
         ImageView favourite;
@@ -69,15 +87,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
+
             title = itemView.findViewById(R.id.title);
             url = itemView.findViewById(R.id.url);
             favourite = itemView.findViewById(R.id.favourite);
             read = itemView.findViewById(R.id.read);
             readingTime = itemView.findViewById(R.id.estimatedReadingTime);
+
             itemView.setOnClickListener(this);
+            itemView.setOnCreateContextMenuListener(this);
         }
 
         void bind(Article article) {
+            this.article = article;
+
             title.setText(article.getTitle());
             url.setText(article.getDomain());
 
@@ -108,6 +131,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         public void onClick(View v) {
             listener.onItemClick(getAdapterPosition());
         }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu menu, View v,
+                                        ContextMenu.ContextMenuInfo menuInfo) {
+            articleWithContextMenu = article;
+
+            if (article == null) return;
+
+            new MenuInflater(context) // not sure about this
+                    .inflate(R.menu.article_list_context_menu, menu);
+
+            articleActionsHelper.initMenu(menu, article);
+        }
+
     }
 
 }
