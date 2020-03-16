@@ -1,12 +1,8 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -64,7 +60,6 @@ import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
-import wallabag.apiwrapper.WallabagService;
 
 import static android.text.Html.escapeHtml;
 
@@ -113,6 +108,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Settings settings;
 
     private ArticleDao articleDao;
+
+    private ArticleActionsHelper articleActionsHelper = new ArticleActionsHelper();
 
     private boolean fullscreenArticleView;
     private int fontSize;
@@ -311,15 +308,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         getMenuInflater().inflate(R.menu.option_article, menu);
 
-        if (article != null) {
-            boolean unread = article.getArchive() != null && !article.getArchive();
-            menu.findItem(R.id.menuArticleMarkAsRead).setVisible(unread);
-            menu.findItem(R.id.menuArticleMarkAsUnread).setVisible(!unread);
-
-            boolean favorite = article.getFavorite() != null && article.getFavorite();
-            menu.findItem(R.id.menuArticleFavorite).setVisible(!favorite);
-            menu.findItem(R.id.menuArticleUnfavorite).setVisible(favorite);
-        }
+        if (article != null) articleActionsHelper.initMenu(menu, article);
 
         menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
 
@@ -332,58 +321,28 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             case R.id.menuArticleMarkAsRead:
             case R.id.menuArticleMarkAsUnread:
                 markAsReadAndClose();
-                break;
-
-            case R.id.menuArticleFavorite:
-            case R.id.menuArticleUnfavorite:
-                toggleFavorite();
-                break;
-
-            case R.id.menuShare:
-                shareArticle();
-                break;
-
-            case R.id.menuChangeTitle:
-                showChangeTitleDialog();
-                break;
-
-            case R.id.menuManageTags:
-                manageTags();
-                break;
+                return true;
 
             case R.id.menuDelete:
                 deleteArticle();
-                break;
-
-            case R.id.menuOpenOriginal:
-                openOriginal();
-                break;
-
-            case R.id.menuCopyOriginalURL:
-                copyURLToClipboard();
-                break;
-
-            case R.id.menuDownloadAsFile:
-                showDownloadFileDialog();
-                break;
+                return true;
 
             case R.id.menuIncreaseFontSize:
                 changeFontSize(true);
-                break;
+                return true;
 
             case R.id.menuDecreaseFontSize:
                 changeFontSize(false);
-                break;
+                return true;
 
             case R.id.menuTTS:
                 toggleTTS(true);
-                break;
-
-            default:
-                return super.onOptionsItemSelected(item);
+                return true;
         }
 
-        return true;
+        if (articleActionsHelper.handleContextItemSelected(this, article, item)) return true;
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -1006,10 +965,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                             OperationsHelper.addArticleWithUI(this, url, articleUrl);
                             break;
                         case 2:
-                            copyURLToClipboard(url);
+                            copyUrlToClipboard(url);
                             break;
                         case 3:
-                            shareArticle(null, url);
+                            shareArticle(url);
                             break;
                     }
                 });
@@ -1054,131 +1013,25 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void openURL(String url) {
-        Log.d(TAG, "openURL() url: " + url);
-        if (TextUtils.isEmpty(url)) return;
-
-        Uri uri = Uri.parse(url);
-        if (uri.getScheme() == null) {
-            Log.i(TAG, "openURL() scheme is null, appending default scheme");
-            uri = Uri.parse("http://" + url);
-        }
-        Log.d(TAG, "openURL() uri: " + uri);
-
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Log.w(TAG, "openURL() no activity to handle intent");
-            Toast.makeText(this, R.string.message_couldNotOpenUrl, Toast.LENGTH_SHORT).show();
-        }
+        articleActionsHelper.openUrl(this, url);
     }
 
     private void markAsReadAndClose() {
-        OperationsHelper.archiveArticle(this, article.getArticleId(), !article.getArchive());
+        articleActionsHelper.archive(this, article, !article.getArchive());
 
         finish();
     }
 
-    private void toggleFavorite() {
-        OperationsHelper.favoriteArticle(this, article.getArticleId(), !article.getFavorite());
-    }
-
-    private void shareArticle() {
-        shareArticle(articleTitle, articleUrl);
-    }
-
-    private void shareArticle(String articleTitle, String articleUrl) {
-        String shareText = articleUrl;
-        if (!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
-
-
-        if (settings.isAppendWallabagMentionEnabled()) {
-            shareText += getString(R.string.share_text_extra);
-        }
-
-        Intent send = new Intent(Intent.ACTION_SEND);
-        send.setType("text/plain");
-        if (!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
-        send.putExtra(Intent.EXTRA_TEXT, shareText);
-
-        startActivity(Intent.createChooser(send, getString(R.string.share_article_title)));
+    private void shareArticle(String articleUrl) {
+        articleActionsHelper.shareArticle(this, null, articleUrl);
     }
 
     private void deleteArticle() {
-        AlertDialog.Builder b = new AlertDialog.Builder(this)
-                .setTitle(R.string.d_deleteArticle_title)
-                .setMessage(R.string.d_deleteArticle_message);
-
-        b.setPositiveButton(R.string.positive_answer, (dialog, which) -> {
-            OperationsHelper.deleteArticle(this, article.getArticleId());
-
-            finish();
-        });
-        b.setNegativeButton(R.string.negative_answer, null);
-
-        b.show();
+        articleActionsHelper.showDeleteArticleDialog(this, article, this::finish);
     }
 
-    private void showChangeTitleDialog() {
-        @SuppressLint("InflateParams") // ok for dialogs
-        final View view = getLayoutInflater().inflate(R.layout.dialog_change_title, null);
-
-        view.<TextView>findViewById(R.id.editText_title).setText(articleTitle);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setView(view);
-
-        builder.setPositiveButton(android.R.string.ok, (dialog, which)
-                -> changeTitle(view.<TextView>findViewById(R.id.editText_title).getText().toString()));
-
-        builder.setNegativeButton(android.R.string.cancel, null);
-
-        builder.show();
-    }
-
-    private void changeTitle(String title) {
-        OperationsHelper.changeArticleTitle(this, article.getArticleId(), title);
-    }
-
-    private void manageTags() {
-        Intent manageTagsIntent = new Intent(this, ManageArticleTagsActivity.class);
-        manageTagsIntent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, article.getArticleId());
-
-        startActivity(manageTagsIntent);
-    }
-
-    private void openOriginal() {
-        openURL(articleUrl);
-    }
-
-    private void copyURLToClipboard() {
-        copyURLToClipboard(articleUrl);
-    }
-
-    private void copyURLToClipboard(String url) {
-        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData urlClipData = ClipData.newPlainText("article URL", url);
-        clipboardManager.setPrimaryClip(urlClipData);
-        Toast.makeText(this, R.string.txtUrlCopied, Toast.LENGTH_SHORT).show();
-    }
-
-    private void showDownloadFileDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(R.string.dialog_title_downloadFileFormat);
-
-        builder.setItems(R.array.options_downloadFormat_values, (dialog, which) -> {
-            String selectedFormat = getResources()
-                    .getStringArray(R.array.options_downloadFormat_values)[which];
-
-            WallabagService.ResponseFormat format = WallabagService.ResponseFormat
-                    .valueOf(selectedFormat);
-
-            OperationsHelper.downloadArticleAsFile(getApplicationContext(),
-                    article.getArticleId(), format, null);
-        });
-
-        builder.show();
+    private void copyUrlToClipboard(String url) {
+        articleActionsHelper.copyUrlToClipboard(this, url);
     }
 
     private void changeFontSize(boolean increase) {
