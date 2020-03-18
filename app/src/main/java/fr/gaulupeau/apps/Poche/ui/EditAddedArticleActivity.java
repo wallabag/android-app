@@ -2,8 +2,6 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -67,6 +66,8 @@ public class EditAddedArticleActivity extends AppCompatActivity {
 
     private boolean archived;
     private boolean favorite;
+
+    private boolean openPending;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +122,8 @@ public class EditAddedArticleActivity extends AppCompatActivity {
 
         if (event.isChangedAny(articleId, CHANGE_SET_FOR_REINIT)) {
             init();
+
+            openIfPending();
         }
     }
 
@@ -132,6 +135,8 @@ public class EditAddedArticleActivity extends AppCompatActivity {
             articleId = event.getArticleId();
 
             init();
+
+            openIfPending();
         }
     }
 
@@ -169,11 +174,53 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     }
 
     public void onOpenClick(View view) {
+        if (canOpen()) {
+            openArticle();
+        } else {
+            openLater();
+        }
+    }
+
+    private boolean canOpen() {
+        return articleId != -1 && article != null;
+    }
+
+    private void openArticle() {
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, article.getId());
         startActivity(intent);
 
         finish();
+    }
+
+    private void openLater() {
+        cancelAutoclose();
+
+        openPending = true;
+
+        Drawable oldImage = openButton.getDrawable();
+        CircularProgressDrawable progressDrawable = new CircularProgressDrawable(this) {
+            @Override
+            public int getIntrinsicWidth() {
+                return oldImage.getIntrinsicWidth();
+            }
+
+            @Override
+            public int getIntrinsicHeight() {
+                return oldImage.getIntrinsicHeight();
+            }
+        };
+        progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
+
+        openButton.setImageDrawable(progressDrawable);
+        progressDrawable.start();
+
+        openButton.setEnabled(false);
+        openButton.setClickable(false);
+    }
+
+    private void openIfPending() {
+        if (openPending && canOpen()) openArticle();
     }
 
     private void init() {
@@ -219,8 +266,6 @@ public class EditAddedArticleActivity extends AppCompatActivity {
                 archived ? R.attr.icon_read_undo : R.attr.icon_read));
         archiveButton.setContentDescription(getString(
                 archived ? R.string.btnMarkUnread : R.string.btnMarkRead));
-
-        setEnabled(openButton, articleId != -1 && article != null);
     }
 
     private int resolveResource(int resId) {
@@ -228,18 +273,6 @@ public class EditAddedArticleActivity extends AppCompatActivity {
         TypedValue value = new TypedValue();
         theme.resolveAttribute(resId, value, true);
         return value.resourceId;
-    }
-
-    private void setEnabled(ImageButton button, boolean enabled) {
-        button.setEnabled(enabled);
-        button.setClickable(enabled);
-
-        Drawable background = button.getBackground();
-        if (enabled) {
-            background.setColorFilter(null);
-        } else {
-            background.setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
-        }
     }
 
     private void scheduleAutoclose() {
