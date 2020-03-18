@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="btnMarkRead">标记为已读</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btnMarkRead">标记为已读</string>
     <string name="btnMarkUnread">标记为未读</string>
     <string name="add_to_favorites">添加到收藏</string>
     <string name="remove_from_favorites">从收藏中移除</string>
@@ -140,31 +141,22 @@
     <string name="content_estimatedReadingTime">预计阅读时间：%s 分钟</string>
     <string name="lastUpdateTimeLabel">最后更新: %s</string>
     <string name="listItem_estimatedReadingTime">%d 分钟</string>
-
     <string name="navigation_drawer_open">打开导航菜单</string>
     <string name="navigation_drawer_close">关闭导航菜单</string>
-
     <string name="nav_main_articles">文章</string>
     <string name="nav_main_tags">标签</string>
     <string name="nav_main_tagged_articles">已标记文章</string>
-
     <string name="nav_add">添加新条目</string>
-
     <string name="nav_other_settings">设置</string>
     <string name="nav_other_about">关于</string>
-
     <string name="title_main_tag">标签: %s</string>
-
     <string name="message_couldNotOpenUrl">无法打开此 URL</string>
-
     <string name="message_disableTouch_inputDisabled">触摸输入已禁用</string>
     <string name="message_disableTouch_inputEnabled">触摸输入已启用</string>
     <string name="d_disableTouch_changeKey_title">禁用触摸输入按钮</string>
     <string name="d_disableTouch_currentCode">当前选择的关键代码（点击按钮更改）：</string>
-
     <string name="pref_name_runConnectionWizard">运行连接向导</string>
     <string name="pref_desc_runConnectionWizard">帮助您进行基本连接设置</string>
-
     <string name="pref_categoryName_connection">连接</string>
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_desc_connection_url"> 示例:\n
@@ -179,13 +171,11 @@
     <string name="pref_name_connection_api_clientSecret">客户端密钥</string>
     <string name="pref_name_connection_autofill">自动填充</string>
     <string name="pref_desc_connection_autofill">测试连接并填写客户端 ID 和客户端机密</string>
-
     <string name="pref_categoryName_connection_advanced">高级连接设置</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP 基本身份验证</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">如果你不知道它是什么，请勿填写</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 认证用户名</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 认证密码</string>
-
     <string name="pref_categoryName_ui">用户界面</string>
     <string name="pref_name_ui_theme">应用主题</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">文章文字大小 (%)</string>
@@ -212,7 +202,6 @@
     <string name="pref_desc_ui_disableTouch_keyCode">按此处配置用于禁用/启用触摸输入的按钮</string>
     <string name="pref_name_ui_scrollOverBottom">在底部上划以标记为已读</string>
     <string name="pref_desc_ui_scrollOverBottom">按此处配置您需要在底部上划以标记文章为已读的次数</string>
-
     <string name="pref_categoryName_sync">同步</string>
     <string name="pref_name_sync_syncTypes">同步类型</string>
     <string name="pref_desc_sync_syncTypes">按下以显示更多关于同步类型的信息</string>
@@ -245,12 +234,10 @@
     <string name="pref_desc_autoDlNew_enabled">在新文章通过应用添加后自动下载。注意：如果您有未同步的离线更改，则不会进行抓取。</string>
     <string name="pref_name_imageCache_enabled">将文章图片放入缓存中</string>
     <string name="pref_desc_imageCache_enabled">自动下载每篇文章中的所有图片, 并将其保存到设备中。根据您的 wallabag 文章列表的长度, 这可能会花费大量的时间和空间。</string>
-
     <string name="pref_name_storage_dbPath">数据库位置</string>
     <string name="pref_name_storage_dbPath_internalStorage">内部存储</string>
     <string name="pref_name_storage_dbPath_externalStorage">外部存储</string>
     <string name="pref_name_storage_dbPath_dbMoved">数据库已移动</string>
-
     <string name="pref_categoryName_miscellaneous">杂项</string>
     <string name="pref_name_misc_appendWallabagMention">附加 walabag 水印</string>
     <string name="pref_desc_misc_appendWallabagMention">将 \"分享自 @wallabagapp\" 附加到分享文本后</string>
@@ -260,15 +247,12 @@
     <string name="pref_desc_misc_wipeDB">擦除本地数据库中的所有文章，同时删除所有未同步的本地更改和 URL</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">擦除数据库？</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">您确定要擦除数据库吗？</string>
-
     <string name="connectionWizard_misc_incorrectConnectionURI">使用的连接 URI 不正确</string>
-
     <string name="connectionWizard_welcome_titleMessage">欢迎来到 wallabag 。</string>
     <string name="connectionWizard_welcome_text">在您可以使用 wallabag 应用之前，您需要设置连接。连接向导将帮助您完成此设置。</string>
     <string name="connectionWizard_welcome_rerunNotice">您始终可以从 \"设置\" 中重新运行 \"连接向导\"。</string>
     <string name="connectionWizard_welcome_prev">跳过</string>
     <string name="connectionWizard_welcome_next">下一步</string>
-
     <string name="connectionWizard_providerSelection_titleMessage">选择 wallabag 提供商</string>
     <string name="connectionWizard_providerSelection_provider_general_name">其他</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">选择此选项以手动输入所需的设置</string>
@@ -276,23 +260,54 @@
     <string name="connectionWizard_providerSelection_provider_framabag_desc">如果您在 https://framabag.org 上有帐户，请选择此项</string>
     <string name="connectionWizard_providerSelection_prev">跳过</string>
     <string name="connectionWizard_providerSelection_next">下一步</string>
-
     <string name="connectionWizard_provider_general_titleMessage">基本配置</string>
     <string name="connectionWizard_provider_general_prev">上一步</string>
     <string name="connectionWizard_provider_general_next">连接</string>
-
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 配置</string>
     <string name="connectionWizard_provider_wallabagit_prev">上一步</string>
     <string name="connectionWizard_provider_wallabagit_next">连接</string>
-
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag 配置</string>
     <string name="connectionWizard_provider_framabag_prev">上一步</string>
     <string name="connectionWizard_provider_framabag_next">连接</string>
-
     <string name="connectionWizard_summary_titleMessage">全部完成。</string>
     <string name="connectionWizard_summary_text">单击此处保存并转到主屏幕。</string>
     <string name="connectionWizard_summary_toastMessage">设置完成</string>
     <string name="connectionWizard_summary_prev">上一步</string>
     <string name="connectionWizard_summary_next">保存设置</string>
     <string name="remove_tag">移除标签</string>
+    <string name="themeName_eink">为墨水屏</string>
+    <string name="notification_channel_group_name_tts">语音合成</string>
+    <string name="notification_channel_group_name_sync">同步</string>
+    <string name="notification_channel_group_name_other">其他</string>
+    <string name="notification_channel_name_tts">wallabag语音合成</string>
+    <string name="notification_channel_name_sync">同步</string>
+    <string name="notification_channel_name_downloading_articles">正在下载多个PDF文件</string>
+    <string name="notification_channel_name_error">错误</string>
+    <string name="pref_name_ui_article_handlePreformattedText">处理长篇预格式化的文本</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">如何处理太长而无法完整显示的预格式化文本。</string>
+    <string name="pref_name_ui_swipeArticles">滑动文章</string>
+    <string name="pref_desc_ui_swipeArticles">在文章中向左或向右滑动即可转到上一篇或下一篇文章</string>
+    <string name="pref_name_ui_previewImage_enabled">预览图像</string>
+    <string name="pref_desc_ui_previewImage_enabled">在文章之前显示预览图像</string>
+    <string name="notification_stacktrace">堆栈跟踪：</string>
+    <string name="notification_copyToClipboard">复制到剪贴板</string>
+    <string name="notification_clipboardLabel">错误详情</string>
+    <string name="copiedToClipboard">已复制到剪贴板</string>
+    <string name="connectionWizard_misc_scanQrCode">扫描一个二维码</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">请安装一款二维码扫描器</string>
+    <string name="pref_categoryName_misc_localQueue">本地变更</string>
+    <string name="pref_name_misc_localQueue_notice">警告</string>
+    <string name="pref_desc_misc_localQueue_notice">除非您知道自己在做什么，否则不要在这里做任何事情</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">转储到文件</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">将所有本地更改转储到txt文件中（您可以自行研究或将其附加到错误报告中）</string>
+    <string name="pref_name_misc_localQueue_removeFirstItem">删除第一个本地队列项目</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">删除第一个未同步的项目。 如果您在同步期间收到重复的错误通知，这可能会有所帮助。 请首先确保将所有本地更改转储到文件</string>
+    <string name="misc_localQueue_empty">无本地变更</string>
+    <string name="misc_localQueue_removeFirstItem_done">完成</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">转储到%s</string>
+    <string name="misc_localQueue_dumpToFile_result_error">错误：%s</string>
+    <string name="misc_localQueue_dumpToFile_header">如果您在同步方面遇到问题，请在此处报告您的问题：%s</string>
+    <string name="pref_name_ui_annotations_enabled">注释支持</string>
+    <string name="pref_desc_ui_annotations_enabled">实验性功能！ 查看，编辑和创建注释</string>
+    <string name="menu_annotate">注释</string>
 </resources>
