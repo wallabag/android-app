@@ -306,7 +306,7 @@
     <string name="misc_localQueue_removeFirstItem_done">完成</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">转储到%s</string>
     <string name="misc_localQueue_dumpToFile_result_error">错误：%s</string>
-    <string name="misc_localQueue_dumpToFile_header">如果您在同步方面遇到问题，请在此处报告您的问题：％s</string>
+    <string name="misc_localQueue_dumpToFile_header">如果您在同步方面遇到问题，请在此处报告您的问题：%s</string>
     <string name="pref_name_ui_annotations_enabled">注释支持</string>
     <string name="pref_desc_ui_annotations_enabled">实验性功能！ 查看，编辑和创建注释</string>
     <string name="menu_annotate">注释</string>
