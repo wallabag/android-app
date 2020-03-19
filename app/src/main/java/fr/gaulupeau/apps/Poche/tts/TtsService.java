@@ -52,10 +52,9 @@ import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
  * Media playback the right way (Big Android BBQ 2015)
  * https://www.youtube.com/watch?v=XQwe30cZffg
  */
-public class TtsService
-        extends Service
-        implements AudioManager.OnAudioFocusChangeListener,
-        TextToSpeech.OnInitListener {
+public class TtsService extends Service
+        implements AudioManager.OnAudioFocusChangeListener, TextToSpeech.OnInitListener {
+
     enum State {
 
         /**
@@ -110,7 +109,7 @@ public class TtsService
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
     private volatile String utteranceId = "1";
-    private HashMap utteranceParams = new HashMap();
+    private HashMap<String, String> utteranceParams = new HashMap<>();
     private boolean playFromStart;
 
     private TextToSpeech tts;
@@ -131,12 +130,7 @@ public class TtsService
             tts.stop();
         }
     };
-    private final Runnable speak = new Runnable() {
-        @Override
-        public void run() {
-            speak();
-        }
-    };
+    private final Runnable speak = this::speak;
     private PendingIntent notificationPendingIntent;
 
     private static final String LOG_TAG = "TtsService";
@@ -283,7 +277,6 @@ public class TtsService
         return super.onStartCommand(intent, flags, startId);
     }
 
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -389,7 +382,6 @@ public class TtsService
         return audioFocusResult;
     }
 
-
     public void pauseCmd() {
         pauseCmd(State.PAUSED);
     }
@@ -434,7 +426,6 @@ public class TtsService
                 break;
         }
     }
-
 
     public void rewindCmd() {
         Log.d(LOG_TAG, "rewindCmd");
@@ -490,9 +481,9 @@ public class TtsService
             throw new AssertionError();
         }
         if (text != null) {
-            HashMap params = this.utteranceParams;
+            HashMap<String, String> params = this.utteranceParams;
             if (!utteranceId.equals(params.get("utteranceId"))) {
-                params = new HashMap();
+                params = new HashMap<>();
                 params.put("utteranceId", utteranceId);
                 this.utteranceParams = params;
             }
@@ -502,14 +493,12 @@ public class TtsService
     }
 
     private void onSpeakDone(String doneUtteranceId) {
-        {
-            //Log.d(LOG_TAG, "onSpeakDone " + doneUtteranceId);
-            if ((state == State.PLAYING) && utteranceId.equals(doneUtteranceId)) {
-                if (textInterface.next()) {
-                    ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, doneUtteranceId);
-                } else {
-                    pauseCmd();
-                }
+        //Log.d(LOG_TAG, "onSpeakDone " + doneUtteranceId);
+        if ((state == State.PLAYING) && utteranceId.equals(doneUtteranceId)) {
+            if (textInterface.next()) {
+                ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, doneUtteranceId);
+            } else {
+                pauseCmd();
             }
         }
     }
@@ -559,12 +548,7 @@ public class TtsService
                 // (probably after initializing a new TextToSpeech with different engine)
                 state = State.CREATED;
             }
-            this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                @Override
-                public void onUtteranceCompleted(String utteranceId) {
-                    onSpeakDone(utteranceId);
-                }
-            });
+            this.tts.setOnUtteranceCompletedListener(this::onSpeakDone);
             tts.setLanguage(convertVoiceNameToLocale(ttsVoice));
             isTTSInitialized = true;
             tts.setSpeechRate(speed);
@@ -579,7 +563,6 @@ public class TtsService
             setForegroundAndNotification();
         }
     }
-
 
     public void setSpeed(float speed) {
         if (speed != this.speed) {
@@ -616,16 +599,9 @@ public class TtsService
     public void setEngineAndVoice(String engine, String voice) {
         Log.d(LOG_TAG, "setEngineAndVoice " + engine + " " + voice);
         boolean resetEngine = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if (!engine.equals(this.ttsEngine)) {
-                this.ttsEngine = engine;
-                resetEngine = true;
-            }
-        } else {
+        if (!engine.equals(this.ttsEngine)) {
             this.ttsEngine = engine;
-            if (!tts.getDefaultEngine().equals(this.ttsEngine)) {
-                resetEngine = true;
-            }
+            resetEngine = true;
         }
         if (resetEngine) {
             if (tts != null) {
@@ -642,11 +618,7 @@ public class TtsService
                         ttsToShutdown.shutdown();
                     }
                 }.start();
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    tts = new TextToSpeech(getApplicationContext(), this, engine);
-                } else {
-                    tts = new TextToSpeech(getApplicationContext(), this);
-                }
+                tts = new TextToSpeech(getApplicationContext(), this, engine);
             }
         }
         if (!voice.equals(this.ttsVoice)) {
@@ -743,7 +715,6 @@ public class TtsService
         mediaSession.setMetadata(builder.build());
     }
 
-
     private void setMediaSessionPlaybackState() {
         if (mediaSession == null) {
             return;
@@ -770,7 +741,6 @@ public class TtsService
                 .build();
         mediaSession.setPlaybackState(playbackState);
     }
-
 
     private void setForegroundAndNotification() {
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
@@ -819,7 +789,6 @@ public class TtsService
                     .setMediaSession(mediaSession.getSessionToken())
                     .setShowCancelButton(true)
                     .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
-
         }
         return builder.build();
     }
@@ -851,4 +820,5 @@ public class TtsService
                 new KeyEvent(KeyEvent.ACTION_DOWN, mediaKeyEvent));
         return PendingIntent.getBroadcast(context, mediaKeyEvent, intent, 0);
     }
+
 }
