@@ -19,19 +19,19 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
-
-import androidx.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.KeyEvent;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.media.session.MediaButtonReceiver;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,23 +46,22 @@ import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 
 /**
  * Text To Speech (TTS) Service.
- *
+ * <p>
  * Need a {@link TextInterface} to access the text to speech.
- *
+ * <p>
  * Tried to follow the recommendations from this video:
- *      Media playback the right way (Big Android BBQ 2015)
- *      https://www.youtube.com/watch?v=XQwe30cZffg
+ * Media playback the right way (Big Android BBQ 2015)
+ * https://www.youtube.com/watch?v=XQwe30cZffg
  */
 public class TtsService
         extends Service
-        implements  AudioManager.OnAudioFocusChangeListener,
-                    TextToSpeech.OnInitListener
-{
+        implements AudioManager.OnAudioFocusChangeListener,
+        TextToSpeech.OnInitListener {
     enum State {
 
         /**
-         *  CREATED State.
-         *  Initialize everything, but do not get audio focus or activate audio session yet.
+         * CREATED State.
+         * Initialize everything, but do not get audio focus or activate audio session yet.
          */
         CREATED(PlaybackStateCompat.STATE_NONE),
 
@@ -97,6 +96,7 @@ public class TtsService
         ERROR(PlaybackStateCompat.STATE_ERROR);
 
         public final int playbackState;
+
         State(int playbackState) {
             this.playbackState = playbackState;
         }
@@ -111,10 +111,8 @@ public class TtsService
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
     private volatile String utteranceId = "1";
-    private HashMap  utteranceParams = new HashMap();
+    private HashMap utteranceParams = new HashMap();
     private boolean playFromStart;
-
-
 
     private TextToSpeech tts;
     private String ttsEngine;
@@ -142,11 +140,12 @@ public class TtsService
     };
     private PendingIntent notificationPendingIntent;
 
-    private static final String LOG_TAG="TtsService";
+    private static final String LOG_TAG = "TtsService";
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
     private static final int NOTIFICATION_ID = 1;
 
     private static volatile TtsService instance;
+
     public static TtsService getInstance() {
         return instance;
     }
@@ -171,30 +170,37 @@ public class TtsService
                 Log.d(LOG_TAG, "MediaSessionCompat.Callback.onMediaButtonEvent " + mediaButtonIntent);
                 return super.onMediaButtonEvent(mediaButtonIntent);
             }
+
             @Override
             public void onPlay() {
                 playCmd();
             }
+
             @Override
             public void onPause() {
                 pauseCmd();
             }
+
             @Override
             public void onRewind() {
                 rewindCmd();
             }
+
             @Override
             public void onFastForward() {
                 fastForwardCmd();
             }
+
             @Override
             public void onSkipToNext() {
                 skipToNextCmd();
             }
+
             @Override
             public void onSkipToPrevious() {
                 skipToPreviousCmd();
             }
+
             @Override
             public void onStop() {
                 stopCmd();
@@ -307,8 +313,7 @@ public class TtsService
         Log.d(LOG_TAG, "playCmd");
         switch (state) {
             case CREATED:
-                if (requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
-                {
+                if (requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
                     isAudioFocusGranted = true;
                     mediaSession.setActive(true);
                     setMediaSessionMetaData();
@@ -319,8 +324,7 @@ public class TtsService
                 }
             case WANT_TO_PLAY:
             case PAUSED:
-                if (isTTSInitialized && isAudioFocusGranted && (textInterface != null))
-                {
+                if (isTTSInitialized && isAudioFocusGranted && (textInterface != null)) {
                     state = State.PLAYING;
                     if (playFromStart) {
                         playFromStart = false;
@@ -477,19 +481,18 @@ public class TtsService
         // of the previous speak sequence will not interfere with the following one
         utteranceId = "" + (Integer.parseInt(utteranceId) + 1);
         ttsSpeak(textInterface.getText(0), TextToSpeech.QUEUE_FLUSH, utteranceId);
-        for(int i = 1; i<= TTS_SPEAK_QUEUE_SIZE; i++) {
+        for (int i = 1; i <= TTS_SPEAK_QUEUE_SIZE; i++) {
             ttsSpeak(textInterface.getText(i), TextToSpeech.QUEUE_ADD, utteranceId);
         }
     }
 
-    private void ttsSpeak(String text, int queue, String utteranceId)
-    {
+    private void ttsSpeak(String text, int queue, String utteranceId) {
         if (BuildConfig.DEBUG && !(state == State.PLAYING && isTTSInitialized)) {
             throw new AssertionError();
         }
         if (text != null) {
             HashMap params = this.utteranceParams;
-            if ( ! utteranceId.equals(params.get("utteranceId"))) {
+            if (!utteranceId.equals(params.get("utteranceId"))) {
                 params = new HashMap();
                 params.put("utteranceId", utteranceId);
                 this.utteranceParams = params;
@@ -512,8 +515,7 @@ public class TtsService
         }
     }
 
-    public void playPageFlipSound()
-    {
+    public void playPageFlipSound() {
         this.mediaPlayerPageFlip.start();
     }
 
@@ -550,15 +552,13 @@ public class TtsService
      * TextToSpeech.OnInitListener.
      */
     @Override
-    public void onInit(int status)
-    {
+    public void onInit(int status) {
         Log.d(LOG_TAG, "TextToSpeech.OnInitListener.onInit " + status);
-        if (status == TextToSpeech.SUCCESS)
-        {
+        if (status == TextToSpeech.SUCCESS) {
             if (state == State.ERROR) {
                 // We finally obtained a success status !
                 // (probably after initializing a new TextToSpeech with different engine)
-                state =  State.CREATED;
+                state = State.CREATED;
             }
             this.tts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
                 @Override
@@ -593,6 +593,7 @@ public class TtsService
             }
         }
     }
+
     public float getSpeed() {
         return speed;
     }
@@ -617,13 +618,13 @@ public class TtsService
         Log.d(LOG_TAG, "setEngineAndVoice " + engine + " " + voice);
         boolean resetEngine = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            if ( ! engine.equals(this.ttsEngine)) {
+            if (!engine.equals(this.ttsEngine)) {
                 this.ttsEngine = engine;
                 resetEngine = true;
             }
         } else {
             this.ttsEngine = engine;
-            if ( ! tts.getDefaultEngine().equals(this.ttsEngine)) {
+            if (!tts.getDefaultEngine().equals(this.ttsEngine)) {
                 resetEngine = true;
             }
         }
@@ -649,7 +650,7 @@ public class TtsService
                 }
             }
         }
-        if ( ! voice.equals(this.ttsVoice)) {
+        if (!voice.equals(this.ttsVoice)) {
             this.ttsVoice = voice;
             if (isTTSInitialized) {
                 tts.setLanguage(convertVoiceNameToLocale(voice));
@@ -758,12 +759,12 @@ public class TtsService
                 .setActions(
                         (this.state == State.PAUSED ?
                                 PlaybackStateCompat.ACTION_PLAY : PlaybackStateCompat.ACTION_PAUSE)
-                        | PlaybackStateCompat.ACTION_PLAY_PAUSE
-                        | PlaybackStateCompat.ACTION_REWIND
-                        | PlaybackStateCompat.ACTION_FAST_FORWARD
-                        | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                        | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                        | PlaybackStateCompat.ACTION_STOP
+                                | PlaybackStateCompat.ACTION_PLAY_PAUSE
+                                | PlaybackStateCompat.ACTION_REWIND
+                                | PlaybackStateCompat.ACTION_FAST_FORWARD
+                                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+                                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                                | PlaybackStateCompat.ACTION_STOP
                 )
                 .setState(this.state.playbackState,
                         position,
@@ -840,14 +841,13 @@ public class TtsService
                 .setDeleteIntent(generateActionIntent(context, KeyEvent.KEYCODE_MEDIA_STOP));
     }
 
-    private NotificationCompat.Action generateAction( int icon, String title, int mediaKeyEvent) {
+    private NotificationCompat.Action generateAction(int icon, String title, int mediaKeyEvent) {
         PendingIntent pendingIntent = generateActionIntent(getApplicationContext(), mediaKeyEvent);
-        return new NotificationCompat.Action.Builder( icon, title, pendingIntent ).build();
+        return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
     }
 
 
-    private static PendingIntent generateActionIntent(Context context, int mediaKeyEvent)
-    {
+    private static PendingIntent generateActionIntent(Context context, int mediaKeyEvent) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
         intent.setPackage(context.getPackageName());
         intent.putExtra(Intent.EXTRA_KEY_EVENT,
