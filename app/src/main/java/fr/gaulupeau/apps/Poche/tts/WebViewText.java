@@ -26,8 +26,6 @@ public class WebViewText implements TextInterface {
     private Runnable parsedCallback;
     private Runnable onReadFinishedCallback;
 
-
-
     private final String WEB_VIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
     private final String JAVASCRIPT_PARSE_DOCUMENT_TEXT = "" +
             "function nextDomElem(elem) {\n" +
@@ -92,8 +90,7 @@ public class WebViewText implements TextInterface {
         this.onReadFinishedCallback = onReadFinishedCallback;
     }
 
-    public void parseWebViewDocument(Runnable callback)
-    {
+    public void parseWebViewDocument(Runnable callback) {
         Log.d(LOG_TAG, "parseWebViewDocument");
         this.parsedSize = 0;
         this.parsedCallback = callback;
@@ -128,24 +125,21 @@ public class WebViewText implements TextInterface {
             item.bottom = bottom;
         }
         if (parsedSize > 1) {
-            item.timePosition = textList.get(parsedSize-2).timePosition + timeDuration(item.text);
+            item.timePosition = textList.get(parsedSize - 2).timePosition + timeDuration(item.text);
         } else {
             item.timePosition = timeDuration(item.text);
         }
     }
 
-    public boolean onWebViewConsoleMessage(ConsoleMessage cm)
-    {
+    public boolean onWebViewConsoleMessage(ConsoleMessage cm) {
         boolean result = false;
         // It is insecure to use WebView.addJavascriptInterface with older
         // version of Android, so we use console.log() instead.
         // We catch the command send through the log done by the code
         // JAVASCRIPT_PARSE_DOCUMENT_TEXT
-        if (cm.messageLevel() == ConsoleMessage.MessageLevel.LOG)
-        {
+        if (cm.messageLevel() == ConsoleMessage.MessageLevel.LOG) {
             String message = cm.message();
-            if (message.startsWith(WEB_VIEW_LOG_CMD_HEADER))
-            {
+            if (message.startsWith(WEB_VIEW_LOG_CMD_HEADER)) {
                 String content = message.substring(WEB_VIEW_LOG_CMD_HEADER.length());
                 if (content.equals("start")) {
                     onDocumentParseStart();
@@ -156,7 +150,7 @@ public class WebViewText implements TextInterface {
                     int separator2 = content.indexOf(':', separator1 + 1);
                     float top = Float.parseFloat(content.substring(0, separator1));
                     float bottom = Float.parseFloat(content.substring(separator1 + 1, separator2));
-                    String text= content.substring(separator2 + 1);
+                    String text = content.substring(separator2 + 1);
                     onDocumentParseItem(text, top, bottom);
                 }
                 result = true;
@@ -169,7 +163,7 @@ public class WebViewText implements TextInterface {
     public String getText(int relativeIndex) {
         //Log.d(LOG_TAG, "getText(" + relativeIndex + "), current=" + current);
         int i = current + relativeIndex;
-        if ( (i >= 0) && (i < textList.size())) {
+        if ((i >= 0) && (i < textList.size())) {
             return textList.get(i).text;
         } else {
             return null;
@@ -178,6 +172,7 @@ public class WebViewText implements TextInterface {
 
     /**
      * Go to the next text item.
+     *
      * @return true if current item changed (not already the end).
      */
     @Override
@@ -198,6 +193,7 @@ public class WebViewText implements TextInterface {
 
     /**
      * Fast forward to the next TextItem located below the current one (next line).
+     *
      * @return true if current item changed (not already the beginning).
      */
     @Override
@@ -210,11 +206,10 @@ public class WebViewText implements TextInterface {
         //}
         int newIndex = current + 1;
         if ((newIndex >= 0) && (newIndex < textList.size())) {
-            float originalBottom = textList.get(newIndex-1).bottom;
+            float originalBottom = textList.get(newIndex - 1).bottom;
             // Look for text's index that start on the next line (its top >= current bottom)
-            while((newIndex < (textList.size()-1))
-                    && (textList.get(newIndex).top < originalBottom))
-            {
+            while ((newIndex < (textList.size() - 1))
+                    && (textList.get(newIndex).top < originalBottom)) {
                 newIndex = newIndex + 1;
             }
             Log.d(LOG_TAG, "fastForward " + current + " => " + newIndex);
@@ -231,6 +226,7 @@ public class WebViewText implements TextInterface {
 
     /**
      * Rewind to the previous TextItem located above the current one (previous line).
+     *
      * @return true if current item changed (not already the end).
      */
     @Override
@@ -243,11 +239,10 @@ public class WebViewText implements TextInterface {
         //}
         int newIndex = current - 1;
         if ((newIndex >= 0) && ((newIndex + 1) < textList.size())) {
-            float originalTop = textList.get(newIndex+1).top;
+            float originalTop = textList.get(newIndex + 1).top;
             // Look for text's index that start on the previous line (its bottom < current top)
-            while((newIndex > 0)
-                    && (textList.get(newIndex).bottom >= originalTop))
-            {
+            while ((newIndex > 0)
+                    && (textList.get(newIndex).bottom >= originalTop)) {
                 newIndex = newIndex - 1;
             }
             if (newIndex > 0) {
@@ -257,9 +252,8 @@ public class WebViewText implements TextInterface {
                 // This way clicking "Next" and "Previous" will be coherent.
                 int prevPrevIndex = newIndex;
                 float newTop = textList.get(prevPrevIndex).top;
-                while((prevPrevIndex > 0)
-                        && (textList.get(prevPrevIndex).bottom >= newTop))
-                {
+                while ((prevPrevIndex > 0)
+                        && (textList.get(prevPrevIndex).bottom >= newTop)) {
                     prevPrevIndex = prevPrevIndex - 1;
                     newIndex = prevPrevIndex + 1;
                 }
@@ -293,7 +287,7 @@ public class WebViewText implements TextInterface {
     }
 
     @Override
-    public   void restoreFromStart() {
+    public void restoreFromStart() {
         Log.d(LOG_TAG, "restoreFromStart -> current = 0");
         current = 0;
     }
@@ -307,7 +301,7 @@ public class WebViewText implements TextInterface {
         if ((textItem.bottom <= currentTop) || (textItem.top >= currentBottom)) {
             // current not displayed on screen, switch to the first text visible:
             result = textList.size() - 1;
-            for(int i=0; i<textList.size(); i++) {
+            for (int i = 0; i < textList.size(); i++) {
                 if (textList.get(i).top > currentTop) {
                     result = i;
                     break;
@@ -323,7 +317,7 @@ public class WebViewText implements TextInterface {
     public long getTime() {
         long result = -1;
         if (current > 0) {
-            result = textList.get(current-1).timePosition;
+            result = textList.get(current - 1).timePosition;
         }
         return result;
     }
@@ -352,21 +346,19 @@ public class WebViewText implements TextInterface {
     }
 
 
-    private float convertWebViewToScreenY(float y)
-    {
+    private float convertWebViewToScreenY(float y) {
         return y * this.webView.getHeight() / this.webView.getContentHeight();
     }
 
-    private float convertScreenToWebViewY(float y)
-    {
+    private float convertScreenToWebViewY(float y) {
         return y * this.webView.getContentHeight() / this.webView.getHeight();
     }
 
     private static StringBuilder getRandomText(int length) {
         StringBuilder result = new StringBuilder(length);
-        for(int i=0;i<length;i++) {
-            char c = (char)(32 + Math.random() * (125-32));
-            if (c=='\'' || c=='"' || c=='\\') {
+        for (int i = 0; i < length; i++) {
+            char c = (char) (32 + Math.random() * (125 - 32));
+            if (c == '\'' || c == '"' || c == '\\') {
                 c = 'a';
             }
             result.append(c);
@@ -379,6 +371,7 @@ public class WebViewText implements TextInterface {
         float top;    // top location in the web view
         float bottom; // bottom location in the web view
         long timePosition; // in milliseconds from the beginning of the document
+
         public TextItem(String text, float top, float bottom) {
             this.text = text;
             this.top = top;
@@ -387,6 +380,6 @@ public class WebViewText implements TextInterface {
     }
 
     private long timeDuration(String text) {
-        return text.length()*50;  // in ms, total approximation
+        return text.length() * 50;  // in ms, total approximation
     }
 }

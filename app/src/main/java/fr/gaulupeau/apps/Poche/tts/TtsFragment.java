@@ -17,9 +17,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.fragment.app.Fragment;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -40,11 +37,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.ui.MainActivity;
-import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.fragment.app.Fragment;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,11 +48,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.ui.MainActivity;
+import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
+
 /**
  * Text To Speech (TTS) User Interface.
  */
 public class TtsFragment
-    extends Fragment {
+        extends Fragment {
 
     private ReadArticleActivity readArticleActivity;
     private WebViewText webViewText;
@@ -175,7 +177,7 @@ public class TtsFragment
             this.percentFormat.setMaximumFractionDigits(0);
         }
         this.viewTTSOption = view.findViewById(R.id.viewTTSOptions);
-        if(!this.settings.isTtsOptionsVisible()) {
+        if (!this.settings.isTtsOptionsVisible()) {
             this.viewTTSOption.setVisibility(View.GONE);
         }
         this.btnTTSPlayStop = ((ImageButton) view.findViewById(R.id.btnTTSPlayPause));
@@ -371,6 +373,7 @@ public class TtsFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 onLanguageSelectionChanged();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
@@ -380,6 +383,7 @@ public class TtsFragment
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 onVoiceSelectionChanged();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {}
         });
@@ -615,11 +619,14 @@ public class TtsFragment
     static class DisplayName implements Comparable<DisplayName> {
         String name;
         String displayName;
+
         DisplayName() {}
+
         DisplayName(String name, String displayName) {
             this.name = name;
             this.displayName = displayName;
         }
+
         @Override
         public int compareTo(@NonNull DisplayName another) {
             return this.displayName.compareTo(another.displayName);
@@ -643,8 +650,8 @@ public class TtsFragment
             ttsEngines = new ArrayList();
             for (ResolveInfo resolveInfo : resolveInfoList) {
                 DisplayName engineInfo = new DisplayName(
-                    resolveInfo.activityInfo.applicationInfo.packageName,
-                    resolveInfo.loadLabel(pm).toString());
+                        resolveInfo.activityInfo.applicationInfo.packageName,
+                        resolveInfo.loadLabel(pm).toString());
                 Log.d(LOG_TAG, "loadTtsEnginesList: " + engineInfo.name + ": " + engineInfo.displayName);
                 ttsEngines.add(engineInfo);
                 Intent getVoicesIntent = new Intent();
@@ -691,7 +698,7 @@ public class TtsFragment
                     }
                 }
             }
-            synchronized(this) {
+            synchronized (this) {
                 activityResultNumber++;
                 if (activityResultNumber == ttsEnginesNumber) {
                     // Sort languages by displayName:
@@ -719,15 +726,14 @@ public class TtsFragment
         //Log.d(LOG_TAG, "updateLanguageSpinnerData");
         if ((ttsEngines != null)
                 && (activityResultNumber == ttsEnginesNumber)
-                && (spinnerLanguageAdapter != null))
-        {
+                && (spinnerLanguageAdapter != null)) {
             String voice = settings.getTtsVoice();
             String language = voice.indexOf("-") >= 0 ?
                     voice.substring(0, voice.indexOf("-")) : voice;
             spinnerLanguageAdapter.setNotifyOnChange(false);
             spinnerLanguageAdapter.clear();
             int languagePositionToSelect = 0;
-            for(DisplayName lang: ttsLanguages) {
+            for (DisplayName lang : ttsLanguages) {
                 spinnerLanguageAdapter.add(lang.displayName);
                 if (lang.name.equals(language)) {
                     languagePositionToSelect = spinnerLanguageAdapter.getCount() - 1;
@@ -754,7 +760,7 @@ public class TtsFragment
             // when it is done, the method onActivityResult()
             // will call us back with this parameter:
             languageToSelect = language;
-        } else{
+        } else {
             if (ttsVoiceByLanguage.get(language) != null) {
                 if (this.settings == null) {
                     this.settings = App.getInstance().getSettings();
@@ -808,7 +814,7 @@ public class TtsFragment
         //Log.d(LOG_TAG, "onVoiceSelectionChanged");
         int voicePosition = spinnerVoice.getSelectedItemPosition();
         int languagePosition = spinnerLanguage.getSelectedItemPosition();
-        if ((voicePosition >=0) && (languagePosition >=0)) {
+        if ((voicePosition >= 0) && (languagePosition >= 0)) {
             String language = ttsLanguages.get(languagePosition).name;
             VoiceInfo voiceInfo = ttsVoiceByLanguage.get(language).get(voicePosition);
             if (voiceInfo != null) {
