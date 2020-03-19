@@ -15,6 +15,8 @@ import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
  */
 public class WebViewText implements TextInterface {
 
+    private static final String TAG = "WebViewText";
+
     ReadArticleActivity readArticleActivity;
     private final WebView webView;
     private final ScrollView scrollView;
@@ -76,9 +78,6 @@ public class WebViewText implements TextInterface {
             "    cmdEnd();\n" +
             "}\n";
 
-    private static final String LOG_TAG = "WebViewText";
-
-
     public WebViewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
         this.webView = webView;
         this.scrollView = scrollView;
@@ -91,7 +90,7 @@ public class WebViewText implements TextInterface {
     }
 
     public void parseWebViewDocument(Runnable callback) {
-        Log.d(LOG_TAG, "parseWebViewDocument");
+        Log.d(TAG, "parseWebViewDocument");
         this.parsedSize = 0;
         this.parsedCallback = callback;
         webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
@@ -102,7 +101,7 @@ public class WebViewText implements TextInterface {
     }
 
     private void onDocumentParseEnd() {
-        Log.d(LOG_TAG, "onDocumentParseEnd");
+        Log.d(TAG, "onDocumentParseEnd");
         this.textList.setSize(this.parsedSize);
         if (parsedCallback != null) {
             parsedCallback.run();
@@ -190,7 +189,6 @@ public class WebViewText implements TextInterface {
         return result;
     }
 
-
     /**
      * Fast forward to the next TextItem located below the current one (next line).
      *
@@ -212,7 +210,7 @@ public class WebViewText implements TextInterface {
                     && (textList.get(newIndex).top < originalBottom)) {
                 newIndex = newIndex + 1;
             }
-            Log.d(LOG_TAG, "fastForward " + current + " => " + newIndex);
+            Log.d(TAG, "fastForward " + current + " => " + newIndex);
             current = newIndex;
             result = true;
         } else {
@@ -222,7 +220,6 @@ public class WebViewText implements TextInterface {
         return result;
 
     }
-
 
     /**
      * Rewind to the previous TextItem located above the current one (previous line).
@@ -258,7 +255,7 @@ public class WebViewText implements TextInterface {
                     newIndex = prevPrevIndex + 1;
                 }
             }
-            Log.d(LOG_TAG, "rewind " + current + " => " + newIndex);
+            Log.d(TAG, "rewind " + current + " => " + newIndex);
             current = newIndex;
             result = true;
         } else {
@@ -288,7 +285,7 @@ public class WebViewText implements TextInterface {
 
     @Override
     public void restoreFromStart() {
-        Log.d(LOG_TAG, "restoreFromStart -> current = 0");
+        Log.d(TAG, "restoreFromStart -> current = 0");
         current = 0;
     }
 
@@ -309,7 +306,7 @@ public class WebViewText implements TextInterface {
             }
         }
         current = result;
-        Log.d(LOG_TAG, "restoreCurrent -> current = " + current);
+        Log.d(TAG, "restoreCurrent -> current = " + current);
     }
 
 
@@ -336,22 +333,12 @@ public class WebViewText implements TextInterface {
         if ((scrollView != null) &&
                 ((textItem.bottom > scrollView.getScrollY() + scrollView.getHeight())
                         || (canMoveBackward && (textItem.top < scrollView.getScrollY())))) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    scrollView.smoothScrollTo(0, (int) textItem.top);
-                }
-            });
+            handler.post(() -> scrollView.smoothScrollTo(0, (int) textItem.top));
         }
     }
 
-
     private float convertWebViewToScreenY(float y) {
         return y * this.webView.getHeight() / this.webView.getContentHeight();
-    }
-
-    private float convertScreenToWebViewY(float y) {
-        return y * this.webView.getContentHeight() / this.webView.getHeight();
     }
 
     private static StringBuilder getRandomText(int length) {
@@ -372,7 +359,7 @@ public class WebViewText implements TextInterface {
         float bottom; // bottom location in the web view
         long timePosition; // in milliseconds from the beginning of the document
 
-        public TextItem(String text, float top, float bottom) {
+        TextItem(String text, float top, float bottom) {
             this.text = text;
             this.top = top;
             this.bottom = bottom;
@@ -382,4 +369,5 @@ public class WebViewText implements TextInterface {
     private long timeDuration(String text) {
         return text.length() * 50;  // in ms, total approximation
     }
+
 }
