@@ -6,8 +6,11 @@ import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
 import android.widget.ScrollView;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 
 /**
@@ -28,61 +31,27 @@ public class WebViewText implements TextInterface {
     private Runnable parsedCallback;
     private Runnable onReadFinishedCallback;
 
-    private final String WEB_VIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
-    private final String JAVASCRIPT_PARSE_DOCUMENT_TEXT = "" +
-            "function nextDomElem(elem) {\n" +
-            "    var result;\n" +
-            "    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT') {\n" +
-            "        result = elem.firstChild;\n" +
-            "    } else {\n" +
-            "        result = elem.nextSibling;\n" +
-            "        while((result == null) && (elem != null)) {\n" +
-            "            elem = elem.parentNode;\n" +
-            "            if (elem != null) {\n" +
-            "                result = elem.nextSibling;\n" +
-            "            }\n" +
-            "        }\n" +
-            "    }\n" +
-            "    return result;\n" +
-            "}\n" +
-            "\n" +
-            "function nextTextElem(elem) {\n" +
-            "    while(elem = nextDomElem(elem)) {\n" +
-            "        if ((elem.nodeType == 3) && (elem.textContent.trim().length > 0)) {\n" +
-            "            break;\n" +
-            "        }\n" +
-            "    }\n" +
-            "    return elem;\n" +
-            "}\n" +
-            "\n" +
-            "function cmdStart() {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "start');\n" +
-            "}\n" +
-            "function cmdEnd() {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "end');\n" +
-            "}\n" +
-            "function cmdText(text, top, bottom) {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);\n" +
-            "}\n" +
-            "\n" +
-            "function parseDocumentText() {\n" +
-            "    var elem = document.getElementsByTagName('body')[0];\n" +
-            "    var range = document.createRange();\n" +
-            "    cmdStart();\n" +
-            "    while(elem = nextTextElem(elem)) {\n" +
-            "        range.selectNode(elem);\n" +
-            "        var rect = range.getBoundingClientRect();\n" +
-            "        var text = elem.textContent.trim();\n" +
-            "        cmdText(text, rect.top, rect.bottom);\n" +
-            "    }\n" +
-            "    cmdEnd();\n" +
-            "}\n";
+    private final String webViewLogCmdHeader = "CMD_" + getRandomText(4) + ":";
+    private String jsParseDocumentScript = prepareScript();
 
     public WebViewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
         this.webView = webView;
         this.scrollView = scrollView;
         this.readArticleActivity = readArticleActivity;
         this.handler = new Handler();
+    }
+
+    private String prepareScript() {
+        return String.format(loadScript(), webViewLogCmdHeader);
+    }
+
+    private String loadScript() {
+        try {
+            return StorageHelper.readRawString(R.raw.tts_parser);
+        } catch (IOException e) {
+            // should not happen
+            throw new RuntimeException("Couldn't load raw resource", e);
+        }
     }
 
     public void setOnReadFinishedCallback(Runnable onReadFinishedCallback) {
@@ -93,7 +62,7 @@ public class WebViewText implements TextInterface {
         Log.d(TAG, "parseWebViewDocument");
         this.parsedSize = 0;
         this.parsedCallback = callback;
-        webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
+        webView.evaluateJavascript("javascript:" + jsParseDocumentScript + ";parseDocumentText();", null);
     }
 
     private void onDocumentParseStart() {
@@ -138,8 +107,8 @@ public class WebViewText implements TextInterface {
         // JAVASCRIPT_PARSE_DOCUMENT_TEXT
         if (cm.messageLevel() == ConsoleMessage.MessageLevel.LOG) {
             String message = cm.message();
-            if (message.startsWith(WEB_VIEW_LOG_CMD_HEADER)) {
-                String content = message.substring(WEB_VIEW_LOG_CMD_HEADER.length());
+            if (message.startsWith(webViewLogCmdHeader)) {
+                String content = message.substring(webViewLogCmdHeader.length());
                 if (content.equals("start")) {
                     onDocumentParseStart();
                 } else if (content.equals("end")) {
