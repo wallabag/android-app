@@ -31,7 +31,15 @@ public class StorageHelper {
 
     private static String externalStoragePath;
 
-    public static String readRawString(int id) throws IOException {
+    public static String readRawString(int id) {
+        try {
+            return readRawStringUnsafe(id);
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't load raw resource", e);
+        }
+    }
+
+    public static String readRawStringUnsafe(int id) throws IOException {
         Resources resources = App.getInstance().getResources();
 
         try (BufferedReader reader = new BufferedReader(

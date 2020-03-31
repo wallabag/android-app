@@ -59,7 +59,9 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
+import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
+import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
 import static android.text.Html.escapeHtml;
 
@@ -142,6 +144,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private Long previousArticleID;
     private Long nextArticleID;
 
+    private TtsHost ttsHost;
+    private JsTtsController jsTtsController;
+
     private int webViewHeightBeforeUpdate;
     private Runnable positionRestorationRunnable;
 
@@ -161,6 +166,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.applyOverrideConfiguration(overrideConfiguration);
     }
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         settings = App.getInstance().getSettings();
 
@@ -229,21 +235,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         initWebView();
 
-        if (ttsFragment != null) {
-            // is it ever executed?
-            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
-        }
-
         loadArticleToWebView();
 
-        if (settings.isTtsVisible() && ttsFragment == null) {
-            ttsFragment = (TtsFragment) getSupportFragmentManager()
-                    .findFragmentByTag(TAG_TTS_FRAGMENT);
-
-            if (ttsFragment == null) {
-                toggleTTS(false);
-            }
-        }
+        initTts();
 
         if (disableTouch) {
             showDisableTouchToast();
@@ -504,8 +498,42 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             loadArticleToWebView();
 
+            initTtsForArticle();
+
 //            restorePositionAfterUpdate();
         }
+    }
+
+    public TtsHost getTtsHost() {
+        if (ttsHost == null) {
+            ttsHost = new TtsHost() {
+                @Override
+                public JsTtsController getJsTtsController() {
+                    return jsTtsController;
+                }
+
+                @Override
+                public WebView getWebView() {
+                    return webViewContent;
+                }
+
+                @Override
+                public ScrollView getScrollView() {
+                    return scrollView;
+                }
+
+                @Override
+                public boolean previousArticle() {
+                    return openPreviousArticle();
+                }
+
+                @Override
+                public boolean nextArticle() {
+                    return openNextArticle();
+                }
+            };
+        }
+        return ttsHost;
     }
 
     private void showDisableTouchToast() {
@@ -561,6 +589,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
 
+        initTtsController();
         initAnnotationController();
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
@@ -568,14 +597,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public boolean onConsoleMessage(ConsoleMessage cm) {
-                boolean result = false;
-                if (ttsFragment != null) {
-                    result = ttsFragment.onWebViewConsoleMessage(cm);
-                }
-                if (!result) {
-                    Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
-                            cm.lineNumber(), cm.sourceId()));
-                }
+                Log.d("WebView.onCM", String.format("%s @ %d: %s", cm.message(),
+                        cm.lineNumber(), cm.sourceId()));
                 return true;
             }
 
@@ -734,6 +757,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
+    private void initTtsController() {
+        // add the controller now even if TTS is not used,
+        // otherwise it won't be possible to enable TTS without content reloading
+        jsTtsController = new JsTtsController();
+        webViewContent.addJavascriptInterface(jsTtsController, "hostWebViewTextController");
+    }
+
     private void initAnnotationController() {
         if (!annotationsEnabled) return;
 
@@ -770,7 +800,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void loadArticleToWebView() {
-        webViewContent.loadDataWithBaseURL("file:///android_asset/", getHtmlPage(),
+        String htmlPage = getHtmlPage();
+
+        loadingFinished = false;
+        webViewContent.loadDataWithBaseURL("file:///android_asset/", htmlPage,
                 "text/html", "utf-8", null);
     }
 
@@ -830,6 +863,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         return String.format(htmlBase, cssName, extraHead, classAttr, escapeHtml(articleTitle),
                 escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent);
+    }
+
+    private String getHtmlBase() {
+        return StorageHelper.readRawString(R.raw.webview_htmlbase);
     }
 
     private String getExtraHead() {
@@ -931,9 +968,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         restoreReadingPosition();
 
-        if (ttsFragment != null) {
-            ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
-        }
+        ttsOnDocumentLoadingFinished();
     }
 
     private void handleUrlClicked(final String url) {
@@ -1156,8 +1191,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
     }
 
-    public boolean toggleTTS(boolean autoPlay) {
-        boolean result;
+    private void initTts() {
+        if (settings.isTtsVisible()) {
+            ttsFragment = (TtsFragment) getSupportFragmentManager()
+                    .findFragmentByTag(TAG_TTS_FRAGMENT);
+
+            if (ttsFragment == null) {
+                toggleTTS(false);
+            }
+        }
+    }
+
+    public void toggleTTS(boolean autoPlay) {
         if (ttsFragment == null) {
             ttsFragment = TtsFragment.newInstance(autoPlay);
 
@@ -1168,12 +1213,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             settings.setTtsVisible(true);
 
-            ttsFragment.onDocumentLoadStart(articleDomain, articleTitle, articleLanguage);
-            if (loadingFinished) {
-                ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
-            }
-
-            result = true;
+            initTtsForArticle();
         } else {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -1183,13 +1223,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ttsFragment = null;
 
             settings.setTtsVisible(false);
-
-            result = false;
         }
 
         invalidateOptionsMenu();
+    }
 
-        return result;
+    private void initTtsForArticle() {
+        if (ttsFragment != null) {
+            ttsFragment.initForArticle(articleDomain, articleTitle, articleLanguage);
+            if (loadingFinished) {
+                ttsOnDocumentLoadingFinished();
+            }
+        }
+    }
+
+    private void ttsOnDocumentLoadingFinished() {
+        if (ttsFragment != null) {
+            ttsFragment.onDocumentLoadFinished();
+        }
     }
 
     private boolean loadArticle(long id) {
@@ -1238,26 +1289,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return null;
     }
 
-    private String getHtmlBase() {
-        String htmlBase;
-        try {
-            htmlBase = StorageHelper.readRawString(R.raw.webview_htmlbase);
-        } catch (Exception e) {
-            // should not happen
-            throw new RuntimeException("Couldn't load raw resource", e);
-        }
-        return htmlBase;
-    }
-
     private void onPageFinished() {
         Log.d(TAG, "onPageFinished() started");
 
         if (!isResumed) {
             onPageFinishedCallPostponedUntilResume = true;
 
-            if (ttsFragment != null) {
-                ttsFragment.onDocumentLoadFinished(webViewContent, scrollView);
-            }
+            // TODO: check
+            // apparently needed for TTS to support going to next article while screen is off
+            ttsOnDocumentLoadingFinished();
             return;
         }
 

@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -17,8 +16,8 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
@@ -28,7 +27,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.media.session.MediaButtonReceiver;
@@ -38,7 +36,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
@@ -47,14 +44,19 @@ import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 /**
  * Text To Speech (TTS) Service.
  * <p>
- * Need a {@link TextInterface} to access the text to speech.
+ * Needs a {@link TextInterface} to access the text to speech.
  * <p>
  * Tried to follow the recommendations from this video:
  * Media playback the right way (Big Android BBQ 2015)
  * https://www.youtube.com/watch?v=XQwe30cZffg
  */
-public class TtsService extends Service
-        implements AudioManager.OnAudioFocusChangeListener, TextToSpeech.OnInitListener {
+public class TtsService extends Service {
+
+    public class LocalBinder extends Binder {
+        public TtsService getService() {
+            return TtsService.this;
+        }
+    }
 
     enum State {
 
@@ -94,74 +96,84 @@ public class TtsService extends Service
          */
         ERROR(PlaybackStateCompat.STATE_ERROR);
 
-        public final int playbackState;
+        final int playbackState;
 
         State(int playbackState) {
             this.playbackState = playbackState;
         }
+
     }
 
+    public static final String ACTION_PLAY = "PLAY";
+    public static final String ACTION_PAUSE = "PAUSE";
+    public static final String ACTION_PLAY_PAUSE = "PLAY_PAUSE";
+    public static final String ACTION_REWIND = "REWIND";
+    public static final String ACTION_FAST_FORWARD = "FAST_FORWARD";
+
+    private static final String TAG = TtsService.class.getSimpleName();
+
+    private static final int NOTIFICATION_ID = 1;
+
+    private static final int TTS_SPEAK_QUEUE_SIZE = 2;
+
+    private ExecutorService executor;
+    private AudioManager audioManager;
+    private MediaPlayer mediaPlayerPageFlip;
+    private MediaSessionCompat mediaSession;
+    private BroadcastReceiver noisyReceiver;
+    private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener;
+
+    private Handler mainThreadHandler;
+
     private volatile State state;
-    private volatile boolean isTTSInitialized;
-    private volatile boolean isAudioFocusGranted;
-    private volatile boolean isVisible;
+
+    private boolean autoplayNext;
+    private boolean playFromStart;
+
+    private String ttsEngine;
+    private String ttsVoice;
+    private float speed = 1.0f;
+    private float pitch = 1.0f;
+
+    private volatile TextToSpeech tts; // TODO: fix: access is not properly synchronized
+    private AudioFocusRequest audioFocusRequest;
+
+    private volatile boolean isTtsInitialized;
+    private boolean isAudioFocusGranted;
+
     private volatile TextInterface textInterface;
     private String metaDataArtist = "";
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
-    private volatile String utteranceId = "1";
-    private HashMap<String, String> utteranceParams = new HashMap<>();
-    private boolean playFromStart;
 
-    private TextToSpeech tts;
-    private String ttsEngine;
-    private String ttsVoice;
-    private AudioManager audioManager;
-    private AudioFocusRequest audioFocusRequest;
-    private MediaSessionCompat mediaSession;
-    private MediaPlayer mediaPlayerPageFlip;
-    private BroadcastReceiver noisyReceiver;
-    private Settings settings;
-    private float speed = 1.0f;
-    private float pitch = 1.0f;
-    private ExecutorService executor;
-    private final Runnable ttsStop = new Runnable() {
-        @Override
-        public void run() {
-            tts.stop();
-        }
-    };
-    private final Runnable speak = this::speak;
+    private boolean isForeground;
     private PendingIntent notificationPendingIntent;
 
-    private static final String LOG_TAG = "TtsService";
-    private static final int TTS_SPEAK_QUEUE_SIZE = 2;
-    private static final int NOTIFICATION_ID = 1;
-
-    private static volatile TtsService instance;
-
-    public static TtsService getInstance() {
-        return instance;
-    }
+    private volatile int utteranceId = 1;
 
     @Override
     public void onCreate() {
-        Log.d(LOG_TAG, "onCreate");
-        TtsService.instance = this;
-        isTTSInitialized = false;
+        Log.d(TAG, "onCreate()");
+
+        isTtsInitialized = false;
         state = State.CREATED;
+
         executor = Executors.newSingleThreadExecutor();
-        settings = App.getInstance().getSettings();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
+
         ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
                 MediaButtonReceiver.class.getName());
-        mediaSession = new MediaSessionCompat(this, "wallabag TTS", mediaButtonReceiverComponentName, null);
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession = new MediaSessionCompat(this, "wallabag TTS",
+                mediaButtonReceiverComponentName, null);
+        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
+                | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(@NonNull Intent mediaButtonIntent) {
-                Log.d(LOG_TAG, "MediaSessionCompat.Callback.onMediaButtonEvent " + mediaButtonIntent);
+                Log.d(TAG, "MediaSessionCompat.Callback.onMediaButtonEvent() "
+                        + mediaButtonIntent);
                 return super.onMediaButtonEvent(mediaButtonIntent);
             }
 
@@ -200,43 +212,44 @@ public class TtsService extends Service
                 stopCmd();
             }
         });
-        ttsVoice = this.settings.getTtsVoice();
-        ttsEngine = this.settings.getTtsEngine();
-        if (ttsEngine.equals("")) {
-            this.tts = new TextToSpeech(getApplicationContext(), this);
-            this.ttsEngine = tts.getDefaultEngine();
-        } else {
-            this.tts = new TextToSpeech(getApplicationContext(), this, ttsEngine);
-        }
+
         noisyReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                Log.d(TAG, "noisyReceiver.onReceive()");
                 pauseCmd();
             }
         };
+
+        audioFocusChangeListener = this::onAudioFocusChange;
+
+        mainThreadHandler = new Handler();
+
+        Settings settings = App.getInstance().getSettings();
+        ttsEngine = settings.getTtsEngine();
+        ttsVoice = settings.getTtsVoice();
+
+        if (ttsEngine.equals("")) {
+            tts = new TextToSpeech(getApplicationContext(), this::onTtsInitListener);
+            ttsEngine = tts.getDefaultEngine();
+        } else {
+            tts = new TextToSpeech(getApplicationContext(), this::onTtsInitListener, ttsEngine);
+        }
+
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
     }
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "onDestroy");
-        switch (state) {
-            case CREATED:
-            case PAUSED:
-                // Do nothing
-                break;
-            case PLAYING:
-                unregisterReceiver(noisyReceiver);
-                break;
-            case WANT_TO_PLAY:
-            case STOPPED:
-            case ERROR:
-                // Do nothing
-                break;
+        Log.d(TAG, "onDestroy()");
+
+        if (state == State.PLAYING) {
+            unregisterReceiver(noisyReceiver);
         }
+
         state = State.STOPPED; // needed before tts.stop() because of the onSpeakDone callback.
-        isVisible = false;
+        isForeground = false;
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
         mediaSession.setActive(false);
@@ -248,76 +261,68 @@ public class TtsService extends Service
         mediaSession = null;
         mediaPlayerPageFlip.release();
         mediaPlayerPageFlip = null;
+        isTtsInitialized = false;
         tts.shutdown();
         tts = null;
-        isTTSInitialized = false;
         abandonAudioFocus();
         isAudioFocusGranted = false;
-        instance = null;
         state = State.STOPPED;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(LOG_TAG, "onStartCommand");
+        Log.d(TAG, "onStartCommand()");
+
         if (intent != null) {
             MediaButtonReceiver.handleIntent(mediaSession, intent);
+
             String action = intent.getAction();
-            if ("PLAY".equals(action)) {
+            if (ACTION_PLAY.equals(action)) {
                 playCmd();
-            } else if ("PAUSE".equals(action)) {
+            } else if (ACTION_PAUSE.equals(action)) {
                 pauseCmd();
-            } else if ("PLAY_PAUSE".equals(action)) {
+            } else if (ACTION_PLAY_PAUSE.equals(action)) {
                 playPauseCmd();
-            } else if ("REWIND".equals(action)) {
+            } else if (ACTION_REWIND.equals(action)) {
                 rewindCmd();
-            } else if ("FAST_FORWARD".equals(action)) {
+            } else if (ACTION_FAST_FORWARD.equals(action)) {
                 fastForwardCmd();
             }
         }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        //Log.d(LOG_TAG, "onBind");
         return new LocalBinder();
     }
 
-    @Override
-    public boolean onUnbind(Intent intent) {
-        //Log.d(LOG_TAG, "onUnbind");
-        return super.onUnbind(intent);
+    public void autoplayNext() {
+        autoplayNext = true;
     }
 
-    public class LocalBinder extends Binder {
-        public TtsService getService() {
-            return TtsService.this;
-        }
-    }
-
-    public void playFromStartCmd() {
+    public void playNextFromStart() {
         playFromStart = true;
-        playCmd();
     }
 
     private void playCmd() {
-        Log.d(LOG_TAG, "playCmd");
+        Log.d(TAG, "playCmd()");
+
         switch (state) {
             case CREATED:
-                if (requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    isAudioFocusGranted = true;
-                    mediaSession.setActive(true);
-                    setMediaSessionMetaData();
-                    //NO BREAK, continue to next statements as if is state == WANT_TO_PLAY
-                } else {
-                    // Stay in the state CREATED
-                    break;
+                if (requestAudioFocus() != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    Log.w(TAG, "playCmd() audio focus is not granted; staying in CREATED");
+                    break; // Stay in the state CREATED
                 }
+                isAudioFocusGranted = true;
+                mediaSession.setActive(true);
+                setMediaSessionMetaData();
+                // NO BREAK, continue to next statements as if is state == WANT_TO_PLAY
+
             case WANT_TO_PLAY:
             case PAUSED:
-                if (isTTSInitialized && isAudioFocusGranted && (textInterface != null)) {
+                if (isTtsInitialized && isAudioFocusGranted && textInterface != null) {
                     state = State.PLAYING;
                     if (playFromStart) {
                         playFromStart = false;
@@ -327,18 +332,14 @@ public class TtsService extends Service
                     }
                     setMediaSessionPlaybackState();
                     setForegroundAndNotification();
-                    registerReceiver(noisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
-                    executor.execute(speak); // speak();
+                    registerReceiver(noisyReceiver,
+                            new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+                    executeSpeak();
                 } else {
                     state = State.WANT_TO_PLAY;
                     setMediaSessionPlaybackState();
                     setForegroundAndNotification();
                 }
-                break;
-            case PLAYING:
-            case STOPPED:
-            case ERROR:
-                // Do nothing
                 break;
         }
     }
@@ -346,12 +347,13 @@ public class TtsService extends Service
     private int requestAudioFocus() {
         int audioFocusResult;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            audioFocusResult = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            audioFocusResult = audioManager.requestAudioFocus(audioFocusChangeListener,
+                    AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         } else {
-            if (this.audioFocusRequest == null) {
-                this.audioFocusRequest =
+            if (audioFocusRequest == null) {
+                audioFocusRequest =
                         new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
-                                .setOnAudioFocusChangeListener(this)
+                                .setOnAudioFocusChangeListener(audioFocusChangeListener)
                                 .setWillPauseWhenDucked(true)
                                 .setAudioAttributes(
                                         new AudioAttributes.Builder()
@@ -361,26 +363,20 @@ public class TtsService extends Service
                                 )
                                 .build();
             }
-            audioFocusResult = audioManager.requestAudioFocus(this.audioFocusRequest);
+            audioFocusResult = audioManager.requestAudioFocus(audioFocusRequest);
         }
         return audioFocusResult;
     }
 
-    private int abandonAudioFocus() {
-        int audioFocusResult;
+    private void abandonAudioFocus() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            audioFocusResult = audioManager.abandonAudioFocus(this);
+            audioManager.abandonAudioFocus(audioFocusChangeListener);
         } else {
-            if (this.audioFocusRequest != null) {
-                audioFocusResult = audioManager.abandonAudioFocusRequest(this.audioFocusRequest);
-                if (audioFocusResult != AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
-                    this.audioFocusRequest = null;
-                }
-            } else {
-                audioFocusResult = AudioManager.AUDIOFOCUS_REQUEST_FAILED;
+            if (audioFocusRequest != null && audioManager.abandonAudioFocusRequest(audioFocusRequest)
+                    != AudioManager.AUDIOFOCUS_REQUEST_FAILED) {
+                audioFocusRequest = null;
             }
         }
-        return audioFocusResult;
     }
 
     public void pauseCmd() {
@@ -388,13 +384,15 @@ public class TtsService extends Service
     }
 
     private void pauseCmd(State newState) {
-        Log.d(LOG_TAG, "pauseCmd " + newState);
+        Log.d(TAG, "pauseCmd() " + newState);
+
         switch (state) {
             case PLAYING:
                 state = newState; // needed before tts.stop() because of the onSpeakDone callback.
-                executor.execute(ttsStop); // tts.stop();
+                executeOnBackgroundThread(tts::stop);
                 unregisterReceiver(noisyReceiver);
-                //NO BREAK, continue to next statements to set state and notification
+                // NO BREAK, continue to next statements to set state and notification
+
             case WANT_TO_PLAY:
             case PAUSED:
                 state = newState;
@@ -402,102 +400,163 @@ public class TtsService extends Service
                 setForegroundAndNotification();
                 stopForeground(false);
                 break;
-            case CREATED:
-            case STOPPED:
-            case ERROR:
-                // Do nothing
-                break;
         }
     }
 
     public void playPauseCmd() {
-        Log.d(LOG_TAG, "playPauseCmd");
+        Log.d(TAG, "playPauseCmd()");
+
         switch (state) {
             case CREATED:
             case PAUSED:
                 playCmd();
                 break;
+
             case PLAYING:
             case WANT_TO_PLAY:
                 pauseCmd();
-                break;
-            case STOPPED:
-            case ERROR:
-                // Do nothing
                 break;
         }
     }
 
     public void rewindCmd() {
-        Log.d(LOG_TAG, "rewindCmd");
+        Log.d(TAG, "rewindCmd()");
+
         if (textInterface != null) {
-            if (textInterface.rewind() && (state == State.PLAYING)) {
-                executor.execute(speak); // speak();
+            if (textInterface.rewind() && state == State.PLAYING) {
+                executeSpeak();
             }
         }
     }
 
     public void fastForwardCmd() {
-        Log.d(LOG_TAG, "fastForwardCmd");
+        Log.d(TAG, "fastForwardCmd()");
+
         if (textInterface != null) {
-            if (textInterface.fastForward() && (state == State.PLAYING)) {
-                executor.execute(speak); // speak();
+            if (textInterface.fastForward() && state == State.PLAYING) {
+                executeSpeak();
             }
         }
     }
 
     private void stopCmd() {
-        Log.d(LOG_TAG, "stopCmd");
+        Log.d(TAG, "stopCmd()");
+
         stopSelf();
     }
 
     private void skipToNextCmd() {
-        if (this.textInterface != null) {
-            this.textInterface.skipToNext();
+        if (textInterface != null) {
+            textInterface.skipToNext();
         }
     }
 
     private void skipToPreviousCmd() {
-        if (this.textInterface != null) {
-            this.textInterface.skipToPrevious();
+        if (textInterface != null) {
+            textInterface.skipToPrevious();
         }
     }
 
+    private void executeOnMainThread(Runnable runnable) {
+        mainThreadHandler.post(runnable);
+    }
+
+    private void executeOnBackgroundThread(Runnable runnable) {
+        executor.execute(runnable);
+    }
+
+    private void executeSpeak() {
+        // tts.speak(...) is supposed to be asynchronous, so I'm not sure executor is required
+        executeOnBackgroundThread(this::speak);
+    }
+
+    /**
+     * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
+     */
     private void speak() {
-        Log.d(LOG_TAG, "speak");
-        if (BuildConfig.DEBUG && (state != State.PLAYING || textInterface == null)) {
-            throw new AssertionError();
+        Log.d(TAG, "speak()");
+
+        // a local variable so it's not gets replaced in another thread
+        TextInterface textInterface = this.textInterface;
+
+        if (state != State.PLAYING || textInterface == null) {
+            Log.w(TAG, "speak() state=" + state + ", textInterface=" + textInterface);
+            return;
         }
+
         // Change the utteranceId so that call to onSpeakDone
         // of the previous speak sequence will not interfere with the following one
-        utteranceId = "" + (Integer.parseInt(utteranceId) + 1);
-        ttsSpeak(textInterface.getText(0), TextToSpeech.QUEUE_FLUSH, utteranceId);
+        utteranceId++;
+
+        String utteranceString = String.valueOf(utteranceId);
+        ttsSpeak(textInterface.getText(0), TextToSpeech.QUEUE_FLUSH, utteranceString);
         for (int i = 1; i <= TTS_SPEAK_QUEUE_SIZE; i++) {
-            ttsSpeak(textInterface.getText(i), TextToSpeech.QUEUE_ADD, utteranceId);
+            ttsSpeak(textInterface.getText(i), TextToSpeech.QUEUE_ADD, utteranceString);
         }
     }
 
-    private void ttsSpeak(String text, int queue, String utteranceId) {
-        if (BuildConfig.DEBUG && !(state == State.PLAYING && isTTSInitialized)) {
-            throw new AssertionError();
+    /**
+     * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
+     */
+    private void ttsEnqueueMoreIfUtteranceMatches(String utteranceId) {
+        if (!String.valueOf(this.utteranceId).equals(utteranceId)) {
+            Log.d(TAG, "ttsSpeakMoreIfUtteranceMatches() utteranceId didn't match");
+            return;
         }
+
+        TextInterface textInterface = this.textInterface;
+
+        if (textInterface == null) {
+            Log.w(TAG, "ttsEnqueueMoreIfUtteranceMatches() textInterface is null");
+            return;
+        }
+
+        ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, utteranceId);
+    }
+
+    /**
+     * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
+     */
+    private void ttsSpeak(String text, int queueMode, String utteranceId) {
+        if (state != State.PLAYING || !isTtsInitialized) {
+            Log.w(TAG, "ttsSpeak() state=" + state + ", isTtsInitialized=" + isTtsInitialized);
+            return;
+        }
+
         if (text != null) {
-            HashMap<String, String> params = this.utteranceParams;
-            if (!utteranceId.equals(params.get("utteranceId"))) {
-                params = new HashMap<>();
-                params.put("utteranceId", utteranceId);
-                this.utteranceParams = params;
+            // TODO: check tts.getMaxSpeechInputLength()?
+
+            Log.v(TAG, "ttsSpeak() speaking " + utteranceId + ": " + text);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tts.speak(text, queueMode, null, utteranceId);
+            } else {
+                HashMap<String, String> params = new HashMap<>(2);
+                params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+                //noinspection deprecation
+                tts.speak(text, queueMode, params);
             }
-            //Log.d(LOG_TAG, "speak " + utteranceId + ": " + text);
-            this.tts.speak(text, queue, params);
+
+            Log.v(TAG, "ttsSpeak() call returned");
         }
+    }
+
+    /**
+     * Thread-safety note: may be executed from multiple background threads
+     * ({@link UtteranceProgressListener}).
+     */
+    private void onSpeakDoneListener(String doneUtteranceId) {
+        Log.v(TAG, "onSpeakDoneListener() " + doneUtteranceId);
+
+        executeOnMainThread(() -> onSpeakDone(doneUtteranceId));
     }
 
     private void onSpeakDone(String doneUtteranceId) {
-        //Log.d(LOG_TAG, "onSpeakDone " + doneUtteranceId);
-        if ((state == State.PLAYING) && utteranceId.equals(doneUtteranceId)) {
+        Log.v(TAG, "onSpeakDone() " + doneUtteranceId);
+
+        if (state == State.PLAYING && String.valueOf(utteranceId).equals(doneUtteranceId)) {
             if (textInterface.next()) {
-                ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, doneUtteranceId);
+                executeOnBackgroundThread(() -> ttsEnqueueMoreIfUtteranceMatches(doneUtteranceId));
             } else {
                 pauseCmd();
             }
@@ -505,15 +564,13 @@ public class TtsService extends Service
     }
 
     public void playPageFlipSound() {
-        this.mediaPlayerPageFlip.start();
+        mediaPlayerPageFlip.start();
     }
 
-    /**
-     * AudioManager.OnAudioFocusChangeListener
-     */
-    @Override
-    public void onAudioFocusChange(final int focusChange) {
-        Log.d(LOG_TAG, "onAudioFocusChange " + focusChange);
+    // AudioManager.OnAudioFocusChangeListener
+    private void onAudioFocusChange(int focusChange) {
+        Log.d(TAG, "onAudioFocusChange() " + focusChange);
+
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 isAudioFocusGranted = true;
@@ -521,12 +578,14 @@ public class TtsService extends Service
                     playCmd();
                 }
                 break;
+
             case AudioManager.AUDIOFOCUS_LOSS:
                 isAudioFocusGranted = false;
                 if (state == State.PLAYING || state == State.WANT_TO_PLAY) {
                     pauseCmd();
                 }
                 break;
+
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
                 isAudioFocusGranted = false;
@@ -539,26 +598,58 @@ public class TtsService extends Service
 
     /**
      * TextToSpeech.OnInitListener.
+     * Thread-safety note: apparently executed on the main thread, but I'm not sure.
      */
-    @Override
-    public void onInit(int status) {
-        Log.d(LOG_TAG, "TextToSpeech.OnInitListener.onInit " + status);
+    private void onTtsInitListener(int status) {
+        // better safe than sorry
+        executeOnMainThread(() -> onTtsInit(status));
+    }
+
+    private void onTtsInit(int status) {
+        Log.d(TAG, "onTtsInit() " + status);
+
         if (status == TextToSpeech.SUCCESS) {
             if (state == State.ERROR) {
                 // We finally obtained a success status !
                 // (probably after initializing a new TextToSpeech with different engine)
                 state = State.CREATED;
             }
-            this.tts.setOnUtteranceCompletedListener(this::onSpeakDone);
+
+            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                @Override
+                public void onStart(String utteranceId) {}
+
+                @Override
+                public synchronized void onDone(String utteranceId) {
+                    onSpeakDoneListener(utteranceId);
+                }
+
+                @Override
+                public void onError(String utteranceId) {
+                    Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId);
+                    onSpeakDoneListener(utteranceId);
+                }
+
+                @Override
+                public void onStop(String utteranceId, boolean interrupted) {
+                    Log.d(TAG, "utteranceProgressListener.onStop() " + utteranceId
+                            + ", " + interrupted);
+                    onSpeakDoneListener(utteranceId);
+                }
+            });
+
             tts.setLanguage(convertVoiceNameToLocale(ttsVoice));
-            isTTSInitialized = true;
+
+            isTtsInitialized = true;
+
             tts.setSpeechRate(speed);
             tts.setPitch(pitch);
+
             if (state == State.WANT_TO_PLAY) {
                 playCmd();
             }
         } else {
-            isTTSInitialized = false;
+            isTtsInitialized = false;
             state = State.ERROR;
             setMediaSessionPlaybackState();
             setForegroundAndNotification();
@@ -568,40 +659,33 @@ public class TtsService extends Service
     public void setSpeed(float speed) {
         if (speed != this.speed) {
             this.speed = speed;
-            if (isTTSInitialized) {
-                this.tts.setSpeechRate(speed);
+            if (isTtsInitialized) {
+                tts.setSpeechRate(speed);
                 if (state == State.PLAYING) {
-                    executor.execute(speak); // speak();
+                    executeSpeak();
                 }
             }
         }
-    }
-
-    public float getSpeed() {
-        return speed;
     }
 
     public void setPitch(float pitch) {
         if (pitch != this.pitch) {
             this.pitch = pitch;
-            if (isTTSInitialized) {
-                this.tts.setPitch(pitch);
+            if (isTtsInitialized) {
+                tts.setPitch(pitch);
                 if (state == State.PLAYING) {
-                    executor.execute(speak); // speak();
+                    executeSpeak();
                 }
             }
         }
     }
 
-    public float getPitch() {
-        return pitch;
-    }
-
     public void setEngineAndVoice(String engine, String voice) {
-        Log.d(LOG_TAG, "setEngineAndVoice " + engine + " " + voice);
+        Log.d(TAG, "setEngineAndVoice() " + engine + " " + voice);
+
         boolean resetEngine = false;
-        if (!engine.equals(this.ttsEngine)) {
-            this.ttsEngine = engine;
+        if (!engine.equals(ttsEngine)) {
+            ttsEngine = engine;
             resetEngine = true;
         }
         if (resetEngine) {
@@ -609,36 +693,27 @@ public class TtsService extends Service
                 if (state == State.PLAYING) {
                     pauseCmd(State.WANT_TO_PLAY);
                 }
-                isTTSInitialized = false;
+                isTtsInitialized = false;
+
                 final TextToSpeech ttsToShutdown = tts;
-                new Thread() {
-                    @Override
-                    public void run() {
-                        ttsToShutdown.setOnUtteranceCompletedListener(null);
-                        ttsToShutdown.stop();
-                        ttsToShutdown.shutdown();
-                    }
-                }.start();
-                tts = new TextToSpeech(getApplicationContext(), this, engine);
+                new Thread(() -> {
+                    ttsToShutdown.setOnUtteranceProgressListener(null);
+                    ttsToShutdown.stop();
+                    ttsToShutdown.shutdown();
+                }).start();
+
+                tts = new TextToSpeech(getApplicationContext(), this::onTtsInitListener, engine);
             }
         }
-        if (!voice.equals(this.ttsVoice)) {
-            this.ttsVoice = voice;
-            if (isTTSInitialized) {
+        if (!voice.equals(ttsVoice)) {
+            ttsVoice = voice;
+            if (isTtsInitialized) {
                 tts.setLanguage(convertVoiceNameToLocale(voice));
                 if (state == State.PLAYING) {
-                    executor.execute(speak); // speak();
+                    executeSpeak();
                 }
             }
         }
-    }
-
-    public String getEngine() {
-        return this.ttsEngine;
-    }
-
-    public String getVoice() {
-        return this.ttsVoice;
     }
 
     private Locale convertVoiceNameToLocale(String voiceName) {
@@ -660,22 +735,25 @@ public class TtsService extends Service
         return new Locale(language, country, variant);
     }
 
-
-    public void setVisible(boolean visible, PendingIntent pendingIntent) {
-        this.notificationPendingIntent = pendingIntent;
-        this.isVisible = visible;
+    public void setForeground(boolean foreground, PendingIntent pendingIntent) {
+        isForeground = foreground;
+        notificationPendingIntent = pendingIntent;
         setForegroundAndNotification();
     }
 
-    public TextInterface getTextInterface() {
-        return textInterface;
-    }
+    public void setTextInterface(TextInterface textInterface, String artist,
+                                 String title, String album) {
+        Log.d(TAG, "setTextInterface() textInterface is "
+                + (textInterface == null ? "null" : "not null"));
 
-    public void setTextInterface(TextInterface textInterface, String artist, String title, String album) {
-        this.metaDataArtist = artist;
-        this.metaDataTitle = title;
-        this.metaDataAlbum = album;
+        boolean newContent = false;
+
+        metaDataArtist = artist;
+        metaDataTitle = title;
+        metaDataAlbum = album;
         if (textInterface != this.textInterface) {
+            newContent = textInterface != null;
+
             switch (state) {
                 case CREATED:
                 case PAUSED:
@@ -683,6 +761,7 @@ public class TtsService extends Service
                 case STOPPED:
                     this.textInterface = textInterface;
                     break;
+
                 case WANT_TO_PLAY:
                 case PLAYING:
                     pauseCmd();
@@ -692,43 +771,55 @@ public class TtsService extends Service
             }
         }
         setMediaSessionMetaData();
+
+        if (newContent) {
+            onNewContent();
+        }
     }
 
-    public void registerCallback(MediaControllerCompat.Callback callback, Handler handler) {
-        this.mediaSession.getController().registerCallback(callback, handler);
+    private void onNewContent() {
+        if (autoplayNext) {
+            autoplayNext = false;
+
+            playCmd();
+        }
     }
 
-    public void unregisterCallback(MediaControllerCompat.Callback callback) {
-        this.mediaSession.getController().unregisterCallback(callback);
+    public void registerMediaControllerCallback(MediaControllerCompat.Callback callback) {
+        mediaSession.getController().registerCallback(callback);
+    }
+
+    public void unregisterMediaControllerCallback(MediaControllerCompat.Callback callback) {
+        mediaSession.getController().unregisterCallback(callback);
     }
 
     private void setMediaSessionMetaData() {
-        if (mediaSession == null) {
-            return;
-        }
+        if (mediaSession == null) return;
+
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, metaDataTitle)
-                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART,
-                        BitmapFactory.decodeResource(getResources(), R.drawable.icon));
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, metaDataTitle);
+
         if (textInterface != null) {
-            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, textInterface.getTotalDuration());
+            builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+                    textInterface.getTotalDuration());
         }
+
         mediaSession.setMetadata(builder.build());
     }
 
     private void setMediaSessionPlaybackState() {
-        if (mediaSession == null) {
-            return;
-        }
+        if (mediaSession == null) return;
+
         long position = PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN;
         if (textInterface != null) {
             position = textInterface.getTime();
         }
+
         PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
                 .setActions(
-                        (this.state == State.PAUSED ?
+                        (state == State.PAUSED ?
                                 PlaybackStateCompat.ACTION_PLAY : PlaybackStateCompat.ACTION_PAUSE)
                                 | PlaybackStateCompat.ACTION_PLAY_PAUSE
                                 | PlaybackStateCompat.ACTION_REWIND
@@ -737,28 +828,30 @@ public class TtsService extends Service
                                 | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
                                 | PlaybackStateCompat.ACTION_STOP
                 )
-                .setState(this.state.playbackState,
+                .setState(state.playbackState,
                         position,
-                        speed,
-                        SystemClock.elapsedRealtime())
+                        speed)
                 .build();
+
         mediaSession.setPlaybackState(playbackState);
     }
 
     private void setForegroundAndNotification() {
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-        if (isVisible) {
+        NotificationManagerCompat notificationManager = NotificationManagerCompat
+                .from(getApplicationContext());
+
+        if (isForeground) {
             switch (state) {
-                case CREATED:
-                    break;
                 case WANT_TO_PLAY:
                 case PLAYING:
                     startForeground(NOTIFICATION_ID, generateNotification());
                     break;
+
                 case PAUSED:
                     stopForeground(false);
                     notificationManager.notify(NOTIFICATION_ID, generateNotification());
                     break;
+
                 case STOPPED:
                 case ERROR:
                     stopForeground(true);
@@ -772,31 +865,49 @@ public class TtsService extends Service
     }
 
     private Notification generateNotification() {
-        NotificationCompat.Builder builder = generateNotificationBuilderFrom(getApplicationContext(), mediaSession);
-        builder.setContentIntent(notificationPendingIntent);
-        builder.setWhen(0);
-        builder.setSmallIcon(R.drawable.icon);
+        NotificationCompat.Builder builder = generateNotificationBuilderFrom(
+                getApplicationContext(), mediaSession);
+
+        builder.setContentIntent(notificationPendingIntent)
+                .setWhen(0)
+                .setSmallIcon(R.drawable.icon);
+
         if (state != State.ERROR) {
-            //builder.addAction( generateAction( android.R.drawable.ic_media_previous, "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS ) );
-            builder.addAction(generateAction(android.R.drawable.ic_media_rew, "Rewind", KeyEvent.KEYCODE_MEDIA_REWIND));
-            if ((state == State.WANT_TO_PLAY) || (state == State.PLAYING)) {
-                builder.addAction(generateAction(android.R.drawable.ic_media_pause, "Pause", KeyEvent.KEYCODE_MEDIA_PAUSE));
+            // TODO: localize action titles
+
+//            builder.addAction(generateAction(android.R.drawable.ic_media_previous,
+//                    "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+
+            builder.addAction(generateAction(android.R.drawable.ic_media_rew,
+                    "Rewind", KeyEvent.KEYCODE_MEDIA_REWIND));
+
+            if (state == State.WANT_TO_PLAY || state == State.PLAYING) {
+                builder.addAction(generateAction(android.R.drawable.ic_media_pause,
+                        "Pause", KeyEvent.KEYCODE_MEDIA_PAUSE));
             } else {
-                builder.addAction(generateAction(android.R.drawable.ic_media_play, "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
+                builder.addAction(generateAction(android.R.drawable.ic_media_play,
+                        "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
             }
-            builder.addAction(generateAction(android.R.drawable.ic_media_ff, "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
-            builder.addAction(generateAction(android.R.drawable.ic_media_next, "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
+
+            builder.addAction(generateAction(android.R.drawable.ic_media_ff,
+                    "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+
+            builder.addAction(generateAction(android.R.drawable.ic_media_next,
+                    "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
+
             builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
-                    .setShowActionsInCompactView(0, 1, 2, 3)
-                    //FIXME: max number of setShowActionsInCompactView depends on Android VERSION
+                    .setShowActionsInCompactView(0, 1, 2)
                     .setMediaSession(mediaSession.getSessionToken())
                     .setShowCancelButton(true)
-                    .setCancelButtonIntent(generateActionIntent(getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
+                    .setCancelButtonIntent(generateActionIntent(
+                            getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
         }
+
         return builder.build();
     }
 
-    private static NotificationCompat.Builder generateNotificationBuilderFrom(Context context, MediaSessionCompat mediaSession) {
+    private static NotificationCompat.Builder generateNotificationBuilderFrom(
+            Context context, MediaSessionCompat mediaSession) {
         MediaControllerCompat controller = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = controller.getMetadata();
         MediaDescriptionCompat description = mediaMetadata.getDescription();
@@ -814,7 +925,6 @@ public class TtsService extends Service
         PendingIntent pendingIntent = generateActionIntent(getApplicationContext(), mediaKeyEvent);
         return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
     }
-
 
     private static PendingIntent generateActionIntent(Context context, int mediaKeyEvent) {
         Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
