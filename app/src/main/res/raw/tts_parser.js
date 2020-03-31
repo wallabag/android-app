@@ -24,13 +24,13 @@ function nextTextElem(elem) {
 }
 
 function cmdStart() {
-        console.log('%1$sstart');
+    hostWebViewTextController.onStart();
 }
 function cmdEnd() {
-        console.log('%1$send');
+    hostWebViewTextController.onEnd();
 }
 function cmdText(text, top, bottom) {
-        console.log('%1$s' + top + ':' + bottom + ':' + text);
+    hostWebViewTextController.onText(text, top, bottom);
 }
 
 function parseDocumentText() {
