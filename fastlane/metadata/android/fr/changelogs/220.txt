@@ -1,0 +1,14 @@
+- La recherche en texte intégral est maintenant disponible. Une "synchronisation complète" est recommandée.
+- Prise en charge expérimentale des annotations (peut être activée dans les paramètres).
+- Possibilité de lancer le scanner de code QR pour la configuration des informations d'identification à partir de l'assistant de configuration
+- Améliorations mineures des performances sur la vue liste.
+- Synchronisation légèrement améliorée.
+- Ajout de la possibilité d'exporter les modifications locales pour traiter les synchronisations bloquées.
+- Mise à jour des traductions.
+- Corrections et améliorations mineures.
+
+Corrections :
+
+- Correction d'un crash de la WebView sur Android 5.
+- Correction de certains éléments du thème ne s'appliquant pas correctement en plein écran.
+- Correction des caractères spéciaux dans le titre.

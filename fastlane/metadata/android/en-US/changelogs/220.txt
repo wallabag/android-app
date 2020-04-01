@@ -1,5 +1,6 @@
 - Basic search is replaced with full-text search. "Full update" is recommended.
 - Experimental annotations support (can be enabled in settings).
+- Launch QR code scanner for credentials setup from configuration assistant
 - Minor list performance improvements.
 - Slightly improved sync.
 - Added ability to export local changes to deal with stuck sync.

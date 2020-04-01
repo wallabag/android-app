@@ -1,0 +1,23 @@
+wallabag est une application de lecture différée auto-hébergée. Elle vous permet de lire plus facilement et d'archiver des articles sur Internet. Contrairement à d'autres services, wallabag est gratuite et est un logiciel libre.
+
+Vous pouvez télécharger wallabag sur le site wallabag.org et l'installer sur votre propre serveur en suivant les instructions, ou bien vous inscrire directement sur wallabag.it
+
+Cette application Android vous permet de lire et gérer vos articles et les synchronise automatiquement avec le serveur wallabag.
+
+SAUVEGARDEZ POUR PLUS TARD :
+La prochaine fois que vous tombez sur un article que vous voulez lire plus tard, sauvegardez-le dans wallabag. Il sera synchronisé automatiquement sur votre téléphone, votre tablette, votre liseuse et votre ordinateur. Vous pouvez donc le lire partout, tout le temps !
+
+Vous pouvez sauvegarder des articles dans wallabag depuis presque partout, y compris votre ordinateur et vos lecteurs de flux RSS favoris.
+
+UNE EXPÉRIENCE DE LECTURE AGRÉABLE :
+
+wallabag vous permet de lire les articles au travers d'une vue simple et plaisante, sans aucune distraction. Vous pouvez modifier l'interface de wallabag à votre guise selon vos habitudes de lecture.
+
+PLUS :
+* Synchronisation automatique entre le serveur et les applications
+* Téléchargement des images pour la lecture hors-ligne
+* Tags pour gérer vos contenus
+* Écoutez vos articles avec la synthèse vocale
+
+Cette application a été initialement créée par Jonathan GAULUPEAU et distribuée sous licence GPLv3.
+wallabag est une création de Nicolas Lœuillet distribuée sous licence MIT.
