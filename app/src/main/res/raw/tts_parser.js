@@ -45,22 +45,49 @@ function parseDocumentText() {
 
 //    var stack = [];
 
-    var currentText = '';
-    var currentStartElement = null;
-    var currentEndElement = null;
+    var accumulatedText = '';
+    var currentElement = null;
 
-    var processCurrentText = function() {
-        if (currentText && currentText.trim().length > 0) {
-            range.setStartBefore(currentStartElement);
-            range.setEndAfter(currentEndElement);
-            var text = currentText.trim();
-            var rect = range.getBoundingClientRect();
-            cmdText(text, rect.top, rect.bottom);
+    var checkForSentenceEnd = function() {
+        if (!accumulatedText || accumulatedText.trim().length === 0) return;
+
+        var currentElementText = currentElement.textContent;
+        var currentElementLength = currentElementText.length;
+
+        var regex = new RegExp(/[.?!]+\s/, 'g');
+
+        var match;
+        while ((match = regex.exec(currentElementText)) !== null) {
+            var index = match.index + match[0].length;
+
+            var end = accumulatedText.length - (currentElementLength - index);
+            var s = accumulatedText.substring(0, end).trim();
+            if (s.length !== 0) {
+                range.setEnd(currentElement, index);
+//                console.log('checkForSentenceEnd()');
+//                console.log('Range: ' + range);
+                var rect = range.getBoundingClientRect();
+                cmdText(s, rect.top, rect.bottom);
+            }
+
+            accumulatedText = accumulatedText.substring(end);
+
+            range.setStart(currentElement, index);
         }
 
-        currentText = '';
-        currentStartElement = null;
-        currentEndElement = null;
+        range.setEnd(currentElement, currentElementLength);
+    };
+
+    var flushCurrentText = function() {
+        if (accumulatedText && accumulatedText.trim().length > 0) {
+//            console.log('flushCurrentText()');
+//            console.log('Range: ' + range);
+            var rect = range.getBoundingClientRect();
+            cmdText(accumulatedText.trim(), rect.top, rect.bottom);
+        }
+
+        accumulatedText = '';
+        currentElement = null;
     };
 
     var parserCallback = {
@@ -70,7 +97,7 @@ function parseDocumentText() {
 //            console.log('enterNode, stack: ' + stackToString(stack));
 
             if (isBlock(element)) {
-                processCurrentText();
+                flushCurrentText();
             }
         },
 
@@ -78,11 +105,18 @@ function parseDocumentText() {
 //            console.log('processLeaf ' + element);
 
             if (element.nodeType == Node.TEXT_NODE) {
-                if (currentStartElement === null) currentStartElement = element;
-                currentText += element.textContent;
-                currentEndElement = element;
+                if (!accumulatedText || accumulatedText.trim().length === 0) {
+                    range.setStart(element, 0);
+                }
+
+                accumulatedText += element.textContent;
+
+                currentElement = element;
+                range.setEnd(element, element.textContent.length);
+
+                checkForSentenceEnd();
             } else if (element.nodeName === 'BR' || isBlock(element)) {
-                processCurrentText();
+                flushCurrentText();
             }
         },
 
@@ -92,7 +126,7 @@ function parseDocumentText() {
 //            console.log('leaveNode, stack: ' + stackToString(stack));
 
             if (isBlock(element)) {
-                processCurrentText();
+                flushCurrentText();
             }
         }
     };
