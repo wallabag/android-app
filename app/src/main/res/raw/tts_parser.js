@@ -1,6 +1,6 @@
 function nextDomElem(elem) {
     var result;
-    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT') {
+    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT' && elem.tagName != 'NOSCRIPT') {
         result = elem.firstChild;
     } else {
         result = elem.nextSibling;
