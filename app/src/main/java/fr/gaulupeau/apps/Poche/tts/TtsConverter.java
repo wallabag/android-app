@@ -1,8 +1,13 @@
 package fr.gaulupeau.apps.Poche.tts;
 
+import android.content.Context;
+import android.text.TextUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import fr.gaulupeau.apps.InThePoche.R;
 
 class TtsConverter {
 
@@ -21,11 +26,19 @@ class TtsConverter {
         }
     }
 
+    private Context context;
+
+    TtsConverter(Context context) {
+        this.context = context;
+    }
+
     CharSequence convert(GenericItem genericItem) {
         if (genericItem == null) return null;
 
         if (genericItem instanceof TextItem) {
             return convert((TextItem) genericItem);
+        } else if (genericItem instanceof ImageItem) {
+            return convert((ImageItem) genericItem);
         }
 
         throw new RuntimeException("Conversion is not implemented for item type: " + genericItem);
@@ -150,6 +163,25 @@ class TtsConverter {
             offsets.add(new Offset(index, amount));
             Collections.sort(offsets);
         }
+    }
+
+    private CharSequence convert(ImageItem item) {
+        if (!TextUtils.isEmpty(item.altText)) {
+            if (item.altText.equals(context.getString(R.string.articleContent_globeIconAltText))
+                    || item.altText.equals(context.getString(R.string.articleContent_previewImageAltText))) {
+                return null;
+            }
+        }
+
+        String title = item.altText;
+        if (TextUtils.isEmpty(title)) title = item.title;
+        // can also fall back to image name from src, but I'm not sure how appropriate it is
+
+        if (!TextUtils.isEmpty(title)) {
+            return context.getString(R.string.tts_image, title);
+        }
+
+        return null; // ignore the image
     }
 
 }

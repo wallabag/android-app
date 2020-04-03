@@ -77,21 +77,15 @@ class WebViewText implements TextInterface {
         }
     }
 
-    void onDocumentParseItem(String text, float top, float bottom, String extras) {
+    void onDocumentParseText(String text, float top, float bottom, String extras) {
         top = convertWebViewToScreenY(top);
         bottom = convertWebViewToScreenY(bottom);
 
         if (BuildConfig.DEBUG) {
-            Log.v(TAG, String.format("onDocumentParseItem(%s, %f, %f)", text, top, bottom));
+            Log.v(TAG, String.format("onDocumentParseText(%s, %f, %f)", text, top, bottom));
         }
 
-        GenericItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
-
-        GenericItem item = new TextItem(text, top, bottom, parseTextItemExtras(extras));
-        item.timePosition = item.approximateDuration()
-                + (prevItem != null ? prevItem.timePosition : 0);
-
-        textList.add(item);
+        addItem(new TextItem(text, top, bottom, parseTextItemExtras(extras)));
     }
 
     private List<TextItem.Extra> parseTextItemExtras(String extrasString) {
@@ -118,6 +112,27 @@ class WebViewText implements TextInterface {
         }
 
         return result;
+    }
+
+    void onDocumentParseImage(String altText, String title, String src, float top, float bottom) {
+        top = convertWebViewToScreenY(top);
+        bottom = convertWebViewToScreenY(bottom);
+
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, String.format("onDocumentParseImage(%s, %s, %s, %f, %f)",
+                    altText, title, src, top, bottom));
+        }
+
+        addItem(new ImageItem(altText, title, src, top, bottom));
+    }
+
+    private void addItem(GenericItem item) {
+        GenericItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
+
+        item.timePosition = item.approximateDuration()
+                + (prevItem != null ? prevItem.timePosition : 0);
+
+        textList.add(item);
     }
 
     @Override

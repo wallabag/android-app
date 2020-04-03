@@ -349,4 +349,9 @@
 
     <string name="title">Title</string>
     <string name="untagged"><![CDATA[<untagged>]]></string>
+
+    <string name="articleContent_globeIconAltText">Globe icon</string>
+    <string name="articleContent_previewImageAltText">Preview image</string>
+
+    <string name="tts_image">Image: %s</string>
 </resources>

@@ -225,7 +225,7 @@ public class TtsService extends Service {
 
         audioFocusChangeListener = this::onAudioFocusChange;
 
-        ttsConverter = new TtsConverter();
+        ttsConverter = new TtsConverter(App.getInstance());
 
         mainThreadHandler = new Handler();
 

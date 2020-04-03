@@ -35,8 +35,16 @@ public class JsTtsController {
     @SuppressWarnings("unused")
     @JavascriptInterface
     public void onText(String text, String topString, String bottomString, String extras) {
-        post(() -> webViewText.onDocumentParseItem(text,
+        post(() -> webViewText.onDocumentParseText(text,
                 Float.parseFloat(topString), Float.parseFloat(bottomString), extras));
+    }
+
+    @SuppressWarnings("unused")
+    @JavascriptInterface
+    public void onImage(String altText, String title, String src,
+                        String topString, String bottomString) {
+        post(() -> webViewText.onDocumentParseImage(altText, title, src,
+                Float.parseFloat(topString), Float.parseFloat(bottomString)));
     }
 
     private void post(Runnable runnable) {
