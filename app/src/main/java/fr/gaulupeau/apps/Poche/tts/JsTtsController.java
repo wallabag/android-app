@@ -34,9 +34,9 @@ public class JsTtsController {
 
     @SuppressWarnings("unused")
     @JavascriptInterface
-    public void onText(String text, String topString, String bottomString) {
+    public void onText(String text, String topString, String bottomString, String extras) {
         post(() -> webViewText.onDocumentParseItem(text,
-                Float.parseFloat(topString), Float.parseFloat(bottomString)));
+                Float.parseFloat(topString), Float.parseFloat(bottomString), extras));
     }
 
     private void post(Runnable runnable) {
