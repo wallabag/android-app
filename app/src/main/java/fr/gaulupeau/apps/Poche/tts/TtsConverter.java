@@ -36,6 +36,9 @@ class TtsConverter {
         List<TextItem.Extra> extras = textItem.extras;
         if (extras == null || extras.isEmpty()) return text;
 
+        extras = simplifyTextItemExtras(extras);
+        if (extras.isEmpty()) return text;
+
         int originalLength = text.length();
 
         List<Offset> offsets = new ArrayList<>(extras.size() * 2);
@@ -58,6 +61,59 @@ class TtsConverter {
         }
 
         return text;
+    }
+
+    /*
+     * Removes unsupported extra types (only emphasis is supported),
+     * removes invalid ranges (start >= end), collapses nested and adjacent extras.
+     */
+    private List<TextItem.Extra> simplifyTextItemExtras(List<TextItem.Extra> extras) {
+        class Point {
+            private int index;
+            private boolean start;
+
+            private Point(int index, boolean start) {
+                this.index = index;
+                this.start = start;
+            }
+        }
+
+        List<Point> points = new ArrayList<>(extras.size() * 2);
+
+        for (TextItem.Extra extra : extras) {
+            if (extra.type != TextItem.Extra.Type.EMPHASIS) continue;
+            if (extra.start >= extra.end) continue;
+
+            points.add(new Point(extra.start, true));
+            points.add(new Point(extra.end, false));
+        }
+
+        Collections.sort(points, (o1, o2) -> {
+            int result = Integer.compare(o1.index, o2.index);
+            if (result == 0) result = Boolean.compare(o2.start, o1.start); // reverse: `true` is earlier
+            return result;
+        });
+
+        extras = new ArrayList<>();
+
+        int level = 0;
+        int startIndex = 0;
+        for (Point point : points) {
+            if (point.start) {
+                if (level == 0) { // nesting is ignored
+                    startIndex = point.index;
+                }
+                level++;
+            } else {
+                level--;
+                if (level == 0) {
+                    extras.add(new TextItem.Extra(
+                            TextItem.Extra.Type.EMPHASIS, startIndex, point.index));
+                }
+            }
+        }
+
+        return extras;
     }
 
     private String insert(List<Offset> offsets, String s, String insert, int originalIndex) {
