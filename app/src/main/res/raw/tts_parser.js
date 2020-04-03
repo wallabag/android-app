@@ -96,7 +96,7 @@ function parseDocumentText() {
 //            stack.push(element);
 //            console.log('enterNode, stack: ' + stackToString(stack));
 
-            if (isBlock(element)) {
+            if (shouldBreak(element)) {
                 flushCurrentText();
             }
         },
@@ -115,7 +115,7 @@ function parseDocumentText() {
                 range.setEnd(element, element.textContent.length);
 
                 checkForSentenceEnd();
-            } else if (element.nodeName === 'BR' || isBlock(element)) {
+            } else if (shouldBreak(element)) {
                 flushCurrentText();
             }
         },
@@ -125,7 +125,7 @@ function parseDocumentText() {
 //            if (element !== stack.pop()) console.log('POP DID NOT MATCH');
 //            console.log('leaveNode, stack: ' + stackToString(stack));
 
-            if (isBlock(element)) {
+            if (shouldBreak(element)) {
                 flushCurrentText();
             }
         }
@@ -138,8 +138,9 @@ function parseDocumentText() {
     cmdEnd();
 }
 
-function isBlock(element) {
-    return element.nodeName === 'P' || window.getComputedStyle(element).display === 'block';
+function shouldBreak(element) {
+    return ['BR', 'P', 'OL', 'UL', 'LI'].indexOf(element.nodeName) !== -1
+            || window.getComputedStyle(element).display === 'block';
 }
 
 //function stackToString(stack) {
