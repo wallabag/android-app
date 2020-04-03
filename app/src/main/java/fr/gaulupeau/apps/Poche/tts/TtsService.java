@@ -123,6 +123,8 @@ public class TtsService extends Service {
     private BroadcastReceiver noisyReceiver;
     private AudioManager.OnAudioFocusChangeListener audioFocusChangeListener;
 
+    private TtsConverter ttsConverter;
+
     private Handler mainThreadHandler;
 
     private volatile State state;
@@ -222,6 +224,8 @@ public class TtsService extends Service {
         };
 
         audioFocusChangeListener = this::onAudioFocusChange;
+
+        ttsConverter = new TtsConverter();
 
         mainThreadHandler = new Handler();
 
@@ -489,9 +493,9 @@ public class TtsService extends Service {
         utteranceId++;
 
         String utteranceString = String.valueOf(utteranceId);
-        ttsSpeak(textInterface.getText(0), TextToSpeech.QUEUE_FLUSH, utteranceString);
+        ttsSpeak(getConvertedText(0), TextToSpeech.QUEUE_FLUSH, utteranceString);
         for (int i = 1; i <= TTS_SPEAK_QUEUE_SIZE; i++) {
-            ttsSpeak(textInterface.getText(i), TextToSpeech.QUEUE_ADD, utteranceString);
+            ttsSpeak(getConvertedText(i), TextToSpeech.QUEUE_ADD, utteranceString);
         }
     }
 
@@ -511,13 +515,23 @@ public class TtsService extends Service {
             return;
         }
 
-        ttsSpeak(textInterface.getText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, utteranceId);
+        ttsSpeak(getConvertedText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, utteranceId);
     }
 
     /**
      * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
      */
-    private void ttsSpeak(String text, int queueMode, String utteranceId) {
+    private CharSequence getConvertedText(int relativeIndex) {
+        GenericItem item = textInterface.getItem(relativeIndex);
+        if (item == null) return null;
+
+        return ttsConverter.convert(item);
+    }
+
+    /**
+     * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
+     */
+    private void ttsSpeak(CharSequence text, int queueMode, String utteranceId) {
         if (state != State.PLAYING || !isTtsInitialized) {
             Log.w(TAG, "ttsSpeak() state=" + state + ", isTtsInitialized=" + isTtsInitialized);
             return;
@@ -534,7 +548,7 @@ public class TtsService extends Service {
                 HashMap<String, String> params = new HashMap<>(2);
                 params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
                 //noinspection deprecation
-                tts.speak(text, queueMode, params);
+                tts.speak(text.toString(), queueMode, params);
             }
 
             Log.v(TAG, "ttsSpeak() call returned");

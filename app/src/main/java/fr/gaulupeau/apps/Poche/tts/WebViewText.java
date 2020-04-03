@@ -1,9 +1,13 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ScrollView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,7 @@ class WebViewText implements TextInterface {
     private final WebView webView;
     private final ScrollView scrollView;
 
-    private final List<TextItem> textList = new ArrayList<>();
+    private final List<GenericItem> textList = new ArrayList<>();
 
     private volatile int current;
 
@@ -73,7 +77,7 @@ class WebViewText implements TextInterface {
         }
     }
 
-    void onDocumentParseItem(String text, float top, float bottom) {
+    void onDocumentParseItem(String text, float top, float bottom, String extras) {
         top = convertWebViewToScreenY(top);
         bottom = convertWebViewToScreenY(bottom);
 
@@ -81,21 +85,47 @@ class WebViewText implements TextInterface {
             Log.v(TAG, String.format("onDocumentParseItem(%s, %f, %f)", text, top, bottom));
         }
 
-        TextItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
+        GenericItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
 
-        TextItem item = new TextItem(text, top, bottom);
-        item.timePosition = approximateDuration(item.text)
+        GenericItem item = new TextItem(text, top, bottom, parseTextItemExtras(extras));
+        item.timePosition = item.approximateDuration()
                 + (prevItem != null ? prevItem.timePosition : 0);
 
         textList.add(item);
     }
 
+    private List<TextItem.Extra> parseTextItemExtras(String extrasString) {
+        if (TextUtils.isEmpty(extrasString)) return null;
+
+        List<TextItem.Extra> result = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = new JSONArray(extrasString);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                TextItem.Extra.Type type = TextItem.Extra.Type.getType(
+                        jsonObject.getString("type"));
+
+                TextItem.Extra extra = new TextItem.Extra(type,
+                        jsonObject.getInt("start"), jsonObject.getInt("end"));
+
+                result.add(extra);
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "parseExtras()", e);
+        }
+
+        return result;
+    }
+
     @Override
-    public String getText(int relativeIndex) {
+    public GenericItem getItem(int relativeIndex) {
         //Log.d(TAG, "getText(" + relativeIndex + "), current=" + current);
         int i = current + relativeIndex;
         if (i >= 0 && i < textList.size()) {
-            return textList.get(i).text;
+            return textList.get(i);
         } else {
             return null;
         }
@@ -207,7 +237,7 @@ class WebViewText implements TextInterface {
         float currentTop = scrollView.getScrollY();
         float currentBottom = currentTop + scrollView.getHeight();
         int result = Math.min(current, textList.size() - 1);
-        TextItem textItem = textList.get(result);
+        GenericItem textItem = textList.get(result);
         if (textItem.bottom <= currentTop || textItem.top >= currentBottom) {
             // current not displayed on screen, switch to the first text visible:
             result = textList.size() - 1;
@@ -241,7 +271,7 @@ class WebViewText implements TextInterface {
     }
 
     private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward) {
-        TextItem item = textList.get(current);
+        GenericItem item = textList.get(current);
         if (scrollView == null) return;
         if (item.bottom > scrollView.getScrollY() + scrollView.getHeight()
                 || canMoveBackward && item.top < scrollView.getScrollY()) {
@@ -251,23 +281,6 @@ class WebViewText implements TextInterface {
 
     private float convertWebViewToScreenY(float y) {
         return y * this.webView.getHeight() / this.webView.getContentHeight();
-    }
-
-    private static class TextItem {
-        String text;
-        float top;    // top location in the web view
-        float bottom; // bottom location in the web view
-        long timePosition; // in milliseconds from the beginning of the document
-
-        TextItem(String text, float top, float bottom) {
-            this.text = text;
-            this.top = top;
-            this.bottom = bottom;
-        }
-    }
-
-    private long approximateDuration(String text) {
-        return text.length() * 50;  // in ms, total approximation
     }
 
 }

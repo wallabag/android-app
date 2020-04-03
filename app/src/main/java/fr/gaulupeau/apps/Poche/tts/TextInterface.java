@@ -6,7 +6,7 @@ package fr.gaulupeau.apps.Poche.tts;
 public interface TextInterface {
     void    restoreFromStart();
     void    restoreCurrent();
-    String  getText(int relativeIndex);
+    GenericItem getItem(int relativeIndex);
     boolean next();
     boolean fastForward();
     boolean rewind();
