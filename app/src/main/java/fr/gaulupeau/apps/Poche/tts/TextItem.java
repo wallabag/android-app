@@ -39,9 +39,8 @@ class TextItem extends GenericItem {
     List<Extra> extras;
 
     TextItem(String text, float top, float bottom, List<Extra> extras) {
+        super(top, bottom);
         this.text = text;
-        this.top = top;
-        this.bottom = bottom;
         this.extras = extras;
     }
 

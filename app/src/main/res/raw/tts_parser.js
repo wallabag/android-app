@@ -7,6 +7,9 @@ function cmdEnd() {
 function cmdText(text, top, bottom, extras) {
     hostWebViewTextController.onText(text, top, bottom, extras);
 }
+function cmdImg(altText, title, src, top, bottom) {
+    hostWebViewTextController.onImage(altText, title, src, top, bottom);
+}
 
 function traverse(element, callback) {
     var rootElement = element;
@@ -188,7 +191,7 @@ function parseDocumentText() {
         processLeaf(element) {
 //            console.log('processLeaf ' + element);
 
-            if (element.nodeType == Node.TEXT_NODE) {
+            if (element.nodeType === Node.TEXT_NODE) {
                 if (!accumulatedText || accumulatedText.trim().length === 0) {
                     range.setStart(element, 0);
                 }
@@ -199,6 +202,12 @@ function parseDocumentText() {
                 range.setEnd(element, element.textContent.length);
 
                 checkForSentenceEnd();
+            } else if (element.nodeName === 'IMG') {
+                flushCurrentText();
+
+                range.selectNode(element);
+                var rect = range.getBoundingClientRect();
+                cmdImg(element.alt, element.title, element.src, rect.top, rect.bottom);
             } else if (shouldBreak(element)) {
                 flushCurrentText();
             }

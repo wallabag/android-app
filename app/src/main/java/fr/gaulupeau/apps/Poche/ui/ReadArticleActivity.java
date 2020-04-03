@@ -862,6 +862,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String htmlContent = getHtmlContent();
 
         return String.format(htmlBase, cssName, extraHead, classAttr, escapeHtml(articleTitle),
+                getString(R.string.articleContent_globeIconAltText),
                 escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent);
     }
 
@@ -911,7 +912,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if (settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
             header.append("<br>\n");
-            header.append("<img src=\"")
+            header.append("<img")
+                    .append(" alt=\"")
+                    .append(escapeHtml(getString(R.string.articleContent_previewImageAltText)))
+                    .append('"')
+                    .append(" src=\"")
                     .append(escapeHtml(article.getPreviewPictureURL()))
                     .append("\"/>");
         }

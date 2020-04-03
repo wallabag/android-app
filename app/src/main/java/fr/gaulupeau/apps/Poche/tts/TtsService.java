@@ -225,7 +225,7 @@ public class TtsService extends Service {
 
         audioFocusChangeListener = this::onAudioFocusChange;
 
-        ttsConverter = new TtsConverter();
+        ttsConverter = new TtsConverter(App.getInstance());
 
         mainThreadHandler = new Handler();
 
@@ -525,7 +525,15 @@ public class TtsService extends Service {
         GenericItem item = textInterface.getItem(relativeIndex);
         if (item == null) return null;
 
-        return ttsConverter.convert(item);
+        CharSequence result = ttsConverter.convert(item);
+
+        if (result == null) {
+            // always return something so `onSpeakDone` is called the same amount of times
+            // as `tts.speak()`
+            result = "";
+        }
+
+        return result;
     }
 
     /**
