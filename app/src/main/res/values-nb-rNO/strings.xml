@@ -158,9 +158,8 @@
     <string name="noPreviousArticle">Det er ingen tidligere artikkel i gjeldende liste</string>
     <string name="noNextArticle">Ingen flere artikler i gjeldende liste</string>
     <string name="themeName_solarized">Solarisert</string>
-    <string name="aboutText">
-        <b>wallabag-programfor Android</b>\n
-        wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
+    <string name="aboutText"><b>wallabag-programfor Android</b>
+\n wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
     <string name="pref_desc_connection_url">Eksempler:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
