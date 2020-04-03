@@ -133,8 +133,7 @@ function parseDocumentText() {
 
     cmdStart();
 
-    var elem = document.getElementsByTagName('body')[0];
-    traverse(elem, parserCallback);
+    traverse(document.getElementById('article'), parserCallback);
 
     cmdEnd();
 }
