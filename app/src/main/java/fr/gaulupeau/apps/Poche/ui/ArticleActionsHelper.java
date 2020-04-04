@@ -7,6 +7,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.FileUriExposedException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -167,10 +169,31 @@ public class ArticleActionsHelper {
 
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
+        boolean errorMessage = false;
+
         if (intent.resolveActivity(context.getPackageManager()) != null) {
-            context.startActivity(intent);
+            try {
+                context.startActivity(intent);
+            } catch (RuntimeException e) {
+                boolean rethrow = true;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (e instanceof FileUriExposedException) {
+                        // apparently happens when user clicks on some file URI in an article
+                        Log.w(TAG, "openUrl()", e);
+                        errorMessage = true;
+                        rethrow = false;
+                    }
+                }
+
+                if (rethrow) throw e;
+            }
         } else {
             Log.w(TAG, "openUrl() no activity to handle intent");
+            errorMessage = true;
+        }
+
+        if (errorMessage) {
             Toast.makeText(context, R.string.message_couldNotOpenUrl, Toast.LENGTH_SHORT).show();
         }
     }
