@@ -393,6 +393,7 @@ public class TtsService extends Service {
         switch (state) {
             case PLAYING:
                 state = newState; // needed before tts.stop() because of the onSpeakDone callback.
+                if (textInterface != null) textInterface.storeCurrent();
                 executeOnBackgroundThread(tts::stop);
                 unregisterReceiver(noisyReceiver);
                 // NO BREAK, continue to next statements to set state and notification

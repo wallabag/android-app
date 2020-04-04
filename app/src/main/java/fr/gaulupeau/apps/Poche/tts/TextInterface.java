@@ -5,6 +5,7 @@ package fr.gaulupeau.apps.Poche.tts;
  */
 public interface TextInterface {
     void    restoreFromStart();
+    void    storeCurrent();
     void    restoreCurrent();
     GenericItem getItem(int relativeIndex);
     boolean next();

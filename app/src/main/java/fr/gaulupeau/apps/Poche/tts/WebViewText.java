@@ -36,6 +36,8 @@ class WebViewText implements TextInterface {
 
     private volatile int current;
 
+    private Integer storedScrollPosition;
+
     private Runnable readFinishedCallback;
     private Runnable parsingFinishedCallback;
 
@@ -248,7 +250,22 @@ class WebViewText implements TextInterface {
     }
 
     @Override
+    public void storeCurrent() {
+        storedScrollPosition = scrollView.getScrollY();
+    }
+
+    @Override
     public void restoreCurrent() {
+        if (storedScrollPosition != null) {
+            int position = storedScrollPosition;
+            storedScrollPosition = null;
+
+            if (position == scrollView.getScrollY()) {
+                // no scrolling has been done since pause, don't restore anything
+                return;
+            }
+        }
+
         float currentTop = scrollView.getScrollY();
         float currentBottom = currentTop + scrollView.getHeight();
         int result = Math.min(current, textList.size() - 1);
