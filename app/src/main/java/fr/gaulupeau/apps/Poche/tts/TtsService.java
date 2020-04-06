@@ -892,8 +892,8 @@ public class TtsService extends Service {
                 getApplicationContext(), mediaSession);
 
         builder.setContentIntent(notificationPendingIntent)
-                .setWhen(0)
-                .setSmallIcon(R.mipmap.ic_launcher);
+                .setShowWhen(false)
+                .setSmallIcon(R.drawable.wallabag_silhouette);
 
         if (state != State.ERROR) {
             // TODO: localize action titles
