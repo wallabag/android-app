@@ -62,9 +62,10 @@ function trim(s) {
 function getRelevantExtras(extras, offset, limit) {
     var result = null;
 
-    for (var e of extras) {
+    for (var i = 0; i < extras.length; i++) {
+        var e = extras[i];
         if (e.start < limit) {
-            var copy = Object.assign({}, e);
+            var copy = JSON.parse(JSON.stringify(e));
             copy.start -= offset;
             copy.end -= offset;
 
@@ -113,7 +114,7 @@ function parseDocumentText() {
         var currentElementText = currentElement.textContent;
         var currentElementLength = currentElementText.length;
 
-        var regex = new RegExp(/[.?!]+\s/, 'g');
+        var regex = /[.?!]+\s/g;
 
         var match;
         while ((match = regex.exec(currentElementText)) !== null) {
@@ -176,7 +177,7 @@ function parseDocumentText() {
     };
 
     var parserCallback = {
-        enterNode(element) {
+        enterNode: function(element) {
 //            console.log('enterNode ' + element);
 //            stack.push(element);
 //            console.log('enterNode, stack: ' + stackToString(stack));
@@ -188,7 +189,7 @@ function parseDocumentText() {
             }
         },
 
-        processLeaf(element) {
+        processLeaf: function(element) {
 //            console.log('processLeaf ' + element);
 
             if (element.nodeType === Node.TEXT_NODE) {
@@ -213,7 +214,7 @@ function parseDocumentText() {
             }
         },
 
-        leaveNode(element) {
+        leaveNode: function(element) {
 //            console.log('leaveNode ' + element);
 //            if (element !== stack.pop()) console.log('POP DID NOT MATCH');
 //            console.log('leaveNode, stack: ' + stackToString(stack));
