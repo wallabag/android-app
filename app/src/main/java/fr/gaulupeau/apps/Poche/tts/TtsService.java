@@ -901,27 +901,30 @@ public class TtsService extends Service {
                 .setSmallIcon(R.drawable.wallabag_silhouette);
 
         if (state != State.ERROR) {
-            // TODO: localize action titles
-
 //            builder.addAction(generateAction(android.R.drawable.ic_media_previous,
 //                    "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 
-            builder.addAction(generateAction(android.R.drawable.ic_media_rew,
-                    "Rewind", KeyEvent.KEYCODE_MEDIA_REWIND));
+            builder.addAction(generateAction(R.drawable.ic_fast_rewind_24dp,
+                    getString(R.string.notification_action_media_rewind),
+                    KeyEvent.KEYCODE_MEDIA_REWIND));
 
             if (state == State.WANT_TO_PLAY || state == State.PLAYING) {
-                builder.addAction(generateAction(android.R.drawable.ic_media_pause,
-                        "Pause", KeyEvent.KEYCODE_MEDIA_PAUSE));
+                builder.addAction(generateAction(R.drawable.ic_pause_24dp,
+                        getString(R.string.notification_action_media_pause),
+                        KeyEvent.KEYCODE_MEDIA_PAUSE));
             } else {
-                builder.addAction(generateAction(android.R.drawable.ic_media_play,
-                        "Play", KeyEvent.KEYCODE_MEDIA_PLAY));
+                builder.addAction(generateAction(R.drawable.ic_play_arrow_24dp,
+                        getString(R.string.notification_action_media_play),
+                        KeyEvent.KEYCODE_MEDIA_PLAY));
             }
 
-            builder.addAction(generateAction(android.R.drawable.ic_media_ff,
-                    "Fast Forward", KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+            builder.addAction(generateAction(R.drawable.ic_fast_forward_24dp,
+                    getString(R.string.notification_action_media_fastforward),
+                    KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
 
-            builder.addAction(generateAction(android.R.drawable.ic_media_next,
-                    "Next", KeyEvent.KEYCODE_MEDIA_NEXT));
+            builder.addAction(generateAction(R.drawable.ic_skip_next_24dp,
+                    getString(R.string.notification_action_media_next),
+                    KeyEvent.KEYCODE_MEDIA_NEXT));
 
             builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2)
