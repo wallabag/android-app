@@ -85,10 +85,16 @@ public class TtsService extends Service {
 
         /**
          * STOPPED State.
+         * Same as PAUSED, except no notification.
+         */
+        STOPPED(PlaybackStateCompat.STATE_STOPPED),
+
+        /**
+         * DESTROYED State.
          * Abandon audio focus and deactivate audio session.
          * => destroy service
          */
-        STOPPED(PlaybackStateCompat.STATE_STOPPED),
+        DESTROYED(PlaybackStateCompat.STATE_STOPPED),
 
         /**
          * ERROR State.
@@ -158,8 +164,9 @@ public class TtsService extends Service {
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
 
-    private boolean isForeground;
     private PendingIntent notificationPendingIntent;
+
+    private boolean isForeground;
 
     private volatile int utteranceId = 1;
 
@@ -262,8 +269,7 @@ public class TtsService extends Service {
             unregisterReceiver(noisyReceiver);
         }
 
-        state = State.STOPPED; // needed before tts.stop() because of the onSpeakDone callback.
-        isForeground = false;
+        state = State.DESTROYED; // needed before tts.stop() because of the onSpeakDone callback.
         setMediaSessionPlaybackState();
         setForegroundAndNotification();
         mediaSession.setActive(false);
@@ -280,14 +286,22 @@ public class TtsService extends Service {
         tts = null;
         abandonAudioFocus();
         isAudioFocusGranted = false;
-        state = State.STOPPED;
+        state = State.DESTROYED;
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG, "onStartCommand()");
+        Log.d(TAG, "onStartCommand() " + intent);
 
         if (intent != null) {
+            if (Intent.ACTION_MEDIA_BUTTON.equals(intent.getAction())) {
+                // `MediaButtonReceiver` may use `Context.startForegroundService(Intent)`,
+                // so we *have* to call `startForeground(...)`
+                // or the app will crash during service shutdown
+
+                setForegroundAndNotification(true);
+            }
+
             MediaButtonReceiver.handleIntent(mediaSession, intent);
 
             String action = intent.getAction();
@@ -336,6 +350,7 @@ public class TtsService extends Service {
 
             case WANT_TO_PLAY:
             case PAUSED:
+            case STOPPED:
                 if (isTtsInitialized && isAudioFocusGranted && textInterface != null) {
                     state = State.PLAYING;
                     if (playFromStart) {
@@ -410,10 +425,10 @@ public class TtsService extends Service {
 
             case WANT_TO_PLAY:
             case PAUSED:
+            case STOPPED:
                 state = newState;
                 setMediaSessionPlaybackState();
                 setForegroundAndNotification();
-                stopForeground(false);
                 break;
         }
     }
@@ -424,6 +439,7 @@ public class TtsService extends Service {
         switch (state) {
             case CREATED:
             case PAUSED:
+            case STOPPED:
                 playCmd();
                 break;
 
@@ -458,6 +474,10 @@ public class TtsService extends Service {
 
     private void stopCmd() {
         Log.d(TAG, "stopCmd()");
+
+        state = State.STOPPED;
+
+        setForegroundAndNotification();
 
         stopSelf();
     }
@@ -771,16 +791,15 @@ public class TtsService extends Service {
         return new Locale(language, country, variant);
     }
 
-    public void setForeground(boolean foreground, PendingIntent pendingIntent) {
-        isForeground = foreground;
+    public void setNotificationPendingIntent(PendingIntent pendingIntent) {
         notificationPendingIntent = pendingIntent;
         setForegroundAndNotification();
     }
 
     public void setTextInterface(TextInterface textInterface, String artist,
                                  String title, String album) {
-        Log.d(TAG, "setTextInterface() textInterface is "
-                + (textInterface == null ? "null" : "not null"));
+        Log.d(TAG, String.format("setTextInterface(%s, %s, %s, %s)",
+                textInterface == null ? "null" : "not null", artist, title, album));
 
         boolean newContent = false;
 
@@ -793,8 +812,9 @@ public class TtsService extends Service {
             switch (state) {
                 case CREATED:
                 case PAUSED:
-                case ERROR:
                 case STOPPED:
+                case ERROR:
+                case DESTROYED:
                     this.textInterface = textInterface;
                     break;
 
@@ -807,6 +827,7 @@ public class TtsService extends Service {
             }
         }
         setMediaSessionMetaData();
+        setForegroundAndNotification();
 
         if (newContent) {
             onNewContent();
@@ -831,6 +852,7 @@ public class TtsService extends Service {
 
     private void setMediaSessionMetaData() {
         if (mediaSession == null) return;
+        Log.v(TAG, "setMediaSessionMetaData() title: " + metaDataTitle);
 
         MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder()
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
@@ -853,7 +875,7 @@ public class TtsService extends Service {
             position = textInterface.getTime();
         }
 
-        long actions = ALWAYS_AVAILABLE_PLAYBACK_ACTIONS | (state == State.PAUSED ?
+        long actions = ALWAYS_AVAILABLE_PLAYBACK_ACTIONS | (state != State.PLAYING ?
                 PlaybackStateCompat.ACTION_PLAY : PlaybackStateCompat.ACTION_PAUSE);
 
         PlaybackStateCompat playbackState = playbackStateBuilder
@@ -865,29 +887,60 @@ public class TtsService extends Service {
     }
 
     private void setForegroundAndNotification() {
+        setForegroundAndNotification(false);
+    }
+
+    private void setForegroundAndNotification(boolean forceForeground) {
+        Log.d(TAG, "setForegroundAndNotification("
+                + (forceForeground ? "forceForeground" : "") + ")");
+
+        boolean foreground;
+        boolean showNotification;
+
+        switch (state) {
+            case WANT_TO_PLAY:
+            case PLAYING:
+                foreground = true;
+                showNotification = true;
+                break;
+
+            case PAUSED:
+                foreground = false;
+                showNotification = true;
+                break;
+
+            default:
+                foreground = false;
+                showNotification = false;
+                break;
+        }
+
+        if (forceForeground) {
+            foreground = true;
+        }
+
+        if (foreground) {
+            if (!isForeground) {
+                Log.v(TAG, "setForegroundAndNotification() startForeground()");
+                startForeground(NOTIFICATION_ID, generateNotification());
+                isForeground = true;
+            }
+        } else {
+            if (isForeground) {
+                boolean removeNotification = !showNotification;
+                Log.v(TAG, "setForegroundAndNotification()" +
+                        " stopForeground(remove notification: " + removeNotification + ")");
+                stopForeground(removeNotification);
+                isForeground = false;
+            }
+        }
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat
                 .from(getApplicationContext());
 
-        if (isForeground) {
-            switch (state) {
-                case WANT_TO_PLAY:
-                case PLAYING:
-                    startForeground(NOTIFICATION_ID, generateNotification());
-                    break;
-
-                case PAUSED:
-                    stopForeground(false);
-                    notificationManager.notify(NOTIFICATION_ID, generateNotification());
-                    break;
-
-                case STOPPED:
-                case ERROR:
-                    stopForeground(true);
-                    notificationManager.cancel(NOTIFICATION_ID);
-                    break;
-            }
+        if (showNotification) {
+            notificationManager.notify(NOTIFICATION_ID, generateNotification());
         } else {
-            stopForeground(true);
             notificationManager.cancel(NOTIFICATION_ID);
         }
     }
@@ -900,7 +953,7 @@ public class TtsService extends Service {
                 .setShowWhen(false)
                 .setSmallIcon(R.drawable.wallabag_silhouette);
 
-        if (state != State.ERROR) {
+        if (mediaSession != null && state != State.ERROR) {
 //            builder.addAction(generateAction(android.R.drawable.ic_media_previous,
 //                    "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 
@@ -939,17 +992,25 @@ public class TtsService extends Service {
 
     private static NotificationCompat.Builder generateNotificationBuilderFrom(
             Context context, MediaSessionCompat mediaSession) {
-        MediaControllerCompat controller = mediaSession.getController();
-        MediaMetadataCompat mediaMetadata = controller.getMetadata();
-        MediaDescriptionCompat description = mediaMetadata.getDescription();
-        return new NotificationCompat.Builder(context, NotificationsHelper.CHANNEL_ID_TTS)
-                .setContentTitle(description.getTitle())
-                .setContentText(description.getSubtitle())
-                .setSubText(description.getDescription())
-                .setLargeIcon(description.getIconBitmap())
-                .setContentIntent(controller.getSessionActivity()) // always null...
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                context, NotificationsHelper.CHANNEL_ID_TTS)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setDeleteIntent(generateActionIntent(context, KeyEvent.KEYCODE_MEDIA_STOP));
+
+        if (mediaSession != null) {
+            MediaControllerCompat controller = mediaSession.getController();
+            MediaMetadataCompat mediaMetadata = controller.getMetadata();
+            if (mediaMetadata != null) {
+                MediaDescriptionCompat description = mediaMetadata.getDescription();
+
+                builder.setContentTitle(description.getTitle())
+                        .setContentText(description.getSubtitle())
+                        .setSubText(description.getDescription())
+                        .setLargeIcon(description.getIconBitmap());
+            }
+        }
+
+        return builder;
     }
 
     private NotificationCompat.Action generateAction(int icon, String title, int mediaKeyEvent) {
