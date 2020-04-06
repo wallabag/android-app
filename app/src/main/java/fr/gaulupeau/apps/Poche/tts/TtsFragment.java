@@ -402,7 +402,7 @@ public class TtsFragment extends Fragment {
 
                 ttsService = ((TtsService.LocalBinder) binder).getService();
                 ttsService.registerMediaControllerCallback(mediaCallback);
-                ttsService.setForeground(!isResumed(), notificationPendingIntent);
+                ttsService.setNotificationPendingIntent(notificationPendingIntent);
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
 
@@ -459,10 +459,6 @@ public class TtsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume()");
-
-        if (ttsService != null) {
-            ttsService.setForeground(false, notificationPendingIntent);
-        }
     }
 
     @Override
@@ -471,10 +467,6 @@ public class TtsFragment extends Fragment {
         Log.d(TAG, "onPause()");
 
         saveSettings();
-
-        if (ttsService != null) {
-            ttsService.setForeground(true, notificationPendingIntent);
-        }
     }
 
     @Override
