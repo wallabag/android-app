@@ -116,6 +116,14 @@ public class TtsService extends Service {
 
     private static final int TTS_SPEAK_QUEUE_SIZE = 2;
 
+    private static final long ALWAYS_AVAILABLE_PLAYBACK_ACTIONS
+            = PlaybackStateCompat.ACTION_PLAY_PAUSE
+            | PlaybackStateCompat.ACTION_REWIND
+            | PlaybackStateCompat.ACTION_FAST_FORWARD
+            | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+            | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+            | PlaybackStateCompat.ACTION_STOP;
+
     private ExecutorService executor;
     private AudioManager audioManager;
     private MediaPlayer mediaPlayerPageFlip;
@@ -142,6 +150,8 @@ public class TtsService extends Service {
 
     private volatile boolean isTtsInitialized;
     private boolean isAudioFocusGranted;
+
+    private PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
 
     private volatile TextInterface textInterface;
     private String metaDataArtist = "";
@@ -430,6 +440,7 @@ public class TtsService extends Service {
         if (textInterface != null) {
             if (textInterface.rewind() && state == State.PLAYING) {
                 executeSpeak();
+                setMediaSessionPlaybackState();
             }
         }
     }
@@ -440,6 +451,7 @@ public class TtsService extends Service {
         if (textInterface != null) {
             if (textInterface.fastForward() && state == State.PLAYING) {
                 executeSpeak();
+                setMediaSessionPlaybackState();
             }
         }
     }
@@ -580,6 +592,7 @@ public class TtsService extends Service {
         if (state == State.PLAYING && String.valueOf(utteranceId).equals(doneUtteranceId)) {
             if (textInterface.next()) {
                 executeOnBackgroundThread(() -> ttsEnqueueMoreIfUtteranceMatches(doneUtteranceId));
+                setMediaSessionPlaybackState();
             } else {
                 pauseCmd();
             }
@@ -840,20 +853,12 @@ public class TtsService extends Service {
             position = textInterface.getTime();
         }
 
-        PlaybackStateCompat playbackState = new PlaybackStateCompat.Builder()
-                .setActions(
-                        (state == State.PAUSED ?
-                                PlaybackStateCompat.ACTION_PLAY : PlaybackStateCompat.ACTION_PAUSE)
-                                | PlaybackStateCompat.ACTION_PLAY_PAUSE
-                                | PlaybackStateCompat.ACTION_REWIND
-                                | PlaybackStateCompat.ACTION_FAST_FORWARD
-                                | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
-                                | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                                | PlaybackStateCompat.ACTION_STOP
-                )
-                .setState(state.playbackState,
-                        position,
-                        speed)
+        long actions = ALWAYS_AVAILABLE_PLAYBACK_ACTIONS | (state == State.PAUSED ?
+                PlaybackStateCompat.ACTION_PLAY : PlaybackStateCompat.ACTION_PAUSE);
+
+        PlaybackStateCompat playbackState = playbackStateBuilder
+                .setActions(actions)
+                .setState(state.playbackState, position, state == State.PLAYING ? speed : 0)
                 .build();
 
         mediaSession.setPlaybackState(playbackState);
