@@ -354,4 +354,10 @@
     <string name="articleContent_previewImageAltText">Preview image</string>
 
     <string name="tts_image">Image: %s</string>
+
+    <string name="notification_action_media_rewind">Rewind</string>
+    <string name="notification_action_media_pause">Pause</string>
+    <string name="notification_action_media_play">Play</string>
+    <string name="notification_action_media_fastforward">Fast Forward</string>
+    <string name="notification_action_media_next">Next</string>
 </resources>
