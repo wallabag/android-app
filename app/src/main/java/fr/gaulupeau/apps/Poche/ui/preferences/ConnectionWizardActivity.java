@@ -226,7 +226,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             Toast.makeText(this, R.string.connectionWizard_misc_installQrCodeScanner,
                     Toast.LENGTH_LONG).show();
 
-            Uri marketUri = Uri.parse("market://details?id=de.markusfisch.android.binaryeye");
+            Uri marketUri = Uri.parse("https://play.google.com/store/apps/details?id=" +
+                    "de.markusfisch.android.binaryeye");
             Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
             startActivity(marketIntent);
         } catch(Exception e) {
