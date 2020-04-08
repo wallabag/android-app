@@ -95,9 +95,8 @@
     <string name="themeName_solarized">Solarizatuta</string>
     <string name="menu_readArticle_increaseFontSize">Handiagotu letra-tamaina</string>
     <string name="menu_readArticle_decreaseFontSize">Txikiagotu letra-tamaina</string>
-    <string name="aboutText">
-        <b>wallabag aplikazioa Androiderako</b>\n
-        "wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri  bat da. Klikatu, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko."</string>
+    <string name="aboutText"><b>wallabag aplikazioa Androiderako</b>
+\n wallabag edukirik inoiz gehiago ez galtzea ahalbidetzen dizun aplikazio auto-ostatagarri bat da. Klikatu, gorde eta irakurri ahal duzunean. Edukia ateratzen du astia duzunean irakurri ahal izateko.</string>
     <string name="readSpeed">Irakurketa abiadura</string>
     <string name="voiceHeight">Ahots tonua</string>
     <string name="readVolume">Irakurketa bolumena</string>

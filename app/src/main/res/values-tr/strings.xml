@@ -95,9 +95,8 @@
     <string name="themeName_solarized">Solarized Tema</string>
     <string name="menu_readArticle_increaseFontSize">Yazı tipi boyutunu büyüt</string>
     <string name="menu_readArticle_decreaseFontSize">Yazı tipi boyutunu küçült</string>
-    <string name="aboutText">
-        <b>Android için wallabag</b>\n
-        wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
+    <string name="aboutText"><b>Android için wallabag</b>
+\n wallabag hiçbir makaleyi kaçırmamak için kullanabileceğiniz, ve de kendi sunucunuza yükleyebileceğiniz bir uygulamadır. Makaleleri denk geldiğiniz anda tek tuşla tıklayıp kaydedebilir, dilediğiniz zaman okuyabilirsiniz. wallabag makalelerden içeriği ayrıştırdığı için dilediğiniz zaman kaydedilmiş makaleleri okuyabilirsiniz.</string>
     <string name="readSpeed">Okuma hızı</string>
     <string name="voiceHeight">Ses seviyesi</string>
     <string name="readVolume">Okuma seviyesi</string>
@@ -273,4 +272,39 @@
     <string name="connectionWizard_provider_framabag_prev">Geri</string>
     <string name="connectionWizard_provider_framabag_next">Bağlan</string>
     <string name="remove_tag">Etiketi kaldır</string>
+    <string name="menu_annotate">Not</string>
+    <string name="copiedToClipboard">Panoya kopyalandı</string>
+    <string name="notification_clipboardLabel">Hata detayları</string>
+    <string name="notification_copyToClipboard">Panoya kopyala</string>
+    <string name="notification_stacktrace">Yığın:</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Lütfen bir karekod tarayıcısı yükleyin</string>
+    <string name="connectionWizard_misc_scanQrCode">Karekod tarama</string>
+    <string name="misc_localQueue_dumpToFile_header">Eğer senkronizasyon üzerinde bir sorun yaşıyorsanız, lütfen sorunu şuradan bildirin: %s</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Hata: %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">%s yoluna aktarıldı</string>
+    <string name="misc_localQueue_removeFirstItem_done">Tamam</string>
+    <string name="misc_localQueue_empty">Yerel değişiklik bulunamadı</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Senkron edilmemiş ilk yerel elemanı kuyruktan çıkarır. Bu işlem sürekli belli makalalerde senkron sorunu yaşıyorsanız faydalı olabilir. Bunu yapmadan önce tüm yerel değişiklikleri bir yerel dosyaya aktardığınızdan emin olun</string>
+    <string name="pref_name_misc_localQueue_removeFirstItem">Yerel kuyruktaki ilk elemanı çıkart</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Tüm yerel değişiklikleri bir txt dosyasına aktarır (bu dosyayı inceleyebilir veya bir hata raporu içine ekleyebilirsiniz)</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Dosyaya aktar</string>
+    <string name="pref_desc_misc_localQueue_notice">Ne yaptığınızı bilmiyorsanız burada bir işlem yapmayın</string>
+    <string name="pref_name_misc_localQueue_notice">UYARI</string>
+    <string name="pref_categoryName_misc_localQueue">Yerel değişiklikler</string>
+    <string name="pref_desc_ui_annotations_enabled">Bu özellik deneyseldir! Makale üzerinde not alma, düzenleme ve götüntüleme özelliği sağlar</string>
+    <string name="pref_name_ui_annotations_enabled">Yorum, not alma özelliği</string>
+    <string name="pref_desc_ui_previewImage_enabled">Makaleden önce önizleme resmini görüntüle</string>
+    <string name="pref_name_ui_previewImage_enabled">Resmi önizle</string>
+    <string name="pref_desc_ui_swipeArticles">Makaleyi sola veya sağa sürükleyerek önceki veya sonraki makaleye erişebilirsiniz</string>
+    <string name="pref_name_ui_swipeArticles">Makaleleri Sürükleyerek Kaydır</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Önden biçimlendirilmiş uzun metinmleri tam olarak yönetme.</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Uzun ve önden biçimlenirilmiş metinleri yönetme</string>
+    <string name="notification_channel_name_error">Hata(lar)</string>
+    <string name="notification_channel_name_downloading_articles">PDFler indiriliyor</string>
+    <string name="notification_channel_name_sync">Senkronizasyon</string>
+    <string name="notification_channel_name_tts">wallabag metinden okuma TTS</string>
+    <string name="notification_channel_group_name_other">Diğer</string>
+    <string name="notification_channel_group_name_sync">Senkronizasyon</string>
+    <string name="notification_channel_group_name_tts">Metinden okuma (TTS)</string>
+    <string name="themeName_eink">E-mürekkep ekranlar için</string>
 </resources>
