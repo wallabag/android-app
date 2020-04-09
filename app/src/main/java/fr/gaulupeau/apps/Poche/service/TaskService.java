@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +16,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+@SuppressLint("Registered") // subclassed
 public class TaskService extends Service {
 
     public static final String ACTION_SIMPLE_TASK = "action_simple_task";
@@ -35,14 +37,16 @@ public class TaskService extends Service {
      */
     private static final int WAIT_TIME = 1000;
 
-    private String tag;
+    private final String tag;
 
     private Thread taskThread;
 
     private final Object startIdLock = new Object();
     private volatile int lastStartId;
 
-    private BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
+
+    private volatile boolean running;
 
     public static Intent newStartIntent(Context context,
                                         Class<? extends TaskService> serviceClass) {
@@ -70,13 +74,17 @@ public class TaskService extends Service {
     public void onCreate() {
         Log.d(tag, "onCreate()");
 
-        taskThread = new Thread(this::run, "TaskService-taskThread");
+        running = true;
+
+        taskThread = new Thread(this::run, tag + "-taskThread");
         taskThread.start();
     }
 
     @Override
     public void onDestroy() {
         Log.d(tag, "onDestroy()");
+
+        running = false;
 
         if (taskThread != null) {
             taskThread.interrupt();
@@ -121,6 +129,7 @@ public class TaskService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         Log.d(tag, "onUnbind()");
+
         return true;
     }
 
@@ -132,12 +141,12 @@ public class TaskService extends Service {
     private void run() {
         Process.setThreadPriority(getThreadPriority());
 
-        while (true) {
+        while (running) {
             Task task;
             try {
                 task = taskQueue.poll(WAIT_TIME, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                Log.d(tag, "run() interrupted");
+                Log.d(tag, "run() poll interrupted");
                 break;
             }
 
@@ -158,12 +167,10 @@ public class TaskService extends Service {
                 }
             }
         }
-    }
 
-    private void ensureStarted() {
-        Log.d(tag, "ensureStarted()");
-
-        startService(newStartIntent(this, getClass()));
+        if (!taskQueue.isEmpty()) {
+            Log.w(tag, "run() stopping, but the queue is not empty");
+        }
     }
 
     private void readyToStop() {
@@ -186,6 +193,12 @@ public class TaskService extends Service {
             ensureStarted();
             Log.v(tag, "enqueueTask() started service");
         }
+    }
+
+    private void ensureStarted() {
+        Log.d(tag, "ensureStarted()");
+
+        startService(newStartIntent(this, getClass()));
     }
 
 }
