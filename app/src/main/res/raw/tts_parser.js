@@ -43,12 +43,17 @@ function shouldSkip(element) {
     return element.tagName === 'SCRIPT' || element.tagName === 'NOSCRIPT';
 }
 
-function prepareTextAndExtras(s, extras, limit) {
+function prepareTextAndExtras(s, extras, emphasisStarts, limit) {
     var values = trim(s);
     s = values[0];
     var trimmedFromStart = values[1];
 
-    return [s, s.length !== 0 ? getRelevantExtras(extras, trimmedFromStart, limit) : null];
+    var relevantExtras = null;
+    if (s.length !== 0) {
+        relevantExtras = getRelevantExtras(extras, emphasisStarts, s, trimmedFromStart, limit);
+    }
+
+    return [s, relevantExtras];
 }
 
 function trim(s) {
@@ -59,7 +64,7 @@ function trim(s) {
     return [s, len];
 }
 
-function getRelevantExtras(extras, offset, limit) {
+function getRelevantExtras(extras, emphasisStarts, s, offset, limit) {
     var result = null;
 
     for (var i = 0; i < extras.length; i++) {
@@ -74,6 +79,11 @@ function getRelevantExtras(extras, offset, limit) {
         }
     }
 
+    if (emphasisStarts.length > 0) {
+        if (result === null) result = [];
+        result.push({type: 'emphasis', start: emphasisStarts[0] - offset, end: s.length});
+    }
+
     return result;
 }
 
@@ -83,8 +93,13 @@ function serializeExtras(extras) {
     return JSON.stringify(extras);
 }
 
-function shiftExtras(extras, amount) {
+function shiftExtras(extras, emphasisStarts, amount) {
     if (amount === 0) return;
+
+    for (var i = 0; i < emphasisStarts.length; i++) {
+        emphasisStarts[i] -= amount;
+        if (emphasisStarts[i] < 0) emphasisStarts[i] = 0;
+    }
 
     for (var i = extras.length - 1; i >= 0; i--) {
         var e = extras[i];
@@ -123,7 +138,7 @@ function parseDocumentText() {
             var end = accumulatedText.length - (currentElementLength - index);
             var s = accumulatedText.substring(0, end);
 
-            var values = prepareTextAndExtras(s, extras, end);
+            var values = prepareTextAndExtras(s, extras, emphasisStarts, end);
             s = values[0];
             var relevantExtras = values[1];
 
@@ -136,7 +151,7 @@ function parseDocumentText() {
             }
 
             accumulatedText = accumulatedText.substring(end);
-            shiftExtras(extras, end);
+            shiftExtras(extras, emphasisStarts, end);
 
             range.setStart(currentElement, index);
         }
@@ -150,7 +165,8 @@ function parseDocumentText() {
 //            console.log('Range: ' + range);
             var rect = range.getBoundingClientRect();
 
-            var values = prepareTextAndExtras(accumulatedText, extras, accumulatedText.length);
+            var values = prepareTextAndExtras(accumulatedText, extras, emphasisStarts,
+                    accumulatedText.length);
             var s = values[0];
             var relevantExtras = values[1];
 
