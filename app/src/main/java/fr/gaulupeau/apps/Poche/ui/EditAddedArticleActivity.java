@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.EnumSet;
+import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -41,6 +43,11 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     private static final String STATE_DISCOVERED_ARTICLE_ID = "discovered_article_id";
     private static final String STATE_ARCHIVED = "archived";
     private static final String STATE_FAVORITE = "favorite";
+    private static final String STATE_OPEN_PENDING = "open_pending";
+    private static final String STATE_INITIAL_OPEN_TIME = "initial_open_time";
+    private static final String STATE_AUTOCLOSE_CANCELLED = "autoclose_cancelled";
+
+    private static final long AUTOCLOSE_DELAY = TimeUnit.SECONDS.toMillis(7);
 
     private final EnumSet<FeedsChangedEvent.ChangeType> CHANGE_SET_FOR_REINIT = EnumSet.of(
             FeedsChangedEvent.ChangeType.TITLE_CHANGED,
@@ -56,8 +63,11 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     private ImageButton archiveButton;
     private ImageButton openButton;
 
-    private Handler handler;
+    private long initialOpenTime;
+
+    private Handler handler = new Handler();
     private Runnable autocloseRunnable;
+    private boolean autocloseCancelled;
 
     private String url;
     private int articleId = -1;
@@ -74,6 +84,8 @@ public class EditAddedArticleActivity extends AppCompatActivity {
         Themes.applyDialogTheme(this);
         super.onCreate(savedInstanceState);
 
+        initialOpenTime = SystemClock.uptimeMillis();
+
         setContentView(R.layout.activity_edit_added_article);
 
         articleTitleTv = findViewById(R.id.editActivity_articleTitle);
@@ -85,13 +97,18 @@ public class EditAddedArticleActivity extends AppCompatActivity {
             articleId = savedInstanceState.getInt(STATE_DISCOVERED_ARTICLE_ID, -1);
             archived = savedInstanceState.getBoolean(STATE_ARCHIVED, false);
             favorite = savedInstanceState.getBoolean(STATE_FAVORITE, false);
+            openPending = savedInstanceState.getBoolean(STATE_OPEN_PENDING, false);
+            autocloseCancelled = savedInstanceState.getBoolean(STATE_AUTOCLOSE_CANCELLED, false);
+            initialOpenTime = savedInstanceState.getLong(STATE_INITIAL_OPEN_TIME, initialOpenTime);
         }
 
         url = getIntent().getStringExtra(PARAM_ARTICLE_URL);
 
         init();
 
-        scheduleAutoclose();
+        if (!autocloseCancelled) scheduleAutoclose();
+
+        if (openPending) onOpenClick(null);
 
         EventBus.getDefault().register(this);
     }
@@ -103,13 +120,16 @@ public class EditAddedArticleActivity extends AppCompatActivity {
         outState.putInt(STATE_DISCOVERED_ARTICLE_ID, articleId);
         outState.putBoolean(STATE_ARCHIVED, archived);
         outState.putBoolean(STATE_FAVORITE, favorite);
+        outState.putBoolean(STATE_OPEN_PENDING, openPending);
+        outState.putBoolean(STATE_AUTOCLOSE_CANCELLED, autocloseCancelled);
+        outState.putLong(STATE_INITIAL_OPEN_TIME, initialOpenTime);
     }
 
     @Override
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
 
-        cancelAutoclose();
+        cancelAutoclose(false);
 
         super.onDestroy();
     }
@@ -276,11 +296,17 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     }
 
     private void scheduleAutoclose() {
-        handler = new Handler();
-        handler.postDelayed(autocloseRunnable = this::finish, 7000);
+        handler.postAtTime(autocloseRunnable = this::finish,
+                initialOpenTime + AUTOCLOSE_DELAY);
     }
 
     private void cancelAutoclose() {
+        cancelAutoclose(true);
+    }
+
+    private void cancelAutoclose(boolean byUser) {
+        if (byUser) autocloseCancelled = true;
+
         handler.removeCallbacks(autocloseRunnable);
     }
 
