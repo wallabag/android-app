@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.webkit.WebView;
-import android.widget.ScrollView;
 
 public interface TtsHost {
 
@@ -9,7 +8,9 @@ public interface TtsHost {
 
     WebView getWebView();
 
-    ScrollView getScrollView();
+    int getScrollY();
+    int getViewHeight();
+    void scrollTo(int y);
 
     boolean previousArticle();
 

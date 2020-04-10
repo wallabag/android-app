@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.WebView;
-import android.widget.ScrollView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,11 +25,9 @@ class WebViewText implements TextInterface {
     private static final String JS_PARSE_DOCUMENT_SCRIPT
             = StorageHelper.readRawString(R.raw.tts_parser);
 
-    private final Handler handler;
+    private final Handler handler = new Handler();
 
     private TtsHost ttsHost;
-    private final WebView webView;
-    private final ScrollView scrollView;
 
     private final List<GenericItem> textList = new ArrayList<>();
 
@@ -43,10 +40,6 @@ class WebViewText implements TextInterface {
 
     WebViewText(TtsHost ttsHost) {
         this.ttsHost = ttsHost;
-        webView = ttsHost.getWebView();
-        scrollView = ttsHost.getScrollView();
-
-        handler = new Handler();
     }
 
     void setTtsHost(TtsHost ttsHost) {
@@ -63,7 +56,7 @@ class WebViewText implements TextInterface {
         parsingFinishedCallback = callback;
 
         ttsHost.getJsTtsController().setWebViewText(this);
-        webView.evaluateJavascript("javascript:" + JS_PARSE_DOCUMENT_SCRIPT
+        ttsHost.getWebView().evaluateJavascript("javascript:" + JS_PARSE_DOCUMENT_SCRIPT
                 + ";parseDocumentText();", null);
     }
 
@@ -251,23 +244,25 @@ class WebViewText implements TextInterface {
 
     @Override
     public void storeCurrent() {
-        storedScrollPosition = scrollView.getScrollY();
+        storedScrollPosition = ttsHost != null ? ttsHost.getScrollY() : null;
     }
 
     @Override
     public void restoreCurrent() {
+        if (ttsHost == null) return;
+
         if (storedScrollPosition != null) {
             int position = storedScrollPosition;
             storedScrollPosition = null;
 
-            if (position == scrollView.getScrollY()) {
+            if (position == ttsHost.getScrollY()) {
                 // no scrolling has been done since pause, don't restore anything
                 return;
             }
         }
 
-        float currentTop = scrollView.getScrollY();
-        float currentBottom = currentTop + scrollView.getHeight();
+        float currentTop = ttsHost.getScrollY();
+        float currentBottom = currentTop + ttsHost.getViewHeight();
         int result = Math.min(current, textList.size() - 1);
         GenericItem textItem = textList.get(result);
         if (textItem.bottom <= currentTop || textItem.top >= currentBottom) {
@@ -303,16 +298,24 @@ class WebViewText implements TextInterface {
     }
 
     private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward) {
+        if (ttsHost == null) return;
+
         GenericItem item = textList.get(current);
-        if (scrollView == null) return;
-        if (item.bottom > scrollView.getScrollY() + scrollView.getHeight()
-                || canMoveBackward && item.top < scrollView.getScrollY()) {
-            handler.post(() -> scrollView.smoothScrollTo(0, (int) item.top));
+        if (item.bottom > ttsHost.getScrollY() + ttsHost.getViewHeight()
+                || canMoveBackward && item.top < ttsHost.getScrollY()) {
+            // TODO: check: call directly?
+            handler.post(() -> ttsHost.scrollTo((int) item.top));
         }
     }
 
     private float convertWebViewToScreenY(float y) {
-        return y * this.webView.getHeight() / this.webView.getContentHeight();
+        if (ttsHost == null) {
+            Log.w(TAG, "convertWebViewToScreenY() ttsHost is null");
+            return 0;
+        }
+
+        WebView webView = ttsHost.getWebView();
+        return y * webView.getHeight() / webView.getContentHeight();
     }
 
 }

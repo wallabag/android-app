@@ -518,8 +518,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 }
 
                 @Override
-                public ScrollView getScrollView() {
-                    return scrollView;
+                public int getScrollY() {
+                    return scrollView.getScrollY();
+                }
+
+                @Override
+                public int getViewHeight() {
+                    return scrollView.getHeight();
+                }
+
+                @Override
+                public void scrollTo(int y) {
+                    if (smoothScrolling) {
+                        scrollView.smoothScrollTo(scrollView.getScrollX(), y);
+                    } else {
+                        scrollView.scrollTo(scrollView.getScrollX(), y);
+                    }
                 }
 
                 @Override
