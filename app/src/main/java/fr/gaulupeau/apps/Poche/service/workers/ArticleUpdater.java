@@ -843,6 +843,8 @@ public class ArticleUpdater {
     }
 
     private String unescapeHtml(String s) {
+        if (s == null) return null;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY).toString();
         } else {
