@@ -24,7 +24,6 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
-import android.view.KeyEvent;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -130,6 +129,7 @@ public class TtsService extends Service {
             | PlaybackStateCompat.ACTION_SKIP_TO_NEXT
             | PlaybackStateCompat.ACTION_STOP;
 
+    private ComponentName mediaActionComponentName;
     private ExecutorService executor;
     private AudioManager audioManager;
     private MediaPlayer mediaPlayerPageFlip;
@@ -174,6 +174,8 @@ public class TtsService extends Service {
 
         isTtsInitialized = false;
         state = State.CREATED;
+
+        mediaActionComponentName = new ComponentName(this, MediaButtonReceiver.class);
 
         executor = Executors.newSingleThreadExecutor();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
@@ -950,44 +952,43 @@ public class TtsService extends Service {
 //                    "Previous", KeyEvent.KEYCODE_MEDIA_PREVIOUS));
 
             builder.addAction(generateAction(R.drawable.ic_fast_rewind_24dp,
-                    getString(R.string.notification_action_media_rewind),
-                    KeyEvent.KEYCODE_MEDIA_REWIND));
+                    R.string.notification_action_media_rewind,
+                    PlaybackStateCompat.ACTION_REWIND));
 
             if (state == State.WANT_TO_PLAY || state == State.PLAYING) {
                 builder.addAction(generateAction(R.drawable.ic_pause_24dp,
-                        getString(R.string.notification_action_media_pause),
-                        KeyEvent.KEYCODE_MEDIA_PAUSE));
+                        R.string.notification_action_media_pause,
+                        PlaybackStateCompat.ACTION_PAUSE));
             } else {
                 builder.addAction(generateAction(R.drawable.ic_play_arrow_24dp,
-                        getString(R.string.notification_action_media_play),
-                        KeyEvent.KEYCODE_MEDIA_PLAY));
+                        R.string.notification_action_media_play,
+                        PlaybackStateCompat.ACTION_PLAY));
             }
 
             builder.addAction(generateAction(R.drawable.ic_fast_forward_24dp,
-                    getString(R.string.notification_action_media_fastforward),
-                    KeyEvent.KEYCODE_MEDIA_FAST_FORWARD));
+                    R.string.notification_action_media_fastforward,
+                    PlaybackStateCompat.ACTION_FAST_FORWARD));
 
             builder.addAction(generateAction(R.drawable.ic_skip_next_24dp,
-                    getString(R.string.notification_action_media_next),
-                    KeyEvent.KEYCODE_MEDIA_NEXT));
+                    R.string.notification_action_media_next,
+                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT));
 
             builder.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2)
                     .setMediaSession(mediaSession.getSessionToken())
                     .setShowCancelButton(true)
-                    .setCancelButtonIntent(generateActionIntent(
-                            getApplicationContext(), KeyEvent.KEYCODE_MEDIA_STOP)));
+                    .setCancelButtonIntent(generateActionIntent(PlaybackStateCompat.ACTION_STOP)));
         }
 
         return builder.build();
     }
 
-    private static NotificationCompat.Builder generateNotificationBuilderFrom(
+    private NotificationCompat.Builder generateNotificationBuilderFrom(
             Context context, MediaSessionCompat mediaSession) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, NotificationsHelper.CHANNEL_ID_TTS)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setDeleteIntent(generateActionIntent(context, KeyEvent.KEYCODE_MEDIA_STOP));
+                .setDeleteIntent(generateActionIntent(PlaybackStateCompat.ACTION_STOP));
 
         if (mediaSession != null) {
             MediaControllerCompat controller = mediaSession.getController();
@@ -1008,17 +1009,15 @@ public class TtsService extends Service {
         return builder;
     }
 
-    private NotificationCompat.Action generateAction(int icon, String title, int mediaKeyEvent) {
-        PendingIntent pendingIntent = generateActionIntent(getApplicationContext(), mediaKeyEvent);
-        return new NotificationCompat.Action.Builder(icon, title, pendingIntent).build();
+    private NotificationCompat.Action generateAction(int icon, int title, long action) {
+        String titleString = getString(title);
+        PendingIntent pendingIntent = generateActionIntent(action);
+        return new NotificationCompat.Action(icon, titleString, pendingIntent);
     }
 
-    private static PendingIntent generateActionIntent(Context context, int mediaKeyEvent) {
-        Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        intent.setPackage(context.getPackageName());
-        intent.putExtra(Intent.EXTRA_KEY_EVENT,
-                new KeyEvent(KeyEvent.ACTION_DOWN, mediaKeyEvent));
-        return PendingIntent.getBroadcast(context, mediaKeyEvent, intent, 0);
+    private PendingIntent generateActionIntent(long action) {
+        return MediaButtonReceiver.buildMediaButtonPendingIntent(
+                getApplicationContext(), mediaActionComponentName, action);
     }
 
 }
