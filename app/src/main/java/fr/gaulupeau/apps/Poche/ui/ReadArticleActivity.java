@@ -125,6 +125,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private int scrolledOverBottom;
     private boolean swipeArticles;
     private boolean annotationsEnabled;
+    private boolean onyxWorkaroundEnabled;
 
     private ScrollView scrollView;
     private View scrollViewLastChild;
@@ -217,6 +218,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         scrolledOverBottom = settings.getScrolledOverBottom();
         swipeArticles = settings.getSwipeArticles();
         annotationsEnabled = settings.isAnnotationsEnabled();
+        onyxWorkaroundEnabled = settings.isOnyxWorkaroundEnabled();
 
         setTitle(articleTitle);
 
@@ -891,6 +893,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     "\t\t<script src=\"annotator.min.js\"></script>" +
                     "\n" +
                     "\t\t<script src=\"annotations-android-app.js\"></script>";
+        }
+
+        if (onyxWorkaroundEnabled) {
+            extra += "\n" +
+                    "\t\t<script>onyxStyleWorkaround();</script>";
         }
 
         return extra;

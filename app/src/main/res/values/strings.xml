@@ -213,6 +213,8 @@
     <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog that allows to favorite/archive/tag a newly added article. A toast message will be displayed instead if the option is disabled.</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Enable Onyx Boox theme workaround</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Work around Onyx devices forcing black link colors</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
     <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
     <string name="pref_name_ui_keepScreenOn">Keep screen on while reading</string>

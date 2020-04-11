@@ -139,6 +139,10 @@ public class Settings {
             if(!contains(R.string.pref_key_tts_pitch)) {
                 prefEditor.putFloat(context.getString(R.string.pref_key_tts_pitch), 1);
             }
+            if(!contains("ui.onyxworkaround.enabled")) {
+                boolean isOnyxDevice = Build.MANUFACTURER.equals("Onyx");
+                prefEditor.putBoolean("ui.onyxworkaround.enabled", isOnyxDevice);
+            }
         } else if(prefVersion < 100) { // v1.*
             prefEditor.putBoolean(context.getString(R.string.pref_key_internal_firstRun), true);
             prefEditor.putBoolean(context.getString(R.string.pref_key_internal_configurationIsOk), false);
@@ -489,6 +493,14 @@ public class Settings {
 
     public void setAnnotationsEnabled(boolean value) {
         setBoolean(R.string.pref_key_ui_annotations_enabled, value);
+    }
+
+    public boolean isOnyxWorkaroundEnabled() {
+        return getBoolean("ui.onyxworkaround.enabled", false);
+    }
+
+    public void setOnyxWorkaroundEnabled(boolean value) {
+        setBoolean("ui.onyxworkaround.enabled", value);
     }
 
     public boolean isTapToScrollEnabled() {
