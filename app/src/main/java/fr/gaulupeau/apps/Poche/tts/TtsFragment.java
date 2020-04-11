@@ -408,11 +408,15 @@ public class TtsFragment extends Fragment {
 
         if (mediaController != null) {
             mediaController.registerCallback(mediaCallback);
+
+            MediaControllerCompat.setMediaController(activity, mediaController);
         }
     }
 
     private void destroyMediaController() {
         if (mediaController != null) {
+            MediaControllerCompat.setMediaController(activity, null);
+
             mediaController.unregisterCallback(mediaCallback);
             mediaController = null;
         }
