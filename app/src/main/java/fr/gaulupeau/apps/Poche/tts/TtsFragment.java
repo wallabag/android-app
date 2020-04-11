@@ -402,7 +402,7 @@ public class TtsFragment extends Fragment {
 
                 ttsService = ((TtsService.LocalBinder) binder).getService();
                 ttsService.registerMediaControllerCallback(mediaCallback);
-                ttsService.setNotificationPendingIntent(notificationPendingIntent);
+                ttsService.setSessionActivity(notificationPendingIntent);
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
 

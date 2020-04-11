@@ -164,8 +164,6 @@ public class TtsService extends Service {
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
 
-    private PendingIntent notificationPendingIntent;
-
     private boolean isForeground;
 
     private volatile int utteranceId = 1;
@@ -791,11 +789,6 @@ public class TtsService extends Service {
         return new Locale(language, country, variant);
     }
 
-    public void setNotificationPendingIntent(PendingIntent pendingIntent) {
-        notificationPendingIntent = pendingIntent;
-        setForegroundAndNotification();
-    }
-
     public void setTextInterface(TextInterface textInterface, String artist,
                                  String title, String album) {
         Log.d(TAG, String.format("setTextInterface(%s, %s, %s, %s)",
@@ -840,6 +833,10 @@ public class TtsService extends Service {
 
             playCmd();
         }
+    }
+
+    public void setSessionActivity(PendingIntent pendingIntent) {
+        mediaSession.setSessionActivity(pendingIntent);
     }
 
     public void registerMediaControllerCallback(MediaControllerCompat.Callback callback) {
@@ -949,8 +946,7 @@ public class TtsService extends Service {
         NotificationCompat.Builder builder = generateNotificationBuilderFrom(
                 getApplicationContext(), mediaSession);
 
-        builder.setContentIntent(notificationPendingIntent)
-                .setShowWhen(false)
+        builder.setShowWhen(false)
                 .setSmallIcon(R.drawable.wallabag_silhouette);
 
         if (mediaSession != null && state != State.ERROR) {
@@ -999,6 +995,9 @@ public class TtsService extends Service {
 
         if (mediaSession != null) {
             MediaControllerCompat controller = mediaSession.getController();
+
+            builder.setContentIntent(controller.getSessionActivity());
+
             MediaMetadataCompat mediaMetadata = controller.getMetadata();
             if (mediaMetadata != null) {
                 MediaDescriptionCompat description = mediaMetadata.getDescription();
