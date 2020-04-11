@@ -835,16 +835,12 @@ public class TtsService extends Service {
         }
     }
 
+    public MediaSessionCompat.Token getMediaSessionToken() {
+        return mediaSession.getSessionToken();
+    }
+
     public void setSessionActivity(PendingIntent pendingIntent) {
         mediaSession.setSessionActivity(pendingIntent);
-    }
-
-    public void registerMediaControllerCallback(MediaControllerCompat.Callback callback) {
-        mediaSession.getController().registerCallback(callback);
-    }
-
-    public void unregisterMediaControllerCallback(MediaControllerCompat.Callback callback) {
-        mediaSession.getController().unregisterCallback(callback);
     }
 
     private void setMediaSessionMetaData() {

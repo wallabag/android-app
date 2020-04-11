@@ -13,7 +13,9 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -58,6 +60,8 @@ public class TtsFragment extends Fragment {
 
     private static final String PARAM_AUTOPLAY = "autoplay";
 
+    private static final String STATE_MEDIA_SESSION_TOKEN = "media_session_token";
+
     private static final String METADATA_ALBUM = "wallabag";
 
     private static final float MAX_TTS_SPEED = 4.0F;
@@ -94,6 +98,9 @@ public class TtsFragment extends Fragment {
 
     private Activity activity;
     private TtsHost ttsHost;
+
+    private MediaSessionCompat.Token mediaSessionToken;
+    private MediaControllerCompat mediaController;
 
     private TtsService ttsService;
     private ServiceConnection serviceConnection;
@@ -169,6 +176,10 @@ public class TtsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate()");
 
+        if (savedInstanceState != null) {
+            mediaSessionToken = savedInstanceState.getParcelable(STATE_MEDIA_SESSION_TOKEN);
+        }
+
         Intent mainFocusIntent = new Intent(Intent.ACTION_MAIN);
         mainFocusIntent.setClass(activity, MainActivity.class);
         mainFocusIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -194,25 +205,13 @@ public class TtsFragment extends Fragment {
             viewTtsOption.setVisibility(View.GONE);
         }
         btnTtsPlayStop = view.findViewById(R.id.btnTTSPlayPause);
-        btnTtsPlayStop.setOnClickListener(v -> {
-            if (ttsService != null) {
-                ttsService.playPauseCmd();
-            }
-        });
+        btnTtsPlayStop.setOnClickListener(v -> playPauseCommand());
 
         ImageButton btnTtsFastRewind = view.findViewById(R.id.btnTTSFastRewind);
-        btnTtsFastRewind.setOnClickListener(v -> {
-            if (ttsService != null) {
-                ttsService.rewindCmd();
-            }
-        });
+        btnTtsFastRewind.setOnClickListener(v -> rewindCommand());
 
         ImageButton btnTtsFastForward = view.findViewById(R.id.btnTTSFastForward);
-        btnTtsFastForward.setOnClickListener(v -> {
-            if (ttsService != null) {
-                ttsService.fastForwardCmd();
-            }
-        });
+        btnTtsFastForward.setOnClickListener(v -> fastForwardCommand());
 
         ImageButton btnTtsOptions = view.findViewById(R.id.btnTTSOptions);
         btnTtsOptions.setOnClickListener(v -> onTtsOptionsClicked());
@@ -385,6 +384,8 @@ public class TtsFragment extends Fragment {
             }
         };
 
+        initMediaController();
+
         initService();
 
         initialized = true;
@@ -394,6 +395,29 @@ public class TtsFragment extends Fragment {
         return view;
     }
 
+    private void initMediaController() {
+        destroyMediaController();
+
+        if (mediaSessionToken == null) return;
+
+        try {
+            mediaController = new MediaControllerCompat(activity, mediaSessionToken);
+        } catch (RemoteException e) {
+            Log.e(TAG, "initMediaController()", e);
+        }
+
+        if (mediaController != null) {
+            mediaController.registerCallback(mediaCallback);
+        }
+    }
+
+    private void destroyMediaController() {
+        if (mediaController != null) {
+            mediaController.unregisterCallback(mediaCallback);
+            mediaController = null;
+        }
+    }
+
     private void initService() {
         serviceConnection = new ServiceConnection() {
             @Override
@@ -401,7 +425,10 @@ public class TtsFragment extends Fragment {
                 Log.d(TAG, "onServiceConnected()");
 
                 ttsService = ((TtsService.LocalBinder) binder).getService();
-                ttsService.registerMediaControllerCallback(mediaCallback);
+
+                mediaSessionToken = ttsService.getMediaSessionToken();
+                initMediaController();
+
                 ttsService.setSessionActivity(notificationPendingIntent);
                 ttsSetSpeedFromSeekBar();
                 ttsSetPitchFromSeekBar();
@@ -418,7 +445,6 @@ public class TtsFragment extends Fragment {
             public void onServiceDisconnected(ComponentName name) {
                 Log.d(TAG, "onServiceDisconnected()");
 
-                ttsService.unregisterMediaControllerCallback(mediaCallback);
                 ttsService = null;
             }
         };
@@ -438,14 +464,22 @@ public class TtsFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putParcelable(STATE_MEDIA_SESSION_TOKEN, mediaSessionToken);
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView()");
 
         initialized = false;
 
+        destroyMediaController();
+
         if (ttsService != null) {
-            ttsService.unregisterMediaControllerCallback(mediaCallback);
             activity.unbindService(serviceConnection);
             ttsService = null;
             if (!dontStopTtsService) {
@@ -498,6 +532,30 @@ public class TtsFragment extends Fragment {
         }
     }
 
+    private void playPauseCommand() {
+        if (ttsService != null) {
+            ttsService.playPauseCmd();
+        }
+    }
+
+    private void pauseCommand() {
+        if (ttsService != null) {
+            ttsService.pauseCmd();
+        }
+    }
+
+    private void rewindCommand() {
+        if (ttsService != null) {
+            ttsService.rewindCmd();
+        }
+    }
+
+    private void fastForwardCommand() {
+        if (ttsService != null) {
+            ttsService.fastForwardCmd();
+        }
+    }
+
     private void ttsSetSpeedFromSeekBar() {
         if (ttsService != null) {
             ttsService.setSpeed(getSpeedBarValue());
@@ -524,10 +582,8 @@ public class TtsFragment extends Fragment {
 
         selectedVoiceInfo = null;
 
-        if (ttsService != null) {
-            setTextAndMetadataToService();
-            ttsService.pauseCmd();
-        }
+        setTextAndMetadataToService();
+        pauseCommand();
 
         selectLanguage(language);
     }
