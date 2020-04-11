@@ -157,6 +157,8 @@ public class TtsService extends Service {
     private volatile boolean isTtsInitialized;
     private boolean isAudioFocusGranted;
 
+    private boolean mediaSessionActive;
+
     private PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
 
     private volatile TextInterface textInterface;
@@ -339,18 +341,21 @@ public class TtsService extends Service {
 
         switch (state) {
             case CREATED:
-                if (requestAudioFocus() != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    Log.w(TAG, "playCmd() audio focus is not granted; staying in CREATED");
-                    break; // Stay in the state CREATED
-                }
-                isAudioFocusGranted = true;
-                mediaSession.setActive(true);
-                setMediaSessionMetaData();
-                // NO BREAK, continue to next statements as if is state == WANT_TO_PLAY
-
-            case WANT_TO_PLAY:
-            case PAUSED:
             case STOPPED:
+            case PAUSED:
+            case WANT_TO_PLAY:
+                if (!mediaSessionActive) {
+                    mediaSessionActive = true;
+                    mediaSession.setActive(true);
+                    setMediaSessionMetaData();
+                }
+
+                if (requestAudioFocus() == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    isAudioFocusGranted = true;
+                } else {
+                    Log.i(TAG, "playCmd() audio focus is not granted");
+                }
+
                 if (isTtsInitialized && isAudioFocusGranted && textInterface != null) {
                     state = State.PLAYING;
                     if (playFromStart) {
@@ -406,6 +411,7 @@ public class TtsService extends Service {
                 audioFocusRequest = null;
             }
         }
+        isAudioFocusGranted = false;
     }
 
     public void pauseCmd() {
@@ -421,11 +427,14 @@ public class TtsService extends Service {
                 if (textInterface != null) textInterface.storeCurrent();
                 executeOnBackgroundThread(tts::stop);
                 unregisterReceiver(noisyReceiver);
-                // NO BREAK, continue to next statements to set state and notification
+                // no break
 
             case WANT_TO_PLAY:
             case PAUSED:
             case STOPPED:
+                if (state == State.STOPPED) {
+                    Log.w(TAG, "pauseCmd() pause shouldn't be called in stopped state");
+                }
                 state = newState;
                 setMediaSessionPlaybackState();
                 setForegroundAndNotification();
@@ -438,8 +447,8 @@ public class TtsService extends Service {
 
         switch (state) {
             case CREATED:
-            case PAUSED:
             case STOPPED:
+            case PAUSED:
                 playCmd();
                 break;
 
@@ -475,9 +484,11 @@ public class TtsService extends Service {
     private void stopCmd() {
         Log.d(TAG, "stopCmd()");
 
-        state = State.STOPPED;
+        pauseCmd(State.STOPPED);
 
-        setForegroundAndNotification();
+        abandonAudioFocus();
+        mediaSession.setActive(false);
+        mediaSessionActive = false;
 
         stopSelf();
     }
@@ -806,8 +817,8 @@ public class TtsService extends Service {
 
             switch (state) {
                 case CREATED:
-                case PAUSED:
                 case STOPPED:
+                case PAUSED:
                 case ERROR:
                 case DESTROYED:
                     this.textInterface = textInterface;
