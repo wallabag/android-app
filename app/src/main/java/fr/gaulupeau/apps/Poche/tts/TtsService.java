@@ -132,6 +132,7 @@ public class TtsService extends Service {
     private ComponentName mediaActionComponentName;
     private ExecutorService executor;
     private AudioManager audioManager;
+    private MediaPlayer fakeSound;
     private MediaPlayer mediaPlayerPageFlip;
     private MediaSessionCompat mediaSession;
     private BroadcastReceiver noisyReceiver;
@@ -182,14 +183,11 @@ public class TtsService extends Service {
         executor = Executors.newSingleThreadExecutor();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+        fakeSound = MediaPlayer.create(getApplicationContext(), R.raw.silence);
         mediaPlayerPageFlip = MediaPlayer.create(getApplicationContext(), R.raw.page_flip);
 
-        ComponentName mediaButtonReceiverComponentName = new ComponentName(getPackageName(),
-                MediaButtonReceiver.class.getName());
-        mediaSession = new MediaSessionCompat(this, "wallabag TTS",
-                mediaButtonReceiverComponentName, null);
-        mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-                | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+        mediaSession = new MediaSessionCompat(this, "wallabag TTS");
+        mediaSession.setMediaButtonReceiver(null); // do not restart inactive media session with media buttons
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public boolean onMediaButtonEvent(@NonNull Intent mediaButtonIntent) {
@@ -281,6 +279,8 @@ public class TtsService extends Service {
         tts.stop();
         mediaSession.release();
         mediaSession = null;
+        fakeSound.release();
+        fakeSound = null;
         mediaPlayerPageFlip.release();
         mediaPlayerPageFlip = null;
         isTtsInitialized = false;
@@ -368,6 +368,7 @@ public class TtsService extends Service {
                     setForegroundAndNotification();
                     registerReceiver(noisyReceiver,
                             new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+                    playFakeSoundToMakeMediaSessionActive();
                     executeSpeak();
                 } else {
                     state = State.WANT_TO_PLAY;
@@ -376,6 +377,13 @@ public class TtsService extends Service {
                 }
                 break;
         }
+    }
+
+    private void playFakeSoundToMakeMediaSessionActive() {
+        // a sound needs to be played for Android to consider a MediaSession active
+        // (apparently, using TTS doesn't count),
+        // that is needed to receive media button events while in background
+        fakeSound.start();
     }
 
     private int requestAudioFocus() {
