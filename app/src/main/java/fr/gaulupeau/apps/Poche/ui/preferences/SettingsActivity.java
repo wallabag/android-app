@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -162,10 +163,10 @@ public class SettingsActivity extends BaseActionBarActivity {
                 });
             }
 
-            Preference handleHttpSchemePreference = findPreference(
+            CheckBoxPreference handleHttpSchemePreference = (CheckBoxPreference) findPreference(
                     getString(R.string.pref_key_misc_handleHttpScheme));
-            if(handleHttpSchemePreference != null) {
-                handleHttpSchemePreference.setDefaultValue(settings.isHandlingHttpScheme());
+            if (handleHttpSchemePreference != null) {
+                handleHttpSchemePreference.setChecked(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
             }
 
