@@ -130,6 +130,7 @@ public class TtsService extends Service {
             | PlaybackStateCompat.ACTION_STOP;
 
     private ComponentName mediaActionComponentName;
+    private Settings settings;
     private ExecutorService executor;
     private AudioManager audioManager;
     private MediaPlayer fakeSound;
@@ -180,6 +181,7 @@ public class TtsService extends Service {
 
         mediaActionComponentName = new ComponentName(this, MediaButtonReceiver.class);
 
+        settings = App.getInstance().getSettings();
         executor = Executors.newSingleThreadExecutor();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -218,12 +220,20 @@ public class TtsService extends Service {
 
             @Override
             public void onSkipToNext() {
-                skipToNextCmd();
+                if (settings.isTtsNextButtonIsFastForward()) {
+                    fastForwardCmd();
+                } else {
+                    skipToNextCmd();
+                }
             }
 
             @Override
             public void onSkipToPrevious() {
-                skipToPreviousCmd();
+                if (settings.isTtsPreviousButtonIsRewind()) {
+                    rewindCmd();
+                } else {
+                    skipToPreviousCmd();
+                }
             }
 
             @Override
@@ -246,7 +256,6 @@ public class TtsService extends Service {
 
         mainThreadHandler = new Handler();
 
-        Settings settings = App.getInstance().getSettings();
         ttsEngine = settings.getTtsEngine();
         ttsVoice = settings.getTtsVoice();
 

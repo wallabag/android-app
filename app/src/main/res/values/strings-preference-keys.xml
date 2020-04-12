@@ -43,6 +43,10 @@
     <string name="pref_key_ui_previewImage_enabled" translatable="false">ui.previewImage.enabled</string>
     <string name="pref_key_ui_annotations_enabled" translatable="false">ui.annotations.enabled</string>
 
+    <string name="pref_key_tts" translatable="false">tts</string>
+    <string name="pref_key_tts_category" translatable="false">tts.category</string>
+    <string name="pref_key_tts_nextButtonIsFastForward" translatable="false">tts.nextButtonIsFastForward</string>
+    <string name="pref_key_tts_previousButtonIsRewind" translatable="false">tts.previousButtonIsRewind</string>
     <string name="pref_key_tts_visible" translatable="false">tts.visible</string>
     <string name="pref_key_tts_optionsVisible" translatable="false">tts.optionsVisible</string>
     <string name="pref_key_tts_speed" translatable="false">tts.speed</string>

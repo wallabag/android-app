@@ -237,6 +237,12 @@
     <string name="pref_name_ui_annotations_enabled">Annotations support</string>
     <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
 
+    <string name="pref_categoryName_tts">Text-to-speech</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">\"Next\" button fast-forwards</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"next\" media button fast-forwards instead of skipping to next article</string>
+    <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Pressing \"previous\" media button rewinds instead of skipping to previous article</string>
+
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
     <string name="pref_desc_sync_syncTypes">Press to show more info about synchronization types</string>

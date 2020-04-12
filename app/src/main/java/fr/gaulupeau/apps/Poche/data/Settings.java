@@ -525,6 +525,22 @@ public class Settings {
         setInt(R.string.pref_key_ui_scrollOverBottom, scrolls);
     }
 
+    public boolean isTtsNextButtonIsFastForward() {
+        return getBoolean(R.string.pref_key_tts_nextButtonIsFastForward, true);
+    }
+
+    public void setTtsNextButtonIsFastForward(boolean value) {
+        setBoolean(R.string.pref_key_tts_nextButtonIsFastForward, value);
+    }
+
+    public boolean isTtsPreviousButtonIsRewind() {
+        return getBoolean(R.string.pref_key_tts_previousButtonIsRewind, true);
+    }
+
+    public void setTtsPreviousButtonIsRewind(boolean value) {
+        setBoolean(R.string.pref_key_tts_previousButtonIsRewind, value);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }

@@ -187,6 +187,26 @@
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
+        android:key="@string/pref_key_tts"
+        android:persistent="false"
+        android:title="@string/pref_categoryName_tts">
+        <PreferenceCategory
+            android:key="@string/pref_key_tts_category"
+            android:title="@string/pref_categoryName_tts"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="@string/pref_key_tts_nextButtonIsFastForward"
+                android:title="@string/pref_name_tts_nextButtonIsFastForward"
+                android:summary="@string/pref_desc_tts_nextButtonIsFastForward"
+                android:defaultValue="true" />
+            <CheckBoxPreference
+                android:key="@string/pref_key_tts_previousButtonIsRewind"
+                android:title="@string/pref_name_tts_previousButtonIsRewind"
+                android:summary="@string/pref_desc_tts_previousButtonIsRewind"
+                android:defaultValue="true" />
+        </PreferenceCategory>
+    </PreferenceScreen>
+    <PreferenceScreen
         android:key="@string/pref_key_sync"
         android:title="@string/pref_categoryName_sync"
         android:persistent="false">
