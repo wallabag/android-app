@@ -138,7 +138,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String articleTitle;
     private String articleDomain;
     private String articleUrl;
-    private String articleLanguage;
     private Double articleProgress;
 
     private Long previousArticleID;
@@ -1256,7 +1255,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private void initTtsForArticle() {
         if (ttsFragment != null) {
-            ttsFragment.initForArticle(articleDomain, articleTitle, articleLanguage);
+            ttsFragment.initForArticle(article);
             if (loadingFinished) {
                 ttsOnDocumentLoadingFinished();
             }
@@ -1282,8 +1281,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Log.v(TAG, "loadArticle() articleUrl: " + articleUrl);
         articleProgress = article.getArticleProgress();
         Log.v(TAG, "loadArticle() articleProgress: " + articleProgress);
-        articleLanguage = article.getLanguage();
-        Log.v(TAG, "loadArticle() articleLanguage: " + articleLanguage);
+        Log.v(TAG, "loadArticle() articleLanguage: " + article.getLanguage());
 
         return true;
     }

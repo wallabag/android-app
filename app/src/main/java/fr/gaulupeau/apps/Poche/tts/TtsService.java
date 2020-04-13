@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -23,6 +24,7 @@ import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,8 @@ import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
+
+import static fr.gaulupeau.apps.Poche.utils.TextTools.equalOrEmpty;
 
 /**
  * Text To Speech (TTS) Service.
@@ -164,9 +168,15 @@ public class TtsService extends Service {
     private PlaybackStateCompat.Builder playbackStateBuilder = new PlaybackStateCompat.Builder();
 
     private volatile TextInterface textInterface;
+    private Integer articleId;
     private String metaDataArtist = "";
     private String metaDataTitle = "";
     private String metaDataAlbum = "";
+    private String metaDataAlbumArtUrl;
+    private String metaDataAlbumArtEffectiveUri;
+    private Bitmap metaDataAlbumArt;
+
+    private AlbumArtLoaderTask albumArtLoaderTask;
 
     private boolean isForeground;
 
@@ -819,16 +829,19 @@ public class TtsService extends Service {
         return new Locale(language, country, variant);
     }
 
-    public void setTextInterface(TextInterface textInterface, String artist,
-                                 String title, String album) {
+    public void setTextInterface(TextInterface textInterface, Integer articleId, String artist,
+                                 String title, String album, String albumArtUrl) {
         Log.d(TAG, String.format("setTextInterface(%s, %s, %s, %s)",
                 textInterface == null ? "null" : "not null", artist, title, album));
 
         boolean newContent = false;
 
+        this.articleId = articleId;
         metaDataArtist = artist;
         metaDataTitle = title;
         metaDataAlbum = album;
+        setAlbumArtUrl(albumArtUrl);
+
         if (textInterface != this.textInterface) {
             newContent = textInterface != null;
 
@@ -857,6 +870,43 @@ public class TtsService extends Service {
         }
     }
 
+    private void setAlbumArtUrl(String albumArtUrl) {
+        if (!equalOrEmpty(metaDataAlbumArtUrl, albumArtUrl)) {
+            metaDataAlbumArtUrl = albumArtUrl;
+            metaDataAlbumArt = null;
+            metaDataAlbumArtEffectiveUri = null;
+
+            if (albumArtLoaderTask != null) {
+                albumArtLoaderTask.cancel(true);
+                albumArtLoaderTask = null;
+            }
+
+            if (articleId != null && !TextUtils.isEmpty(metaDataAlbumArtUrl)
+                    && settings.isTtsUsePreviewAsAlbumArt()) {
+                albumArtLoaderTask = new AlbumArtLoaderTask(articleId,
+                        metaDataAlbumArtUrl, this::albumArtLoaded);
+                albumArtLoaderTask.execute();
+            }
+        }
+    }
+
+    private void albumArtLoaded(int articleId, String givenUrl, String effectiveUri, Bitmap image) {
+        if (state == State.DESTROYED) return;
+        if (!equalOrEmpty(givenUrl, metaDataAlbumArtUrl)) return;
+
+        albumArtLoaderTask = null;
+
+        metaDataAlbumArt = image;
+        metaDataAlbumArtEffectiveUri = effectiveUri;
+
+        Log.v(TAG, "albumArtLoaded() image=" + image + ", Uri=" + metaDataAlbumArtEffectiveUri);
+
+        if (metaDataAlbumArt != null || !TextUtils.isEmpty(metaDataAlbumArtEffectiveUri)) {
+            setMediaSessionMetaData();
+            setForegroundAndNotification();
+        }
+    }
+
     private void onNewContent() {
         if (autoplayNext) {
             autoplayNext = false;
@@ -881,6 +931,18 @@ public class TtsService extends Service {
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, metaDataArtist)
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, metaDataAlbum)
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, metaDataTitle);
+
+        if (metaDataAlbumArt != null) {
+            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, metaDataAlbumArt);
+            builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, metaDataAlbumArt);
+        }
+
+        if (!TextUtils.isEmpty(metaDataAlbumArtEffectiveUri)) {
+            builder.putString(MediaMetadataCompat.METADATA_KEY_ART_URI,
+                    metaDataAlbumArtEffectiveUri);
+            builder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+                    metaDataAlbumArtEffectiveUri);
+        }
 
         if (textInterface != null) {
             builder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION,

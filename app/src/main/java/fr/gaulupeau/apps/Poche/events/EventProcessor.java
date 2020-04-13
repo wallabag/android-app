@@ -8,13 +8,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,7 +23,6 @@ import java.io.StringWriter;
 import java.util.EnumSet;
 import java.util.Locale;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
@@ -37,6 +35,7 @@ import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
+import fr.gaulupeau.apps.Poche.utils.WallabagFileProvider;
 
 import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_DOWNLOADING_ARTICLES;
 import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_ERRORS;
@@ -385,9 +384,7 @@ public class EventProcessor {
 
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-            Uri uri = FileProvider.getUriForFile(context,
-                    BuildConfig.APPLICATION_ID + ".fileprovider",
-                    event.getFile());
+            Uri uri = WallabagFileProvider.getUriForFile(context, event.getFile());
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     event.getRequest().getDownloadFormat().toString().toLowerCase(Locale.US));
             intent.setDataAndType(uri, mimeType);

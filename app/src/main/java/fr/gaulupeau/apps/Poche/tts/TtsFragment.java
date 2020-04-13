@@ -45,6 +45,7 @@ import java.util.Locale;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.ui.MainActivity;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
 
@@ -105,8 +106,10 @@ public class TtsFragment extends Fragment {
     private TtsService ttsService;
     private ServiceConnection serviceConnection;
 
+    private Integer articleId;
     private String artist = "";
     private String title = "";
+    private String previewPicture;
 
     private String languageToSelect;
 
@@ -572,15 +575,17 @@ public class TtsFragment extends Fragment {
         }
     }
 
-    public void initForArticle(String domain, String title, String language) {
+    public void initForArticle(Article article) {
         Log.d(TAG, "initForArticle()");
 
         documentLoaded = false;
         documentParsed = false;
         reinitDocument = true;
 
-        this.artist = domain;
-        this.title = title;
+        this.articleId = article.getArticleId();
+        this.artist = article.getDomain();
+        this.title = article.getTitle();
+        this.previewPicture = article.getPreviewPictureURL();
         languageToSelect = null;
         webViewText = null;
 
@@ -589,7 +594,7 @@ public class TtsFragment extends Fragment {
         setTextAndMetadataToService();
         pauseCommand();
 
-        selectLanguage(language);
+        selectLanguage(article.getLanguage());
     }
 
     public void onDocumentLoadFinished() {
@@ -631,7 +636,8 @@ public class TtsFragment extends Fragment {
         Log.v(TAG, "setTextAndMetadataToService()");
 
         if (ttsService != null) {
-            ttsService.setTextInterface(webViewText, artist, title, METADATA_ALBUM);
+            ttsService.setTextInterface(webViewText, articleId,
+                    artist, title, METADATA_ALBUM, previewPicture);
         }
     }
 
@@ -645,8 +651,10 @@ public class TtsFragment extends Fragment {
 
     public void onOpenNewArticle() {
         dontStopTtsService = true;
+        articleId = null;
         artist = "...";
         title = "...";
+        previewPicture = null;
         webViewText = null;
         setTextAndMetadataToService();
     }

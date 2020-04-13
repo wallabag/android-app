@@ -204,6 +204,11 @@
                 android:title="@string/pref_name_tts_previousButtonIsRewind"
                 android:summary="@string/pref_desc_tts_previousButtonIsRewind"
                 android:defaultValue="true" />
+            <CheckBoxPreference
+                android:key="@string/pref_key_tts_usePreviewAsAlbumArt"
+                android:title="@string/pref_name_tts_showPreviewAsAlbumArt"
+                android:summary="@string/pref_desc_tts_showPreviewAsAlbumArt"
+                android:defaultValue="true" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen

@@ -1,18 +1,9 @@
 package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
-import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
-
-import fr.gaulupeau.apps.Poche.data.DbUtils;
-import wallabag.apiwrapper.ArticlesPageIterator;
-import wallabag.apiwrapper.ArticlesQueryBuilder;
-import wallabag.apiwrapper.WallabagService;
-import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
-import wallabag.apiwrapper.models.Articles;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +16,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import fr.gaulupeau.apps.Poche.data.DbUtils;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
@@ -40,8 +32,15 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleContent;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import wallabag.apiwrapper.ArticlesPageIterator;
+import wallabag.apiwrapper.ArticlesQueryBuilder;
+import wallabag.apiwrapper.WallabagService;
+import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
+import wallabag.apiwrapper.models.Articles;
 
 import static fr.gaulupeau.apps.Poche.events.FeedsChangedEvent.ChangeType;
+import static fr.gaulupeau.apps.Poche.utils.TextTools.equalOrEmpty;
+import static fr.gaulupeau.apps.Poche.utils.TextTools.unescapeHtml;
 
 public class ArticleUpdater {
 
@@ -828,29 +827,6 @@ public class ArticleUpdater {
             sb.append(author);
         }
         return sb.toString();
-    }
-
-    /**
-     * Returns true if both arguments are equal or empty.
-     * {@code null} and empty sequences are considered equal.
-     *
-     * @param s1 first char sequence
-     * @param s2 second char sequence
-     * @return true if arguments are considered equal
-     */
-    private boolean equalOrEmpty(CharSequence s1, CharSequence s2) {
-        return (TextUtils.isEmpty(s1) && TextUtils.isEmpty(s2))
-                || TextUtils.equals(s1, s2);
-    }
-
-    private String unescapeHtml(String s) {
-        if (s == null) return null;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY).toString();
-        } else {
-            return Html.fromHtml(s).toString();
-        }
     }
 
     private void fixArticleNullValues(Article article) {

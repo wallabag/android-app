@@ -242,6 +242,8 @@
     <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"next\" media button fast-forwards instead of skipping to next article</string>
     <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>
     <string name="pref_desc_tts_previousButtonIsRewind">Pressing \"previous\" media button rewinds instead of skipping to previous article</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Use preview as album art</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Use the article preview image (if it is present) as album art (visible in notification and may be displayed as the lockscreen background)</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>

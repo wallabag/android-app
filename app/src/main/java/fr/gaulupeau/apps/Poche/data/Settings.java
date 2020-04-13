@@ -541,6 +541,14 @@ public class Settings {
         setBoolean(R.string.pref_key_tts_previousButtonIsRewind, value);
     }
 
+    public boolean isTtsUsePreviewAsAlbumArt() {
+        return getBoolean(R.string.pref_key_tts_usePreviewAsAlbumArt, true);
+    }
+
+    public void setTtsUsePreviewAsAlbumArt(boolean value) {
+        setBoolean(R.string.pref_key_tts_usePreviewAsAlbumArt, value);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }
