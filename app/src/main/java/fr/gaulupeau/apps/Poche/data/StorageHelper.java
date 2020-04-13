@@ -51,20 +51,16 @@ public class StorageHelper {
         if(externalStoragePath == null) {
             String returnPath = null;
             File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            if(externalFilesDirs != null) {
-                // TODO: better SD Card detection
-                for(File extStorageDir: externalFilesDirs) {
-                    if(extStorageDir == null) {
-                        Log.w(TAG, "getExternalStoragePath() extStorageDir is null");
-                        continue;
-                    }
-
-                    Log.d(TAG, "getExternalStoragePath() extStorageDir.getPath(): "
-                            + extStorageDir.getPath());
-                    returnPath = extStorageDir.getPath();
+            // TODO: better SD Card detection
+            for(File extStorageDir: externalFilesDirs) {
+                if(extStorageDir == null) {
+                    Log.w(TAG, "getExternalStoragePath() extStorageDir is null");
+                    continue;
                 }
-            } else {
-                Log.w(TAG, "getExternalStoragePath() getExternalFilesDirs() returned null");
+
+                returnPath = extStorageDir.getPath();
+                Log.d(TAG, "getExternalStoragePath() extStorageDir.getPath(): " + returnPath);
+                break;
             }
 
             Log.d(TAG, "getExternalStoragePath() returnPath: " + returnPath);
