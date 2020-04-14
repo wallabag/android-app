@@ -7,10 +7,11 @@ public interface TextInterface {
     void    restoreFromStart();
     void    storeCurrent();
     void    restoreCurrent();
-    GenericItem getItem(int relativeIndex);
+    int getCurrentIndex();
+    GenericItem getItem(int index);
     boolean next();
-    boolean fastForward();
-    boolean rewind();
+    boolean rewind(long desiredTimeToRewind, int currentIndex, long progressInCurrentItem);
+    boolean fastForward(long desiredTimeToSkip, int currentIndex, long progressInCurrentItem);
     boolean skipToNext();
     boolean skipToPrevious();
     long   getTime();

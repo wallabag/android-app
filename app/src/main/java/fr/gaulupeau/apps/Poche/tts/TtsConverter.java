@@ -26,6 +26,8 @@ class TtsConverter {
         }
     }
 
+    private static final int TIME_PER_CHARACTER_APPROXIMATION = 58;
+
     private Context context;
 
     TtsConverter(Context context) {
@@ -42,6 +44,16 @@ class TtsConverter {
         }
 
         throw new RuntimeException("Conversion is not implemented for item type: " + genericItem);
+    }
+
+    long approximateDuration(GenericItem genericItem) {
+        return approximateLength(genericItem) * TIME_PER_CHARACTER_APPROXIMATION;
+    }
+
+    long getTimePositionInItem(GenericItem genericItem, int index) {
+        if (genericItem == null) return 0;
+
+        return index * TIME_PER_CHARACTER_APPROXIMATION;
     }
 
     private CharSequence convert(TextItem textItem) {
@@ -182,6 +194,18 @@ class TtsConverter {
         }
 
         return null; // ignore the image
+    }
+
+    private long approximateLength(GenericItem genericItem) {
+        if (genericItem == null) return 0;
+
+        if (genericItem instanceof TextItem) {
+            // negligible difference between raw and converted
+            return ((TextItem) genericItem).text.length();
+        } else {
+            CharSequence text = convert(genericItem);
+            return text != null ? text.length() : 0;
+        }
     }
 
 }

@@ -44,9 +44,4 @@ class TextItem extends GenericItem {
         this.extras = extras;
     }
 
-    @Override
-    long approximateDuration() {
-        return text.length() * 50; // in ms, total approximation
-    }
-
 }

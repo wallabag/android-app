@@ -238,6 +238,10 @@
     <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
 
     <string name="pref_categoryName_tts">Text-to-speech</string>
+    <string name="pref_name_tts_fastForwardTime">Fast-forward skip time</string>
+    <string name="pref_desc_tts_fastForwardTime">The number of seconds to skip forward when the \"fast-forward\" button is pressed</string>
+    <string name="pref_name_tts_rewindTime">Rewind skip time</string>
+    <string name="pref_desc_tts_rewindTime">The number of seconds to skip backward when the \"rewind\" button is pressed</string>
     <string name="pref_name_tts_nextButtonIsFastForward">\"Next\" button fast-forwards</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"next\" media button fast-forwards instead of skipping to next article</string>
     <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>

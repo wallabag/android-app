@@ -194,6 +194,18 @@
             android:key="@string/pref_key_tts_category"
             android:title="@string/pref_categoryName_tts"
             android:persistent="false">
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+                android:key="@string/pref_key_tts_fastForwardTime"
+                android:title="@string/pref_name_tts_fastForwardTime"
+                android:summary="@string/pref_desc_tts_fastForwardTime"
+                android:inputType="number"
+                android:defaultValue="30" />
+            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+                android:key="@string/pref_key_tts_rewindTime"
+                android:title="@string/pref_name_tts_rewindTime"
+                android:summary="@string/pref_desc_tts_rewindTime"
+                android:inputType="number"
+                android:defaultValue="10" />
             <CheckBoxPreference
                 android:key="@string/pref_key_tts_nextButtonIsFastForward"
                 android:title="@string/pref_name_tts_nextButtonIsFastForward"

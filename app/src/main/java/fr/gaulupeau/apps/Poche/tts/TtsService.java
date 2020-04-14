@@ -17,6 +17,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
 import android.support.v4.media.MediaDescriptionCompat;
@@ -30,12 +31,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.util.Pair;
 import androidx.media.session.MediaButtonReceiver;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -113,6 +116,33 @@ public class TtsService extends Service {
 
     }
 
+    private static class UtteranceIdToIndexMap {
+
+        private final int[] utteranceIds = new int[TTS_SPEAK_QUEUE_SIZE];
+        private final int[] indexes = new int[TTS_SPEAK_QUEUE_SIZE];
+        private int utteranceMapIndex;
+
+        private synchronized void addToUtteranceIndexMap(int utteranceId, int itemIndex) {
+            utteranceIds[utteranceMapIndex] = utteranceId;
+            indexes[utteranceMapIndex] = itemIndex;
+
+            utteranceMapIndex++;
+
+            if (utteranceMapIndex >= TTS_SPEAK_QUEUE_SIZE) utteranceMapIndex = 0;
+        }
+
+        private synchronized int getIndexByUtteranceId(int utteranceId) {
+            for (int i = 0; i < TTS_SPEAK_QUEUE_SIZE; i++) {
+                if (utteranceId == utteranceIds[i]) {
+                    return indexes[i];
+                }
+            }
+
+            return -1;
+        }
+
+    }
+
     public static final String ACTION_PLAY = "PLAY";
     public static final String ACTION_PAUSE = "PAUSE";
     public static final String ACTION_PLAY_PAUSE = "PLAY_PAUSE";
@@ -181,6 +211,14 @@ public class TtsService extends Service {
     private boolean isForeground;
 
     private volatile int utteranceId = 1;
+
+    private final UtteranceIdToIndexMap utteranceIdToIndexMap = new UtteranceIdToIndexMap();
+
+    private final Object currentItemStatsLock = new Object();
+    private String currentUtteranceId;
+    private int currentUtteranceFragmentStart;
+    private int currentUtteranceFragmentEnd;
+    private long currentUtteranceStartTimestamp;
 
     @Override
     public void onCreate() {
@@ -490,7 +528,15 @@ public class TtsService extends Service {
         Log.d(TAG, "rewindCmd()");
 
         if (textInterface != null) {
-            if (textInterface.rewind() && state == State.PLAYING) {
+            long time = TimeUnit.SECONDS.toMillis(settings.getTtsRewindTime());
+
+            Pair<Integer, Long> positionInCurrentItem = getPositionInCurrentItem();
+            @SuppressWarnings("ConstantConditions")
+            int index = positionInCurrentItem.first;
+            @SuppressWarnings("ConstantConditions")
+            long position = positionInCurrentItem.second;
+
+            if (textInterface.rewind(time, index, position) && state == State.PLAYING) {
                 executeSpeak();
                 setMediaSessionPlaybackState();
             }
@@ -501,7 +547,15 @@ public class TtsService extends Service {
         Log.d(TAG, "fastForwardCmd()");
 
         if (textInterface != null) {
-            if (textInterface.fastForward() && state == State.PLAYING) {
+            long time = TimeUnit.SECONDS.toMillis(settings.getTtsFastForwardTime());
+
+            Pair<Integer, Long> positionInCurrentItem = getPositionInCurrentItem();
+            @SuppressWarnings("ConstantConditions")
+            int index = positionInCurrentItem.first;
+            @SuppressWarnings("ConstantConditions")
+            long position = positionInCurrentItem.second;
+
+            if (textInterface.fastForward(time, index, position) && state == State.PLAYING) {
                 executeSpeak();
                 setMediaSessionPlaybackState();
             }
@@ -532,6 +586,54 @@ public class TtsService extends Service {
         }
     }
 
+    private void setCurrentItemProgress(String utteranceId, int start, int end) {
+        synchronized (currentItemStatsLock) {
+            currentUtteranceId = utteranceId;
+            currentUtteranceFragmentStart = start;
+            currentUtteranceFragmentEnd = end;
+            currentUtteranceStartTimestamp = SystemClock.elapsedRealtime();
+        }
+    }
+
+    private void resetCurrentItemProgress() {
+        setCurrentItemProgress(null, -1, -1);
+    }
+
+    private Pair<Integer, Long> getPositionInCurrentItem() {
+        String currentUtterance;
+        int start, end;
+        long timestamp;
+
+        synchronized (currentItemStatsLock) {
+            currentUtterance = currentUtteranceId;
+            start = currentUtteranceFragmentStart;
+            end = currentUtteranceFragmentEnd;
+            timestamp = currentUtteranceStartTimestamp;
+        }
+
+        int currentIndex = currentUtterance != null
+                ? utteranceIdToIndexMap.getIndexByUtteranceId(Integer.parseInt(currentUtterance))
+                : -1;
+
+        GenericItem item = null;
+        if (textInterface != null) {
+            item = textInterface.getItem(currentIndex);
+        }
+
+        if (item == null) return new Pair<>(-1, 0L);
+
+        long timePositionInItem;
+        if (start == -1 && end == -1) {
+            // fallback for situations where TTS engine does not report detailed progress
+            timePositionInItem = SystemClock.elapsedRealtime() - timestamp;
+            Log.v(TAG, "getPositionInCurrentItem() using fallback");
+        } else {
+            int indexInItem = (start + end) / 2;
+            timePositionInItem = ttsConverter.getTimePositionInItem(item, indexInItem);
+        }
+        return new Pair<>(currentIndex, timePositionInItem);
+    }
+
     private void executeOnMainThread(Runnable runnable) {
         mainThreadHandler.post(runnable);
     }
@@ -551,7 +653,7 @@ public class TtsService extends Service {
     private void speak() {
         Log.d(TAG, "speak()");
 
-        // a local variable so it's not gets replaced in another thread
+        // a local variable so it doesn't get replaced in another thread
         TextInterface textInterface = this.textInterface;
 
         if (state != State.PLAYING || textInterface == null) {
@@ -561,21 +663,25 @@ public class TtsService extends Service {
 
         // Change the utteranceId so that call to onSpeakDone
         // of the previous speak sequence will not interfere with the following one
-        utteranceId++;
+        //noinspection NonAtomicOperationOnVolatileField: modified only in one thread
+        utteranceId += TTS_SPEAK_QUEUE_SIZE + 1;
 
-        String utteranceString = String.valueOf(utteranceId);
-        ttsSpeak(getConvertedText(0), TextToSpeech.QUEUE_FLUSH, utteranceString);
+        int currentIndex = textInterface.getCurrentIndex();
+
+        ttsSpeak(textInterface, currentIndex, 0, TextToSpeech.QUEUE_FLUSH, utteranceId);
         for (int i = 1; i <= TTS_SPEAK_QUEUE_SIZE; i++) {
-            ttsSpeak(getConvertedText(i), TextToSpeech.QUEUE_ADD, utteranceString);
+            ttsSpeak(textInterface, currentIndex, i, TextToSpeech.QUEUE_ADD, utteranceId);
         }
     }
 
     /**
      * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
      */
-    private void ttsEnqueueMoreIfUtteranceMatches(String utteranceId) {
-        if (!String.valueOf(this.utteranceId).equals(utteranceId)) {
-            Log.d(TAG, "ttsSpeakMoreIfUtteranceMatches() utteranceId didn't match");
+    private void ttsEnqueueMoreIfUtteranceMatches(String doneUtteranceId) {
+        Log.v(TAG, "ttsEnqueueMoreIfUtteranceMatches() doneUtteranceId: " + doneUtteranceId);
+
+        if (!String.valueOf(utteranceId).equals(doneUtteranceId)) {
+            Log.d(TAG, "ttsSpeakMoreIfUtteranceMatches() doneUtteranceId didn't match");
             return;
         }
 
@@ -586,14 +692,32 @@ public class TtsService extends Service {
             return;
         }
 
-        ttsSpeak(getConvertedText(TTS_SPEAK_QUEUE_SIZE), TextToSpeech.QUEUE_ADD, utteranceId);
+        //noinspection NonAtomicOperationOnVolatileField: modified only in one thread
+        utteranceId++;
+
+        int currentIndex = textInterface.getCurrentIndex();
+
+        ttsSpeak(textInterface, currentIndex, TTS_SPEAK_QUEUE_SIZE,
+                TextToSpeech.QUEUE_ADD, utteranceId);
     }
 
     /**
      * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
      */
-    private CharSequence getConvertedText(int relativeIndex) {
-        GenericItem item = textInterface.getItem(relativeIndex);
+    private void ttsSpeak(TextInterface textInterface, int currentIndex, int offset,
+                          int queueMode, int utteranceId) {
+        int index = currentIndex + offset;
+        int utterance = utteranceId + offset;
+
+        ttsSpeak(getConvertedText(textInterface, index), queueMode, String.valueOf(utterance));
+        utteranceIdToIndexMap.addToUtteranceIndexMap(utterance, index);
+    }
+
+    /**
+     * Thread-safety note: executed in a background thread: {@link TtsService#executor}.
+     */
+    private CharSequence getConvertedText(TextInterface textInterface, int index) {
+        GenericItem item = textInterface.getItem(index);
         if (item == null) return null;
 
         CharSequence result = ttsConverter.convert(item);
@@ -711,7 +835,11 @@ public class TtsService extends Service {
 
             tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                 @Override
-                public void onStart(String utteranceId) {}
+                public void onStart(String utteranceId) {
+//                    Log.v(TAG, "utteranceProgressListener.onStart()");
+
+                    setCurrentItemProgress(utteranceId, -1, -1);
+                }
 
                 @Override
                 public synchronized void onDone(String utteranceId) {
@@ -719,8 +847,18 @@ public class TtsService extends Service {
                 }
 
                 @Override
+                public void onError(String utteranceId, int errorCode) {
+                    Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId
+                            + ", errorCode: " + errorCode);
+                    super.onError(utteranceId, errorCode);
+                }
+
+                @Override
                 public void onError(String utteranceId) {
                     Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId);
+
+                    resetCurrentItemProgress();
+
                     onSpeakDoneListener(utteranceId);
                 }
 
@@ -728,7 +866,20 @@ public class TtsService extends Service {
                 public void onStop(String utteranceId, boolean interrupted) {
                     Log.d(TAG, "utteranceProgressListener.onStop() " + utteranceId
                             + ", " + interrupted);
+
+                    resetCurrentItemProgress();
+
                     onSpeakDoneListener(utteranceId);
+                }
+
+                @Override
+                public void onRangeStart(String utteranceId, int start, int end, int frame) {
+                    super.onRangeStart(utteranceId, start, end, frame);
+
+//                    Log.v(TAG, String.format("utteranceProgressListener.onRangeStart(%s, %d, %d, %d)",
+//                            utteranceId, start, end, frame));
+
+                    setCurrentItemProgress(utteranceId, start, end);
                 }
             });
 

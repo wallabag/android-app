@@ -27,18 +27,21 @@ class WebViewText implements TextInterface {
 
     private final Handler handler = new Handler();
 
+    private TtsConverter ttsConverter;
+
     private TtsHost ttsHost;
 
     private final List<GenericItem> textList = new ArrayList<>();
 
-    private volatile int current;
+    private int current;
 
     private Integer storedScrollPosition;
 
     private Runnable readFinishedCallback;
     private Runnable parsingFinishedCallback;
 
-    WebViewText(TtsHost ttsHost) {
+    WebViewText(TtsConverter ttsConverter, TtsHost ttsHost) {
+        this.ttsConverter = ttsConverter;
         this.ttsHost = ttsHost;
     }
 
@@ -124,18 +127,21 @@ class WebViewText implements TextInterface {
     private void addItem(GenericItem item) {
         GenericItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
 
-        item.timePosition = item.approximateDuration()
+        item.timePosition = ttsConverter.approximateDuration(item)
                 + (prevItem != null ? prevItem.timePosition : 0);
 
         textList.add(item);
     }
 
     @Override
-    public GenericItem getItem(int relativeIndex) {
-        //Log.d(TAG, "getText(" + relativeIndex + "), current=" + current);
-        int i = current + relativeIndex;
-        if (i >= 0 && i < textList.size()) {
-            return textList.get(i);
+    public synchronized int getCurrentIndex() {
+        return current;
+    }
+
+    @Override
+    public GenericItem getItem(int index) {
+        if (index >= 0 && index < textList.size()) {
+            return textList.get(index);
         } else {
             return null;
         }
@@ -147,7 +153,7 @@ class WebViewText implements TextInterface {
      * @return true if current item changed (not already the end).
      */
     @Override
-    public boolean next() {
+    public synchronized boolean next() {
         //Log.d(TAG, "next, current=" + current);
         boolean result;
         if (current < textList.size() - 1) {
@@ -161,69 +167,81 @@ class WebViewText implements TextInterface {
         return result;
     }
 
-    /**
-     * Fast forward to the next TextItem located below the current one (next line).
-     *
-     * @return true if current item changed (not already the beginning).
-     */
     @Override
-    public boolean fastForward() {
-        //Log.d(TAG, "fastForward, current=" + current);
-        boolean result;
-        int newIndex = current + 1;
-        if (newIndex > 0 && newIndex < textList.size()) {
-            float originalBottom = textList.get(newIndex - 1).bottom;
-            // Look for text's index that start on the next line (its top >= current bottom)
-            while (newIndex < textList.size() - 1
-                    && textList.get(newIndex).top < originalBottom) {
-                newIndex++;
-            }
-            Log.d(TAG, "fastForward " + current + " => " + newIndex);
-            current = newIndex;
-            result = true;
-        } else {
-            result = false;
+    public synchronized boolean rewind(long desiredTimeToRewind,
+                                       int currentIndex, long progressInCurrentItem) {
+        int startIndex = current;
+        if (currentIndex != startIndex) progressInCurrentItem = 0;
+
+/*
+        if (startIndex == 0 && progressInCurrentItem < desiredTimeToRewind / 10) {
+            Log.d(TAG, "rewind() no time to rewind");
+            return false;
         }
+*/
+
+        int index = startIndex;
+        long timeToRewind = desiredTimeToRewind - progressInCurrentItem;
+
+        while (timeToRewind > 0 && index > 0) {
+            int newIndex = index - 1;
+            long newTimeToRewind = timeToRewind - itemDuration(newIndex);
+            long alreadyRewound = desiredTimeToRewind - timeToRewind;
+
+            if (newTimeToRewind > 0 || alreadyRewound < desiredTimeToRewind / 2) {
+                index = newIndex;
+                timeToRewind = newTimeToRewind;
+            } else {
+                break;
+            }
+        }
+
+        Log.d(TAG, "rewind() " + startIndex + " => " + index);
+        current = index;
+
         ensureTextRangeVisibleOnScreen(true);
-        return result;
+
+        return true;
     }
 
-    /**
-     * Rewind to the previous TextItem located above the current one (previous line).
-     *
-     * @return true if current item changed (not already the end).
-     */
     @Override
-    public boolean rewind() {
-        //Log.d(TAG, "rewind, current=" + current);
-        boolean result;
-        int newIndex = current - 1;
-        if (newIndex >= 0 && newIndex + 1 < textList.size()) {
-            float originalTop = textList.get(newIndex + 1).top;
-            // Look for text's index that start on the previous line (its bottom < current top)
-            while (newIndex > 0 && textList.get(newIndex).bottom >= originalTop) {
-                newIndex--;
-            }
-            if (newIndex > 0) {
-                // If there is many text on the previous line, we want
-                // the first on the line, so we look again for the text's index
-                // on the previous of the previous line and select the following index.
-                // This way clicking "Next" and "Previous" will be coherent.
-                int prevPrevIndex = newIndex;
-                float newTop = textList.get(prevPrevIndex).top;
-                while (prevPrevIndex > 0 && textList.get(prevPrevIndex).bottom >= newTop) {
-                    prevPrevIndex--;
-                }
-                newIndex = prevPrevIndex + 1;
-            }
-            Log.d(TAG, "rewind " + current + " => " + newIndex);
-            current = newIndex;
-            result = true;
-        } else {
-            result = false;
+    public synchronized boolean fastForward(long desiredTimeToSkip,
+                                            int currentIndex, long progressInCurrentItem) {
+        int startIndex = current;
+        if (currentIndex != startIndex) progressInCurrentItem = 0;
+
+        if (startIndex == textList.size() - 1) {
+            Log.d(TAG, "fastForward() no time to skip");
+            return false;
         }
+
+        int index = startIndex + 1;
+        long timeToSkip = desiredTimeToSkip - (itemDuration(startIndex) - progressInCurrentItem);
+
+        while (timeToSkip > 0 && index < textList.size() - 1) {
+            int newIndex = index + 1;
+            long newTimeToSkip = timeToSkip - itemDuration(index);
+            long alreadySkipped = desiredTimeToSkip - timeToSkip;
+
+            if (newTimeToSkip > 0 || alreadySkipped < desiredTimeToSkip / 3) {
+                index = newIndex;
+                timeToSkip = newTimeToSkip;
+            } else {
+                break;
+            }
+        }
+
+        Log.d(TAG, "fastForward() " + startIndex + " => " + index);
+        current = index;
+
         ensureTextRangeVisibleOnScreen(true);
-        return result;
+
+        return true;
+    }
+
+    private long itemDuration(int index) {
+        return textList.get(index).timePosition
+                - (index > 0 ? textList.get(index - 1).timePosition : 0);
     }
 
     @Override
@@ -237,7 +255,7 @@ class WebViewText implements TextInterface {
     }
 
     @Override
-    public void restoreFromStart() {
+    public synchronized void restoreFromStart() {
         Log.d(TAG, "restoreFromStart -> current = 0");
         current = 0;
     }
@@ -248,7 +266,7 @@ class WebViewText implements TextInterface {
     }
 
     @Override
-    public void restoreCurrent() {
+    public synchronized void restoreCurrent() {
         if (ttsHost == null) return;
 
         if (storedScrollPosition != null) {
@@ -280,7 +298,7 @@ class WebViewText implements TextInterface {
     }
 
     @Override
-    public long getTime() {
+    public synchronized long getTime() {
         long result = -1;
         if (current > 0) {
             result = textList.get(current - 1).timePosition;

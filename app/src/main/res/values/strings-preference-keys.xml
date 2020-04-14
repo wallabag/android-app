@@ -45,6 +45,8 @@
 
     <string name="pref_key_tts" translatable="false">tts</string>
     <string name="pref_key_tts_category" translatable="false">tts.category</string>
+    <string name="pref_key_tts_fastForwardTime" translatable="false">tts.fastForwardTime</string>
+    <string name="pref_key_tts_rewindTime" translatable="false">tts.rewindTime</string>
     <string name="pref_key_tts_nextButtonIsFastForward" translatable="false">tts.nextButtonIsFastForward</string>
     <string name="pref_key_tts_previousButtonIsRewind" translatable="false">tts.previousButtonIsRewind</string>
     <string name="pref_key_tts_usePreviewAsAlbumArt" translatable="false">tts.usePreviewAsAlbumArt</string>

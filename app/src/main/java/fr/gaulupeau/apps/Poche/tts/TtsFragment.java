@@ -619,7 +619,9 @@ public class TtsFragment extends Fragment {
             setTextAndMetadataToService();
         }
 
-        webViewText = new WebViewText(ttsHost);
+        // ideally, this should be the same TtsConverter instance as in TtsService,
+        // but this is ok for now
+        webViewText = new WebViewText(new TtsConverter(activity), ttsHost);
         webViewText.setReadFinishedCallback(this::onReadFinished);
 
         webViewText.parseWebViewDocument(() -> {

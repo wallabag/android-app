@@ -13,6 +13,4 @@ abstract class GenericItem {
         this.bottom = bottom;
     }
 
-    abstract long approximateDuration();
-
 }
