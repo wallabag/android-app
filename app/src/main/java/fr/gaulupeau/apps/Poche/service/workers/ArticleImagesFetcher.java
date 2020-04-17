@@ -106,6 +106,12 @@ public class ArticleImagesFetcher extends BaseNetworkWorker {
 
                 String content = article.getContent();
 
+                if (content == null) {
+                    Log.w(TAG, "fetchImages() content is null for articleId: "
+                            + article.getArticleId());
+                    content = "";
+                }
+
                 // append preview picture URL to content to fetch it too
                 // should probably be handled separately
                 if (!TextUtils.isEmpty(article.getPreviewPictureURL())) {

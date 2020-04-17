@@ -905,6 +905,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private String getHtmlContent() {
         String htmlContent = article.getContent();
 
+        if (htmlContent == null) {
+            Log.w(TAG, "getHtmlContent() content is null for articleId: "
+                    + article.getArticleId());
+
+            htmlContent = getString(R.string.contentIsTooLong);
+        }
+
         if (BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
         return doImageUrlReplacements(htmlContent);

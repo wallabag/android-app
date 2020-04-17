@@ -1,5 +1,8 @@
 package fr.gaulupeau.apps.Poche.data.dao.entities;
 
+import android.database.sqlite.SQLiteBlobTooBigException;
+import android.util.Log;
+
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +20,8 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
  */
 @Entity
 public class Article {
+
+    private static final String TAG = Article.class.getSimpleName();
 
     @Id
     private Long id;
@@ -63,6 +68,9 @@ public class Article {
     private Double articleProgress;
 
     private Boolean imagesDownloaded;
+
+    @Transient
+    private boolean contentTooBig;
 
     @ToMany
     @JoinEntity(
@@ -136,16 +144,28 @@ public class Article {
     }
 
     public String getContent() {
-        return getArticleContent().getContent();
+        ArticleContent articleContent = getArticleContent();
+
+        if (contentTooBig) return null;
+
+        return articleContent.getContent();
     }
 
     public void setContent(String content) {
-        getArticleContent().setContent(content);
+        ArticleContent articleContent = getArticleContent();
+
+        if (contentTooBig) {
+            Log.w(TAG, "setContent() ignoring content change" +
+                    " because current content is too big to be loaded");
+            return;
+        }
+
+        articleContent.setContent(content);
     }
 
     public ArticleContent getArticleContent() {
         ArticleContent content = this.content;
-        if (content == null) {
+        if (content == null && !contentTooBig) {
             if (id == null) {
                 throw new IllegalStateException("Can't fetch content for a not persisted Article");
             }
@@ -156,7 +176,12 @@ public class Article {
             }
 
             ArticleContentDao targetDao = daoSession.getArticleContentDao();
-            this.content = content = targetDao.load(id);
+            try {
+                this.content = content = targetDao.load(id);
+            } catch (SQLiteBlobTooBigException e) {
+                Log.w(TAG, "getArticleContent() content is too big", e);
+                contentTooBig = true;
+            }
         }
         return content;
     }
@@ -167,6 +192,10 @@ public class Article {
 
     public boolean isArticleContentLoaded() {
         return content != null;
+    }
+
+    public boolean isContentTooBig() {
+        return contentTooBig;
     }
 
     public String getTitle() {

@@ -349,4 +349,6 @@
 
     <string name="title">Title</string>
     <string name="untagged"><![CDATA[<untagged>]]></string>
+
+    <string name="contentIsTooLong">The article content is too long to display</string>
 </resources>

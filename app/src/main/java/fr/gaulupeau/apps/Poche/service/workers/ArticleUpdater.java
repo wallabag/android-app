@@ -308,7 +308,8 @@ public class ArticleUpdater {
         }
 
         if (existing) {
-            if (!equalOrEmpty(article.getContent(), apiArticle.content)) {
+            if (!equalOrEmpty(article.getContent(), apiArticle.content)
+                    && !article.isContentTooBig()) {
                 article.setContent(apiArticle.content);
                 articleContentToUpdate.add(article.getArticleContent());
                 articleChanges.add(ChangeType.CONTENT_CHANGED);
@@ -854,7 +855,8 @@ public class ArticleUpdater {
 
     private void fixArticleNullValues(Article article) {
         if (article.getTitle() == null) article.setTitle("");
-        if (article.isArticleContentLoaded() && article.getContent() == null) {
+        if (article.isArticleContentLoaded() && article.getContent() == null
+                && !article.isContentTooBig()) {
             article.setContent("");
         }
         if (article.getDomain() == null) article.setDomain("");
