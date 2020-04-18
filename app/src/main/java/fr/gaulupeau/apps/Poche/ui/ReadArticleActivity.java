@@ -900,6 +900,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     "\t\t<script src=\"onyx-style-workaround.js\"></script>";
         }
 
+        extra += "\n" + "\t\t<script src=\"xpath-range.js\"></script>";
+
         return extra;
     }
 

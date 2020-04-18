@@ -4,11 +4,14 @@ function cmdStart() {
 function cmdEnd() {
     hostWebViewTextController.onEnd();
 }
-function cmdText(text, top, bottom, extras) {
-    hostWebViewTextController.onText(text, top, bottom, extras);
+function cmdText(text, extras, range, top, bottom) {
+    hostWebViewTextController.onText(text, extras, JSON.stringify(range), top, bottom);
 }
-function cmdImg(altText, title, src, top, bottom) {
-    hostWebViewTextController.onImage(altText, title, src, top, bottom);
+function cmdImg(altText, title, src, range, top, bottom) {
+    hostWebViewTextController.onImage(altText, title, src, JSON.stringify(range), top, bottom);
+}
+function cmdRangeInfo(requestId, top, bottom) {
+    hostWebViewTextController.onRangeInfoResponse(requestId, top, bottom);
 }
 
 function traverse(element, callback) {
@@ -112,7 +115,14 @@ function shiftExtras(extras, emphasisStarts, amount) {
     }
 }
 
+function serializeRange(range, root) {
+    // uses the `xpath-range` library
+    return xpathRange.fromRange(range, root);
+}
+
 function parseDocumentText() {
+    var root = document.getElementById('article');
+
     var range = document.createRange();
 
 //    var stack = [];
@@ -146,7 +156,7 @@ function parseDocumentText() {
 //                console.log('checkForSentenceEnd()');
 //                console.log('Range: ' + range);
                 var rect = range.getBoundingClientRect();
-                cmdText(s, rect.top, rect.bottom, serializeExtras(relevantExtras));
+                cmdText(s, serializeExtras(relevantExtras), serializeRange(range, root), rect.top, rect.bottom);
             }
 
             accumulatedText = accumulatedText.substring(end);
@@ -171,7 +181,7 @@ function parseDocumentText() {
             var relevantExtras = values[1];
 
             var rect = range.getBoundingClientRect();
-            cmdText(s, rect.top, rect.bottom, serializeExtras(relevantExtras));
+            cmdText(s, serializeExtras(relevantExtras), serializeRange(range, root), rect.top, rect.bottom);
         }
 
         accumulatedText = '';
@@ -225,7 +235,7 @@ function parseDocumentText() {
 
                 range.selectNode(element);
                 var rect = range.getBoundingClientRect();
-                cmdImg(element.alt, element.title, element.src, rect.top, rect.bottom);
+                cmdImg(element.alt, element.title, element.src, serializeRange(range, root), rect.top, rect.bottom);
             } else if (shouldBreak(element)) {
                 flushCurrentText();
             }
@@ -246,7 +256,7 @@ function parseDocumentText() {
 
     cmdStart();
 
-    traverse(document.getElementById('article'), parserCallback);
+    traverse(root, parserCallback);
 
     cmdEnd();
 }
@@ -259,3 +269,53 @@ function shouldBreak(element) {
 //function stackToString(stack) {
 //    return stack.map(e => e.nodeName.toLowerCase()).join(', ');
 //}
+
+
+function deserializeRange(rangeString, root) {
+    var rangeObj = JSON.parse(rangeString);
+    return xpathRange.toRange(rangeObj.start, rangeObj.startOffset,
+            rangeObj.end, rangeObj.endOffset, root);
+}
+
+function getRangeInfo(requestId, rangeString) {
+    var range = deserializeRange(rangeString, document.getElementById('article'));
+
+    var rect = range.getBoundingClientRect();
+    cmdRangeInfo(requestId, rect.top, rect.bottom);
+}
+
+function highlightRange(rangeString) {
+    var range = deserializeRange(rangeString, document.getElementById('article'));
+
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(range);
+}
+
+
+/*
+// for debugging in a web-browser:
+// just uncomment this and copy-paste everything into the browser console
+
+//function serializeRange(range, root) {
+//    return null;
+//}
+
+function cmdStart() {
+    console.log('parse start');
+}
+function cmdEnd() {
+    console.log('parse end');
+}
+function cmdText(text, extras, range, top, bottom) {
+    console.log('TEXT: ' + text);
+    if (range !== null) console.log('RANGE: ' + JSON.stringify(range));
+    if (extras !== null) console.log('EXTRAS: ' + extras);
+}
+function cmdImg(altText, title, src, range, top, bottom) {
+    console.log('IMG: ' + altText + ', title: ' + title + ', src: ' + src);
+    if (range !== null) console.log('RANGE: ' + JSON.stringify(range));
+}
+
+
+parseDocumentText();
+*/
