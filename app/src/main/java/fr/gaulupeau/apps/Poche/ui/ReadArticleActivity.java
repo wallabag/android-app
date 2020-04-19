@@ -60,6 +60,7 @@ import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.tts.JsTtsController;
+import fr.gaulupeau.apps.Poche.tts.Parser;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
@@ -1291,6 +1292,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         articleProgress = article.getArticleProgress();
         Log.v(TAG, "loadArticle() articleProgress: " + articleProgress);
         Log.v(TAG, "loadArticle() articleLanguage: " + article.getLanguage());
+
+        article.getContent();
+
+        Log.v(TAG, "loadArticle() parsing started");
+        new Parser().parse("<article>" + article.getContent() + "</article>");
+        Log.v(TAG, "loadArticle() parsing ended");
 
         return true;
     }
