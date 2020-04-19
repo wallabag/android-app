@@ -128,7 +128,7 @@ function parseDocumentText() {
         var currentElementText = currentElement.textContent;
         var currentElementLength = currentElementText.length;
 
-        var regex = /[.?!]+\s/g;
+        var regex = /[.?!\u2026]+\s/g;
 
         var match;
         while ((match = regex.exec(currentElementText)) !== null) {
