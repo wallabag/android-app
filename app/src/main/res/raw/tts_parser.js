@@ -119,11 +119,10 @@ function parseDocumentText() {
 
     var accumulatedText = '';
     var extras = [];
-    var currentElement = null;
 
     var emphasisStarts = [];
 
-    var checkForSentenceEnd = function() {
+    var checkForSentenceEnd = function(currentElement) {
         if (!accumulatedText || accumulatedText.trim().length === 0) return;
 
         var currentElementText = currentElement.textContent;
@@ -143,7 +142,7 @@ function parseDocumentText() {
             var relevantExtras = values[1];
 
             if (s.length !== 0) {
-                range.setEnd(currentElement, index);
+                range.setEnd(currentElement, index); // TODO: should subtract trimmed from end
 //                console.log('checkForSentenceEnd()');
 //                console.log('Range: ' + range);
                 var rect = range.getBoundingClientRect();
@@ -157,25 +156,26 @@ function parseDocumentText() {
         }
 
         range.setEnd(currentElement, currentElementLength);
+
+        if (accumulatedText.trim().length === 0) accumulatedText = '';
     };
 
     var flushCurrentText = function() {
         if (accumulatedText && accumulatedText.trim().length > 0) {
 //            console.log('flushCurrentText()');
 //            console.log('Range: ' + range);
-            var rect = range.getBoundingClientRect();
 
             var values = prepareTextAndExtras(accumulatedText, extras, emphasisStarts,
                     accumulatedText.length);
             var s = values[0];
             var relevantExtras = values[1];
 
+            var rect = range.getBoundingClientRect();
             cmdText(s, rect.top, rect.bottom, serializeExtras(relevantExtras));
         }
 
         accumulatedText = '';
         extras = [];
-        currentElement = null;
         emphasisStarts = [];
     };
 
@@ -185,7 +185,7 @@ function parseDocumentText() {
                 emphasisStarts.push(accumulatedText.length);
             } else {
                 var lastStart = emphasisStarts.pop();
-                if (lastStart !== undefined) {
+                if (lastStart !== undefined && accumulatedText.length > 0) {
                     extras.push({type: 'emphasis', start: lastStart, end: accumulatedText.length});
                 }
             }
@@ -210,15 +210,16 @@ function parseDocumentText() {
 
             if (element.nodeType === Node.TEXT_NODE) {
                 if (!accumulatedText || accumulatedText.trim().length === 0) {
+                    accumulatedText = '';
                     range.setStart(element, 0);
                 }
 
-                accumulatedText += element.textContent;
+                accumulatedText += element.textContent
+                        .replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]/g, " ");
 
-                currentElement = element;
                 range.setEnd(element, element.textContent.length);
 
-                checkForSentenceEnd();
+                checkForSentenceEnd(element);
             } else if (element.nodeName === 'IMG') {
                 flushCurrentText();
 
