@@ -101,7 +101,7 @@
     <string name="themeName_solarized">过曝光</string>
     <string name="menu_readArticle_increaseFontSize">增大字体</string>
     <string name="menu_readArticle_decreaseFontSize">缩小字体</string>
-    <string name="aboutText"><b>适用于 Android 的 wallabag 应用</b>\n
+    <string name="aboutLibraries_description_text"><b>适用于 Android 的 wallabag 应用</b>\n
         wallabag 是一个自托管应用，使您不再错过任何内容。点击，保存并在闲暇时阅读提取的内容。</string>
     <string name="readSpeed">朗读速度</string>
     <string name="voiceHeight">语音音高</string>

@@ -85,7 +85,7 @@
     <string name="themeName_solarized">Túlexponált</string>
     <string name="menu_readArticle_increaseFontSize">Betűméret növelése</string>
     <string name="menu_readArticle_decreaseFontSize">Betűméret csökkentése</string>
-    <string name="aboutText"><b>wallabag alkalmazás Androidra</b>\n
+    <string name="aboutLibraries_description_text"><b>wallabag alkalmazás Androidra</b>\n
         A wallabag egy saját szerveren futó alkalmazás, amely lehetővé teszi, hogy többé ne hagyjon ki semmilyen tartalmat. Kattintson, mentse és olvassa el a kibontott tartalmat szabadidejében.</string>
     <string name="readSpeed">Olvasási sebesség</string>
     <string name="voiceHeight">Hangmagasság</string>
