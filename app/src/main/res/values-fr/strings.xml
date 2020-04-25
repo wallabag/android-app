@@ -235,7 +235,7 @@
     <string name="pref_name_storage_dbPath_dbMoved">La base de données a été déplacée</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>
-    <string name="pref_desc_misc_appendWallabagMention">Ajoute \"via @wallabagapp\" aux articles partagés</string>
+    <string name="pref_desc_misc_appendWallabagMention">Ajoute « via @wallabagapp » aux articles partagés</string>
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
@@ -291,8 +291,8 @@
     <string name="notification_clipboardLabel">Détails de l\'erreur</string>
     <string name="notification_copyToClipboard">Copier dans le presse-papiers</string>
     <string name="notification_stacktrace">Pile d\'erreur :</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Veuillez installer un lecteur de QR-codes</string>
-    <string name="connectionWizard_misc_scanQrCode">Scanner un QR code</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Veuillez installer un lecteur de codes QR</string>
+    <string name="connectionWizard_misc_scanQrCode">Scanner un code QR</string>
     <string name="misc_localQueue_dumpToFile_header">Si vous avez des soucis avec la synchronisation, merci d\'indiquer votre problème ici : %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Erreur : %s</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">Exporté dans %s</string>
