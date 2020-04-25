@@ -81,6 +81,11 @@ public class WallabagConnection {
 
             @Override
             public String getAccessToken() {
+                Long expirationDate = settings.getApiAccessTokenExpirationDate();
+                if (expirationDate != null && System.currentTimeMillis() > expirationDate) {
+                    return null;
+                }
+
                 return settings.getApiAccessToken();
             }
 
@@ -88,6 +93,14 @@ public class WallabagConnection {
             public boolean tokensUpdated(TokenResponse token) {
                 if(token.refreshToken != null) settings.setApiRefreshToken(token.refreshToken);
                 settings.setApiAccessToken(token.accessToken);
+
+                if (token.expiresIn > TimeUnit.MINUTES.toSeconds(1)) {
+                    settings.setApiAccessTokenExpirationDate(System.currentTimeMillis()
+                            + TimeUnit.SECONDS.toMillis(token.expiresIn)
+                            - TimeUnit.SECONDS.toMillis(30)); // subtract 30 seconds to be on the safe side
+                } else {
+                    settings.setApiAccessTokenExpirationDate(null);
+                }
 
                 return !TextUtils.isEmpty(token.accessToken);
             }
