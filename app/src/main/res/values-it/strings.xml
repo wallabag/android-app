@@ -95,7 +95,7 @@
     <string name="themeName_solarized">Solarizzato</string>
     <string name="menu_readArticle_increaseFontSize">Aumenta dimensione del font</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuisci dimensione del font</string>
-    <string name="aboutText"><b>App wallabag per Android</b>\n
+    <string name="aboutLibraries_description_text"><b>App wallabag per Android</b>\n
         wallabag è un\'app autoospidabile che ti permette non mancare più nessun contenuta. Clicca, salva e legge i contenuti estratti come vuoi.</string>
     <string name="readSpeed">Velocità di lettura</string>
     <string name="voiceHeight">Tonalità della voce</string>

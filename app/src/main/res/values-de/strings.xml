@@ -66,7 +66,7 @@
     <string name="themeName_solarized">Solarisiert</string>
     <string name="menu_readArticle_increaseFontSize">Schrift vergrößern</string>
     <string name="menu_readArticle_decreaseFontSize">Schrift verkleinern</string>
-    <string name="aboutText"><b>wallabag-App für Android</b>\n
+    <string name="aboutLibraries_description_text"><b>wallabag-App für Android</b>\n
         wallabag ist eine selbsthostbare Anwendung, die dir ermöglicht, nie wieder Inhalte zu vermissen. Klicke, speichere und lese es, wann du willst. Der ausgewählte Inhalt wird gespeichert, sodass du ihn lesen kannst, wenn du Zeit hast.</string>
     <string name="readSpeed">Lesegeschwindigkeit</string>
     <string name="voiceHeight">Stimmhöhe</string>

@@ -5,9 +5,13 @@ buildscript {
         google()
         jcenter()
     }
+    ext {
+        aboutLibrariesVersion = '8.1.2'
+    }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.2'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.2.2'
+        classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:${aboutLibrariesVersion}"
     }
 }
 

@@ -22,8 +22,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -35,7 +33,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -465,27 +462,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch(Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
-                CharSequence aboutCharSequence = getText(R.string.aboutText);
-                String aboutString = aboutCharSequence instanceof Spanned
-                        ? Html.toHtml((Spanned) aboutCharSequence)
-                        : aboutCharSequence.toString();
-                new LibsBuilder()
-                        .withActivityStyle(style)
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withAboutDescription(aboutString)
-                        .start(this);
+                new LibsBuilder().start(this);
                 break;
         }
 
