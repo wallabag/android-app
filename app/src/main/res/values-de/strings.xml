@@ -272,7 +272,7 @@
     <string name="pref_name_storage_dbPath_externalStorage">Externer Speicher</string>
     <string name="pref_name_storage_dbPath_dbMoved">Datenbank verschoben</string>
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
-    <string name="pref_desc_misc_appendWallabagMention">Hänge \"via @wallabagapp\" an geteilte Text an</string>
+    <string name="pref_desc_misc_appendWallabagMention">Hänge „via @wallabagapp“ an geteilte Text an</string>
     <string name="remove_tag">Tag entfernen</string>
     <string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
     <string name="markedAsRead">Artikel als gelesen markiert</string>
@@ -282,7 +282,7 @@
     <string name="pref_desc_ui_swipeArticles">Hier klicken, um durch Wischen innerhalb eines Artikels zum vorherigen/nächsten Artikel zu wechseln</string>
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
     <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>
-    <string name="themeName_eink">Für E-Ink Displays</string>
+    <string name="themeName_eink">Für E-Papier-Anzeige</string>
     <string name="notification_channel_group_name_tts">TTS</string>
     <string name="notification_channel_group_name_sync">Synchronisierung</string>
     <string name="notification_channel_group_name_other">Sonstige</string>
@@ -310,4 +310,7 @@
     <string name="misc_localQueue_dumpToFile_result_dumped">Geschrieben in %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Fehler: %s</string>
     <string name="misc_localQueue_dumpToFile_header">Wenn du Probleme beim Synchronisieren hast, erstelle bitte einen Fehlerbericht hier: %s</string>
+    <string name="menu_annotate">Anmerkung erstellen</string>
+    <string name="pref_desc_ui_annotations_enabled">Experimentelle Funktion! Anmerkungen anzeigen, bearbeiten und erstellen</string>
+    <string name="pref_name_ui_annotations_enabled">Unterstützung von Anmerkungen</string>
 </resources>
