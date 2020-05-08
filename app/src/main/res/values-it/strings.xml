@@ -9,7 +9,7 @@
     <string name="menuPrevious">Articolo precedente</string>
     <string name="menuDelete">Elimina</string>
     <string name="menuOpenOriginal">Apri originale</string>
-    <string name="menuTTS">Text To Speech</string>
+    <string name="menuTTS">Sintesi vocale</string>
     <string name="ttsSpeed">Velocità</string>
     <string name="ttsPitch">Tonalità</string>
     <string name="ttsVolume">Volume</string>
@@ -18,7 +18,7 @@
     <string name="ttsAutoplayNextArticle">Riproduci automaticamente il prossimo articolo</string>
     <string name="ttsError">Errore Text To Speech</string>
     <string name="ttsFastRewind">Vai indietro</string>
-    <string name="ttsPlayPause">Play / Pausa</string>
+    <string name="ttsPlayPause">Riproduci / Pausa</string>
     <string name="ttsFastForward">Vai avanti</string>
     <string name="ttsOptions">Opzioni</string>
     <string name="menu_open_random_article">Apri articolo casuale</string>
@@ -119,7 +119,7 @@
     <string name="notification_expandedError">Errore: %s</string>
     <string name="menu_lists_search">Cerca</string>
     <string name="menu_lists_changeSortOrder">Cambia ordinamento</string>
-    <string name="menu_lists_sweepDeletedArticles">\"Pulisci\" articoli cancellati</string>
+    <string name="menu_lists_sweepDeletedArticles">«Pulisci» articoli cancellati</string>
     <string name="menu_lists_fullUpdate">Aggiornamento completo</string>
     <string name="other_searchHint">Cerca per articolo o per testo</string>
     <string name="menu_manageTags">Gestisci etichette</string>
@@ -148,7 +148,7 @@
         https://app.wallabag.it\n
         https://framabag.org
     </string>
-    <string name="pref_name_connection_username">Username</string>
+    <string name="pref_name_connection_username">Nome utente</string>
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_api_clientID">ID del Client</string>
     <string name="pref_name_connection_api_clientSecret">Segreto del Client</string>
@@ -267,4 +267,30 @@
     <string name="d_urlAction_copyToClipboard">Copia negli appunti</string>
     <string name="pref_name_ui_keepScreenOn">Mantieni lo schermo attivato durante la lettura</string>
     <string name="pref_desc_ui_keepScreenOn">Tieni lo schermo attivato durante la lettura di un articolo</string>
+    <string name="menu_annotate">Annota</string>
+    <string name="copiedToClipboard">Copiato negli appunti</string>
+    <string name="notification_clipboardLabel">Dettagli dell\'errore</string>
+    <string name="notification_copyToClipboard">Copia negli appunti</string>
+    <string name="remove_tag">Rimuovi l\'etichetta</string>
+    <string name="connectionWizard_misc_scanQrCode">Scannerizza un codice QR</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Errore: %s</string>
+    <string name="misc_localQueue_removeFirstItem_done">Fatto</string>
+    <string name="misc_localQueue_empty">Nessun cambiamento locale</string>
+    <string name="pref_desc_misc_localQueue_notice">Non fare nulla qui se non sai cosa stai facendo</string>
+    <string name="pref_name_misc_localQueue_notice">ATTENZIONE</string>
+    <string name="pref_categoryName_misc_localQueue">Cambiamenti locali</string>
+    <string name="pref_desc_misc_appendWallabagMention">Aggiungi «via @wallabagapp» ai testi condivisi</string>
+    <string name="pref_name_storage_dbPath_dbMoved">Banca dati spostata</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Archiviazione esterna</string>
+    <string name="pref_name_storage_dbPath_internalStorage">Archiviazione interna</string>
+    <string name="pref_name_storage_dbPath">Posizione della banca dati</string>
+    <string name="pref_name_ui_previewImage_enabled">Anteprima immagine</string>
+    <string name="pref_name_ui_swipeArticles">Scorri gli articoli</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Gestione del testo lungo preformattato</string>
+    <string name="notification_channel_name_error">Errori</string>
+    <string name="notification_channel_name_downloading_articles">Scaricamento di PDF</string>
+    <string name="notification_channel_name_sync">Sincronizzazione</string>
+    <string name="notification_channel_group_name_other">Altro</string>
+    <string name="notification_channel_group_name_sync">Sincronizzazione</string>
+    <string name="themeName_eink">Per gli schermi a inchiostro elettronico</string>
 </resources>
