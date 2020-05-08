@@ -4,9 +4,11 @@ Added:
 - Tags (clickable) are displayed in the article view.
 - "Untagged" list.
 - Long-press menu (only for single articles).
+- Saving origin URL when adding from other articles.
 
 Changes:
 
+- Adaptive icon.
 - UI should no longer be blocked by database operations.
 - A lot of refactoring.
 
