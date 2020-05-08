@@ -897,7 +897,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if (onyxWorkaroundEnabled) {
             extra += "\n" +
-                    "\t\t<script>onyxStyleWorkaround();</script>";
+                    "\t\t<script src=\"onyx-style-workaround.js\"></script>";
         }
 
         return extra;
