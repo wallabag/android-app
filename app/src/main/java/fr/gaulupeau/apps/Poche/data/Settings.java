@@ -162,6 +162,14 @@ public class Settings {
         return contains(context.getString(keyResourceID));
     }
 
+    public void remove(String key) {
+        pref.edit().remove(key).apply();
+    }
+
+    public void remove(int keyResourceID) {
+        remove(context.getString(keyResourceID));
+    }
+
     public boolean getBoolean(String key, boolean defValue) {
         return pref.getBoolean(key, defValue);
     }
@@ -304,6 +312,20 @@ public class Settings {
 
     public void setApiAccessToken(String apiAccessToken) {
         setString(R.string.pref_key_connection_api_accessToken, apiAccessToken);
+    }
+
+    public Long getApiAccessTokenExpirationDate() {
+        return contains(R.string.pref_key_connection_api_accessTokenExpirationDate)
+                ? getLong(R.string.pref_key_connection_api_accessTokenExpirationDate, 0)
+                : null;
+    }
+
+    public void setApiAccessTokenExpirationDate(Long timestamp) {
+        if (timestamp == null) {
+            remove(R.string.pref_key_connection_api_accessTokenExpirationDate);
+        } else {
+            setLong(R.string.pref_key_connection_api_accessTokenExpirationDate, timestamp);
+        }
     }
 
     public String getHttpAuthUsername() {

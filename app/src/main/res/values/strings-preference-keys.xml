@@ -11,6 +11,7 @@
     <string name="pref_key_connection_api_clientSecret" translatable="false">connection.api.clientSecret</string>
     <string name="pref_key_connection_api_refreshToken" translatable="false">connection.api.refreshToken</string>
     <string name="pref_key_connection_api_accessToken" translatable="false">connection.api.accessToken</string>
+    <string name="pref_key_connection_api_accessTokenExpirationDate" translatable="false">connection.api.accessTokenExpirationDate</string>
     <string name="pref_key_connection_advanced" translatable="false">connection.advanced</string>
     <string name="pref_key_connection_advanced_httpAuth_category" translatable="false">connection.advanced.httpAuth.category</string>
     <string name="pref_key_connection_advanced_httpAuthUsername" translatable="false">connection.advanced.httpAuthUsername</string>
