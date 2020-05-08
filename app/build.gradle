@@ -64,7 +64,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'org.greenrobot:eventbus:3.2.0'
-    implementation 'org.greenrobot:greendao:3.2.2'
+    implementation 'org.greenrobot:greendao:3.3.0'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.5.0'
