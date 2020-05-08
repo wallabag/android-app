@@ -94,6 +94,11 @@
                 android:title="@string/pref_name_ui_article_textAlignment_justify"
                 android:summary="@string/pref_desc_ui_article_textAlignment_justify"
                 android:defaultValue="true"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_onyxworkaround_enabled"
+                android:title="@string/pref_name_ui_onyxworkaround_enabled"
+                android:summary="@string/pref_desc_ui_onyxworkaround_enabled"
+                android:defaultValue="false"/>
             <ListPreference
                 android:key="@string/pref_key_ui_article_handlePreformattedText"
                 android:title="@string/pref_name_ui_article_handlePreformattedText"

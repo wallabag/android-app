@@ -128,9 +128,11 @@ public class Settings {
                 setFirstRun(false);
                 setConfigurationOk(false);
             } else { // preferences are not migrated -- set some default values
-                boolean isEreader = Build.MODEL.equals("NOOK") || Build.MANUFACTURER.equals("Onyx");
+                boolean isOnyxDevice = Build.MANUFACTURER.equals("Onyx");
+                boolean isEreader = isOnyxDevice || Build.MODEL.equals("NOOK");
                 Themes.Theme theme = isEreader ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
                 prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
+                prefEditor.putBoolean(context.getString(R.string.pref_key_ui_onyxworkaround_enabled), isOnyxDevice);
             }
 
             if(!contains(R.string.pref_key_tts_speed)) {
@@ -489,6 +491,14 @@ public class Settings {
 
     public void setAnnotationsEnabled(boolean value) {
         setBoolean(R.string.pref_key_ui_annotations_enabled, value);
+    }
+
+    public boolean isOnyxWorkaroundEnabled() {
+        return getBoolean(R.string.pref_key_ui_onyxworkaround_enabled, false);
+    }
+
+    public void setOnyxWorkaroundEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_onyxworkaround_enabled, value);
     }
 
     public boolean isTapToScrollEnabled() {
