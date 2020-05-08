@@ -135,8 +135,8 @@
     <string name="d_testConnection_urlSuggestion_acceptButton">Nutze Empfehlung</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Abbrechen</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Nutze eigene</string>
-    <string name="d_testConnection_urlSuggestion_message">Es ist empfohlen, die URL zu \"%s\" zu ändern. Aber du kannst auch die eingegebene verwenden.</string>
-    <string name="d_testConnection_urlSuggestion_message_mandatory">Es ist empfohlen, die URL zu \"%s\" zu ändern</string>
+    <string name="d_testConnection_urlSuggestion_message">Es ist empfohlen, die URL zu „%s“ zu ändern. Aber du kannst auch die eingegebene verwenden.</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Es ist empfohlen, die URL zu „%s“ zu ändern</string>
     <string name="d_testConnection_urlSuggestion_title">Erwäge, die URL zu ändern</string>
     <string name="menu_syncLocalChanges">Synchronisiere lokale Änderungen</string>
     <string name="notification_expandedError">Fehler: %s</string>
@@ -240,13 +240,13 @@
     <string name="pref_categoryName_sync">Synchronisierung</string>
     <string name="pref_name_sync_syncTypes">Synchronisationsarten</string>
     <string name="pref_desc_sync_syncTypes">Drücke hier, um mehr Info über die Synchronisierungsarten zu zeigen</string>
-    <string name="pref_desc_sync_syncTypes_text">Es gibt zwei Arten der Synchronisation: \"Vollständig\" und \"Schnell\".\n\n
-        \"Vollständig\" löscht alle lokalen Inhalte und lädt sie erneut herunter. Diese Art der Synchronisierung ist im Menü \"Optionen\" verfügbar. Es wird empfohlen, diese Option nur als letzten Ausweg zu verwenden.\n\n
-        \"Schnell\" (inkrementelle Synchronisierung) lädt nur Änderungen seit der letzten Synchronisierung herunter, die in der Regel deutlich weniger Zeit dauert und Internet-Verkehr verbraucht. Diese Methode hat jedoch ein Manko: Es kann nicht durch andere Applikationen gelöschte Artikel erkennen (also werden keine lokalen Artikel während der schnellen Synchronisation gelöscht). Diese Art der Synchronisierung wird mit einer Ziehen-und-Loslassen Geste in der Artikelliste gestartet.\n\n
-        Um das Manko des Synchronisierungstyps \"Schnell\" zu beheben gibt es eine Option zum Ausführen von \"gelöschte Artikel aussortieren\", die durch alle lokalen Artikel durchgeht und den Server fragt, ob der Artikel auf dem Server noch vorhanden ist - wenn nicht, wird der lokale Artikel entfernt. Abhängig von der Anzahl der Artikel, die du hast, kann dieser Vorgang einige Zeit dauern, aber es spart eine Menge des Internetverkehrs im Vergleich zur vollständigen Synchronisierung.\n\n
+    <string name="pref_desc_sync_syncTypes_text">Es gibt zwei Arten der Synchronisation: „Vollständig“ und „Schnell“.\n\n
+        „Vollständig“ löscht alle lokalen Inhalte und lädt sie erneut herunter. Diese Art der Synchronisierung ist im Menü „Optionen“ verfügbar. Es wird empfohlen, diese Option nur als letzten Ausweg zu verwenden.\n\n
+        „Schnell“ (inkrementelle Synchronisierung) lädt nur Änderungen seit der letzten Synchronisierung herunter, die in der Regel deutlich weniger Zeit dauert und Internet-Verkehr verbraucht. Diese Methode hat jedoch ein Manko: Es kann nicht durch andere Applikationen gelöschte Artikel erkennen (also werden keine lokalen Artikel während der schnellen Synchronisation gelöscht). Diese Art der Synchronisierung wird mit einer Ziehen-und-Loslassen Geste in der Artikelliste gestartet.\n\n
+        Um das Manko des Synchronisierungstyps „Schnell“ zu beheben gibt es eine Option zum Ausführen von „gelöschte Artikel aussortieren“, die durch alle lokalen Artikel durchgeht und den Server fragt, ob der Artikel auf dem Server noch vorhanden ist - wenn nicht, wird der lokale Artikel entfernt. Abhängig von der Anzahl der Artikel, die du hast, kann dieser Vorgang einige Zeit dauern, aber es spart eine Menge des Internetverkehrs im Vergleich zur vollständigen Synchronisierung.\n\n
         Keine dieser Funktionen beeinflusst die Client-zum-Server-Synchronisierung: Deine lokalen Änderungen werden immer an den Server gesendet, bevor die lokalen Inhalte aktualisiert werden.
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Aktiviert \"gelöschte Artikel aussortieren\" nach schneller Synchronisierung</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Aktiviert „gelöschte Artikel aussortieren“ nach schneller Synchronisierung</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lies die Synchronisierungsartenbeschreibung oben für weitere Informationen</string>
     <string name="pref_name_autoSync_onStartup_enabled">Aktiviert die automatische Synchronisierung beim Start der Anwendung</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Die App synchronisiert sich mit dem Server, wenn sie geöffnet wird</string>
