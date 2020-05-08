@@ -1,14 +1,18 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import androidx.core.content.ContextCompat;
+import android.content.res.Resources;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,24 +31,44 @@ public class StorageHelper {
 
     private static String externalStoragePath;
 
+    public static String readRawString(int id) {
+        try {
+            return readRawStringUnsafe(id);
+        } catch (IOException e) {
+            throw new RuntimeException("Couldn't load raw resource", e);
+        }
+    }
+
+    public static String readRawStringUnsafe(int id) throws IOException {
+        Resources resources = App.getInstance().getResources();
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(resources.openRawResource(id)))) {
+
+            StringBuilder sb = new StringBuilder();
+            String s;
+            while ((s = reader.readLine()) != null) {
+                sb.append(s).append('\n');
+            }
+
+            return sb.toString();
+        }
+    }
+
     public static String getExternalStoragePath() {
         if(externalStoragePath == null) {
             String returnPath = null;
             File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            if(externalFilesDirs != null) {
-                // TODO: better SD Card detection
-                for(File extStorageDir: externalFilesDirs) {
-                    if(extStorageDir == null) {
-                        Log.w(TAG, "getExternalStoragePath() extStorageDir is null");
-                        continue;
-                    }
-
-                    Log.d(TAG, "getExternalStoragePath() extStorageDir.getPath(): "
-                            + extStorageDir.getPath());
-                    returnPath = extStorageDir.getPath();
+            // TODO: better SD Card detection
+            for(File extStorageDir: externalFilesDirs) {
+                if(extStorageDir == null) {
+                    Log.w(TAG, "getExternalStoragePath() extStorageDir is null");
+                    continue;
                 }
-            } else {
-                Log.w(TAG, "getExternalStoragePath() getExternalFilesDirs() returned null");
+
+                returnPath = extStorageDir.getPath();
+                Log.d(TAG, "getExternalStoragePath() extStorageDir.getPath(): " + returnPath);
+                break;
             }
 
             Log.d(TAG, "getExternalStoragePath() returnPath: " + returnPath);

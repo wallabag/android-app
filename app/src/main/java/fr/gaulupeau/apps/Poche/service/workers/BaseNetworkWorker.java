@@ -1,32 +1,23 @@
-package fr.gaulupeau.apps.Poche.service;
+package fr.gaulupeau.apps.Poche.service.workers;
 
-import android.app.IntentService;
+import android.content.Context;
 import android.util.Log;
 
+import java.io.IOException;
+
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+import fr.gaulupeau.apps.Poche.service.ActionResult;
 import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.exceptions.AuthorizationException;
 import wallabag.apiwrapper.exceptions.UnsuccessfulResponseException;
 
-import java.io.IOException;
+public class BaseNetworkWorker extends BaseWorker {
 
-import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
-import fr.gaulupeau.apps.Poche.network.WallabagConnection;
-import fr.gaulupeau.apps.Poche.network.WallabagWebService;
-import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
+    private static final String TAG = BaseNetworkWorker.class.getSimpleName();
 
-public abstract class IntentServiceBase extends IntentService {
-
-    private static final String TAG = MainService.class.getSimpleName();
-
-    private Settings settings;
-
-    private DaoSession daoSession;
-    private WallabagWebService wallabagWebService;
-
-    public IntentServiceBase(String name) {
-        super(name);
+    public BaseNetworkWorker(Context context) {
+        super(context);
     }
 
     protected ActionResult processException(Exception e, String scope) {
@@ -34,9 +25,9 @@ public abstract class IntentServiceBase extends IntentService {
 
         Log.w(TAG, String.format("%s %s", scope, e.getClass().getName()), e);
 
-        if(e instanceof UnsuccessfulResponseException) {
-            UnsuccessfulResponseException ure = (UnsuccessfulResponseException)e;
-            if(ure instanceof AuthorizationException) {
+        if (e instanceof UnsuccessfulResponseException) {
+            UnsuccessfulResponseException ure = (UnsuccessfulResponseException) e;
+            if (ure instanceof AuthorizationException) {
                 result.setErrorType(ActionResult.ErrorType.INCORRECT_CREDENTIALS);
                 result.setMessage(ure.getResponseBody()); // TODO: fix message
             } else {
@@ -46,24 +37,24 @@ public abstract class IntentServiceBase extends IntentService {
                 result.setMessage(e.toString());
                 result.setException(e);
             }
-        } else if(e instanceof IncorrectConfigurationException) {
+        } else if (e instanceof IncorrectConfigurationException) {
             result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
             result.setMessage(e.getMessage());
-        } else if(e instanceof IOException) {
+        } else if (e instanceof IOException) {
             boolean handled = false;
 
-            if(getSettings().isConfigurationOk()) {
-                if(e instanceof java.net.UnknownHostException
+            if (getSettings().isConfigurationOk()) {
+                if (e instanceof java.net.UnknownHostException
                         || e instanceof java.net.ConnectException // TODO: maybe filter by message
                         || e instanceof java.net.SocketTimeoutException) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
-                } else if(e instanceof javax.net.ssl.SSLException
+                } else if (e instanceof javax.net.ssl.SSLException
                         && e.getMessage() != null
                         && e.getMessage().contains("Connection timed out")) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
-                } else if(e instanceof java.net.SocketException
+                } else if (e instanceof java.net.SocketException
                         && e.getMessage() != null
                         && e.getMessage().contains("Software caused connection abort")) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
@@ -71,14 +62,14 @@ public abstract class IntentServiceBase extends IntentService {
                 }
             }
 
-            if(!handled) {
+            if (!handled) {
                 result.setErrorType(ActionResult.ErrorType.UNKNOWN);
                 result.setMessage(e.toString());
                 result.setException(e);
             }
             // IOExceptions in most cases mean temporary error,
             // in some cases may mean that the action was completed anyway.
-        } else if(e instanceof IllegalArgumentException && !getSettings().isConfigurationOk()) {
+        } else if (e instanceof IllegalArgumentException && !getSettings().isConfigurationOk()) {
             result.setErrorType(ActionResult.ErrorType.INCORRECT_CONFIGURATION);
             result.setMessage(e.toString());
         } else { // other exceptions meant to be handled outside
@@ -88,31 +79,6 @@ public abstract class IntentServiceBase extends IntentService {
         }
 
         return result;
-    }
-
-    protected Settings getSettings() {
-        if(settings == null) {
-            settings = new Settings(this);
-        }
-
-        return settings;
-    }
-
-    protected DaoSession getDaoSession() {
-        if(daoSession == null) {
-            daoSession = DbConnection.getSession();
-        }
-
-        return daoSession;
-    }
-
-    protected WallabagWebService getWallabagWebService() {
-        if(wallabagWebService == null) {
-            Settings settings = getSettings();
-            wallabagWebService = WallabagWebService.fromSettings(settings);
-        }
-
-        return wallabagWebService;
     }
 
     protected WallabagService getWallabagService()

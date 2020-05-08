@@ -8,35 +8,34 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
-
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
 import android.widget.Toast;
+
+import androidx.core.app.NotificationCompat;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Locale;
 
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.Settings;
-import fr.gaulupeau.apps.Poche.network.Updater;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
 import fr.gaulupeau.apps.Poche.service.ActionResult;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.NotificationActionReceiver;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
+import fr.gaulupeau.apps.Poche.utils.WallabagFileProvider;
 
 import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_DOWNLOADING_ARTICLES;
 import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_ERRORS;
@@ -118,10 +117,10 @@ public class EventProcessor {
             return;
         }
 
-        Updater.UpdateType updateType = settings.getAutoSyncType() == 0
-                ? Updater.UpdateType.FAST : Updater.UpdateType.FULL;
+        ArticleUpdater.UpdateType updateType = settings.getAutoSyncType() == 0
+                ? ArticleUpdater.UpdateType.FAST : ArticleUpdater.UpdateType.FULL;
 
-        ServiceHelper.syncAndUpdate(getContext(), settings, updateType, true);
+        OperationsHelper.syncAndUpdate(getContext(), settings, updateType, true);
     }
 
     @Subscribe
@@ -150,7 +149,7 @@ public class EventProcessor {
         settings.setOfflineQueuePending(!queueIsEmpty);
 
         if(event.isTriggeredByOperation() && WallabagConnection.isNetworkAvailable()) {
-            ServiceHelper.syncQueue(getContext(), false, true);
+            OperationsHelper.syncQueue(getContext(), false, true);
         } else if(settings.isAutoSyncQueueEnabled()) {
             enableConnectivityChangeReceiver(!queueIsEmpty);
         }
@@ -160,7 +159,7 @@ public class EventProcessor {
     public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "onFeedsChangedEvent() started");
 
-        if(!Collections.disjoint(event.getMainFeedChanges(), CHANGE_SET_UNREAD_WIDGET)) {
+        if (FeedsChangedEvent.containsAny(event.getMainFeedChanges(), CHANGE_SET_UNREAD_WIDGET)) {
             Log.d(TAG, "onFeedsChangedEvent() triggering update for IconUnreadWidget");
             IconUnreadWidget.triggerWidgetUpdate(getContext());
         }
@@ -173,7 +172,7 @@ public class EventProcessor {
         Context context = getContext();
 
         String detailedMessage = context.getString(
-                event.getRequest().getUpdateType() != Updater.UpdateType.FAST
+                event.getRequest().getUpdateType() != ArticleUpdater.UpdateType.FAST
                         ? R.string.notification_updatingArticles_full
                         : R.string.notification_updatingArticles_fast);
 
@@ -385,9 +384,7 @@ public class EventProcessor {
 
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-            Uri uri = FileProvider.getUriForFile(context,
-                    BuildConfig.APPLICATION_ID + ".fileprovider",
-                    event.getFile());
+            Uri uri = WallabagFileProvider.getUriForFile(context, event.getFile());
             String mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
                     event.getRequest().getDownloadFormat().toString().toLowerCase(Locale.US));
             intent.setDataAndType(uri, mimeType);
@@ -574,25 +571,6 @@ public class EventProcessor {
         }
     }
 
-    @Subscribe
-    public void onLinkUploadedEvent(LinkUploadedEvent event) {
-        Log.d(TAG, "onLinkUploadedEvent() started");
-
-        ActionResult result = event.getResult();
-        if(result == null || result.isSuccess()) {
-            Log.d(TAG, "onLinkUploadedEvent() result is null or success");
-
-            Settings settings = getSettings();
-            if(settings.isAutoDownloadNewArticlesEnabled()
-                    && !settings.isOfflineQueuePending()) {
-                Log.d(TAG, "onLinkUploadedEvent() autoDlNew enabled, triggering fast update");
-
-                ServiceHelper.updateArticles(getContext(), settings,
-                        Updater.UpdateType.FAST, true, null);
-            }
-        }
-    }
-
     private void networkChanged(boolean delayed) {
         if(!delayed && delayedNetworkChangedTask) return;
 
@@ -604,7 +582,7 @@ public class EventProcessor {
             if(delayed) {
                 Log.d(TAG, "networkChanged() requesting SyncQueue operation");
 
-                ServiceHelper.syncQueue(getContext(), true);
+                OperationsHelper.syncQueue(getContext(), true);
 
                 delayedNetworkChangedTask = false;
             } else {

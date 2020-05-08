@@ -37,8 +37,8 @@ public class Themes {
         appliedThemes.put(activity, theme);
     }
 
-    public static void applyProxyTheme(Activity activity) {
-        activity.setTheme(theme.getProxyResId());
+    public static void applyDialogTheme(Activity activity) {
+        activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
     }
 
@@ -52,55 +52,55 @@ public class Themes {
                 R.string.themeName_light,
                 R.style.LightTheme,
                 R.style.LightTheme_NoActionBar,
-                R.style.ProxyTheme
+                R.style.DialogTheme
         ),
 
         LIGHT_CONTRAST(
                 R.string.themeName_light_contrast,
                 R.style.LightThemeContrast,
                 R.style.LightThemeContrast_NoActionBar,
-                R.style.ProxyTheme
+                R.style.DialogTheme
         ),
 
         E_INK(
                 R.string.themeName_eink,
                 R.style.LightThemeContrast,
                 R.style.LightThemeContrast_NoActionBar,
-                R.style.ProxyTheme
+                R.style.DialogTheme
         ),
 
         DARK(
                 R.string.themeName_dark,
                 R.style.DarkTheme,
                 R.style.DarkTheme_NoActionBar,
-                R.style.ProxyThemeDark
+                R.style.DialogThemeDark
         ),
 
         DARK_CONTRAST(
                 R.string.themeName_dark_contrast,
                 R.style.DarkThemeContrast,
                 R.style.DarkThemeContrast_NoActionBar,
-                R.style.ProxyThemeDark
+                R.style.DialogThemeDark
         ),
 
         SOLARIZED(
                 R.string.themeName_solarized,
                 R.style.SolarizedTheme,
                 R.style.SolarizedTheme_NoActionBar,
-                R.style.ProxyTheme
+                R.style.DialogTheme
         );
 
         private int nameId;
         private int resId;
         private int noActionBarResId;
-        private int proxyResId;
+        private int dialogResId;
 
         Theme(@StringRes int nameId, @StyleRes int resId,
               @StyleRes int noActionBarResId, @StyleRes int dialogResId) {
             this.nameId = nameId;
             this.resId = resId;
             this.noActionBarResId = noActionBarResId;
-            this.proxyResId = dialogResId;
+            this.dialogResId = dialogResId;
         }
 
         public @StringRes int getNameId() {
@@ -115,8 +115,8 @@ public class Themes {
             return noActionBarResId;
         }
 
-        public @StyleRes int getProxyResId() {
-            return proxyResId;
+        public @StyleRes int getDialogResId() {
+            return dialogResId;
         }
 
     }

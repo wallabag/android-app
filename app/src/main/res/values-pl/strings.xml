@@ -201,8 +201,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Oddzielna automatyczna synchronizacja dla lokalnych zmian</string>
     <string name="pref_desc_autoSyncQueue_enabled">Umożliwia lokalnym zmianom (dodane linki, zarchiwizowane artykuły, itd.) na synchronizację z serwerem, tak szybko jak sieć stanie się dostępna.</string>
-    <string name="pref_name_autoDlNew_enabled">Pobierz nowo dodane artykuły</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatycznie pobieraj nowe artykuły zaraz po ich dodaniu za pośrednictwem aplikacji. Uwaga: pobieranie nie nastąpi, jeśli masz niezsynchronizowane zmiany w trybie offline.</string>
     <string name="pref_name_imageCache_enabled">Umieść obrazy artykułów w pamięci podręcznej</string>
     <string name="pref_desc_imageCache_enabled">Automatycznie pobiera wszystkie obrazy z każdego artykułu i zapisuje je na urządzeniu. W zależności od długości Twojej listy artykułów na wallabag może to zająć dużo czasu i miejsca.</string>
     <string name="pref_categoryName_miscellaneous">Różne</string>

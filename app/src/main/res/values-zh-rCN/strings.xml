@@ -230,8 +230,6 @@
     <string name="pref_name_autoSync_type">自动同步类型</string>
     <string name="pref_name_autoSyncQueue_enabled">本地更改的独立自动同步</string>
     <string name="pref_desc_autoSyncQueue_enabled">这允许本地更改 (添加的链接、存档的文章等) 在网络可用后立即同步到服务器。</string>
-    <string name="pref_name_autoDlNew_enabled">下载新添加的文章</string>
-    <string name="pref_desc_autoDlNew_enabled">在新文章通过应用添加后自动下载。注意：如果您有未同步的离线更改，则不会进行抓取。</string>
     <string name="pref_name_imageCache_enabled">将文章图片放入缓存中</string>
     <string name="pref_desc_imageCache_enabled">自动下载每篇文章中的所有图片, 并将其保存到设备中。根据您的 wallabag 文章列表的长度, 这可能会花费大量的时间和空间。</string>
     <string name="pref_name_storage_dbPath">数据库位置</string>

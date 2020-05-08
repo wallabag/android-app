@@ -1,5 +1,8 @@
 package fr.gaulupeau.apps.Poche.data.dao.entities;
 
+import android.database.sqlite.SQLiteBlobTooBigException;
+import android.util.Log;
+
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +21,8 @@ import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 @Entity
 public class Article {
 
+    private static final String TAG = Article.class.getSimpleName();
+
     @Id
     private Long id;
 
@@ -32,6 +37,8 @@ public class Article {
     private String domain;
 
     private String url;
+
+    private String givenUrl;
 
     private String originUrl;
 
@@ -62,6 +69,9 @@ public class Article {
 
     private Boolean imagesDownloaded;
 
+    @Transient
+    private boolean contentTooBig;
+
     @ToMany
     @JoinEntity(
             entity = ArticleTagsJoin.class,
@@ -88,17 +98,18 @@ public class Article {
         this.id = id;
     }
 
-    @Generated(hash = 1512174298)
-    public Article(Long id, Integer articleId, String title, String domain, String url,
-            String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
-            String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
-            Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
-            Double articleProgress, Boolean imagesDownloaded) {
+    @Generated(hash = 1498635781)
+    public Article(Long id, Integer articleId, String title, String domain, String url, String givenUrl,
+                   String originUrl, int estimatedReadingTime, String language, String previewPictureURL,
+                   String authors, Boolean favorite, Boolean archive, Date creationDate, Date updateDate,
+                   Date publishedAt, Date starredAt, Boolean isPublic, String publicUid,
+                   Double articleProgress, Boolean imagesDownloaded) {
         this.id = id;
         this.articleId = articleId;
         this.title = title;
         this.domain = domain;
         this.url = url;
+        this.givenUrl = givenUrl;
         this.originUrl = originUrl;
         this.estimatedReadingTime = estimatedReadingTime;
         this.language = language;
@@ -133,16 +144,28 @@ public class Article {
     }
 
     public String getContent() {
-        return getArticleContent().getContent();
+        ArticleContent articleContent = getArticleContent();
+
+        if (contentTooBig) return null;
+
+        return articleContent.getContent();
     }
 
     public void setContent(String content) {
-        getArticleContent().setContent(content);
+        ArticleContent articleContent = getArticleContent();
+
+        if (contentTooBig) {
+            Log.w(TAG, "setContent() ignoring content change" +
+                    " because current content is too big to be loaded");
+            return;
+        }
+
+        articleContent.setContent(content);
     }
 
     public ArticleContent getArticleContent() {
         ArticleContent content = this.content;
-        if (content == null) {
+        if (content == null && !contentTooBig) {
             if (id == null) {
                 throw new IllegalStateException("Can't fetch content for a not persisted Article");
             }
@@ -153,7 +176,12 @@ public class Article {
             }
 
             ArticleContentDao targetDao = daoSession.getArticleContentDao();
-            this.content = content = targetDao.load(id);
+            try {
+                this.content = content = targetDao.load(id);
+            } catch (SQLiteBlobTooBigException e) {
+                Log.w(TAG, "getArticleContent() content is too big", e);
+                contentTooBig = true;
+            }
         }
         return content;
     }
@@ -164,6 +192,10 @@ public class Article {
 
     public boolean isArticleContentLoaded() {
         return content != null;
+    }
+
+    public boolean isContentTooBig() {
+        return contentTooBig;
     }
 
     public String getTitle() {
@@ -188,6 +220,14 @@ public class Article {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getGivenUrl() {
+        return givenUrl;
+    }
+
+    public void setGivenUrl(String givenUrl) {
+        this.givenUrl = givenUrl;
     }
 
     public String getOriginUrl() {

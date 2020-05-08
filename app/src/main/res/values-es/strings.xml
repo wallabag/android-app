@@ -214,8 +214,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Sincronizar cambios locales por separado</string>
     <string name="pref_desc_autoSyncQueue_enabled">Esto permite sincronizar cambios locales (enlaces añadidos, artículos archivados, etc.) con el servidor tan pronto haya una conexión disponible.</string>
-    <string name="pref_name_autoDlNew_enabled">Descargar artículos nuevos al añadirlos</string>
-    <string name="pref_desc_autoDlNew_enabled">Descargar artículos nuevos automáticamente justo después de añadirlos desde la app. Nota: no se descargarán si tienes cambios locales pendientes de sincronizar.</string>
     <string name="pref_name_imageCache_enabled">Cachear imágenes de los artículos</string>
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
     <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>

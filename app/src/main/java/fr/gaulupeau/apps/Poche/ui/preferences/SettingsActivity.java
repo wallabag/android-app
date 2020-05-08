@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -19,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +27,6 @@ import java.util.List;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.StorageHelper;
@@ -40,7 +39,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.AlarmHelper;
-import fr.gaulupeau.apps.Poche.service.ServiceHelper;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 
@@ -164,10 +163,10 @@ public class SettingsActivity extends BaseActionBarActivity {
                 });
             }
 
-            Preference handleHttpSchemePreference = findPreference(
+            CheckBoxPreference handleHttpSchemePreference = (CheckBoxPreference) findPreference(
                     getString(R.string.pref_key_misc_handleHttpScheme));
-            if(handleHttpSchemePreference != null) {
-                handleHttpSchemePreference.setDefaultValue(settings.isHandlingHttpScheme());
+            if (handleHttpSchemePreference != null) {
+                handleHttpSchemePreference.setChecked(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
             }
 
@@ -328,7 +327,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 if(!oldImageCacheEnabled && settings.isImageCacheEnabled()
                         && settings.isFirstSyncDone()) {
                     Log.i(TAG, "applyChanges() image caching changed, starting image fetching");
-                    ServiceHelper.fetchImages(App.getInstance());
+                    OperationsHelper.fetchImages(App.getInstance());
                 }
             }
 
@@ -554,13 +553,17 @@ public class SettingsActivity extends BaseActionBarActivity {
             sb.append("id").append(delim)
                     .append("action").append(delim)
                     .append("articleId").append(delim)
-                    .append("extra").append(nl);
+                    .append("localArticleId").append(delim)
+                    .append("extra").append(delim)
+                    .append("extra2").append(nl);
 
             for (QueueItem item : items) {
                 sb.append(item.getId()).append(delim)
                         .append(item.getAction()).append(delim)
                         .append(item.getArticleId()).append(delim)
-                        .append(item.getExtra()).append(nl);
+                        .append(item.getLocalArticleId()).append(delim)
+                        .append(item.getExtra()).append(delim)
+                        .append(item.getExtra2()).append(nl);
             }
 
             return sb.toString();

@@ -21,13 +21,13 @@ import android.widget.Toast;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.data.OperationsHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
+import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 
 // TODO: split classes?
 public class ConnectionWizardActivity extends BaseActionBarActivity {
@@ -226,7 +226,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             Toast.makeText(this, R.string.connectionWizard_misc_installQrCodeScanner,
                     Toast.LENGTH_LONG).show();
 
-            Uri marketUri = Uri.parse("market://details?id=de.markusfisch.android.binaryeye");
+            Uri marketUri = Uri.parse("https://play.google.com/store/apps/details?id=" +
+                    "de.markusfisch.android.binaryeye");
             Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
             startActivity(marketIntent);
         } catch(Exception e) {

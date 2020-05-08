@@ -53,6 +53,28 @@ public class ImageCacheUtils {
     private static OkHttpClient okHttpClient;
     private static String wallabagUrl;
 
+    public static File getCachedImageFile(String imageUrl, long articleId) {
+        if (!isExternalStorageReadable()) {
+            Log.w(TAG, "getCachedImageFile() extStorage path is not readable");
+            return null;
+        }
+
+        String extStorage = getExternalStoragePath();
+        String articleCachePath = getArticleCachePath(extStorage, articleId);
+        String localImagePath = getCacheImagePath(articleCachePath, imageUrl);
+        if (localImagePath == null) {
+            return null;
+        }
+
+        File image = new File(localImagePath);
+        if (!image.exists() || !image.canRead()) {
+            Log.d(TAG, "getCachedImageFile() file doesn't exist or isn't readable");
+            return null;
+        }
+
+        return image;
+    }
+
     public static String replaceImagesInHtmlContent(String htmlContent, long articleId) {
         String extStorage = getExternalStoragePath();
         if(!isExternalStorageReadable()) {

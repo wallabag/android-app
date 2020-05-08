@@ -1,176 +1,147 @@
 package fr.gaulupeau.apps.Poche.tts;
 
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.ConsoleMessage;
 import android.webkit.WebView;
-import android.widget.ScrollView;
 
-import java.util.Vector;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
+import java.util.ArrayList;
+import java.util.List;
+
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.StorageHelper;
 
 /**
  * TextInterface to navigate in a WebView.
  */
-public class WebViewText implements TextInterface {
+class WebViewText implements TextInterface {
 
-    ReadArticleActivity readArticleActivity;
-    private final WebView webView;
-    private final ScrollView scrollView;
-    private final Handler handler;
+    private static final String TAG = WebViewText.class.getSimpleName();
 
-    private final Vector<TextItem> textList = new Vector<>();
-    private volatile int parsedSize;
-    private volatile int current;
-    private Runnable parsedCallback;
-    private Runnable onReadFinishedCallback;
+    private static final String JS_PARSE_DOCUMENT_SCRIPT
+            = StorageHelper.readRawString(R.raw.tts_parser);
 
+    private final Handler handler = new Handler();
 
+    private TtsConverter ttsConverter;
 
-    private final String WEB_VIEW_LOG_CMD_HEADER = "CMD_" + getRandomText(4) + ":";
-    private final String JAVASCRIPT_PARSE_DOCUMENT_TEXT = "" +
-            "function nextDomElem(elem) {\n" +
-            "    var result;\n" +
-            "    if (elem.hasChildNodes() && elem.tagName != 'SCRIPT') {\n" +
-            "        result = elem.firstChild;\n" +
-            "    } else {\n" +
-            "        result = elem.nextSibling;\n" +
-            "        while((result == null) && (elem != null)) {\n" +
-            "            elem = elem.parentNode;\n" +
-            "            if (elem != null) {\n" +
-            "                result = elem.nextSibling;\n" +
-            "            }\n" +
-            "        }\n" +
-            "    }\n" +
-            "    return result;\n" +
-            "}\n" +
-            "\n" +
-            "function nextTextElem(elem) {\n" +
-            "    while(elem = nextDomElem(elem)) {\n" +
-            "        if ((elem.nodeType == 3) && (elem.textContent.trim().length > 0)) {\n" +
-            "            break;\n" +
-            "        }\n" +
-            "    }\n" +
-            "    return elem;\n" +
-            "}\n" +
-            "\n" +
-            "function cmdStart() {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "start');\n" +
-            "}\n" +
-            "function cmdEnd() {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "end');\n" +
-            "}\n" +
-            "function cmdText(text, top, bottom) {\n" +
-            "        console.log('" + WEB_VIEW_LOG_CMD_HEADER + "' + top + ':' + bottom + ':' + text);\n" +
-            "}\n" +
-            "\n" +
-            "function parseDocumentText() {\n" +
-            "    var elem = document.getElementsByTagName('body')[0];\n" +
-            "    var range = document.createRange();\n" +
-            "    cmdStart();\n" +
-            "    while(elem = nextTextElem(elem)) {\n" +
-            "        range.selectNode(elem);\n" +
-            "        var rect = range.getBoundingClientRect();\n" +
-            "        var text = elem.textContent.trim();\n" +
-            "        cmdText(text, rect.top, rect.bottom);\n" +
-            "    }\n" +
-            "    cmdEnd();\n" +
-            "}\n";
+    private TtsHost ttsHost;
 
-    private static final String LOG_TAG = "WebViewText";
+    private final List<GenericItem> textList = new ArrayList<>();
 
+    private int current;
 
-    public WebViewText(WebView webView, ScrollView scrollView, ReadArticleActivity readArticleActivity) {
-        this.webView = webView;
-        this.scrollView = scrollView;
-        this.readArticleActivity = readArticleActivity;
-        this.handler = new Handler();
+    private Integer storedScrollPosition;
+
+    private Runnable readFinishedCallback;
+    private Runnable parsingFinishedCallback;
+
+    WebViewText(TtsConverter ttsConverter, TtsHost ttsHost) {
+        this.ttsConverter = ttsConverter;
+        this.ttsHost = ttsHost;
     }
 
-    public void setOnReadFinishedCallback(Runnable onReadFinishedCallback) {
-        this.onReadFinishedCallback = onReadFinishedCallback;
+    void setTtsHost(TtsHost ttsHost) {
+        this.ttsHost = ttsHost;
     }
 
-    public void parseWebViewDocument(Runnable callback)
-    {
-        Log.d(LOG_TAG, "parseWebViewDocument");
-        this.parsedSize = 0;
-        this.parsedCallback = callback;
-        webView.loadUrl("javascript:" + JAVASCRIPT_PARSE_DOCUMENT_TEXT + ";parseDocumentText();");
+    void setReadFinishedCallback(Runnable readFinishedCallback) {
+        this.readFinishedCallback = readFinishedCallback;
     }
 
-    private void onDocumentParseStart() {
-        //Log.d(LOG_TAG, "onDocumentParseStart");
+    void parseWebViewDocument(Runnable callback) {
+        Log.d(TAG, "parseWebViewDocument()");
+
+        parsingFinishedCallback = callback;
+
+        ttsHost.getJsTtsController().setWebViewText(this);
+        ttsHost.getWebView().evaluateJavascript("javascript:" + JS_PARSE_DOCUMENT_SCRIPT
+                + ";parseDocumentText();", null);
     }
 
-    private void onDocumentParseEnd() {
-        Log.d(LOG_TAG, "onDocumentParseEnd");
-        this.textList.setSize(this.parsedSize);
-        if (parsedCallback != null) {
-            parsedCallback.run();
+    void onDocumentParseStart() {
+        Log.d(TAG, "onDocumentParseStart()");
+    }
+
+    void onDocumentParseEnd() {
+        Log.d(TAG, "onDocumentParseEnd()");
+
+        if (parsingFinishedCallback != null) {
+            parsingFinishedCallback.run();
         }
     }
 
-    private void onDocumentParseItem(String text, float top, float bottom) {
+    void onDocumentParseText(String text, float top, float bottom, String extras) {
         top = convertWebViewToScreenY(top);
         bottom = convertWebViewToScreenY(bottom);
-        //Log.d(LOG_TAG, "onDocumentParseItem " + top + " " + bottom + " " + text);
-        parsedSize = parsedSize + 1;
-        TextItem item;
-        if (parsedSize > this.textList.size()) {
-            item = new TextItem(text, top, bottom);
-            textList.add(item);
-        } else {
-            item = textList.get(parsedSize - 1);
-            item.text = text;
-            item.top = top;
-            item.bottom = bottom;
+
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, String.format("onDocumentParseText(%s, %f, %f)", text, top, bottom));
         }
-        if (parsedSize > 1) {
-            item.timePosition = textList.get(parsedSize-2).timePosition + timeDuration(item.text);
-        } else {
-            item.timePosition = timeDuration(item.text);
-        }
+
+        addItem(new TextItem(text, top, bottom, parseTextItemExtras(extras)));
     }
 
-    public boolean onWebViewConsoleMessage(ConsoleMessage cm)
-    {
-        boolean result = false;
-        // It is insecure to use WebView.addJavascriptInterface with older
-        // version of Android, so we use console.log() instead.
-        // We catch the command send through the log done by the code
-        // JAVASCRIPT_PARSE_DOCUMENT_TEXT
-        if (cm.messageLevel() == ConsoleMessage.MessageLevel.LOG)
-        {
-            String message = cm.message();
-            if (message.startsWith(WEB_VIEW_LOG_CMD_HEADER))
-            {
-                String content = message.substring(WEB_VIEW_LOG_CMD_HEADER.length());
-                if (content.equals("start")) {
-                    onDocumentParseStart();
-                } else if (content.equals("end")) {
-                    onDocumentParseEnd();
-                } else {
-                    int separator1 = content.indexOf(':');
-                    int separator2 = content.indexOf(':', separator1 + 1);
-                    float top = Float.parseFloat(content.substring(0, separator1));
-                    float bottom = Float.parseFloat(content.substring(separator1 + 1, separator2));
-                    String text= content.substring(separator2 + 1);
-                    onDocumentParseItem(text, top, bottom);
-                }
-                result = true;
+    private List<TextItem.Extra> parseTextItemExtras(String extrasString) {
+        if (TextUtils.isEmpty(extrasString)) return null;
+
+        List<TextItem.Extra> result = new ArrayList<>();
+
+        try {
+            JSONArray jsonArray = new JSONArray(extrasString);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                TextItem.Extra.Type type = TextItem.Extra.Type.getType(
+                        jsonObject.getString("type"));
+
+                TextItem.Extra extra = new TextItem.Extra(type,
+                        jsonObject.getInt("start"), jsonObject.getInt("end"));
+
+                result.add(extra);
             }
+        } catch (Exception e) {
+            Log.w(TAG, "parseExtras()", e);
         }
+
         return result;
     }
 
+    void onDocumentParseImage(String altText, String title, String src, float top, float bottom) {
+        top = convertWebViewToScreenY(top);
+        bottom = convertWebViewToScreenY(bottom);
+
+        if (BuildConfig.DEBUG) {
+            Log.v(TAG, String.format("onDocumentParseImage(%s, %s, %s, %f, %f)",
+                    altText, title, src, top, bottom));
+        }
+
+        addItem(new ImageItem(altText, title, src, top, bottom));
+    }
+
+    private void addItem(GenericItem item) {
+        GenericItem prevItem = !textList.isEmpty() ? textList.get(textList.size() - 1) : null;
+
+        item.timePosition = ttsConverter.approximateDuration(item)
+                + (prevItem != null ? prevItem.timePosition : 0);
+
+        textList.add(item);
+    }
+
     @Override
-    public String getText(int relativeIndex) {
-        //Log.d(LOG_TAG, "getText(" + relativeIndex + "), current=" + current);
-        int i = current + relativeIndex;
-        if ( (i >= 0) && (i < textList.size())) {
-            return textList.get(i).text;
+    public synchronized int getCurrentIndex() {
+        return current;
+    }
+
+    @Override
+    public GenericItem getItem(int index) {
+        if (index >= 0 && index < textList.size()) {
+            return textList.get(index);
         } else {
             return null;
         }
@@ -178,136 +149,144 @@ public class WebViewText implements TextInterface {
 
     /**
      * Go to the next text item.
+     *
      * @return true if current item changed (not already the end).
      */
     @Override
-    public boolean next() {
-        //Log.d(LOG_TAG, "next, current=" + current);
+    public synchronized boolean next() {
+        //Log.d(TAG, "next, current=" + current);
         boolean result;
-        if (current < (textList.size() - 1)) {
-            current = current + 1;
+        if (current < textList.size() - 1) {
+            current++;
             result = true;
         } else {
-            handler.post(onReadFinishedCallback);
+            handler.post(readFinishedCallback);
             result = false;
         }
         ensureTextRangeVisibleOnScreen(false);
         return result;
     }
 
-
-    /**
-     * Fast forward to the next TextItem located below the current one (next line).
-     * @return true if current item changed (not already the beginning).
-     */
     @Override
-    public boolean fastForward() {
-        //Log.d(LOG_TAG, "fastForward, current=" + current);
-        boolean result;
-        //for(int i=textListCurrentIndex; i<(textListSize-1) && i<(textListCurrentIndex+6); i++) {
-        //    TextItem t = textList.get(i);
-        //    Log.d(LOG_TAG, " - " + i + " top=" + t.top + " bottom=" + t.bottom + "  " + t.text);
-        //}
-        int newIndex = current + 1;
-        if ((newIndex >= 0) && (newIndex < textList.size())) {
-            float originalBottom = textList.get(newIndex-1).bottom;
-            // Look for text's index that start on the next line (its top >= current bottom)
-            while((newIndex < (textList.size()-1))
-                    && (textList.get(newIndex).top < originalBottom))
-            {
-                newIndex = newIndex + 1;
-            }
-            Log.d(LOG_TAG, "fastForward " + current + " => " + newIndex);
-            current = newIndex;
-            result = true;
-        } else {
-            result = false;
-        }
-        ensureTextRangeVisibleOnScreen(true);
-        return result;
+    public synchronized boolean rewind(long desiredTimeToRewind,
+                                       int currentIndex, long progressInCurrentItem) {
+        int startIndex = current;
+        if (currentIndex != startIndex) progressInCurrentItem = 0;
 
+/*
+        if (startIndex == 0 && progressInCurrentItem < desiredTimeToRewind / 10) {
+            Log.d(TAG, "rewind() no time to rewind");
+            return false;
+        }
+*/
+
+        int index = startIndex;
+        long timeToRewind = desiredTimeToRewind - progressInCurrentItem;
+
+        while (timeToRewind > 0 && index > 0) {
+            int newIndex = index - 1;
+            long newTimeToRewind = timeToRewind - itemDuration(newIndex);
+            long alreadyRewound = desiredTimeToRewind - timeToRewind;
+
+            if (newTimeToRewind > 0 || alreadyRewound < desiredTimeToRewind / 2) {
+                index = newIndex;
+                timeToRewind = newTimeToRewind;
+            } else {
+                break;
+            }
+        }
+
+        Log.d(TAG, "rewind() " + startIndex + " => " + index);
+        current = index;
+
+        ensureTextRangeVisibleOnScreen(true);
+
+        return true;
     }
 
-
-    /**
-     * Rewind to the previous TextItem located above the current one (previous line).
-     * @return true if current item changed (not already the end).
-     */
     @Override
-    public boolean rewind() {
-        //Log.d(LOG_TAG, "rewind, current=" + current);
-        boolean result;
-        //for(int i=current; (i>=0) && i>(current-8); i--) {
-        //    TextItem t = textList.get(i);
-        //    Log.d(LOG_TAG, " - " + i + " top=" + t.top + " bottom=" + t.bottom + "  " + t.text);
-        //}
-        int newIndex = current - 1;
-        if ((newIndex >= 0) && ((newIndex + 1) < textList.size())) {
-            float originalTop = textList.get(newIndex+1).top;
-            // Look for text's index that start on the previous line (its bottom < current top)
-            while((newIndex > 0)
-                    && (textList.get(newIndex).bottom >= originalTop))
-            {
-                newIndex = newIndex - 1;
-            }
-            if (newIndex > 0) {
-                // If there is many text on the previous line, we want
-                // the first on the line, so we look again for the text's index
-                // on the previous of the previous line and select the following index.
-                // This way clicking "Next" and "Previous" will be coherent.
-                int prevPrevIndex = newIndex;
-                float newTop = textList.get(prevPrevIndex).top;
-                while((prevPrevIndex > 0)
-                        && (textList.get(prevPrevIndex).bottom >= newTop))
-                {
-                    prevPrevIndex = prevPrevIndex - 1;
-                    newIndex = prevPrevIndex + 1;
-                }
-            }
-            Log.d(LOG_TAG, "rewind " + current + " => " + newIndex);
-            current = newIndex;
-            result = true;
-        } else {
-            result = false;
+    public synchronized boolean fastForward(long desiredTimeToSkip,
+                                            int currentIndex, long progressInCurrentItem) {
+        int startIndex = current;
+        if (currentIndex != startIndex) progressInCurrentItem = 0;
+
+        if (startIndex == textList.size() - 1) {
+            Log.d(TAG, "fastForward() no time to skip");
+            return false;
         }
+
+        int index = startIndex + 1;
+        long timeToSkip = desiredTimeToSkip - (itemDuration(startIndex) - progressInCurrentItem);
+
+        while (timeToSkip > 0 && index < textList.size() - 1) {
+            int newIndex = index + 1;
+            long newTimeToSkip = timeToSkip - itemDuration(index);
+            long alreadySkipped = desiredTimeToSkip - timeToSkip;
+
+            if (newTimeToSkip > 0 || alreadySkipped < desiredTimeToSkip / 3) {
+                index = newIndex;
+                timeToSkip = newTimeToSkip;
+            } else {
+                break;
+            }
+        }
+
+        Log.d(TAG, "fastForward() " + startIndex + " => " + index);
+        current = index;
+
         ensureTextRangeVisibleOnScreen(true);
-        return result;
+
+        return true;
+    }
+
+    private long itemDuration(int index) {
+        return textList.get(index).timePosition
+                - (index > 0 ? textList.get(index - 1).timePosition : 0);
     }
 
     @Override
     public boolean skipToNext() {
-        if (readArticleActivity != null) {
-            return readArticleActivity.openNextArticle();
-        } else {
-            return false;
-        }
+        return ttsHost != null && ttsHost.nextArticle();
     }
 
     @Override
     public boolean skipToPrevious() {
-        if (readArticleActivity != null) {
-            return readArticleActivity.openPreviousArticle();
-        } else {
-            return false;
-        }
+        return ttsHost != null && ttsHost.previousArticle();
     }
 
     @Override
-    public   void restoreFromStart() {
-        Log.d(LOG_TAG, "restoreFromStart -> current = 0");
+    public synchronized void restoreFromStart() {
+        Log.d(TAG, "restoreFromStart -> current = 0");
         current = 0;
     }
 
     @Override
-    public void restoreCurrent() {
-        float currentTop = scrollView.getScrollY();
-        float currentBottom = currentTop + scrollView.getHeight();
+    public void storeCurrent() {
+        storedScrollPosition = ttsHost != null ? ttsHost.getScrollY() : null;
+    }
+
+    @Override
+    public synchronized void restoreCurrent() {
+        if (ttsHost == null) return;
+
+        if (storedScrollPosition != null) {
+            int position = storedScrollPosition;
+            storedScrollPosition = null;
+
+            if (position == ttsHost.getScrollY()) {
+                // no scrolling has been done since pause, don't restore anything
+                return;
+            }
+        }
+
+        float currentTop = ttsHost.getScrollY();
+        float currentBottom = currentTop + ttsHost.getViewHeight();
         int result = Math.min(current, textList.size() - 1);
-        TextItem textItem = textList.get(result);
-        if ((textItem.bottom <= currentTop) || (textItem.top >= currentBottom)) {
+        GenericItem textItem = textList.get(result);
+        if (textItem.bottom <= currentTop || textItem.top >= currentBottom) {
             // current not displayed on screen, switch to the first text visible:
             result = textList.size() - 1;
-            for(int i=0; i<textList.size(); i++) {
+            for (int i = 0; i < textList.size(); i++) {
                 if (textList.get(i).top > currentTop) {
                     result = i;
                     break;
@@ -315,15 +294,14 @@ public class WebViewText implements TextInterface {
             }
         }
         current = result;
-        Log.d(LOG_TAG, "restoreCurrent -> current = " + current);
+        Log.d(TAG, "restoreCurrent -> current = " + current);
     }
 
-
     @Override
-    public long getTime() {
+    public synchronized long getTime() {
         long result = -1;
         if (current > 0) {
-            result = textList.get(current-1).timePosition;
+            result = textList.get(current - 1).timePosition;
         }
         return result;
     }
@@ -338,55 +316,24 @@ public class WebViewText implements TextInterface {
     }
 
     private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward) {
-        final TextItem textItem = textList.get(current);
-        if ((scrollView != null) &&
-                ((textItem.bottom > scrollView.getScrollY() + scrollView.getHeight())
-                        || (canMoveBackward && (textItem.top < scrollView.getScrollY())))) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    scrollView.smoothScrollTo(0, (int) textItem.top);
-                }
-            });
+        if (ttsHost == null) return;
+
+        GenericItem item = textList.get(current);
+        if (item.bottom > ttsHost.getScrollY() + ttsHost.getViewHeight()
+                || canMoveBackward && item.top < ttsHost.getScrollY()) {
+            // TODO: check: call directly?
+            handler.post(() -> ttsHost.scrollTo((int) item.top));
         }
     }
 
-
-    private float convertWebViewToScreenY(float y)
-    {
-        return y * this.webView.getHeight() / this.webView.getContentHeight();
-    }
-
-    private float convertScreenToWebViewY(float y)
-    {
-        return y * this.webView.getContentHeight() / this.webView.getHeight();
-    }
-
-    private static StringBuilder getRandomText(int length) {
-        StringBuilder result = new StringBuilder(length);
-        for(int i=0;i<length;i++) {
-            char c = (char)(32 + Math.random() * (125-32));
-            if (c=='\'' || c=='"' || c=='\\') {
-                c = 'a';
-            }
-            result.append(c);
+    private float convertWebViewToScreenY(float y) {
+        if (ttsHost == null) {
+            Log.w(TAG, "convertWebViewToScreenY() ttsHost is null");
+            return 0;
         }
-        return result;
+
+        WebView webView = ttsHost.getWebView();
+        return y * webView.getHeight() / webView.getContentHeight();
     }
 
-    private static class TextItem {
-        String text;
-        float top;    // top location in the web view
-        float bottom; // bottom location in the web view
-        long timePosition; // in milliseconds from the beginning of the document
-        public TextItem(String text, float top, float bottom) {
-            this.text = text;
-            this.top = top;
-            this.bottom = bottom;
-        }
-    }
-
-    private long timeDuration(String text) {
-        return text.length()*50;  // in ms, total approximation
-    }
 }

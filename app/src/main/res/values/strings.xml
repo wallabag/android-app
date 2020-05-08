@@ -209,6 +209,8 @@
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
+    <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog that allows to favorite/archive/tag a newly added article. A toast message will be displayed instead if the option is disabled.</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
@@ -234,6 +236,18 @@
     <string name="pref_desc_ui_previewImage_enabled">Display the preview image before the article</string>
     <string name="pref_name_ui_annotations_enabled">Annotations support</string>
     <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
+
+    <string name="pref_categoryName_tts">Text-to-speech</string>
+    <string name="pref_name_tts_fastForwardTime">Fast-forward skip time</string>
+    <string name="pref_desc_tts_fastForwardTime">The number of seconds to skip forward when the \"fast-forward\" button is pressed</string>
+    <string name="pref_name_tts_rewindTime">Rewind skip time</string>
+    <string name="pref_desc_tts_rewindTime">The number of seconds to skip backward when the \"rewind\" button is pressed</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">\"Next\" button fast-forwards</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"next\" media button fast-forwards instead of skipping to next article</string>
+    <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Pressing \"previous\" media button rewinds instead of skipping to previous article</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Use preview as album art</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Use the article preview image (if it is present) as album art (visible in notification and may be displayed as the lockscreen background)</string>
 
     <string name="pref_categoryName_sync">Synchronization</string>
     <string name="pref_name_sync_syncTypes">Synchronization types</string>
@@ -264,8 +278,6 @@
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
-    <string name="pref_name_autoDlNew_enabled">Download newly added articles</string>
-    <string name="pref_desc_autoDlNew_enabled">Automatically download new articles right after they were added via the app. Note: Fetching will not occur if you have unsynchronized offline changes.</string>
     <string name="pref_name_imageCache_enabled">Put article images in cache</string>
     <string name="pref_desc_imageCache_enabled">Automatically downloads all images from every article and saves them to the device. Depending on the length of your wallabag article list, this can take up a lot of time and space.</string>
 
@@ -344,4 +356,22 @@
     <string name="copiedToClipboard">Copied to clipboard</string>
 
     <string name="menu_annotate">Annotate</string>
+
+    <string name="articleEdit_openArticle">Open article</string>
+
+    <string name="title">Title</string>
+    <string name="untagged"><![CDATA[<untagged>]]></string>
+
+    <string name="contentIsTooLong">The article content is too long to display</string>
+
+    <string name="articleContent_globeIconAltText">Globe icon</string>
+    <string name="articleContent_previewImageAltText">Preview image</string>
+
+    <string name="tts_image">Image: %s</string>
+
+    <string name="notification_action_media_rewind">Rewind</string>
+    <string name="notification_action_media_pause">Pause</string>
+    <string name="notification_action_media_play">Play</string>
+    <string name="notification_action_media_fastforward">Fast Forward</string>
+    <string name="notification_action_media_next">Next</string>
 </resources>

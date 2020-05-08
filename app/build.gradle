@@ -53,13 +53,14 @@ android {
 }
 
 greendao {
-    schemaVersion 106
+    schemaVersion 108
     daoPackage 'fr.gaulupeau.apps.Poche.data.dao'
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.media:media:1.1.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'org.greenrobot:eventbus:3.2.0'

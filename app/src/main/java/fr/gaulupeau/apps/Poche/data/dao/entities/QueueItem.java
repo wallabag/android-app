@@ -10,6 +10,8 @@ import java.util.Iterator;
 
 /**
  * Entity mapped to table "QUEUE_ITEM".
+ * <p>Avoid using fields of this class directly - prefer action-specific classes
+ * available via {@link #asSpecificItem()}.
  */
 @Entity
 public class QueueItem {
@@ -63,8 +65,6 @@ public class QueueItem {
 
     }
 
-    public static final String DELETED_TAGS_DELIMITER = ",";
-
     @Id
     private Long id;
 
@@ -74,23 +74,55 @@ public class QueueItem {
     private QueueItem.Action action;
 
     private Integer articleId;
+    private Long localArticleId;
     private String extra;
+    private String extra2;
 
     @Generated(hash = 1112811270)
     public QueueItem() {}
 
-    public QueueItem(Long id) {
-        this.id = id;
+    public QueueItem(QueueItem.Action action) {
+        this.action = action;
     }
 
-    @Generated(hash = 1681630945)
+    @Generated(hash = 20035817)
     public QueueItem(Long id, Long queueNumber, QueueItem.Action action, Integer articleId,
-                     String extra) {
+                     Long localArticleId, String extra, String extra2) {
         this.id = id;
         this.queueNumber = queueNumber;
         this.action = action;
         this.articleId = articleId;
+        this.localArticleId = localArticleId;
         this.extra = extra;
+        this.extra2 = extra2;
+    }
+
+    public <T extends SpecificItem> T asSpecificItem() {
+        @SuppressWarnings("unchecked") // cast will fail for incorrect type, but it is desired
+        T item = (T) getView();
+        return item;
+    }
+
+    private SpecificItem getView() {
+        if (action == null) throw new RuntimeException("action is not set!");
+
+        switch (action) {
+            case ADD_LINK:
+                return new AddLinkItem(this);
+            case ARTICLE_DELETE:
+                return new ArticleDeleteItem(this);
+            case ARTICLE_CHANGE:
+                return new ArticleChangeItem(this);
+            case ARTICLE_TAGS_DELETE:
+                return new ArticleTagsDeleteItem(this);
+            case ANNOTATION_ADD:
+            case ANNOTATION_UPDATE:
+                return new AddOrUpdateAnnotationItem(this);
+            case ANNOTATION_DELETE:
+                return new DeleteAnnotationItem(this);
+            default:
+                throw new RuntimeException("Not implemented for action=" + action);
+        }
     }
 
     public Long getId() {
@@ -125,12 +157,28 @@ public class QueueItem {
         this.articleId = articleId;
     }
 
+    public Long getLocalArticleId() {
+        return localArticleId;
+    }
+
+    public void setLocalArticleId(Long localArticleId) {
+        this.localArticleId = localArticleId;
+    }
+
     public String getExtra() {
         return extra;
     }
 
     public void setExtra(String extra) {
         this.extra = extra;
+    }
+
+    public String getExtra2() {
+        return extra2;
+    }
+
+    public void setExtra2(String extra2) {
+        this.extra2 = extra2;
     }
 
     public static class ActionConverter implements PropertyConverter<Action, Integer> {
@@ -162,7 +210,9 @@ public class QueueItem {
                 ", queueNumber=" + queueNumber +
                 ", action=" + action +
                 ", articleId=" + articleId +
+                ", localArticleId=" + localArticleId +
                 ", extra='" + extra + '\'' +
+                ", extra2='" + extra2 + '\'' +
                 '}';
     }
 

@@ -354,6 +354,14 @@ public class Settings {
         setString(R.string.pref_key_ui_article_handlePreformattedText, value);
     }
 
+    public boolean isShowArticleAddedDialog() {
+        return getBoolean(R.string.pref_key_ui_showArticleAddedDialog_enabled, true);
+    }
+
+    public void setShowArticleAddedDialog(boolean value) {
+        setBoolean(R.string.pref_key_ui_showArticleAddedDialog_enabled, value);
+    }
+
     public boolean isFullscreenArticleView() {
         return getBoolean(R.string.pref_key_ui_article_fullscreen, false);
     }
@@ -517,6 +525,46 @@ public class Settings {
         setInt(R.string.pref_key_ui_scrollOverBottom, scrolls);
     }
 
+    public int getTtsFastForwardTime() {
+        return getInt(R.string.pref_key_tts_fastForwardTime, 30);
+    }
+
+    public void setTtsFastForwardTime(int value) {
+        setInt(R.string.pref_key_tts_fastForwardTime, value);
+    }
+
+    public int getTtsRewindTime() {
+        return getInt(R.string.pref_key_tts_rewindTime, 10);
+    }
+
+    public void setTtsRewindTime(int value) {
+        setInt(R.string.pref_key_tts_rewindTime, value);
+    }
+
+    public boolean isTtsNextButtonIsFastForward() {
+        return getBoolean(R.string.pref_key_tts_nextButtonIsFastForward, true);
+    }
+
+    public void setTtsNextButtonIsFastForward(boolean value) {
+        setBoolean(R.string.pref_key_tts_nextButtonIsFastForward, value);
+    }
+
+    public boolean isTtsPreviousButtonIsRewind() {
+        return getBoolean(R.string.pref_key_tts_previousButtonIsRewind, true);
+    }
+
+    public void setTtsPreviousButtonIsRewind(boolean value) {
+        setBoolean(R.string.pref_key_tts_previousButtonIsRewind, value);
+    }
+
+    public boolean isTtsUsePreviewAsAlbumArt() {
+        return getBoolean(R.string.pref_key_tts_usePreviewAsAlbumArt, true);
+    }
+
+    public void setTtsUsePreviewAsAlbumArt(boolean value) {
+        setBoolean(R.string.pref_key_tts_usePreviewAsAlbumArt, value);
+    }
+
     public boolean isTtsVisible() {
         return getBoolean(R.string.pref_key_tts_visible, false);
     }
@@ -627,14 +675,6 @@ public class Settings {
 
     public void setAutoSyncQueueEnabled(boolean value) {
         setBoolean(R.string.pref_key_autoSyncQueue_enabled, value);
-    }
-
-    public boolean isAutoDownloadNewArticlesEnabled() {
-        return getBoolean(R.string.pref_key_autoDlNew_enabled, false);
-    }
-
-    public void setAutoDownloadNewArticlesEnabled(boolean value) {
-        setBoolean(R.string.pref_key_autoDlNew_enabled, value);
     }
 
     public boolean isImageCacheEnabled() {
