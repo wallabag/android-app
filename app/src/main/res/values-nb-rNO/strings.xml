@@ -301,4 +301,14 @@
     <string name="misc_localQueue_dumpToFile_result_dumped">Dumpet til %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Feil: %s</string>
     <string name="misc_localQueue_dumpToFile_header">Hvis du opplever problemer med synkroniseringen, innrapporter problemet ditt her: %s</string>
+    <string name="notification_action_media_next">Neste</string>
+    <string name="notification_action_media_fastforward">Hurtigspoling forover</string>
+    <string name="notification_action_media_play">Spill av</string>
+    <string name="notification_action_media_pause">Pause</string>
+    <string name="notification_action_media_rewind">Spol tilbake</string>
+    <string name="tts_image">Bilde: %s</string>
+    <string name="articleContent_previewImageAltText">Forhåndsvis bilde</string>
+    <string name="title">Tittel</string>
+    <string name="articleEdit_openArticle">Åpne artikkel</string>
+    <string name="pref_categoryName_tts">Tekst-til-tale</string>
 </resources>
