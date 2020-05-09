@@ -323,8 +323,8 @@
     <string name="pref_desc_ui_disableTouch_enabled">Presione el botón configurado (por defecto el botón de la cámara) para bloquear / desbloquear la entrada táctil en la pantalla de lectura (los controles del sistema no se ven afectados)</string>
     <string name="pref_name_ui_disableTouch_enabled">Deshabilitar entrada táctil</string>
     <string name="pref_categoryName_ui_misc">Miscelánea</string>
-    <string name="pref_desc_ui_keepScreenOn">Mantiene la pantalla encendida mientras lee un artículo</string>
-    <string name="pref_name_ui_keepScreenOn">Mantener la pantalla encendida mientras lee</string>
+    <string name="pref_desc_ui_keepScreenOn">Mantener la pantalla encendida mientras lees un artículo</string>
+    <string name="pref_name_ui_keepScreenOn">Mantener la pantalla encendida mientras lees</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Solución alternativa para dispositivos Onyx que fuerza enlaces de color negro</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Habilite la solución del tema Onyx Boox</string>
     <string name="pref_desc_ui_article_fullscreen">Oculta las barras del sistema y de aplicaciones al leer artículos</string>
@@ -333,8 +333,8 @@
     <string name="pref_name_ui_showArticleAddedDialog">Mostrar una ventana al añadir</string>
     <string name="pref_desc_ui_article_handlePreformattedText">Cómo manejar texto preformateado que es demasiado largo para mostrarse por completo.</string>
     <string name="pref_name_ui_article_handlePreformattedText">Texto preformateado largo</string>
-    <string name="d_disableTouch_currentCode">Código de tecla actualmente seleccionado (presione un botón para cambiarlo):</string>
+    <string name="d_disableTouch_currentCode">Tecla seleccionada actualmente (pulsa un botón para cambiarla):</string>
     <string name="notification_channel_name_tts">TTS wallabag</string>
     <string name="notification_channel_group_name_tts">TTS</string>
-    <string name="themeName_eink">Para pantallas e-ink</string>
+    <string name="themeName_eink">Para pantallas de tinta electrónica</string>
 </resources>
