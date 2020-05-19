@@ -14,6 +14,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepclassmembers class fr.gaulupeau.apps.Poche.ui.JsAnnotationController {
+   public *;
+}
+-keepclassmembers class fr.gaulupeau.apps.Poche.tts.JsTtsController {
+   public *;
+}
 
 -keep class .R
 -keep class **.R$* {
@@ -29,7 +35,7 @@ public static java.lang.String TABLENAME;
 -keep class **$Properties { *; }
 
 # If you DO use SQLCipher:
--keep class org.greenrobot.greendao.database.SqlCipherEncryptedHelper { *; }
+#-keep class org.greenrobot.greendao.database.SqlCipherEncryptedHelper { *; }
 
 # If you do NOT use SQLCipher:
 -dontwarn net.sqlcipher.database.**
