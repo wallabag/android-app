@@ -1,2 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="d_add_fail_title">Neuspjeh</string>
+    <string name="ok">OK</string>
+    <string name="d_urlAction_copyToClipboard">Kopiraj u međuspremnik</string>
+    <string name="d_urlAction_addToWallabag">Dodaj u wallabag</string>
+    <string name="d_urlAction_openInBrowser">Otvori u pregledniku</string>
+    <string name="d_urlAction_title">Odaberi akciju za URL</string>
+    <string name="loading_article_text">Učitavanje…</string>
+    <string name="no_articles">Nema članaka</string>
+    <string name="negative_answer">Ne</string>
+    <string name="positive_answer">Da</string>
+    <string name="share_text_extra">" via @wallabagapp"</string>
+    <string name="share_article_title">Podijeli članak</string>
+    <string name="page_url">URL stranice</string>
+    <string name="dialog_add_label">Dodaj novi članak</string>
+    <string name="txtUrlCopied">URL članka kopiran u međuspremnik</string>
+    <string name="txtConfigNotSet">Molimo konfigurirajte aplikaciju prije sinkronizacije.</string>
+    <string name="txtNetOffline">Provjeri vezu s internetom!</string>
+    <string name="d_deleteArticle_message">Jeste li sigurni da želite obrisati članak\?</string>
+    <string name="d_deleteArticle_title">Obrisati članak\?</string>
+    <string name="menu_syncLocalChanges">Sinkroniziraj lokalne promjene</string>
+    <string name="menu_open_random_article">Otvori nasumični članak</string>
+    <string name="ttsOptions">Opcije</string>
+    <string name="ttsError">Text To Speech greška</string>
+    <string name="ttsAutoplayNextArticle">Automatski pusti sljedeći članak</string>
+    <string name="ttsVoice">Odaberi glas</string>
+    <string name="ttsLanguage">Odaberi jezik</string>
+    <string name="ttsVolume">Glasnoća</string>
+    <string name="ttsPitch">Boja glasa</string>
+    <string name="ttsSpeed">Brzina</string>
+    <string name="menuCopyOriginalURL">Kopiraj originalni URL</string>
+    <string name="menuOpenOriginal">Otvori original</string>
+    <string name="menuDelete">Obriši</string>
+    <string name="menuPrevious">Prethodni članak</string>
+    <string name="menuNext">Sljedeći članak</string>
+    <string name="menuShare">Podijeli</string>
+    <string name="add_to_favorites">Dodaj u favorite</string>
+    <string name="btnMarkUnread">Označi kao nepročitano</string>
+    <string name="btnMarkRead">Označi kao pročitano</string>
+</resources>
