@@ -302,4 +302,6 @@
     <string name="misc_localQueue_dumpToFile_result_dumped">A(z) %s fájlba kiírva</string>
     <string name="misc_localQueue_dumpToFile_result_error">Hiba: %s</string>
     <string name="misc_localQueue_dumpToFile_header">Ha szinkronizálási problémákat tapasztal, kérjük, jelentse a problémát itt: %s</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Egy párbeszédpanelt jelenít meg, amely lehetővé teszi újonnan hozzáadott cikkhez kedvenc/archív/címke típust. Ha a beállítás le van tiltva, egy bejelentési üzenet jelenik meg.</string>
+    <string name="pref_name_ui_showArticleAddedDialog">Párbeszéd megjelenítése amikor eltárolt egy cikket</string>
 </resources>
