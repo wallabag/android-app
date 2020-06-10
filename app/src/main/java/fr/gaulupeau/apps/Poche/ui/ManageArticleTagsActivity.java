@@ -142,6 +142,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         }
 
         updateCurrentTagList(newList);
+        updateSuggestedTagList();
 
         if (!TextUtils.isEmpty(text)) {
             setEditText(text);
@@ -304,11 +305,10 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     }
 
     private void updateSuggestedTagList() {
-        if (TextUtils.isEmpty(currentText) && suggestedTags.isEmpty()) return;
-
         List<Tag> filteredList;
         if (TextUtils.isEmpty(currentText)) {
-            filteredList = new ArrayList<>();
+            // With no filter, suggest all available tags
+            filteredList = filterUniqueTagList(availableTags, currentTags);
         } else {
             filteredList = filterTagList(currentText, availableTags, currentTags);
         }
@@ -454,6 +454,33 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         return null;
     }
 
+	private static List<Tag> filterUniqueTagList(List<Tag> src, List<Tag> excludeList) {
+        if (excludeList == null || excludeList.isEmpty()) {
+            return src;
+        }
+
+        if (src == null || src.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        // Make a lowercase version once here to not have to convert case many times
+        List<String> excludeLowerList = new ArrayList<>();
+        for (Tag excludeTag : excludeList) {
+            excludeLowerList.add(excludeTag.getLabel().toLowerCase(Locale.getDefault()));
+        }
+
+        List<Tag> result = new ArrayList<>();
+        for (Tag tag : src) {
+            String tagLower = tag.getLabel().toLowerCase(Locale.getDefault());
+
+            if (excludeLowerList.contains(tagLower))
+                continue;
+
+            result.add(tag);
+        }
+        return result;
+    }
+
     private static List<Tag> filterTagList(String label, List<Tag> src, List<Tag> excludeList) {
         if (TextUtils.isEmpty(label) || src.isEmpty()) {
             return new ArrayList<>(src);
@@ -465,12 +492,11 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         for (Tag tag : src) {
             String tagLabel = tag.getLabel();
             if (tagLabel != null && tagLabel.toLowerCase(Locale.getDefault()).contains(label)) {
-                if (excludeList != null && excludeList.contains(tag)) continue;
-
                 result.add(tag);
             }
         }
-        return result;
+
+        return filterUniqueTagList(result, excludeList);
     }
 
     private static boolean equalLabels(String s1, String s2) {
