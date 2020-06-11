@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,19 +24,16 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
         void onItemButtonClick(int position);
     }
 
-    private final @LayoutRes int itemLayoutResID;
     private final List<Tag> tags;
     private final OnItemClickListener listener;
     private final OnItemButtonClickListener buttonClickListener;
 
     public TagListAdapter(List<Tag> tags, OnItemClickListener listener) {
-        this(R.layout.tag_list_item, tags, listener, null);
+        this(tags, listener, null);
     }
 
-    public TagListAdapter(@LayoutRes int itemLayoutResID,
-                          List<Tag> tags, OnItemClickListener listener,
+    public TagListAdapter(List<Tag> tags, OnItemClickListener listener,
                           OnItemButtonClickListener buttonClickListener) {
-        this.itemLayoutResID = itemLayoutResID;
         this.tags = tags;
         this.listener = listener;
         this.buttonClickListener = buttonClickListener;
@@ -47,7 +43,7 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(itemLayoutResID, parent, false);
+                .inflate(R.layout.tag_list_removable_item, parent, false);
         return new ViewHolder(view, listener, buttonClickListener);
     }
 
@@ -82,7 +78,11 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
 
             button = itemView.findViewById(R.id.tag_remove_button);
             if (button != null) {
-                button.setOnClickListener(this);
+                if (buttonClickListener != null) {
+                    button.setOnClickListener(this);
+                } else {
+                    button.setVisibility(View.GONE);
+                }
             }
         }
 

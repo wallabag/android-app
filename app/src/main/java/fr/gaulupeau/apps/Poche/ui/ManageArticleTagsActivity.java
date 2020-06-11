@@ -73,7 +73,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
     private EditText editText;
     private RecyclerView suggestedTagsView;
-    private TextView currentTagsLabel;
+    private TextView currentTagsNone;
     private RecyclerView currentTagsView;
 
     private String currentText;
@@ -98,7 +98,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         suggestedTagsAdapter = new TagListAdapter(suggestedTags, this::suggestedTagClicked);
 
         currentTagsAdapter = new TagListAdapter(
-                R.layout.tag_list_removable_item, currentTags,
+                currentTags,
                 this::currentTagClicked,
                 this::currentTagRemoveClicked
         );
@@ -131,7 +131,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
             currentTagsView.setAdapter(currentTagsAdapter);
         }
 
-        currentTagsLabel = findViewById(R.id.manageTags_currentList_label);
+        currentTagsNone = findViewById(R.id.manageTags_currentList_none);
 
         loadAvailableTags();
 
@@ -333,10 +333,12 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
         diffResult.dispatchUpdatesTo(currentTagsAdapter);
 
-        int visibility = currentTags.isEmpty() ? View.GONE : View.VISIBLE;
-
-        if (currentTagsLabel != null) currentTagsLabel.setVisibility(visibility);
-        if (currentTagsView != null) currentTagsView.setVisibility(visibility);
+        if (currentTagsNone != null) {
+            currentTagsNone.setVisibility(currentTags.isEmpty() ? View.VISIBLE : View.GONE);
+        }
+        if (currentTagsView != null) {
+            currentTagsView.setVisibility(currentTags.isEmpty() ? View.GONE : View.VISIBLE);
+        }
 
         updateSuggestedTagList();
     }
