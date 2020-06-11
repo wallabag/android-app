@@ -2,13 +2,6 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,6 +13,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -28,9 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Set;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -142,11 +143,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         }
 
         updateCurrentTagList(newList);
-        updateSuggestedTagList();
 
-        if (!TextUtils.isEmpty(text)) {
-            setEditText(text);
-        }
+        setEditText(text);
 
         EventBus.getDefault().register(this);
     }
@@ -259,6 +257,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
     private void loadAvailableTags() {
         availableTags = DbConnection.getSession().getTagDao().queryBuilder()
+                .where(TagDao.Properties.Label.isNotNull())
+                .where(TagDao.Properties.Label.notEq(""))
                 .orderAsc(TagDao.Properties.Label).list();
 
         sortTagListByLabel(availableTags);
@@ -305,13 +305,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     }
 
     private void updateSuggestedTagList() {
-        List<Tag> filteredList;
-        if (TextUtils.isEmpty(currentText)) {
-            // With no filter, suggest all available tags
-            filteredList = filterUniqueTagList(availableTags, currentTags);
-        } else {
-            filteredList = filterTagList(currentText, availableTags, currentTags);
-        }
+        List<Tag> filteredList = filterTagList(currentText, availableTags, currentTags);
 
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
                 new TagListFragment.TagListDiffCallback(suggestedTags, filteredList));
@@ -454,56 +448,41 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         return null;
     }
 
-	private static List<Tag> filterUniqueTagList(List<Tag> src, List<Tag> excludeList) {
-        if (excludeList == null || excludeList.isEmpty()) {
-            return src;
-        }
-
-        if (src == null || src.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        // Make a lowercase version once here to not have to convert case many times
-        List<String> excludeLowerList = new ArrayList<>();
-        for (Tag excludeTag : excludeList) {
-            excludeLowerList.add(excludeTag.getLabel().toLowerCase(Locale.getDefault()));
-        }
-
-        List<Tag> result = new ArrayList<>();
-        for (Tag tag : src) {
-            String tagLower = tag.getLabel().toLowerCase(Locale.getDefault());
-
-            if (excludeLowerList.contains(tagLower))
-                continue;
-
-            result.add(tag);
-        }
-        return result;
-    }
-
-    private static List<Tag> filterTagList(String label, List<Tag> src, List<Tag> excludeList) {
-        if (TextUtils.isEmpty(label) || src.isEmpty()) {
+    private static List<Tag> filterTagList(String filterLabel, List<Tag> src, List<Tag> excludeList) {
+        if (TextUtils.isEmpty(filterLabel) && excludeList.isEmpty() || src.isEmpty()) {
             return new ArrayList<>(src);
         }
 
-        label = label.toLowerCase(Locale.getDefault());
+        filterLabel = getNormalizedLabel(filterLabel);
+
+        Set<String> excludeNormalized = new HashSet<>();
+        for (Tag excludeTag : excludeList) {
+            excludeNormalized.add(getNormalizedLabel(excludeTag));
+        }
 
         List<Tag> result = new ArrayList<>();
         for (Tag tag : src) {
-            String tagLabel = tag.getLabel();
-            if (tagLabel != null && tagLabel.toLowerCase(Locale.getDefault()).contains(label)) {
-                result.add(tag);
-            }
+            String label = getNormalizedLabel(tag);
+
+            if (!TextUtils.isEmpty(filterLabel) && !label.contains(filterLabel)) continue;
+            if (excludeNormalized.contains(label)) continue;
+
+            result.add(tag);
         }
 
-        return filterUniqueTagList(result, excludeList);
+        return result;
     }
 
     private static boolean equalLabels(String s1, String s2) {
-        if (s1 != null) s1 = s1.toLowerCase(Locale.getDefault());
-        if (s2 != null) s2 = s2.toLowerCase(Locale.getDefault());
+        return TextUtils.equals(getNormalizedLabel(s1), getNormalizedLabel(s2));
+    }
 
-        return TextUtils.equals(s1, s2);
+    private static String getNormalizedLabel(Tag tag) {
+        return getNormalizedLabel(tag.getLabel());
+    }
+
+    private static String getNormalizedLabel(String label) {
+        return !TextUtils.isEmpty(label) ? label.toLowerCase(Locale.getDefault()) : label;
     }
 
 }
