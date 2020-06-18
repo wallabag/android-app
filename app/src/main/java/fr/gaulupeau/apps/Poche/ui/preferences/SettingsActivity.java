@@ -42,6 +42,7 @@ import fr.gaulupeau.apps.Poche.service.AlarmHelper;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
+import fr.gaulupeau.apps.Poche.utils.LoggingUtils;
 
 public class SettingsActivity extends BaseActionBarActivity {
 
@@ -127,6 +128,7 @@ public class SettingsActivity extends BaseActionBarActivity {
             setOnClickListener(R.string.pref_key_misc_wipeDB);
             setOnClickListener(R.string.pref_key_misc_localQueue_dumpToFile);
             setOnClickListener(R.string.pref_key_misc_localQueue_removeFirstItem);
+            setOnClickListener(R.string.pref_key_misc_logging_logcatToFile);
 
             ListPreference themeListPreference = (ListPreference)findPreference(
                     getString(R.string.pref_key_ui_theme));
@@ -511,6 +513,13 @@ public class SettingsActivity extends BaseActionBarActivity {
                 }
                 case R.string.pref_key_misc_localQueue_removeFirstItem: {
                     removeFirstOfflineQueueItem();
+                    return true;
+                }
+                case R.string.pref_key_misc_logging_logcatToFile: {
+                    Activity activity = getActivity();
+                    if (activity != null) {
+                        LoggingUtils.saveLogcatToFile(activity);
+                    }
                     return true;
                 }
             }

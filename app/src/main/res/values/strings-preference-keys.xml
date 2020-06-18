@@ -86,6 +86,7 @@
     <string name="pref_key_misc_localQueue_notice" translatable="false">misc.localQueue.notice</string>
     <string name="pref_key_misc_localQueue_dumpToFile" translatable="false">misc.localQueue.dumpToFile</string>
     <string name="pref_key_misc_localQueue_removeFirstItem" translatable="false">misc.localQueue.removeFirstItem</string>
+    <string name="pref_key_misc_logging_logcatToFile" translatable="false">misc.logging.logcatToFile</string>
 
     <string name="pref_key_internal_preferencesVersion" translatable="false">internal.preferencesVersion</string>
     <string name="pref_key_internal_firstRun" translatable="false">internal.firstRun</string>

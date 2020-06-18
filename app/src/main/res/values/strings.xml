@@ -306,12 +306,16 @@
     <string name="pref_desc_misc_localQueue_dumpToFile">Dumps all local changes to a txt file (you can study it yourself or attach it to a bug report)</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Remove first local queue item</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Removes the first not synchronized item. May help if you get repeating error notifications during sync. Be sure to dump all local changes to file first</string>
+    <string name="pref_name_misc_logging_logcatToFile">Save logcat output to a file</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Saves logcat output (Android app log) to a file in /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
 
     <string name="misc_localQueue_empty">No local changes</string>
     <string name="misc_localQueue_removeFirstItem_done">Done</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">Dumped to %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Error: %s</string>
     <string name="misc_localQueue_dumpToFile_header">If you experience troubles with synchronization, please report your problem here: %s</string>
+    <string name="misc_logging_logcatToFile_result_saved">Logs saved to %s</string>
+    <string name="misc_logging_logcatToFile_result_error">Error: %s</string>
 
     <string name="issues_url" translatable="false">https://github.com/wallabag/android-app/issues</string>
 

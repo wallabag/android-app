@@ -341,6 +341,11 @@
                         android:title="@string/pref_name_misc_localQueue_removeFirstItem" />
                 </PreferenceCategory>
             </PreferenceScreen>
+            <Preference
+                android:key="@string/pref_key_misc_logging_logcatToFile"
+                android:persistent="false"
+                android:summary="@string/pref_desc_misc_logging_logcatToFile"
+                android:title="@string/pref_name_misc_logging_logcatToFile" />
         </PreferenceCategory>
     </PreferenceScreen>
 </PreferenceScreen>
