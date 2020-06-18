@@ -35,6 +35,13 @@ public class WallabagWebService {
 
     private static final String CLIENT_NAME = "Android app";
 
+    private static final Pattern CLIENT_PATTERN_CREATION_RESULT = compile(
+            "<ul>\\s*" +
+                    "<li>[^<]+?<strong><pre>([^<]+?)</pre></strong></li>\\s*" +
+                    "<li>[^<]+?<strong><pre>([^<]+?)</pre></strong></li>\\s*" +
+                    "<li>[^<]+?<strong><pre>([^<]+?)</pre></strong></li>\\s*" +
+                    "</ul>");
+
     private static final Pattern CLIENT_PATTERN = compile(
             "<div class=\"collapsible-header\">([^<]+?)</div>" +
                     ".*?<strong><code>([^<]+?)</code></strong>" +
@@ -152,31 +159,44 @@ public class WallabagWebService {
         ClientCredentials clientCredentials = findApiClientCredentials(false);
 
         if(clientCredentials == null) {
-            Log.i(TAG, "getApiClientCredentials() no acceptable API client found, trying to create a new one");
-            createApiClient(); // TODO: optimize: this method implicitly gets credentials right after creation
+            Log.i(TAG, "getApiClientCredentials() no acceptable API client found, creating a new one");
+            clientCredentials = findApiClientCredentialsInCreateResult(createApiClient());
 
-            clientCredentials = findApiClientCredentials(true);
+            if (clientCredentials == null) {
+                // there was an issue where a newly created client wasn't immediately available
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {}
+
+                clientCredentials = findApiClientCredentials(true);
+            }
         }
 
         return clientCredentials;
     }
 
-    private ClientCredentials findApiClientCredentials(boolean desperate)
-            throws RequestException, IOException {
-        String configPath = "/config";
-        Log.d(TAG, "getApiClientCredentials() configPath: " + configPath);
+    private ClientCredentials findApiClientCredentialsInCreateResult(String result) {
+        return findApiClientCredentials(result, CLIENT_PATTERN_CREATION_RESULT, true);
+    }
 
-        String response = executeRequestForResult(getDeveloperPageRequest());
-        if(response == null) {
-            Log.d(TAG, "getApiClientCredentials() configRequest response is null");
+    private ClientCredentials findApiClientCredentials(boolean anyName)
+            throws RequestException, IOException {
+        return findApiClientCredentials(executeRequestForResult(getDeveloperPageRequest()),
+                CLIENT_PATTERN, anyName);
+    }
+
+    private ClientCredentials findApiClientCredentials(
+            String body, Pattern pattern, boolean anyName) {
+        if(body == null) {
+            Log.d(TAG, "findApiClientCredentials() body is null");
             return null;
         }
 
         String lastClientID = null;
         String lastClientSecret = null;
-        boolean found = desperate;
+        boolean found = anyName;
 
-        Matcher matcher = CLIENT_PATTERN.matcher(response);
+        Matcher matcher = pattern.matcher(body);
         while(matcher.find()) {
             String clientName = matcher.group(1);
             lastClientID = matcher.group(2);
@@ -205,7 +225,7 @@ public class WallabagWebService {
         return null;
     }
 
-    private boolean createApiClient() throws RequestException, IOException {
+    private String createApiClient() throws RequestException, IOException {
         Request createClientPageRequest = getCreateClientPageRequest();
         String createClientPage = executeRequestForResult(createClientPageRequest);
         String token = null;
@@ -215,7 +235,11 @@ public class WallabagWebService {
             token = matcher.group(1);
         }
 
-        return token != null && executeRequest(getCreateClientRequest(CLIENT_NAME, token));
+        if (token != null) {
+            return executeRequestForResult(getCreateClientRequest(CLIENT_NAME, token));
+        }
+
+        return null;
     }
 
     private Response exec(Request request) throws IOException {
@@ -405,16 +429,6 @@ public class WallabagWebService {
                 .url(url)
                 .post(formBody)
                 .build();
-    }
-
-    private boolean executeRequest(Request request) throws RequestException, IOException {
-        return executeRequest(request, true, true);
-    }
-
-    private boolean executeRequest(Request request, boolean checkResponse, boolean autoRelogin)
-            throws RequestException, IOException {
-        // TODO: fix: this method does not return null anymore
-        return executeRequestForResult(request, checkResponse, autoRelogin) != null;
     }
 
     private String executeRequestForResult(Request request) throws RequestException, IOException {
