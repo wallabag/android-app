@@ -307,4 +307,27 @@
     <string name="pref_categoryName_misc_localQueue">Changements locaux</string>
     <string name="pref_desc_ui_annotations_enabled">Fonction expérimentale ! Affichez, éditez et créez des annotations</string>
     <string name="pref_name_ui_annotations_enabled">Gestion des annotations</string>
+    <string name="notification_action_media_next">Suivant</string>
+    <string name="notification_action_media_fastforward">Avance rapide</string>
+    <string name="notification_action_media_play">Lecture</string>
+    <string name="notification_action_media_pause">Pause</string>
+    <string name="tts_image">Image : %s</string>
+    <string name="articleContent_previewImageAltText">Image d\'aperçu</string>
+    <string name="articleContent_globeIconAltText">Icône globe</string>
+    <string name="contentIsTooLong">Le contenu de l\'article est trop long pour être affiché</string>
+    <string name="untagged">&lt;non taggé&gt;</string>
+    <string name="title">Titre</string>
+    <string name="articleEdit_openArticle">Ouvrir l\'article</string>
+    <string name="misc_logging_logcatToFile_result_error">Erreur : %s</string>
+    <string name="misc_logging_logcatToFile_result_saved">Journaux enregistrés dans %s</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Enregistre la sortie du logcat (journaux système des applications Android) dans un fichier sous /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
+    <string name="pref_name_misc_logging_logcatToFile">Enregistrer la sorte logcat dans un fichier</string>
+    <string name="pref_desc_tts_fastForwardTime">Le nombre de secondes à sauter lorsque le bouton « avance rapide » est utilisé</string>
+    <string name="pref_categoryName_tts">Synthèse vocale</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Solution pour appareils Onyx qui forcent l\'affichage des liens en noir</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Activer le thème alternatif pour Onyx Boox</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/tagger un article venant d\'être ajouté. Une notification toast sera affichée à la place si l\'option est désactivée.</string>
+    <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
+    <string name="manageTags_addMoreTags">Ajouter plus de tags :</string>
+    <string name="manageTags_currentTags_none">Aucun</string>
 </resources>
