@@ -5,12 +5,17 @@ Added:
 - "Untagged" list.
 - Long-press menu (only for single articles).
 - Saving origin URL when adding from other articles.
+- Ability to export logcat to file
 
 Changes:
 
 - Adaptive icon.
 - UI should no longer be blocked by database operations.
 - A lot of refactoring.
+
+Fixes:
+
+- Fixes to API client credentials management
 
 Text-to-speech changes:
 
