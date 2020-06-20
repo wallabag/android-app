@@ -332,4 +332,10 @@
     <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox teması için olan geçici çözümü aktifleştir</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Makaleyi kaydederken bir diyalog penceresi gösterir. Bu pencerede makaleyi favorileyebilir, arşivleyebilir veya etikeyleyebilirsiniz. Eğer bu özellik kapalı olursa bunun yerine bir bildirim mesajı çıkacaktır.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Kaydederken bir diyalog ekranı görüntüle</string>
+    <string name="manageTags_currentTags_none">Yok</string>
+    <string name="misc_logging_logcatToFile_result_saved">Günlük kayıtları %s dosyasına kaydedildi</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Logcat çıktısını (Android uygulama günlüğü) /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/ içinde bir dosyaya kaydeder</string>
+    <string name="pref_name_misc_logging_logcatToFile">Logcat çıktısını dosyaya kaydet</string>
+    <string name="manageTags_addMoreTags">Daha fazla etiket ekle:</string>
+    <string name="misc_logging_logcatToFile_result_error">Hata: %s</string>
 </resources>

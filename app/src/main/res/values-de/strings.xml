@@ -340,4 +340,10 @@
     <string name="pref_name_ui_onyxworkaround_enabled">Aktiviere für Onyx Boox die Notlösung für Probleme mit dem Design</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Zeigt einen Dialog, der es ermöglicht neu hinzugefügte Artikel zu favorisieren, archivieren oder zu verschlagworten. Wenn die Option deaktiviert ist, wird eine kurze Benachrichtung angezeigt.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Zeige einen Dialog beim Hinzufügen von Artikeln</string>
+    <string name="misc_logging_logcatToFile_result_error">Fehler: %s</string>
+    <string name="misc_logging_logcatToFile_result_saved">Log gespeichert unter %s</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Speichert die Logcat-Ausgabe (Android App Log) in eine Datei unter /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
+    <string name="pref_name_misc_logging_logcatToFile">Speichere die Logcat-Ausgabe in eine Datei</string>
+    <string name="manageTags_addMoreTags">Füge mehr Tags hinzu:</string>
+    <string name="manageTags_currentTags_none">Keine</string>
 </resources>
