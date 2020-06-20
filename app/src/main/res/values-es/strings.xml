@@ -232,7 +232,7 @@
     <string name="pref_name_misc_wipeDB_confirmTitle">¿Limpiar base de datos?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que quieres limpiar la base de datos?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de conexión incorrecta</string>
-    <string name="connectionWizard_welcome_titleMessage">¡Bienvenido a wallabag!</string>
+    <string name="connectionWizard_welcome_titleMessage">Bienvenido a wallabag.</string>
     <string name="connectionWizard_welcome_text">Antes de usar la aplicación wallabag necesitas configurar una conexión. El asistente de conexión te ayudará a hacerlo.</string>
     <string name="connectionWizard_welcome_rerunNotice">Siempre puedes volver a ejecutar el asistente de conexión desde el menú de Ajustes.</string>
     <string name="connectionWizard_welcome_prev">Saltar</string>
@@ -253,7 +253,7 @@
     <string name="connectionWizard_provider_framabag_titleMessage">Configuración de Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Volver</string>
     <string name="connectionWizard_provider_framabag_next">Conectar</string>
-    <string name="connectionWizard_summary_titleMessage">¡Todo listo!</string>
+    <string name="connectionWizard_summary_titleMessage">Todo listo.</string>
     <string name="connectionWizard_summary_text">Pulsa para guardar los ajustes e ir a la pantalla principal.</string>
     <string name="connectionWizard_summary_toastMessage">Configuración completada</string>
     <string name="connectionWizard_summary_prev">Volver</string>
@@ -339,4 +339,10 @@
     <string name="notification_channel_name_tts">Texto-a-voz (TTS) wallabag</string>
     <string name="notification_channel_group_name_tts">Texto-a-voz (TTS)</string>
     <string name="themeName_eink">Para pantallas de tinta electrónica</string>
+    <string name="misc_logging_logcatToFile_result_error">Error: %s</string>
+    <string name="misc_logging_logcatToFile_result_saved">Logs guardados en %s</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Guarda la salida de logcat (registro de la aplicación) en un archivo en /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
+    <string name="pref_name_misc_logging_logcatToFile">Guardar la salida de logcat en un archivo</string>
+    <string name="manageTags_addMoreTags">Añadir más etiquetas:</string>
+    <string name="manageTags_currentTags_none">Ninguna</string>
 </resources>
