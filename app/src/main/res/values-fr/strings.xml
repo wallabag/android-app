@@ -63,7 +63,7 @@
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion. Celle-ci peut survenir lors de l\'utilisation d\'un second facteur d\'authentification, ce qui n\'est pas encore possible pour cette application</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
-    <string name="d_testConnection_urlSuggestion_title">Changer l\'URL ?</string>
+    <string name="d_testConnection_urlSuggestion_title">Essayez de changer l\'URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
@@ -313,7 +313,7 @@
     <string name="notification_action_media_pause">Pause</string>
     <string name="tts_image">Image : %s</string>
     <string name="articleContent_previewImageAltText">Image d\'aperçu</string>
-    <string name="articleContent_globeIconAltText">Icône globe</string>
+    <string name="articleContent_globeIconAltText">Icône d\'un globe</string>
     <string name="contentIsTooLong">Le contenu de l\'article est trop long pour être affiché</string>
     <string name="untagged">&lt;non taggé&gt;</string>
     <string name="title">Titre</string>
@@ -330,4 +330,14 @@
     <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
     <string name="manageTags_addMoreTags">Ajouter plus de tags :</string>
     <string name="manageTags_currentTags_none">Aucun</string>
+    <string name="notification_action_media_rewind">Retour rapide</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Utilise l\'image d\'aperçu de l\'article (si présente) en tant que pochette de l\'album (visible dans la notification et possiblement affichée en tant que fond d\'écran de l\'écran de verrouillage)</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Utiliser l\'aperçu en tant que pochette de l\'album</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Appuyer sur le bouton « Précédent » fait un retour rapide au lieu de passer à l\'article précédent</string>
+    <string name="pref_name_tts_previousButtonIsRewind">Le bouton « Précédent » fait un retour rapide</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Appuyer sur le bouton « Suivant » fait une avance rapide au lieu de passer à l\'article suivant</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">Le bouton « Suivant » fait une avance rapide</string>
+    <string name="pref_desc_tts_rewindTime">Le nombre de secondes à sauter lorsque le bouton \"retour rapide\" est appuyé</string>
+    <string name="pref_name_tts_rewindTime">Retour rapide</string>
+    <string name="pref_name_tts_fastForwardTime">Avance rapide</string>
 </resources>
