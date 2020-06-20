@@ -1,0 +1,19 @@
+Added:
+
+- Share-menu: favorite/archive/tag articles right after sharing.
+- Tags (clickable) are displayed in the article view.
+- "Untagged" list.
+- Long-press menu (only for single articles).
+- Saving origin URL when adding from other articles.
+
+Changes:
+
+- Adaptive icon.
+- UI should no longer be blocked by database operations.
+- Other fixes and improvements
+
+Text-to-speech changes:
+
+- Better interruption handling.
+- Image alt-text is now pronounced.
+- Some other changes.

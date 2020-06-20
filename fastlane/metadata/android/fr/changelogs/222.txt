@@ -1,0 +1,19 @@
+Ajouté :
+
+- Menu de partage : possibilité de mettre en favori/archiver/tagger des articles juste après le partage.
+- Les tags (cliquables) sont affichés dans la vue de l'article.
+- Liste d'articles "non taggés".
+- Menu en restant appuyé (uniquement pour les articles individuels).
+- Sauvegarde de l'URL d'origine lors de l'ajout à partir d'autres articles.
+- Possibilité d'exporter le logcat dans un fichier
+
+Changements :
+
+- Icône adaptative.
+- L'interface utilisateur ne devrait plus être bloquée par les opérations de la base de données.
+- Autres corrections et améliorations
+
+Changements de synthèse vocale :
+
+- Meilleure gestion des interruptions.
+- Les textes alternatifs de l'image sont maintenant pris en compte.
