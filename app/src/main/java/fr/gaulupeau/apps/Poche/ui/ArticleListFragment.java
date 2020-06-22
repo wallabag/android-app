@@ -156,16 +156,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article>
     @Override
     protected RecyclerView.Adapter getListAdapter(List<Article> list) {
         return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
-                list, position -> {
-            if (position >= itemList.size() || position < 0) {
-                Log.e(TAG, "Fragment.getListAdapter.onItemClick prevent" +
-                        " ArrayIndexOutOfBoundsException position=" + position +
-                        ", itemList.size()=" + itemList.size());
-            } else {
-                Article article = itemList.get(position);
-                openArticle(article.getId());
-            }
-        }, listType);
+                list, position -> openArticle(itemList.get(position).getId()), listType);
     }
 
     @Override
