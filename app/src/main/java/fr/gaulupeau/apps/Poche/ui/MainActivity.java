@@ -931,8 +931,7 @@ public class MainActivity extends AppCompatActivity
 
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             TextView textView = view.findViewById(R.id.page_url);
-            OperationsHelper.addArticleWithUI(getBaseContext(),
-                    textView.getText().toString(), null);
+            OperationsHelper.addArticleWithUI(this, textView.getText().toString(), null);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
 
