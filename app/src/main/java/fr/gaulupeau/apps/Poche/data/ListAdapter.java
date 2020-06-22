@@ -129,7 +129,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            listener.onItemClick(getAdapterPosition());
+            int index = getAdapterPosition();
+            if (index != RecyclerView.NO_POSITION) {
+                listener.onItemClick(index);
+            }
         }
 
         @Override
