@@ -6,9 +6,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.widget.Toast;
 
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.UUID;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
@@ -25,9 +26,10 @@ public class NotificationActionReceiver extends BroadcastReceiver {
         intent.setAction(ACTION_COPY_TO_CLIPBOARD);
         intent.putExtra(EXTRA_COPY_TO_CLIPBOARD_LABEL, label);
         intent.putExtra(EXTRA_COPY_TO_CLIPBOARD_TEXT, text);
+        // make the intent unique, so `PendingIntent` creates a **new** pending intent
+        intent.setData(Uri.parse("uuid:" + UUID.randomUUID()));
 
-        int code = ThreadLocalRandom.current().nextInt(); // so `PendingIntent` creates a **new** pending intent
-        return PendingIntent.getBroadcast(context, code, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     @Override
