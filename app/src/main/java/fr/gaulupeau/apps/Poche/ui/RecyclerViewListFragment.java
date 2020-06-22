@@ -21,8 +21,8 @@ import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 
-public abstract class RecyclerViewListFragment<T> extends Fragment
-        implements Sortable, Searchable {
+public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter<?>>
+        extends Fragment implements Sortable, Searchable {
 
     private static final String TAG = "RecyclerVLFragment";
 
@@ -37,7 +37,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
     protected LinearLayoutManager recyclerViewLayoutManager;
 
     protected List<T> itemList;
-    protected RecyclerView.Adapter listAdapter;
+    protected V listAdapter;
     protected EndlessRecyclerViewScrollListener scrollListener;
 
     protected boolean active = false; // TODO: check: doesn't work as expected in PagerAdapter
@@ -65,7 +65,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
 
         itemList = new ArrayList<>();
 
-        listAdapter = getListAdapter(itemList);
+        listAdapter = createListAdapter(itemList);
     }
 
     @Override
@@ -168,7 +168,7 @@ public abstract class RecyclerViewListFragment<T> extends Fragment
         return R.id.list_swipeContainer;
     }
 
-    protected abstract RecyclerView.Adapter getListAdapter(List<T> list);
+    protected abstract V createListAdapter(List<T> list);
 
     protected void resetContent() {
         List<T> items = getItems(0);
