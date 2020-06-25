@@ -19,16 +19,23 @@
         android:theme="@style/LightTheme"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name="fr.gaulupeau.apps.Poche.ui.MainActivity"
             android:theme="@style/LightTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <action android:name="android.intent.action.SEARCH"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable"/>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity"
