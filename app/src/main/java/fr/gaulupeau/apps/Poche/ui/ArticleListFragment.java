@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -41,7 +40,7 @@ import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_UNREAD;
 
-public class ArticleListFragment extends RecyclerViewListFragment<Article>
+public class ArticleListFragment extends RecyclerViewListFragment<Article, ListAdapter>
         implements ContextMenuItemHandler {
 
     public interface OnFragmentInteractionListener {
@@ -146,7 +145,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article>
 
     @Override
     public boolean handleContextItemSelected(Activity activity, MenuItem item) {
-        return ((ListAdapter) listAdapter).handleContextItemSelected(activity, item);
+        return listAdapter.handleContextItemSelected(activity, item);
     }
 
     public void forceContentUpdate() {
@@ -154,18 +153,9 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article>
     }
 
     @Override
-    protected RecyclerView.Adapter getListAdapter(List<Article> list) {
+    protected ListAdapter createListAdapter(List<Article> list) {
         return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
-                list, position -> {
-            if (position >= itemList.size() || position < 0) {
-                Log.e(TAG, "Fragment.getListAdapter.onItemClick prevent" +
-                        " ArrayIndexOutOfBoundsException position=" + position +
-                        ", itemList.size()=" + itemList.size());
-            } else {
-                Article article = itemList.get(position);
-                openArticle(article.getId());
-            }
-        }, listType);
+                list, position -> openArticle(itemList.get(position).getId()), listType);
     }
 
     @Override

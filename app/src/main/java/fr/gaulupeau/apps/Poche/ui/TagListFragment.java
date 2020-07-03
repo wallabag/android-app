@@ -7,7 +7,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
-import androidx.recyclerview.widget.RecyclerView;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
@@ -19,7 +18,7 @@ import fr.gaulupeau.apps.Poche.data.TagListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 
-public class TagListFragment extends RecyclerViewListFragment<Tag> {
+public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapter> {
 
     public interface OnFragmentInteractionListener
             extends ArticleListFragment.OnFragmentInteractionListener {
@@ -64,7 +63,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag> {
     }
 
     @Override
-    protected RecyclerView.Adapter getListAdapter(List<Tag> list) {
+    protected TagListAdapter createListAdapter(List<Tag> list) {
         return new TagListAdapter(list, TagListFragment.this::onItemClick);
     }
 

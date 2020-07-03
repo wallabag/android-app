@@ -92,12 +92,15 @@ public class TagListAdapter extends RecyclerView.Adapter<TagListAdapter.ViewHold
 
         @Override
         public void onClick(View v) {
+            int index = getAdapterPosition();
+            if (index == RecyclerView.NO_POSITION) return;
+
             if (button != null && v == button) {
                 if (buttonClickListener != null) {
-                    buttonClickListener.onItemButtonClick(getAdapterPosition());
+                    buttonClickListener.onItemButtonClick(index);
                 }
             } else {
-                listener.onItemClick(getAdapterPosition());
+                listener.onItemClick(index);
             }
         }
 
