@@ -134,6 +134,11 @@ public class ListContext implements Parcelable {
     }
 
     public QueryBuilder<Article> applyForArticles(QueryBuilder<Article> qb, TagDao tagDao) {
+        return applyArticlesOrder(applyForArticlesWithoutOrder(qb, tagDao));
+    }
+
+    public QueryBuilder<Article> applyForArticlesWithoutOrder(
+            QueryBuilder<Article> qb, TagDao tagDao) {
         if (isUntagged(tagDao)) {
             qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN ("
                     + "select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
@@ -161,6 +166,10 @@ public class ListContext implements Parcelable {
                     + ")"));
         }
 
+        return qb;
+    }
+
+    public QueryBuilder<Article> applyArticlesOrder(QueryBuilder<Article> qb) {
         Sortable.SortOrder sortOrder = this.sortOrder != null
                 ? this.sortOrder : Sortable.SortOrder.DESC;
         switch (sortOrder) {

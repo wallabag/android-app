@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -49,9 +50,11 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.ListContext;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.StorageHelper;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
@@ -67,9 +70,8 @@ import static android.text.Html.escapeHtml;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
-    public static final String EXTRA_ID = "ReadArticleActivity.id";
-    public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
-    public static final String EXTRA_LIST_FAVORITES = "ReadArticleActivity.favorites";
+    private static final String EXTRA_ID = "ReadArticleActivity.id";
+    private static final String EXTRA_LIST_CONTEXT = "ReadArticleActivity.listContext";
 
     private static final String TAG = ReadArticleActivity.class.getSimpleName();
 
@@ -102,14 +104,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ArticlesChangedEvent.ChangeType.UNARCHIVED,
             ArticlesChangedEvent.ChangeType.FAVORITED,
             ArticlesChangedEvent.ChangeType.UNFAVORITED,
-            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED);
+            ArticlesChangedEvent.ChangeType.CREATED_DATE_CHANGED,
+            ArticlesChangedEvent.ChangeType.TAG_SET_CHANGED,
+            ArticlesChangedEvent.ChangeType.TAGS_CHANGED_GLOBALLY);
 
-    private Boolean contextFavorites;
-    private Boolean contextArchived;
+    private ListContext listContext;
 
     private Settings settings;
 
     private ArticleDao articleDao;
+    private TagDao tagDao;
 
     private ArticleActionsHelper articleActionsHelper = new ArticleActionsHelper();
 
@@ -154,6 +158,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
+    public static Intent getIntent(Context context, long articleId, ListContext listContext) {
+        Intent intent = new Intent(context, ReadArticleActivity.class);
+
+        intent.putExtra(EXTRA_ID, articleId);
+        if (listContext != null) intent.putExtra(EXTRA_LIST_CONTEXT, listContext);
+
+        return intent;
+    }
+
     // TODO: remove after updating to ~"androidx.appcompat:appcompat:1.2.0"
     // https://issuetracker.google.com/issues/141132133
     // https://stackoverflow.com/q/58028821
@@ -192,14 +205,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         long articleID = intent.getLongExtra(EXTRA_ID, -1);
         Log.d(TAG, "onCreate() articleId: " + articleID);
 
-        if (intent.hasExtra(EXTRA_LIST_FAVORITES)) {
-            contextFavorites = intent.getBooleanExtra(EXTRA_LIST_FAVORITES, false);
-        }
-        if (intent.hasExtra(EXTRA_LIST_ARCHIVED)) {
-            contextArchived = intent.getBooleanExtra(EXTRA_LIST_ARCHIVED, false);
-        }
+        listContext = intent.getParcelableExtra(EXTRA_LIST_CONTEXT);
+        if (listContext == null) listContext = new ListContext();
 
         articleDao = DbConnection.getSession().getArticleDao();
+        tagDao = DbConnection.getSession().getTagDao();
 
         if (!loadArticle(articleID)) {
             Log.e(TAG, "onCreate() did not find article with ID: " + articleID);
@@ -428,9 +438,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             updatePrevNext = true;
         } else {
             EnumSet<ArticlesChangedEvent.ChangeType> changes;
-            if (contextArchived != null) {
-                changes = contextArchived ? event.getArchiveFeedChanges() : event.getMainFeedChanges();
-            } else if (contextFavorites != null && contextFavorites) {
+            // TODO: check logic
+            if (listContext.getArchived() != null) {
+                changes = listContext.getArchived()
+                        ? event.getArchiveFeedChanges() : event.getMainFeedChanges();
+            } else if (listContext.getFavorite() != null && listContext.getFavorite()) {
                 changes = event.getFavoriteFeedChanges();
             } else {
                 changes = EnumSet.copyOf(event.getMainFeedChanges());
@@ -593,6 +605,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void updatePrevNextButtons() {
+        listContext.resetCache();
+
         previousArticleID = getAdjacentArticle(true);
         nextArticleID = getAdjacentArticle(false);
 
@@ -1120,11 +1134,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             ttsFragment.onOpenNewArticle();
         }
 
-        Intent intent = new Intent(this, ReadArticleActivity.class);
+        Intent intent = getIntent(this, id, listContext);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-        if (contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
-        if (contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
 
         startActivity(intent);
     }
@@ -1303,14 +1314,19 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
-        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+        listContext.applyForArticlesWithoutOrder(qb, tagDao);
 
-        if (contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        if (contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        if (listContext.getSortOrder() == Sortable.SortOrder.ASC) {
+            previous = !previous;
+        }
 
-        if (previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
-        else qb.orderDesc(ArticleDao.Properties.ArticleId);
+        if (previous) {
+            qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
+            qb.orderAsc(ArticleDao.Properties.ArticleId);
+        } else {
+            qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+            qb.orderDesc(ArticleDao.Properties.ArticleId);
+        }
 
         List<Article> l = qb.limit(1).list();
         if (!l.isEmpty()) {

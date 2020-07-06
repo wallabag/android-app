@@ -206,9 +206,7 @@ public class EditAddedArticleActivity extends AppCompatActivity {
     }
 
     private void openArticle() {
-        Intent intent = new Intent(this, ReadArticleActivity.class);
-        intent.putExtra(ReadArticleActivity.EXTRA_ID, article.getId());
-        startActivity(intent);
+        startActivity(ReadArticleActivity.getIntent(this, article.getId(), null));
 
         finish();
     }

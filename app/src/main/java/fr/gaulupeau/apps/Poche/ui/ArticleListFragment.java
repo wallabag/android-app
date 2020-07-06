@@ -2,7 +2,6 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -220,21 +219,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         articles.close();
     }
 
-    // TODO: include more info (order, search query, tag)
     private void openArticle(long id) {
         Activity activity = getActivity();
         if (activity != null) {
-            Intent intent = new Intent(activity, ReadArticleActivity.class);
-            intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-
-            if (listContext.getArchived() != null) {
-                intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, listContext.getArchived());
-            }
-            if (listContext.getFavorite() != null) {
-                intent.putExtra(ReadArticleActivity.EXTRA_LIST_FAVORITES, listContext.getFavorite());
-            }
-
-            startActivity(intent);
+            startActivity(ReadArticleActivity.getIntent(activity, id, listContext));
         }
     }
 
