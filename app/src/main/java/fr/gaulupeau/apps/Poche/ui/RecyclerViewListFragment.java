@@ -28,7 +28,7 @@ public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter
 
     protected static final String STATE_LIST_CONTEXT = "list_context";
 
-    protected ListContext listContext;
+    protected ListContext listContext = new ListContext();
 
     protected SwipeRefreshLayout refreshLayout;
     protected RecyclerView recyclerView;
@@ -53,10 +53,8 @@ public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter
             Log.v(TAG, "onCreate() restoring state");
 
             listContext = savedInstanceState.getParcelable(STATE_LIST_CONTEXT);
+            if (listContext == null) listContext = new ListContext();
         }
-        if (listContext == null) listContext = new ListContext();
-
-        if (listContext.getSortOrder() == null) listContext.setSortOrder(Sortable.SortOrder.DESC);
 
         itemList = new ArrayList<>();
 
