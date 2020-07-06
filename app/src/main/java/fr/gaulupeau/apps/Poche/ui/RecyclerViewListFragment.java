@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.data.ListContext;
 
 public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter<?>>
         extends Fragment implements Sortable, Searchable {
 
     private static final String TAG = "RecyclerVLFragment";
 
-    protected static final String STATE_SORT_ORDER = "sort_order";
-    protected static final String STATE_SEARCH_QUERY = "search_query";
+    protected static final String STATE_LIST_CONTEXT = "list_context";
 
-    protected Sortable.SortOrder sortOrder;
-    protected String searchQuery;
+    protected ListContext listContext;
 
     protected SwipeRefreshLayout refreshLayout;
     protected RecyclerView recyclerView;
@@ -54,14 +52,11 @@ public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter
         if (savedInstanceState != null) {
             Log.v(TAG, "onCreate() restoring state");
 
-            if (sortOrder == null) {
-                sortOrder = Sortable.SortOrder.values()[savedInstanceState.getInt(STATE_SORT_ORDER)];
-            }
-            if (searchQuery == null) {
-                searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
-            }
+            listContext = savedInstanceState.getParcelable(STATE_LIST_CONTEXT);
         }
-        if (sortOrder == null) sortOrder = Sortable.SortOrder.DESC;
+        if (listContext == null) listContext = new ListContext();
+
+        if (listContext.getSortOrder() == null) listContext.setSortOrder(Sortable.SortOrder.DESC);
 
         itemList = new ArrayList<>();
 
@@ -122,24 +117,17 @@ public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter
 
         Log.v(TAG, "onSaveInstanceState()");
 
-        if (sortOrder != null) outState.putInt(STATE_SORT_ORDER, sortOrder.ordinal());
-        if (searchQuery != null) outState.putString(STATE_SEARCH_QUERY, searchQuery);
+        outState.putParcelable(STATE_LIST_CONTEXT, listContext);
     }
 
     @Override
     public void setSortOrder(Sortable.SortOrder sortOrder) {
-        Sortable.SortOrder oldSortOrder = this.sortOrder;
-        this.sortOrder = sortOrder;
-
-        if (sortOrder != oldSortOrder) invalidateList();
+        if (listContext.setSortOrder(sortOrder)) invalidateList();
     }
 
     @Override
     public void setSearchQuery(String searchQuery) {
-        String oldSearchQuery = this.searchQuery;
-        this.searchQuery = searchQuery;
-
-        if (!TextUtils.equals(oldSearchQuery, searchQuery)) invalidateList();
+        if (listContext.setSearchQuery(searchQuery)) invalidateList();
     }
 
     public void invalidateList() {

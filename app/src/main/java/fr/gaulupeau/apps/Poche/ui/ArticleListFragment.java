@@ -19,8 +19,8 @@ import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -34,7 +34,6 @@ import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
-import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
@@ -55,9 +54,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
-    private String tagLabel;
-    private boolean untagged;
-    private List<Long> tagIDs;
 
     private OnFragmentInteractionListener host;
 
@@ -81,21 +77,33 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            listType = arguments.getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
-            tagLabel = arguments.getString(TAG_PARAM);
-        }
+        Bundle arguments = Objects.requireNonNull(getArguments());
+        listType = arguments.getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
+
+        super.onCreate(savedInstanceState);
 
         Log.v(TAG, "Fragment " + listType + " onCreate()");
+
+        switch (listType) {
+            case LIST_TYPE_ARCHIVED:
+                listContext.setArchived(true);
+                break;
+
+            case LIST_TYPE_FAVORITES:
+                listContext.setFavorite(true);
+                break;
+
+            default:
+                listContext.setArchived(false);
+                break;
+        }
+        listContext.setTagLabel(arguments.getString(TAG_PARAM));
 
         DaoSession daoSession = DbConnection.getSession();
         articleDao = daoSession.getArticleDao();
         tagDao = daoSession.getTagDao();
 
         setHasOptionsMenu(true);
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -156,22 +164,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     @Override
     protected void resetContent() {
-        untagged = false;
-        tagIDs = null;
-
-        if (getString(R.string.untagged).equals(tagLabel)) {
-            untagged = true;
-        } else if (tagLabel != null) {
-            List<Tag> tags = tagDao.queryBuilder()
-                    .where(TagDao.Properties.Label.eq(tagLabel))
-                    .orderDesc(TagDao.Properties.Label)
-                    .list();
-
-            tagIDs = new ArrayList<>(tags.size());
-            for (Tag t : tags) {
-                tagIDs.add(t.getId());
-            }
-        }
+        listContext.resetCache();
 
         super.resetContent();
 
@@ -194,36 +187,32 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (untagged) {
+        if (listContext.isUntagged(tagDao)) {
             qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN "
                     + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
                     + " from " + ArticleTagsJoinDao.TABLENAME + ")"));
-        } else if (tagIDs != null && !tagIDs.isEmpty()) {
-            // TODO: try subquery
-            qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
-                    .where(ArticleTagsJoinDao.Properties.TagId.in(tagIDs));
+        } else {
+            List<Long> tagIds = listContext.getTagIds(tagDao);
+            if (tagIds != null && !tagIds.isEmpty()) {
+                // TODO: try subquery
+                qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
+                        .where(ArticleTagsJoinDao.Properties.TagId.in(tagIds));
+            }
         }
 
-        switch (listType) {
-            case LIST_TYPE_ARCHIVED:
-                qb.where(ArticleDao.Properties.Archive.eq(true));
-                break;
-
-            case LIST_TYPE_FAVORITES:
-                qb.where(ArticleDao.Properties.Favorite.eq(true));
-                break;
-
-            default:
-                qb.where(ArticleDao.Properties.Archive.eq(false));
-                break;
+        if (listContext.getArchived() != null) {
+            qb.where(ArticleDao.Properties.Archive.eq(listContext.getArchived()));
+        }
+        if (listContext.getFavorite() != null) {
+            qb.where(ArticleDao.Properties.Favorite.eq(listContext.getFavorite()));
         }
 
-        if (!TextUtils.isEmpty(searchQuery)) {
+        if (!TextUtils.isEmpty(listContext.getSearchQuery())) {
             qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
-                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
+                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(listContext.getSearchQuery()) + ")"));
         }
 
-        switch (sortOrder) {
+        switch (listContext.getSortOrder()) {
             case ASC:
                 qb.orderAsc(ArticleDao.Properties.ArticleId);
                 break;
@@ -233,7 +222,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
                 break;
 
             default:
-                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
+                throw new IllegalStateException("Sort order not implemented: "
+                        + listContext.getSortOrder());
         }
 
         return qb;
@@ -281,16 +271,11 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
             Intent intent = new Intent(activity, ReadArticleActivity.class);
             intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
 
-            switch (listType) {
-                case LIST_TYPE_FAVORITES:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_FAVORITES, true);
-                    break;
-                case LIST_TYPE_ARCHIVED:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, true);
-                    break;
-                default:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, false);
-                    break;
+            if (listContext.getArchived() != null) {
+                intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, listContext.getArchived());
+            }
+            if (listContext.getFavorite() != null) {
+                intent.putExtra(ReadArticleActivity.EXTRA_LIST_FAVORITES, listContext.getFavorite());
             }
 
             startActivity(intent);

@@ -37,9 +37,9 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        tagDao = DbConnection.getSession().getTagDao();
-
         super.onCreate(savedInstanceState);
+
+        tagDao = DbConnection.getSession().getTagDao();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
 
         List<Tag> tags = detachObjects(qb.list());
 
-        if (page == 0 && TextUtils.isEmpty(searchQuery)) {
+        if (page == 0 && TextUtils.isEmpty(listContext.getSearchQuery())) {
             tags.add(0, new Tag(null, null, getString(R.string.untagged)));
         }
 
@@ -88,11 +88,11 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
     private QueryBuilder<Tag> getQueryBuilder() {
         QueryBuilder<Tag> qb = tagDao.queryBuilder();
 
-        if (!TextUtils.isEmpty(searchQuery)) {
-            qb.where(TagDao.Properties.Label.like("%" + searchQuery + "%"));
+        if (!TextUtils.isEmpty(listContext.getSearchQuery())) {
+            qb.where(TagDao.Properties.Label.like("%" + listContext.getSearchQuery() + "%"));
         }
 
-        switch (sortOrder) {
+        switch (listContext.getSortOrder()) {
             case ASC:
                 qb.orderAsc(TagDao.Properties.Label);
                 break;
@@ -102,7 +102,8 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
                 break;
 
             default:
-                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
+                throw new IllegalStateException("Sort order not implemented: "
+                        + listContext.getSortOrder());
         }
 
         return qb;
