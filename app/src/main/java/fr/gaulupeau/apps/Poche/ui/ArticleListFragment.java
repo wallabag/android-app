@@ -3,7 +3,6 @@ package fr.gaulupeau.apps.Poche.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.List;
 import java.util.Objects;
@@ -28,12 +26,9 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
-import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
-import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
-import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
@@ -187,46 +182,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (listContext.isUntagged(tagDao)) {
-            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN "
-                    + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
-                    + " from " + ArticleTagsJoinDao.TABLENAME + ")"));
-        } else {
-            List<Long> tagIds = listContext.getTagIds(tagDao);
-            if (tagIds != null && !tagIds.isEmpty()) {
-                // TODO: try subquery
-                qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
-                        .where(ArticleTagsJoinDao.Properties.TagId.in(tagIds));
-            }
-        }
-
-        if (listContext.getArchived() != null) {
-            qb.where(ArticleDao.Properties.Archive.eq(listContext.getArchived()));
-        }
-        if (listContext.getFavorite() != null) {
-            qb.where(ArticleDao.Properties.Favorite.eq(listContext.getFavorite()));
-        }
-
-        if (!TextUtils.isEmpty(listContext.getSearchQuery())) {
-            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
-                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(listContext.getSearchQuery()) + ")"));
-        }
-
-        switch (listContext.getSortOrder()) {
-            case ASC:
-                qb.orderAsc(ArticleDao.Properties.ArticleId);
-                break;
-
-            case DESC:
-                qb.orderDesc(ArticleDao.Properties.ArticleId);
-                break;
-
-            default:
-                throw new IllegalStateException("Sort order not implemented: "
-                        + listContext.getSortOrder());
-        }
-
-        return qb;
+        return listContext.applyForArticles(qb, tagDao);
     }
 
     // removes articles from cache: necessary for DiffUtil to work

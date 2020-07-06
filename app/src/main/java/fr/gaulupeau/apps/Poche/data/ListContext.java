@@ -1,8 +1,12 @@
 package fr.gaulupeau.apps.Poche.data;
 
+import android.database.DatabaseUtils;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+
+import org.greenrobot.greendao.query.QueryBuilder;
+import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +14,12 @@ import java.util.Objects;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
+import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
+import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
+import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.ui.Sortable;
 
@@ -80,12 +89,12 @@ public class ListContext implements Parcelable {
         return true;
     }
 
-    public boolean isUntagged(TagDao tagDao) {
+    protected boolean isUntagged(TagDao tagDao) {
         cacheTags(tagDao);
         return untagged;
     }
 
-    public List<Long> getTagIds(TagDao tagDao) {
+    protected List<Long> getTagIds(TagDao tagDao) {
         cacheTags(tagDao);
         return tagIds;
     }
@@ -99,6 +108,75 @@ public class ListContext implements Parcelable {
 
         this.sortOrder = sortOrder;
         return true;
+    }
+
+    public QueryBuilder<Tag> applyForTags(QueryBuilder<Tag> qb) {
+        if (!TextUtils.isEmpty(searchQuery)) {
+            qb.where(TagDao.Properties.Label.like("%" + searchQuery + "%"));
+        }
+
+        Sortable.SortOrder sortOrder = this.sortOrder != null
+                ? this.sortOrder : Sortable.SortOrder.ASC;
+        switch (sortOrder) {
+            case ASC:
+                qb.orderAsc(TagDao.Properties.Label);
+                break;
+
+            case DESC:
+                qb.orderDesc(TagDao.Properties.Label);
+                break;
+
+            default:
+                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
+        }
+
+        return qb;
+    }
+
+    public QueryBuilder<Article> applyForArticles(QueryBuilder<Article> qb, TagDao tagDao) {
+        if (isUntagged(tagDao)) {
+            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN ("
+                    + "select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
+                    + " from " + ArticleTagsJoinDao.TABLENAME
+                    + ")"));
+        } else {
+            List<Long> tagIds = getTagIds(tagDao);
+            if (tagIds != null && !tagIds.isEmpty()) {
+                // TODO: try subquery
+                qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
+                        .where(ArticleTagsJoinDao.Properties.TagId.in(tagIds));
+            }
+        }
+
+        if (archived != null) {
+            qb.where(ArticleDao.Properties.Archive.eq(archived));
+        }
+        if (favorite != null) {
+            qb.where(ArticleDao.Properties.Favorite.eq(favorite));
+        }
+
+        if (!TextUtils.isEmpty(searchQuery)) {
+            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN ("
+                    + FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery)
+                    + ")"));
+        }
+
+        Sortable.SortOrder sortOrder = this.sortOrder != null
+                ? this.sortOrder : Sortable.SortOrder.DESC;
+        switch (sortOrder) {
+            case ASC:
+                qb.orderAsc(ArticleDao.Properties.ArticleId);
+                break;
+
+            case DESC:
+                qb.orderDesc(ArticleDao.Properties.ArticleId);
+                break;
+
+            default:
+                throw new IllegalStateException("Sort order not implemented: " + getSortOrder());
+        }
+
+        return qb;
     }
 
     public void resetCache() {

@@ -86,27 +86,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
     }
 
     private QueryBuilder<Tag> getQueryBuilder() {
-        QueryBuilder<Tag> qb = tagDao.queryBuilder();
-
-        if (!TextUtils.isEmpty(listContext.getSearchQuery())) {
-            qb.where(TagDao.Properties.Label.like("%" + listContext.getSearchQuery() + "%"));
-        }
-
-        switch (listContext.getSortOrder()) {
-            case ASC:
-                qb.orderAsc(TagDao.Properties.Label);
-                break;
-
-            case DESC:
-                qb.orderDesc(TagDao.Properties.Label);
-                break;
-
-            default:
-                throw new IllegalStateException("Sort order not implemented: "
-                        + listContext.getSortOrder());
-        }
-
-        return qb;
+        return listContext.applyForTags(tagDao.queryBuilder());
     }
 
     // removes tags from cache: necessary for DiffUtil to work
