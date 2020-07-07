@@ -52,10 +52,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     private static final String LIST_TYPE_PARAM = "list_type";
     private static final String TAG_PARAM = "tag";
 
-    private static final String UNTAGGED_WHERE = ArticleDao.Properties.Id.columnName + " not in "
-            + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
-            + " from " + ArticleTagsJoinDao.TABLENAME + ")";
-
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
@@ -199,7 +195,9 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
         if (untagged) {
-            qb.where(new WhereCondition.StringCondition(UNTAGGED_WHERE));
+            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN "
+                    + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
+                    + " from " + ArticleTagsJoinDao.TABLENAME + ")"));
         } else if (tagIDs != null && !tagIDs.isEmpty()) {
             // TODO: try subquery
             qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
@@ -221,7 +219,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         }
 
         if (!TextUtils.isEmpty(searchQuery)) {
-            qb.where(new WhereCondition.StringCondition(ArticleDao.Properties.Id.columnName + " IN (" +
+            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
                     FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
         }
 
