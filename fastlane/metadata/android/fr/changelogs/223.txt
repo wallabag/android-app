@@ -1,0 +1,7 @@
+Ajouté :
+
+- Écran de démarrage au lancement de l'application
+
+Changements :
+
+- Corrections diverses
