@@ -1,0 +1,7 @@
+Added:
+
+- Splash screen when starting app
+
+Changes:
+
+- Various fixes
