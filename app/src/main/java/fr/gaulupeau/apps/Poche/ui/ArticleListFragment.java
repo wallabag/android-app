@@ -2,8 +2,6 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,10 +15,9 @@ import androidx.recyclerview.widget.DiffUtil;
 
 import org.greenrobot.greendao.query.LazyList;
 import org.greenrobot.greendao.query.QueryBuilder;
-import org.greenrobot.greendao.query.WhereCondition;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import fr.gaulupeau.apps.InThePoche.R;
@@ -28,13 +25,9 @@ import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
-import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
-import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
-import fr.gaulupeau.apps.Poche.data.dao.entities.ArticleTagsJoin;
-import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
@@ -55,9 +48,6 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     private static final int PER_PAGE_LIMIT = 30;
 
     private int listType;
-    private String tagLabel;
-    private boolean untagged;
-    private List<Long> tagIDs;
 
     private OnFragmentInteractionListener host;
 
@@ -81,21 +71,33 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            listType = arguments.getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
-            tagLabel = arguments.getString(TAG_PARAM);
-        }
+        Bundle arguments = Objects.requireNonNull(getArguments());
+        listType = arguments.getInt(LIST_TYPE_PARAM, LIST_TYPE_UNREAD);
+
+        super.onCreate(savedInstanceState);
 
         Log.v(TAG, "Fragment " + listType + " onCreate()");
+
+        switch (listType) {
+            case LIST_TYPE_ARCHIVED:
+                listContext.setArchived(true);
+                break;
+
+            case LIST_TYPE_FAVORITES:
+                listContext.setFavorite(true);
+                break;
+
+            default:
+                listContext.setArchived(false);
+                break;
+        }
+        listContext.setTagLabel(arguments.getString(TAG_PARAM));
 
         DaoSession daoSession = DbConnection.getSession();
         articleDao = daoSession.getArticleDao();
         tagDao = daoSession.getTagDao();
 
         setHasOptionsMenu(true);
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -156,22 +158,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     @Override
     protected void resetContent() {
-        untagged = false;
-        tagIDs = null;
-
-        if (getString(R.string.untagged).equals(tagLabel)) {
-            untagged = true;
-        } else if (tagLabel != null) {
-            List<Tag> tags = tagDao.queryBuilder()
-                    .where(TagDao.Properties.Label.eq(tagLabel))
-                    .orderDesc(TagDao.Properties.Label)
-                    .list();
-
-            tagIDs = new ArrayList<>(tags.size());
-            for (Tag t : tags) {
-                tagIDs.add(t.getId());
-            }
-        }
+        listContext.resetCache();
 
         super.resetContent();
 
@@ -194,49 +181,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (untagged) {
-            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN "
-                    + "(select " + ArticleTagsJoinDao.Properties.ArticleId.columnName
-                    + " from " + ArticleTagsJoinDao.TABLENAME + ")"));
-        } else if (tagIDs != null && !tagIDs.isEmpty()) {
-            // TODO: try subquery
-            qb.join(ArticleTagsJoin.class, ArticleTagsJoinDao.Properties.ArticleId)
-                    .where(ArticleTagsJoinDao.Properties.TagId.in(tagIDs));
-        }
-
-        switch (listType) {
-            case LIST_TYPE_ARCHIVED:
-                qb.where(ArticleDao.Properties.Archive.eq(true));
-                break;
-
-            case LIST_TYPE_FAVORITES:
-                qb.where(ArticleDao.Properties.Favorite.eq(true));
-                break;
-
-            default:
-                qb.where(ArticleDao.Properties.Archive.eq(false));
-                break;
-        }
-
-        if (!TextUtils.isEmpty(searchQuery)) {
-            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
-                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
-        }
-
-        switch (sortOrder) {
-            case ASC:
-                qb.orderAsc(ArticleDao.Properties.ArticleId);
-                break;
-
-            case DESC:
-                qb.orderDesc(ArticleDao.Properties.ArticleId);
-                break;
-
-            default:
-                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
-        }
-
-        return qb;
+        return listContext.applyForArticles(qb, tagDao);
     }
 
     // removes articles from cache: necessary for DiffUtil to work
@@ -274,26 +219,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         articles.close();
     }
 
-    // TODO: include more info (order, search query, tag)
     private void openArticle(long id) {
         Activity activity = getActivity();
         if (activity != null) {
-            Intent intent = new Intent(activity, ReadArticleActivity.class);
-            intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-
-            switch (listType) {
-                case LIST_TYPE_FAVORITES:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_FAVORITES, true);
-                    break;
-                case LIST_TYPE_ARCHIVED:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, true);
-                    break;
-                default:
-                    intent.putExtra(ReadArticleActivity.EXTRA_LIST_ARCHIVED, false);
-                    break;
-            }
-
-            startActivity(intent);
+            startActivity(ReadArticleActivity.getIntent(activity, id, listContext));
         }
     }
 

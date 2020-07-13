@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +32,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mikepenz.aboutlibraries.Libs;
@@ -239,6 +241,17 @@ public class MainActivity extends AppCompatActivity
             this.currentFragmentType = currentFragmentType;
             updateNavigationUI(currentFragmentType);
         }
+
+        getSupportFragmentManager().registerFragmentLifecycleCallbacks(
+                new FragmentManager.FragmentLifecycleCallbacks() {
+                    @Override
+                    public void onFragmentCreated(@NonNull FragmentManager fm,
+                                                  @NonNull Fragment f,
+                                                  @Nullable Bundle savedInstanceState) {
+                        Log.d(TAG, "onFragmentCreated() fragment: " + f);
+                        setParametersToFragment(f);
+                    }
+                }, false);
 
         EventBus.getDefault().register(this);
     }
@@ -958,5 +971,12 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        Log.d(TAG, "onAttachFragment() fragment: " + fragment);
     }
 }
