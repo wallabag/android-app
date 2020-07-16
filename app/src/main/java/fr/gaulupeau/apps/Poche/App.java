@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche;
 
 import android.app.Application;
-import android.webkit.WebView;
 
 import com.facebook.stetho.Stetho;
 
@@ -30,7 +29,6 @@ public class App extends Application {
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
-            WebView.setWebContentsDebuggingEnabled(true);
         }
 
         EventBus.builder()

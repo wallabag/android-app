@@ -168,6 +168,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        if (BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
         settings = App.getInstance().getSettings();
 
         fullscreenArticleView = settings.isFullscreenArticleView();
