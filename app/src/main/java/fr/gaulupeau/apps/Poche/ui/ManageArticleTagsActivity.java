@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -41,6 +40,7 @@ import fr.gaulupeau.apps.Poche.data.dao.TagDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.LocalArticleReplacedEvent;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
@@ -146,7 +146,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
         setEditText(text);
 
-        EventBus.getDefault().register(this);
+        EventHelper.register(this);
     }
 
     @Override
@@ -164,7 +164,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        EventHelper.unregister(this);
 
         super.onDestroy();
     }

@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
@@ -22,6 +21,7 @@ import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
@@ -201,7 +201,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                 db.endTransaction();
             }
 
-            if(inserted) EventBus.getDefault().post(new OfflineQueueChangedEvent(null));
+            if(inserted) EventHelper.postEvent(new OfflineQueueChangedEvent(null));
         }
     }
 

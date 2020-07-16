@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.io.PrintWriter;
@@ -76,14 +75,6 @@ public class EventProcessor {
 
     public EventProcessor(Context context) {
         this.context = context;
-    }
-
-    public void start() {
-        EventBus.getDefault().register(this);
-    }
-
-    public void stop() {
-        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe

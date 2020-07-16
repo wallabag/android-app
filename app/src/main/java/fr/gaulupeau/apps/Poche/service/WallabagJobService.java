@@ -7,12 +7,12 @@ import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.RequiresApi;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
+import androidx.annotation.RequiresApi;
 
 import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class WallabagJobService extends JobService {
@@ -69,7 +69,7 @@ public class WallabagJobService extends JobService {
     public boolean onStartJob(JobParameters params) {
         Log.d(TAG, "onStartJob() started");
 
-        EventBus.getDefault().post(new ConnectivityChangedEvent());
+        EventHelper.postEvent(new ConnectivityChangedEvent());
 
         // not sure about it
         jobFinished(params, false);
