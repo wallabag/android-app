@@ -58,6 +58,7 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
@@ -168,6 +169,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // not sure if it is relevant to WebView
+        WallabagConnection.initConscrypt();
+
         if (BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true);
         }

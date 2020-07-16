@@ -4,10 +4,7 @@ import android.app.Application;
 
 import com.facebook.stetho.Stetho;
 
-import org.conscrypt.Conscrypt;
 import org.greenrobot.eventbus.EventBus;
-
-import java.security.Security;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
@@ -24,8 +21,6 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Security.insertProviderAt(Conscrypt.newProvider(), 1);
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);

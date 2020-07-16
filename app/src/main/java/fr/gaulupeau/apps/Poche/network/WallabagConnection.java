@@ -8,6 +8,16 @@ import android.util.Log;
 
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
+import org.conscrypt.Conscrypt;
+
+import java.io.IOException;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.security.Security;
+import java.util.concurrent.TimeUnit;
+
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.exceptions.IncorrectConfigurationException;
 import okhttp3.Interceptor;
@@ -15,22 +25,28 @@ import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.util.concurrent.TimeUnit;
-
-import fr.gaulupeau.apps.InThePoche.BuildConfig;
-import fr.gaulupeau.apps.Poche.App;
 import wallabag.apiwrapper.ParameterHandler;
 import wallabag.apiwrapper.WallabagService;
 import wallabag.apiwrapper.models.TokenResponse;
 
 public class WallabagConnection {
 
+    private static boolean conscryptInitialized;
+
     private static WallabagService wallabagService;
     private static final Object wallabagServiceLock = new Object();
+
+    public static void initConscrypt() {
+        if (conscryptInitialized) return;
+
+        synchronized (WallabagConnection.class) {
+            if (conscryptInitialized) return;
+
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+
+            conscryptInitialized = true;
+        }
+    }
 
     public static WallabagService getWallabagService() throws IncorrectConfigurationException {
         synchronized(wallabagServiceLock) {
@@ -124,6 +140,8 @@ public class WallabagConnection {
     }
 
     private static OkHttpClient.Builder getClientBuilder(boolean addCookieManager) {
+        initConscrypt();
+
         OkHttpClient.Builder b = new OkHttpClient.Builder()
                 .readTimeout(45, TimeUnit.SECONDS);
 
