@@ -132,7 +132,7 @@ public class TtsFragment extends Fragment {
     }
 
     public TtsFragment() {
-        settings = App.getInstance().getSettings();
+        settings = App.getSettings();
 
         percentFormat = NumberFormat.getPercentInstance();
         percentFormat.setMaximumFractionDigits(0);

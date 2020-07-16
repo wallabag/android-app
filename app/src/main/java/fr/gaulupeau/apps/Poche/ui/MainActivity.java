@@ -47,6 +47,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity
 
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-        settings = new Settings(this);
+        settings = App.getSettings();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

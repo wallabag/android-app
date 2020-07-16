@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.service.workers;
 
 import android.content.Context;
 
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
@@ -24,7 +25,7 @@ public class BaseWorker {
 
     protected Settings getSettings() {
         if (settings == null) {
-            settings = new Settings(context);
+            settings = App.getSettings();
         }
 
         return settings;

@@ -20,7 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import fr.gaulupeau.apps.InThePoche.R;
-import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import wallabag.apiwrapper.WallabagService;
@@ -101,7 +101,7 @@ public class ArticleActionsHelper {
         String shareText = articleUrl;
         if (!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
 
-        if (new Settings(context).isAppendWallabagMentionEnabled()) {
+        if (App.getSettings().isAppendWallabagMentionEnabled()) {
             shareText += context.getString(R.string.share_text_extra);
         }
 

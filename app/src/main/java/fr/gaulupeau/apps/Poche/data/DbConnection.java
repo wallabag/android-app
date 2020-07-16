@@ -9,6 +9,7 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 
@@ -26,7 +27,7 @@ public class DbConnection {
                 QueryBuilder.LOG_VALUES = true;
             }
 
-            String dbPath = new Settings(context).getDbPathForDbHelper();
+            String dbPath = App.getSettings().getDbPathForDbHelper();
 
             Log.d(TAG, "creating new db session");
             WallabagDbOpenHelper dbHelper = new WallabagDbOpenHelper(context, dbPath, null);

@@ -32,7 +32,7 @@ public class Settings {
     private SharedPreferences pref;
 
     public static boolean checkFirstRunInit(Context context) {
-        Settings settings = App.getInstance().getSettings();
+        Settings settings = App.getSettings();
 
         if(settings.isFirstRun()) {
             settings.setFirstRun(false);

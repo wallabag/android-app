@@ -341,7 +341,7 @@ public class ImageCacheUtils {
 
     public static String getWallabagUrl() {
         if(wallabagUrl == null) {
-            wallabagUrl = App.getInstance().getSettings().getUrl();
+            wallabagUrl = App.getSettings().getUrl();
         }
 
         return wallabagUrl;

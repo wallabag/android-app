@@ -150,7 +150,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     @Override
     protected ListAdapter createListAdapter(List<Article> list) {
-        return new ListAdapter(App.getInstance(), App.getInstance().getSettings(),
+        return new ListAdapter(App.getInstance(), App.getSettings(),
                 list, position -> openArticle(itemList.get(position).getId()), listType);
     }
 

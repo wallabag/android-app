@@ -176,7 +176,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             WebView.setWebContentsDebuggingEnabled(true);
         }
 
-        settings = App.getInstance().getSettings();
+        settings = App.getSettings();
 
         fullscreenArticleView = settings.isFullscreenArticleView();
         if (fullscreenArticleView) {

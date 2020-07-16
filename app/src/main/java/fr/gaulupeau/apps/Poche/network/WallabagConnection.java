@@ -64,7 +64,7 @@ public class WallabagConnection {
     }
 
     private static WallabagService createWallabagService() throws IncorrectConfigurationException {
-        final Settings settings = App.getInstance().getSettings();
+        final Settings settings = App.getSettings();
 
         String url = settings.getUrl();
         if(TextUtils.isEmpty(url)) throw new IncorrectConfigurationException("URL is empty");

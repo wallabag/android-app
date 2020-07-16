@@ -121,7 +121,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             addPreferencesFromResource(R.xml.preferences);
 
-            settings = new Settings(App.getInstance());
+            settings = App.getSettings();
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
@@ -501,7 +501,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        OperationsHelper.wipeDB(App.getInstance().getSettings());
+                                        OperationsHelper.wipeDB(App.getSettings());
                                     }
                                 })
                                 .setNegativeButton(R.string.negative_answer, null)

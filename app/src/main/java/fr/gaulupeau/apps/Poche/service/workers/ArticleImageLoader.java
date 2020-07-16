@@ -38,7 +38,7 @@ public class ArticleImageLoader {
     private static final String TAG = ArticleImageLoader.class.getSimpleName();
 
     public Result loadImage(int articleId, String imageUrl) {
-        return loadImage(articleId, imageUrl, App.getInstance().getSettings().isImageCacheEnabled());
+        return loadImage(articleId, imageUrl, App.getSettings().isImageCacheEnabled());
     }
 
     public Result loadImage(int articleId, String imageUrl, boolean tryLocal) {
@@ -68,7 +68,7 @@ public class ArticleImageLoader {
         Log.v(TAG, "loadImage() trying to load remote image");
 
         if (imageUrl.startsWith(WALLABAG_RELATIVE_URL_PATH)) {
-            imageUrl = App.getInstance().getSettings().getUrl() + imageUrl;
+            imageUrl = App.getSettings().getUrl() + imageUrl;
         }
 
         URL url = null;

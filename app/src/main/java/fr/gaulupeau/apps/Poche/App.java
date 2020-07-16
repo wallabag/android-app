@@ -16,11 +16,30 @@ public class App extends Application {
 
     private static App instance;
 
-    private Settings settings;
+    private static class SettingsHolder {
+        static final Settings SETTINGS = createSettings();
+
+        static Settings createSettings() {
+            Settings settings = new Settings(instance);
+            settings.initPreferences();
+
+            return settings;
+        }
+    }
+
+    public static App getInstance() {
+        return instance;
+    }
+
+    public static Settings getSettings() {
+        return SettingsHolder.SETTINGS;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        instance = this;
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
@@ -33,24 +52,11 @@ public class App extends Application {
                 .addIndex(new EventBusIndex())
                 .installDefaultEventBus();
 
-        settings = new Settings(this);
-        settings.initPreferences();
-
         NotificationsHelper.createNotificationChannels(this);
 
         new EventProcessor(this).start();
 
         DbConnection.setContext(this);
-
-        instance = this;
-    }
-
-    public Settings getSettings() {
-        return settings;
-    }
-
-    public static App getInstance() {
-        return instance;
     }
 
 }

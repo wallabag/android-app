@@ -6,20 +6,21 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
-import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.data.Settings;
+import fr.gaulupeau.apps.Poche.network.ClientCredentials;
 import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
-import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
+import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
 
 public class ConfigurationTestHelper
         implements GetCredentialsTask.ResultHandler,
@@ -321,7 +322,7 @@ public class ConfigurationTestHelper
 
         if(result == TestApiAccessTask.Result.OK) {
             if(handleResult) {
-                Settings settings = App.getInstance().getSettings();
+                Settings settings = App.getSettings();
 
                 if(newUrl != null) {
                     settings.setUrl(newUrl);

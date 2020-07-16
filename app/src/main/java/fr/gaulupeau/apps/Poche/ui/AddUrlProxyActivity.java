@@ -2,11 +2,12 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.regex.Matcher;
 
@@ -49,7 +50,7 @@ public class AddUrlProxyActivity extends AppCompatActivity {
         boolean showDialog = !Settings.checkFirstRunInit(this);
 
         if (showDialog) {
-            showDialog = App.getInstance().getSettings().isShowArticleAddedDialog();
+            showDialog = App.getSettings().isShowArticleAddedDialog();
         }
 
         String originUrl = intent.getStringExtra(PARAM_ORIGIN_URL);

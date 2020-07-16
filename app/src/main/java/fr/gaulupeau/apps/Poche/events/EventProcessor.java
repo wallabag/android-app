@@ -24,6 +24,7 @@ import java.util.EnumSet;
 import java.util.Locale;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.ActionRequest;
@@ -622,7 +623,7 @@ public class EventProcessor {
 
     private Settings getSettings() {
         if(settings == null) {
-            settings = new Settings(getContext());
+            settings = App.getSettings();
         }
 
         return settings;
