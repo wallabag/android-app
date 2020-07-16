@@ -1226,6 +1226,8 @@ public class TtsService extends Service {
 
     private NotificationCompat.Builder generateNotificationBuilderFrom(
             Context context, MediaSessionCompat mediaSession) {
+        NotificationsHelper.initNotificationChannels();
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, NotificationsHelper.CHANNEL_ID_TTS)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

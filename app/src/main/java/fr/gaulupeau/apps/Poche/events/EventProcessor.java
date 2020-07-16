@@ -35,6 +35,7 @@ import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.service.ServiceHelper;
 import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
+import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
 import fr.gaulupeau.apps.Poche.utils.WallabagFileProvider;
 
@@ -185,7 +186,7 @@ public class EventProcessor {
                 .setContentText(detailedMessage)
                 .setOngoing(true);
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
+        notify(NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
 
         updateArticlesNotificationBuilder = notificationBuilder;
@@ -197,7 +198,7 @@ public class EventProcessor {
 
         if(updateArticlesNotificationBuilder != null
                 && event.getCurrent() != 0 /* don't show empty progressbar */) {
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
+            notify(NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING,
                     updateArticlesNotificationBuilder
                             .setProgress(event.getTotal(), event.getCurrent(), false)
                             .build());
@@ -208,7 +209,7 @@ public class EventProcessor {
     public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
         Log.d(TAG, "onUpdateArticlesFinishedEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING);
+        cancelNotification(NOTIFICATION_ID_UPDATE_ARTICLES_ONGOING);
 
         updateArticlesNotificationBuilder = null;
     }
@@ -228,7 +229,7 @@ public class EventProcessor {
             notificationBuilder.setContentText(context.getString(R.string.app_name));
         }
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
+        notify(NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
                 notificationBuilder.setProgress(0, 0, true).build());
 
         sweepDeletedArticlesNotificationBuilder = notificationBuilder;
@@ -240,7 +241,7 @@ public class EventProcessor {
 
         if(sweepDeletedArticlesNotificationBuilder != null
                 && event.getCurrent() != 0 /* don't show empty progressbar */) {
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
+            notify(NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING,
                     sweepDeletedArticlesNotificationBuilder
                             .setProgress(event.getTotal(), event.getCurrent(), false)
                             .build());
@@ -251,7 +252,7 @@ public class EventProcessor {
     public void onSweepDeletedArticlesFinishedEvent(SweepDeletedArticlesFinishedEvent event) {
         Log.d(TAG, "onSweepDeletedArticlesFinishedEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING);
+        cancelNotification(NOTIFICATION_ID_SWEEP_DELETED_ARTICLES_ONGOING);
 
         sweepDeletedArticlesNotificationBuilder = null;
     }
@@ -281,15 +282,14 @@ public class EventProcessor {
             fetchImagesNotificationBuilder.setProgress(event.getTotal(), event.getCurrent(), false);
         }
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING,
-                fetchImagesNotificationBuilder.build());
+        notify(NOTIFICATION_ID_FETCH_IMAGES_ONGOING, fetchImagesNotificationBuilder.build());
     }
 
     @Subscribe
     public void onFetchImagesFinishedEvent(FetchImagesFinishedEvent event) {
         Log.d(TAG, "onFetchImagesFinishedEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_FETCH_IMAGES_ONGOING);
+        cancelNotification(NOTIFICATION_ID_FETCH_IMAGES_ONGOING);
 
         fetchImagesNotificationBuilder = null;
     }
@@ -329,7 +329,7 @@ public class EventProcessor {
                 syncQueueNotificationBuilder = notificationBuilder;
             }
 
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
+            notify(NOTIFICATION_ID_SYNC_QUEUE_ONGOING,
                     notificationBuilder.setProgress(total, event.getCurrent(), false).build());
         }
     }
@@ -338,7 +338,7 @@ public class EventProcessor {
     public void onSyncQueueFinishedEvent(SyncQueueFinishedEvent event) {
         Log.d(TAG, "onSyncQueueFinishedEvent() started");
 
-        getNotificationManager().cancel(TAG, NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
+        cancelNotification(NOTIFICATION_ID_SYNC_QUEUE_ONGOING);
 
         syncQueueNotificationBuilder = null;
 
@@ -371,7 +371,7 @@ public class EventProcessor {
                         formatString));
         notificationBuilder.setStyle(inboxStyle);
 
-        getNotificationManager().notify(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
+        notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
                 notificationBuilder.setProgress(1, 0, true).build());
     }
 
@@ -405,10 +405,9 @@ public class EventProcessor {
                             event.getArticle().getTitle().replaceAll("[^a-zA-Z0-9.-]", " ")));
             notificationBuilder.setStyle(inboxStyle);
 
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING,
-                    notificationBuilder.build());
+            notify(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING, notificationBuilder.build());
         } else {
-            getNotificationManager().cancel(TAG, NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING);
+            cancelNotification(NOTIFICATION_ID_DOWNLOAD_FILE_ONGOING);
         }
     }
 
@@ -568,7 +567,7 @@ public class EventProcessor {
         if(notification != null) {
             Log.d(TAG, "onActionResultEvent() notification is not null; showing it");
 
-            getNotificationManager().notify(TAG, NOTIFICATION_ID_OTHER, notification);
+            notify(NOTIFICATION_ID_OTHER, notification);
         }
     }
 
@@ -635,6 +634,16 @@ public class EventProcessor {
         }
 
         return mainHandler;
+    }
+
+    private void notify(int id, Notification notification) {
+        NotificationsHelper.initNotificationChannels();
+
+        getNotificationManager().notify(TAG, id, notification);
+    }
+
+    private void cancelNotification(int id) {
+        getNotificationManager().cancel(TAG, id);
     }
 
     private NotificationManager getNotificationManager() {

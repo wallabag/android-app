@@ -10,7 +10,6 @@ import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.events.EventProcessor;
-import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 
 public class App extends Application {
 
@@ -51,8 +50,6 @@ public class App extends Application {
                 .throwSubscriberException(BuildConfig.DEBUG)
                 .addIndex(new EventBusIndex())
                 .installDefaultEventBus();
-
-        NotificationsHelper.createNotificationChannels(this);
 
         new EventProcessor(this).start();
 

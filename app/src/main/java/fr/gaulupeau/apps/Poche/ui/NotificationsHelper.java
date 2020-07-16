@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 
 public class NotificationsHelper {
 
@@ -23,7 +24,21 @@ public class NotificationsHelper {
     public static final String CHANNEL_ID_DOWNLOADING_ARTICLES = "downloading_articles";
     public static final String CHANNEL_ID_ERRORS = "errors";
 
-    public static void createNotificationChannels(Context context) {
+    private static boolean notificationChannelsInitialized;
+
+    public static void initNotificationChannels() {
+        if (notificationChannelsInitialized) return;
+
+        synchronized (NotificationsHelper.class) {
+            if (notificationChannelsInitialized) return;
+
+            createNotificationChannels(App.getInstance());
+
+            notificationChannelsInitialized = true;
+        }
+    }
+
+    private static void createNotificationChannels(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
 
