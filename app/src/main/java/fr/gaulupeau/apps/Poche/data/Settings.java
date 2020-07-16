@@ -11,11 +11,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
-
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver;
@@ -33,46 +28,8 @@ public class Settings {
 
     private static final int PREFERENCES_VERSION = 100;
 
-    private static Map<String, Integer> preferenceKeysMap;
-
     private Context context;
     private SharedPreferences pref;
-
-    public static void init(Context c) {
-        preferenceKeysMap = new HashMap<>();
-
-        try {
-            for(Field field: R.string.class.getDeclaredFields()) {
-                int modifiers = field.getModifiers();
-                if(Modifier.isStatic(modifiers)
-                        && !Modifier.isPrivate(modifiers)
-                        && field.getType().equals(int.class)) {
-                    try {
-                        if(field.getName().startsWith("pref_key_")) {
-                            int resID = field.getInt(null);
-                            addToMap(c, resID);
-                        }
-                    } catch(IllegalArgumentException | IllegalAccessException e) {
-                        Log.e(TAG, "init() exception", e);
-                    }
-                }
-            }
-        } catch(Exception e) {
-            Log.e(TAG, "init() exception", e);
-        }
-    }
-
-    public static int getPrefKeyIDByValue(String value) {
-        if(value == null || value.isEmpty()) return -1;
-
-        Integer id = preferenceKeysMap.get(value);
-
-        return id != null ? id : -1;
-    }
-
-    private static void addToMap(Context context, int resID) {
-        preferenceKeysMap.put(context.getString(resID), resID);
-    }
 
     public static boolean checkFirstRunInit(Context context) {
         Settings settings = App.getInstance().getSettings();

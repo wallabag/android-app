@@ -33,7 +33,6 @@ public class App extends Application {
                 .addIndex(new EventBusIndex())
                 .installDefaultEventBus();
 
-        Settings.init(this);
         settings = new Settings(this);
         settings.initPreferences();
 
