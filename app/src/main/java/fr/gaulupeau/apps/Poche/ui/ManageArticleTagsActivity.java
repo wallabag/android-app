@@ -66,6 +66,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     private List<Tag> availableTags;
 
     private List<Tag> suggestedTags = new ArrayList<>();
+    private List<Tag> suggestedTagsTmp = new ArrayList<>();
     private List<Tag> currentTags = new ArrayList<>();
 
     private TagListAdapter suggestedTagsAdapter;
@@ -305,7 +306,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
     }
 
     private void updateSuggestedTagList() {
-        List<Tag> filteredList = filterTagList(currentText, availableTags, currentTags);
+        List<Tag> filteredList = filterTagList(currentText, availableTags, currentTags,
+                suggestedTagsTmp, 50);
 
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(
                 new TagListFragment.TagListDiffCallback(suggestedTags, filteredList));
@@ -450,9 +452,13 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         return null;
     }
 
-    private static List<Tag> filterTagList(String filterLabel, List<Tag> src, List<Tag> excludeList) {
+    private static List<Tag> filterTagList(String filterLabel, List<Tag> src, List<Tag> excludeList,
+                                           List<Tag> out, int limit) {
+        out.clear();
+
         if (TextUtils.isEmpty(filterLabel) && excludeList.isEmpty() || src.isEmpty()) {
-            return new ArrayList<>(src);
+            out.addAll(limit >= 0 ? src.subList(0, limit) : src);
+            return out;
         }
 
         filterLabel = getNormalizedLabel(filterLabel);
@@ -462,17 +468,18 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
             excludeNormalized.add(getNormalizedLabel(excludeTag));
         }
 
-        List<Tag> result = new ArrayList<>();
         for (Tag tag : src) {
+            if (limit >= 0 && out.size() >= limit) break;
+
             String label = getNormalizedLabel(tag);
 
             if (!TextUtils.isEmpty(filterLabel) && !label.contains(filterLabel)) continue;
             if (excludeNormalized.contains(label)) continue;
 
-            result.add(tag);
+            out.add(tag);
         }
 
-        return result;
+        return out;
     }
 
     private static boolean equalLabels(String s1, String s2) {
