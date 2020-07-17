@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.util.Log;
@@ -9,14 +8,13 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.DaoSession;
 
 public class DbConnection {
 
     private static final String TAG = DbConnection.class.getSimpleName();
-
-    private static Context context;
 
     public static DaoSession getSession() {
         if(Holder.session == null) {
@@ -26,10 +24,10 @@ public class DbConnection {
                 QueryBuilder.LOG_VALUES = true;
             }
 
-            String dbPath = new Settings(context).getDbPathForDbHelper();
+            String dbPath = App.getSettings().getDbPathForDbHelper();
 
             Log.d(TAG, "creating new db session");
-            WallabagDbOpenHelper dbHelper = new WallabagDbOpenHelper(context, dbPath, null);
+            WallabagDbOpenHelper dbHelper = new WallabagDbOpenHelper(App.getInstance(), dbPath, null);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 dbHelper.setWriteAheadLoggingEnabled(true);
             }
@@ -50,10 +48,6 @@ public class DbConnection {
 
     public static void resetSession() {
         Holder.session = null;
-    }
-
-    public static void setContext(Context context) {
-        DbConnection.context = context;
     }
 
     private static class Holder {

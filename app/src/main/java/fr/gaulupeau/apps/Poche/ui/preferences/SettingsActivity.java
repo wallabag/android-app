@@ -5,19 +5,20 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import androidx.appcompat.app.AlertDialog;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
+import fr.gaulupeau.apps.Poche.data.PreferenceKeysMap;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.StorageHelper;
@@ -119,7 +121,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             addPreferencesFromResource(R.xml.preferences);
 
-            settings = new Settings(App.getInstance());
+            settings = App.getSettings();
 
             setOnClickListener(R.string.pref_key_connection_wizard);
             setOnClickListener(R.string.pref_key_connection_autofill);
@@ -359,7 +361,7 @@ public class SettingsActivity extends BaseActionBarActivity {
             Log.d(TAG, String.format("onPreferenceChange(key: %s, newValue: %s)",
                     preference.getKey(), newValue));
 
-            int keyID = Settings.getPrefKeyIDByValue(preference.getKey());
+            int keyID = PreferenceKeysMap.getInstance().getPrefKeyId(preference);
             switch(keyID) {
                 case R.string.pref_key_misc_handleHttpScheme:
                     settings.setHandleHttpScheme((Boolean)newValue);
@@ -389,7 +391,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             boolean themeChanged = false;
 
-            int keyResID = Settings.getPrefKeyIDByValue(key);
+            int keyResID = PreferenceKeysMap.getInstance().getPrefKeyIdByStringKey(key);
             switch(keyResID) {
                 case R.string.pref_key_ui_theme:
                     themeChanged = true;
@@ -457,7 +459,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            switch(Settings.getPrefKeyIDByValue(preference.getKey())) {
+            switch (PreferenceKeysMap.getInstance().getPrefKeyId(preference)) {
                 case R.string.pref_key_connection_wizard: {
                     Activity activity = getActivity();
                     if(activity != null) {
@@ -499,7 +501,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                        OperationsHelper.wipeDB(App.getInstance().getSettings());
+                                        OperationsHelper.wipeDB(App.getSettings());
                                     }
                                 })
                                 .setNegativeButton(R.string.negative_answer, null)

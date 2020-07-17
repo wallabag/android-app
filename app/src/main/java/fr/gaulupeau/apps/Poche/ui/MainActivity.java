@@ -36,7 +36,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.xmlpull.v1.XmlPullParserException;
@@ -47,8 +46,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 import fr.gaulupeau.apps.Poche.events.UpdateArticlesFinishedEvent;
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity
 
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-        settings = new Settings(this);
+        settings = App.getSettings();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -240,7 +241,7 @@ public class MainActivity extends AppCompatActivity
             updateNavigationUI(currentFragmentType);
         }
 
-        EventBus.getDefault().register(this);
+        EventHelper.register(this);
     }
 
     @Override
@@ -338,7 +339,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        EventHelper.unregister(this);
 
         super.onDestroy();
     }

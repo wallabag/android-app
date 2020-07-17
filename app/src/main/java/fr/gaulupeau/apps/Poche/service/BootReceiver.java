@@ -5,9 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import fr.gaulupeau.apps.Poche.events.BootCompletedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 
 public class BootReceiver extends BroadcastReceiver {
 
@@ -16,7 +15,7 @@ public class BootReceiver extends BroadcastReceiver {
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             Log.d("BootReceiver", "Boot completed");
 
-            EventBus.getDefault().post(new BootCompletedEvent());
+            EventHelper.postEvent(new BootCompletedEvent());
         }
     }
 

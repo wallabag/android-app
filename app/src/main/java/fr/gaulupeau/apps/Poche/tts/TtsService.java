@@ -229,7 +229,7 @@ public class TtsService extends Service {
 
         mediaActionComponentName = new ComponentName(this, MediaButtonReceiver.class);
 
-        settings = App.getInstance().getSettings();
+        settings = App.getSettings();
         executor = Executors.newSingleThreadExecutor();
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
@@ -1226,6 +1226,8 @@ public class TtsService extends Service {
 
     private NotificationCompat.Builder generateNotificationBuilderFrom(
             Context context, MediaSessionCompat mediaSession) {
+        NotificationsHelper.initNotificationChannels();
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 context, NotificationsHelper.CHANNEL_ID_TTS)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)

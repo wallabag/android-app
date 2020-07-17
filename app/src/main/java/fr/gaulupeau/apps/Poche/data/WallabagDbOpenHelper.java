@@ -5,22 +5,23 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationDao;
 import fr.gaulupeau.apps.Poche.data.dao.AnnotationRangeDao;
-import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleContentDao;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.data.dao.ArticleTagsJoinDao;
 import fr.gaulupeau.apps.Poche.data.dao.DaoMaster;
 import fr.gaulupeau.apps.Poche.data.dao.FtsDao;
 import fr.gaulupeau.apps.Poche.data.dao.QueueItemDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.QueueItem;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
@@ -157,7 +158,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
         DaoMaster.dropAllTables(db, true);
         onCreate(db);
 
-        Settings settings = new Settings(context);
+        Settings settings = App.getSettings();
         settings.setFirstSyncDone(false);
         settings.setLatestUpdatedItemTimestamp(0);
         settings.setLatestUpdateRunTimestamp(0);
@@ -200,7 +201,7 @@ class WallabagDbOpenHelper extends DaoMaster.OpenHelper {
                 db.endTransaction();
             }
 
-            if(inserted) EventBus.getDefault().post(new OfflineQueueChangedEvent(null));
+            if(inserted) EventHelper.postEvent(new OfflineQueueChangedEvent(null));
         }
     }
 

@@ -21,7 +21,7 @@ public class Themes {
     }
 
     public static void init() {
-        Themes.theme = App.getInstance().getSettings().getTheme();
+        Themes.theme = App.getSettings().getTheme();
     }
 
     public static Theme getCurrentTheme() {

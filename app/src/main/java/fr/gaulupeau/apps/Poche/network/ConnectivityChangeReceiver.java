@@ -6,9 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
-import org.greenrobot.eventbus.EventBus;
-
 import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 
 public class ConnectivityChangeReceiver extends BroadcastReceiver {
 
@@ -17,7 +16,7 @@ public class ConnectivityChangeReceiver extends BroadcastReceiver {
         if(ConnectivityManager.CONNECTIVITY_ACTION.equals(intent.getAction())) {
             Log.d("ConnectivityChangeRcvr", "Connectivity changed");
 
-            EventBus.getDefault().post(new ConnectivityChangedEvent(
+            EventHelper.postEvent(new ConnectivityChangedEvent(
                     intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)));
         }
     }

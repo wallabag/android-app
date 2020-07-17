@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -29,6 +28,7 @@ import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.events.LocalArticleReplacedEvent;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
@@ -110,7 +110,7 @@ public class EditAddedArticleActivity extends AppCompatActivity {
 
         if (openPending) onOpenClick(null);
 
-        EventBus.getDefault().register(this);
+        EventHelper.register(this);
     }
 
     @Override
@@ -127,7 +127,7 @@ public class EditAddedArticleActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        EventHelper.unregister(this);
 
         cancelAutoclose(false);
 

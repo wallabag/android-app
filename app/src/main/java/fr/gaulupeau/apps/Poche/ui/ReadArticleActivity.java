@@ -34,7 +34,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -56,8 +55,10 @@ import fr.gaulupeau.apps.Poche.data.dao.entities.Annotation;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Tag;
 import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
+import fr.gaulupeau.apps.Poche.events.EventHelper;
 import fr.gaulupeau.apps.Poche.events.FeedsChangedEvent;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
@@ -168,7 +169,14 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        settings = App.getInstance().getSettings();
+        // not sure if it is relevant to WebView
+        WallabagConnection.initConscrypt();
+
+        if (BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
+        settings = App.getSettings();
 
         fullscreenArticleView = settings.isFullscreenArticleView();
         if (fullscreenArticleView) {
@@ -244,7 +252,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             showDisableTouchToast();
         }
 
-        EventBus.getDefault().register(this);
+        EventHelper.register(this);
     }
 
     @Override
@@ -290,7 +298,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        EventHelper.unregister(this);
 
         super.onDestroy();
     }
