@@ -38,8 +38,8 @@ class TextItem extends GenericItem {
     String text;
     List<Extra> extras;
 
-    TextItem(String text, float top, float bottom, List<Extra> extras) {
-        super(top, bottom);
+    TextItem(String text, Range range, float top, float bottom, List<Extra> extras) {
+        super(range, top, bottom);
         this.text = text;
         this.extras = extras;
     }

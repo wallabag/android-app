@@ -4,11 +4,14 @@ function cmdStart() {
 function cmdEnd() {
     hostWebViewTextController.onEnd();
 }
-function cmdText(text, top, bottom, extras) {
-    hostWebViewTextController.onText(text, top, bottom, extras);
+function cmdText(text, extras, range, top, bottom) {
+    hostWebViewTextController.onText(text, extras, JSON.stringify(range), top, bottom);
 }
-function cmdImg(altText, title, src, top, bottom) {
-    hostWebViewTextController.onImage(altText, title, src, top, bottom);
+function cmdImg(altText, title, src, range, top, bottom) {
+    hostWebViewTextController.onImage(altText, title, src, JSON.stringify(range), top, bottom);
+}
+function cmdRangeInfo(requestId, top, bottom) {
+    hostWebViewTextController.onRangeInfoResponse(requestId, top, bottom);
 }
 
 function traverse(element, callback) {
@@ -112,24 +115,30 @@ function shiftExtras(extras, emphasisStarts, amount) {
     }
 }
 
+function serializeRange(range, root) {
+    // uses the `xpath-range` library
+    return xpathRange.fromRange(range, root);
+}
+
 function parseDocumentText() {
+    var root = document.getElementById('article');
+
     var range = document.createRange();
 
 //    var stack = [];
 
     var accumulatedText = '';
     var extras = [];
-    var currentElement = null;
 
     var emphasisStarts = [];
 
-    var checkForSentenceEnd = function() {
+    var checkForSentenceEnd = function(currentElement) {
         if (!accumulatedText || accumulatedText.trim().length === 0) return;
 
         var currentElementText = currentElement.textContent;
         var currentElementLength = currentElementText.length;
 
-        var regex = /[.?!]+\s/g;
+        var regex = /[.?!\u2026]+\s/g;
 
         var match;
         while ((match = regex.exec(currentElementText)) !== null) {
@@ -143,11 +152,11 @@ function parseDocumentText() {
             var relevantExtras = values[1];
 
             if (s.length !== 0) {
-                range.setEnd(currentElement, index);
+                range.setEnd(currentElement, index); // TODO: should subtract trimmed from end
 //                console.log('checkForSentenceEnd()');
 //                console.log('Range: ' + range);
                 var rect = range.getBoundingClientRect();
-                cmdText(s, rect.top, rect.bottom, serializeExtras(relevantExtras));
+                cmdText(s, serializeExtras(relevantExtras), serializeRange(range, root), rect.top, rect.bottom);
             }
 
             accumulatedText = accumulatedText.substring(end);
@@ -157,25 +166,26 @@ function parseDocumentText() {
         }
 
         range.setEnd(currentElement, currentElementLength);
+
+        if (accumulatedText.trim().length === 0) accumulatedText = '';
     };
 
     var flushCurrentText = function() {
         if (accumulatedText && accumulatedText.trim().length > 0) {
 //            console.log('flushCurrentText()');
 //            console.log('Range: ' + range);
-            var rect = range.getBoundingClientRect();
 
             var values = prepareTextAndExtras(accumulatedText, extras, emphasisStarts,
                     accumulatedText.length);
             var s = values[0];
             var relevantExtras = values[1];
 
-            cmdText(s, rect.top, rect.bottom, serializeExtras(relevantExtras));
+            var rect = range.getBoundingClientRect();
+            cmdText(s, serializeExtras(relevantExtras), serializeRange(range, root), rect.top, rect.bottom);
         }
 
         accumulatedText = '';
         extras = [];
-        currentElement = null;
         emphasisStarts = [];
     };
 
@@ -185,7 +195,7 @@ function parseDocumentText() {
                 emphasisStarts.push(accumulatedText.length);
             } else {
                 var lastStart = emphasisStarts.pop();
-                if (lastStart !== undefined) {
+                if (lastStart !== undefined && accumulatedText.length > 0) {
                     extras.push({type: 'emphasis', start: lastStart, end: accumulatedText.length});
                 }
             }
@@ -210,21 +220,22 @@ function parseDocumentText() {
 
             if (element.nodeType === Node.TEXT_NODE) {
                 if (!accumulatedText || accumulatedText.trim().length === 0) {
+                    accumulatedText = '';
                     range.setStart(element, 0);
                 }
 
-                accumulatedText += element.textContent;
+                accumulatedText += element.textContent
+                        .replace(/[\r\n\x0B\x0C\u0085\u2028\u2029]/g, " ");
 
-                currentElement = element;
                 range.setEnd(element, element.textContent.length);
 
-                checkForSentenceEnd();
+                checkForSentenceEnd(element);
             } else if (element.nodeName === 'IMG') {
                 flushCurrentText();
 
                 range.selectNode(element);
                 var rect = range.getBoundingClientRect();
-                cmdImg(element.alt, element.title, element.src, rect.top, rect.bottom);
+                cmdImg(element.alt, element.title, element.src, serializeRange(range, root), rect.top, rect.bottom);
             } else if (shouldBreak(element)) {
                 flushCurrentText();
             }
@@ -245,7 +256,7 @@ function parseDocumentText() {
 
     cmdStart();
 
-    traverse(document.getElementById('article'), parserCallback);
+    traverse(root, parserCallback);
 
     cmdEnd();
 }
@@ -258,3 +269,53 @@ function shouldBreak(element) {
 //function stackToString(stack) {
 //    return stack.map(e => e.nodeName.toLowerCase()).join(', ');
 //}
+
+
+function deserializeRange(rangeString, root) {
+    var rangeObj = JSON.parse(rangeString);
+    return xpathRange.toRange(rangeObj.start, rangeObj.startOffset,
+            rangeObj.end, rangeObj.endOffset, root);
+}
+
+function getRangeInfo(requestId, rangeString) {
+    var range = deserializeRange(rangeString, document.getElementById('article'));
+
+    var rect = range.getBoundingClientRect();
+    cmdRangeInfo(requestId, rect.top, rect.bottom);
+}
+
+function highlightRange(rangeString) {
+    var range = deserializeRange(rangeString, document.getElementById('article'));
+
+    document.getSelection().removeAllRanges();
+    document.getSelection().addRange(range);
+}
+
+
+/*
+// for debugging in a web-browser:
+// just uncomment this and copy-paste everything into the browser console
+
+//function serializeRange(range, root) {
+//    return null;
+//}
+
+function cmdStart() {
+    console.log('parse start');
+}
+function cmdEnd() {
+    console.log('parse end');
+}
+function cmdText(text, extras, range, top, bottom) {
+    console.log('TEXT: ' + text);
+    if (range !== null) console.log('RANGE: ' + JSON.stringify(range));
+    if (extras !== null) console.log('EXTRAS: ' + extras);
+}
+function cmdImg(altText, title, src, range, top, bottom) {
+    console.log('IMG: ' + altText + ', title: ' + title + ', src: ' + src);
+    if (range !== null) console.log('RANGE: ' + JSON.stringify(range));
+}
+
+
+parseDocumentText();
+*/

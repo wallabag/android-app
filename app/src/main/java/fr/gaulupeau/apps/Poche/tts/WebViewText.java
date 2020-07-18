@@ -20,9 +20,19 @@ import fr.gaulupeau.apps.Poche.data.StorageHelper;
  */
 class WebViewText implements TextInterface {
 
+    private static class RangeVisibilityRequest {
+        RangeVisibilityRequest(int requestId, boolean canMoveBackward) {
+            this.requestId = requestId;
+            this.canMoveBackward = canMoveBackward;
+        }
+
+        int requestId;
+        boolean canMoveBackward;
+    }
+
     private static final String TAG = WebViewText.class.getSimpleName();
 
-    private static final String JS_PARSE_DOCUMENT_SCRIPT
+    private static final String JS_PARSE_DOCUMENT_SCRIPT // TODO: rename or reorganize
             = StorageHelper.readRawString(R.raw.tts_parser);
 
     private final Handler handler = new Handler();
@@ -39,6 +49,10 @@ class WebViewText implements TextInterface {
 
     private Runnable readFinishedCallback;
     private Runnable parsingFinishedCallback;
+
+    private int requestCounter;
+
+    private RangeVisibilityRequest rangeVisibilityRequest;
 
     WebViewText(TtsConverter ttsConverter, TtsHost ttsHost) {
         this.ttsConverter = ttsConverter;
@@ -58,9 +72,12 @@ class WebViewText implements TextInterface {
 
         parsingFinishedCallback = callback;
 
+        runJs(JS_PARSE_DOCUMENT_SCRIPT + "; parseDocumentText();");
+    }
+
+    private void runJs(String jsToRun) {
         ttsHost.getJsTtsController().setWebViewText(this);
-        ttsHost.getWebView().evaluateJavascript("javascript:" + JS_PARSE_DOCUMENT_SCRIPT
-                + ";parseDocumentText();", null);
+        ttsHost.getWebView().evaluateJavascript("javascript:" + jsToRun, null);
     }
 
     void onDocumentParseStart() {
@@ -75,15 +92,16 @@ class WebViewText implements TextInterface {
         }
     }
 
-    void onDocumentParseText(String text, float top, float bottom, String extras) {
+    void onDocumentParseText(String text, String extras, String range, float top, float bottom) {
         top = convertWebViewToScreenY(top);
         bottom = convertWebViewToScreenY(bottom);
 
         if (BuildConfig.DEBUG) {
-            Log.v(TAG, String.format("onDocumentParseText(%s, %f, %f)", text, top, bottom));
+            Log.v(TAG, String.format("onDocumentParseText(%s, %s, %f, %f)",
+                    text, range, top, bottom));
         }
 
-        addItem(new TextItem(text, top, bottom, parseTextItemExtras(extras)));
+        addItem(new TextItem(text, parseRange(range), top, bottom, parseTextItemExtras(extras)));
     }
 
     private List<TextItem.Extra> parseTextItemExtras(String extrasString) {
@@ -112,16 +130,56 @@ class WebViewText implements TextInterface {
         return result;
     }
 
-    void onDocumentParseImage(String altText, String title, String src, float top, float bottom) {
+    void onDocumentParseImage(String altText, String title, String src, String range,
+                              float top, float bottom) {
         top = convertWebViewToScreenY(top);
         bottom = convertWebViewToScreenY(bottom);
 
         if (BuildConfig.DEBUG) {
-            Log.v(TAG, String.format("onDocumentParseImage(%s, %s, %s, %f, %f)",
-                    altText, title, src, top, bottom));
+            Log.v(TAG, String.format("onDocumentParseImage(%s, %s, %s, %s, %f, %f)",
+                    altText, title, src, range, top, bottom));
         }
 
-        addItem(new ImageItem(altText, title, src, top, bottom));
+        addItem(new ImageItem(altText, title, src, parseRange(range), top, bottom));
+    }
+
+    private GenericItem.Range parseRange(String rangeString) {
+        if (TextUtils.isEmpty(rangeString)) return null;
+
+        Log.v(TAG, "parseRange() rangeString: " + rangeString);
+
+        try {
+            JSONObject jsonRange = new JSONObject(rangeString);
+
+            return new GenericItem.Range(
+                    jsonRange.getString("start"),
+                    jsonRange.getLong("startOffset"),
+                    jsonRange.getString("end"),
+                    jsonRange.getLong("endOffset"));
+        } catch (Exception e) {
+            Log.w(TAG, "parseRange()", e);
+        }
+
+        return null;
+    }
+
+    private String serializeRange(GenericItem.Range range) {
+        if (range == null) return null;
+
+        JSONObject jsonRange = new JSONObject();
+
+        try {
+            jsonRange.put("start", range.start);
+            jsonRange.put("startOffset", range.startOffset);
+            jsonRange.put("end", range.end);
+            jsonRange.put("endOffset", range.endOffset);
+
+            return jsonRange.toString();
+        } catch (Exception e) {
+            Log.w(TAG, "serializeRange()", e);
+        }
+
+        return null;
     }
 
     private void addItem(GenericItem item) {
@@ -131,6 +189,20 @@ class WebViewText implements TextInterface {
                 + (prevItem != null ? prevItem.timePosition : 0);
 
         textList.add(item);
+    }
+
+    void onRangeInfoResponse(String requestId, float top, float bottom) {
+        RangeVisibilityRequest request = rangeVisibilityRequest;
+        if (request == null || Integer.parseInt(requestId) != request.requestId) {
+            Log.d(TAG, "onRangeInfoResponse() no request or id didn't match");
+            return;
+        }
+        rangeVisibilityRequest = null;
+
+        top = convertWebViewToScreenY(top);
+        bottom = convertWebViewToScreenY(bottom);
+
+        ensureTextRangeVisibleOnScreen(request.canMoveBackward, top, bottom);
     }
 
     @Override
@@ -316,14 +388,46 @@ class WebViewText implements TextInterface {
     }
 
     private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward) {
+        highlightRange(); // TODO: move
+
         if (ttsHost == null) return;
 
         GenericItem item = textList.get(current);
-        if (item.bottom > ttsHost.getScrollY() + ttsHost.getViewHeight()
-                || canMoveBackward && item.top < ttsHost.getScrollY()) {
-            // TODO: check: call directly?
-            handler.post(() -> ttsHost.scrollTo((int) item.top));
+
+        if (item.range == null) {
+            Log.w(TAG, "ensureTextRangeVisibleOnScreen() range is null");
+            return;
         }
+
+        rangeVisibilityRequest = new RangeVisibilityRequest(requestCounter++, canMoveBackward);
+
+        // TODO: ensure the base is injected
+        runJs("getRangeInfo(" + rangeVisibilityRequest.requestId
+                + ", '" + serializeRange(item.range) + "');");
+    }
+
+    private void ensureTextRangeVisibleOnScreen(boolean canMoveBackward, float top, float bottom) {
+        if (ttsHost == null) return;
+
+        if (bottom > ttsHost.getScrollY() + ttsHost.getViewHeight()
+                || canMoveBackward && top < ttsHost.getScrollY()) {
+            // TODO: check: call directly?
+            handler.post(() -> ttsHost.scrollTo((int) top));
+        }
+    }
+
+    private void highlightRange() {
+        if (ttsHost == null) return;
+
+        GenericItem item = textList.get(current);
+
+        if (item.range == null) {
+            Log.w(TAG, "highlightRange() range is null");
+            return;
+        }
+
+        // TODO: ensure the base is injected
+        runJs("highlightRange('" + serializeRange(item.range) + "');");
     }
 
     private float convertWebViewToScreenY(float y) {

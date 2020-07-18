@@ -34,16 +34,24 @@ public class JsTtsController {
 
     @SuppressWarnings("unused")
     @JavascriptInterface
-    public void onText(String text, String topString, String bottomString, String extras) {
-        post(() -> webViewText.onDocumentParseText(text,
-                Float.parseFloat(topString), Float.parseFloat(bottomString), extras));
+    public void onText(String text, String extras, String range,
+                       String topString, String bottomString) {
+        post(() -> webViewText.onDocumentParseText(text, extras, range,
+                Float.parseFloat(topString), Float.parseFloat(bottomString)));
     }
 
     @SuppressWarnings("unused")
     @JavascriptInterface
-    public void onImage(String altText, String title, String src,
+    public void onImage(String altText, String title, String src, String range,
                         String topString, String bottomString) {
-        post(() -> webViewText.onDocumentParseImage(altText, title, src,
+        post(() -> webViewText.onDocumentParseImage(altText, title, src, range,
+                Float.parseFloat(topString), Float.parseFloat(bottomString)));
+    }
+
+    @SuppressWarnings("unused")
+    @JavascriptInterface
+    public void onRangeInfoResponse(String requestId, String topString, String bottomString) {
+        post(() -> webViewText.onRangeInfoResponse(requestId,
                 Float.parseFloat(topString), Float.parseFloat(bottomString)));
     }
 
