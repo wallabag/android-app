@@ -82,9 +82,8 @@
     <string name="themeName_solarized">ソラリゼーション</string>
     <string name="menu_readArticle_increaseFontSize">フォントサイズを大きく</string>
     <string name="menu_readArticle_decreaseFontSize">フォントサイズを小さく</string>
-    <string name="aboutText">
-        <b>Android 用 wallabag アプリ</b>\n
-        wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
+    <string name="aboutText"><b>Android 用 wallabag アプリ</b>
+\n wallabag は、すべてのコンテンツをもう見逃さないようにすることができる、自己ホスト可能なアプリケーションです。クリックして保存すれば、時間があるときにコンテンツを抽出して読むことができます。</string>
     <string name="readSpeed">読む速度</string>
     <string name="voiceHeight">声のピッチ</string>
     <string name="readVolume">読む音量</string>
@@ -126,7 +125,7 @@
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 認証ユーザー名</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 認証パスワード</string>
     <string name="pref_categoryName_ui">UI</string>
-    <string name="pref_name_ui_theme">アプリ テーマ</string>
+    <string name="pref_name_ui_theme">アプリテーマ</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">記事の文字サイズ (%)</string>
     <string name="pref_name_ui_article_fontSerif">書体</string>
     <string name="pref_desc_ui_article_fontSerif">記事の書体フォント</string>
@@ -165,9 +164,9 @@
     <string name="connectionWizard_welcome_next">次へ</string>
     <string name="connectionWizard_providerSelection_titleMessage">wallabag プロバイダーを選択してください</string>
     <string name="connectionWizard_providerSelection_provider_general_name">その他</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">これを選択すると、必要な設定を手動で入力します</string>
-    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択します</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択します</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">必要な設定を手動で行う場合は、このオプションを選択してください</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択してください</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択してください</string>
     <string name="connectionWizard_providerSelection_prev">スキップ</string>
     <string name="connectionWizard_providerSelection_next">次へ</string>
     <string name="connectionWizard_provider_general_titleMessage">基本的な構成</string>
@@ -218,7 +217,7 @@
     <string name="nav_main_tagged_articles">タグ付きの記事</string>
     <string name="nav_add">新しいエントリを追加</string>
     <string name="pref_name_connection_api_clientID">クライアント ID</string>
-    <string name="pref_name_connection_api_clientSecret">クライアント シークレット</string>
+    <string name="pref_name_connection_api_clientSecret">クライアントシークレット</string>
     <string name="pref_name_ui_article_textAlignment_justify">テキストの配置: 均等割り付け</string>
     <string name="pref_desc_ui_article_textAlignment_justify">同じ幅になるように行を伸ばします (新聞のように)</string>
     <string name="pref_name_ui_readingSpeed">読書の速度</string>
@@ -236,7 +235,7 @@
         \"高速\" 同期種類の欠点を解決するため、すべてのローカル記事を反復処理し、サーバー上にまだ存在かどうかをサーバーに問い合わせる、\"削除された記事を掃除\" を実行するオプションがあります。存在しない場合、ローカル記事が削除されます。自分の記事の数に応じて、この操作は時間がかかることがありますが、\"完全\" 同期と比較して多くのインターネットのトラフィックを節約します。\n\n
         これらの機能はクライアントからサーバーの同期に影響を与えません: ローカルの変更は、常にローカルのコンテンツを更新する前にサーバーに送信されます。
     </string>
-    <string name="pref_desc_connection_autofill">接続をテストし、クライアント ID とクライアント シークレットを入力します</string>
+    <string name="pref_desc_connection_autofill">接続をテストし、クライアント ID とクライアントシークレットを入力します</string>
     <string name="title_main_tag">タグ: %s</string>
     <string name="menuCopyOriginalURL">元の URL をコピー</string>
     <string name="txtUrlCopied">記事の URL をクリップボードにコピーしました</string>
@@ -285,4 +284,6 @@
     <string name="pref_desc_ui_swipeArticles">記事内を左または右にスワイプして、前または次の記事に移動します</string>
     <string name="pref_name_ui_previewImage_enabled">プレビュー画像</string>
     <string name="pref_desc_ui_previewImage_enabled">記事の前にプレビュー画像を表示します</string>
+    <string name="manageTags_addMoreTags">更にタグを追加:</string>
+    <string name="manageTags_currentTags_none">無い</string>
 </resources>
