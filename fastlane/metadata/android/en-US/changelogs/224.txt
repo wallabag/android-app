@@ -1,0 +1,4 @@
+Changes:
+
+- Limit the number of suggested tags to 50.
+- Startup time improvements.
