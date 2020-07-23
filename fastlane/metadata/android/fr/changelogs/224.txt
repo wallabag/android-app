@@ -1,0 +1,4 @@
+Changements:
+
+- Limitation du nombre de tags suggérés à 50.
+- Améliorations du temps de démarrage.
