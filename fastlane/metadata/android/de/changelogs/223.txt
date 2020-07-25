@@ -1,0 +1,7 @@
+Hinzugefügt:
+
+- Begrüßungsbildschirm beim Start der App
+
+Änderungen:
+
+- Verschiedenen Fehlerbehebungen
