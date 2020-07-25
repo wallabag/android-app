@@ -1,0 +1,25 @@
+Hinzugefügt:
+
+- Teilenmenü: Favorisieren/Archivieren/Taggen von Artikel direkt nach dem
+  Teilen.
+- Tags (klickbar) sind in der Artikelansicht dargestellt.
+- "nicht getaggt" Liste.
+- Lange-Antippen-Menü (nur für einzelne Artikel).
+- Speichert die Original-URL beim Artikel hinzufügen.
+- Möglichkeit das Log in eine Datei zu exportieren
+
+Änderungen:
+
+- Adaptives Icon.
+- Benutzeroberfläche sollte nicht länger von Datenbankoperationen geblockt sein.
+- Eine Menge Code-Überarbeitungen.
+
+Fehlerbehebungen:
+
+- Fehlerbehebungen für das Zugangsdatenmanagement über die API
+
+Text-zu-Sprache Änderungen:
+
+- Besseres Unterbrechungsverwaltung.
+- Alternativer Bildtext wird nun ausgesprochen.
+- Ein paar andere Änderungen.
