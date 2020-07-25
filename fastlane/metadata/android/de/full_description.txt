@@ -1,0 +1,23 @@
+Eine selbst-gehostete Später-Lesen-App, die für dich zum komfortablen Lesen
+und Archivieren deiner Artikel erstellt wurde. Anders als andere Services,
+steht die Server-Software unter MIT-Lizenz, sodass du deinen eigenen Server
+aufsetzen kannst.: Befolge dazu die Anleitung unter
+[http://www.wallabag.org wallabag.org].
+
+Diese Android App erlaubt dir das Lesen und Verwalten deiner Aritkel und
+synchronisiert sie automatisch mit dem wallabag Server. Das nächste Mal,
+wenn du einen Artikel findest, den du später lesen möchtest, speichere ihn
+in wallabg. Er wird automatisch auf dein Telefon, Tablet, e-Reader oder
+deinen Computer synchronisiert. Somit kannst du ihn jederzeit überall lesen,
+sogar offline.
+
+Du kannst Artikel in wallabag fast von überall aus speichern, inkl. von
+deinem Computer und deinem Lieblings-RSS-Reader.
+
+'''Funktionen:'''
+
+* Automatische Synchronisierung zwischen Server und App
+* Herunterladen der Artikelbilder zum offline Lesen
+* Tags, um deine Inhalte zu verwalten
+* Sprachsynthese, um deine Artikel vorlesen zu lassen
+
