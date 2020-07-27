@@ -7,7 +7,7 @@ aufsetzen kannst.: Befolge dazu die Anleitung unter
 Diese Android App erlaubt dir das Lesen und Verwalten deiner Aritkel und
 synchronisiert sie automatisch mit dem wallabag Server. Das nächste Mal,
 wenn du einen Artikel findest, den du später lesen möchtest, speichere ihn
-in wallabg. Er wird automatisch auf dein Telefon, Tablet, e-Reader oder
+in wallabag. Er wird automatisch auf dein Telefon, Tablet, e-Reader oder
 deinen Computer synchronisiert. Somit kannst du ihn jederzeit überall lesen,
 sogar offline.
 
