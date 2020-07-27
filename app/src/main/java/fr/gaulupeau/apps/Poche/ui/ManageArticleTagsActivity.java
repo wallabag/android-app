@@ -457,7 +457,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         out.clear();
 
         if (TextUtils.isEmpty(filterLabel) && excludeList.isEmpty() || src.isEmpty()) {
-            out.addAll(limit >= 0 ? src.subList(0, limit) : src);
+            out.addAll(limit >= 0 ? src.subList(0, Math.min(limit, src.size())) : src);
             return out;
         }
 
