@@ -1,0 +1,19 @@
+- Einfache Suche ist durch Volltextsuche ersetzt. "Vollständige Aktualisierung"
+  ist empfohlen
+- Experimentelle Unterstützung für Anmerkungen (kann in den Einstellungen
+  aktiviert werden)
+- Für Zugangsdateneinrichtung kann ein QR-Code-Scanner gestartet werden
+- Kleinere Geschwindigkeitsverbesserungen
+- Leicht verbesserte Synchronisierung
+- Hinzufügen einer Möglichkeit zum Export lokaler Änderung, um mit hängender
+  Synchronisierung umzugehen
+- Aktualiserte Übersetzungen
+- Kleinere Fehlerbehebungen und Verbesserungen
+
+Fehlerbehebungen:
+
+- Behobener Crash vom WebView unter Android 5.
+- Behoben, dass eine Darstellungselemente im Vollbildmodus nicht korrekt
+  dargestellt wurden
+- Korrigierte Darstellung von Sonderzeichen im Artikeltitel
+

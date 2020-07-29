@@ -1,0 +1,4 @@
+Änderungen:
+
+- Limitierung der Anzahl empfohlener Tags auf 50.
+- Startzeitverbesserungen.
