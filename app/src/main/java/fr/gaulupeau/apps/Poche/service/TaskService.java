@@ -23,13 +23,9 @@ public class TaskService extends Service {
 
     public static final String ACTION_SIMPLE_TASK = "action_simple_task";
 
-    public interface Task {
-        void run(Context context);
-    }
-
     public class TaskServiceBinder extends Binder {
-        public void enqueueTask(Task task) {
-            TaskService.this.enqueueTask(task, true);
+        public void enqueue(ParameterizedRunnable parameterizedRunnable) {
+            TaskService.this.enqueueTask(parameterizedRunnable, true);
         }
     }
 
@@ -46,7 +42,7 @@ public class TaskService extends Service {
     private final Object startIdLock = new Object();
     private volatile int lastStartId;
 
-    private final BlockingQueue<Task> taskQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<ParameterizedRunnable> taskQueue = new LinkedBlockingQueue<>();
 
     private volatile boolean running;
 
@@ -98,7 +94,7 @@ public class TaskService extends Service {
         Log.d(tag, "onStartCommand()");
 
         if (ACTION_SIMPLE_TASK.equals(intent.getAction())) {
-            Task task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
+            ParameterizedRunnable task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
             if (task != null) {
                 enqueueTask(task, false);
             }
@@ -111,7 +107,7 @@ public class TaskService extends Service {
         return START_NOT_STICKY;
     }
 
-    private Task taskFromSimpleTask(SimpleTask simpleTask) {
+    private ParameterizedRunnable taskFromSimpleTask(SimpleTask simpleTask) {
         if (simpleTask == null) {
             Log.d(tag, "taskFromActionRequest() request is null");
             return null;
@@ -144,7 +140,7 @@ public class TaskService extends Service {
         Process.setThreadPriority(getThreadPriority());
 
         while (running) {
-            Task task;
+            ParameterizedRunnable task;
             try {
                 task = taskQueue.poll(WAIT_TIME, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
@@ -183,7 +179,7 @@ public class TaskService extends Service {
         }
     }
 
-    private void enqueueTask(Task task, boolean ensureStarted) {
+    private void enqueueTask(ParameterizedRunnable task, boolean ensureStarted) {
         Log.d(tag, "enqueueTask()");
         Objects.requireNonNull(task, "task is null");
 
