@@ -400,7 +400,7 @@ public class OperationsWorker extends BaseWorker {
         Log.d(TAG, "setArticleTagsInternal() finished");
     }
 
-    public void addAnnotation(int articleId, Annotation annotation) {
+    public Annotation addAnnotation(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
 
         Article article = getArticle(articleId);
@@ -441,6 +441,7 @@ public class OperationsWorker extends BaseWorker {
         }
 
         Log.d(TAG, "addAnnotation() finished");
+        return annotation;
     }
 
     public void updateAnnotation(int articleId, Annotation annotation) {
