@@ -400,7 +400,7 @@ public class OperationsWorker extends BaseWorker {
         Log.d(TAG, "setArticleTagsInternal() finished");
     }
 
-    public void addAnnotation(int articleId, Annotation annotation) {
+    public Annotation addAnnotation(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
 
         Article article = getArticle(articleId);
@@ -441,6 +441,7 @@ public class OperationsWorker extends BaseWorker {
         }
 
         Log.d(TAG, "addAnnotation() finished");
+        return annotation;
     }
 
     public void updateAnnotation(int articleId, Annotation annotation) {
@@ -454,9 +455,7 @@ public class OperationsWorker extends BaseWorker {
 
         String newText = annotation.getText();
 
-        AnnotationDao annotationDao = getDaoSession().getAnnotationDao();
-        annotation = annotationDao.queryBuilder()
-                .where(AnnotationDao.Properties.Id.eq(annotationId)).unique();
+        annotation = getAnnotation(annotationId);
 
         if (TextUtils.equals(annotation.getText(), newText)) {
             Log.w(TAG, "updateAnnotation() annotation ID=" + annotationId
@@ -466,7 +465,7 @@ public class OperationsWorker extends BaseWorker {
 
         annotation.setText(newText);
 
-        annotationDao.update(annotation);
+        getDaoSession().getAnnotationDao().update(annotation);
         Log.d(TAG, "updateAnnotation() annotation object updated");
 
         Article article = getArticle(articleId);
@@ -483,6 +482,8 @@ public class OperationsWorker extends BaseWorker {
 
     public void deleteAnnotation(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("deleteAnnotation(%d, %s) started", articleId, annotation));
+
+        annotation = getAnnotation(annotation.getId());
 
         Integer remoteId = annotation.getAnnotationId();
 
@@ -511,6 +512,11 @@ public class OperationsWorker extends BaseWorker {
         }
 
         Log.d(TAG, "deleteAnnotation() finished");
+    }
+
+    private Annotation getAnnotation(long annotationId) {
+        return getDaoSession().getAnnotationDao().queryBuilder()
+                .where(AnnotationDao.Properties.Id.eq(annotationId)).unique();
     }
 
     private Article getArticle(int articleId) {

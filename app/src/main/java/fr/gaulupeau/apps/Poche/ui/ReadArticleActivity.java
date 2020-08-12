@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
@@ -798,10 +799,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     }
 
                     @Override
-                    public Annotation createAnnotation(Annotation annotation) {
-                        OperationsHelper.addAnnotation(ReadArticleActivity.this,
-                                article.getArticleId(), annotation);
-                        return annotation;
+                    public Annotation createAnnotation(Annotation annotation) { // TODO: fix: waiting call
+                        return waitForFuture(OperationsHelper.addAnnotation(
+                                ReadArticleActivity.this, article.getArticleId(), annotation));
                     }
 
                     @Override
@@ -816,6 +816,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                         OperationsHelper.deleteAnnotation(ReadArticleActivity.this,
                                 article.getArticleId(), annotation);
                         return annotation;
+                    }
+
+                    private <T> T waitForFuture(Future<T> future) {
+                        try {
+                            return future.get();
+                        } catch (Exception e) {
+                            Log.w("JsAnnotCtrl.Callback", "waitForFuture() exception", e);
+                        }
+                        return null;
                     }
                 });
 

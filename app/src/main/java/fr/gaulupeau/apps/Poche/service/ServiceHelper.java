@@ -10,6 +10,9 @@ import android.util.Log;
 
 import androidx.core.util.Consumer;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+
 import fr.gaulupeau.apps.Poche.service.tasks.ActionRequestTask;
 import fr.gaulupeau.apps.Poche.service.tasks.DownloadArticleAsFileTask;
 import fr.gaulupeau.apps.Poche.service.tasks.FetchArticleImagesTask;
@@ -67,23 +70,69 @@ public class ServiceHelper {
         context.startService(TaskService.newSimpleTaskIntent(context, serviceClass, task));
     }
 
-    public static void enqueueServiceTask(Context context, TaskService.Task task,
+    public static void enqueueServiceTask(Context context, ParameterizedRunnable task,
                                           Runnable postCallCallback) {
         enqueueServiceTask(context, MainService.class, task, postCallCallback);
     }
 
+    public static <V> Future<V> submitServiceCallableTask(Context context,
+                                                          ParameterizedCallable<V> task,
+                                                          Runnable postCallCallback) {
+        return submit(context, MainService.class, task, postCallCallback);
+    }
+
+    public static Future<?> submitServiceTask(Context context, ParameterizedRunnable task,
+                                              Runnable postCallCallback) {
+        return submit(context, MainService.class, task, postCallCallback);
+    }
+
+    public static <V> Future<V> submit(Context context,
+                                       Class<? extends TaskService> serviceClass,
+                                       ParameterizedCallable<V> callable,
+                                       Runnable postCallCallback) {
+        CallableParameterizedAdapter<V> parameterizedCallable
+                = new CallableParameterizedAdapter<>(callable);
+        FutureTask<V> future = new FutureTask<>(parameterizedCallable);
+
+        enqueueServiceTask(context, serviceClass, future, parameterizedCallable, postCallCallback);
+
+        return future;
+    }
+
+    public static Future<?> submit(Context context,
+                                   Class<? extends TaskService> serviceClass,
+                                   ParameterizedRunnable runnable,
+                                   Runnable postCallCallback) {
+        RunnableParameterizedAdapter parameterizedRunnable
+                = new RunnableParameterizedAdapter(runnable);
+        FutureTask<?> future = new FutureTask<>(parameterizedRunnable, null);
+
+        enqueueServiceTask(context, serviceClass, future, parameterizedRunnable, postCallCallback);
+
+        return future;
+    }
+
+    private static void enqueueServiceTask(Context context,
+                                           Class<? extends TaskService> serviceClass,
+                                           Runnable runnable, Parameterized parameterized,
+                                           Runnable postCallCallback) {
+        enqueueServiceTask(context, serviceClass,
+                new ParameterizedRunnableAdapter(runnable, parameterized),
+                postCallCallback);
+    }
+
     public static void enqueueServiceTask(Context context,
                                           Class<? extends TaskService> serviceClass,
-                                          TaskService.Task task,
+                                          ParameterizedRunnable task,
                                           Runnable postCallCallback) {
         performBoundServiceCall(context, serviceClass, binder -> {
             TaskService.TaskServiceBinder service = (TaskService.TaskServiceBinder) binder;
-            service.enqueueTask(task);
+            service.enqueue(task);
         }, postCallCallback);
     }
 
     public static void performBoundServiceCall(Context context,
-                                               Class<? extends TaskService> serviceClass,
+                                               Class<?> serviceClass,
                                                Consumer<IBinder> action,
                                                Runnable postCallCallback) {
         Log.d(TAG, "performBoundServiceCall() started");

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.DbUtils;
@@ -26,6 +27,7 @@ import wallabag.apiwrapper.WallabagService;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueServiceTask;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.enqueueSimpleServiceTask;
 import static fr.gaulupeau.apps.Poche.service.ServiceHelper.startService;
+import static fr.gaulupeau.apps.Poche.service.ServiceHelper.submitServiceCallableTask;
 
 public class OperationsHelper {
 
@@ -73,8 +75,8 @@ public class OperationsHelper {
                 .setArticleTags(article, newTags), postCallCallback);
     }
 
-    public static void addAnnotation(Context context, int articleId, Annotation annotation) {
-        enqueueServiceTask(context, ctx -> new OperationsWorker(ctx)
+    public static Future<Annotation> addAnnotation(Context context, int articleId, Annotation annotation) {
+        return submitServiceCallableTask(context, ctx -> new OperationsWorker(ctx)
                 .addAnnotation(articleId, annotation), null);
     }
 
