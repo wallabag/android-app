@@ -284,7 +284,7 @@
     <string name="misc_localQueue_empty">Yerel değişiklik bulunamadı</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Senkron edilmemiş ilk yerel elemanı kuyruktan çıkarır. Bu işlem sürekli belli makalalerde senkron sorunu yaşıyorsanız faydalı olabilir. Bunu yapmadan önce tüm yerel değişiklikleri bir yerel dosyaya aktardığınızdan emin olun</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Yerel kuyruktaki ilk elemanı çıkart</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Tüm yerel değişiklikleri bir txt dosyasına aktarır (bu dosyayı inceleyebilir veya bir hata raporu içine ekleyebilirsiniz)</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Tüm yerel değişiklikleri bir txt dosyasına aktarır (bu dosyayı inceleyebilir veya bir hata bildirimine ekleyebilirsiniz)</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Dosyaya aktar</string>
     <string name="pref_desc_misc_localQueue_notice">Ne yaptığınızı bilmiyorsanız burada bir işlem yapmayın</string>
     <string name="pref_name_misc_localQueue_notice">UYARI</string>
