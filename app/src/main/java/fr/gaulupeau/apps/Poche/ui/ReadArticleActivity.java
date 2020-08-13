@@ -2,8 +2,6 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -155,18 +153,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean isResumed;
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
-
-    // TODO: remove after updating to ~"androidx.appcompat:appcompat:1.2.0"
-    // https://issuetracker.google.com/issues/141132133
-    // https://stackoverflow.com/q/58028821
-    // workaround: https://github.com/ankidroid/Anki-Android/issues/5507#issuecomment-543501300
-    @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT <= 25) {
-            return;
-        }
-        super.applyOverrideConfiguration(overrideConfiguration);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
