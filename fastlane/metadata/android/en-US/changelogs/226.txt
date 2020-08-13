@@ -1,0 +1,9 @@
+- Share-menu: favorite/archive/tag articles right after saving.
+- Experimental annotations support (can be enabled in settings).
+- Full-text search. "Full update" is recommended.
+- "Untagged" list.
+- Long-press menu (only for single articles).
+- Tags (clickable) in the article view.
+- Saving origin URL when adding from other articles.
+- Text-to-speech is significantly rewritten.
+- A lot of other fixes and improvements.
