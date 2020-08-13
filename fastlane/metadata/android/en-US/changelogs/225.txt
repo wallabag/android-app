@@ -1,0 +1,2 @@
+- Fixed crash on the tags management screen.
+- Fixed annotations.
