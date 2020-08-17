@@ -20,9 +20,9 @@
     <string name="d_deleteArticle_message">Jeste li sigurni da želite obrisati članak\?</string>
     <string name="d_deleteArticle_title">Obrisati članak\?</string>
     <string name="menu_syncLocalChanges">Sinkroniziraj lokalne promjene</string>
-    <string name="menu_open_random_article">Otvori nasumični članak</string>
+    <string name="menu_open_random_article">Otvori članak nasumce</string>
     <string name="ttsOptions">Opcije</string>
-    <string name="ttsError">Text To Speech greška</string>
+    <string name="ttsError">Tekst u govor greška</string>
     <string name="ttsAutoplayNextArticle">Automatski pusti sljedeći članak</string>
     <string name="ttsVoice">Odaberi glas</string>
     <string name="ttsLanguage">Odaberi jezik</string>
@@ -38,4 +38,9 @@
     <string name="add_to_favorites">Dodaj u favorite</string>
     <string name="btnMarkUnread">Označi kao nepročitano</string>
     <string name="btnMarkRead">Označi kao pročitano</string>
+    <string name="ttsFastForward">Brzo naprijed</string>
+    <string name="ttsPlayPause">Pokreni / Zaustavi</string>
+    <string name="ttsFastRewind">Brzo natrag</string>
+    <string name="menuTTS">Tekst u govor</string>
+    <string name="remove_from_favorites">Ukloni iz favorita</string>
 </resources>
