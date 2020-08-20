@@ -95,9 +95,8 @@
     <string name="themeName_solarized">Prześwietlony (Solarized)</string>
     <string name="menu_readArticle_increaseFontSize">Zwiększ rozmiar czcionki</string>
     <string name="menu_readArticle_decreaseFontSize">Zmniejsz rozmiar czcionki</string>
-    <string name="aboutText">
-        <b>Aplikacja wallabag dla Androida</b>\n
-        wallabag to samodzielna aplikacja, dzięki której nie przegapisz już żadnych treści. Kliknij, zapisz i przeczytaj wyciągniętą treść w wolnym czasie.</string>
+    <string name="aboutText"><b>Aplikacja wallabag dla Androida</b>
+\n wallabag to samodzielna aplikacja, dzięki której nie przegapisz już żadnych treści. Kliknij, zapisz i przeczytaj wyciągniętą treść w wolnym czasie.</string>
     <string name="readSpeed">Prędkość czytania</string>
     <string name="voiceHeight">Wysokość głosu</string>
     <string name="readVolume">Głośność czytania</string>
