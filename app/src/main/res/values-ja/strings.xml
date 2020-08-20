@@ -39,7 +39,8 @@
     <string name="d_urlAction_addToWallabag">wallabag に追加</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">失敗</string>
-    <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:</string>
+    <string name="d_add_fail_text">共有文字列で URL を見つけることができませんでした:
+\n</string>
     <string name="d_configurationChanged_title">パラメーターが変更されました</string>
     <string name="d_configurationChanged_message">いくつかのパラメーターが変更されているようです。接続テストを実行することをお勧めします。</string>
     <string name="d_configurationChanged_answer_decline">後で</string>
