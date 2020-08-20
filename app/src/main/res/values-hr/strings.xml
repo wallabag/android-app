@@ -242,7 +242,7 @@
     <string name="connectionWizard_welcome_text">Prije upotrebe programa wallabag, moraš uspostaviti vezu. U tome će ti pomoći čarobnjak za vezu.</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Kliži s gumbovima glasnoće</string>
     <string name="themeName_light">Svjetla</string>
-    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %2$s</string>
+    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza podataka je premještena</string>
     <string name="menu_lists_sweepDeletedArticles">„Počisti” izbrisane članke</string>
     <string name="menu_lists_changeSortOrder">Promijeni redoslijed</string>
