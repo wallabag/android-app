@@ -1,0 +1,20 @@
+Praktičan program za arhiviranje i kasnije čitanje spremljenih članaka.
+Za razliku od ostalih usluga, softver poslužitelja sadrži MIT licencu,
+tako da ga svatko smije instalirati: jednostavno slijedi upute na
+[http://www.wallabag.org wallabag.org].
+
+Ovaj Android program omogućuje čitanje i upravljanje člancima te automatsko
+sinkroniziranje na wallabag poslužitelju. Sljedeći put kad pronađeš članak
+koji želiš kasnije čitati, spremi ga u wallabag. Automatski će se sinkronizirati
+s tvojim mobitelom, tabletom, e-čitačem ili računalom. Na taj ga način možeš
+čitati bilo gdje, u bilo koje vrijeme, pa čak i bez internetske veze.
+
+Članak možeš spremiti u wallabag skoro odsvakuda, uključujući tvoje računalo
+i omiljene RSS čitače.
+
+'''Dodatne funkcije:'''
+
+* Automatska sinkronizacija između poslužitelja i programa
+* Preuzimanje slika za izvanmrežno čitanje
+* Etikete za upravljanje sadržajem
+* Govorna jedinica za slušanje članaka
