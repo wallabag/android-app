@@ -45,7 +45,7 @@
     <string name="remove_from_favorites">Ukloni iz favorita</string>
     <string name="pref_desc_sync_syncTypes_text">"Postoje dvije glavne vrste sinkronizacije: „Potpuna” i „Brza”.
 \n
-\n „Potpuna” sinkronizacija briše sav lokalni sadržaj i ponovo ga preuzima. Dostupno u izbornika opcija, kao zadnja mogućnost.
+\n  „Potpuna” sinkronizacija briše sav lokalni sadržaj i ponovo ga preuzima. Dostupno u izbornika opcija, kao zadnja mogućnost.
 \n
 \n  „Brza” sinkronizacija (inkrementalno) preuzima samo promjene, napravljene u prethodnoj sinkronizaciji, smanjujući vrijeme i promet. Međutim, ova metoda ima nedostatak: ne može otkriti udaljeno izbrisani članak (tako da se lokalni članci ne brišu tijekom „Brze” sinkronizacije). Za pokretanje, povuci prema dolje preko najviše pozicije klizne trake u bilo kojem popisu članaka.
 \n
@@ -96,8 +96,8 @@
     <string name="pref_name_storage_dbPath_internalStorage">Interno spremište</string>
     <string name="feedName_favorites">Favoriti</string>
     <string name="pref_categoryName_connection_advanced">Napredne postavke veze</string>
-    <string name="articleList_favoriteMark">Oznaka za favorit</string>
-    <string name="untagged">&lt;neoznačeno&gt;</string>
+    <string name="articleList_favoriteMark">Oznaka za favorite</string>
+    <string name="untagged">&lt;neetiketirano&gt;</string>
     <string name="connectionWizard_welcome_rerunNotice">Čarobnjak veze se uvijek može pokrenuti u postavkama.</string>
     <string name="pref_name_ui_article_fullscreen">Cjeloekranski prikaz članka</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">Ispis u %s</string>
@@ -107,7 +107,7 @@
     <string name="pref_desc_autoSync_enabled">Ovo omogućava automatsku sinkronizaciju lokalnih promjena (dodane veze, arhivirani članci itd.) i preuzimanje novih članaka, na osnovi rasporeda</string>
     <string name="contentIsTooLong">Sadržaj članka je predug za prikaz</string>
     <string name="pref_categoryName_autoSync">Automatska sinkronizacija</string>
-    <string name="manageTags_textField_hint">Jedna ili više oznaka odvojene zarezom</string>
+    <string name="manageTags_textField_hint">Jedna ili više etiketa odvojene zarezom</string>
     <string name="notification_expandedError">Greška: %s</string>
     <string name="articleContent_previewImageAltText">Pretprikaz slike</string>
     <string name="settings_parametersAutofilled">Parametri popunjeni</string>
@@ -122,7 +122,7 @@
     <string name="connectionWizard_summary_text">Pritisni za spremanje i prijeđi na glavni ekran.</string>
     <string name="pref_desc_sync_syncTypes">Pritisni, za prikaz dodatnih informacija o vrstama sinkronizacije</string>
     <string name="notification_action_media_next">Sljedeće</string>
-    <string name="nav_main_tags">Oznake</string>
+    <string name="nav_main_tags">Etikete</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Nepoznata greška: %s</string>
     <string name="pref_name_connection_autofill">Automatsko ispunjavanje</string>
     <string name="menu_readArticle_increaseFontSize">Povećaj veličinu fonta</string>
@@ -142,7 +142,7 @@
     <string name="connectionWizard_provider_general_titleMessage">Osnovna konfiguracija</string>
     <string name="menu_readArticle_decreaseFontSize">Smanji veličinu fonta</string>
     <string name="pref_option_autoSync_interval_24h">24 sata</string>
-    <string name="manageTags_title">Upravljaj oznakama</string>
+    <string name="manageTags_title">Upravljaj etiketama</string>
     <string name="d_checkCredentials_errorMessage_noAccess">Nema pristupa sučelju</string>
     <string name="tts_image">Slika: %s</string>
     <string name="menu_lists_fullUpdate">Potpunog aktualiziranja</string>
@@ -153,7 +153,7 @@
     <string name="testConnection_errorMessage_authProblems">Problemi u vezi s autorizacijom. Uzrok tomu su obično HTTP-preusmjeravanja.</string>
     <string name="connectionWizard_provider_framabag_next">Spoji</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Osalo</string>
-    <string name="menu_manageTags">Upravljaj oznakama</string>
+    <string name="menu_manageTags">Upravljaj etiketama</string>
     <string name="voiceHeight">Visina glasa</string>
     <string name="pref_name_autoSync_enabled">Aktiviraj automatsku sinkronizaciju</string>
     <string name="lastUpdateTimeLabel">Zadnje aktualiziranje: %s</string>
@@ -171,9 +171,9 @@
     <string name="aboutText"><b>wallabag program za Android</b>
 \n wallabag je program za vlastiti hosting te omogućuje da više ne propustiš nijedan sadržaj. Pritisni na izdvojeni sadržaj, spremi ga i čitaj ga u slobodno vrijeme.</string>
     <string name="d_configurationChanged_title">Parametri promijenjeni</string>
-    <string name="manageTags_addMoreTags">Dodaj još oznaka:</string>
+    <string name="manageTags_addMoreTags">Dodaj još etiketa:</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag usluga nije pronađena – provjeri URL</string>
-    <string name="pref_desc_tts_showPreviewAsAlbumArt">Koristite sliku pretprikaza članka (ako postoji) kao naslov albuma (vidljivo u obavijestima i može se prikazati kao pozadina ekrana)</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Koristi sliku pretprikaza članka (ako postoji) kao naslov albuma (vidljivo u obavijestima i može se prikazati kao pozadina ekrana)</string>
     <string name="notification_downloadingImages">Preuzimanje slika</string>
     <string name="themeName_solarized">Solarno</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Rasteže retke na jednaku dužinu (kao u novinama)</string>
@@ -186,7 +186,7 @@
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ako ne znaš o čemu se radi, ostavi prazno</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Stvarno želiš izbrisati bazu podataka\?</string>
     <string name="downloadAsFileArticleDownloadedDetail">Članak %s preuzet</string>
-    <string name="nav_add">Dodaj novi unos</string>
+    <string name="nav_add">Dodaj novi zapis</string>
     <string name="pref_name_connection_api_clientSecret">Tajna klijenta</string>
     <string name="noNextArticle">Nema daljnjih članaka u trenutačnom popisu</string>
     <string name="connectionWizard_provider_wallabagit_prev">Natrag</string>
@@ -197,10 +197,10 @@
     <string name="menuDownloadAsFile">Preuzmi kao datoteku</string>
     <string name="pref_name_ui_article_textAlignment_justify">Poravnanje teksta: Obostrano</string>
     <string name="pref_name_ui_scrollOverBottom">Klizni preko kraja članka, da bi se označio kao pročitan</string>
-    <string name="remove_tag">Ukloni oznaku</string>
+    <string name="remove_tag">Ukloni etiketu</string>
     <string name="pref_desc_ui_swipeArticles">Povuci prstom lijevo ili desno u članku, za prijelaz na prethodni ili sljedeći članak</string>
     <string name="connectionWizard_provider_general_next">Spoji</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Prikazuje dijaloški okvir koji omogućuje dodavanje u favorite/arhiviranje/označavanje novog dodanog članka. Ako je opcija deaktivirana, prikazat će se poruka.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Prikazuje dijaloški okvir koji omogućuje dodavanje u favorite/arhiviranje/etiketiranje jednog novo dodanog članka. Ako je opcija deaktivirana, prikazat će se poruka.</string>
     <string name="message_disableTouch_inputEnabled">Unos dodirom aktiviran</string>
     <string name="notification_action_media_fastforward">Naprijed</string>
     <string name="connectionWizard_providerSelection_provider_framabag_desc">Odaberi ovo, ako imaš račun na https://framabag.org</string>
@@ -235,7 +235,7 @@
     <string name="articleList_ArchivedMark">Oznaka za arhivirano</string>
     <string name="settings_parametersAreOk">Parametri su u redu</string>
     <string name="dialog_title_downloadFileFormat">Odaberi datotečni format</string>
-    <string name="manageTags_currentTags">Odabrane oznake:</string>
+    <string name="manageTags_currentTags">Odabrane etikete:</string>
     <string name="connectionWizard_welcome_titleMessage">Dobro došao/dobro došla u wallabag.</string>
     <string name="notification_syncingQueue">Sinkroniziranje lokalnih prmjena</string>
     <string name="themeName_dark_contrast">Tamna (visoki kontrast)</string>
@@ -285,7 +285,7 @@
     <string name="pref_name_tts_nextButtonIsFastForward">Gumb „Sljedeći” premata naprijed</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Neuspjela prijava – provjeri korisničko ime i lozinku</string>
     <string name="pref_categoryName_miscellaneous">Razno</string>
-    <string name="nav_main_tagged_articles">Označeni članci</string>
+    <string name="nav_main_tagged_articles">Etiketirani članci</string>
     <string name="d_disableTouch_changeKey_title">Deaktiviraj gumb za unos dodirom</string>
     <string name="pref_name_misc_handleHttpScheme">Podrži HTTP shemu</string>
     <string name="previousUpdateNotFinished">Prethodno aktualiziranje još nije gotovo</string>
