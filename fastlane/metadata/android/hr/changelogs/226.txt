@@ -1,0 +1,9 @@
+- Izbronik za dijeljenje: dodaj članke u favorite, u arhiv ili ih označi etiketama odmah nakon spremanja.
+- Eksperimentalna podrška za napomene (može se aktivirati u postavkama).
+- Pretraživanje cijelog teksta. Preporučuje se koristiti „Potpuno aktualiziranje”.
+- Popis „neetiketiranih” članaka.
+- Izbornik dugim dodirom (samo za pojedinačne članke).
+- Etikete u prikazu članka (mogu se otvoriti dodirom).
+- Spremanje izvornog URL-a tijekom dodavanja iz drugih članaka.
+- Funkcija za tekst u govor značajno je prepravljena.
+- Mnogi drugi ispravci i poboljšanja.
