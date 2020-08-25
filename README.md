@@ -71,9 +71,6 @@ wallabag app is a free and open source project developed by volunteers. Any cont
  * [Translate the app](https://hosted.weblate.org/projects/wallabag/android-app/) (you don't have to create an account).
  * Write some code. Please follow the code style used in the project to make a review process faster.
 
-## Credits  
-Thanks to Michael Cook ([Twitter](https://twitter.com/mcookie)/[website](https://cookicons.co/)) for the app icon.
-
 ## License
 
 This application is released under GNU GPLv3 (see [LICENSE](LICENSE)).
