@@ -1,7 +1,7 @@
 Praktičan program za arhiviranje i kasnije čitanje spremljenih članaka.
 Za razliku od ostalih usluga, softver poslužitelja sadrži MIT licencu,
 tako da ga svatko smije instalirati: jednostavno slijedi upute na
-[http://www.wallabag.org wallabag.org].
+<a href="https://www.wallabag.org">wallabag.org</a>.
 
 Ovaj Android program omogućuje čitanje i upravljanje člancima te automatsko
 sinkroniziranje na wallabag poslužitelju. Sljedeći put kad pronađeš članak
@@ -12,7 +12,7 @@ s tvojim mobitelom, tabletom, e-čitačem ili računalom. Na taj ga način može
 Članak možeš spremiti u wallabag skoro odsvakuda, uključujući tvoje računalo
 i omiljene RSS čitače.
 
-'''Dodatne funkcije:'''
+<b>Dodatne funkcije:</b>
 
 * Automatska sinkronizacija između poslužitelja i programa
 * Preuzimanje slika za izvanmrežno čitanje
