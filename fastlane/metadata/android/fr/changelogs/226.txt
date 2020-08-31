@@ -1,0 +1,9 @@
+- Menu de partage : marquer comme favori/archiver/tagger juste après l'enregistrement.
+- Prise en charge des annotations expérimentales (peut être activée dans les paramètres).
+- Recherche en texte intégral. Une synchronisation "complète" est recommandée.
+- Liste des articles "non taggés".
+- Menu en appuyant de manière prolongée sur un article dans la liste.
+- Tags (cliquables) sur la page de l'article.
+- Sauvegarde de l'URL d'origine lors de l'ajout à partir d'autres articles.
+- Le fonctionnement de la synthèse vocale a été largement remanié.
+- Nombreuses autres corrections et améliorations.

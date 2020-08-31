@@ -1,0 +1,10 @@
+- Teilenmenü: Favorisiere/Archiviere/Tagge Artikel direkt nach dem Speichern.
+- Experimentelle Unterstüzung für Anmerkungen (kann in den Einstellungen
+  aktiviert werden).
+- Volltextsuche. "Vollständige Aktualisierung" ist empfohlen.
+- "Nicht getaggt" Liste.
+- Lange-Antippen-Menü (nur für einzelne Artikel).
+- Tags (klickbar) in der Artikelansicht.
+- Original-URL wird gespeichert beim Hinzufügen von anderen Artikeln.
+- Text-zu-Sprache ist bedeutend neu programmiert worden.
+- Eine Menge anderer Fehlerbehebungen und Verbesserungen.
