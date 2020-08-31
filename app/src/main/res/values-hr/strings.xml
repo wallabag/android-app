@@ -145,7 +145,7 @@
     <string name="manageTags_title">Upravljaj etiketama</string>
     <string name="d_checkCredentials_errorMessage_noAccess">Nema pristupa sučelju</string>
     <string name="tts_image">Slika: %s</string>
-    <string name="menu_lists_fullUpdate">Potpunog aktualiziranja</string>
+    <string name="menu_lists_fullUpdate">Potpuno aktualiziranje</string>
     <string name="d_disableTouch_currentCode">Trenutačno odabrani tipkovnički kod (za mijenjanje koda, pritisni gumb):</string>
     <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguracija</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Uklanja prvu nesinkroniziranu stavku. Može pomoći, ako tijekom sinkronizacije dobiješ ponavljajuće obavijesti o grešci. U svakom slučaju, najprije ispiši sve lokalne promjene u datoteku</string>
@@ -242,7 +242,7 @@
     <string name="connectionWizard_welcome_text">Prije upotrebe programa wallabag, moraš uspostaviti vezu. U tome će ti pomoći čarobnjak za vezu.</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Kliži s gumbovima glasnoće</string>
     <string name="themeName_light">Svjetla</string>
-    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %s</string>
+    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak u %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza podataka je premještena</string>
     <string name="menu_lists_sweepDeletedArticles">„Počisti” izbrisane članke</string>
     <string name="menu_lists_changeSortOrder">Promijeni redoslijed</string>
