@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_tag"
+        android:title="@string/menu_tag" />
+
+    <item
         android:id="@+id/menu_annotate"
         android:title="@string/menu_annotate" />
 

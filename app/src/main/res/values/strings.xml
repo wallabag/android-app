@@ -363,6 +363,7 @@
     <string name="notification_clipboardLabel">Error details</string>
     <string name="copiedToClipboard">Copied to clipboard</string>
 
+    <string name="menu_tag">Add tag</string>
     <string name="menu_annotate">Annotate</string>
 
     <string name="articleEdit_openArticle">Open article</string>
