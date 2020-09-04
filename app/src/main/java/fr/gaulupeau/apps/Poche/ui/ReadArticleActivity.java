@@ -18,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -398,17 +399,45 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onActionModeStarted(ActionMode mode) {
-        if (annotationsEnabled) {
-            Menu menu = mode.getMenu();
+        Menu menu = mode.getMenu();
 
-            mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
+        mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
 
-            MenuItem item = menu.findItem(R.id.menu_annotate);
-            item.setOnMenuItemClickListener(i -> {
+        MenuItem tagItem = menu.findItem(R.id.menu_tag);
+        Intent tagIntent = new Intent(
+                this,
+                ManageArticleTagsActivity.class);
+        tagItem.setOnMenuItemClickListener(i -> {
+            webViewContent.evaluateJavascript(
+                "(function(){return window.getSelection().toString()})()",
+                new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String s) {
+                        s = s.replaceAll("^\"|\"$", "")
+			     .replaceAll("\\\\n|\\\\r|\\\\t", " ");
+                        tagIntent.putExtra(
+                            ManageArticleTagsActivity.PARAM_ARTICLE_ID,
+                            article.getArticleId()
+                        );
+                        tagIntent.putExtra(
+                            ManageArticleTagsActivity.PARAM_TAG_LABEL,
+                            s
+                        );
+                        startActivity(tagIntent);
+                    };
+                }
+            );
+            return true;
+        });
+        MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
+        annotateItem.setOnMenuItemClickListener(i -> {
                 webViewContent.evaluateJavascript("invokeAnnotator();", null);
-//                mode.finish(); // seems to reset selection too early (not on emulator though)
+                //                mode.finish(); // seems to reset selection too early (not on emulator though)
                 return true;
-            });
+                });
+
+        if (!annotationsEnabled) {
+                annotateItem.setVisible(false);
         }
 
         super.onActionModeStarted(mode);
