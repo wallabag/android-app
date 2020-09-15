@@ -18,7 +18,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -403,44 +402,35 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
 
-        MenuItem tagItem = menu.findItem(R.id.menu_tag);
-        Intent tagIntent = new Intent(
-                this,
-                ManageArticleTagsActivity.class);
-        tagItem.setOnMenuItemClickListener(i -> {
+        menu.findItem(R.id.menu_tag).setOnMenuItemClickListener(item -> {
             webViewContent.evaluateJavascript(
-                "(function(){return window.getSelection().toString()})()",
-                new ValueCallback<String>() {
-                    @Override
-                    public void onReceiveValue(String s) {
-                        s = s.replaceAll("^\"|\"$", "")
-			     .replaceAll("\\\\n|\\\\r|\\\\t", " ");
-                        tagIntent.putExtra(
-                            ManageArticleTagsActivity.PARAM_ARTICLE_ID,
-                            article.getArticleId()
-                        );
-                        tagIntent.putExtra(
-                            ManageArticleTagsActivity.PARAM_TAG_LABEL,
-                            s
-                        );
-                        startActivity(tagIntent);
-                    };
-                }
-            );
+                    "(function(){return window.getSelection().toString()})()",
+                    this::createTagFromSelection);
             return true;
         });
-        MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
-        annotateItem.setOnMenuItemClickListener(i -> {
-                webViewContent.evaluateJavascript("invokeAnnotator();", null);
-                //                mode.finish(); // seems to reset selection too early (not on emulator though)
-                return true;
-                });
 
-        if (!annotationsEnabled) {
-                annotateItem.setVisible(false);
+        MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
+        if (annotationsEnabled) {
+            annotateItem.setOnMenuItemClickListener(i -> {
+                webViewContent.evaluateJavascript("invokeAnnotator();", null);
+//                mode.finish(); // seems to reset selection too early (not on emulator though)
+                return true;
+            });
+        } else {
+            annotateItem.setVisible(false);
         }
 
         super.onActionModeStarted(mode);
+    }
+
+    private void createTagFromSelection(String selection) {
+        selection = selection.replaceAll("^\"|\"$", "")
+                .replaceAll("\\\\n|\\\\r|\\\\t", " ");
+
+        Intent intent = new Intent(this, ManageArticleTagsActivity.class);
+        intent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, article.getArticleId());
+        intent.putExtra(ManageArticleTagsActivity.PARAM_TAG_LABEL, selection);
+        startActivity(intent);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
