@@ -406,6 +406,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             webViewContent.evaluateJavascript(
                     "(function(){return window.getSelection().toString()})()",
                     this::createTagFromSelection);
+            mode.finish();
             return true;
         });
 
