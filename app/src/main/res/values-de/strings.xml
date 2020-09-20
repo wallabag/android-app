@@ -208,20 +208,20 @@
     <string name="menu_lists_sweepDeletedArticles">Aussortieren gelöschter Artikel</string>
     <string name="menu_lists_fullUpdate">Vollständige Aktualisierung</string>
     <string name="menu_changeTitle">Titel ändern</string>
-    <string name="menu_manageTags">Tags verwalten</string>
-    <string name="manageTags_title">Tags verwalten</string>
+    <string name="menu_manageTags">Markierungen verwalten</string>
+    <string name="manageTags_title">Markierungen verwalten</string>
     <string name="manageTags_save">Speichern</string>
-    <string name="manageTags_textField_hint">Ein oder mehrere Tags durch Komma getrennt</string>
+    <string name="manageTags_textField_hint">Eine oder mehrere Markierungen durch Komma getrennt</string>
     <string name="manageTags_addNew">Hinzufügen</string>
-    <string name="manageTags_currentTags">Ausgewählte Tags:</string>
+    <string name="manageTags_currentTags">Ausgewählte Markierungen:</string>
     <string name="content_estimatedReadingTime">Geschätzte Lesezeit: %s min</string>
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
     <string name="nav_main_articles">Artikel</string>
-    <string name="nav_main_tags">Tags</string>
-    <string name="nav_main_tagged_articles">Artikel mit Tags</string>
+    <string name="nav_main_tags">Markierungen</string>
+    <string name="nav_main_tagged_articles">Artikel mit Markierungen</string>
     <string name="nav_add">Neuen Artikel hinzufügen</string>
-    <string name="title_main_tag">Tag: %s</string>
+    <string name="title_main_tag">Markierung: %s</string>
     <string name="pref_name_connection_api_clientID">Client-ID</string>
     <string name="pref_name_connection_api_clientSecret">Clientschlüssel</string>
     <string name="pref_desc_connection_autofill">Verbindung testen und Client-ID und Clientschlüssel ausfüllen</string>
@@ -273,7 +273,7 @@
     <string name="pref_name_storage_dbPath_dbMoved">Datenbank verschoben</string>
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
     <string name="pref_desc_misc_appendWallabagMention">Hänge „via @wallabagapp“ an geteilte Text an</string>
-    <string name="remove_tag">Tag entfernen</string>
+    <string name="remove_tag">Markierung entfernen</string>
     <string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
     <string name="markedAsRead">Artikel als gelesen markiert</string>
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
@@ -322,7 +322,7 @@
     <string name="articleContent_previewImageAltText">Vorschaubild</string>
     <string name="articleContent_globeIconAltText">Globussymbol</string>
     <string name="contentIsTooLong">Der Artikelinhalt ist zu lang, um dargestellt zu werden</string>
-    <string name="untagged">&lt;nicht getaggt&gt;</string>
+    <string name="untagged">&lt;nicht markiert&gt;</string>
     <string name="title">Titel</string>
     <string name="articleEdit_openArticle">Artikel öffnen</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">Nutze Vorschau als Albumgrafik</string>
@@ -344,6 +344,6 @@
     <string name="misc_logging_logcatToFile_result_saved">Log gespeichert unter %s</string>
     <string name="pref_desc_misc_logging_logcatToFile">Speichert die Logcat-Ausgabe (Android App Log) in eine Datei unter /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
     <string name="pref_name_misc_logging_logcatToFile">Speichere die Logcat-Ausgabe in eine Datei</string>
-    <string name="manageTags_addMoreTags">Füge mehr Tags hinzu:</string>
+    <string name="manageTags_addMoreTags">Mehr Markierungen hinzufügen:</string>
     <string name="manageTags_currentTags_none">Keine</string>
 </resources>
