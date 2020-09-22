@@ -23,8 +23,8 @@
     <string name="ttsOptions">Opzioni</string>
     <string name="menu_open_random_article">Apri articolo casuale</string>
     <string name="menu_syncLocalChanges">Sincronizza modifiche locali</string>
-    <string name="d_deleteArticle_title">Cancella articolo?</string>
-    <string name="d_deleteArticle_message">Sei sicuro di voler cancellare l\'articolo?</string>
+    <string name="d_deleteArticle_title">Eliminare l\'articolo\?</string>
+    <string name="d_deleteArticle_message">Sei sicuro/a di voler cancellare l\'articolo\?</string>
     <string name="txtNetOffline">Si prega di controllare la connessione ad Internet!</string>
     <string name="txtConfigNotSet">Si prega di configurare l\'app prima di sincronizzare.</string>
     <string name="dialog_add_label">Salva pagina</string>
@@ -293,4 +293,14 @@
     <string name="notification_channel_group_name_other">Altro</string>
     <string name="notification_channel_group_name_sync">Sincronizzazione</string>
     <string name="themeName_eink">Per gli schermi a inchiostro elettronico</string>
+    <string name="pref_categoryName_tts">Sintesi vocale</string>
+    <string name="pref_desc_ui_annotations_enabled">Funzionalità sperimentale! Visualizza, modifica e crea annotazioni</string>
+    <string name="pref_name_ui_annotations_enabled">Supporto per le annotazioni</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Mostra una finestra che permette di aggiungere ai preferiti/archiviare/etichettare un articolo aggiunto di recente. Un messaggio di benvenuto verrà invece mostrato se l\'opzione è disabilitata.</string>
+    <string name="pref_name_ui_showArticleAddedDialog">Visualizza una finestra di dialogo durante l\'aggiunto</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Come gestire testo preformattato che è troppo lungo per essere mostrato interamente.</string>
+    <string name="manageTags_addMoreTags">Aggiungi più etichette:</string>
+    <string name="manageTags_currentTags_none">Nessuno</string>
+    <string name="notification_channel_name_tts">TTS wallabag</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
 </resources>

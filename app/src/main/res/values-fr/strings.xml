@@ -25,7 +25,7 @@
     <string name="menu_open_random_article">Ouvrir un article au hasard</string>
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
     <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
-    <string name="d_deleteArticle_message">Êtes vous certain de vouloir supprimer l\'article ?</string>
+    <string name="d_deleteArticle_message">Êtes vous sûr·e de vouloir supprimer l\'article \?</string>
     <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser.</string>
     <string name="txtUrlCopied">L\'URL de l\'article a été copiée dans le presse papier</string>
@@ -43,7 +43,8 @@
     <string name="d_urlAction_copyToClipboard">Copier dans le presse-papier</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Échec</string>
-    <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé : \n</string>
+    <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé :
+\n</string>
     <string name="d_configurationChanged_title">Paramètres modifiés</string>
     <string name="d_configurationChanged_message">Il semble que certains paramètres aient été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationChanged_answer_decline">Pas maintenant</string>
@@ -131,24 +132,24 @@
     <string name="menu_lists_fullUpdate">Mise à jour complète</string>
     <string name="other_searchHint">Rechercher dans le titre de l\'article ou dans le texte</string>
     <string name="menu_changeTitle">Modifier le titre</string>
-    <string name="menu_manageTags">Gérer les tags</string>
-    <string name="manageTags_title">Gérer les tags</string>
-    <string name="manageTags_save">Sauvegarder</string>
-    <string name="manageTags_textField_hint">Un ou plusieurs tags séparés par des virgules</string>
+    <string name="menu_manageTags">Gérer les étiquettes</string>
+    <string name="manageTags_title">Gérer les étiquettes</string>
+    <string name="manageTags_save">Enregistrer</string>
+    <string name="manageTags_textField_hint">Une ou plusieurs étiquettes séparées par des virgules</string>
     <string name="manageTags_addNew">Ajouter</string>
-    <string name="manageTags_currentTags">Tags sélectionnés :</string>
-    <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
-    <string name="lastUpdateTimeLabel">Dernière mise à jour : %s</string>
-    <string name="listItem_estimatedReadingTime">%d min</string>
+    <string name="manageTags_currentTags">Étiquettes sélectionnées :</string>
+    <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
+    <string name="lastUpdateTimeLabel">Dernière mise à jour : %s</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
     <string name="navigation_drawer_close">Fermer le menu de navigation</string>
     <string name="nav_main_articles">Articles</string>
-    <string name="nav_main_tags">Tags</string>
-    <string name="nav_main_tagged_articles">Articles taggés</string>
+    <string name="nav_main_tags">Étiquettes</string>
+    <string name="nav_main_tagged_articles">Articles étiquetés</string>
     <string name="nav_add">Ajouter un nouvel article</string>
     <string name="nav_other_settings">Paramètres</string>
     <string name="nav_other_about">À propos</string>
-    <string name="title_main_tag">Tag : %s</string>
+    <string name="title_main_tag">Étiquette : %s</string>
     <string name="message_couldNotOpenUrl">L\'URL n\'a pas pu être ouverte</string>
     <string name="message_disableTouch_inputDisabled">Saisie tactile désactivée</string>
     <string name="message_disableTouch_inputEnabled">Saisie tactile activée</string>
@@ -201,12 +202,15 @@
     <string name="pref_categoryName_sync">Synchronisation</string>
     <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
     <string name="pref_desc_sync_syncTypes">Appuyer ici pour en savoir plus à propos des types de synchronisation</string>
-    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».\n\n
-        Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.\n\n
-        La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.\n\n
-        Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur - si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.\n\n
-        Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.
-    </string>
+    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».
+\n
+\n Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.
+\n
+\n La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.
+\n
+\n Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur – si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.
+\n
+\n Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Vérifier les articles supprimés après une synchronisation rapide</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire ci-dessus la description des types de synchronisation pour plus d\'informations</string>
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
@@ -235,7 +239,7 @@
     <string name="pref_name_storage_dbPath_dbMoved">La base de données a été déplacée</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>
-    <string name="pref_desc_misc_appendWallabagMention">Ajoute « via @wallabagapp » aux articles partagés</string>
+    <string name="pref_desc_misc_appendWallabagMention">Ajouter « via @wallabagapp » aux articles partagés</string>
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
     <string name="pref_name_misc_wipeDB">Purger la base de données</string>
@@ -269,8 +273,8 @@
     <string name="connectionWizard_summary_toastMessage">La configuration est terminée</string>
     <string name="connectionWizard_summary_prev">Retour</string>
     <string name="connectionWizard_summary_next">Sauvegarder les paramètres</string>
-    <string name="remove_tag">Supprimer tag</string>
-    <string name="pref_name_ui_keepScreenOn">Empêcher la mise en veille de l\'écran</string>
+    <string name="remove_tag">Supprimer l\'étiquette</string>
+    <string name="pref_name_ui_keepScreenOn">Garder l\'écran actif pendant la lecture</string>
     <string name="pref_desc_ui_keepScreenOn">Garder l\'écran actif pendant la lecture d\'un article</string>
     <string name="themeName_eink">Pour les affichages à encre électronique</string>
     <string name="notification_channel_group_name_tts">TTS</string>
@@ -315,7 +319,7 @@
     <string name="articleContent_previewImageAltText">Image d\'aperçu</string>
     <string name="articleContent_globeIconAltText">Icône d\'un globe</string>
     <string name="contentIsTooLong">Le contenu de l\'article est trop long pour être affiché</string>
-    <string name="untagged">&lt;non taggé&gt;</string>
+    <string name="untagged">&lt;non étiqueté&gt;</string>
     <string name="title">Titre</string>
     <string name="articleEdit_openArticle">Ouvrir l\'article</string>
     <string name="misc_logging_logcatToFile_result_error">Erreur : %s</string>
@@ -326,10 +330,10 @@
     <string name="pref_categoryName_tts">Synthèse vocale</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Solution pour appareils Onyx qui forcent l\'affichage des liens en noir</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Activer le thème alternatif pour Onyx Boox</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/tagger un article venant d\'être ajouté. Une notification toast sera affichée à la place si l\'option est désactivée.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification toast sera affichée à la place si l\'option est désactivée.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
-    <string name="manageTags_addMoreTags">Ajouter plus de tags :</string>
-    <string name="manageTags_currentTags_none">Aucun</string>
+    <string name="manageTags_addMoreTags">Ajouter plus d\'étiquettes :</string>
+    <string name="manageTags_currentTags_none">Aucune</string>
     <string name="notification_action_media_rewind">Retour rapide</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Utilise l\'image d\'aperçu de l\'article (si présente) en tant que pochette de l\'album (visible dans la notification et possiblement affichée en tant que fond d\'écran de l\'écran de verrouillage)</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">Utiliser l\'aperçu en tant que pochette de l\'album</string>
@@ -337,7 +341,7 @@
     <string name="pref_name_tts_previousButtonIsRewind">Le bouton « Précédent » fait un retour rapide</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">Appuyer sur le bouton « Suivant » fait une avance rapide au lieu de passer à l\'article suivant</string>
     <string name="pref_name_tts_nextButtonIsFastForward">Le bouton « Suivant » fait une avance rapide</string>
-    <string name="pref_desc_tts_rewindTime">Le nombre de secondes à sauter lorsque le bouton \"retour rapide\" est appuyé</string>
+    <string name="pref_desc_tts_rewindTime">Le nombre de secondes à sauter quand on appuie sur le bouton « retour rapide »</string>
     <string name="pref_name_tts_rewindTime">Retour rapide</string>
     <string name="pref_name_tts_fastForwardTime">Avance rapide</string>
 </resources>
