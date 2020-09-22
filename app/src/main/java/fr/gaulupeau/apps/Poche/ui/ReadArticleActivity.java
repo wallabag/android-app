@@ -398,20 +398,40 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onActionModeStarted(ActionMode mode) {
+        Menu menu = mode.getMenu();
+
+        mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
+
+        menu.findItem(R.id.menu_tag).setOnMenuItemClickListener(item -> {
+            webViewContent.evaluateJavascript(
+                    "(function(){return window.getSelection().toString()})()",
+                    this::createTagFromSelection);
+            mode.finish();
+            return true;
+        });
+
+        MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
         if (annotationsEnabled) {
-            Menu menu = mode.getMenu();
-
-            mode.getMenuInflater().inflate(R.menu.read_article_activity_annotate, menu);
-
-            MenuItem item = menu.findItem(R.id.menu_annotate);
-            item.setOnMenuItemClickListener(i -> {
+            annotateItem.setOnMenuItemClickListener(i -> {
                 webViewContent.evaluateJavascript("invokeAnnotator();", null);
 //                mode.finish(); // seems to reset selection too early (not on emulator though)
                 return true;
             });
+        } else {
+            annotateItem.setVisible(false);
         }
 
         super.onActionModeStarted(mode);
+    }
+
+    private void createTagFromSelection(String selection) {
+        selection = selection.replaceAll("^\"|\"$", "")
+                .replaceAll("\\\\n|\\\\r|\\\\t", " ");
+
+        Intent intent = new Intent(this, ManageArticleTagsActivity.class);
+        intent.putExtra(ManageArticleTagsActivity.PARAM_ARTICLE_ID, article.getArticleId());
+        intent.putExtra(ManageArticleTagsActivity.PARAM_TAG_LABEL, selection);
+        startActivity(intent);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

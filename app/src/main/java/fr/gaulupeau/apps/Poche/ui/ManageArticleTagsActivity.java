@@ -52,6 +52,7 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
     public static final String PARAM_ARTICLE_ID = "article_id";
     public static final String PARAM_ARTICLE_URL = "article_url";
+    public static final String PARAM_TAG_LABEL = "tag_label";
 
     private static final String TAG = "ManageArticleTagsA";
 
@@ -87,11 +88,13 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         setContentView(R.layout.activity_manage_article_tags);
 
         String[] currentTagsArray = null;
-        String text = null;
+        String text;
         if (savedInstanceState != null) {
             discoveredArticleId = savedInstanceState.getInt(STATE_DISCOVERED_ARTICLE_ID, -1);
             currentTagsArray = savedInstanceState.getStringArray(STATE_CURRENT_TAGS);
             text = savedInstanceState.getString(STATE_CURRENT_TEXT);
+        } else {
+            text = getIntent().getStringExtra(PARAM_TAG_LABEL);
         }
 
         if (!loadArticle()) return;
