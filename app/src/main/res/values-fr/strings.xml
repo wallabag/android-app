@@ -135,7 +135,7 @@
     <string name="menu_manageTags">Gérer les étiquettes</string>
     <string name="manageTags_title">Gérer les étiquettes</string>
     <string name="manageTags_save">Enregistrer</string>
-    <string name="manageTags_textField_hint">Une ou plusieurs étiquettes sépares par des virgules</string>
+    <string name="manageTags_textField_hint">Une ou plusieurs étiquettes séparées par des virgules</string>
     <string name="manageTags_addNew">Ajouter</string>
     <string name="manageTags_currentTags">Étiquettes sélectionnées :</string>
     <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
