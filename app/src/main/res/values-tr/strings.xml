@@ -338,4 +338,5 @@
     <string name="pref_name_misc_logging_logcatToFile">Logcat çıktısını dosyaya kaydet</string>
     <string name="manageTags_addMoreTags">Daha fazla etiket ekle:</string>
     <string name="misc_logging_logcatToFile_result_error">Hata: %s</string>
+    <string name="menu_tag">Etiket ekle</string>
 </resources>

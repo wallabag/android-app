@@ -341,4 +341,5 @@
     <string name="pref_name_misc_logging_logcatToFile">保存logcat输出到一个文件</string>
     <string name="manageTags_addMoreTags">添加更多标签：</string>
     <string name="manageTags_currentTags_none">无</string>
+    <string name="menu_tag">添加标签</string>
 </resources>

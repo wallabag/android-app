@@ -338,4 +338,5 @@
     <string name="pref_name_ui_showArticleAddedDialog">Показывать диалог при добавлении</string>
     <string name="manageTags_addMoreTags">Добавить теги:</string>
     <string name="manageTags_currentTags_none">Нет</string>
+    <string name="menu_tag">Добавить тег</string>
 </resources>

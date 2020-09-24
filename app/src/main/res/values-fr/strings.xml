@@ -344,4 +344,5 @@
     <string name="pref_desc_tts_rewindTime">Le nombre de secondes à sauter quand on appuie sur le bouton « retour rapide »</string>
     <string name="pref_name_tts_rewindTime">Retour rapide</string>
     <string name="pref_name_tts_fastForwardTime">Avance rapide</string>
+    <string name="menu_tag">Ajouter une étiquette</string>
 </resources>
