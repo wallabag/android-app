@@ -346,4 +346,5 @@
     <string name="pref_name_misc_logging_logcatToFile">Speichere die Logcat-Ausgabe in eine Datei</string>
     <string name="manageTags_addMoreTags">Mehr Markierungen hinzufügen:</string>
     <string name="manageTags_currentTags_none">Keine</string>
+    <string name="menu_tag">Markierung hinzufügen</string>
 </resources>
