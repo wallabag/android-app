@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="btnMarkRead">Marcar como lido</string>
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btnMarkRead">Marcar como lido</string>
     <string name="btnMarkUnread">Marcar como não lido</string>
     <string name="add_to_favorites">Adicionar aos favoritos</string>
     <string name="remove_from_favorites">Remover dos favoritos</string>
@@ -23,7 +24,7 @@
     <string name="d_deleteArticle_title">Deletar artigo?</string>
     <string name="d_deleteArticle_message">Tem certeza que deseja deletar o artigo?</string>
     <string name="txtNetOffline">Por favor checar conexão com Internet!</string>
-    <string name="txtConfigNotSet">Por favor configure o aplicativo antes de sincronizar.</string>
+    <string name="txtConfigNotSet">Por favor configure a app antes de sincronizar.</string>
     <string name="txtUrlCopied">URL do artigo copiada para prancheta</string>
     <string name="dialog_add_label">Adicionar um novo artigo</string>
     <string name="page_url">URL da Página</string>
@@ -129,7 +130,7 @@
     <string name="notification_expandedError">Erro: %s</string>
     <string name="themeName_dark">Escuro</string>
     <string name="themeName_dark_contrast">Escuro (alto contraste)</string>
-    <string name="pref_name_ui_theme">Tema do aplicativo</string>
+    <string name="pref_name_ui_theme">Tema da app</string>
     <string name="connectionWizard_provider_framabag_next">Conectar</string>
     <string name="connectionWizard_provider_general_next">Conectar</string>
     <string name="connectionWizard_provider_wallabagit_next">Conectar</string>
