@@ -32,7 +32,7 @@
     <string name="d_testConnection_urlSuggestion_message">Doporučujeme změnit URL adresu na: %s. Ale můžete použít i tu vloženou.</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Nelze se připojit – zkontrolujte uživatelské jméno a heslo</string>
     <string name="settings_parametersAreOk">Parametry jsou v pořádku</string>
-    <string name="d_configurationChanged_message">Zdá se, že byly změněny nějaké parametry. Doporučujeme provést test připojení.</string>
+    <string name="d_configurationChanged_message">Zdá se, že byly změněné nějaké parametry. Doporučujeme provést test připojení.</string>
     <string name="copiedToClipboard">Zkopírováno do schránky</string>
     <string name="notification_copyToClipboard">Zkopírovat do schránky</string>
     <string name="connectionWizard_summary_text">Klikněte pro uložení a přejděte na hlavní obrazovku.</string>
