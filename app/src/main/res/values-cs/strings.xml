@@ -185,4 +185,7 @@
     <string name="add_to_favorites">Přidat do Oblíbených</string>
     <string name="btnMarkUnread">Označit jako nepřečtené</string>
     <string name="btnMarkRead">Označit jako přečtené</string>
+    <string name="d_configurationChanged_title">Změněné parametry</string>
+    <string name="d_urlAction_title">Vyberte akci pro URL adresu</string>
+    <string name="menu_syncLocalChanges">Synchronizovat lokální změny</string>
 </resources>
