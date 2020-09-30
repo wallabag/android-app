@@ -3,8 +3,8 @@
     <string name="app_name" translatable="false">wallabag</string>
     <string name="btnMarkRead">Mark as Read</string>
     <string name="btnMarkUnread">Mark as Unread</string>
-    <string name="add_to_favorites">Add to Favorites</string>
-    <string name="remove_from_favorites">Remove from Favorites</string>
+    <string name="add_to_favorites">Add to Favourites</string>
+    <string name="remove_from_favorites">Remove from Favourites</string>
     <string name="menuShare">Share</string>
     <string name="menuNext">Next article</string>
     <string name="menuPrevious">Previous article</string>
@@ -88,7 +88,7 @@
     <string name="feedName_favorites">Favorites</string>
     <string name="feedName_archived">Archived</string>
     <string name="feedName_unread">Unread</string>
-    <string name="articleList_favoriteMark">Favorite mark</string>
+    <string name="articleList_favoriteMark">Favourite mark</string>
     <string name="articleList_ArchivedMark">Archived mark</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
     <string name="scrolledOverBottom">Scroll %d time(s) more over the bottom to mark the article as read</string>
