@@ -68,8 +68,15 @@ public class ServiceHelper {
     public static void enqueueSimpleServiceTask(Context context,
                                                 Class<? extends TaskService> serviceClass,
                                                 SimpleTask task) {
-        ContextCompat.startForegroundService(
-                context, TaskService.newSimpleTaskIntent(context, serviceClass, task));
+        Intent intent = TaskService.newSimpleTaskIntent(context, serviceClass, task);
+        try {
+            context.startService(intent);
+        } catch (IllegalStateException e) {
+            Log.w(TAG, "enqueueSimpleServiceTask() failed to start normal service", e);
+
+            intent.putExtra(TaskService.PARAM_FOREGROUND, true);
+            ContextCompat.startForegroundService(context, intent);
+        }
     }
 
     public static void enqueueServiceTask(Context context, ParameterizedRunnable task,

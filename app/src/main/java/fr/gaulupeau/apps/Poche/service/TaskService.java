@@ -25,6 +25,8 @@ public abstract class TaskService extends Service {
 
     public static final String ACTION_SIMPLE_TASK = "action_simple_task";
 
+    public static final String PARAM_FOREGROUND = "param_foreground";
+
     public class TaskServiceBinder extends Binder {
         public void enqueue(ParameterizedRunnable parameterizedRunnable) {
             TaskService.this.enqueueTask(parameterizedRunnable, true);
@@ -95,7 +97,9 @@ public abstract class TaskService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(tag, "onStartCommand()");
 
-        setForeground(true);
+        if (intent.getBooleanExtra(PARAM_FOREGROUND, false)) {
+            setForeground(true);
+        }
 
         if (ACTION_SIMPLE_TASK.equals(intent.getAction())) {
             ParameterizedRunnable task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
