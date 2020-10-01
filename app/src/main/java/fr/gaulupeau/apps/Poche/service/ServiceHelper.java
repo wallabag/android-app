@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
 
 import java.util.concurrent.Future;
@@ -67,7 +68,8 @@ public class ServiceHelper {
     public static void enqueueSimpleServiceTask(Context context,
                                                 Class<? extends TaskService> serviceClass,
                                                 SimpleTask task) {
-        context.startService(TaskService.newSimpleTaskIntent(context, serviceClass, task));
+        ContextCompat.startForegroundService(
+                context, TaskService.newSimpleTaskIntent(context, serviceClass, task));
     }
 
     public static void enqueueServiceTask(Context context, ParameterizedRunnable task,
