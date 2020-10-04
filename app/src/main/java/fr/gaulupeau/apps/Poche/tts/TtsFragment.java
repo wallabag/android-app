@@ -13,7 +13,6 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -403,17 +402,11 @@ public class TtsFragment extends Fragment {
 
         if (mediaSessionToken == null) return;
 
-        try {
-            mediaController = new MediaControllerCompat(activity, mediaSessionToken);
-        } catch (RemoteException e) {
-            Log.e(TAG, "initMediaController()", e);
-        }
+        mediaController = new MediaControllerCompat(activity, mediaSessionToken);
 
-        if (mediaController != null) {
-            mediaController.registerCallback(mediaCallback);
+        mediaController.registerCallback(mediaCallback);
 
-            MediaControllerCompat.setMediaController(activity, mediaController);
-        }
+        MediaControllerCompat.setMediaController(activity, mediaController);
     }
 
     private void destroyMediaController() {
