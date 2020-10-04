@@ -227,4 +227,14 @@
     <string name="pref_categoryName_misc_localQueue">Lokální změny</string>
     <string name="pref_desc_misc_appendWallabagMention">Připojí ke sdílenému textu „přes wallabag aplikaci“</string>
     <string name="pref_name_misc_appendWallabagMention">Zmínit wallabag při sdílení</string>
+    <string name="pref_name_ui_keepScreenOn">Nevypínat obrazovku při čtení</string>
+    <string name="scrolledOverBottom">Ještě %dx přerolujte přes spodek pro označení článku jako přečteného</string>
+    <string name="pref_name_ui_article_textAlignment_justify">Zarovnání textu: do bloku (justify)</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">Velikost textu v článcích (%)</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Pokud nevíte co to je, nechte prázdné</string>
+    <string name="message_couldNotOpenUrl">Tato URL adresa nelze otevřít</string>
+    <string name="menu_lists_changeSortOrder">Obrátit pořadí</string>
+    <string name="menu_lists_search">Hledat</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Jak zacházet s předformátovaným textem, který je příliš dlouhý, aby mohl být zobrazen celý.</string>
+    <string name="pref_name_ui_article_handlePreformattedText">Zacházení s dlouhým předformátovaným textem</string>
 </resources>
