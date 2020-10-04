@@ -164,7 +164,6 @@
     <string name="downloadAsFileArticleDownloadedDetail">기사가 %s 다운로드되었다</string>
     <string name="connectionWizard_summary_next">설정 저장</string>
     <string name="downloadAsFileTouchToOpen">열려면 터치</string>
-    <string name="unsuccessfulRequest_errorMessage">요청 실패, 응답 코드: %1$d, 응답 메시지: %2$s</string>
     <string name="dialog_add_label">새로운 기사 추가</string>
     <string name="connectionWizard_provider_wallabagit_prev">이전</string>
     <string name="menuOpenOriginal">원문 열기</string>

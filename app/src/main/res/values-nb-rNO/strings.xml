@@ -151,7 +151,6 @@
     <string name="pref_name_sync_syncTypes">Synkroniseringstyper</string>
     <string name="pref_desc_sync_syncTypes">Trykk for å vise mer info om synkroniseringstyper</string>
     <string name="wrongUsernameOrPassword_errorMessage">Kunne ikke logge inn: Antagelig galt brukernavn eller passord</string>
-    <string name="unsuccessfulRequest_errorMessage">Forespørsel mislykket; svarkode: %1$d, svarmelding: %2$s</string>
     <string name="previousUpdateNotFinished">Forrige oppdatering er ikke ferdig</string>
     <string name="articleList_favoriteMark">Favorittmarkering</string>
     <string name="articleList_ArchivedMark">Arkiveringsmerking</string>

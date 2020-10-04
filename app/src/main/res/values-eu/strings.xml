@@ -79,7 +79,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Errore ezezaguna</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore ezezaguna: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Ezin izan da saioa hasi: Ziur aski erabiltzaile-izen edo pasahitz okerra</string>
-    <string name="unsuccessfulRequest_errorMessage">Eskaera ez da burutu; erantzun-kodea: %1$d, erantzun-mezua: %2$s</string>
     <string name="previousUpdateNotFinished">Aurreko eguneratzea oraindik ez da amaitu</string>
     <string name="feedName_favorites">Gogokoak</string>
     <string name="feedName_archived">Artxibatuak</string>
