@@ -10,6 +10,12 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="22"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /> <!-- needed by TTS service for Android P or above -->
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name="fr.gaulupeau.apps.Poche.App"
         android:allowBackup="true"
