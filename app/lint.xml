@@ -7,7 +7,9 @@
     </issue>
 
     <!-- Consider localization issues as Warnings -->
-    <issue id="MissingTranslation" severity="warning" />
     <issue id="MissingQuantity" severity="warning" />
     <issue id="ExtraTranslation" severity="warning" />
+
+    <!-- Not helpful-->
+    <issue id="MissingTranslation" severity="ignore" />
 </lint>
