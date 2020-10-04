@@ -7,7 +7,7 @@
     <string name="menuShare">Compartilhar</string>
     <string name="menuNext">Próximo artigo</string>
     <string name="menuPrevious">Artigo anterior</string>
-    <string name="menuDelete">Excluir</string>
+    <string name="menuDelete">Apagar</string>
     <string name="menuOpenOriginal">Abrir original</string>
     <string name="menuCopyOriginalURL">Copiar URL original</string>
     <string name="menuTTS">Conversão de texto em voz</string>
