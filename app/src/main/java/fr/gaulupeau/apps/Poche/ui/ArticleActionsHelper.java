@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -171,26 +172,24 @@ public class ArticleActionsHelper {
 
         boolean errorMessage = false;
 
-        if (intent.resolveActivity(context.getPackageManager()) != null) {
-            try {
-                context.startActivity(intent);
-            } catch (RuntimeException e) {
-                boolean rethrow = true;
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    if (e instanceof FileUriExposedException) {
-                        // apparently happens when user clicks on some file URI in an article
-                        Log.w(TAG, "openUrl()", e);
-                        errorMessage = true;
-                        rethrow = false;
-                    }
-                }
-
-                if (rethrow) throw e;
-            }
-        } else {
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
             Log.w(TAG, "openUrl() no activity to handle intent");
             errorMessage = true;
+        } catch (RuntimeException e) {
+            boolean rethrow = true;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (e instanceof FileUriExposedException) {
+                    // apparently happens when user clicks on some file URI in an article
+                    Log.w(TAG, "openUrl()", e);
+                    errorMessage = true;
+                    rethrow = false;
+                }
+            }
+
+            if (rethrow) throw e;
         }
 
         if (errorMessage) {
