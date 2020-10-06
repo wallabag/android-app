@@ -131,7 +131,7 @@
     <string name="ttsPitch">Toonhoogte</string>
     <string name="ttsVolume">Volume</string>
     <string name="d_add_fail_title">Mislukt</string>
-    <string name="d_configurationChanged_title">Parameters gewijzigd</string>
+    <string name="d_configurationChanged_title">Parameters veranderd</string>
     <string name="settings_parametersAutofilled">Parameters gevuld</string>
     <string name="testConnection_errorMessage_noCSRF">Fout bij het onleden van het aanmeldingsformulier</string>
     <string name="testConnection_errorMessage_authProblems">Autorisatie gerelateerde problemen. Deze worden meestal veroorzaakt door HTTP-omleidingen.</string>
