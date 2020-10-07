@@ -161,4 +161,8 @@
     <string name="notification_channel_name_sync">Synchronisatie</string>
     <string name="notification_channel_name_downloading_articles">Pdf\'s downloaden</string>
     <string name="notification_channel_name_error">Fouten</string>
+    <string name="pref_name_runConnectionWizard">Start verbinding configuratie</string>
+    <string name="d_disableTouch_currentCode">Huidige geselecteerde sleutelcode (druk op een knop om te veranderen):</string>
+    <string name="manageTags_addMoreTags">Voeg meer labels toe:</string>
+    <string name="manageTags_currentTags_none">Geen</string>
 </resources>
