@@ -257,7 +257,7 @@
     <string name="notification_updatingArticles_fast">انجام به‌روزرسانی سریع</string>
     <string name="notification_updatingArticles_full">انجام به‌روزرسانی کامل</string>
     <string name="notification_updatingArticles">به‌روزرسانی مقالات</string>
-    <string name="downloadAsFileProgress">والابگ مقاله شما را در %2$s بارگیری می‌کند</string>
+    <string name="downloadAsFileProgress">والابگ مقاله شما را در %s بارگیری می‌کند</string>
     <string name="downloadAsFileProgressDetail">والابگ مقاله %1$s شما را در %2$s بارگیری می‌کند</string>
     <string name="downloadAsFileTouchToOpen">برای باز کردن، لمس کنید</string>
     <string name="downloadAsFileArticleDownloadedDetail">مقاله %s بارگیری شد</string>
