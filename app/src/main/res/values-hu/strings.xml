@@ -303,4 +303,14 @@
     <string name="misc_localQueue_dumpToFile_header">Ha szinkronizálási problémákat tapasztal, kérjük, jelentse a problémát itt: %s</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Egy párbeszédpanelt jelenít meg, amely lehetővé teszi újonnan hozzáadott cikkhez kedvenc/archív/címke típust. Ha a beállítás le van tiltva, egy bejelentési üzenet jelenik meg.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Párbeszéd megjelenítése amikor eltárolt egy cikket</string>
+    <string name="pref_name_tts_rewindTime">Visszatekerési idő</string>
+    <string name="pref_desc_tts_fastForwardTime">A másodpercek száma amivel előreugrik amikor a \"Gyors előreugrás\" gombot megnyomják</string>
+    <string name="pref_name_tts_fastForwardTime">Gyors előreugrási idő</string>
+    <string name="pref_categoryName_tts">Szövegfelolvasás</string>
+    <string name="pref_desc_ui_annotations_enabled">Kísérleti funkció! Jegyzetek megtekintése, szerkesztése és létrehozása</string>
+    <string name="pref_name_ui_annotations_enabled">Jegyzetek támogatása</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Kerülő megoldás az Onyx eszközök fekete hivatkozás szín kényszerítésére</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Az Onyx Boox téma kerülő megoldásának engedélyezése</string>
+    <string name="manageTags_addMoreTags">További címkék hozzáadása:</string>
+    <string name="manageTags_currentTags_none">Nincs</string>
 </resources>
