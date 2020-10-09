@@ -1,10 +1,12 @@
 package fr.gaulupeau.apps.Poche.service;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Process;
 import android.util.Log;
@@ -19,9 +21,11 @@ import java.util.concurrent.TimeUnit;
 import fr.gaulupeau.apps.Poche.service.tasks.SimpleTask;
 
 @SuppressLint("Registered") // subclassed
-public class TaskService extends Service {
+public abstract class TaskService extends Service {
 
     public static final String ACTION_SIMPLE_TASK = "action_simple_task";
+
+    public static final String PARAM_FOREGROUND = "param_foreground";
 
     public class TaskServiceBinder extends Binder {
         public void enqueue(ParameterizedRunnable parameterizedRunnable) {
@@ -92,6 +96,10 @@ public class TaskService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(tag, "onStartCommand()");
+
+        if (intent.getBooleanExtra(PARAM_FOREGROUND, false)) {
+            setForeground(true);
+        }
 
         if (ACTION_SIMPLE_TASK.equals(intent.getAction())) {
             ParameterizedRunnable task = taskFromSimpleTask(SimpleTask.fromIntent(intent));
@@ -174,6 +182,8 @@ public class TaskService extends Service {
     private void readyToStop() {
         Log.d(tag, "readyToStop()");
 
+        setForeground(false);
+
         if (!stopSelfResult(lastStartId)) {
             Log.d(tag, "readyToStop() startId didn't match");
         }
@@ -198,5 +208,21 @@ public class TaskService extends Service {
 
         startService(newStartIntent(this, getClass()));
     }
+
+    private void setForeground(boolean foreground) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return; // normal services are good enough before Oreo
+        }
+
+        if (foreground) {
+            startForeground(getForegroundNotificationId(), getForegroundNotification());
+        } else {
+            stopForeground(true);
+        }
+    }
+
+    protected abstract int getForegroundNotificationId();
+
+    protected abstract Notification getForegroundNotification();
 
 }

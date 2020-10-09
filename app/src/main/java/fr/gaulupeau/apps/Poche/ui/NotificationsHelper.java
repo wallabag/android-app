@@ -22,6 +22,7 @@ public class NotificationsHelper {
     public static final String CHANNEL_ID_TTS = "fr.gaulupeau.apps.Poche.tts";
     public static final String CHANNEL_ID_SYNC = "sync";
     public static final String CHANNEL_ID_DOWNLOADING_ARTICLES = "downloading_articles";
+    public static final String CHANNEL_ID_BACKGROUND_OPERATIONS = "background_operations";
     public static final String CHANNEL_ID_ERRORS = "errors";
 
     private static boolean notificationChannelsInitialized;
@@ -81,6 +82,13 @@ public class NotificationsHelper {
                     NotificationManager.IMPORTANCE_LOW
             );
             channel.setGroup(channelGroupSync.getId());
+            channels.add(channel);
+
+            channel = new NotificationChannel(
+                    CHANNEL_ID_BACKGROUND_OPERATIONS, context.getString(R.string.notification_channel_name_background_operations),
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            channel.setGroup(channelGroupOther.getId());
             channels.add(channel);
 
             channel = new NotificationChannel(
