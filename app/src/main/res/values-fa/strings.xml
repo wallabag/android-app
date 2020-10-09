@@ -288,7 +288,6 @@
     <string name="feedName_archived">بایگانی شده</string>
     <string name="feedName_favorites">علاقه‌مندی‌ها</string>
     <string name="previousUpdateNotFinished">به‌روزرسانی پیشین هنوز تمام نشده است</string>
-    <string name="unsuccessfulRequest_errorMessage">درخواست ناموفق؛ کد پاسخ: %1$d، پیام پاسخ: %2$s</string>
     <string name="wrongUsernameOrPassword_errorMessage">ناتوانی در ورود: احتمالا به دلیل نام کاربری یا گذرواژه نادرست</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">خطای ناشناخته: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">خطای ناشناخته</string>
