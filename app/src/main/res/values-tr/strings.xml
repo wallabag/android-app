@@ -79,7 +79,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Bilinmeyen hata</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Bilinmeyen hata: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Giriş yapılamadı: Tahminen hatalı kullanıcı adı veya parola</string>
-    <string name="unsuccessfulRequest_errorMessage">Başarısız istek; yanıt kodu: %1$d, yanıt iletisi: %2$s</string>
     <string name="previousUpdateNotFinished">Bir önceki güncelleme işlemi henüz bitmedi</string>
     <string name="feedName_favorites">Favoriler</string>
     <string name="feedName_archived">Arşiv</string>

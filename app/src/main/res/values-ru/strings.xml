@@ -37,7 +37,6 @@
     <string name="testConnection_errorMessage_unknownWithMessage">Неизвестная ошибка: %s</string>
     <string name="d_testConnection_fail_title">Ошибка</string>
     <string name="wrongUsernameOrPassword_errorMessage">Ошибка входа: предположительно, неверное имя пользователя или пароль</string>
-    <string name="unsuccessfulRequest_errorMessage">"Запрос отклонён; код ответа: %1$d, сообщение: %2$s"</string>
     <string name="previousUpdateNotFinished">Предыдущее обновление ещё не завершилось</string>
     <string name="feedName_favorites">Избранное</string>
     <string name="feedName_archived">Архив</string>

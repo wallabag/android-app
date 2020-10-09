@@ -15,7 +15,6 @@
     <string name="ttsFastForward">Rychle vpřed</string>
     <string name="notification_action_media_play">Spustit</string>
     <string name="notification_action_media_rewind">Posunout zpět</string>
-    <string name="unsuccessfulRequest_errorMessage">Neúspěšný požadavek; kód odezvy: %1$d, zpráva odezvy: %2$s</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Použít moji</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Použít doporučenou</string>
     <string name="d_testConnection_urlSuggestion_title">Zvažte změnu URL adresy</string>

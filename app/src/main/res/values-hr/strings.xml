@@ -57,7 +57,6 @@
     <string name="noPreviousArticle">Nema prethodnog članka u trenutačnom popisu</string>
     <string name="d_checkCredentials_errorMessage_unknown">Nepoznata greška</string>
     <string name="connectionWizard_welcome_prev">Preskoči</string>
-    <string name="unsuccessfulRequest_errorMessage">Zahtjev neuspješan; kod odgovora: %1$d, poruka odgovora: %2$s</string>
     <string name="downloadAsFilePathStart">Preuzimanje članka</string>
     <string name="d_getCredentials_title_fail">Neuspjelo dobivanje podataka za prijavu na sučelje</string>
     <string name="d_testConnection_fail_title">Provjera veze neuspjela</string>

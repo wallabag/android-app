@@ -83,7 +83,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">未知错误</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">未知错误: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">无法登录: 可能是错误的用户名或密码</string>
-    <string name="unsuccessfulRequest_errorMessage">请求失败；响应代码: %1$d，响应消息: %2$s</string>
     <string name="previousUpdateNotFinished">上一个更新尚未完成</string>
     <string name="feedName_favorites">收藏</string>
     <string name="feedName_archived">存档</string>

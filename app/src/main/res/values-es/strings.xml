@@ -81,7 +81,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Error desconocido</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: Probablemente usuario o contraseña incorrecta</string>
-    <string name="unsuccessfulRequest_errorMessage">"Solicitud fallida; código de respuesta: %1$d, mensaje de respuesta: %2$s"</string>
     <string name="previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>

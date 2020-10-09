@@ -69,7 +69,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Ismeretlen hiba</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Ismeretlen hiba: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Nem lehetett bejelentkezni: feltételezhetően rossz a felhasználónév vagy a jelszó</string>
-    <string name="unsuccessfulRequest_errorMessage">Kérés sikertelen; válasz kód: %1$d, válasz üzenet: %2$s</string>
     <string name="previousUpdateNotFinished">Az előző frissítés még nem fejeződött be</string>
     <string name="feedName_favorites">Kedvencek</string>
     <string name="feedName_archived">Archívum</string>

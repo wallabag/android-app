@@ -83,7 +83,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Unknown error</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Unknown error: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t log in: Presumably wrong username or password</string>
-    <string name="unsuccessfulRequest_errorMessage">"Request unsuccessful; response code: %1$d, response message: %2$s"</string>
     <string name="previousUpdateNotFinished">Previous update not finished yet</string>
     <string name="feedName_favorites">Favorites</string>
     <string name="feedName_archived">Archived</string>

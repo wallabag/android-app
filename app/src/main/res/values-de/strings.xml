@@ -50,7 +50,6 @@
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
     <string name="wrongUsernameOrPassword_errorMessage">Anmeldung nicht möglich: Vermutlich falscher Benutzername oder Passwort</string>
-    <string name="unsuccessfulRequest_errorMessage">"Anfrage nicht erfolgreich; Antwortcode: %1$d, Antwortnachricht: %2$s"</string>
     <string name="previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>

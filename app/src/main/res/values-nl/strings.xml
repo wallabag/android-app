@@ -72,7 +72,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Onbekende fout</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Onbekende fout: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Kon niet inloggen: Waarschijnlijk een incorrecte gebruikersnaam of wachtwoord</string>
-    <string name="unsuccessfulRequest_errorMessage">Verzoek onsuccesvol; antwoord code: %1$d, antwoord bericht: %2$s</string>
     <string name="previousUpdateNotFinished">Vorige update is nog niet klaar</string>
     <string name="feedName_favorites">Favorieten</string>
     <string name="feedName_archived">Opgeslagen</string>

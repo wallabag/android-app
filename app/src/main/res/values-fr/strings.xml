@@ -83,7 +83,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Erreur inconnue</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : L\'identifiant et le mot de passe doivent être erronés</string>
-    <string name="unsuccessfulRequest_errorMessage">"Échec de la requête. Code de réponse : %1$d. Message de réponse : %2$s"</string>
     <string name="previousUpdateNotFinished">La mise à jour précédente n\'est pas terminée</string>
     <string name="feedName_favorites">Favoris</string>
     <string name="feedName_archived">Archivés</string>

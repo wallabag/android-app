@@ -79,7 +79,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Errore sconosciuto</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Errore sconosciuto: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Accesso impossibile: eventuali nome utente o password sbagliati</string>
-    <string name="unsuccessfulRequest_errorMessage">"Richiesta senza successo; codice di risposta: %1$d, messaggio di risposta: %2$s"</string>
     <string name="previousUpdateNotFinished">Aggiornamento precedente non ancora completato</string>
     <string name="feedName_favorites">Preferiti</string>
     <string name="feedName_archived">Archiviati</string>

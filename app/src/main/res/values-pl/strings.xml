@@ -79,7 +79,6 @@
     <string name="d_checkCredentials_errorMessage_unknown">Nieznany błądr</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Nieznany błąd: %s</string>
     <string name="wrongUsernameOrPassword_errorMessage">Nie można się zalogować: Prawdopodobnie niewłaściwa nazwa użytkownika lub hasło</string>
-    <string name="unsuccessfulRequest_errorMessage">"Nieudane żądanie; kod odpowiedzi: %1$d, treść odpowiedzi: %2$s"</string>
     <string name="previousUpdateNotFinished">Poprzednia aktualizacja nie została jeszcze zakończona</string>
     <string name="feedName_favorites">Ulubione</string>
     <string name="feedName_archived">Zarchiwizowane</string>
