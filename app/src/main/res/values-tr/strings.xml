@@ -338,4 +338,6 @@
     <string name="manageTags_addMoreTags">Daha fazla etiket ekle:</string>
     <string name="misc_logging_logcatToFile_result_error">Hata: %s</string>
     <string name="menu_tag">Etiket ekle</string>
+    <string name="notification_backgroundOperations">Arka plan işlemleri</string>
+    <string name="notification_channel_name_background_operations">Arka plan işlemleri</string>
 </resources>
