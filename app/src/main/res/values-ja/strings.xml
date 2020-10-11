@@ -286,4 +286,12 @@
     <string name="pref_desc_ui_previewImage_enabled">記事の前にプレビュー画像を表示します</string>
     <string name="manageTags_addMoreTags">更にタグを追加:</string>
     <string name="manageTags_currentTags_none">無い</string>
+    <string name="pref_desc_ui_annotations_enabled">実験的な機能！注釈の編集と作成</string>
+    <string name="pref_name_ui_annotations_enabled">注釈あり</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Onyx関連のリンクを黒色にする</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Onyx Booxテーマを可能にする</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">新規記事でお気に入り／アーカイブ／タグを許可するか確認します。オプションが不可でも通知されます。</string>
+    <string name="pref_name_ui_showArticleAddedDialog">バグ発生のときに表示します</string>
+    <string name="notification_channel_name_background_operations">バックグラウンド操作</string>
+    <string name="notification_backgroundOperations">バックグラウンド操作</string>
 </resources>
