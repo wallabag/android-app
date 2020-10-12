@@ -1,0 +1,2 @@
+- Olivier Mehani (@shtrom) a ajouté un menu contextuel pour ajouter un tag depuis la sélection
+- Corrigé quelques crashs sur Android 8+.
