@@ -340,4 +340,6 @@
     <string name="pref_name_ui_screenScrolling_percent">Postotak visine ekrana za klizanje</string>
     <string name="testConnection_errorMessage_unknown">Nepoznata greška</string>
     <string name="menu_tag">Dodaj etiketu</string>
+    <string name="notification_channel_name_background_operations">Operacije u pozadini</string>
+    <string name="notification_backgroundOperations">Operacije u pozadini</string>
 </resources>

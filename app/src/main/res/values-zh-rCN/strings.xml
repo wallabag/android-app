@@ -341,4 +341,6 @@
     <string name="manageTags_addMoreTags">添加更多标签：</string>
     <string name="manageTags_currentTags_none">无</string>
     <string name="menu_tag">添加标签</string>
+    <string name="notification_channel_name_background_operations">后台操作</string>
+    <string name="notification_backgroundOperations">后台操作</string>
 </resources>

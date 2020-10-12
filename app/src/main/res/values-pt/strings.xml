@@ -7,7 +7,7 @@
     <string name="menuShare">Compartilhar</string>
     <string name="menuNext">Próximo artigo</string>
     <string name="menuPrevious">Artigo anterior</string>
-    <string name="menuDelete">Excluir</string>
+    <string name="menuDelete">Apagar</string>
     <string name="menuOpenOriginal">Abrir original</string>
     <string name="menuCopyOriginalURL">Copiar URL original</string>
     <string name="menuTTS">Conversão de texto em voz</string>
@@ -53,7 +53,7 @@
     <string name="testConnection_errorMessage_unsupportedServerVersion">Versão de servidor não suportada detectada</string>
     <string name="testConnection_errorMessage_wallabagNotFound">serviço wallabag não encontrado — checar URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticação HTTP falhou</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Não pode logar — checar nome de usuário e senha</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Não pode logar — checar nome de utilizador e palavra-passe</string>
     <string name="testConnection_errorMessage_authProblems">Problemas relacionados à autorização. Esse normalmente são causados por redirecionamentos HTTP.</string>
     <string name="testConnection_errorMessage_unknown">Erro desconhecido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erro desconhecido: %s</string>
@@ -76,7 +76,7 @@
     <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API não encontrada: %s</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Error desconhecido: %s</string>
     <string name="d_testConnection_fail_title">Teste de conexão falhido</string>
-    <string name="dialog_title_downloadFileFormat">Selecione o formato do arquivo</string>
+    <string name="dialog_title_downloadFileFormat">Selecione o formato do ficheiro</string>
     <string name="pref_desc_connection_url">
         Exemplos:\n
         https://wallabag.example.com\n
@@ -84,7 +84,7 @@
         https://app.wallabag.it\n
         https://framabag.org
     </string>
-    <string name="pref_name_connection_username">Nome de usuário</string>
+    <string name="pref_name_connection_username">Nome do utilizador</string>
     <string name="pref_name_sync_syncTypes">Tipos de sincronização</string>
     <string name="notification_incorrectConfiguration">Configuração incorreta</string>
     <string name="notification_incorrectCredentials">Credenciáis incorretas</string>
@@ -95,7 +95,7 @@
     <string name="feedName_favorites">Favoritos</string>
     <string name="menu_lists_search">Pesquisar</string>
     <string name="manageTags_addNew">Adicionar</string>
-    <string name="menuDownloadAsFile">Baixar como arquivo</string>
+    <string name="menuDownloadAsFile">Descarregar como ficheiro</string>
     <string name="pref_option_autoSync_interval_24h">24 horas</string>
     <string name="noNextArticle">Não há mais artigos na lista atual</string>
     <string name="remove_tag">Remover tag</string>
@@ -107,7 +107,7 @@
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Leia a descrição dos diferentes tipos de sincronização acima para obter mais informações</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de conexão incorreta</string>
     <string name="pref_name_storage_dbPath_dbMoved">Base de dados movida</string>
-    <string name="connectionWizard_summary_text">Clique para salvar e ir para a tela principal.</string>
+    <string name="connectionWizard_summary_text">Clique para gravar e ir para o ecrã principal.</string>
     <string name="menu_changeTitle">Mudar o título</string>
     <string name="manageTags_title">Gerenciar tags</string>
     <string name="menu_manageTags">Gerenciar tags</string>
