@@ -104,7 +104,7 @@
     <string name="d_testConnection_urlSuggestion_title">Razmisli o mijenjanju URL-a</string>
     <string name="menu_changeTitle">Promijeni naslov</string>
     <string name="pref_desc_autoSync_enabled">Ovo omogućava automatsku sinkronizaciju lokalnih promjena (dodane veze, arhivirani članci itd.) i preuzimanje novih članaka, na osnovi rasporeda</string>
-    <string name="contentIsTooLong">Sadržaj članka je predug za prikaz</string>
+    <string name="contentIsTooLong">Sadržaj članka je predugačak da bi se mogao prikazati</string>
     <string name="pref_categoryName_autoSync">Automatska sinkronizacija</string>
     <string name="manageTags_textField_hint">Jedna ili više etiketa odvojene zarezom</string>
     <string name="notification_expandedError">Greška: %s</string>
@@ -211,7 +211,7 @@
     <string name="copiedToClipboard">Kopirano u međuspremnik</string>
     <string name="misc_logging_logcatToFile_result_error">Greška: %s</string>
     <string name="notification_action_media_pause">Zaustavi</string>
-    <string name="pref_desc_tts_nextButtonIsFastForward">Pritiskom gumba „Sljedeći”, medij se premata naprijed, umjesto preskakanja na sljedeći članak</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Pritiskom gumba „Sljedeći”, medij se lista prema naprijed, umjesto preskakanja na sljedeći članak</string>
     <string name="d_add_fail_text">URL nije pronađen u tekstu dijeljenja:
 \n</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Izbrisati bazu podataka\?</string>
@@ -228,7 +228,7 @@
     <string name="pref_name_storage_dbPath">Mjesto baze podataka</string>
     <string name="readVolume">Količina čitanja</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Pritiskom gumba „Prethodni”, medij se premata natrag, umjesto preskakanja na prethodni članak</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Pritiskom gumba „Prethodni”, medij se lista prema natrag, umjesto preskakanja na prethodni članak</string>
     <string name="downloadAsFileTouchToOpen">Za otvaranje, dodirni</string>
     <string name="connectionWizard_misc_scanQrCode">Snimi QR-kod</string>
     <string name="articleList_ArchivedMark">Oznaka za arhivirano</string>
@@ -288,7 +288,7 @@
     <string name="d_disableTouch_changeKey_title">Deaktiviraj gumb za unos dodirom</string>
     <string name="pref_name_misc_handleHttpScheme">Podrži HTTP shemu</string>
     <string name="previousUpdateNotFinished">Prethodno aktualiziranje još nije gotovo</string>
-    <string name="pref_desc_ui_previewImage_enabled">Prikaži pretprikaz slike prije članka</string>
+    <string name="pref_desc_ui_previewImage_enabled">Prikaži sliku pretprikaza prije članka</string>
     <string name="pref_option_autoSync_interval_12h">12 sati</string>
     <string name="pref_desc_ui_readingSpeed">Tvoja brzina čitanja (mjeri se u riječima u minuti). Koristi se za izračunavanje procijenjenog vremena čitanja.</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Nepoznata greška: %s</string>
