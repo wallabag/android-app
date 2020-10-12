@@ -70,7 +70,7 @@
     <string name="pref_name_connection_password">Lozinka</string>
     <string name="pref_name_ui_showArticleAddedDialog">Pokaži dijaloški okvir prilikom dodavanja</string>
     <string name="pref_name_misc_logging_logcatToFile">Spremi logcat-rezultat u datoteku</string>
-    <string name="feedName_unread">Nepročitano</string>
+    <string name="feedName_unread">Nepročitani</string>
     <string name="testConnection_progressDialogMessage">Provjera veze …</string>
     <string name="downloadAsFileArticleDownloaded">Članak preuzet</string>
     <string name="pref_name_ui_swipeArticles">Premještanje po člancima povlačenjem</string>
@@ -226,7 +226,7 @@
     <string name="notification_channel_name_sync">Sinkronizacija</string>
     <string name="pref_desc_misc_appendWallabagMention">Nadodaj „putem @wallabagapp” dijeljenim tekstovima</string>
     <string name="pref_name_storage_dbPath">Mjesto baze podataka</string>
-    <string name="readVolume">Glasnoća čitanja</string>
+    <string name="readVolume">Količina čitanja</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="pref_desc_tts_previousButtonIsRewind">Pritiskom gumba „Prethodni”, medij se premata natrag, umjesto preskakanja na prethodni članak</string>
     <string name="downloadAsFileTouchToOpen">Za otvaranje, dodirni</string>
@@ -241,7 +241,7 @@
     <string name="connectionWizard_welcome_text">Prije upotrebe programa wallabag, moraš uspostaviti vezu. U tome će ti pomoći čarobnjak za vezu.</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Kliži s gumbovima glasnoće</string>
     <string name="themeName_light">Svjetla</string>
-    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak u %s</string>
+    <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza podataka je premještena</string>
     <string name="menu_lists_sweepDeletedArticles">„Počisti” izbrisane članke</string>
     <string name="menu_lists_changeSortOrder">Promijeni redoslijed</string>
@@ -284,7 +284,7 @@
     <string name="pref_name_tts_nextButtonIsFastForward">Gumb „Sljedeći” premata naprijed</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Neuspjela prijava – provjeri korisničko ime i lozinku</string>
     <string name="pref_categoryName_miscellaneous">Razno</string>
-    <string name="nav_main_tagged_articles">Etiketirani članci</string>
+    <string name="nav_main_tagged_articles">Članci s oznakama</string>
     <string name="d_disableTouch_changeKey_title">Deaktiviraj gumb za unos dodirom</string>
     <string name="pref_name_misc_handleHttpScheme">Podrži HTTP shemu</string>
     <string name="previousUpdateNotFinished">Prethodno aktualiziranje još nije gotovo</string>
