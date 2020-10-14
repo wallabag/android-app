@@ -340,4 +340,6 @@
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_categoryName_connection">Verbinding</string>
     <string name="pref_desc_runConnectionWizard">Helpt u met het opzetten van de verbindingsinstellingen</string>
+    <string name="notification_channel_name_background_operations">Achtergrond taken</string>
+    <string name="notification_backgroundOperations">Achtergrond taken</string>
 </resources>

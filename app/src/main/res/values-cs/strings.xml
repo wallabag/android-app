@@ -237,4 +237,12 @@
     <string name="menu_lists_search">Hledat</string>
     <string name="pref_desc_ui_article_handlePreformattedText">Jak zacházet s předformátovaným textem, který je příliš dlouhý, aby mohl být zobrazen celý.</string>
     <string name="pref_name_ui_article_handlePreformattedText">Zacházení s dlouhým předformátovaným textem</string>
+    <string name="notification_channel_name_background_operations">Operace na pozadí</string>
+    <string name="pref_desc_ui_article_fullscreen">Při čtení článku skryje lišty systému a aplikací</string>
+    <string name="pref_name_ui_article_fullscreen">Zobrazit články na celou obrazovku</string>
+    <string name="pref_name_ui_showArticleAddedDialog">Při přidávání článku zobrazit dialog</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Zobrazí dialog, pomocí kterého lze nově přidaný článek označit jako oblíbený, archivovaný nebo k němu přidat štítky. Pokud zakážete, zobrazí se jen krátká oznamovací zpráva o přidání článku.</string>
+    <string name="connectionWizard_welcome_rerunNotice">Průvodce nastavením může kdykoliv znovu spustit v „Nastavení“.</string>
+    <string name="connectionWizard_providerSelection_provider_general_name">Jiný</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Vyberte tuto možnost pro manuální zadání požadovaného nastavení</string>
 </resources>
