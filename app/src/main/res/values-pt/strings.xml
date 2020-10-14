@@ -61,7 +61,7 @@
     <string name="d_testConnection_urlSuggestion_acceptButton">Usar sugerido</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Usar meu</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Cancelar</string>
-    <string name="checkCredentials_progressDialogMessage">Testando o acesso à API</string>
+    <string name="checkCredentials_progressDialogMessage">Testando o acesso à API…</string>
     <string name="connectionWizard_providerSelection_next">Seguinte</string>
     <string name="connectionWizard_providerSelection_prev">Pular</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Outro</string>
