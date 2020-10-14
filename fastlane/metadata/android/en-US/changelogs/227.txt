@@ -1,0 +1,2 @@
+- Olivier Mehani (@shtrom) added a context menu item to add tag from selection.
+- Fixed some crashes on Android 8+.
