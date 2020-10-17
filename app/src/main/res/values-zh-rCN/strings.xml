@@ -336,7 +336,7 @@
     <string name="pref_name_ui_showArticleAddedDialog">保存页面时显示对话框</string>
     <string name="misc_logging_logcatToFile_result_error">错误 ：%s</string>
     <string name="misc_logging_logcatToFile_result_saved">已将日志保存到 %s</string>
-    <string name="pref_desc_misc_logging_logcatToFile">"保存logcat输出  (安卓应用日志) 到/sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/目录下的一个文件."</string>
+    <string name="pref_desc_misc_logging_logcatToFile">保存logcat输出 (安卓应用日志) 到/sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/目录下的一个文件</string>
     <string name="pref_name_misc_logging_logcatToFile">保存logcat输出到一个文件</string>
     <string name="manageTags_addMoreTags">添加更多标签：</string>
     <string name="manageTags_currentTags_none">无</string>
