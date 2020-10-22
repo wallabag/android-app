@@ -333,7 +333,7 @@
     <string name="pref_desc_tts_rewindTime">Die Zahl der Sekunden, die zurückgespult wurde, wenn der Zurückspulen-Button gedrückt wurde</string>
     <string name="pref_name_tts_rewindTime">Zurückspulzeit</string>
     <string name="pref_name_tts_fastForwardTime">Schnellvorlaufzeit</string>
-    <string name="pref_desc_tts_fastForwardTime">Die Zahl der Sekunden, die vorgespult werden soll, wenn der Schnellvorlauf-Button gedrückt wurde</string>
+    <string name="pref_desc_tts_fastForwardTime">Die Zahl der Sekunden, die vorgespult werden soll, wenn der Schnellvorlauf-Knopf gedrückt wurde</string>
     <string name="pref_categoryName_tts">Text zu Sprache</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Aktiviert die Zwischenlösung für Onyx-Geräte, die die Farbe schwarz für Links erzwingen</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Aktiviere für Onyx Boox die Notlösung für Probleme mit dem Design</string>
