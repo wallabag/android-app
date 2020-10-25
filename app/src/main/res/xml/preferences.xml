@@ -306,6 +306,11 @@
                 android:summary="@string/pref_desc_misc_handleHttpScheme"
                 android:defaultValue="false"
                 android:persistent="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_misc_ftsIcuTokenizer_enabled"
+                android:title="@string/pref_name_misc_ftsIcuTokenizer_enabled"
+                android:summary="@string/pref_desc_misc_ftsIcuTokenizer_enabled"
+                android:defaultValue="false"/>
             <ListPreference
                 android:key="@string/pref_key_storage_dbPath"
                 android:title="@string/pref_name_storage_dbPath"

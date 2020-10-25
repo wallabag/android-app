@@ -690,6 +690,14 @@ public class Settings {
         setBoolean(R.string.pref_key_misc_appendWallabagMention_enabled, value);
     }
 
+    public boolean isFtsIcuTokenizerEnabled() {
+        return getBoolean(R.string.pref_key_misc_ftsIcuTokenizer_enabled, false);
+    }
+
+    public void setFtsIcuTokenizerEnabled(boolean value) {
+        setBoolean(R.string.pref_key_misc_ftsIcuTokenizer_enabled, value);
+    }
+
     public boolean isFirstRun() {
         return getBoolean(R.string.pref_key_internal_firstRun, true);
     }
