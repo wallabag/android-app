@@ -251,4 +251,9 @@
     <string name="pref_name_ui_disableTouch_enabled">Zakázat dotykové ovládání</string>
     <string name="pref_categoryName_tts">Převod textu na řeč</string>
     <string name="pref_categoryName_sync">Synchronizace</string>
+    <string name="message_disableTouch_inputEnabled">Dotekové ovládání bylo povoleno</string>
+    <string name="message_disableTouch_inputDisabled">Dotekové ovládání bylo zakázáno</string>
+    <string name="downloadAsFileTouchToOpen">Otevřete ho ťuknutím</string>
+    <string name="testConnection_errorMessage_authProblems">Problémy související s oprávněním. Obvykle jsou způsobeny HTTP přesměrováním.</string>
+    <string name="d_add_fail_title">Selhání</string>
 </resources>
