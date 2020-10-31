@@ -161,4 +161,14 @@
     <string name="pref_option_autoSync_interval_15m">15 minutos</string>
     <string name="pref_option_autoSync_interval_12h">12 horas</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
+    <string name="d_getCredentials_title_fail">Não foi possível obter as credenciais da API</string>
+    <string name="getCredentials_progressDialogMessage">Obtendo credenciais da API…</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">Recomenda-se mudar a URL para: %s</string>
+    <string name="d_testConnection_urlSuggestion_message">Recomenda-se mudar a URL para: %s. Entretanto, podes utilizar a URL original também.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconhecida após o início da sessão. Isto usualmente ocorre ao ativar a autenticação em duas etapas, a qual ainda não é suportada pelo aplicativo</string>
+    <string name="d_add_fail_text">Impossível de achar uma URL no texto a ser compartilhado:
+\n</string>
+    <string name="ttsFastRewind">Rebobinação rápida</string>
+    <string name="ttsFastForward">Avanço rápido</string>
+    <string name="ttsPitch">Tom da voz</string>
 </resources>
