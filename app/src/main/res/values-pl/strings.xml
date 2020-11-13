@@ -292,4 +292,5 @@
     <string name="copiedToClipboard">Skopiowano do schowka</string>
     <string name="connectionWizard_misc_scanQrCode">Skanuj kod QR</string>
     <string name="connectionWizard_misc_installQrCodeScanner">Proszę zainstaluj skaner kodów QR</string>
+    <string name="notification_backgroundOperations">Operacje w tle</string>
 </resources>
