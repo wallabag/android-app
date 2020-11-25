@@ -31,6 +31,8 @@ import wallabag.apiwrapper.models.TokenResponse;
 
 public class WallabagConnection {
 
+    private static final String TAG = WallabagConnection.class.getSimpleName();
+
     private static boolean conscryptInitialized;
 
     private static WallabagService wallabagService;
@@ -42,7 +44,11 @@ public class WallabagConnection {
         synchronized (WallabagConnection.class) {
             if (conscryptInitialized) return;
 
-            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+            try {
+                Security.insertProviderAt(Conscrypt.newProvider(), 1);
+            } catch (Throwable t) {
+                Log.w(TAG, "initConscrypt() error", t);
+            }
 
             conscryptInitialized = true;
         }
