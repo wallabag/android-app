@@ -343,4 +343,8 @@
     <string name="menu_tag">添加标签</string>
     <string name="notification_channel_name_background_operations">后台操作</string>
     <string name="notification_backgroundOperations">后台操作</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">选择 KaTeX 应该处理的环境分隔符</string>
+    <string name="pref_name_ui_mathRendering_delimiters">数学分隔符</string>
+    <string name="pref_desc_ui_mathRendering_enabled">允许通过 KaTeX 解析 LaTeX-math</string>
+    <string name="pref_name_ui_mathRendering_enabled">数学函数解析</string>
 </resources>
