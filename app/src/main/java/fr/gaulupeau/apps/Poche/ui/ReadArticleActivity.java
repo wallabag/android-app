@@ -923,6 +923,11 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     "\t\t<script src=\"onyx-style-workaround.js\"></script>";
         }
 
+        if (settings.isMathRenderingEnabled()) {
+            String delimiters = TextUtils.join(",", settings.getMathRenderingDelimiters());
+            extra += String.format(StorageHelper.readRawString(R.raw.katex_part), delimiters);
+        }
+
         return extra;
     }
 

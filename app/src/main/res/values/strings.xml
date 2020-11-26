@@ -241,6 +241,10 @@
     <string name="pref_desc_ui_previewImage_enabled">Display the preview image before the article</string>
     <string name="pref_name_ui_annotations_enabled">Annotations support</string>
     <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
+    <string name="pref_name_ui_mathRendering_enabled">Math rendering</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Enable LaTeX-math rendering via KaTeX</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Math delimiters</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Select the environment delimiters that KaTeX should process</string>
 
     <string name="pref_categoryName_tts">Text-to-speech</string>
     <string name="pref_name_tts_fastForwardTime">Fast-forward skip time</string>

@@ -27,4 +27,21 @@
         <item>XML</item>
         <item>CSV</item>
     </string-array>
+    <string-array name="pref_option_mathRendering_delimiters" translatable="false">
+        <item>\\[ … \\]</item>
+        <item>$$ … $$</item>
+        <item>\\( … \\)</item>
+        <item>$ … $</item>
+    </string-array>
+    <string-array name="pref_option_mathRendering_delimiters_values" translatable="false">
+        <item>{left: \"\\\\[\", right: \"\\\\]\", display: true}</item>
+        <item>{left: \"$$\", right: \"$$\", display: true}</item>
+        <item>{left: \"\\\\(\", right: \"\\\\)\", display: false}</item>
+        <item>{left: \"$\", right: \"$\", display: false}</item>
+    </string-array>
+    <string-array name="pref_option_mathRendering_delimiters_defaultValues" translatable="false">
+        <item>{left: \"\\\\[\", right: \"\\\\]\", display: true}</item>
+        <item>{left: \"$$\", right: \"$$\", display: true}</item>
+        <item>{left: \"\\\\(\", right: \"\\\\)\", display: false}</item>
+    </string-array>
 </resources>

@@ -44,6 +44,8 @@
     <string name="pref_key_ui_previewImage_enabled" translatable="false">ui.previewImage.enabled</string>
     <string name="pref_key_ui_annotations_enabled" translatable="false">ui.annotations.enabled</string>
     <string name="pref_key_ui_onyxworkaround_enabled" translatable="false">ui.onyxworkaround.enabled</string>
+    <string name="pref_key_ui_mathRendering_enabled" translatable="false">ui.mathRendering.enabled</string>
+    <string name="pref_key_ui_mathRendering_delimiters" translatable="false">ui.mathRendering.delimiters</string>
 
     <string name="pref_key_tts" translatable="false">tts</string>
     <string name="pref_key_tts_category" translatable="false">tts.category</string>

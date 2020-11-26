@@ -189,6 +189,19 @@
                 android:key="@string/pref_key_ui_annotations_enabled"
                 android:summary="@string/pref_desc_ui_annotations_enabled"
                 android:title="@string/pref_name_ui_annotations_enabled" />
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_mathRendering_enabled"
+                android:title="@string/pref_name_ui_mathRendering_enabled"
+                android:summary="@string/pref_desc_ui_mathRendering_enabled"
+                android:defaultValue="false"/>
+            <MultiSelectListPreference
+                android:key="@string/pref_key_ui_mathRendering_delimiters"
+                android:title="@string/pref_name_ui_mathRendering_delimiters"
+                android:summary="@string/pref_desc_ui_mathRendering_delimiters"
+                android:dialogTitle="@string/pref_name_ui_mathRendering_delimiters"
+                android:entries="@array/pref_option_mathRendering_delimiters"
+                android:entryValues="@array/pref_option_mathRendering_delimiters_values"
+                android:defaultValue="@array/pref_option_mathRendering_delimiters_defaultValues"/>
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
