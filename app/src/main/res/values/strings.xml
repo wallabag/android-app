@@ -27,8 +27,8 @@
     <string name="menu_syncLocalChanges">Sync local changes</string>
     <string name="d_deleteArticle_title">Delete article?</string>
     <string name="d_deleteArticle_message">Are you sure you want to delete the article?</string>
-    <string name="txtNetOffline">Please check Internet connectivity!</string>
-    <string name="txtConfigNotSet">Please configure the app before syncing.</string>
+    <string name="txtNetOffline">Make sure you are connected to the Internet first.</string>
+    <string name="txtConfigNotSet">Set up the app before syncing.</string>
     <string name="txtUrlCopied">Article URL copied to clipboard</string>
     <string name="dialog_add_label">Add a new article</string>
     <string name="page_url">Page URL</string>
@@ -46,34 +46,34 @@
     <string name="d_add_fail_title">Fail</string>
     <string name="d_add_fail_text">Couldn\'t find a URL in share string:\n</string>
     <string name="d_configurationChanged_title">Parameters changed</string>
-    <string name="d_configurationChanged_message">It seems some parameters have been changed. It is recommended to perform a connection test.</string>
+    <string name="d_configurationChanged_message">Test the connection to check if the new changes work.</string>
     <string name="d_configurationChanged_answer_decline">Not now</string>
     <string name="d_configurationIsQuestionable_title">Problem detected</string>
     <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
     <string name="addLink_success_text">Added</string>
-    <string name="settings_parametersAreOk">Parameters are fine</string>
+    <string name="settings_parametersAreOk">The parameters are fine</string>
     <string name="settings_parametersAutofilled">Parameters filled</string>
     <string name="testConnection_progressDialogMessage">Testing connection…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Incorrect URL</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Unsupported server version detected</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag service not found — check URL</string>
-    <string name="testConnection_errorMessage_httpAuth">HTTP Authentication failed</string>
-    <string name="testConnection_errorMessage_noCSRF">Error parsing login form</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">The server version is unsupported</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Could not find wallabag service — check URL</string>
+    <string name="testConnection_errorMessage_httpAuth">Could not log in via HTTP</string>
+    <string name="testConnection_errorMessage_noCSRF">Could not parse login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Can\'t log in — check username and password</string>
-    <string name="testConnection_errorMessage_authProblems">Authorization-related problems. These usually caused by HTTP-redirects.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login. This is usually caused by enabled two-factor authentication, which is not yet supported by the app</string>
+    <string name="testConnection_errorMessage_authProblems">Could not log in. Make sure there are no HTTP-redirects.</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login. Usually caused by two-factor authentication, (which the app doesn\'t support yet).</string>
     <string name="testConnection_errorMessage_unknown">Unknown error</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unknown error: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Consider changing URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Use suggested</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Use mine</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Cancel</string>
-    <string name="d_testConnection_urlSuggestion_message">It is recommended to change URL to: "%s". But you may use the entered one too.</string>
+    <string name="d_testConnection_urlSuggestion_message">Changing the URL to "%s" is recommended over using the entered one.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">It is suggested to change URL to: "%s"</string>
     <string name="d_testConnection_fail_title">Connection test failed</string>
     <string name="getCredentials_progressDialogMessage">Getting API credentials…</string>
     <string name="d_getCredentials_title_fail">Couldn\'t get API credentials</string>
-    <string name="d_getCredentials_title_message">Something went wrong. Check your internet connection and try again.</string>
+    <string name="d_getCredentials_title_message">Something went wrong. Check your Internet connection and try again.</string>
     <string name="checkCredentials_progressDialogMessage">Testing API access…</string>
     <string name="d_checkCredentials_title_fail">API access test failed</string>
     <string name="d_checkCredentials_errorMessage_notFound">API not found</string>
@@ -82,7 +82,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">No access to API: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Unknown error</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Unknown error: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t log in: Presumably wrong username or password</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Couldn\'t log in. Maybe the username or password is wrong?</string>
     <string name="previousUpdateNotFinished">Previous update not finished yet</string>
     <string name="feedName_favorites">Favorites</string>
     <string name="feedName_archived">Archived</string>
@@ -90,7 +90,7 @@
     <string name="articleList_favoriteMark">Favorite mark</string>
     <string name="articleList_ArchivedMark">Archived mark</string>
     <string name="noPreviousArticle">There is no previous article in current list</string>
-    <string name="scrolledOverBottom">Scroll %d time(s) more over the bottom to mark the article as read</string>
+    <string name="scrolledOverBottom">Scroll %d more time(s) past the bottom to mark article as read</string>
     <string name="markedAsRead"> Article marked as read</string>
     <string name="noNextArticle">No more articles in current list</string>
     <string name="themeName_light">Light</string>
@@ -118,8 +118,8 @@
     <string name="notification_updatingArticles_full">Performing full update</string>
     <string name="notification_updatingArticles_fast">Performing fast update</string>
     <string name="notification_sweepingDeletedArticles">Sweeping deleted articles</string>
-    <string name="notification_downloadingImages">Downloading images</string>
-    <string name="notification_syncingQueue">Synchronizing local changes</string>
+    <string name="notification_downloadingImages">Downloading images…</string>
+    <string name="notification_syncingQueue">Syncing local changes…</string>
     <string name="notification_backgroundOperations">Background operations</string>
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Incorrect credentials</string>
@@ -128,10 +128,10 @@
     <string name="notification_unknownError">Unknown error</string>
     <string name="notification_expandedError">Error: %s</string>
     <string name="notification_channel_group_name_tts">TTS</string>
-    <string name="notification_channel_group_name_sync">Synchronization</string>
+    <string name="notification_channel_group_name_sync">Syncing</string>
     <string name="notification_channel_group_name_other">Other</string>
     <string name="notification_channel_name_tts">wallabag TTS</string>
-    <string name="notification_channel_name_sync">Synchronization</string>
+    <string name="notification_channel_name_sync">Syncing</string>
     <string name="notification_channel_name_downloading_articles">Downloading PDFs</string>
     <string name="notification_channel_name_background_operations">Background operations</string>
     <string name="notification_channel_name_error">Errors</string>
@@ -144,7 +144,7 @@
     <string name="menu_manageTags">Manage tags</string>
     <string name="manageTags_title">Manage tags</string>
     <string name="manageTags_save">Save</string>
-    <string name="manageTags_textField_hint">One or more tags separated by commas</string>
+    <string name="manageTags_textField_hint">One or more (comma-separated) tags</string>
     <string name="manageTags_addNew">Add</string>
     <string name="manageTags_currentTags">Selected tags:</string>
     <string name="manageTags_currentTags_none">None</string>
@@ -169,13 +169,13 @@
 
     <string name="message_couldNotOpenUrl">Couldn\'t open this URL</string>
 
-    <string name="message_disableTouch_inputDisabled">Touch input disabled</string>
-    <string name="message_disableTouch_inputEnabled">Touch input enabled</string>
-    <string name="d_disableTouch_changeKey_title">Disable touch input button</string>
-    <string name="d_disableTouch_currentCode">Currently selected key code (press a button to change it):</string>
+    <string name="message_disableTouch_inputDisabled">Touch input off</string>
+    <string name="message_disableTouch_inputEnabled">Touch input on</string>
+    <string name="d_disableTouch_changeKey_title">Button to turn off touch input</string>
+    <string name="d_disableTouch_currentCode">Currently selected key-code (press a button to change it):</string>
 
     <string name="pref_name_runConnectionWizard">Run connection wizard</string>
-    <string name="pref_desc_runConnectionWizard">Helps you set up basic connection settings</string>
+    <string name="pref_desc_runConnectionWizard">Helps set up basic connection settings</string>
 
     <string name="pref_categoryName_connection">Connection</string>
     <string name="pref_name_connection_url">wallabag URL</string>
@@ -190,14 +190,14 @@
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_api_clientID">Client ID</string>
     <string name="pref_name_connection_api_clientSecret">Client secret</string>
-    <string name="pref_name_connection_autofill">Autofill</string>
+    <string name="pref_name_connection_autofill">Auto-fill</string>
     <string name="pref_desc_connection_autofill">Test connection and fill in client ID and client secret</string>
 
     <string name="pref_categoryName_connection_advanced">Advanced connection settings</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basic Authentication</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Authentication</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth username</string>
-    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth password</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP auth username</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP auth password</string>
 
     <string name="pref_categoryName_ui">UI</string>
     <string name="pref_name_ui_theme">App theme</string>
@@ -207,73 +207,73 @@
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
     <string name="pref_name_ui_article_handlePreformattedText">Handling Long Preformatted Text</string>
-    <string name="pref_desc_ui_article_handlePreformattedText">How To handle preformatted text that is too long to show completely.</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">How To handle preformatted text too long to show in full.</string>
     <string-array name="pref_option_handlePreformattedText">
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
     <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog that allows to favorite/archive/tag a newly added article. A toast message will be displayed instead if the option is disabled.</string>
-    <string name="pref_name_ui_article_fullscreen">Fullscreen Article View</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog allowing favoriting/archiving/tagging a newly added article (instead of a toast message).</string>
+    <string name="pref_name_ui_article_fullscreen">Fullscreen Articles</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">Enable Onyx Boox theme workaround</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">Work around Onyx devices forcing black link colors</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox theme workaround</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Prevent Onyx devices forcing black link colors</string>
     <string name="pref_name_ui_readingSpeed">Reading speed</string>
-    <string name="pref_desc_ui_readingSpeed">Your reading speed (measured in words per minute). Used to calculate estimated reading time.</string>
+    <string name="pref_desc_ui_readingSpeed">Your reading speed (in words per minute) to show estimated reading time.</string>
     <string name="pref_name_ui_keepScreenOn">Keep screen on while reading</string>
-    <string name="pref_desc_ui_keepScreenOn">Keep the screen on while reading an article</string>
+    <string name="pref_desc_ui_keepScreenOn">Don\'t let the screen turn off while reading an article</string>
     <string name="pref_categoryName_ui_screenScrolling">Screen scrolling</string>
-    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scroll with volume buttons</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Go up and down using the volume buttons</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tap-to-scroll</string>
-    <string name="pref_desc_ui_tapToScroll_enabled">Scroll screen by tapping on left and right screen sides</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Go up and down by tapping the left and right screen sides</string>
     <string name="pref_name_ui_screenScrolling_percent">Percent of screen height to scroll</string>
-    <string name="pref_name_ui_screenScrolling_smooth">Use smooth scrolling</string>
-    <string name="pref_categoryName_ui_misc">Miscellanea</string>
-    <string name="pref_name_ui_disableTouch_enabled">Disable touch input</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Press the configured button (camera button by default) to block/unblock touch input on the reading screen (system controls are not affected)</string>
-    <string name="pref_name_ui_disableTouch_keyCode">Disable touch input button</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Press here to configure the button used to disable/enable touch input</string>
-    <string name="pref_name_ui_scrollOverBottom">Scroll over bottom to mark as read</string>
-    <string name="pref_desc_ui_scrollOverBottom">Press here to configure the number of times you need to "scroll over the bottom" to mark an article as read</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Smooth scrolling</string>
+    <string name="pref_categoryName_ui_misc">Misc</string>
+    <string name="pref_name_ui_disableTouch_enabled">No touch input</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Press the \"No touch input button\" (camera button by default) to block or unblock touch input on the reading screen (system controls are unaffected)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Button preventing touch input</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Press to select a button to turn on and off touch input</string>
+    <string name="pref_name_ui_scrollOverBottom">Scroll past bottom to mark as read</string>
+    <string name="pref_desc_ui_scrollOverBottom">Press to set how many times scrolling past the bottom marks an article as read</string>
     <string name="pref_name_ui_swipeArticles">Swipe Articles</string>
-    <string name="pref_desc_ui_swipeArticles">Swipe left or right inside an article to go to previous or next article</string>
+    <string name="pref_desc_ui_swipeArticles">Swipe ← or → inside an article to go to previous or next article</string>
     <string name="pref_name_ui_previewImage_enabled">Preview Image</string>
     <string name="pref_desc_ui_previewImage_enabled">Display the preview image before the article</string>
-    <string name="pref_name_ui_annotations_enabled">Annotations support</string>
-    <string name="pref_desc_ui_annotations_enabled">Experimental feature! See, edit and create annotations</string>
+    <string name="pref_name_ui_annotations_enabled">Annotation support</string>
+    <string name="pref_desc_ui_annotations_enabled">Experimental! See, edit and create annotations</string>
     <string name="pref_name_ui_mathRendering_enabled">Math rendering</string>
-    <string name="pref_desc_ui_mathRendering_enabled">Enable LaTeX-math rendering via KaTeX</string>
+    <string name="pref_desc_ui_mathRendering_enabled">LaTeX-math rendering via KaTeX</string>
     <string name="pref_name_ui_mathRendering_delimiters">Math delimiters</string>
-    <string name="pref_desc_ui_mathRendering_delimiters">Select the environment delimiters that KaTeX should process</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Select the environment delimiters KaTeX should process</string>
 
     <string name="pref_categoryName_tts">Text-to-speech</string>
     <string name="pref_name_tts_fastForwardTime">Fast-forward skip time</string>
-    <string name="pref_desc_tts_fastForwardTime">The number of seconds to skip forward when the \"fast-forward\" button is pressed</string>
+    <string name="pref_desc_tts_fastForwardTime">Number of seconds pressing \"Fast Forward\" skips forwards</string>
     <string name="pref_name_tts_rewindTime">Rewind skip time</string>
-    <string name="pref_desc_tts_rewindTime">The number of seconds to skip backward when the \"rewind\" button is pressed</string>
+    <string name="pref_desc_tts_rewindTime">Number of seconds pressing \"Fast Rewind\" skips backwards</string>
     <string name="pref_name_tts_nextButtonIsFastForward">\"Next\" button fast-forwards</string>
-    <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"next\" media button fast-forwards instead of skipping to next article</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"Next\" media button fast-forwards instead of skipping to next article</string>
     <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Pressing \"previous\" media button rewinds instead of skipping to previous article</string>
-    <string name="pref_name_tts_showPreviewAsAlbumArt">Use preview as album art</string>
-    <string name="pref_desc_tts_showPreviewAsAlbumArt">Use the article preview image (if it is present) as album art (visible in notification and may be displayed as the lockscreen background)</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Pressing \"Previous\" media button rewinds instead of skipping to previous article</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Preview image as album art</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Use article preview picture (if present) as the album cover-art (shown in the notification and possibly as lock-screen background)</string>
 
-    <string name="pref_categoryName_sync">Synchronization</string>
-    <string name="pref_name_sync_syncTypes">Synchronization types</string>
-    <string name="pref_desc_sync_syncTypes">Press to show more info about synchronization types</string>
-    <string name="pref_desc_sync_syncTypes_text">There are two main synchronization types: \"Full\" and \"Fast\".\n\n
-        \"Full\" sync deletes all local content and downloads it again. It is available from the options menu, as a last resort.\n\n
-        \"Fast\" sync (incremental) only downloads changes made since the previous sync, reducing time and bandwidth spent. However, this method has a shortcoming: It can\'t detect remotely deleted article (so no local articles are deleted during \"Fast\" sync). Pull downwards beyond the top position scrollbar in any article list to initiate.\n\n
-        To remedy the shortcoming of the \"Fast\" sync type, \"Deleted article sweep\" checks every local article and asks the server whether it is still present on the server - if not, the local article is removed. Depending on the number of articles you have, it takes a while, but saves traffic over the \"Full\" sync.\n\n
-        None of these functions affect client-to-server sync: Your local changes will always be sent to the server before updating local content.
+    <string name="pref_categoryName_sync">Syncing</string>
+    <string name="pref_name_sync_syncTypes">Ways to sync</string>
+    <string name="pref_desc_sync_syncTypes">Press for more info about syncing types</string>
+    <string name="pref_desc_sync_syncTypes_text">\"Full\" and \"Fast\" are the two main syncing types.\n\n
+        \"Full\" deletes all local content and re-downloads it. (The option is there in the menu as a last resort.)\n\n
+        \"Fast\" (incremental) downloads any changes made since the previous sync to reduce time and bandwidth. It can\'t detect or delete remotely deleted articles. (Pull ↓ beyond the top position scrollbar in any article list to use it).\n\n
+        Use \"Deleted article sweep\" to auto-remove any local articles not found by it on the server. Takes a while, but saves traffic over the \"Full\" sync.\n\n
+        Local changes are always synced from the client to the server before updating local content. (If it fails nothing happens.)
     </string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Enable \"Deleted article sweep\" after \"Fast\" sync</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Read the description of different sync types above for more info</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Deleted article sweep\" after \"Fast\" sync</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">The description of different sync types above has more info</string>
     <string name="pref_categoryName_autoSync">Auto-sync</string>
-    <string name="pref_name_autoSync_onStartup_enabled">Enable auto-sync on application start</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Auto-sync upon app start</string>
     <string name="pref_decs_autoSync_onStartup_enabled">The app will sync when you open it</string>
-    <string name="pref_name_autoSync_enabled">Enable auto-sync</string>
-    <string name="pref_desc_autoSync_enabled">This enables automatic synchronization of local changes (added links, archived articles, etc.) and download of new articles based on a schedule</string>
+    <string name="pref_name_autoSync_enabled">Auto-sync</string>
+    <string name="pref_desc_autoSync_enabled">Syncs local changes (added links, archived articles, etc.) automatically and downloads new articles based on a schedule</string>
     <string name="pref_name_autoSync_interval">Auto-sync interval</string>
     <string name="pref_option_autoSync_interval_15m">15 minutes</string>
     <string name="pref_option_autoSync_interval_30m">30 minutes</string>
@@ -286,81 +286,81 @@
         <item>Full</item>
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
-    <string name="pref_desc_autoSyncQueue_enabled">This allows local changes (added links, archived articles, etc.) to be synced to the server as soon as network becomes available.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Syncs local changes (added links, archived articles, etc.) to the server once online again.</string>
     <string name="pref_name_imageCache_enabled">Put article images in cache</string>
-    <string name="pref_desc_imageCache_enabled">Automatically downloads all images from every article and saves them to the device. Depending on the length of your wallabag article list, this can take up a lot of time and space.</string>
+    <string name="pref_desc_imageCache_enabled">Auto-download all images from every article onto the device. (Takes up a lot of time and space if the article list is long.)</string>
 
     <string name="pref_name_storage_dbPath">Database location</string>
     <string name="pref_name_storage_dbPath_internalStorage">Internal storage</string>
     <string name="pref_name_storage_dbPath_externalStorage">External storage</string>
     <string name="pref_name_storage_dbPath_dbMoved">Database moved</string>
 
-    <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
+    <string name="pref_categoryName_miscellaneous">Misc</string>
     <string name="pref_name_misc_appendWallabagMention">Append wallabag mention</string>
     <string name="pref_desc_misc_appendWallabagMention">Append \"via @wallabagapp\" to shared texts</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
-    <string name="pref_desc_misc_handleHttpScheme">Show wallabag in the list of web browsers</string>
+    <string name="pref_desc_misc_handleHttpScheme">Show wallabag in the list of web-browsers</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Use ICU tokenizer for full-text-search</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Uses ICU tokenizer for full-text-search indexing (generic unicode61 tokenizer is used otherwise). May improve search results for CJK languages. \"Full update\" is required for the option to take effect</string>
-    <string name="pref_name_misc_wipeDB">Wipe Database</string>
-    <string name="pref_desc_misc_wipeDB">Wipes all the articles from local database, also removes all not synchronized local changes and URLs</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Uses ICU tokenizer for full-text-search indexing (generic unicode61 tokenizer is used otherwise). May improve search results for CJK languages. \"Full update\" is required for the option to take effect.</string>
+    <string name="pref_name_misc_wipeDB">Clear Database</string>
+    <string name="pref_desc_misc_wipeDB">Deletes articles and all unsynced local changes and URLs from the local database</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to wipe the database?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to clear the database?</string>
     <string name="pref_categoryName_misc_localQueue">Local changes</string>
-    <string name="pref_name_misc_localQueue_notice">WARNING</string>
-    <string name="pref_desc_misc_localQueue_notice">Don\'t do anything here unless you know what you\'re doing</string>
+    <string name="pref_name_misc_localQueue_notice">Warning</string>
+    <string name="pref_desc_misc_localQueue_notice">Don\'t do anything here unless you know what you\'re doing!</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Dump to file</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Dumps all local changes to a txt file (you can study it yourself or attach it to a bug report)</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Dumps all local changes to a TXT file (to study yourself or attach to a bug-report)</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Remove first local queue item</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Removes the first not synchronized item. May help if you get repeating error notifications during sync. Be sure to dump all local changes to file first</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Removes the first unsynced item. May help with repeating errors during notifications syncing. Tip: Save all local changes to a file first.</string>
     <string name="pref_name_misc_logging_logcatToFile">Save logcat output to a file</string>
     <string name="pref_desc_misc_logging_logcatToFile">Saves logcat output (Android app log) to a file in /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
 
     <string name="misc_localQueue_empty">No local changes</string>
     <string name="misc_localQueue_removeFirstItem_done">Done</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">Dumped to %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Saved as %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Error: %s</string>
-    <string name="misc_localQueue_dumpToFile_header">If you experience troubles with synchronization, please report your problem here: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Report syncing problems here: %s</string>
     <string name="misc_logging_logcatToFile_result_saved">Logs saved to %s</string>
     <string name="misc_logging_logcatToFile_result_error">Error: %s</string>
 
     <string name="issues_url" translatable="false">https://github.com/wallabag/android-app/issues</string>
 
     <string name="connectionWizard_misc_scanQrCode">Scan a QR code</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Please install a QR-code scanner</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Install a QR-code scanner first.)</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
     <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag.</string>
-    <string name="connectionWizard_welcome_text">Before you can use wallabag app you need to set up a connection. The connection wizard will help you do so.</string>
-    <string name="connectionWizard_welcome_rerunNotice">You can always re-run the connection wizard from \"Settings\".</string>
+    <string name="connectionWizard_welcome_text">Set up a connection using the wizard first.</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Re-run the connection wizard from \"Settings\" at any time.)</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 
     <string name="connectionWizard_providerSelection_titleMessage">Select wallabag provider</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Other</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Select this to input required settings manually</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Lets you type in settings manually</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">For accounts on https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this if you have an account on https://framabag.org</string>
+    <string name="connectionWizard_providerSelection_provider_framabag_desc">For accounts on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>
 
-    <string name="connectionWizard_provider_general_titleMessage">Basic configuration</string>
+    <string name="connectionWizard_provider_general_titleMessage">Basic setup</string>
     <string name="connectionWizard_provider_general_prev">Back</string>
     <string name="connectionWizard_provider_general_next">Connect</string>
 
-    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it setup</string>
     <string name="connectionWizard_provider_wallabagit_prev">Back</string>
     <string name="connectionWizard_provider_wallabagit_next">Connect</string>
 
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
+    <string name="connectionWizard_provider_framabag_titleMessage">Framabag setup</string>
     <string name="connectionWizard_provider_framabag_prev">Back</string>
     <string name="connectionWizard_provider_framabag_next">Connect</string>
 
     <string name="connectionWizard_summary_titleMessage">All done.</string>
     <string name="connectionWizard_summary_text">Click to save and go to the main screen.</string>
-    <string name="connectionWizard_summary_toastMessage">Setup complete</string>
+    <string name="connectionWizard_summary_toastMessage">Setup completed</string>
     <string name="connectionWizard_summary_prev">Back</string>
     <string name="connectionWizard_summary_next">Save settings</string>
     <string name="remove_tag">Remove tag</string>
@@ -378,7 +378,7 @@
     <string name="title">Title</string>
     <string name="untagged"><![CDATA[<untagged>]]></string>
 
-    <string name="contentIsTooLong">The article content is too long to display</string>
+    <string name="contentIsTooLong">Article content too long to display</string>
 
     <string name="articleContent_globeIconAltText">Globe icon</string>
     <string name="articleContent_previewImageAltText">Preview image</string>
