@@ -301,7 +301,7 @@
     <string name="misc_localQueue_dumpToFile_result_error">Feil: %s</string>
     <string name="misc_localQueue_dumpToFile_header">Hvis du opplever problemer med synkroniseringen, innrapporter problemet ditt her: %s</string>
     <string name="notification_action_media_next">Neste</string>
-    <string name="notification_action_media_fastforward">Hurtigspoling forover</string>
+    <string name="notification_action_media_fastforward">Rask framoverspoling</string>
     <string name="notification_action_media_play">Spill av</string>
     <string name="notification_action_media_pause">Pause</string>
     <string name="notification_action_media_rewind">Spol tilbake</string>
@@ -310,4 +310,16 @@
     <string name="title">Tittel</string>
     <string name="articleEdit_openArticle">Åpne artikkel</string>
     <string name="pref_categoryName_tts">Tekst-til-tale</string>
+    <string name="pref_desc_tts_fastForwardTime">Antallet sekunder og hoppe forover når «Rask framoverspoling»-knappen trykkes</string>
+    <string name="pref_name_tts_rewindTime">Tilbakespolingshopp</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Skru på LaTeX-matteopptegning via KaTeX</string>
+    <string name="pref_name_ui_mathRendering_enabled">Matte-opptegning</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Bruk artikkelforhåndsvisningsbilde (hvis det finnes) som omslagsbilde (synlig i merknader, og kan vises som låseskjermsbakgrunn)</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Bruk forhåndsvisning som omslagsbilde</string>
+    <string name="pref_name_tts_previousButtonIsRewind">«Forrige»-knapp spoler tilbake</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">«Neste»-knapp for hurtigspoling</string>
+    <string name="manageTags_addMoreTags">Legg til flere etiketter:</string>
+    <string name="manageTags_currentTags_none">Ingen</string>
+    <string name="notification_channel_name_background_operations">Bakgrunnsoperasjoner</string>
+    <string name="notification_backgroundOperations">Bakgrunnsoperasjoner</string>
 </resources>
