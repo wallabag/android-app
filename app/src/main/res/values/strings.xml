@@ -49,7 +49,7 @@
     <string name="d_configurationChanged_message">Test the connection to check if the new parameters work.</string>
     <string name="d_configurationChanged_answer_decline">Not now</string>
     <string name="d_configurationIsQuestionable_title">Problem detected</string>
-    <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
+    <string name="d_configurationIsQuestionable_message">Retry the connection to see if it works now.</string>
     <string name="addLink_success_text">Added</string>
     <string name="settings_parametersAreOk">The parameters are fine</string>
     <string name="settings_parametersAutofilled">Parameters filled</string>
@@ -99,10 +99,10 @@
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
     <string name="themeName_solarized">Solarized</string>
-    <string name="menu_readArticle_increaseFontSize">Increase font size</string>
-    <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
-    <string name="aboutText"><b>wallabag app for Android</b>\n
-        wallabag is a self-hostable app, allowing you to not miss any content anymore. Click, save and read the extracted content at your leisure.</string>
+    <string name="menu_readArticle_increaseFontSize">Bigger fonts</string>
+    <string name="menu_readArticle_decreaseFontSize">Smaller fonts</string>
+    <string name="aboutText"><b>wallabag for Android</b>\n
+        Don\'t miss content. Click, extract, save to a server and read it at your leisure. Self-hostable copylefted libre software.</string>
     <string name="readSpeed">Read speed</string>
     <string name="voiceHeight">Voice pitch</string>
     <string name="readVolume">Read volume</string>
@@ -122,7 +122,7 @@
     <string name="notification_syncingQueue">Syncing local changes…</string>
     <string name="notification_backgroundOperations">Background operations</string>
     <string name="notification_error">Error</string>
-    <string name="notification_incorrectCredentials">Incorrect credentials</string>
+    <string name="notification_incorrectCredentials">Wrong username, password, client ID, or client secret</string>
     <string name="notification_incorrectConfiguration">Incorrect configuration</string>
     <string name="notification_serverError">Server error</string>
     <string name="notification_unknownError">Unknown error</string>
@@ -136,7 +136,7 @@
     <string name="notification_channel_name_background_operations">Background operations</string>
     <string name="notification_channel_name_error">Errors</string>
     <string name="menu_lists_search">Search</string>
-    <string name="menu_lists_changeSortOrder">Change sort order</string>
+    <string name="menu_lists_changeSortOrder">Change order</string>
     <string name="menu_lists_sweepDeletedArticles">\"Sweep\" deleted articles</string>
     <string name="menu_lists_fullUpdate">Full update</string>
     <string name="other_searchHint">Search by article title or text</string>
