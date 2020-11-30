@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     const authorization = {
-        permits() { return true; },
+        permits: function() { return true; },
     };
     app.registry.registerUtility(authorization, 'authorizationPolicy');
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     app.include(myStorage);
 
-    app.start().then(() => {
+    app.start().then(function() {
         app.annotations.load({});
     });
 });
