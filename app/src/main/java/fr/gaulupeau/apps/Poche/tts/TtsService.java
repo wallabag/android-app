@@ -833,55 +833,59 @@ public class TtsService extends Service {
                 state = State.CREATED;
             }
 
-            tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                @Override
-                public void onStart(String utteranceId) {
-//                    Log.v(TAG, "utteranceProgressListener.onStart()");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                    @Override
+                    public void onStart(String utteranceId) {
+    //                    Log.v(TAG, "utteranceProgressListener.onStart()");
 
-                    setCurrentItemProgress(utteranceId, -1, -1);
-                }
+                        setCurrentItemProgress(utteranceId, -1, -1);
+                    }
 
-                @Override
-                public synchronized void onDone(String utteranceId) {
-                    onSpeakDoneListener(utteranceId);
-                }
+                    @Override
+                    public synchronized void onDone(String utteranceId) {
+                        onSpeakDoneListener(utteranceId);
+                    }
 
-                @Override
-                public void onError(String utteranceId, int errorCode) {
-                    Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId
-                            + ", errorCode: " + errorCode);
-                    super.onError(utteranceId, errorCode);
-                }
+                    @Override
+                    public void onError(String utteranceId, int errorCode) {
+                        Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId
+                                + ", errorCode: " + errorCode);
+                        super.onError(utteranceId, errorCode);
+                    }
 
-                @Override
-                public void onError(String utteranceId) {
-                    Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId);
+                    @Override
+                    public void onError(String utteranceId) {
+                        Log.w(TAG, "utteranceProgressListener.onError() " + utteranceId);
 
-                    resetCurrentItemProgress();
+                        resetCurrentItemProgress();
 
-                    onSpeakDoneListener(utteranceId);
-                }
+                        onSpeakDoneListener(utteranceId);
+                    }
 
-                @Override
-                public void onStop(String utteranceId, boolean interrupted) {
-                    Log.d(TAG, "utteranceProgressListener.onStop() " + utteranceId
-                            + ", " + interrupted);
+                    @Override
+                    public void onStop(String utteranceId, boolean interrupted) {
+                        Log.d(TAG, "utteranceProgressListener.onStop() " + utteranceId
+                                + ", " + interrupted);
 
-                    resetCurrentItemProgress();
+                        resetCurrentItemProgress();
 
-                    onSpeakDoneListener(utteranceId);
-                }
+                        onSpeakDoneListener(utteranceId);
+                    }
 
-                @Override
-                public void onRangeStart(String utteranceId, int start, int end, int frame) {
-                    super.onRangeStart(utteranceId, start, end, frame);
+                    @Override
+                    public void onRangeStart(String utteranceId, int start, int end, int frame) {
+                        super.onRangeStart(utteranceId, start, end, frame);
 
-//                    Log.v(TAG, String.format("utteranceProgressListener.onRangeStart(%s, %d, %d, %d)",
-//                            utteranceId, start, end, frame));
+    //                    Log.v(TAG, String.format("utteranceProgressListener.onRangeStart(%s, %d, %d, %d)",
+    //                            utteranceId, start, end, frame));
 
-                    setCurrentItemProgress(utteranceId, start, end);
-                }
-            });
+                        setCurrentItemProgress(utteranceId, start, end);
+                    }
+                });
+            } else {
+                tts.setOnUtteranceCompletedListener(this::onSpeakDoneListener);
+            }
 
             tts.setLanguage(convertVoiceNameToLocale(ttsVoice));
 
@@ -942,7 +946,11 @@ public class TtsService extends Service {
 
                 final TextToSpeech ttsToShutdown = tts;
                 new Thread(() -> {
-                    ttsToShutdown.setOnUtteranceProgressListener(null);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                        ttsToShutdown.setOnUtteranceProgressListener(null);
+                    } else {
+                        ttsToShutdown.setOnUtteranceCompletedListener(null);
+                    }
                     ttsToShutdown.stop();
                     ttsToShutdown.shutdown();
                 }).start();
