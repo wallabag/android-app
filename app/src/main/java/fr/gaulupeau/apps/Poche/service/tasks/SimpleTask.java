@@ -52,7 +52,7 @@ public class SimpleTask implements Parcelable {
             T instance;
             try {
                 instance = clazz.newInstance();
-            } catch (IllegalAccessException | InstantiationException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException("Uh oh");
             }
