@@ -406,17 +406,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
 
         menu.findItem(R.id.menu_tag).setOnMenuItemClickListener(item -> {
-            webViewContent.evaluateJavascript(
-                    "(function(){return window.getSelection().toString()})()",
-                    this::createTagFromSelection);
-            mode.finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webViewContent.evaluateJavascript(
+                        "(function(){return window.getSelection().toString()})()",
+                        this::createTagFromSelection);
+                mode.finish();
+            } else {
+                webViewContent.loadUrl("javascript:hostActionController.selectedText(window.getSelection().toString())");
+            }
             return true;
         });
 
         MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
         if (annotationsEnabled) {
             annotateItem.setOnMenuItemClickListener(i -> {
-                webViewContent.evaluateJavascript("invokeAnnotator();", null);
+                webViewContent.loadUrl("javascript:invokeAnnotator()");
 //                mode.finish(); // seems to reset selection too early (not on emulator though)
                 return true;
             });
@@ -622,6 +626,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
 
+        initJsActionController();
         initTtsController();
         initAnnotationController();
 
@@ -788,6 +793,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         final GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
 
         webViewContent.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+
+    private void initJsActionController() {
+        JsActionController jsActionController = new JsActionController(this::createTagFromSelection);
+
+        webViewContent.addJavascriptInterface(jsActionController, "hostActionController");
     }
 
     private void initTtsController() {
