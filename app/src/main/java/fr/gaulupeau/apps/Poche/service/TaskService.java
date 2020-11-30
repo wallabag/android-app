@@ -191,7 +191,7 @@ public abstract class TaskService extends Service {
 
     private void enqueueTask(ParameterizedRunnable task, boolean ensureStarted) {
         Log.d(tag, "enqueueTask()");
-        Objects.requireNonNull(task, "task is null");
+        Objects.requireNonNull(task);
 
         Log.v(tag, "enqueueTask() enqueueing task");
         taskQueue.add(task);

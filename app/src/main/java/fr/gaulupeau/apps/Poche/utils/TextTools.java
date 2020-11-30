@@ -4,6 +4,8 @@ import android.os.Build;
 import android.text.Html;
 import android.text.TextUtils;
 
+import androidx.core.text.TextUtilsCompat;
+
 public class TextTools {
 
     /**
@@ -17,6 +19,14 @@ public class TextTools {
     public static boolean equalOrEmpty(CharSequence s1, CharSequence s2) {
         return (TextUtils.isEmpty(s1) && TextUtils.isEmpty(s2))
                 || TextUtils.equals(s1, s2);
+    }
+
+    public static String escapeHtml(String s) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            return Html.escapeHtml(s);
+        } else {
+            return TextUtilsCompat.htmlEncode(s); // not sure
+        }
     }
 
     public static String unescapeHtml(String s) {

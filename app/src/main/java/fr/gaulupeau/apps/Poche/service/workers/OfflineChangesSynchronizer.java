@@ -5,11 +5,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.core.util.ObjectsCompat;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 import fr.gaulupeau.apps.Poche.data.DbUtils;
 import fr.gaulupeau.apps.Poche.data.QueueHelper;
@@ -307,7 +308,7 @@ public class OfflineChangesSynchronizer extends BaseNetworkWorker {
     }
 
     private void updateGivenUrl(Article article, String givenUrl) {
-        if (!Objects.equals(article.getGivenUrl(), givenUrl)) {
+        if (!ObjectsCompat.equals(article.getGivenUrl(), givenUrl)) {
             article.setGivenUrl(givenUrl);
             article.update();
         }

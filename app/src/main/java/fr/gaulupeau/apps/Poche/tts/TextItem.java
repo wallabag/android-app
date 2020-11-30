@@ -29,7 +29,7 @@ class TextItem extends GenericItem {
         Extra() {}
 
         Extra(Extra.Type type, int start, int end) {
-            this.type = Objects.requireNonNull(type, "type cannot be null");
+            this.type = Objects.requireNonNull(type);
             this.start = start;
             this.end = end;
         }

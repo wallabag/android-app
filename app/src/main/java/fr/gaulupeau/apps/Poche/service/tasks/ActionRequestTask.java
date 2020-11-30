@@ -16,7 +16,7 @@ public class ActionRequestTask extends SimpleTask {
     protected ActionRequest actionRequest;
 
     public ActionRequestTask(ActionRequest actionRequest) {
-        Objects.requireNonNull(actionRequest, "actionRequest is null");
+        Objects.requireNonNull(actionRequest);
         this.actionRequest = actionRequest;
     }
 

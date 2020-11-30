@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import androidx.core.util.ObjectsCompat;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import fr.gaulupeau.apps.Poche.data.DbUtils;
@@ -357,15 +358,15 @@ public class ArticleUpdater {
                 article.setUpdateDate(apiArticle.updatedAt);
                 articleChanges.add(ChangeType.UPDATED_DATE_CHANGED);
             }
-            if (!Objects.equals(article.getPublishedAt(), apiArticle.publishedAt)) {
+            if (!ObjectsCompat.equals(article.getPublishedAt(), apiArticle.publishedAt)) {
                 article.setPublishedAt(apiArticle.publishedAt);
                 articleChanges.add(ChangeType.PUBLISHED_AT_CHANGED);
             }
-            if (!Objects.equals(article.getStarredAt(), apiArticle.starredAt)) {
+            if (!ObjectsCompat.equals(article.getStarredAt(), apiArticle.starredAt)) {
                 article.setStarredAt(apiArticle.starredAt);
                 articleChanges.add(ChangeType.STARRED_AT_CHANGED);
             }
-            if (!Objects.equals(article.getIsPublic(), apiArticle.isPublic)) {
+            if (!ObjectsCompat.equals(article.getIsPublic(), apiArticle.isPublic)) {
                 article.setIsPublic(apiArticle.isPublic);
                 articleChanges.add(ChangeType.IS_PUBLIC_CHANGED);
             }
@@ -552,11 +553,11 @@ public class ArticleUpdater {
                         annotation.setQuote(apiAnnotation.quote);
                         annotationChanged = true;
                     }
-                    if (!Objects.equals(annotation.getCreatedAt(), apiAnnotation.createdAt)) {
+                    if (!ObjectsCompat.equals(annotation.getCreatedAt(), apiAnnotation.createdAt)) {
                         annotation.setCreatedAt(apiAnnotation.createdAt);
                         annotationChanged = true;
                     }
-                    if (!Objects.equals(annotation.getUpdatedAt(), apiAnnotation.updatedAt)) {
+                    if (!ObjectsCompat.equals(annotation.getUpdatedAt(), apiAnnotation.updatedAt)) {
                         annotation.setUpdatedAt(apiAnnotation.updatedAt);
                         annotationChanged = true;
                     }

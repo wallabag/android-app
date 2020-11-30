@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -63,7 +64,7 @@ import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
-import static android.text.Html.escapeHtml;
+import static fr.gaulupeau.apps.Poche.utils.TextTools.escapeHtml;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
@@ -160,7 +161,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         WallabagConnection.initConscrypt();
 
         if (BuildConfig.DEBUG) {
-            WebView.setWebContentsDebuggingEnabled(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
         }
 
         settings = App.getSettings();
