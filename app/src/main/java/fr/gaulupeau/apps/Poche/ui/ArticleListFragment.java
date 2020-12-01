@@ -219,8 +219,12 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
         }
 
         if (!TextUtils.isEmpty(searchQuery)) {
-            qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
-                    FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
+            if (FtsDao.isFtsSupported()) {
+                qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " IN (" +
+                        FtsDao.getQueryString() + DatabaseUtils.sqlEscapeString(searchQuery) + ")"));
+            } else {
+                qb.where(ArticleDao.Properties.Title.like("%" + searchQuery + "%"));
+            }
         }
 
         switch (sortOrder) {
