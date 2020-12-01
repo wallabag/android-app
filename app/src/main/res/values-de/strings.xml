@@ -278,7 +278,7 @@
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um als gelesen zu markieren</string>
     <string name="pref_desc_ui_scrollOverBottom">Hier klicken, um einzustellen, wie oft man über den Rand hinaus scrollen muss, um einen Artikel als gelesen zu markieren</string>
     <string name="pref_name_ui_swipeArticles">Artikel durch Wischen wechseln</string>
-    <string name="pref_desc_ui_swipeArticles">Hier klicken, um durch Wischen innerhalb eines Artikels zum vorherigen/nächsten Artikel zu wechseln</string>
+    <string name="pref_desc_ui_swipeArticles">Innerhalb eines Artikels nach links oder rechts wischen, um zum vorherigen/nächsten Artikel zu wechseln</string>
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
     <string name="pref_desc_ui_article_fullscreen">Versteckt die System- und App-Leiste während des Artikellesens</string>
     <string name="themeName_eink">Für E-Papier-Anzeige</string>
@@ -333,7 +333,7 @@
     <string name="pref_desc_tts_rewindTime">Die Zahl der Sekunden, die zurückgespult wurde, wenn der Zurückspulen-Button gedrückt wurde</string>
     <string name="pref_name_tts_rewindTime">Zurückspulzeit</string>
     <string name="pref_name_tts_fastForwardTime">Schnellvorlaufzeit</string>
-    <string name="pref_desc_tts_fastForwardTime">Die Zahl der Sekunden, die vorgespult werden soll, wenn der Schnellvorlauf-Button gedrückt wurde</string>
+    <string name="pref_desc_tts_fastForwardTime">Die Zahl der Sekunden, die vorgespult werden soll, wenn der Schnellvorlauf-Knopf gedrückt wurde</string>
     <string name="pref_categoryName_tts">Text zu Sprache</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Aktiviert die Zwischenlösung für Onyx-Geräte, die die Farbe schwarz für Links erzwingen</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Aktiviere für Onyx Boox die Notlösung für Probleme mit dem Design</string>
@@ -346,4 +346,10 @@
     <string name="manageTags_addMoreTags">Mehr Markierungen hinzufügen:</string>
     <string name="manageTags_currentTags_none">Keine</string>
     <string name="menu_tag">Tag hinzufügen</string>
+    <string name="notification_channel_name_background_operations">Hintergrundoperationen</string>
+    <string name="notification_backgroundOperations">Hintergrundoperationen</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Darstellung mathematischer Inhalte in LaTeX mithilfe von KaTeX aktivieren</string>
+    <string name="pref_name_ui_mathRendering_enabled">Darstellung mathematischer Inhalte</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Trennzeichen wählen die KaTeX verarbeiten soll</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Mathematische Trennzeichen</string>
 </resources>

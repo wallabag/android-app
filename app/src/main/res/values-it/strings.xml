@@ -209,7 +209,7 @@
     <string name="pref_name_misc_wipeDB_confirmTitle">Cancella Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Sei sicuro di voler cancellare il database?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Usato URI di connessione sbagliato</string>
-    <string name="connectionWizard_welcome_titleMessage">Benvenuto in wallabag!</string>
+    <string name="connectionWizard_welcome_titleMessage">Benvenuto/a in wallabag.</string>
     <string name="connectionWizard_welcome_text">Prima di poter usare l\'app di wallabag devi configurare una connessione. Questo assistente di connessione cercherà di aiutarti.</string>
     <string name="connectionWizard_welcome_rerunNotice">Puoi comunque riavviare l\'assistente di connessione dalle Impostazioni.</string>
     <string name="connectionWizard_welcome_prev">Salta</string>
@@ -230,7 +230,7 @@
     <string name="connectionWizard_provider_framabag_titleMessage">Configurazione di Framabag</string>
     <string name="connectionWizard_provider_framabag_prev">Indietro</string>
     <string name="connectionWizard_provider_framabag_next">Connetti</string>
-    <string name="connectionWizard_summary_titleMessage">Fatto!</string>
+    <string name="connectionWizard_summary_titleMessage">Fatto.</string>
     <string name="connectionWizard_summary_text">Premi il bottone per salvare le impostazioni ed andare alla schermata principale.</string>
     <string name="connectionWizard_summary_toastMessage">Impostazione completata</string>
     <string name="connectionWizard_summary_prev">Indietro</string>
@@ -302,4 +302,7 @@
     <string name="manageTags_currentTags_none">Nessuno</string>
     <string name="notification_channel_name_tts">TTS wallabag</string>
     <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="notification_channel_name_background_operations">Operazioni nello sfondo</string>
+    <string name="notification_backgroundOperations">Operazioni nello sfondo</string>
+    <string name="pref_desc_ui_previewImage_enabled">Visualizza l\'immagine di anteprima prima dell\'articolo</string>
 </resources>

@@ -15,7 +15,7 @@
     <string name="page_url">URL stranice</string>
     <string name="dialog_add_label">Dodaj novi članak</string>
     <string name="txtUrlCopied">URL članka kopiran u međuspremnik</string>
-    <string name="txtConfigNotSet">Molimo konfigurirajte aplikaciju prije sinkronizacije.</string>
+    <string name="txtConfigNotSet">Konfiguriraj program prije sinkronizacije.</string>
     <string name="txtNetOffline">Provjeri vezu s internetom!</string>
     <string name="d_deleteArticle_message">Stvarno želiš izbrisati članak\?</string>
     <string name="d_deleteArticle_title">Izbrisati članak\?</string>
@@ -132,7 +132,7 @@
     <string name="notification_stacktrace">Praćenje grešaka:</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Osnovna HTTP autentifikacija</string>
     <string name="nav_other_settings">Postavke</string>
-    <string name="pref_name_ui_theme">Tema aplikacije</string>
+    <string name="pref_name_ui_theme">Tema programa</string>
     <string name="getCredentials_progressDialogMessage">Dobavljanje podataka za prijavu …</string>
     <string name="notification_serverError">Greška poslužitelja</string>
     <string name="pref_name_ui_tapToScroll_enabled">Klizanje dodirom</string>
@@ -224,7 +224,7 @@
     <string name="pref_desc_misc_wipeDB">Briše sve članke iz lokalne baze podataka, uklanja i sve ne sinkronizirane lokalne promjene i URL-ove</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Predlažemo, da promijeniš URL u: %s</string>
     <string name="notification_channel_name_sync">Sinkronizacija</string>
-    <string name="pref_desc_misc_appendWallabagMention">Nadodaj „putem @wallabagapp” dijeljenim tekstovima</string>
+    <string name="pref_desc_misc_appendWallabagMention">Dijeljenim tekstovima dodaj „putem @wallabagapp”</string>
     <string name="pref_name_storage_dbPath">Mjesto baze podataka</string>
     <string name="readVolume">Količina čitanja</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
@@ -240,7 +240,7 @@
     <string name="themeName_dark_contrast">Tamna (visoki kontrast)</string>
     <string name="connectionWizard_welcome_text">Prije upotrebe programa wallabag, moraš uspostaviti vezu. U tome će ti pomoći čarobnjak za vezu.</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Kliži s gumbovima glasnoće</string>
-    <string name="themeName_light">Svjetla</string>
+    <string name="themeName_light">Svijetla</string>
     <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza podataka je premještena</string>
     <string name="menu_lists_sweepDeletedArticles">„Počisti” izbrisane članke</string>
@@ -276,7 +276,7 @@
     <string name="notification_copyToClipboard">Kopiraj u međuspremnik</string>
     <string name="wrongUsernameOrPassword_errorMessage">Neuspjela prijava: Vjerojatno pogrešno korisničko ime ili lozinka</string>
     <string name="scrolledOverBottom">Klizni još %d put(a) preko kraja članka, da bi se članak označio kao pročitan</string>
-    <string name="pref_name_misc_appendWallabagMention">Nadodaj napomenu o wallabagu</string>
+    <string name="pref_name_misc_appendWallabagMention">Dodaj napomenu o wallabagu</string>
     <string name="pref_desc_ui_disableTouch_enabled">Pritisni konfigurirani gumb (gumb kamere prema standardnim postavkama) za blokiranje/deblokiranje unosa dodirom na ekranu za čitanje (ne utječe na kontrole sustava)</string>
     <string name="connectionWizard_provider_wallabagit_next">Spoji</string>
     <string name="pref_categoryName_sync">Sinkronizacija</string>
@@ -307,7 +307,7 @@
     <string name="d_testConnection_urlSuggestion_message">Preporučujemo, da promijeniš URL u: %s. Ali možeš koristiti i upisani.</string>
     <string name="pref_categoryName_connection">Veza</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Zaobiđi Onyx uređaje, forsirajući crnu boju za poveznice</string>
-    <string name="themeName_light_contrast">Svjetla (visoki kontrast)</string>
+    <string name="themeName_light_contrast">Svijetla (visoki kontrast)</string>
     <string name="notification_channel_group_name_tts">TTS</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Koristi predloženo</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Ukloni prvi element lokalnog reda čekanja</string>
@@ -342,4 +342,8 @@
     <string name="menu_tag">Dodaj oznaku</string>
     <string name="notification_channel_name_background_operations">Operacije u pozadini</string>
     <string name="notification_backgroundOperations">Operacije u pozadini</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Odaberi ograničavače koje KaTeX treba obraditi</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Aktiviraj iscrtavanje LaTeX matematike putem KaTeX-a</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Matematički ograničavači</string>
+    <string name="pref_name_ui_mathRendering_enabled">Iscrtavanje matematike</string>
 </resources>
