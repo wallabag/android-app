@@ -346,4 +346,10 @@
     <string name="menu_tag">Ajouter une étiquette</string>
     <string name="notification_channel_name_background_operations">Opérations en tâche de fond</string>
     <string name="notification_backgroundOperations">Opérations en tâche de fond</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Utilise le jetoniseur ICU pour l\'indexation de recherche en texte intégral (le jetoniseur générique unicode61 est utilisé dans le cas contraire). Peut améliorer les résultats de recherche pour les langues coréenne, chinoise et japonaise. Une « mise à jour complète » est requise pour que l\'option prenne effet</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">Utilisez le jetoniseur ICU pour la recherche en texte intégral</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Sélectionnez les délimiteurs d\'environnement que KaTeX doit traiter</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Délimiteurs mathématiques</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Activer le rendu de contenu mathématique en LaTeX via KaTeX</string>
+    <string name="pref_name_ui_mathRendering_enabled">Rendu du contenu mathématique</string>
 </resources>
