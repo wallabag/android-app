@@ -1,4 +1,4 @@
-# wallabag - Android App [![Build Status](https://travis-ci.org/wallabag/android-app.svg?branch=master)](https://travis-ci.org/wallabag/android-app)
+# wallabag - Android App ![Build status](https://github.com/wallabag/android-app/workflows/CI/badge.svg?branch=master)
 
 <img src="/readme/wallabag logo.png" align="left"
 width="200" hspace="10" vspace="10">
