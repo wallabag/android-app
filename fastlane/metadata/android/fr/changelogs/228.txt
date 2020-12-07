@@ -1,0 +1,3 @@
+- Konrad Heidler (@khdlr) a ajouté le rendu LaTeX (optional).
+- Ajout d'une option pour améliorer la recherche pour le groupe de langues CJK.
+- Mise à jour des traductions.

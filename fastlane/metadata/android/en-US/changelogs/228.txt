@@ -1,0 +1,3 @@
+- Konrad Heidler (@khdlr) added LaTeX rendering (optional).
+- Added an option to improve search for CJK languages.
+- Updated translations.
