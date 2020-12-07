@@ -346,4 +346,6 @@
     <string name="pref_desc_ui_mathRendering_enabled">Aktiviraj iscrtavanje LaTeX matematike putem KaTeX-a</string>
     <string name="pref_name_ui_mathRendering_delimiters">Matematički ograničavači</string>
     <string name="pref_name_ui_mathRendering_enabled">Iscrtavanje matematike</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Koristi ICU tokenizer za indeksiranje pretraživanja teksta (inače se koristi generički tokenizer unicode61). Može poboljšati rezultate pretraživanja za kineski/japanski/korejski. „Potpuno aktualiziranje” je potrebno, da bi opcija stupila na snagu</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">Koristi ICU tokenizer za pretraživanje teksta</string>
 </resources>

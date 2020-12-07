@@ -341,4 +341,10 @@
     <string name="pref_desc_misc_localQueue_notice">何をしているか理解できない場合はここで何もしないでください</string>
     <string name="pref_name_misc_localQueue_notice">注意</string>
     <string name="pref_categoryName_misc_localQueue">ローカルの変更</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">全文検索のインデックスにICU tokenizerを使用します(それ以外の場合は一般的なunicode61 tokenizerを使用します)。CJK言語の検索が改善される可能性があります。オプションを有効化するには\"全て更新\"が必要です</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">全文検索にICU tokenizerを使用する</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">KaTeXが処理する区切り文字を選択</string>
+    <string name="pref_name_ui_mathRendering_delimiters">数式の区切り文字</string>
+    <string name="pref_desc_ui_mathRendering_enabled">KaTeXによるLaTeX-math表示を有効にする</string>
+    <string name="pref_name_ui_mathRendering_enabled">数式表示</string>
 </resources>

@@ -347,4 +347,6 @@
     <string name="pref_name_ui_mathRendering_delimiters">数学分隔符</string>
     <string name="pref_desc_ui_mathRendering_enabled">允许通过 KaTeX 解析 LaTeX-math</string>
     <string name="pref_name_ui_mathRendering_enabled">数学函数解析</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">使用 ICU 分词器进行全文搜索索引 (否则使用通用 unicode61 分词器)。可以改善中日韩统一表意文字的搜索结果。需要“完整更新”使该选项生效</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">对全文搜索使用 ICU 分词器</string>
 </resources>
