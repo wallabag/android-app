@@ -6,15 +6,11 @@ import android.app.job.JobScheduler;
 import android.app.job.JobService;
 import android.content.ComponentName;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import fr.gaulupeau.apps.Poche.events.ConnectivityChangedEvent;
 import fr.gaulupeau.apps.Poche.events.EventHelper;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class WallabagJobService extends JobService {
 
     private static final int CONNECTIVITY_CHANGE_JOB_ID = 1;
