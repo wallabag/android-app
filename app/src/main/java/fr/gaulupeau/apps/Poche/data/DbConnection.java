@@ -1,10 +1,7 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.util.Log;
 
-import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
@@ -28,16 +25,8 @@ public class DbConnection {
 
             Log.d(TAG, "creating new db session");
             WallabagDbOpenHelper dbHelper = new WallabagDbOpenHelper(App.getInstance(), dbPath, null);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                dbHelper.setWriteAheadLoggingEnabled(true);
-            }
-            Database db = dbHelper.getWritableDb();
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                if(!((SQLiteDatabase)db.getRawDatabase()).enableWriteAheadLogging()) {
-                    Log.w(TAG, "write ahead logging was not enabled");
-                }
-            }
-            DaoMaster daoMaster = new DaoMaster(db);
+            dbHelper.setWriteAheadLoggingEnabled(true);
+            DaoMaster daoMaster = new DaoMaster(dbHelper.getWritableDb());
             Holder.session = daoMaster.newSession();
         } else {
             Log.d(TAG, "using existing db session");
