@@ -139,14 +139,6 @@
                 android:resource="@xml/icon_unread_info" />
         </receiver>
         <receiver
-            android:name="fr.gaulupeau.apps.Poche.network.ConnectivityChangeReceiver"
-            android:enabled="false">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"
-                        tools:ignore="BatteryLife" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name="fr.gaulupeau.apps.Poche.service.BootReceiver"
             android:enabled="false">
             <intent-filter>
