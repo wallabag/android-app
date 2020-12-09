@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- copied from latest values/styles.xml -->
 <resources>
     <declare-styleable name="Theme">
         <attr name="appBarOverlayTheme" format="reference"/>
@@ -50,6 +51,8 @@
     <style name="LightTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
     <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -61,11 +64,12 @@
     <style name="LightThemeContrast.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
-        <item name="appBarOverlayTheme">@style/DarkTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/DarkTheme.PopupOverlay</item>
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_white_24dp</item>
         <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
@@ -88,6 +92,8 @@
     <style name="DarkTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
     <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
@@ -102,10 +108,11 @@
     <style name="DarkThemeContrast.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
-        <!-- Attention: adjustments here need to be applied also to SolarizedTheme in styles.xml v21 -->
         <item name="android:colorBackground">@color/solarizedBase3</item>
         <item name="android:colorForeground">@color/solarizedBase01</item>
         <item name="android:textColor">@color/solarizedBase00</item>
@@ -114,6 +121,10 @@
         <item name="android:windowBackground">@color/solarizedBase3</item>
         <item name="colorPrimary">@color/solarizedBase2</item>
         <item name="colorAccent">@color/solarizedYellow</item>
+        <item name="android:colorPrimaryDark">@color/solarizedBase1</item>
+        <item name="android:colorButtonNormal">@color/solarizedBase2</item>
+        <item name="android:navigationBarColor">@color/solarizedBase02</item>
+        <item name="android:statusBarColor">@color/solarizedBase02</item>
         <item name="appBarOverlayTheme">@style/SolarizedTheme.AppBarOverlay</item>
         <item name="popupOverlayTheme">@style/SolarizedTheme.PopupOverlay</item>
         <item name="icon_favorite">@drawable/ic_star_border_solarized_24dp</item>
@@ -137,6 +148,8 @@
     <style name="SolarizedTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
     <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
     <style name="SolarizedTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">

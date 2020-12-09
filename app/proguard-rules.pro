@@ -14,6 +14,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepclassmembers class fr.gaulupeau.apps.Poche.ui.JsActionController {
+   public *;
+}
 -keepclassmembers class fr.gaulupeau.apps.Poche.ui.JsAnnotationController {
    public *;
 }

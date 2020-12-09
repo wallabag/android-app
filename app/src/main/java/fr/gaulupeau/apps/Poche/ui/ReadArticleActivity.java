@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,7 +20,6 @@ import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -64,7 +64,7 @@ import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
-import static android.text.Html.escapeHtml;
+import static fr.gaulupeau.apps.Poche.utils.TextTools.escapeHtml;
 
 public class ReadArticleActivity extends BaseActionBarActivity {
 
@@ -161,7 +161,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         WallabagConnection.initConscrypt();
 
         if (BuildConfig.DEBUG) {
-            WebView.setWebContentsDebuggingEnabled(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
         }
 
         settings = App.getSettings();
@@ -404,17 +406,21 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
 
         menu.findItem(R.id.menu_tag).setOnMenuItemClickListener(item -> {
-            webViewContent.evaluateJavascript(
-                    "(function(){return window.getSelection().toString()})()",
-                    this::createTagFromSelection);
-            mode.finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                webViewContent.evaluateJavascript(
+                        "(function(){return window.getSelection().toString()})()",
+                        this::createTagFromSelection);
+                mode.finish();
+            } else {
+                webViewContent.loadUrl("javascript:hostActionController.selectedText(window.getSelection().toString())");
+            }
             return true;
         });
 
         MenuItem annotateItem = menu.findItem(R.id.menu_annotate);
         if (annotationsEnabled) {
             annotateItem.setOnMenuItemClickListener(i -> {
-                webViewContent.evaluateJavascript("invokeAnnotator();", null);
+                webViewContent.loadUrl("javascript:invokeAnnotator()");
 //                mode.finish(); // seems to reset selection too early (not on emulator though)
                 return true;
             });
@@ -620,6 +626,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void initWebView() {
         webViewContent.getSettings().setJavaScriptEnabled(true);
 
+        initJsActionController();
         initTtsController();
         initAnnotationController();
 
@@ -677,10 +684,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 super.onPageFinished(view, url);
             }
 
+            @SuppressWarnings("deprecation") // can't use newer method until API 21
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                String url = request.getUrl().toString();
-
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 // If we try to open current URL, do not propose to save it, directly open browser
                 if (url.equals(articleUrl)) {
                     openURL(url);
@@ -787,6 +793,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         final GestureDetector gestureDetector = new GestureDetector(this, gestureListener);
 
         webViewContent.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
+    }
+
+    private void initJsActionController() {
+        JsActionController jsActionController = new JsActionController(this::createTagFromSelection);
+
+        webViewContent.addJavascriptInterface(jsActionController, "hostActionController");
     }
 
     private void initTtsController() {

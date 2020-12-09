@@ -1,5 +1,7 @@
 package fr.gaulupeau.apps.Poche.data.dao;
 
+import android.os.Build;
+
 import org.greenrobot.greendao.database.Database;
 
 import fr.gaulupeau.apps.Poche.App;
@@ -29,31 +31,44 @@ public class FtsDao {
             "article_content_after_delete_tr"
     };
 
+    public static boolean isFtsSupported() {
+        // https://www.sqlite.org/changes.html#version_3_7_9 is required for the 'content' option
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN; // https://stackoverflow.com/a/4377116
+    }
+
     public static String getQueryString() {
         return "select " + COLUMN_ID + " from " + TABLE_NAME + " where " + TABLE_NAME + " match ";
     }
 
     public static void createAll(Database db, boolean ifNotExists) {
+        if (!isFtsSupported()) return;
+
         createViewForFts(db, ifNotExists);
         createTable(db, ifNotExists);
         createTriggers(db, ifNotExists);
     }
 
     public static void dropAll(Database db, boolean ifExists) {
+        if (!isFtsSupported()) return;
+
         dropTriggers(db, ifExists);
         dropTable(db, ifExists);
         dropViewForFts(db, ifExists);
     }
 
     public static void deleteAllArticles(Database db) {
+        if (!isFtsSupported()) return;
+
         dropTable(db, true);
         createTable(db, true);
     }
 
     private static void createTable(Database db, boolean ifNotExists) {
-        String options = ", content=\"" + VIEW_FOR_FTS_NAME + "\""
-                + ", tokenize="
-                + (App.getSettings().isFtsIcuTokenizerEnabled() ? "icu" : "unicode61");
+        String options = ", content=\"" + VIEW_FOR_FTS_NAME + "\"";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            options += ", tokenize="
+                    + (App.getSettings().isFtsIcuTokenizerEnabled() ? "icu" : "unicode61");
+        }
 
         db.execSQL("create virtual table " + getIfNotExistsConstraint(ifNotExists) +
                 TABLE_NAME + " using fts4(" +

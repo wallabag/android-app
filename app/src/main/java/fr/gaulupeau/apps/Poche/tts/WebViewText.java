@@ -59,8 +59,8 @@ class WebViewText implements TextInterface {
         parsingFinishedCallback = callback;
 
         ttsHost.getJsTtsController().setWebViewText(this);
-        ttsHost.getWebView().evaluateJavascript("javascript:" + JS_PARSE_DOCUMENT_SCRIPT
-                + ";parseDocumentText();", null);
+        ttsHost.getWebView().loadUrl("javascript:" + JS_PARSE_DOCUMENT_SCRIPT);
+        ttsHost.getWebView().loadUrl("javascript:parseDocumentText()");
     }
 
     void onDocumentParseStart() {
