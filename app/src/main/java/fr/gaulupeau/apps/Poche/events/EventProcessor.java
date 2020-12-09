@@ -66,6 +66,8 @@ public class EventProcessor {
     private Handler mainHandler;
     private NotificationManager notificationManager;
 
+    private boolean delayedNetworkChangedTask;
+
     private NotificationCompat.Builder syncQueueNotificationBuilder;
     private NotificationCompat.Builder updateArticlesNotificationBuilder;
     private NotificationCompat.Builder sweepDeletedArticlesNotificationBuilder;
@@ -118,11 +120,12 @@ public class EventProcessor {
     public void onConnectivityChangedEvent(ConnectivityChangedEvent event) {
         Log.d(TAG, "onConnectivityChangedEvent() started");
 
-        Settings settings = getSettings();
-        if (settings.isOfflineQueuePending() && settings.isConfigurationOk()) {
-            Log.d(TAG, "networkChanged() requesting SyncQueue operation");
-            OperationsHelper.syncQueue(getContext(), true);
+        if(event.isNoConnectivity()) {
+            Log.d(TAG, "onConnectivityChangedEvent() isNoConnectivity is true; ignoring event");
+            return;
         }
+
+        networkChanged(false);
     }
 
     @Subscribe
@@ -556,6 +559,33 @@ public class EventProcessor {
             Log.d(TAG, "onActionResultEvent() notification is not null; showing it");
 
             notify(NOTIFICATION_ID_OTHER, notification);
+        }
+    }
+
+    private void networkChanged(boolean delayed) {
+        if(!delayed && delayedNetworkChangedTask) return;
+
+        if(!WallabagConnection.isNetworkAvailable()) return;
+
+        Settings settings = getSettings();
+
+        if(settings.isOfflineQueuePending() && settings.isConfigurationOk()) {
+            if(delayed) {
+                Log.d(TAG, "networkChanged() requesting SyncQueue operation");
+
+                OperationsHelper.syncQueue(getContext(), true);
+
+                delayedNetworkChangedTask = false;
+            } else {
+                getMainHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        networkChanged(true);
+                    }
+                }, 3000);
+
+                delayedNetworkChangedTask = true;
+            }
         }
     }
 
