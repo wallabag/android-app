@@ -34,6 +34,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.util.Pair;
 import androidx.media.session.MediaButtonReceiver;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -744,7 +745,14 @@ public class TtsService extends Service {
 
             Log.v(TAG, "ttsSpeak() speaking " + utteranceId + ": " + text);
 
-            tts.speak(text, queueMode, null, utteranceId);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                tts.speak(text, queueMode, null, utteranceId);
+            } else {
+                HashMap<String, String> params = new HashMap<>(2);
+                params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, utteranceId);
+                //noinspection deprecation
+                tts.speak(text.toString(), queueMode, params);
+            }
 
             Log.v(TAG, "ttsSpeak() call returned");
         }

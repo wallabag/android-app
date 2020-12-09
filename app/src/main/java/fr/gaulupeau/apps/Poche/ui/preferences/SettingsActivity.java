@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -172,6 +173,14 @@ public class SettingsActivity extends BaseActionBarActivity {
             if (handleHttpSchemePreference != null) {
                 handleHttpSchemePreference.setChecked(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                CheckBoxPreference ftsIcuTokenizerPreference = (CheckBoxPreference) findPreference(
+                        getString(R.string.pref_key_misc_ftsIcuTokenizer_enabled));
+                if (ftsIcuTokenizerPreference != null) {
+                    ftsIcuTokenizerPreference.setEnabled(false);
+                }
             }
 
             ListPreference dbPathListPreference = (ListPreference)findPreference(
