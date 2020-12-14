@@ -20,6 +20,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -618,7 +619,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
-        webViewContent.getSettings().setJavaScriptEnabled(true);
+        WebSettings webViewSettings = webViewContent.getSettings();
+        webViewSettings.setJavaScriptEnabled(true);
+
+        if (settings.isImageCacheEnabled() && !webViewSettings.getAllowFileAccess()) {
+            Log.d(TAG, "initWebView() enabling WebView file access");
+            webViewSettings.setAllowFileAccess(true);
+        }
 
         initTtsController();
         initAnnotationController();
