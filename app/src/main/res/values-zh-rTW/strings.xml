@@ -1,2 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="d_urlAction_addToWallabag">添加至 wallabag</string>
+    <string name="d_urlAction_openInBrowser">在瀏覽器中打開</string>
+    <string name="d_urlAction_title">選擇網址的操作</string>
+    <string name="loading_article_text">載入中…</string>
+    <string name="no_articles">沒有文章</string>
+    <string name="negative_answer">否</string>
+    <string name="positive_answer">是</string>
+    <string name="share_text_extra">" 來自 @wallabagapp"</string>
+    <string name="share_article_title">分享文章</string>
+    <string name="page_url">Page URL</string>
+    <string name="dialog_add_label">添加新文章</string>
+    <string name="txtUrlCopied">文章網址已復製到剪貼板</string>
+    <string name="txtConfigNotSet">請先配置應用，然後再進行同步。</string>
+    <string name="txtNetOffline">請檢查互聯網連接！</string>
+    <string name="d_deleteArticle_message">確定要刪除該文章嗎？</string>
+    <string name="d_deleteArticle_title">刪除文章？</string>
+    <string name="menu_syncLocalChanges">同步本地更改</string>
+    <string name="menu_open_random_article">打開隨機文章</string>
+    <string name="ttsOptions">選項</string>
+    <string name="ttsFastForward">快進</string>
+    <string name="ttsPlayPause">播放/暫停</string>
+    <string name="ttsFastRewind">快退</string>
+    <string name="ttsError">文字轉語音出錯</string>
+    <string name="ttsAutoplayNextArticle">自動播放下一篇</string>
+    <string name="ttsVoice">選擇語音</string>
+    <string name="ttsLanguage">選擇語言</string>
+    <string name="ttsVolume">音量</string>
+    <string name="ttsPitch">音調</string>
+    <string name="ttsSpeed">速率</string>
+    <string name="menuTTS">文字轉語音</string>
+    <string name="menuCopyOriginalURL">複製原始網址</string>
+    <string name="menuOpenOriginal">打開原文</string>
+    <string name="menuDelete">刪除</string>
+    <string name="menuPrevious">上一篇</string>
+    <string name="menuNext">下一篇</string>
+    <string name="menuShare">分享</string>
+    <string name="remove_from_favorites">從收藏夾中刪除</string>
+    <string name="add_to_favorites">添加到收藏夾</string>
+    <string name="btnMarkUnread">標記為未讀</string>
+    <string name="btnMarkRead">標記為已讀</string>
+</resources>
