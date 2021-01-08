@@ -46,7 +46,7 @@ public class BaseNetworkWorker extends BaseWorker {
             if (getSettings().isConfigurationOk()) {
                 if (e instanceof java.net.UnknownHostException
                         || e instanceof java.net.ConnectException // TODO: maybe filter by message
-                        || e instanceof java.net.SocketTimeoutException) {
+                        || e instanceof java.io.InterruptedIOException) {
                     result.setErrorType(ActionResult.ErrorType.TEMPORARY);
                     handled = true;
                 } else if (e instanceof javax.net.ssl.SSLException
