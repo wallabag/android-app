@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
+        <item name="icon_favorite_list">@drawable/ic_star_white_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
+        <item name="icon_read">@drawable/ic_done_white_24dp</item>
+        <item name="icon_read_list">@drawable/ic_done_white_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
+        <item name="icon_search">@drawable/ic_search_white_24dp</item>
+        <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
+        <item name="welcome_logo">@drawable/welcome_white</item>
+        <item name="icon_running">@drawable/ic_running_white_24dp</item>
+        <item name="icon_notes">@drawable/ic_musical_notes_white_24dp</item>
+        <item name="icon_volume">@drawable/ic_volume_up_white_24dp</item>
+        <item name="icon_fast_forward">@drawable/ic_fast_forward_white_24dp</item>
+        <item name="icon_play">@drawable/ic_play_arrow_white_24dp</item>
+        <item name="icon_fast_rewind">@drawable/ic_fast_rewind_white_24dp</item>
+        <item name="icon_autoplay">@drawable/ic_redo_white_24dp</item>
+        <item name="icon_menu">@drawable/ic_menu_white_24dp</item>
+    </style>
+
+    <style name="DarkTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+
+    <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+
+    <style name="DarkThemeContrast" parent="DarkTheme">
+        <item name="android:windowBackground">@color/darkContrastBlack</item>
+        <item name="android:itemBackground">@color/darkContrastBlack
+        </item> <!-- Background Color of Three-dots Menu -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#000000</item>
+    </style>
+
+    <style name="DarkThemeContrast.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>
