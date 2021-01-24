@@ -24,9 +24,9 @@
         <attr name="icon_open" format="reference" />
     </declare-styleable>
 
-    <style name="LightTheme" parent="Theme.MaterialComponents.DayNight">
-        <item name="appBarOverlayTheme">@style/LightTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/LightTheme.PopupOverlay</item>
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
+        <item name="appBarOverlayTheme">@style/Theme.App.AppBarOverlay</item>
+        <item name="popupOverlayTheme">@style/Theme.App.PopupOverlay</item>
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_black_24dp</item>
         <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
@@ -47,22 +47,22 @@
         <item name="android:textColorPrimary">@color/darkContrastBlack</item>
     </style>
 
-    <style name="LightTheme.NoActionBar">
+    <style name="Theme.App.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.App.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.App.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="LightThemeContrast" parent="LightTheme">
+    <style name="Theme.App.Contrast" parent="Theme.App">
         <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="LightThemeContrast.NoActionBar">
+    <style name="Theme.App.Contrast.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
@@ -70,7 +70,7 @@
     </style>
 
 
-    <style name="SolarizedTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.App.Solarized" parent="Theme.MaterialComponents.DayNight">
         <item name="android:colorBackground">@color/solarizedBase3</item>
         <item name="android:colorForeground">@color/solarizedBase01</item>
         <item name="android:textColor">@color/solarizedBase00</item>
@@ -83,8 +83,8 @@
         <item name="android:colorButtonNormal">@color/solarizedBase2</item>
         <item name="android:navigationBarColor">@color/solarizedBase02</item>
         <item name="android:statusBarColor">@color/solarizedBase02</item>
-        <item name="appBarOverlayTheme">@style/SolarizedTheme.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/SolarizedTheme.PopupOverlay</item>
+        <item name="appBarOverlayTheme">@style/Theme.App.Solarized.AppBarOverlay</item>
+        <item name="popupOverlayTheme">@style/Theme.App.Solarized.PopupOverlay</item>
         <item name="icon_favorite">@drawable/ic_star_border_solarized_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_solarized_24dp</item>
         <item name="icon_favorite_undo">@drawable/ic_star_solarized_24dp</item>
@@ -103,16 +103,16 @@
         <item name="icon_menu">@drawable/ic_menu_solarized_24dp</item>
     </style>
 
-    <style name="SolarizedTheme.NoActionBar">
+    <style name="Theme.App.Solarized.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="Theme.App.Solarized.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="SolarizedTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <style name="Theme.App.Solarized.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:colorBackground">@color/solarizedBase3</item>
     </style>
 

@@ -50,43 +50,43 @@ public class Themes {
     public enum Theme {
         LIGHT(
                 R.string.themeName_light,
-                R.style.LightTheme,
-                R.style.LightTheme_NoActionBar,
+                R.style.Theme_App,
+                R.style.Theme_App_NoActionBar,
                 R.style.DialogTheme
         ),
 
         LIGHT_CONTRAST(
                 R.string.themeName_light_contrast,
-                R.style.LightThemeContrast,
-                R.style.LightThemeContrast_NoActionBar,
+                R.style.Theme_App_Contrast,
+                R.style.Theme_App_Contrast_NoActionBar,
                 R.style.DialogTheme
         ),
 
         E_INK(
                 R.string.themeName_eink,
-                R.style.LightThemeContrast,
-                R.style.LightThemeContrast_NoActionBar,
+                R.style.Theme_App_Contrast,
+                R.style.Theme_App_Contrast_NoActionBar,
                 R.style.DialogTheme
         ),
 
         DARK(
                 R.string.themeName_dark,
-                R.style.DarkTheme,
-                R.style.DarkTheme_NoActionBar,
+                R.style.Theme_App,
+                R.style.Theme_App_NoActionBar,
                 R.style.DialogThemeDark
         ),
 
         DARK_CONTRAST(
                 R.string.themeName_dark_contrast,
-                R.style.DarkThemeContrast,
-                R.style.DarkThemeContrast_NoActionBar,
+                R.style.Theme_App_Contrast,
+                R.style.Theme_App_Contrast_NoActionBar,
                 R.style.DialogThemeDark
         ),
 
         SOLARIZED(
                 R.string.themeName_solarized,
-                R.style.SolarizedTheme,
-                R.style.SolarizedTheme_NoActionBar,
+                R.style.Theme_App_Solarized,
+                R.style.Theme_App_Solarized_NoActionBar,
                 R.style.DialogTheme
         );
 

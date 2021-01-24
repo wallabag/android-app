@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="DarkTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_white_24dp</item>
@@ -22,18 +22,18 @@
         <item name="icon_menu">@drawable/ic_menu_white_24dp</item>
     </style>
 
-    <style name="DarkTheme.NoActionBar">
+    <style name="Theme.App.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="Theme.App.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
 
-    <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
+    <style name="Theme.App.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
-    <style name="DarkThemeContrast" parent="DarkTheme">
+    <style name="Theme.App.Contrast" parent="Theme.App">
         <item name="android:windowBackground">@color/darkContrastBlack</item>
         <item name="android:itemBackground">@color/darkContrastBlack
         </item> <!-- Background Color of Three-dots Menu -->
@@ -41,7 +41,7 @@
         <item name="colorPrimary">#000000</item>
     </style>
 
-    <style name="DarkThemeContrast.NoActionBar">
+    <style name="Theme.App.Contrast.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
