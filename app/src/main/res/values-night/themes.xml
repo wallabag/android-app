@@ -22,16 +22,11 @@
         <item name="icon_menu">@drawable/ic_menu_white_24dp</item>
     </style>
 
-    <style name="Theme.App.NoActionBar">
+    <style name="Theme.App.NoActionBar" parent="Theme.App">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.App.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
-
-    <style name="Theme.App.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="Theme.App.Contrast" parent="Theme.App">
         <item name="android:windowBackground">@color/darkContrastBlack</item>
@@ -41,10 +36,23 @@
         <item name="colorPrimary">#000000</item>
     </style>
 
-    <style name="Theme.App.Contrast.NoActionBar">
+    <style name="Theme.App.Contrast.NoActionBar" parent="Theme.App.Contrast">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.App.Solarized" parent="Theme.App">
+        <item name="colorPrimary">@color/solarizedBase02</item>
+        <item name="colorPrimaryVariant">@color/solarizedBase01</item>
+        <item name="colorSecondary">@color/solarizedYellow</item>
+        <item name="colorSurface">@color/solarizedBase02</item>
+        <item name="android:colorBackground">@color/solarizedBase03</item>
+        <item name="colorError">@color/solarizedRed</item>
+        <item name="colorOnPrimary">@color/solarizedBase00</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSurface">@color/solarizedBase00</item>
+        <item name="colorOnError">#FFFBFA</item>
+        <item name="colorOnBackground">@color/solarizedBase01</item>
     </style>
 </resources>

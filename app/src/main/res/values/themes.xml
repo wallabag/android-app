@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <declare-styleable name="Theme">
         <attr name="appBarOverlayTheme" format="reference" />
         <attr name="popupOverlayTheme" format="reference" />
@@ -24,9 +24,7 @@
         <attr name="icon_open" format="reference" />
     </declare-styleable>
 
-    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight">
-        <item name="appBarOverlayTheme">@style/Theme.App.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/Theme.App.PopupOverlay</item>
+    <style name="Theme.App" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_black_24dp</item>
         <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
@@ -44,47 +42,78 @@
         <item name="icon_fast_rewind">@drawable/ic_fast_rewind_24dp</item>
         <item name="icon_autoplay">@drawable/ic_redo_24dp</item>
         <item name="icon_menu">@drawable/ic_menu_24dp</item>
-        <item name="android:textColorPrimary">@color/darkContrastBlack</item>
+
+        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimaryDark">#000000</item>
+        <item name="colorPrimaryVariant">#4E0D3A</item>
+        <item name="colorSecondary">#6B38FB</item>
+        <item name="colorSecondaryVariant">#2100c7</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="colorError">#C5032B</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorOnSurface">#442B2D</item>
+        <item name="colorOnError">#FFFBFA</item>
+        <item name="colorOnBackground">#442B2D</item>
+
+        <!--        <item name="android:windowTranslucentStatus">true</item>-->
+
+        <item name="shapeAppearanceSmallComponent">
+            @style/ShapeAppearance.Fortnightly.SmallComponent
+        </item>
+        <item name="shapeAppearanceMediumComponent">
+            @style/ShapeAppearance.Fortnightly.MediumComponent
+        </item>
+        <item name="shapeAppearanceLargeComponent">
+            @style/ShapeAppearance.Fortnightly.LargeComponent
+        </item>
+
+        <item name="bottomSheetDialogTheme">@style/Theme.Fortnightly.BottomSheetDialog</item>
+        <item name="chipStyle">@style/Widget.Fortnightly.Chip</item>
+        <item name="floatingActionButtonStyle">@style/Widget.Fortnightly.FloatingActionButton</item>
+        <item name="textInputStyle">@style/Widget.Fortnightly.TextInputLayout</item>
+
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+        <item name="circularProgressIndicatorStyle">@style/Widget.App.CircularProgressIndicator
+        </item>
+        <item name="linearProgressIndicatorStyle">@style/Widget.App.LinearProgressIndicator
+        </item>
+
     </style>
 
-    <style name="Theme.App.NoActionBar">
+    <style name="Theme.App.NoActionBar" parent="Theme.App">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.App.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.App.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Theme.App.Contrast" parent="Theme.App">
         <item name="android:textColor">#000000</item>
     </style>
 
-    <style name="Theme.App.Contrast.NoActionBar">
+    <style name="Theme.App.Contrast.NoActionBar" parent="Theme.App.Contrast">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
 
-    <style name="Theme.App.Solarized" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:colorBackground">@color/solarizedBase3</item>
-        <item name="android:colorForeground">@color/solarizedBase01</item>
-        <item name="android:textColor">@color/solarizedBase00</item>
-        <item name="android:textColorPrimary">@color/solarizedBase01</item>
-        <item name="android:textColorSecondary">@color/solarizedBase01</item>
-        <item name="android:windowBackground">@color/solarizedBase3</item>
+    <style name="Theme.App.Solarized" parent="Theme.App">
+
         <item name="colorPrimary">@color/solarizedBase2</item>
-        <item name="colorAccent">@color/solarizedYellow</item>
-        <item name="android:colorPrimaryDark">@color/solarizedBase1</item>
-        <item name="android:colorButtonNormal">@color/solarizedBase2</item>
-        <item name="android:navigationBarColor">@color/solarizedBase02</item>
-        <item name="android:statusBarColor">@color/solarizedBase02</item>
-        <item name="appBarOverlayTheme">@style/Theme.App.Solarized.AppBarOverlay</item>
-        <item name="popupOverlayTheme">@style/Theme.App.Solarized.PopupOverlay</item>
+        <item name="colorPrimaryVariant">@color/solarizedBase1</item>
+        <item name="colorSecondary">@color/solarizedYellow</item>
+        <item name="colorSurface">@color/solarizedBase2</item>
+        <item name="android:colorBackground">@color/solarizedBase3</item>
+        <item name="colorError">@color/solarizedRed</item>
+        <item name="colorOnPrimary">@color/solarizedBase0</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSurface">@color/solarizedBase0</item>
+        <item name="colorOnError">#FFFBFA</item>
+        <item name="colorOnBackground">@color/solarizedBase1</item>
+
         <item name="icon_favorite">@drawable/ic_star_border_solarized_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_solarized_24dp</item>
         <item name="icon_favorite_undo">@drawable/ic_star_solarized_24dp</item>
@@ -103,55 +132,16 @@
         <item name="icon_menu">@drawable/ic_menu_solarized_24dp</item>
     </style>
 
-    <style name="Theme.App.Solarized.NoActionBar">
+    <style name="Theme.App.Solarized.NoActionBar" parent="Theme.App.Solarized">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.App.Solarized.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar" />
+    <style name="Theme.App.Solarized.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
-    <style name="Theme.App.Solarized.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <style name="Theme.App.Solarized.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light">
         <item name="android:colorBackground">@color/solarizedBase3</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="windowNoTitle">true</item>
-
-        <item name="icon_read">@drawable/ic_done_black_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_black_24dp</item>
-        <item name="icon_favorite">@drawable/ic_star_border_black_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_black_24dp</item>
-        <item name="icon_tag">@drawable/ic_tag_black_24dp</item>
-        <item name="icon_open">@drawable/ic_open_in_new_black_24dp</item>
-    </style>
-
-    <style name="DialogThemeDark" parent="Theme.AppCompat.Dialog">
-        <item name="windowNoTitle">true</item>
-
-        <item name="icon_read">@drawable/ic_done_white_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
-        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
-        <item name="icon_tag">@drawable/ic_tag_white_24dp</item>
-        <item name="icon_open">@drawable/ic_open_in_new_white_24dp</item>
-    </style>
-
-    <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:colorBackgroundCacheHint">@null</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@android:style/Animation</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="colorPrimary">@color/splash_background</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
-        <item name="android:windowBackground">@drawable/background_splash</item>
-    </style>
 </resources>

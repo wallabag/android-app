@@ -35,7 +35,7 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.MainActivity"
-            android:theme="@style/Theme.App.NoActionBar">
+            android:theme="@style/Theme.App">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
