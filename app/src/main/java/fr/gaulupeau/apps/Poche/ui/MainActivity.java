@@ -555,7 +555,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onUpdateArticlesProgressEvent()");
 
         if (this.progressBar != null) {
-            this.progressBar.setProgressCompat(event.getCurrent() / event.getTotal(), true);
+            final int total = event.getTotal();
+            if (total > 0) {
+                this.progressBar.setProgressCompat(event.getCurrent() / total, true);
+            }
         }
     }
 
