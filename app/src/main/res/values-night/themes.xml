@@ -29,11 +29,7 @@
     </style>
 
     <style name="Theme.App.Contrast" parent="Theme.App">
-        <item name="android:windowBackground">@color/darkContrastBlack</item>
-        <item name="android:itemBackground">@color/darkContrastBlack
-        </item> <!-- Background Color of Three-dots Menu -->
-        <item name="android:textColor">#FFFFFF</item>
-        <item name="colorPrimary">#000000</item>
+        <item name="android:colorBackground">@color/darkContrastBlack</item>
     </style>
 
     <style name="Theme.App.Contrast.NoActionBar" parent="Theme.App.Contrast">

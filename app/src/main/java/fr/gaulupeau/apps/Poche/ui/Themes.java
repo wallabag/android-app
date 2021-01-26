@@ -68,6 +68,20 @@ public class Themes {
     }
 
     public enum Theme {
+        DEFAULT(
+                R.string.themeName_default,
+                R.style.Theme_App,
+                R.style.Theme_App_NoActionBar,
+                R.style.DialogTheme
+        ),
+
+        CONTRAST(
+                R.string.themeName_contrast,
+                R.style.Theme_App_Contrast,
+                R.style.Theme_App_Contrast_NoActionBar,
+                R.style.DialogTheme
+        ),
+
         LIGHT(
                 R.string.themeName_light,
                 R.style.Theme_App,

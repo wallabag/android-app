@@ -44,20 +44,17 @@
         <item name="icon_menu">@drawable/ic_menu_24dp</item>
 
         <item name="colorPrimary">#000000</item>
-        <item name="colorPrimaryDark">#000000</item>
-        <item name="colorPrimaryVariant">#4E0D3A</item>
+        <item name="colorPrimaryVariant">#000000</item>
         <item name="colorSecondary">#6B38FB</item>
         <item name="colorSecondaryVariant">#2100c7</item>
         <item name="colorSurface">#FFFFFF</item>
         <item name="android:colorBackground">#FFFFFF</item>
         <item name="colorError">#C5032B</item>
-        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnPrimary">#000000</item>
         <item name="colorOnSecondary">#FFFFFF</item>
-        <item name="colorOnSurface">#442B2D</item>
+        <item name="colorOnSurface">#000000</item>
         <item name="colorOnError">#FFFBFA</item>
         <item name="colorOnBackground">#442B2D</item>
-
-        <!--        <item name="android:windowTranslucentStatus">true</item>-->
 
         <item name="shapeAppearanceSmallComponent">
             @style/ShapeAppearance.Fortnightly.SmallComponent
@@ -74,7 +71,12 @@
         <item name="floatingActionButtonStyle">@style/Widget.Fortnightly.FloatingActionButton</item>
         <item name="textInputStyle">@style/Widget.Fortnightly.TextInputLayout</item>
 
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+
+        <item name="borderlessButtonStyle">@style/Widget.App.Button.TextButton</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.App.Button.OutlinedButton</item>
+        <item name="materialButtonStyle">@style/Widget.App.Button</item>
     </style>
 
     <style name="Theme.App.NoActionBar" parent="Theme.App">
@@ -83,9 +85,7 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="Theme.App.Contrast" parent="Theme.App">
-        <item name="android:textColor">#000000</item>
-    </style>
+    <style name="Theme.App.Contrast" parent="Theme.App" />
 
     <style name="Theme.App.Contrast.NoActionBar" parent="Theme.App.Contrast">
         <item name="windowActionBar">false</item>
