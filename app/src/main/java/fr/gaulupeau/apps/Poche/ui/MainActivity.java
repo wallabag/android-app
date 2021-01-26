@@ -556,8 +556,10 @@ public class MainActivity extends AppCompatActivity
 
         if (progressBar != null) {
             progressBar.setIndeterminate(false);
-            progressBar.setMax(event.getTotal());
-            progressBar.setProgress(event.getCurrent());
+            if (event.getTotal() > 0) {
+                progressBar.setMax(event.getTotal());
+                progressBar.setProgressCompat(event.getCurrent(), true);
+            }
         }
     }
 
@@ -599,7 +601,7 @@ public class MainActivity extends AppCompatActivity
         updateRunning = started;
 
         if (progressBar != null) {
-            progressBar.setVisibility(started ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(started ? View.VISIBLE : View.INVISIBLE);
             progressBar.setIndeterminate(true);
         }
     }
