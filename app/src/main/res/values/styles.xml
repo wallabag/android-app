@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!--https://github.com/material-components/material-components-android/blob/5b32b25c0cd05b11036776b6f6297e05d6f18d62/catalog/java/io/material/catalog/shapetheming/res/values/styles.xml#L93-->
     <style name="Widget.Fortnightly.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="shapeAppearanceOverlay">
