@@ -1,8 +1,12 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
+
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatDelegate;
+
+import android.os.Build;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -14,7 +18,7 @@ public class Themes {
 
     private static Theme theme;
 
-    private static Map<Activity, Theme> appliedThemes = new WeakHashMap<>();
+    private static final Map<Activity, Theme> appliedThemes = new WeakHashMap<>();
 
     static {
         init();
@@ -24,27 +28,43 @@ public class Themes {
         Themes.theme = App.getSettings().getTheme();
     }
 
-    public static Theme getCurrentTheme() {
+    static Theme getCurrentTheme() {
         return theme;
     }
 
-    public static void applyTheme(Activity activity) {
+    static void applyTheme(final Activity activity) {
         applyTheme(activity, true);
+        applyDarkTheme();
     }
 
-    public static void applyTheme(Activity activity, boolean actionBar) {
+    static void applyTheme(final Activity activity, final boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
     }
 
-    public static void applyDialogTheme(Activity activity) {
+    private static void applyDarkTheme() {
+        if (theme.name().toLowerCase().contains("light")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (theme.name().toLowerCase().contains("dark")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            // `Set by Battery Saver` for Q above (inclusive), `Use system default` for Q below
+            // https://medium.com/androiddevelopers/appcompat-v23-2-daynight-d10f90c83e94
+            AppCompatDelegate.setDefaultNightMode(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q ?
+                    AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY : AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
+
+    static void applyDialogTheme(final Activity activity) {
         activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
     }
 
-    public static void checkTheme(Activity activity) {
-        Theme appliedTheme = appliedThemes.get(activity);
-        if(appliedTheme != theme) activity.recreate();
+    public static void checkTheme(final Activity activity) {
+        final Theme appliedTheme = appliedThemes.get(activity);
+        if (appliedTheme != theme) {
+            activity.recreate();
+        }
     }
 
     public enum Theme {
@@ -90,33 +110,37 @@ public class Themes {
                 R.style.DialogTheme
         );
 
-        private int nameId;
-        private int resId;
-        private int noActionBarResId;
-        private int dialogResId;
+        private final int nameId;
+        private final int resId;
+        private final int noActionBarResId;
+        private final int dialogResId;
 
-        Theme(@StringRes int nameId, @StyleRes int resId,
-              @StyleRes int noActionBarResId, @StyleRes int dialogResId) {
+        Theme(@StringRes final int nameId, @StyleRes final int resId,
+              @StyleRes final int noActionBarResId, @StyleRes final int dialogResId) {
             this.nameId = nameId;
             this.resId = resId;
             this.noActionBarResId = noActionBarResId;
             this.dialogResId = dialogResId;
         }
 
-        public @StringRes int getNameId() {
-            return nameId;
+        public @StringRes
+        int getNameId() {
+            return this.nameId;
         }
 
-        public @StyleRes int getResId() {
-            return resId;
+        public @StyleRes
+        int getResId() {
+            return this.resId;
         }
 
-        public @StyleRes int getNoActionBarResId() {
-            return noActionBarResId;
+        public @StyleRes
+        int getNoActionBarResId() {
+            return this.noActionBarResId;
         }
 
-        public @StyleRes int getDialogResId() {
-            return dialogResId;
+        public @StyleRes
+        int getDialogResId() {
+            return this.dialogResId;
         }
 
     }
