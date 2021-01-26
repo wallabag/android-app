@@ -9,8 +9,8 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        app:elevation="0dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -26,10 +26,10 @@
                 android:id="@+id/progressBar"
                 android:layout_width="match_parent"
                 android:layout_height="14dp"
-                android:visibility="invisible"
                 android:indeterminate="true"
-                app:showAnimationBehavior="outward"
-                app:hideAnimationBehavior="inward" />
+                android:visibility="invisible"
+                app:hideAnimationBehavior="inward"
+                app:showAnimationBehavior="outward" />
 
         </FrameLayout>
 
