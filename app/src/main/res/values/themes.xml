@@ -74,13 +74,7 @@
         <item name="floatingActionButtonStyle">@style/Widget.Fortnightly.FloatingActionButton</item>
         <item name="textInputStyle">@style/Widget.Fortnightly.TextInputLayout</item>
 
-        <item name="tabStyle">@style/Widget.App.TabLayout</item>
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
-        <item name="circularProgressIndicatorStyle">@style/Widget.App.CircularProgressIndicator
-        </item>
-        <item name="linearProgressIndicatorStyle">@style/Widget.App.LinearProgressIndicator
-        </item>
-
     </style>
 
     <style name="Theme.App.NoActionBar" parent="Theme.App">
@@ -101,14 +95,13 @@
 
 
     <style name="Theme.App.Solarized" parent="Theme.App">
-
-        <item name="colorPrimary">@color/solarizedBase2</item>
+        <item name="colorPrimary">@color/solarizedBase0</item>
         <item name="colorPrimaryVariant">@color/solarizedBase1</item>
         <item name="colorSecondary">@color/solarizedYellow</item>
         <item name="colorSurface">@color/solarizedBase2</item>
         <item name="android:colorBackground">@color/solarizedBase3</item>
         <item name="colorError">@color/solarizedRed</item>
-        <item name="colorOnPrimary">@color/solarizedBase0</item>
+        <item name="colorOnPrimary">@color/solarizedBase00</item>
         <item name="colorOnSecondary">#000000</item>
         <item name="colorOnSurface">@color/solarizedBase0</item>
         <item name="colorOnError">#FFFBFA</item>
@@ -138,10 +131,6 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="Theme.App.Solarized.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.ActionBar" />
 
-    <style name="Theme.App.Solarized.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light">
-        <item name="android:colorBackground">@color/solarizedBase3</item>
-    </style>
 
 </resources>

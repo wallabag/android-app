@@ -43,13 +43,13 @@
     </style>
 
     <style name="Theme.App.Solarized" parent="Theme.App">
-        <item name="colorPrimary">@color/solarizedBase02</item>
+        <item name="colorPrimary">@color/solarizedBase00</item>
         <item name="colorPrimaryVariant">@color/solarizedBase01</item>
         <item name="colorSecondary">@color/solarizedYellow</item>
         <item name="colorSurface">@color/solarizedBase02</item>
         <item name="android:colorBackground">@color/solarizedBase03</item>
         <item name="colorError">@color/solarizedRed</item>
-        <item name="colorOnPrimary">@color/solarizedBase00</item>
+        <item name="colorOnPrimary">@color/solarizedBase0</item>
         <item name="colorOnSecondary">#000000</item>
         <item name="colorOnSurface">@color/solarizedBase00</item>
         <item name="colorOnError">#FFFBFA</item>

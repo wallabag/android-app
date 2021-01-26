@@ -76,43 +76,10 @@
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
-    <style name="Widget.App.TabLayout" parent="Widget.MaterialComponents.TabLayout.PrimarySurface">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.TabLayout</item>
+    <style name="Theme.App.Solarized.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:colorBackground">@color/solarizedBase3</item>
     </style>
 
-    <style name="ThemeOverlay.App.TabLayout" parent="">
-        <item name="colorPrimary">#FFFFFF</item>
-        <item name="colorPrimaryVariant">#FFFFFF</item>
-        <item name="colorOnPrimary">#000000</item>
-        <item name="colorSurface">#FFFFFF</item>
-        <item name="colorOnSurface">#000000</item>
-    </style>
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface" />
 
-    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.PrimarySurface">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
-    </style>
-
-    <style name="ThemeOverlay.App.Toolbar" parent="">
-        <item name="colorPrimary">#FFFFFF</item>
-        <item name="colorPrimaryVariant">#FFFFFF</item>
-        <item name="colorOnPrimary">#000000</item>
-    </style>
-
-    <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
-        <item name="trackThickness">20dp</item>
-    </style>
-
-    <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
-        <item name="colorPrimary">#000000</item>
-    </style>
-
-    <style name="Widget.App.LinearProgressIndicator" parent="Widget.MaterialComponents.LinearProgressIndicator">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.LinearProgressIndicator</item>
-        <item name="trackThickness">20dp</item>
-    </style>
-
-    <style name="ThemeOverlay.App.LinearProgressIndicator" parent="">
-        <item name="colorPrimary">#000000</item>
-    </style>
 </resources>
