@@ -32,12 +32,12 @@ public class Themes {
         return theme;
     }
 
-    static void applyTheme(final Activity activity) {
+    static void applyTheme(Activity activity) {
         applyTheme(activity, true);
         applyDarkTheme();
     }
 
-    static void applyTheme(final Activity activity, final boolean actionBar) {
+    static void applyTheme(Activity activity, boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
     }
@@ -124,13 +124,13 @@ public class Themes {
                 R.style.DialogTheme
         );
 
-        private final int nameId;
-        private final int resId;
-        private final int noActionBarResId;
-        private final int dialogResId;
+        private int nameId;
+        private int resId;
+        private int noActionBarResId;
+        private int dialogResId;
 
-        Theme(@StringRes final int nameId, @StyleRes final int resId,
-              @StyleRes final int noActionBarResId, @StyleRes final int dialogResId) {
+        Theme(@StringRes int nameId, @StyleRes int resId,
+              @StyleRes int noActionBarResId, @StyleRes int dialogResId) {
             this.nameId = nameId;
             this.resId = resId;
             this.noActionBarResId = noActionBarResId;
@@ -139,22 +139,22 @@ public class Themes {
 
         public @StringRes
         int getNameId() {
-            return this.nameId;
+            return nameId;
         }
 
         public @StyleRes
         int getResId() {
-            return this.resId;
+            return resId;
         }
 
         public @StyleRes
         int getNoActionBarResId() {
-            return this.noActionBarResId;
+            return noActionBarResId;
         }
 
         public @StyleRes
         int getDialogResId() {
-            return this.dialogResId;
+            return dialogResId;
         }
 
     }

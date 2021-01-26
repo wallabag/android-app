@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
     private boolean updateRunning;
 
-    private final Map<String, Fragment.SavedState> savedFragmentStates = new HashMap<>();
+    private Map<String, Fragment.SavedState> savedFragmentStates = new HashMap<>();
 
     private String currentFragmentType;
     private Fragment currentFragment;
@@ -114,48 +114,48 @@ public class MainActivity extends AppCompatActivity
     private String selectedTag;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate()");
         Themes.applyTheme(this, false);
         super.onCreate(savedInstanceState);
 
-        this.setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        this.setDefaultKeyMode(AppCompatActivity.DEFAULT_KEYS_SEARCH_LOCAL);
+        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
-        this.settings = App.getSettings();
+        settings = App.getSettings();
 
-        final Toolbar toolbar = this.findViewById(R.id.toolbar);
-        this.setSupportActionBar(toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        this.navigationView = this.findViewById(R.id.nav_view);
-        this.navigationView.setNavigationItemSelectedListener(this);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-        if (this.navigationView != null) {
-            final View headerView = this.navigationView.getHeaderView(0);
+        if (navigationView != null) {
+            View headerView = navigationView.getHeaderView(0);
             if (headerView != null) {
-                this.lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
+                lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
             }
 
             // Set different colors for items in the navigation bar in dark (high contrast) theme
             if (Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
-                @SuppressLint("ResourceType") final XmlResourceParser parser = this.getResources().getXml(R.color.dark_contrast_menu_item);
+                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
                 try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        this.navigationView.setItemTextColor(ColorStateList.createFromXml(this.getResources(), parser, this.getTheme()));
-                        this.navigationView.setItemIconTintList(ColorStateList.createFromXml(this.getResources(), parser, this.getTheme()));
+                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
+                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
                     } else {
-                        this.navigationView.setItemTextColor(ColorStateList.createFromXml(this.getResources(), parser));
-                        this.navigationView.setItemIconTintList(ColorStateList.createFromXml(this.getResources(), parser));
+                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
+                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
                     }
-                } catch (final XmlPullParserException | IOException e) {
+                } catch (XmlPullParserException | IOException e) {
                     Log.e(TAG, "onCreate()", e);
                 }
             }
         }
 
-        final DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
-        final ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
@@ -166,131 +166,131 @@ public class MainActivity extends AppCompatActivity
             boolean updated;
 
             @Override
-            public void onDrawerSlide(final View drawerView, final float slideOffset) {
-                this.updateTime();
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                updateTime();
             }
 
             @Override
-            public void onDrawerStateChanged(final int newState) {
+            public void onDrawerStateChanged(int newState) {
                 if (newState == DrawerLayout.STATE_IDLE) {
-                    this.updated = false;
+                    updated = false;
                 }
             }
 
             private void updateTime() {
-                if (this.updated) {
+                if (updated) {
                     return;
                 }
-                this.updated = true;
+                updated = true;
 
-                if (MainActivity.this.lastUpdateTimeView == null) {
+                if (lastUpdateTimeView == null) {
                     return;
                 }
 
-                Log.d(MainActivity.TAG, "DrawerListener.updateTime() updating time");
+                Log.d(TAG, "DrawerListener.updateTime() updating time");
 
-                MainActivity.this.updateLastUpdateTime();
+                updateLastUpdateTime();
             }
         });
 
-        this.progressBar = this.findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
-        this.firstSyncDone = this.settings.isFirstSyncDone();
+        firstSyncDone = settings.isFirstSyncDone();
 
-        this.offlineQueuePending = this.settings.isOfflineQueuePending();
+        offlineQueuePending = settings.isOfflineQueuePending();
 
-        this.sortOrder = this.settings.getListSortOrder();
-        this.tagsSortOrder = this.settings.getTagListSortOrder();
+        sortOrder = settings.getListSortOrder();
+        tagsSortOrder = settings.getTagListSortOrder();
 
         String currentFragmentType = null;
 
         if (savedInstanceState == null) {
-            final Intent intent = this.getIntent();
+            Intent intent = getIntent();
 
-            this.selectedTag = intent.getStringExtra(PARAM_TAG_LABEL);
+            selectedTag = intent.getStringExtra(PARAM_TAG_LABEL);
 
-            if (!TextUtils.isEmpty(this.selectedTag)) {
+            if (!TextUtils.isEmpty(selectedTag)) {
                 currentFragmentType = FRAGMENT_TAGGED_ARTICLE_LISTS;
             }
 
             if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-                this.searchQuery = intent.getStringExtra(SearchManager.QUERY);
+                searchQuery = intent.getStringExtra(SearchManager.QUERY);
             }
         } else {
             Log.v(TAG, "onCreate() restoring state");
 
-            final Bundle bundle = savedInstanceState.getBundle(STATE_SAVED_FRAGMENT_STATES);
+            Bundle bundle = savedInstanceState.getBundle(STATE_SAVED_FRAGMENT_STATES);
             if (bundle != null) {
-                for (final String key : bundle.keySet()) {
+                for (String key : bundle.keySet()) {
                     //noinspection ConstantConditions
-                    this.savedFragmentStates.put(key, bundle.getParcelable(key));
+                    savedFragmentStates.put(key, bundle.getParcelable(key));
                 }
             }
 
             currentFragmentType = savedInstanceState.getString(STATE_CURRENT_FRAGMENT);
 
-            this.selectedTag = savedInstanceState.getString(STATE_SELECTED_TAG);
+            selectedTag = savedInstanceState.getString(STATE_SELECTED_TAG);
 
-            this.searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
+            searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
         }
 
-        if (this.searchQuery == null) {
-            this.searchQuery = "";
+        if (searchQuery == null) {
+            searchQuery = "";
         }
-        this.performSearch(this.searchQuery);
+        performSearch(searchQuery);
 
         if (currentFragmentType == null) {
             currentFragmentType = FRAGMENT_ARTICLE_LISTS;
         }
 
         if (savedInstanceState == null) {
-            this.setCurrentFragment(currentFragmentType);
+            setCurrentFragment(currentFragmentType);
         } else {
-            this.currentFragment = this.getSupportFragmentManager().findFragmentByTag(currentFragmentType);
+            currentFragment = getSupportFragmentManager().findFragmentByTag(currentFragmentType);
             this.currentFragmentType = currentFragmentType;
-            this.updateNavigationUI(currentFragmentType);
+            updateNavigationUI(currentFragmentType);
         }
 
         EventHelper.register(this);
     }
 
     @Override
-    protected void onNewIntent(final Intent intent) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.d(TAG, "onNewIntent()");
 
-        final String tag = intent.getStringExtra(PARAM_TAG_LABEL);
+        String tag = intent.getStringExtra(PARAM_TAG_LABEL);
         if (!TextUtils.isEmpty(tag)) {
-            this.openTag(tag);
+            openTag(tag);
         }
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            final String query = intent.getStringExtra(SearchManager.QUERY);
+            String query = intent.getStringExtra(SearchManager.QUERY);
             Log.v(TAG, "onNewIntent() search intent; query: " + query);
 
-            this.performSearch(query);
+            performSearch(query);
         }
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull final Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         Log.v(TAG, "onSaveInstanceState()");
 
-        if (!this.savedFragmentStates.isEmpty()) {
-            final Bundle bundle = new Bundle(this.savedFragmentStates.size());
+        if (!savedFragmentStates.isEmpty()) {
+            Bundle bundle = new Bundle(savedFragmentStates.size());
 
-            for (final Map.Entry<String, Fragment.SavedState> e : this.savedFragmentStates.entrySet()) {
+            for (Map.Entry<String, Fragment.SavedState> e : savedFragmentStates.entrySet()) {
                 bundle.putParcelable(e.getKey(), e.getValue());
             }
 
             outState.putBundle(STATE_SAVED_FRAGMENT_STATES, bundle);
         }
 
-        outState.putString(STATE_CURRENT_FRAGMENT, this.currentFragmentType);
-        outState.putString(STATE_SELECTED_TAG, this.selectedTag);
-        outState.putString(STATE_SEARCH_QUERY, this.searchQuery);
+        outState.putString(STATE_CURRENT_FRAGMENT, currentFragmentType);
+        outState.putString(STATE_SELECTED_TAG, selectedTag);
+        outState.putString(STATE_SEARCH_QUERY, searchQuery);
     }
 
     @Override
@@ -299,9 +299,9 @@ public class MainActivity extends AppCompatActivity
 
         Themes.checkTheme(this);
 
-        this.checkConfigurationOnResume = true;
+        checkConfigurationOnResume = true;
 
-        this.tryToUpdateOnResume = true;
+        tryToUpdateOnResume = true;
     }
 
     @Override
@@ -309,40 +309,40 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
 
         // TODO: check logic
-        if (this.checkConfigurationOnResume) {
-            this.checkConfigurationOnResume = false;
+        if (checkConfigurationOnResume) {
+            checkConfigurationOnResume = false;
 
             if (!Settings.checkFirstRunInit(this)) {
-                if (!this.settings.isConfigurationOk() && this.checkConfigurationDialog == null) {
-                    final AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
-                    messageBox.setTitle(this.settings.isConfigurationErrorShown()
+                if (!settings.isConfigurationOk() && checkConfigurationDialog == null) {
+                    AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
+                    messageBox.setTitle(settings.isConfigurationErrorShown()
                             ? R.string.d_configurationIsQuestionable_title
                             : R.string.d_configurationChanged_title);
-                    messageBox.setMessage(this.settings.isConfigurationErrorShown()
+                    messageBox.setMessage(settings.isConfigurationErrorShown()
                             ? R.string.d_configurationIsQuestionable_message
                             : R.string.d_configurationChanged_message);
-                    messageBox.setPositiveButton(R.string.ok, (dialog, which) -> this.testConfiguration());
+                    messageBox.setPositiveButton(R.string.ok, (dialog, which) -> testConfiguration());
                     messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
-                    messageBox.setOnDismissListener(dialog -> this.checkConfigurationDialog = null);
-                    this.checkConfigurationDialog = messageBox.show();
+                    messageBox.setOnDismissListener(dialog -> checkConfigurationDialog = null);
+                    checkConfigurationDialog = messageBox.show();
                 }
             }
         }
 
-        if (this.tryToUpdateOnResume) {
-            this.tryToUpdateOnResume = false;
+        if (tryToUpdateOnResume) {
+            tryToUpdateOnResume = false;
 
-            if (!this.firstSyncDone) {
-                this.updateAllFeedsIfDbIsEmpty();
+            if (!firstSyncDone) {
+                updateAllFeedsIfDbIsEmpty();
             } else {
-                this.updateOnStartup();
+                updateOnStartup();
             }
         }
     }
 
     @Override
     protected void onStop() {
-        this.cancelConfigurationTest();
+        cancelConfigurationTest();
 
         super.onStop();
     }
@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        final DrawerLayout drawer = this.findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -365,68 +365,68 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         Log.d(TAG, "onCreateOptionsMenu()");
 
-        if (this.searchMenuItemExpanded) {
+        if (searchMenuItemExpanded) {
             // options menu invalidation happened when searchMenuItem was expanded
-            this.searchMenuItemExpanded = false;
-            this.searchMenuItem = null;
+            searchMenuItemExpanded = false;
+            searchMenuItem = null;
 
             Log.i(TAG, "onCreateOptionsMenu() searchMenuItem was not collapsed!");
-            Log.v(TAG, "onCreateOptionsMenu() searchQuery: " + this.searchQuery
-                    + ", searchQueryPrevious: " + this.searchQueryPrevious);
+            Log.v(TAG, "onCreateOptionsMenu() searchQuery: " + searchQuery
+                    + ", searchQueryPrevious: " + searchQueryPrevious);
 
-            this.performSearch(this.searchQueryPrevious);
+            performSearch(searchQueryPrevious);
         }
 
-        this.getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
 
-        this.searchMenuItem = menu.findItem(R.id.menu_main_search);
-        this.searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        searchMenuItem = menu.findItem(R.id.menu_main_search);
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public boolean onMenuItemActionExpand(final MenuItem item) {
-                Log.v(MainActivity.TAG, "searchMenuItem expanded");
-                MainActivity.this.searchMenuItemExpanded = true;
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                Log.v(TAG, "searchMenuItem expanded");
+                searchMenuItemExpanded = true;
                 return true;
             }
 
             @Override
-            public boolean onMenuItemActionCollapse(final MenuItem item) {
-                Log.v(MainActivity.TAG, "searchMenuItem collapsed");
-                MainActivity.this.supportInvalidateOptionsMenu();
-                MainActivity.this.searchMenuItemExpanded = false;
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Log.v(TAG, "searchMenuItem collapsed");
+                supportInvalidateOptionsMenu();
+                searchMenuItemExpanded = false;
                 return true;
             }
         });
 
-        final SearchView searchView = (SearchView) this.searchMenuItem.getActionView();
+        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
         if (searchView != null) {
-            searchView.setSearchableInfo(((SearchManager) this.getSystemService(Context.SEARCH_SERVICE))
-                    .getSearchableInfo(this.getComponentName()));
+            searchView.setSearchableInfo(((SearchManager) getSystemService(Context.SEARCH_SERVICE))
+                    .getSearchableInfo(getComponentName()));
 
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
-                public boolean onQueryTextSubmit(final String query) {
-                    Log.v(MainActivity.TAG, "onQueryTextSubmit() query: " + query);
+                public boolean onQueryTextSubmit(String query) {
+                    Log.v(TAG, "onQueryTextSubmit() query: " + query);
 
                     return true;
                 }
 
                 @Override
-                public boolean onQueryTextChange(final String newText) {
-                    Log.v(MainActivity.TAG, "onQueryTextChange() newText: " + newText);
+                public boolean onQueryTextChange(String newText) {
+                    Log.v(TAG, "onQueryTextChange() newText: " + newText);
 
-                    MainActivity.this.setSearchQuery(newText);
+                    setSearchQuery(newText);
 
                     return true;
                 }
             });
         }
-        this.checkPendingSearchUI();
+        checkPendingSearchUI();
 
-        if (!this.offlineQueuePending) {
-            final MenuItem menuItem = menu.findItem(R.id.menu_main_syncQueue);
+        if (!offlineQueuePending) {
+            MenuItem menuItem = menu.findItem(R.id.menu_main_syncQueue);
             if (menuItem != null) {
                 menuItem.setVisible(false);
             }
@@ -436,22 +436,22 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_changeSortOrder:
-                this.switchSortOrder();
+                switchSortOrder();
                 return true;
 
             case R.id.menu_main_syncQueue:
-                this.syncQueue();
+                syncQueue();
                 return true;
 
             case R.id.menu_main_sweepDeletedArticles:
-                this.sweepDeletedArticles();
+                sweepDeletedArticles();
                 return true;
 
             case R.id.menu_main_fullUpdate:
-                this.fullUpdate(true);
+                fullUpdate(true);
                 return true;
         }
 
@@ -459,26 +459,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_mainLists:
-                this.setCurrentFragment(FRAGMENT_ARTICLE_LISTS);
+                setCurrentFragment(FRAGMENT_ARTICLE_LISTS);
                 break;
 
             case R.id.nav_tags:
-                this.setCurrentFragment(FRAGMENT_TAG_LIST);
+                setCurrentFragment(FRAGMENT_TAG_LIST);
                 break;
 
             case R.id.nav_add:
-                this.showAddBagDialog();
+                showAddBagDialog();
                 break;
 
             case R.id.nav_settings:
-                this.startActivity(new Intent(this.getBaseContext(), SettingsActivity.class));
+                startActivity(new Intent(getBaseContext(), SettingsActivity.class));
                 break;
 
             case R.id.nav_about:
-                final Libs.ActivityStyle style;
+                Libs.ActivityStyle style;
                 switch (Themes.getCurrentTheme()) {
                     case DARK:
                     case DARK_CONTRAST:
@@ -489,8 +489,8 @@ public class MainActivity extends AppCompatActivity
                         style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
                         break;
                 }
-                final CharSequence aboutCharSequence = this.getText(R.string.aboutText);
-                final String aboutString = aboutCharSequence instanceof Spanned
+                CharSequence aboutCharSequence = getText(R.string.aboutText);
+                String aboutString = aboutCharSequence instanceof Spanned
                         ? Html.toHtml((Spanned) aboutCharSequence)
                         : aboutCharSequence.toString();
                 new LibsBuilder()
@@ -507,140 +507,136 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onContextItemSelected(final MenuItem item) {
-        return this.handleContextMenuItemInFragment(item) || super.onContextItemSelected(item);
+    public boolean onContextItemSelected(MenuItem item) {
+        return handleContextMenuItemInFragment(item) || super.onContextItemSelected(item);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
-    public void onOfflineQueueChangedEvent(final OfflineQueueChangedEvent event) {
+    public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
         Log.d(TAG, "onOfflineQueueChangedEvent()");
 
-        final Long queueLength = event.getQueueLength();
+        Long queueLength = event.getQueueLength();
 
-        final boolean prevValue = this.offlineQueuePending;
-        this.offlineQueuePending = queueLength == null || queueLength > 0;
+        boolean prevValue = offlineQueuePending;
+        offlineQueuePending = queueLength == null || queueLength > 0;
 
-        Log.d(TAG, "onOfflineQueueChangedEvent() offlineQueuePending: " + this.offlineQueuePending);
+        Log.d(TAG, "onOfflineQueueChangedEvent() offlineQueuePending: " + offlineQueuePending);
 
-        if (prevValue != this.offlineQueuePending) {
+        if (prevValue != offlineQueuePending) {
             Log.d(TAG, "onOfflineQueueChangedEvent() invalidating options menu");
-            this.invalidateOptionsMenu();
+            invalidateOptionsMenu();
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFeedsChangedEvent(final FeedsChangedEvent event) {
+    public void onFeedsChangedEvent(FeedsChangedEvent event) {
         Log.d(TAG, "onFeedsChangedEvent()");
 
         if (event.isInvalidateAll()) {
-            this.firstSyncDone = this.settings.isFirstSyncDone();
+            firstSyncDone = settings.isFirstSyncDone();
         }
 
-        if (this.currentFragment instanceof ArticleListsFragment) {
-            ((ArticleListsFragment) this.currentFragment).onFeedsChangedEvent(event);
-        } else if (this.currentFragment instanceof RecyclerViewListFragment) {
-            ((RecyclerViewListFragment) this.currentFragment).invalidateList();
+        if (currentFragment instanceof ArticleListsFragment) {
+            ((ArticleListsFragment) currentFragment).onFeedsChangedEvent(event);
+        } else if (currentFragment instanceof RecyclerViewListFragment) {
+            ((RecyclerViewListFragment) currentFragment).invalidateList();
         }
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    public void onUpdateArticlesStartedEvent(final UpdateArticlesStartedEvent event) {
+    public void onUpdateArticlesStartedEvent(UpdateArticlesStartedEvent event) {
         Log.d(TAG, "onUpdateArticlesStartedEvent()");
 
-        this.updateStateChanged(true);
+        updateStateChanged(true);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateArticlesProgressEvent(final UpdateArticlesProgressEvent event) {
+    public void onUpdateArticlesProgressEvent(UpdateArticlesProgressEvent event) {
         Log.d(TAG, "onUpdateArticlesProgressEvent()");
 
-        if (this.progressBar != null) {
-            final int total = event.getTotal();
-            if (total > 0) {
-                this.progressBar.setProgressCompat(event.getCurrent() / total, true);
-            }
+        if (progressBar != null) {
+            progressBar.setIndeterminate(false);
+            progressBar.setMax(event.getTotal());
+            progressBar.setProgress(event.getCurrent());
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateArticlesFinishedEvent(final UpdateArticlesFinishedEvent event) {
+    public void onUpdateArticlesFinishedEvent(UpdateArticlesFinishedEvent event) {
         Log.d(TAG, "onUpdateArticlesFinishedEvent");
 
         if (event.getResult().isSuccess()) {
-            this.firstSyncDone = true;
-            this.tryToUpdateOnResume = false;
+            firstSyncDone = true;
+            tryToUpdateOnResume = false;
         }
 
-        this.updateLastUpdateTime();
+        updateLastUpdateTime();
 
-        this.updateStateChanged(false);
+        updateStateChanged(false);
     }
 
     private void updateLastUpdateTime() {
-        if (this.lastUpdateTimeView == null) {
+        if (lastUpdateTimeView == null) {
             return;
         }
 
         Log.d(TAG, "updateLastUpdateTime() updating time");
 
-        final long timestamp = this.settings.getLatestUpdateRunTimestamp();
+        long timestamp = settings.getLatestUpdateRunTimestamp();
         if (timestamp != 0) {
-            this.lastUpdateTimeView.setText(this.getString(R.string.lastUpdateTimeLabel,
+            lastUpdateTimeView.setText(getString(R.string.lastUpdateTimeLabel,
                     DateUtils.getRelativeTimeSpanString(timestamp)));
         } else {
-            this.lastUpdateTimeView.setVisibility(View.INVISIBLE);
+            lastUpdateTimeView.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void updateStateChanged(final boolean started) {
-        if (started == this.updateRunning) {
+    private void updateStateChanged(boolean started) {
+        if (started == updateRunning) {
             return;
         }
 
-        this.updateRunning = started;
+        updateRunning = started;
 
-        if (this.progressBar != null) {
-            if (started) {
-                this.progressBar.show();
-            } else {
-                this.progressBar.hide();
-            }
+        if (progressBar != null) {
+            progressBar.setVisibility(started ? View.VISIBLE : View.GONE);
+            progressBar.setIndeterminate(true);
         }
     }
 
-    private void performSearch(final String query) {
-        this.setSearchQuery(query);
+    private void performSearch(String query) {
+        setSearchQuery(query);
 
         if (TextUtils.isEmpty(query)) {
             return;
         }
 
-        this.searchUIPending = true;
-        this.checkPendingSearchUI();
+        searchUIPending = true;
+        checkPendingSearchUI();
     }
 
     private void checkPendingSearchUI() {
-        if (this.searchMenuItem == null) {
+        if (searchMenuItem == null) {
             return;
         }
-        if (!this.searchUIPending) {
+        if (!searchUIPending) {
             return;
         }
 
-        this.searchUIPending = false;
+        searchUIPending = false;
 
-        this.initSearchUI();
+        initSearchUI();
     }
 
     private void initSearchUI() {
-        final SearchView searchView = (SearchView) this.searchMenuItem.getActionView();
+        final SearchView searchView = (SearchView) searchMenuItem.getActionView();
         if (searchView == null) {
             return;
         }
 
-        final String searchQueryToRestore = this.searchQuery;
+        final String searchQueryToRestore = searchQuery;
 
-        this.searchMenuItem.expandActionView();
+        searchMenuItem.expandActionView();
 
         searchView.post(() -> {
             Log.v(TAG, "searchView.post() restoring search string: " + searchQueryToRestore);
@@ -648,105 +644,105 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void setParametersToFragment(final Fragment fragment) {
+    private void setParametersToFragment(Fragment fragment) {
         Log.v(TAG, "setParametersToFragment() started");
         if (fragment == null) {
             return;
         }
 
-        this.setSortOrder(fragment);
-        MainActivity.setSearchQueryOnFragment(fragment, this.searchQuery);
+        setSortOrder(fragment);
+        setSearchQueryOnFragment(fragment, searchQuery);
     }
 
     private void switchSortOrder() {
-        if (FRAGMENT_TAG_LIST.equals(this.currentFragmentType)) {
-            this.tagsSortOrder = this.tagsSortOrder == Sortable.SortOrder.DESC
+        if (FRAGMENT_TAG_LIST.equals(currentFragmentType)) {
+            tagsSortOrder = tagsSortOrder == Sortable.SortOrder.DESC
                     ? Sortable.SortOrder.ASC
                     : Sortable.SortOrder.DESC;
 
-            this.settings.setTagListSortOrder(this.tagsSortOrder);
+            settings.setTagListSortOrder(tagsSortOrder);
         } else {
-            this.sortOrder = this.sortOrder == Sortable.SortOrder.DESC
+            sortOrder = sortOrder == Sortable.SortOrder.DESC
                     ? Sortable.SortOrder.ASC
                     : Sortable.SortOrder.DESC;
 
-            this.settings.setListSortOrder(this.sortOrder);
+            settings.setListSortOrder(sortOrder);
         }
 
-        this.setSortOrder(this.currentFragment);
+        setSortOrder(currentFragment);
     }
 
-    private void setSortOrder(final Fragment fragment) {
-        MainActivity.setSortOrder(fragment, FRAGMENT_TAG_LIST.equals(this.currentFragmentType)
-                ? this.tagsSortOrder : this.sortOrder);
+    private void setSortOrder(Fragment fragment) {
+        setSortOrder(fragment, FRAGMENT_TAG_LIST.equals(currentFragmentType)
+                ? tagsSortOrder : sortOrder);
     }
 
-    private static void setSortOrder(final Fragment fragment, final Sortable.SortOrder sortOrder) {
+    private void setSortOrder(Fragment fragment, Sortable.SortOrder sortOrder) {
         if (fragment instanceof Sortable) {
             ((Sortable) fragment).setSortOrder(sortOrder);
         }
     }
 
-    private void setSearchQuery(final String searchQuery) {
+    private void setSearchQuery(String searchQuery) {
         this.searchQueryPrevious = this.searchQuery;
         this.searchQuery = searchQuery;
 
-        MainActivity.setSearchQueryOnFragment(this.currentFragment, searchQuery);
+        setSearchQueryOnFragment(currentFragment, searchQuery);
     }
 
-    private static void setSearchQueryOnFragment(final Fragment fragment, final String searchQuery) {
+    private void setSearchQueryOnFragment(Fragment fragment, String searchQuery) {
         if (fragment instanceof Searchable) {
             ((Searchable) fragment).setSearchQuery(searchQuery);
         }
     }
 
-    private boolean handleContextMenuItemInFragment(final MenuItem item) {
-        return this.currentFragment instanceof ContextMenuItemHandler
-                && ((ContextMenuItemHandler) this.currentFragment).handleContextItemSelected(this, item);
+    private boolean handleContextMenuItemInFragment(MenuItem item) {
+        return currentFragment instanceof ContextMenuItemHandler
+                && ((ContextMenuItemHandler) currentFragment).handleContextItemSelected(this, item);
     }
 
-    private void setCurrentFragment(final String type) {
-        this.setCurrentFragment(type, false);
+    private void setCurrentFragment(String type) {
+        setCurrentFragment(type, false);
     }
 
-    private void setCurrentFragment(final String type, final boolean force) {
+    private void setCurrentFragment(String type, boolean force) {
         Log.d(TAG, String.format("setCurrentFragment(%s, %s)", type, force));
 
-        if (!force && TextUtils.equals(this.currentFragmentType, type)) {
+        if (!force && TextUtils.equals(currentFragmentType, type)) {
             Log.i(TAG, "setCurrentFragment() ignoring switch to the same type: " + type);
             return;
         }
 
-        this.setCurrentFragment(this.getFragment(type), type);
+        setCurrentFragment(getFragment(type), type);
     }
 
-    private void setCurrentFragment(final Fragment fragment, final String type) {
-        this.updateNavigationUI(type);
+    private void setCurrentFragment(Fragment fragment, String type) {
+        updateNavigationUI(type);
 
-        if (this.currentFragment != null && MainActivity.isFragmentStateSavable(this.currentFragmentType)) {
-            Log.d(TAG, "setCurrentFragment() saving fragment state: " + this.currentFragmentType);
+        if (currentFragment != null && isFragmentStateSavable(currentFragmentType)) {
+            Log.d(TAG, "setCurrentFragment() saving fragment state: " + currentFragmentType);
 
             //noinspection ConstantConditions
-            this.savedFragmentStates.put(this.currentFragmentType, this.getSupportFragmentManager()
-                    .saveFragmentInstanceState(this.currentFragment));
+            savedFragmentStates.put(currentFragmentType, getSupportFragmentManager()
+                    .saveFragmentInstanceState(currentFragment));
         }
 
-        this.getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_content_frame, fragment, type)
                 .commit();
 
-        this.currentFragment = fragment;
-        this.currentFragmentType = type;
+        currentFragment = fragment;
+        currentFragmentType = type;
 
-        this.setParametersToFragment(fragment);
+        setParametersToFragment(fragment);
     }
 
-    private Fragment getFragment(final String type) {
+    private Fragment getFragment(String type) {
         Log.d(TAG, "getFragment() type: " + type);
 
-        Fragment fragment = this.getSupportFragmentManager().findFragmentByTag(type);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(type);
 
-        if (fragment == null || !MainActivity.isFragmentReusable(type)) {
+        if (fragment == null || !isFragmentReusable(type)) {
             Log.d(TAG, "getFragment() creating new instance");
 
             switch (type) {
@@ -755,7 +751,7 @@ public class MainActivity extends AppCompatActivity
                     break;
 
                 case FRAGMENT_TAGGED_ARTICLE_LISTS:
-                    fragment = ArticleListsFragment.newInstance(this.selectedTag);
+                    fragment = ArticleListsFragment.newInstance(selectedTag);
                     break;
 
                 case FRAGMENT_TAG_LIST:
@@ -766,10 +762,10 @@ public class MainActivity extends AppCompatActivity
                     throw new IllegalArgumentException("Fragment type is not supported: " + type);
             }
 
-            if (MainActivity.isFragmentStateSavable(type)) {
+            if (isFragmentStateSavable(type)) {
                 Log.d(TAG, "getFragment() fragment is savable");
 
-                final Fragment.SavedState savedState = this.savedFragmentStates.get(type);
+                Fragment.SavedState savedState = savedFragmentStates.get(type);
                 if (savedState != null) {
                     Log.d(TAG, "getFragment() restoring fragment state");
 
@@ -781,11 +777,11 @@ public class MainActivity extends AppCompatActivity
         return fragment;
     }
 
-    private static boolean isFragmentReusable(final String type) {
+    private boolean isFragmentReusable(String type) {
         return !type.equals(FRAGMENT_TAGGED_ARTICLE_LISTS);
     }
 
-    private static boolean isFragmentStateSavable(final String type) {
+    private boolean isFragmentStateSavable(String type) {
         if (type == null) {
             return false;
         }
@@ -799,13 +795,13 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    private void updateNavigationUI(final String type) {
-        if (type == null || this.navigationView == null) {
+    private void updateNavigationUI(String type) {
+        if (type == null || navigationView == null) {
             return;
         }
 
-        if (FRAGMENT_TAGGED_ARTICLE_LISTS.equals(this.currentFragmentType)) {
-            final MenuItem item = this.navigationView.getMenu().findItem(R.id.nav_taggedLists);
+        if (FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
+            MenuItem item = navigationView.getMenu().findItem(R.id.nav_taggedLists);
             if (item != null) {
                 item.setVisible(false);
                 item.setEnabled(false);
@@ -826,11 +822,11 @@ public class MainActivity extends AppCompatActivity
             case FRAGMENT_TAGGED_ARTICLE_LISTS:
                 itemID = R.id.nav_taggedLists;
 
-                if (this.selectedTag != null) {
-                    title = this.getString(R.string.title_main_tag, this.selectedTag);
+                if (selectedTag != null) {
+                    title = getString(R.string.title_main_tag, selectedTag);
                 }
 
-                final MenuItem item = this.navigationView.getMenu().findItem(itemID);
+                MenuItem item = navigationView.getMenu().findItem(itemID);
                 if (item != null) {
                     if (title != null) {
                         item.setTitle(title);
@@ -842,39 +838,39 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (itemID != 0) {
-            this.navigationView.setCheckedItem(itemID);
+            navigationView.setCheckedItem(itemID);
 
             if (title == null) {
-                final MenuItem item = this.navigationView.getMenu().findItem(itemID);
+                MenuItem item = navigationView.getMenu().findItem(itemID);
                 if (item != null) {
                     title = item.getTitle();
                 }
             }
         }
         if (title != null) {
-            this.setTitle(title);
+            setTitle(title);
         }
     }
 
     @Override
-    public void onTagSelected(final Tag tag) {
-        this.openTag(tag.getLabel());
+    public void onTagSelected(Tag tag) {
+        openTag(tag.getLabel());
     }
 
-    private void openTag(final String tagLabel) {
-        this.selectedTag = tagLabel;
+    private void openTag(String tagLabel) {
+        selectedTag = tagLabel;
 
-        this.setCurrentFragment(FRAGMENT_TAGGED_ARTICLE_LISTS, true);
+        setCurrentFragment(FRAGMENT_TAGGED_ARTICLE_LISTS, true);
     }
 
     @Override
     public void onRecyclerViewListSwipeUpdate() {
-        this.updateArticles(true, ArticleUpdater.UpdateType.FAST);
+        updateArticles(true, ArticleUpdater.UpdateType.FAST);
     }
 
     private void syncQueue() {
         if (!WallabagConnection.isNetworkAvailable()) {
-            Toast.makeText(this, this.getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -883,7 +879,7 @@ public class MainActivity extends AppCompatActivity
 
     private void sweepDeletedArticles() {
         if (!WallabagConnection.isNetworkAvailable()) {
-            Toast.makeText(this, this.getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -891,82 +887,82 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateAllFeedsIfDbIsEmpty() {
-        if (this.settings.isConfigurationOk() && !this.settings.isFirstSyncDone()) {
-            this.fullUpdate(false);
+        if (settings.isConfigurationOk() && !settings.isFirstSyncDone()) {
+            fullUpdate(false);
         }
     }
 
     private void updateOnStartup() {
-        final long delay = TimeUnit.MINUTES.toMillis(5);
-        if (this.settings.isAutoSyncOnStartupEnabled() && this.settings.isConfigurationOk()
-                && this.settings.isFirstSyncDone()
-                && this.settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
-            this.updateArticles(false, ArticleUpdater.UpdateType.FAST);
+        long delay = TimeUnit.MINUTES.toMillis(5);
+        if (settings.isAutoSyncOnStartupEnabled() && settings.isConfigurationOk()
+                && settings.isFirstSyncDone()
+                && settings.getLatestUpdateRunTimestamp() + delay < System.currentTimeMillis()) {
+            updateArticles(false, ArticleUpdater.UpdateType.FAST);
         }
     }
 
-    private void fullUpdate(final boolean showErrors) {
-        this.updateArticles(showErrors, ArticleUpdater.UpdateType.FULL);
+    private void fullUpdate(boolean showErrors) {
+        updateArticles(showErrors, ArticleUpdater.UpdateType.FULL);
     }
 
-    private void updateArticles(final boolean showErrors, final ArticleUpdater.UpdateType updateType) {
-        if (this.updateRunning) {
+    private void updateArticles(boolean showErrors, ArticleUpdater.UpdateType updateType) {
+        if (updateRunning) {
             if (showErrors) {
                 Toast.makeText(this, R.string.previousUpdateNotFinished, Toast.LENGTH_SHORT).show();
             }
-        } else if (!this.settings.isConfigurationOk()) {
+        } else if (!settings.isConfigurationOk()) {
             if (showErrors) {
-                Toast.makeText(this, this.getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if (WallabagConnection.isNetworkAvailable()) {
-            OperationsHelper.syncAndUpdate(this, this.settings, updateType, false);
+            OperationsHelper.syncAndUpdate(this, settings, updateType, false);
         } else {
             if (showErrors) {
-                Toast.makeText(this, this.getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private void testConfiguration() {
-        this.cancelConfigurationTest();
+        cancelConfigurationTest();
 
-        this.configurationTestHelper = new ConfigurationTestHelper(
+        configurationTestHelper = new ConfigurationTestHelper(
                 this, new ConfigurationTestHelper.ResultHandler() {
             @Override
-            public void onConfigurationTestSuccess(final String url) {
-                MainActivity.this.updateAllFeedsIfDbIsEmpty();
+            public void onConfigurationTestSuccess(String url) {
+                updateAllFeedsIfDbIsEmpty();
             }
 
             @Override
             public void onConnectionTestFail(
-                    final WallabagWebService.ConnectionTestResult result, final String details) {
+                    WallabagWebService.ConnectionTestResult result, String details) {
             }
 
             @Override
-            public void onApiAccessTestFail(final TestApiAccessTask.Result result, final String details) {
+            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {
             }
-        }, null, this.settings, true);
+        }, null, settings, true);
 
-        this.configurationTestHelper.test();
+        configurationTestHelper.test();
     }
 
     private void cancelConfigurationTest() {
-        if (this.configurationTestHelper != null) {
-            this.configurationTestHelper.cancel();
-            this.configurationTestHelper = null;
+        if (configurationTestHelper != null) {
+            configurationTestHelper.cancel();
+            configurationTestHelper = null;
         }
     }
 
     private void showAddBagDialog() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_add_label);
 
-        @SuppressLint("InflateParams") final View view = this.getLayoutInflater().inflate(R.layout.dialog_add, null);
+        @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
 
         builder.setView(view);
 
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            final TextView textView = view.findViewById(R.id.page_url);
+            TextView textView = view.findViewById(R.id.page_url);
             OperationsHelper.addArticleWithUI(this, textView.getText().toString(), null);
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -975,18 +971,18 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
-        if (this.currentFragment instanceof ArticleListsFragment) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (currentFragment instanceof ArticleListsFragment) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_PAGE_UP:
                 case KeyEvent.KEYCODE_PAGE_DOWN:
-                    ((ArticleListsFragment) this.currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
+                    ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_PAGE_UP);
                     return true;
 
                 case KeyEvent.KEYCODE_VOLUME_UP:
                 case KeyEvent.KEYCODE_VOLUME_DOWN:
-                    if (this.settings.isVolumeButtonsScrollingEnabled()) {
-                        ((ArticleListsFragment) this.currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
+                    if (settings.isVolumeButtonsScrollingEnabled()) {
+                        ((ArticleListsFragment) currentFragment).scroll(keyCode == KeyEvent.KEYCODE_VOLUME_UP);
                         return true;
                     }
                     break;
