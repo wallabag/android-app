@@ -1,7 +1,9 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -46,7 +48,7 @@ public class ArticleActionsHelper {
         unfavoriteItem.setVisible(favorite);
     }
 
-    public boolean handleContextItemSelected(Activity activity, Article article, MenuItem item) {
+    public boolean handleContextItemSelected(AppCompatActivity activity, Article article, MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
             case R.id.menuArticleMarkAsUnread:
@@ -100,7 +102,9 @@ public class ArticleActionsHelper {
 
     public void shareArticle(Context context, String articleTitle, String articleUrl) {
         String shareText = articleUrl;
-        if (!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+        if (!TextUtils.isEmpty(articleTitle)) {
+            shareText = articleTitle + " " + shareText;
+        }
 
         if (App.getSettings().isAppendWallabagMentionEnabled()) {
             shareText += context.getString(R.string.share_text_extra);
@@ -108,14 +112,16 @@ public class ArticleActionsHelper {
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        if (!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        if (!TextUtils.isEmpty(articleTitle)) {
+            send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        }
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         context.startActivity(Intent.createChooser(send,
                 context.getString(R.string.share_article_title)));
     }
 
-    public void showChangeTitleDialog(Activity activity, Article article) {
+    public void showChangeTitleDialog(AppCompatActivity activity, Article article) {
         @SuppressLint("InflateParams") // ok for dialogs
         final View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_title, null);
 
@@ -150,7 +156,9 @@ public class ArticleActionsHelper {
         b.setPositiveButton(R.string.positive_answer, (dialog, which) -> {
             OperationsHelper.deleteArticle(context, article.getArticleId());
 
-            if (okCallback != null) okCallback.run();
+            if (okCallback != null) {
+                okCallback.run();
+            }
         });
         b.setNegativeButton(R.string.negative_answer, null);
 
@@ -159,7 +167,9 @@ public class ArticleActionsHelper {
 
     public void openUrl(Context context, String url) {
         Log.d(TAG, "openUrl() url: " + url);
-        if (TextUtils.isEmpty(url)) return;
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
 
         Uri uri = Uri.parse(url);
         if (uri.getScheme() == null) {
@@ -189,7 +199,9 @@ public class ArticleActionsHelper {
                 }
             }
 
-            if (rethrow) throw e;
+            if (rethrow) {
+                throw e;
+            }
         }
 
         if (errorMessage) {

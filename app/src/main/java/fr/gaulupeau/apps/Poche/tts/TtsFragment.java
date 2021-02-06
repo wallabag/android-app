@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.tts;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -96,7 +97,7 @@ public class TtsFragment extends Fragment {
 
     private boolean dontStopTtsService;
 
-    private Activity activity;
+    private AppCompatActivity activity;
     private TtsHost ttsHost;
 
     private MediaSessionCompat.Token mediaSessionToken;
@@ -151,10 +152,12 @@ public class TtsFragment extends Fragment {
         super.onAttach(context);
         Log.d(TAG, "onAttach()");
 
-        activity = (Activity) context;
+        activity = (AppCompatActivity) context;
         ttsHost = ((ReadArticleActivity) activity).getTtsHost();
 
-        if (webViewText != null) webViewText.setTtsHost(ttsHost);
+        if (webViewText != null) {
+            webViewText.setTtsHost(ttsHost);
+        }
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -170,7 +173,9 @@ public class TtsFragment extends Fragment {
         activity = null;
 
         ttsHost = null;
-        if (webViewText != null) webViewText.setTtsHost(null);
+        if (webViewText != null) {
+            webViewText.setTtsHost(null);
+        }
     }
 
     @Override
@@ -360,6 +365,7 @@ public class TtsFragment extends Fragment {
         });
 
         mediaCallback = new MediaControllerCompat.Callback() {
+            @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
                 switch (state.getState()) {
                     case PlaybackStateCompat.STATE_BUFFERING:
@@ -400,7 +406,9 @@ public class TtsFragment extends Fragment {
     private void initMediaController() {
         destroyMediaController();
 
-        if (mediaSessionToken == null) return;
+        if (mediaSessionToken == null) {
+            return;
+        }
 
         mediaController = new MediaControllerCompat(activity, mediaSessionToken);
 
@@ -602,7 +610,9 @@ public class TtsFragment extends Fragment {
         Log.v(TAG, "onDocumentLoadFinished() documentParsed="
                 + documentParsed + ", reinitDocument=" + reinitDocument);
 
-        if (documentParsed && !reinitDocument) return;
+        if (documentParsed && !reinitDocument) {
+            return;
+        }
 
         reinitDocument = false;
         documentParsed = false;
@@ -664,7 +674,9 @@ public class TtsFragment extends Fragment {
     }
 
     private void showToastMessage(@StringRes int text) {
-        if (activity != null) Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+        if (activity != null) {
+            Toast.makeText(activity, text, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -696,12 +708,16 @@ public class TtsFragment extends Fragment {
     private void selectLanguage(String language) {
         Log.d(TAG, "selectLanguage() " + language);
 
-        if (TextUtils.isEmpty(language)) return;
+        if (TextUtils.isEmpty(language)) {
+            return;
+        }
 
         language = new Locale(language).getISO3Language();
         Log.v(TAG, "selectLanguage() ISO3: " + language);
 
-        if (TextUtils.isEmpty(language)) return;
+        if (TextUtils.isEmpty(language)) {
+            return;
+        }
 
         if (!TTS_DATA.isInitialized()) {
             // The list of TTS engines has not yet be fully obtained,
@@ -725,7 +741,9 @@ public class TtsFragment extends Fragment {
                     break;
                 }
             }
-            if (voiceInfo == null && !voiceInfos.isEmpty()) voiceInfo = voiceInfos.get(0);
+            if (voiceInfo == null && !voiceInfos.isEmpty()) {
+                voiceInfo = voiceInfos.get(0);
+            }
 
             if (voiceInfo != null) {
                 setVoiceInfo(voiceInfo);

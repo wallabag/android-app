@@ -1,9 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.os.Build;
@@ -18,7 +19,7 @@ public class Themes {
 
     private static Theme theme;
 
-    private static final Map<Activity, Theme> appliedThemes = new WeakHashMap<>();
+    private static final Map<AppCompatActivity, Theme> appliedThemes = new WeakHashMap<>();
 
     static {
         init();
@@ -32,12 +33,12 @@ public class Themes {
         return theme;
     }
 
-    static void applyTheme(Activity activity) {
+    static void applyTheme(AppCompatActivity activity) {
         applyTheme(activity, true);
         applyDarkTheme();
     }
 
-    static void applyTheme(Activity activity, boolean actionBar) {
+    static void applyTheme(AppCompatActivity activity, boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
     }
@@ -55,12 +56,12 @@ public class Themes {
         }
     }
 
-    static void applyDialogTheme(final Activity activity) {
+    static void applyDialogTheme(final AppCompatActivity activity) {
         activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
     }
 
-    public static void checkTheme(final Activity activity) {
+    public static void checkTheme(final AppCompatActivity activity) {
         final Theme appliedTheme = appliedThemes.get(activity);
         if (appliedTheme != theme) {
             activity.recreate();

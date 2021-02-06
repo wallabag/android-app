@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.utils;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ public class LoggingUtils {
 
     private static final String TAG = LoggingUtils.class.getSimpleName();
 
-    public static void saveLogcatToFile(Activity context) {
+    public static void saveLogcatToFile(AppCompatActivity context) {
         String filePath = null;
         try {
             filePath = saveLogcatToFileInternal();

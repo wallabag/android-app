@@ -37,7 +37,7 @@
     </style>
 
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="DialogTheme" parent="MaterialAlertDialog.MaterialComponents.Title.Icon">
         <item name="windowNoTitle">true</item>
 
         <item name="icon_read">@drawable/ic_done_black_24dp</item>

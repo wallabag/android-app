@@ -43,7 +43,6 @@
         <item name="icon_autoplay">@drawable/ic_redo_24dp</item>
         <item name="icon_menu">@drawable/ic_menu_24dp</item>
 
-
         <item name="shapeAppearanceSmallComponent">
             @style/ShapeAppearance.Fortnightly.SmallComponent
         </item>
@@ -67,7 +66,7 @@
         <item name="materialButtonStyle">@style/Widget.App.Button</item>
     </style>
 
-    <style name="Theme.MyApp" parent="Base.Theme.App">
+    <style name="Theme.App" parent="Base.Theme.App">
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryVariant">#000000</item>
         <item name="colorSecondary">#6B38FB</item>

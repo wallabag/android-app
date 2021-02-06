@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.utils;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -24,7 +25,7 @@ public class WallabagFileProvider extends FileProvider {
         return getUriForFile(context, AUTHORITY, file);
     }
 
-    public static boolean shareFile(@NonNull Activity activity, @NonNull File file) {
+    static boolean shareFile(@NonNull AppCompatActivity activity, @NonNull File file) {
         try {
             Uri uri = getUriForFile(activity, file);
 

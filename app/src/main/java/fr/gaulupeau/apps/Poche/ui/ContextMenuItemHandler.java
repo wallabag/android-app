@@ -1,10 +1,11 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.MenuItem;
 
 interface ContextMenuItemHandler {
 
-    boolean handleContextItemSelected(Activity activity, MenuItem item);
+    boolean handleContextItemSelected(AppCompatActivity activity, MenuItem item);
 
 }

@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -66,7 +67,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return articles.size();
     }
 
-    public boolean handleContextItemSelected(Activity activity, MenuItem item) {
+    public boolean handleContextItemSelected(AppCompatActivity activity, MenuItem item) {
         return articleWithContextMenu != null && articleActionsHelper
                 .handleContextItemSelected(activity, articleWithContextMenu, item);
     }
@@ -140,7 +141,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                                         ContextMenu.ContextMenuInfo menuInfo) {
             articleWithContextMenu = article;
 
-            if (article == null) return;
+            if (article == null) {
+                return;
+            }
 
             new MenuInflater(context) // not sure about this
                     .inflate(R.menu.article_list_context_menu, menu);
