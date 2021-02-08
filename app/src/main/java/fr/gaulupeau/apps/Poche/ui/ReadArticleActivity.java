@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -33,6 +34,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -182,7 +185,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         if (fullscreenArticleView) {
             ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) actionBar.hide();
+            if (actionBar != null) {
+                actionBar.hide();
+            }
         }
 
         Intent intent = getIntent();
@@ -300,7 +305,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         getMenuInflater().inflate(R.menu.option_article, menu);
 
-        if (article != null) articleActionsHelper.initMenu(menu, article);
+        if (article != null) {
+            articleActionsHelper.initMenu(menu, article);
+        }
 
         menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
 
@@ -332,7 +339,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 return true;
         }
 
-        if (articleActionsHelper.handleContextItemSelected(this, article, item)) return true;
+        if (articleActionsHelper.handleContextItemSelected(this, article, item)) {
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -467,7 +476,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         EnumSet<ArticlesChangedEvent.ChangeType> changes = event.getArticleChanges(article);
-        if (changes == null) return;
+        if (changes == null) {
+            return;
+        }
 
         Log.d(TAG, "onArticlesChangedEvent() changes: " + changes);
 
@@ -627,6 +638,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             webViewSettings.setAllowFileAccess(true);
         }
 
+        applyDarkTheme(webViewSettings);
         initTtsController();
         initAnnotationController();
 
@@ -641,6 +653,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
 
             //Necessary for enabling watching youtube videos in fullscreen
+            @Override
             public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback) {
                 customView = paramView;
 
@@ -654,6 +667,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             }
 
             //Necessary for enabling watching youtube videos in fullscreen
+            @Override
             public void onHideCustomView() {
                 //Show action bar and bottom buttons when leaving fullscreen
                 hideUi(false);
@@ -666,12 +680,17 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 if (!fullscreenArticleView) {
                     ActionBar actionBar = getSupportActionBar();
                     if (actionBar != null) {
-                        if (hide) actionBar.hide();
-                        else actionBar.show();
+                        if (hide) {
+                            actionBar.hide();
+                        } else {
+                            actionBar.show();
+                        }
                     }
                 }
                 LinearLayout bottom = findViewById(R.id.bottomTools);
-                if (bottom != null) bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
+                if (bottom != null) {
+                    bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
+                }
             }
         });
 
@@ -721,7 +740,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         });
 
-        if (fontSize != 100) setFontSize(fontSize);
+        if (fontSize != 100) {
+            setFontSize(fontSize);
+        }
 
         GestureDetector.SimpleOnGestureListener gestureListener
                 = new GestureDetector.SimpleOnGestureListener() {
@@ -730,10 +751,16 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 // note: e1 - previous event, e2 - current event
                 // velocity* - velocity in pixels per second
 
-                if (!swipeArticles) return false;
+                if (!swipeArticles) {
+                    return false;
+                }
 
-                if (e1 == null || e2 == null) return false;
-                if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
+                if (e1 == null || e2 == null) {
+                    return false;
+                }
+                if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1) {
+                    return false;
+                }
 
 //                if (Math.abs(e1.getY() - e2.getY()) > 150) {
 //                    Log.d("FLING", "not a horizontal fling (distance)");
@@ -769,9 +796,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                if (!tapToScroll) return false;
+                if (!tapToScroll) {
+                    return false;
+                }
 
-                if (e.getPointerCount() > 1) return false;
+                if (e.getPointerCount() > 1) {
+                    return false;
+                }
 
                 int viewHeight = scrollView.getHeight();
                 float y = e.getY() - scrollView.getScrollY();
@@ -796,6 +827,22 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         webViewContent.setOnTouchListener((v, event) -> gestureDetector.onTouchEvent(event));
     }
 
+    private void applyDarkTheme(WebSettings settings) {
+        if (WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+            switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+                case Configuration.UI_MODE_NIGHT_YES:
+                    // enable force dark
+                    WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_ON);
+                    break;
+                case Configuration.UI_MODE_NIGHT_NO:
+                case Configuration.UI_MODE_NIGHT_UNDEFINED:
+                    // disable force dark
+                    WebSettingsCompat.setForceDark(settings, WebSettingsCompat.FORCE_DARK_OFF);
+                    break;
+            }
+        }
+    }
+
     private void initTtsController() {
         // add the controller now even if TTS is not used,
         // otherwise it won't be possible to enable TTS without content reloading
@@ -804,7 +851,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void initAnnotationController() {
-        if (!annotationsEnabled) return;
+        if (!annotationsEnabled) {
+            return;
+        }
 
         JsAnnotationController annotationController = new JsAnnotationController(
                 new JsAnnotationController.Callback() {
@@ -881,10 +930,18 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         }
 
         List<String> additionalClasses = new ArrayList<>();
-        if (highContrast) additionalClasses.add("high-contrast");
-        if (weightedFont) additionalClasses.add("weighted-font");
-        if (settings.isArticleFontSerif()) additionalClasses.add("serif-font");
-        if (settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
+        if (highContrast) {
+            additionalClasses.add("high-contrast");
+        }
+        if (weightedFont) {
+            additionalClasses.add("weighted-font");
+        }
+        if (settings.isArticleFontSerif()) {
+            additionalClasses.add("serif-font");
+        }
+        if (settings.isArticleTextAlignmentJustify()) {
+            additionalClasses.add("text-align-justify");
+        }
         additionalClasses.add(settings.getHandlePreformattedTextOption());
 
         String classAttr;
@@ -980,7 +1037,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         String headerString = header.toString();
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "getHeader() headerString: " + headerString);
+        }
 
         return doImageUrlReplacements(headerString);
     }
@@ -1011,7 +1070,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             htmlContent = getString(R.string.contentIsTooLong);
         }
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
+        }
 
         return doImageUrlReplacements(htmlContent);
     }
@@ -1042,9 +1103,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     private void handleUrlClicked(final String url) {
         Log.d(TAG, "handleUrlClicked() url: " + url);
-        if (TextUtils.isEmpty(url)) return;
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
 
-        if (handleTagClicked(url)) return;
+        if (handleTagClicked(url)) {
+            return;
+        }
 
         @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
@@ -1083,7 +1148,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean handleTagClicked(String url) {
         final String tagUrlPrefix = "tag://";
 
-        if (!url.startsWith(tagUrlPrefix)) return false;
+        if (!url.startsWith(tagUrlPrefix)) {
+            return false;
+        }
 
         long tagId;
         try {
@@ -1143,7 +1210,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         int step = 5;
         fontSize += step * (increase ? 1 : -1);
-        if (!increase && fontSize < 5) fontSize = 5;
+        if (!increase && fontSize < 5) {
+            fontSize = 5;
+        }
 
         setFontSize(fontSize);
 
@@ -1160,8 +1229,12 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-        if (contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
-        if (contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
+        if (contextFavorites != null) {
+            intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
+        }
+        if (contextArchived != null) {
+            intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
+        }
 
         startActivity(intent);
     }
@@ -1187,7 +1260,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void scroll(boolean up, float percent, boolean smooth, boolean keyUsed) {
-        if (scrollView == null) return;
+        if (scrollView == null) {
+            return;
+        }
 
         int viewHeight = scrollView.getHeight();
         int yOffset = scrollView.getScrollY();
@@ -1233,7 +1308,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         totalHeight -= viewHeight;
 
         double position = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
-        if (position > 100) position = 100;
+        if (position > 100) {
+            position = 100;
+        }
 
         Log.d(TAG, "getReadingPosition() position: " + position);
 
@@ -1315,7 +1392,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean loadArticle(long id) {
         article = getArticle(id);
 
-        if (article == null) return false;
+        if (article == null) {
+            return false;
+        }
 
         articleTitle = article.getTitle();
         Log.v(TAG, "loadArticle() articleTitle: " + articleTitle);
@@ -1340,14 +1419,24 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
-        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+        if (previous) {
+            qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
+        } else {
+            qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+        }
 
-        if (contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        if (contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        if (contextFavorites != null) {
+            qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        }
+        if (contextArchived != null) {
+            qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
+        }
 
-        if (previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
-        else qb.orderDesc(ArticleDao.Properties.ArticleId);
+        if (previous) {
+            qb.orderAsc(ArticleDao.Properties.ArticleId);
+        } else {
+            qb.orderDesc(ArticleDao.Properties.ArticleId);
+        }
 
         List<Article> l = qb.limit(1).list();
         if (!l.isEmpty()) {
@@ -1395,7 +1484,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     }
 
     private void prepareToRestorePosition(boolean savePosition) {
-        if (savePosition) articleProgress = getReadingPosition();
+        if (savePosition) {
+            articleProgress = getReadingPosition();
+        }
 
         webViewHeightBeforeUpdate = webViewContent.getHeight();
     }
@@ -1428,7 +1519,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private void cancelPositionRestoration() {
         if (positionRestorationRunnable != null) {
             Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
-            if (webViewContent != null) webViewContent.removeCallbacks(positionRestorationRunnable);
+            if (webViewContent != null) {
+                webViewContent.removeCallbacks(positionRestorationRunnable);
+            }
             positionRestorationRunnable = null;
         }
     }

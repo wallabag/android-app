@@ -7,6 +7,7 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.res.Configuration;
 import android.os.Build;
 
 import java.util.Map;
@@ -35,7 +36,7 @@ public class Themes {
 
     static void applyTheme(AppCompatActivity activity) {
         applyTheme(activity, true);
-        applyDarkTheme();
+        applyDarkTheme(activity);
     }
 
     static void applyTheme(AppCompatActivity activity, boolean actionBar) {
@@ -43,7 +44,7 @@ public class Themes {
         appliedThemes.put(activity, theme);
     }
 
-    private static void applyDarkTheme() {
+    private static void applyDarkTheme(AppCompatActivity activity) {
         if (theme.name().toLowerCase().contains("light")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else if (theme.name().toLowerCase().contains("dark")) {
