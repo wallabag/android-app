@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.App" parent="Base.Theme.App" />
+    <style name="Theme.App" parent="Base.Theme.App">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
 
     <style name="Theme.App.NoActionBar" parent="Theme.App">
         <item name="windowActionBar">false</item>
