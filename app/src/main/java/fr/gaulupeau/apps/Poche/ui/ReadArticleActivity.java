@@ -37,6 +37,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
+import com.google.android.material.appbar.MaterialToolbar;
+
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.greenrobot.greendao.query.QueryBuilder;
@@ -182,6 +184,10 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
+
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        setSupportActionBar(toolbar);
 
         if (fullscreenArticleView) {
             ActionBar actionBar = getSupportActionBar();
