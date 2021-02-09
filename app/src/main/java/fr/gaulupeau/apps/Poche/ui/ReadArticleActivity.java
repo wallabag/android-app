@@ -162,6 +162,8 @@ public class ReadArticleActivity extends AppCompatActivity {
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
+    private MaterialToolbar toolbar;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // not sure if it is relevant to WebView
@@ -188,14 +190,12 @@ public class ReadArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        setSupportActionBar(toolbar);
 
         if (fullscreenArticleView) {
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.hide();
+            if (toolbar != null) {
+                toolbar.setVisibility(View.GONE);
             }
         }
 
@@ -231,10 +231,19 @@ public class ReadArticleActivity extends AppCompatActivity {
         annotationsEnabled = settings.isAnnotationsEnabled();
         onyxWorkaroundEnabled = settings.isOnyxWorkaroundEnabled();
 
-        setTitle(articleTitle);
+        toolbar.setTitle(articleTitle);
 
         // article is loaded - update menu
-        invalidateOptionsMenu();
+        Log.d(TAG, "Creating the menu");
+
+        toolbar.inflateMenu(R.menu.option_article);
+        Menu menu = toolbar.getMenu();
+        if (article != null) {
+            articleActionsHelper.initMenu(menu, article);
+        }
+        menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
+
+        toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
 
         scrollView = findViewById(R.id.scroll);
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
@@ -304,23 +313,6 @@ public class ReadArticleActivity extends AppCompatActivity {
         EventHelper.unregister(this);
 
         super.onDestroy();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        Log.d(TAG, "onCreateOptionsMenu() started");
-
-        getMenuInflater().inflate(R.menu.option_article, menu);
-
-        if (article != null) {
-            articleActionsHelper.initMenu(menu, article);
-        }
-
-        menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
-
-        return true;
     }
 
     @Override
@@ -687,12 +679,11 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             private void hideUi(boolean hide) {
                 if (!fullscreenArticleView) {
-                    ActionBar actionBar = getSupportActionBar();
-                    if (actionBar != null) {
+                    if (toolbar != null) {
                         if (hide) {
-                            actionBar.hide();
+                            toolbar.setVisibility(View.GONE);
                         } else {
-                            actionBar.show();
+                            toolbar.setVisibility(View.VISIBLE);
                         }
                     }
                 }
