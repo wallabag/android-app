@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -72,7 +73,7 @@ import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
 import static android.text.Html.escapeHtml;
 
-public class ReadArticleActivity extends BaseActionBarActivity {
+public class ReadArticleActivity extends AppCompatActivity {
 
     public static final String EXTRA_ID = "ReadArticleActivity.id";
     public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
@@ -181,6 +182,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         if (settings.isKeepScreenOn()) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
+
+        Themes.applyTheme(this, false);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);

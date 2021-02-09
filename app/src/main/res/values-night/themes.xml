@@ -5,9 +5,13 @@
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
+    <style name="Theme.App.NoActionBar" parent="Base.Theme.App.NoActionBar" />
+
     <style name="Theme.App.Contrast" parent="Theme.App">
         <item name="android:colorBackground">@color/darkContrastBlack</item>
     </style>
+
+    <style name="Theme.App.Contrast.NoActionBar" parent="Base.Theme.App.Contrast.NoActionBar" />
 
     <style name="Theme.App.Solarized" parent="Theme.App">
         <item name="colorPrimary">@color/solarizedBase01</item>
@@ -23,4 +27,5 @@
         <item name="colorOnBackground">@color/solarizedBase01</item>
     </style>
 
+    <style name="Theme.App.Solarized.NoActionBar" parent="Base.Theme.App.Solarized.NoActionBar" />
 </resources>
