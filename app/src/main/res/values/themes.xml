@@ -138,4 +138,37 @@
     </style>
 
     <style name="Theme.App.Solarized.NoActionBar" parent="Base.Theme.App.Solarized.NoActionBar" />
+
+
+    <style name="Base.Theme.App.DialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="windowNoTitle">true</item>
+
+        <item name="icon_read">@drawable/ic_done_black_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_black_24dp</item>
+        <item name="icon_favorite">@drawable/ic_star_border_black_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_black_24dp</item>
+        <item name="icon_tag">@drawable/ic_tag_black_24dp</item>
+        <item name="icon_open">@drawable/ic_open_in_new_black_24dp</item>
+    </style>
+
+    <style name="Theme.App.DialogTheme" parent="Base.Theme.App.DialogTheme" />
+
+    <style name="Base.Theme.App.ProxyTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="Theme.App.ProxyTheme" parent="Base.Theme.App.ProxyTheme" />
+
+    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/splash_background</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="android:windowBackground">@drawable/background_splash</item>
+    </style>
 </resources>

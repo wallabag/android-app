@@ -74,56 +74,56 @@ public class Themes {
                 R.string.themeName_default,
                 R.style.Theme_App,
                 R.style.Theme_App_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         ),
 
         CONTRAST(
                 R.string.themeName_contrast,
                 R.style.Theme_App_Contrast,
                 R.style.Theme_App_Contrast_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         ),
 
         LIGHT(
                 R.string.themeName_light,
                 R.style.Theme_App,
                 R.style.Theme_App_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         ),
 
         LIGHT_CONTRAST(
                 R.string.themeName_light_contrast,
                 R.style.Theme_App_Contrast,
                 R.style.Theme_App_Contrast_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         ),
 
         E_INK(
                 R.string.themeName_eink,
                 R.style.Theme_App_Contrast,
                 R.style.Theme_App_Contrast_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         ),
 
         DARK(
                 R.string.themeName_dark,
                 R.style.Theme_App,
                 R.style.Theme_App_NoActionBar,
-                R.style.DialogThemeDark
+                R.style.Theme_App_DialogTheme
         ),
 
         DARK_CONTRAST(
                 R.string.themeName_dark_contrast,
                 R.style.Theme_App_Contrast,
                 R.style.Theme_App_Contrast_NoActionBar,
-                R.style.DialogThemeDark
+                R.style.Theme_App_DialogTheme
         ),
 
         SOLARIZED(
                 R.string.themeName_solarized,
                 R.style.Theme_App_Solarized,
                 R.style.Theme_App_Solarized_NoActionBar,
-                R.style.DialogTheme
+                R.style.Theme_App_DialogTheme
         );
 
         private int nameId;

@@ -28,4 +28,8 @@
     </style>
 
     <style name="Theme.App.Solarized.NoActionBar" parent="Base.Theme.App.Solarized.NoActionBar" />
+
+    <style name="Theme.App.DialogTheme" parent="Base.Theme.App.DialogTheme" />
+
+    <style name="Theme.App.ProxyTheme" parent="Base.Theme.App.ProxyTheme" />
 </resources>
