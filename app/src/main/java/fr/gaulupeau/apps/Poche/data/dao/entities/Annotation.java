@@ -226,7 +226,8 @@ public class Annotation {
         List<Long> ids = new ArrayList<>();
         try (Cursor cursor = getAnnotationByArticlesQueryBuilder(articleIds, dao).buildCursor().query()) {
             while (cursor.moveToNext()) {
-                ids.add(cursor.getLong(cursor.getColumnIndex(AnnotationDao.Properties.Id.columnName)));
+                ids.add(cursor.getLong(cursor.getColumnIndexOrThrow(
+                        AnnotationDao.Properties.Id.columnName)));
             }
         }
         return ids;
