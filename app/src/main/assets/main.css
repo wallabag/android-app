@@ -64,7 +64,8 @@ table, th, td {
 }
 
 .high-contrast p,
-.high-contrast li {
+.high-contrast li,
+.high-contrast #article blockquote {
   color: #000;
   background: #FFF;
 }
@@ -214,13 +215,20 @@ header.mbm {
 }
 
 #article blockquote, #article pre {
-  border: 1px solid #999;
-  background: #DDD;
   padding: 0.25em;
   margin: 0;
 }
 
+#article blockquote {
+  border-left: 5px solid #018786; /* material light accent */
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: #777;
+}
+
 #article pre {
+  border: 1px solid #999;
+  background: #DDD;
   font-family: monospace;
   white-space: pre;
   text-justify: none;
@@ -234,7 +242,7 @@ header.mbm {
   white-space: pre-wrap;
 }
 
-#article blockquote *, #article pre * {
+#article pre * {
   background: inherit;
 }
 

@@ -74,7 +74,8 @@ img {
 }
 
 .high-contrast p,
-.high-contrast li {
+.high-contrast li,
+.high-contrast #article blockquote {
   color: #FFF;
   background: #000;
 }
@@ -225,13 +226,20 @@ header.mbm {
 }
 
 #article blockquote, #article pre {
-  border: 1px solid #999;
-  background: #222;
   padding: 0.25em;
   margin: 0;
 }
 
+#article blockquote {
+  border-left: 5px solid #03dac6; /* material dark accent */
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: #ddd;
+}
+
 #article pre {
+  border: 1px solid #999;
+  background: #222;
   font-family: monospace;
   white-space: pre;
   text-justify: none;
@@ -245,7 +253,7 @@ header.mbm {
   white-space: pre-wrap;
 }
 
-#article blockquote *, #article pre * {
+#article pre * {
   background: inherit;
 }
 

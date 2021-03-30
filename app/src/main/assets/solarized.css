@@ -229,13 +229,20 @@ header.mbm {
 }
 
 #article blockquote, #article pre {
-  border:1px solid #999;
-  background: #eee8d5; /* $base2*/
   padding: 0.25em;
   margin: 0;
 }
 
+#article blockquote {
+  border-left: 5px solid #b58900; /* $yellow; */
+  padding-left: 1.25rem;
+  font-style: italic;
+  color: #657B83; /* $base00 */
+}
+
 #article pre {
+  background: #eee8d5; /* $base2*/
+  border: 1px solid #999;
   font-family: monospace;
   white-space: pre;
   text-justify: none;
@@ -249,7 +256,7 @@ header.mbm {
   white-space: pre-wrap;
 }
 
-#article blockquote *, #article pre * {
+#article pre * {
   background: inherit;
 }
 
