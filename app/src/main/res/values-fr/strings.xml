@@ -88,7 +88,7 @@
     <string name="feedName_archived">Archivés</string>
     <string name="feedName_unread">Non lus</string>
     <string name="articleList_favoriteMark">Marqué comme favori</string>
-    <string name="articleList_ArchivedMark">Marqué comme lu</string>
+    <string name="articleList_ArchivedMark">Marqué comme archivé</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
     <string name="scrolledOverBottom">Faites défiler %d fois plus en bas pour marquer l\'article comme lu</string>
     <string name="markedAsRead">Article marqué comme lu</string>
@@ -129,7 +129,7 @@
     <string name="menu_lists_changeSortOrder">Changer l\'ordre de tri</string>
     <string name="menu_lists_sweepDeletedArticles">Nettoyer les articles supprimés</string>
     <string name="menu_lists_fullUpdate">Mise à jour complète</string>
-    <string name="other_searchHint">Rechercher dans le titre de l\'article ou dans le texte</string>
+    <string name="other_searchHint">Rechercher par le titre ou le texte de l\'article</string>
     <string name="menu_changeTitle">Modifier le titre</string>
     <string name="menu_manageTags">Gérer les étiquettes</string>
     <string name="manageTags_title">Gérer les étiquettes</string>

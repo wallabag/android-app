@@ -340,4 +340,10 @@
     <string name="menu_tag">Etiket ekle</string>
     <string name="notification_backgroundOperations">Arka plan işlemleri</string>
     <string name="notification_channel_name_background_operations">Arka plan işlemleri</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Tam metin araması içerik indekslemesinde ICU tokenizer kullan (başka durumlarda genel unicode61 tokenizer kullanılıyor). Bu değişiklik Çince, Japonca, Korece gibi dillerde aramayı iyileştirmeye yardımcı olabilir. Bu işlemin yayına alınması için \"Tam güncelleme\" gerekmektedir</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">Tam metin aramasında ICU Tokenizer kullan</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">KaTeX\'İN işleyeceği ortam ayraçlarını seçin</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Matematik ayraçları</string>
+    <string name="pref_desc_ui_mathRendering_enabled">KaTeX kullanarak LaTeX-math formül işlemeyi aktifleştirir</string>
+    <string name="pref_name_ui_mathRendering_enabled">Matematik işleme</string>
 </resources>

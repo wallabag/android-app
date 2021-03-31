@@ -223,7 +223,7 @@
     <string name="contentIsTooLong">Obsah článku je pro zobrazení příliš dlouhý</string>
     <string name="articleContent_globeIconAltText">Ikona zeměkoule</string>
     <string name="other_searchHint">Hledat název článku nebo text</string>
-    <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co přesně chcete udělat</string>
+    <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co děláte</string>
     <string name="pref_categoryName_misc_localQueue">Lokální změny</string>
     <string name="pref_desc_misc_appendWallabagMention">Připojí ke sdílenému textu „přes wallabag aplikaci“</string>
     <string name="pref_name_misc_appendWallabagMention">Zmínit wallabag při sdílení</string>
@@ -256,4 +256,9 @@
     <string name="downloadAsFileTouchToOpen">Otevřete ho ťuknutím</string>
     <string name="testConnection_errorMessage_authProblems">Problémy související s oprávněním. Obvykle jsou způsobeny HTTP přesměrováním.</string>
     <string name="d_add_fail_title">Selhání</string>
+    <string name="pref_desc_sync_syncTypes">Stiskněte pro více informací o různých způsobech synchronizace</string>
+    <string name="pref_name_sync_syncTypes">Způsoby synchronizace</string>
+    <string name="pref_name_runConnectionWizard">Spustit průvodce připojením</string>
+    <string name="notification_backgroundOperations">Operace na pozadí</string>
+    <string name="testConnection_errorMessage_noCSRF">Chyba parsování přihlašovacího formuláře</string>
 </resources>
