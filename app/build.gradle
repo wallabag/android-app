@@ -70,7 +70,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.9.1'
     implementation 'org.conscrypt:conscrypt-android:2.5.1'
     implementation 'com.facebook.stetho:stetho:1.6.0'
-    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.1'
+    implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
     implementation 'com.mikepenz:aboutlibraries:7.1.0'
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:v2.0.0-beta.6'
     implementation 'org.slf4j:slf4j-android:1.7.30'
