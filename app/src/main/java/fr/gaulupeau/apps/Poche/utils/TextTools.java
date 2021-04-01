@@ -1,8 +1,8 @@
 package fr.gaulupeau.apps.Poche.utils;
 
-import android.os.Build;
-import android.text.Html;
 import android.text.TextUtils;
+
+import androidx.core.text.HtmlCompat;
 
 public class TextTools {
 
@@ -22,11 +22,7 @@ public class TextTools {
     public static String unescapeHtml(String s) {
         if (s == null) return null;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(s, Html.FROM_HTML_MODE_LEGACY).toString();
-        } else {
-            return Html.fromHtml(s).toString();
-        }
+        return HtmlCompat.fromHtml(s, HtmlCompat.FROM_HTML_MODE_LEGACY).toString();
     }
 
 }
