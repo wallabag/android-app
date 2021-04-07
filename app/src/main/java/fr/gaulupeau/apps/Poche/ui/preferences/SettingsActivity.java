@@ -1,9 +1,7 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
 import android.annotation.SuppressLint;
-
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -454,10 +452,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 Themes.init();
 
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                if (activity != null) {
-                    Themes.checkTheme(activity);
-                }
+                Activity activity = getActivity();
+                if(activity != null) Themes.checkTheme(activity);
             }
         }
 
@@ -465,7 +461,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         public boolean onPreferenceClick(Preference preference) {
             switch (PreferenceKeysMap.getInstance().getPrefKeyId(preference)) {
                 case R.string.pref_key_connection_wizard: {
-                    AppCompatActivity activity = (AppCompatActivity) getActivity();
+                    Activity activity = getActivity();
                     if(activity != null) {
                         ConnectionWizardActivity.runWizard(activity, true);
 
@@ -482,7 +478,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                     return true;
                 }
                 case R.string.pref_key_sync_syncTypes_description: {
-                    AppCompatActivity activity = (AppCompatActivity) getActivity();
+                    Activity activity = getActivity();
                     if(activity != null) {
                         new AlertDialog.Builder(activity)
                                 .setTitle(R.string.pref_name_sync_syncTypes)
@@ -497,7 +493,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                     return true;
                 }
                 case R.string.pref_key_misc_wipeDB: {
-                    AppCompatActivity activity = (AppCompatActivity) getActivity();
+                    Activity activity = getActivity();
                     if(activity != null) {
                         new AlertDialog.Builder(activity)
                                 .setTitle(R.string.pref_name_misc_wipeDB_confirmTitle)
@@ -522,7 +518,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                     return true;
                 }
                 case R.string.pref_key_misc_logging_logcatToFile: {
-                    AppCompatActivity activity = (AppCompatActivity) getActivity();
+                    Activity activity = getActivity();
                     if (activity != null) {
                         LoggingUtils.saveLogcatToFile(activity);
                     }
@@ -534,10 +530,8 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         private void dumpOfflineQueue() {
-            AppCompatActivity activity = (AppCompatActivity) getActivity();
-            if (activity == null) {
-                return;
-            }
+            Activity activity = getActivity();
+            if (activity == null) return;
 
             QueueHelper queueHelper = new QueueHelper(DbConnection.getSession());
             List<QueueItem> items = queueHelper.getQueueItems();
@@ -587,10 +581,8 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         private void removeFirstOfflineQueueItem() {
-            AppCompatActivity activity = (AppCompatActivity) getActivity();
-            if (activity == null) {
-                return;
-            }
+            Activity activity = getActivity();
+            if (activity == null) return;
 
             QueueHelper queueHelper = new QueueHelper(DbConnection.getSession());
             List<QueueItem> items = queueHelper.getQueueItems();
@@ -604,7 +596,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         private void showDisableTouchSetKeyCodeDialog() {
-            AppCompatActivity activity = (AppCompatActivity) getActivity();
+            Activity activity = getActivity();
             if(activity != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                 builder.setTitle(R.string.d_disableTouch_changeKey_title);

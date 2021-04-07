@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -129,9 +128,7 @@ public class ConfigurationTestHelper
     public void onTestConnectionResult(List<TestConnectionTask.TestResult> results) {
         dismissDialog(progressDialog);
 
-        if(canceled) {
-            return;
-        }
+        if(canceled) return;
 
         if(results != null) {
             if(results.isEmpty()) { // should not happen?
@@ -149,9 +146,7 @@ public class ConfigurationTestHelper
                     boolean originalUrl = TestConnectionTask.areUrlsEqual(result.url, url);
 
                     if(result.result == WallabagWebService.ConnectionTestResult.OK) {
-                        if(originalUrl) {
-                            isOriginalOk = true;
-                        }
+                        if(originalUrl) isOriginalOk = true;
 
                         if(bestUrl == null) {
                             bestUrl = result.url;
@@ -172,9 +167,7 @@ public class ConfigurationTestHelper
                 } else if(bestUrl != null) { // there is a better option
                     showSuggestionDialog(bestUrl, isOriginalOk);
                 } else { // all the options have failed
-                    if(handler != null) {
-                        handler.onConnectionTestFail(error, errorMessage);
-                    }
+                    if(handler != null) handler.onConnectionTestFail(error, errorMessage);
                     showErrorDialog(error, errorMessage);
                 }
             }
@@ -264,9 +257,7 @@ public class ConfigurationTestHelper
         Log.d(TAG, "connectionTestOnSuccess() new url: " + url);
         newUrl = url;
 
-        if(canceled) {
-            return;
-        }
+        if(canceled) return;
 
         if(credentialsHandler != null) {
             getApiCredentials();
@@ -289,9 +280,7 @@ public class ConfigurationTestHelper
     public void handleGetCredentialsResult(boolean success, ClientCredentials credentials) {
         dismissDialog(progressDialog);
 
-        if(canceled) {
-            return;
-        }
+        if(canceled) return;
 
         if(success) {
             clientID = credentials.clientID;
@@ -329,9 +318,7 @@ public class ConfigurationTestHelper
     public void onTestApiAccessTaskResult(TestApiAccessTask.Result result, String details) {
         dismissDialog(progressDialog);
 
-        if(canceled) {
-            return;
-        }
+        if(canceled) return;
 
         if(result == TestApiAccessTask.Result.OK) {
             if(handleResult) {
@@ -353,9 +340,7 @@ public class ConfigurationTestHelper
                 int basicErrorResId;
                 int messageErrorResId;
 
-                if(result == null) {
-                    result = TestApiAccessTask.Result.UNKNOWN_ERROR;
-                }
+                if(result == null) result = TestApiAccessTask.Result.UNKNOWN_ERROR;
                 switch(result) {
                     case NOT_FOUND:
                         basicErrorResId = R.string.d_checkCredentials_errorMessage_notFound;
@@ -398,18 +383,14 @@ public class ConfigurationTestHelper
     }
 
     private void cancelTask(AsyncTask task) {
-        if(task != null) {
-            task.cancel(true);
-        }
+        if(task != null) task.cancel(true);
     }
 
     private void dismissDialog(Dialog dialog) {
-        if (dialog == null || !dialog.isShowing()) {
-            return;
-        }
+        if(dialog == null || !dialog.isShowing()) return;
 
-        if (context instanceof AppCompatActivity) {
-            if (!((AppCompatActivity) context).isFinishing()) {
+        if(context instanceof Activity) {
+            if(!((Activity)context).isFinishing()) {
                 dialog.dismiss();
             }
         } else {

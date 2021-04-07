@@ -7,6 +7,7 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Build;
 
@@ -20,7 +21,7 @@ public class Themes {
 
     private static Theme theme;
 
-    private static final Map<AppCompatActivity, Theme> appliedThemes = new WeakHashMap<>();
+    private static Map<Activity, Theme> appliedThemes = new WeakHashMap<>();
 
     static {
         init();
@@ -30,21 +31,21 @@ public class Themes {
         Themes.theme = App.getSettings().getTheme();
     }
 
-    static Theme getCurrentTheme() {
+    public static Theme getCurrentTheme() {
         return theme;
     }
 
-    static void applyTheme(AppCompatActivity activity) {
+    static void applyTheme(Activity activity) {
         applyTheme(activity, true);
-        applyDarkTheme(activity);
+        applyDarkTheme();
     }
 
-    static void applyTheme(AppCompatActivity activity, boolean actionBar) {
+    static void applyTheme(Activity activity, boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
     }
 
-    private static void applyDarkTheme(AppCompatActivity activity) {
+    private static void applyDarkTheme() {
         if (theme.name().toLowerCase().contains("light")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else if (theme.name().toLowerCase().contains("dark")) {
@@ -57,13 +58,13 @@ public class Themes {
         }
     }
 
-    static void applyDialogTheme(final AppCompatActivity activity) {
+    static void applyDialogTheme(final Activity activity) {
         activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
     }
 
-    public static void checkTheme(final AppCompatActivity activity) {
-        final Theme appliedTheme = appliedThemes.get(activity);
+    public static void checkTheme(Activity activity) {
+        Theme appliedTheme = appliedThemes.get(activity);
         if (appliedTheme != theme) {
             activity.recreate();
         }
@@ -139,23 +140,19 @@ public class Themes {
             this.dialogResId = dialogResId;
         }
 
-        public @StringRes
-        int getNameId() {
+        public @StringRes int getNameId() {
             return nameId;
         }
 
-        public @StyleRes
-        int getResId() {
+        public @StyleRes int getResId() {
             return resId;
         }
 
-        public @StyleRes
-        int getNoActionBarResId() {
+        public @StyleRes int getNoActionBarResId() {
             return noActionBarResId;
         }
 
-        public @StyleRes
-        int getDialogResId() {
+        public @StyleRes int getDialogResId() {
             return dialogResId;
         }
 

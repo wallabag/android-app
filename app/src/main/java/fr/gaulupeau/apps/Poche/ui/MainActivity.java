@@ -172,20 +172,14 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onDrawerStateChanged(int newState) {
-                if (newState == DrawerLayout.STATE_IDLE) {
-                    updated = false;
-                }
+                if (newState == DrawerLayout.STATE_IDLE) updated = false;
             }
 
             private void updateTime() {
-                if (updated) {
-                    return;
-                }
+                if (updated) return;
                 updated = true;
 
-                if (lastUpdateTimeView == null) {
-                    return;
-                }
+                if (lastUpdateTimeView == null) return;
 
                 Log.d(TAG, "DrawerListener.updateTime() updating time");
 
@@ -234,14 +228,10 @@ public class MainActivity extends AppCompatActivity
             searchQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
         }
 
-        if (searchQuery == null) {
-            searchQuery = "";
-        }
+        if (searchQuery == null) searchQuery = "";
         performSearch(searchQuery);
 
-        if (currentFragmentType == null) {
-            currentFragmentType = FRAGMENT_ARTICLE_LISTS;
-        }
+        if (currentFragmentType == null) currentFragmentType = FRAGMENT_ARTICLE_LISTS;
 
         if (savedInstanceState == null) {
             setCurrentFragment(currentFragmentType);
@@ -578,9 +568,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateLastUpdateTime() {
-        if (lastUpdateTimeView == null) {
-            return;
-        }
+        if (lastUpdateTimeView == null) return;
 
         Log.d(TAG, "updateLastUpdateTime() updating time");
 
@@ -594,9 +582,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateStateChanged(boolean started) {
-        if (started == updateRunning) {
-            return;
-        }
+        if (started == updateRunning) return;
 
         updateRunning = started;
 
@@ -609,21 +595,15 @@ public class MainActivity extends AppCompatActivity
     private void performSearch(String query) {
         setSearchQuery(query);
 
-        if (TextUtils.isEmpty(query)) {
-            return;
-        }
+        if (TextUtils.isEmpty(query)) return;
 
         searchUIPending = true;
         checkPendingSearchUI();
     }
 
     private void checkPendingSearchUI() {
-        if (searchMenuItem == null) {
-            return;
-        }
-        if (!searchUIPending) {
-            return;
-        }
+        if (searchMenuItem == null) return;
+        if (!searchUIPending) return;
 
         searchUIPending = false;
 
@@ -632,9 +612,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initSearchUI() {
         final SearchView searchView = (SearchView) searchMenuItem.getActionView();
-        if (searchView == null) {
-            return;
-        }
+        if (searchView == null) return;
 
         final String searchQueryToRestore = searchQuery;
 
@@ -648,9 +626,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setParametersToFragment(Fragment fragment) {
         Log.v(TAG, "setParametersToFragment() started");
-        if (fragment == null) {
-            return;
-        }
+        if (fragment == null) return;
 
         setSortOrder(fragment);
         setSearchQueryOnFragment(fragment, searchQuery);
@@ -784,9 +760,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private boolean isFragmentStateSavable(String type) {
-        if (type == null) {
-            return false;
-        }
+        if (type == null) return false;
 
         switch (type) {
             case FRAGMENT_ARTICLE_LISTS:
@@ -798,9 +772,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void updateNavigationUI(String type) {
-        if (type == null || navigationView == null) {
-            return;
-        }
+        if (type == null || navigationView == null) return;
 
         if (FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
             MenuItem item = navigationView.getMenu().findItem(R.id.nav_taggedLists);
@@ -830,9 +802,7 @@ public class MainActivity extends AppCompatActivity
 
                 MenuItem item = navigationView.getMenu().findItem(itemID);
                 if (item != null) {
-                    if (title != null) {
-                        item.setTitle(title);
-                    }
+                    if (title != null) item.setTitle(title);
                     item.setVisible(true);
                     item.setEnabled(true);
                 }
@@ -937,12 +907,10 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onConnectionTestFail(
-                    WallabagWebService.ConnectionTestResult result, String details) {
-            }
+                    WallabagWebService.ConnectionTestResult result, String details) {}
 
             @Override
-            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {
-            }
+            public void onApiAccessTestFail(TestApiAccessTask.Result result, String details) {}
         }, null, settings, true);
 
         configurationTestHelper.test();
@@ -959,7 +927,8 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_add_label);
 
-        @SuppressLint("InflateParams") final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
+        @SuppressLint("InflateParams")
+        final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
 
         builder.setView(view);
 

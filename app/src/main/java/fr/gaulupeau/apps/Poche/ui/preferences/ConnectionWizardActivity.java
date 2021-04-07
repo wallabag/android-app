@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -632,7 +631,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             Bundle bundle = getArguments();
             if(bundle == null || !bundle.getBoolean(EXTRA_SHOW_SUMMARY)) {
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                Activity activity = getActivity();
                 if(activity != null) {
                     saveSettings();
 
@@ -644,7 +643,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             }
         }
 
-        @Override
         public String getPageName() {
             return PAGE_SUMMARY;
         }

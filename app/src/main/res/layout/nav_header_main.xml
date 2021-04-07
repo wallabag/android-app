@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         app:srcCompat="?attr/welcome_logo"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/lastUpdateTime"

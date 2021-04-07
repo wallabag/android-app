@@ -441,7 +441,7 @@ public class Settings {
             } catch(IllegalArgumentException ignored) {}
         }
 
-        return theme != null ? theme : Themes.Theme.DEFAULT;
+        return theme != null ? theme : Themes.Theme.LIGHT;
     }
 
     public void setTheme(Themes.Theme theme) {

@@ -1,7 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DatabaseUtils;
@@ -142,7 +141,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     }
 
     @Override
-    public boolean handleContextItemSelected(AppCompatActivity activity, MenuItem item) {
+    public boolean handleContextItemSelected(Activity activity, MenuItem item) {
         return listAdapter.handleContextItemSelected(activity, item);
     }
 
@@ -264,9 +263,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     protected void onSwipeRefresh() {
         super.onSwipeRefresh();
 
-        if (host != null) {
-            host.onRecyclerViewListSwipeUpdate();
-        }
+        if (host != null) host.onRecyclerViewListSwipeUpdate();
     }
 
     @Override
@@ -290,7 +287,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
     // TODO: include more info (order, search query, tag)
     private void openArticle(long id) {
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        Activity activity = getActivity();
         if (activity != null) {
             Intent intent = new Intent(activity, ReadArticleActivity.class);
             intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
@@ -341,9 +338,7 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-            if (forceContentUpdate) {
-                return false;
-            }
+            if (forceContentUpdate) return false;
 
             Article oldArticle = oldList.get(oldItemPosition);
             Article newArticle = newList.get(newItemPosition);

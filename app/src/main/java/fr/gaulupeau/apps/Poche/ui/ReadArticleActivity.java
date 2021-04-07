@@ -34,11 +34,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
-
-import com.google.android.material.appbar.MaterialToolbar;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -73,7 +70,7 @@ import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
 import static android.text.Html.escapeHtml;
 
-public class ReadArticleActivity extends AppCompatActivity {
+public class ReadArticleActivity extends BaseActionBarActivity {
 
     public static final String EXTRA_ID = "ReadArticleActivity.id";
     public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
@@ -162,8 +159,6 @@ public class ReadArticleActivity extends AppCompatActivity {
     private boolean onPageFinishedCallPostponedUntilResume;
     private boolean loadingFinished;
 
-    private MaterialToolbar toolbar;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // not sure if it is relevant to WebView
@@ -185,18 +180,12 @@ public class ReadArticleActivity extends AppCompatActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
-        Themes.applyTheme(this, false);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
-        toolbar = findViewById(R.id.toolbar);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-
         if (fullscreenArticleView) {
-            if (toolbar != null) {
-                toolbar.setVisibility(View.GONE);
-            }
+            ActionBar actionBar = getSupportActionBar();
+            if (actionBar != null) actionBar.hide();
         }
 
         Intent intent = getIntent();
@@ -231,19 +220,10 @@ public class ReadArticleActivity extends AppCompatActivity {
         annotationsEnabled = settings.isAnnotationsEnabled();
         onyxWorkaroundEnabled = settings.isOnyxWorkaroundEnabled();
 
-        toolbar.setTitle(articleTitle);
+        setTitle(articleTitle);
 
         // article is loaded - update menu
-        Log.d(TAG, "Creating the menu");
-
-        toolbar.inflateMenu(R.menu.option_article);
-        Menu menu = toolbar.getMenu();
-        if (article != null) {
-            articleActionsHelper.initMenu(menu, article);
-        }
-        menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
-
-        toolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+        invalidateOptionsMenu();
 
         scrollView = findViewById(R.id.scroll);
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
@@ -316,6 +296,21 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        Log.d(TAG, "onCreateOptionsMenu() started");
+
+        getMenuInflater().inflate(R.menu.option_article, menu);
+
+        if (article != null) articleActionsHelper.initMenu(menu, article);
+
+        menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
@@ -340,9 +335,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                 return true;
         }
 
-        if (articleActionsHelper.handleContextItemSelected(this, article, item)) {
-            return true;
-        }
+        if (articleActionsHelper.handleContextItemSelected(this, article, item)) return true;
 
         return super.onOptionsItemSelected(item);
     }
@@ -477,9 +470,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         }
 
         EnumSet<ArticlesChangedEvent.ChangeType> changes = event.getArticleChanges(article);
-        if (changes == null) {
-            return;
-        }
+        if (changes == null) return;
 
         Log.d(TAG, "onArticlesChangedEvent() changes: " + changes);
 
@@ -654,7 +645,6 @@ public class ReadArticleActivity extends AppCompatActivity {
             }
 
             //Necessary for enabling watching youtube videos in fullscreen
-            @Override
             public void onShowCustomView(View paramView, WebChromeClient.CustomViewCallback paramCustomViewCallback) {
                 customView = paramView;
 
@@ -668,7 +658,6 @@ public class ReadArticleActivity extends AppCompatActivity {
             }
 
             //Necessary for enabling watching youtube videos in fullscreen
-            @Override
             public void onHideCustomView() {
                 //Show action bar and bottom buttons when leaving fullscreen
                 hideUi(false);
@@ -679,18 +668,14 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             private void hideUi(boolean hide) {
                 if (!fullscreenArticleView) {
-                    if (toolbar != null) {
-                        if (hide) {
-                            toolbar.setVisibility(View.GONE);
-                        } else {
-                            toolbar.setVisibility(View.VISIBLE);
-                        }
+                    ActionBar actionBar = getSupportActionBar();
+                    if (actionBar != null) {
+                        if (hide) actionBar.hide();
+                        else actionBar.show();
                     }
                 }
                 LinearLayout bottom = findViewById(R.id.bottomTools);
-                if (bottom != null) {
-                    bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
-                }
+                if (bottom != null) bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
             }
         });
 
@@ -740,9 +725,7 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         });
 
-        if (fontSize != 100) {
-            setFontSize(fontSize);
-        }
+        if (fontSize != 100) setFontSize(fontSize);
 
         GestureDetector.SimpleOnGestureListener gestureListener
                 = new GestureDetector.SimpleOnGestureListener() {
@@ -751,16 +734,10 @@ public class ReadArticleActivity extends AppCompatActivity {
                 // note: e1 - previous event, e2 - current event
                 // velocity* - velocity in pixels per second
 
-                if (!swipeArticles) {
-                    return false;
-                }
+                if (!swipeArticles) return false;
 
-                if (e1 == null || e2 == null) {
-                    return false;
-                }
-                if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1) {
-                    return false;
-                }
+                if (e1 == null || e2 == null) return false;
+                if (e1.getPointerCount() > 1 || e2.getPointerCount() > 1) return false;
 
 //                if (Math.abs(e1.getY() - e2.getY()) > 150) {
 //                    Log.d("FLING", "not a horizontal fling (distance)");
@@ -796,13 +773,9 @@ public class ReadArticleActivity extends AppCompatActivity {
 
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                if (!tapToScroll) {
-                    return false;
-                }
+                if (!tapToScroll) return false;
 
-                if (e.getPointerCount() > 1) {
-                    return false;
-                }
+                if (e.getPointerCount() > 1) return false;
 
                 int viewHeight = scrollView.getHeight();
                 float y = e.getY() - scrollView.getScrollY();
@@ -851,9 +824,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void initAnnotationController() {
-        if (!annotationsEnabled) {
-            return;
-        }
+        if (!annotationsEnabled) return;
 
         JsAnnotationController annotationController = new JsAnnotationController(
                 new JsAnnotationController.Callback() {
@@ -930,18 +901,10 @@ public class ReadArticleActivity extends AppCompatActivity {
         }
 
         List<String> additionalClasses = new ArrayList<>();
-        if (highContrast) {
-            additionalClasses.add("high-contrast");
-        }
-        if (weightedFont) {
-            additionalClasses.add("weighted-font");
-        }
-        if (settings.isArticleFontSerif()) {
-            additionalClasses.add("serif-font");
-        }
-        if (settings.isArticleTextAlignmentJustify()) {
-            additionalClasses.add("text-align-justify");
-        }
+        if (highContrast) additionalClasses.add("high-contrast");
+        if (weightedFont) additionalClasses.add("weighted-font");
+        if (settings.isArticleFontSerif()) additionalClasses.add("serif-font");
+        if (settings.isArticleTextAlignmentJustify()) additionalClasses.add("text-align-justify");
         additionalClasses.add(settings.getHandlePreformattedTextOption());
 
         String classAttr;
@@ -1037,9 +1000,7 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         String headerString = header.toString();
 
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "getHeader() headerString: " + headerString);
-        }
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
 
         return doImageUrlReplacements(headerString);
     }
@@ -1070,9 +1031,7 @@ public class ReadArticleActivity extends AppCompatActivity {
             htmlContent = getString(R.string.contentIsTooLong);
         }
 
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
-        }
+        if (BuildConfig.DEBUG) Log.d(TAG, "getHtmlContent() htmlContent: " + htmlContent);
 
         return doImageUrlReplacements(htmlContent);
     }
@@ -1103,13 +1062,9 @@ public class ReadArticleActivity extends AppCompatActivity {
 
     private void handleUrlClicked(final String url) {
         Log.d(TAG, "handleUrlClicked() url: " + url);
-        if (TextUtils.isEmpty(url)) {
-            return;
-        }
+        if (TextUtils.isEmpty(url)) return;
 
-        if (handleTagClicked(url)) {
-            return;
-        }
+        if (handleTagClicked(url)) return;
 
         @SuppressLint("InflateParams") // it's ok to inflate with null for AlertDialog
         View v = getLayoutInflater().inflate(R.layout.dialog_title_url, null);
@@ -1148,9 +1103,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private boolean handleTagClicked(String url) {
         final String tagUrlPrefix = "tag://";
 
-        if (!url.startsWith(tagUrlPrefix)) {
-            return false;
-        }
+        if (!url.startsWith(tagUrlPrefix)) return false;
 
         long tagId;
         try {
@@ -1210,9 +1163,7 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         int step = 5;
         fontSize += step * (increase ? 1 : -1);
-        if (!increase && fontSize < 5) {
-            fontSize = 5;
-        }
+        if (!increase && fontSize < 5) fontSize = 5;
 
         setFontSize(fontSize);
 
@@ -1229,12 +1180,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ReadArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         intent.putExtra(ReadArticleActivity.EXTRA_ID, id);
-        if (contextFavorites != null) {
-            intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
-        }
-        if (contextArchived != null) {
-            intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
-        }
+        if (contextFavorites != null) intent.putExtra(EXTRA_LIST_FAVORITES, contextFavorites);
+        if (contextArchived != null) intent.putExtra(EXTRA_LIST_ARCHIVED, contextArchived);
 
         startActivity(intent);
     }
@@ -1260,9 +1207,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void scroll(boolean up, float percent, boolean smooth, boolean keyUsed) {
-        if (scrollView == null) {
-            return;
-        }
+        if (scrollView == null) return;
 
         int viewHeight = scrollView.getHeight();
         int yOffset = scrollView.getScrollY();
@@ -1308,9 +1253,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         totalHeight -= viewHeight;
 
         double position = totalHeight >= 0 ? yOffset * 1. / totalHeight : 0;
-        if (position > 100) {
-            position = 100;
-        }
+        if (position > 100) position = 100;
 
         Log.d(TAG, "getReadingPosition() position: " + position);
 
@@ -1392,9 +1335,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private boolean loadArticle(long id) {
         article = getArticle(id);
 
-        if (article == null) {
-            return false;
-        }
+        if (article == null) return false;
 
         articleTitle = article.getTitle();
         Log.v(TAG, "loadArticle() articleTitle: " + articleTitle);
@@ -1419,24 +1360,14 @@ public class ReadArticleActivity extends AppCompatActivity {
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (previous) {
-            qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
-        } else {
-            qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
-        }
+        if (previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
+        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
 
-        if (contextFavorites != null) {
-            qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
-        }
-        if (contextArchived != null) {
-            qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
-        }
+        if (contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
+        if (contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
 
-        if (previous) {
-            qb.orderAsc(ArticleDao.Properties.ArticleId);
-        } else {
-            qb.orderDesc(ArticleDao.Properties.ArticleId);
-        }
+        if (previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
+        else qb.orderDesc(ArticleDao.Properties.ArticleId);
 
         List<Article> l = qb.limit(1).list();
         if (!l.isEmpty()) {
@@ -1484,9 +1415,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     }
 
     private void prepareToRestorePosition(boolean savePosition) {
-        if (savePosition) {
-            articleProgress = getReadingPosition();
-        }
+        if (savePosition) articleProgress = getReadingPosition();
 
         webViewHeightBeforeUpdate = webViewContent.getHeight();
     }
@@ -1519,9 +1448,7 @@ public class ReadArticleActivity extends AppCompatActivity {
     private void cancelPositionRestoration() {
         if (positionRestorationRunnable != null) {
             Log.d(TAG, "cancelPositionRestoration() trying to cancel previous task");
-            if (webViewContent != null) {
-                webViewContent.removeCallbacks(positionRestorationRunnable);
-            }
+            if (webViewContent != null) webViewContent.removeCallbacks(positionRestorationRunnable);
             positionRestorationRunnable = null;
         }
     }
