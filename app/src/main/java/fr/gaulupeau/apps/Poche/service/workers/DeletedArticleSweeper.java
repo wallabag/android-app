@@ -189,7 +189,7 @@ public class DeletedArticleSweeper extends BaseNetworkWorker {
 
                 if (existQueryBuilder == null) {
                     existQueryBuilder = wallabagService
-                            .getArticlesExistQueryBuilder(7950);
+                            .getArticlesExistQueryBuilder();
                 }
 
                 if (existQueryBuilder.addUrl(url)) {
