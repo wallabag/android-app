@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -187,7 +188,17 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
             qb.offset(PER_PAGE_LIMIT * page);
         }
 
-        return detachObjects(qb.list());
+        try {
+            return detachObjects(qb.list());
+        } catch (SQLException e) {
+            if (e.getMessage() != null && e.getMessage().contains("malformed MATCH expression")) {
+                Log.i(TAG, "Ignoring \"malformed MATCH expression\" error from FTS", e);
+                // the error is ignored, the user is presented with an empty list
+                return new ArrayList<>();
+            } else {
+                throw e;
+            }
+        }
     }
 
     private QueryBuilder<Article> getQueryBuilder() {
