@@ -236,11 +236,11 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
         switch (sortOrder) {
             case ASC:
-                qb.orderAsc(ArticleDao.Properties.ArticleId);
+                qb.orderAsc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId);
                 break;
 
             case DESC:
-                qb.orderDesc(ArticleDao.Properties.ArticleId);
+                qb.orderDesc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId);
                 break;
 
             default:
