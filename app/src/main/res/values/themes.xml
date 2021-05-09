@@ -166,7 +166,7 @@
 
     <style name="Theme.App.ProxyTheme" parent="Base.Theme.App.ProxyTheme" />
 
-    <style name="SplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/splash_background</item>
         <item name="colorPrimaryDark">@android:color/transparent</item>
         <item name="android:windowBackground">@drawable/background_splash</item>
