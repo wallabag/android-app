@@ -37,12 +37,12 @@ public class Themes {
 
     static void applyTheme(Activity activity) {
         applyTheme(activity, true);
-        applyDarkTheme();
     }
 
     static void applyTheme(Activity activity, boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
+        applyDarkTheme();
     }
 
     private static void applyDarkTheme() {
@@ -61,6 +61,7 @@ public class Themes {
     static void applyDialogTheme(final Activity activity) {
         activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
+        applyDarkTheme();
     }
 
     public static void checkTheme(Activity activity) {
