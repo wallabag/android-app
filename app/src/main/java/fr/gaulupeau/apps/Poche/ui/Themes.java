@@ -1,14 +1,10 @@
 package fr.gaulupeau.apps.Poche.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.os.Build;
 
 import java.util.Map;
