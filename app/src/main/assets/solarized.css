@@ -235,7 +235,7 @@ header.mbm {
   margin: 0;
 }
 
-#article blockquote p {
+#article blockquote p:last-of-type {
   margin-bottom: 0;
 }
 
