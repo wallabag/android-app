@@ -235,6 +235,10 @@ header.mbm {
   margin: 0;
 }
 
+#article blockquote p {
+  margin-bottom: 0;
+}
+
 #article pre {
   font-family: monospace;
   white-space: pre;
