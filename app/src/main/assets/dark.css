@@ -228,7 +228,7 @@ header.mbm {
   border: 1px solid #999;
   background: #222;
   padding: 0.25em;
-  margin: 0;
+  margin: 1.25em 0;
 }
 
 #article blockquote p:last-of-type {
