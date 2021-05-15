@@ -75,7 +75,7 @@
         <item name="colorSecondary">#6B38FB</item>
         <item name="colorSecondaryVariant">#2100c7</item>
         <item name="colorSurface">#FFFFFF</item>
-        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="android:colorBackground">@android:color/white</item>
         <item name="colorError">#C5032B</item>
         <item name="colorOnPrimary">#000000</item>
         <item name="colorOnSecondary">#FFFFFF</item>
