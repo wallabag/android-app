@@ -68,8 +68,8 @@ public class Themes {
     }
 
     public enum Theme {
-        DEFAULT(
-                R.string.themeName_default,
+        FOLLOW_SYSTEM(
+                R.string.themeName_follow_system,
                 R.style.Theme_App,
                 R.style.Theme_App_NoActionBar,
                 R.style.Theme_App_DialogTheme

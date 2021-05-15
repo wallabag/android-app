@@ -93,7 +93,7 @@
     <string name="scrolledOverBottom">Scroll %d time(s) more over the bottom to mark the article as read</string>
     <string name="markedAsRead"> Article marked as read</string>
     <string name="noNextArticle">No more articles in current list</string>
-    <string name="themeName_default">Default</string>
+    <string name="themeName_follow_system">Follow system</string>
     <string name="themeName_light">Light</string>
     <string name="themeName_light_contrast">Light (high contrast)</string>
     <string name="themeName_eink">For e-ink displays</string>
