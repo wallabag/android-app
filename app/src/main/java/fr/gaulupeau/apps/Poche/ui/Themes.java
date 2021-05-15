@@ -31,17 +31,17 @@ public class Themes {
         return theme;
     }
 
-    static void applyTheme(Activity activity) {
+    public static void applyTheme(Activity activity) {
         applyTheme(activity, true);
     }
 
-    static void applyTheme(Activity activity, boolean actionBar) {
+    public static void applyTheme(Activity activity, boolean actionBar) {
         activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
         appliedThemes.put(activity, theme);
         applyDarkTheme();
     }
 
-    private static void applyDarkTheme() {
+    public static void applyDarkTheme() {
         if (theme.name().toLowerCase().contains("light")) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         } else if (theme.name().toLowerCase().contains("dark")) {
@@ -54,7 +54,7 @@ public class Themes {
         }
     }
 
-    static void applyDialogTheme(final Activity activity) {
+    public static void applyDialogTheme(final Activity activity) {
         activity.setTheme(theme.getDialogResId());
         appliedThemes.put(activity, theme);
         applyDarkTheme();

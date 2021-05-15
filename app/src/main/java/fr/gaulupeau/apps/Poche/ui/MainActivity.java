@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TagListFragment.OnFragmentInteractionListener {
 
-    static final String PARAM_TAG_LABEL = "tag_label";
+    public static final String PARAM_TAG_LABEL = "tag_label";
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
