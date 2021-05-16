@@ -225,17 +225,21 @@ header.mbm {
 }
 
 #article blockquote, #article pre {
-  border: 1px solid #999;
-  background: #222;
-  padding: 0.25em;
   margin: 1.25em 0;
 }
 
-#article blockquote p:last-of-type {
-  margin-bottom: 0;
+#article blockquote {
+  border-left: 5px solid #03dac6; /* material dark accent */
+  padding-left: 1.25rem;
+  padding-right: 0.25rem;
+  font-style: italic;
+  color: #ddd;
 }
 
 #article pre {
+  padding: 0.25em;
+  border: 1px solid #999;
+  background: #222;
   font-family: monospace;
   white-space: pre;
   text-justify: none;
@@ -249,7 +253,7 @@ header.mbm {
   white-space: pre-wrap;
 }
 
-#article blockquote *, #article pre * {
+#article pre * {
   background: inherit;
 }
 
