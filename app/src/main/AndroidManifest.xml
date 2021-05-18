@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
           package="fr.gaulupeau.apps.InThePoche"
           android:installLocation="auto">
 
@@ -93,8 +92,7 @@
         </activity>
 
         <activity
-            android:name="fr.gaulupeau.apps.Poche.ui.EditAddedArticleActivity"
-            android:theme="@style/Theme.App.DialogTheme" />
+            android:name="fr.gaulupeau.apps.Poche.ui.EditAddedArticleActivity" />
 
         <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
             <intent-filter>
