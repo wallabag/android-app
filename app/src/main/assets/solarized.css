@@ -257,7 +257,7 @@ header.mbm {
   white-space: pre-wrap;
 }
 
-#article pre *  {
+#article pre * {
   background: inherit;
 }
 
