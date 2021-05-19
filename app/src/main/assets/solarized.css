@@ -78,7 +78,8 @@ table, th, td {
 }
 
 .high-contrast p,
-.high-contrast li {
+.high-contrast li,
+.high-contrast #article blockquote {
   color: #000;
   background: #FFF;
 }

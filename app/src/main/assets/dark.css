@@ -74,7 +74,8 @@ img {
 }
 
 .high-contrast p,
-.high-contrast li {
+.high-contrast li,
+.high-contrast #article blockquote {
   color: #FFF;
   background: #000;
 }
