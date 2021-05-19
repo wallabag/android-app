@@ -6,7 +6,7 @@
     <item
         android:id="@+id/menuArticleMarkAsRead"
         android:title="@string/btnMarkRead"
-        android:icon="?attr/icon_read"
+        android:icon="@drawable/ic_done_white_24dp"
         app:showAsAction="always"/>
     <item
         android:id="@+id/menuArticleMarkAsUnread"

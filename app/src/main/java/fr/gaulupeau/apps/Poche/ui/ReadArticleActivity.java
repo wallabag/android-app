@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -183,6 +184,36 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        toolbar.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuArticleMarkAsRead:
+                case R.id.menuArticleMarkAsUnread:
+                    markAsReadAndClose();
+                    return true;
+
+                case R.id.menuDelete:
+                    deleteArticle();
+                    return true;
+
+                case R.id.menuIncreaseFontSize:
+                    changeFontSize(true);
+                    return true;
+
+                case R.id.menuDecreaseFontSize:
+                    changeFontSize(false);
+                    return true;
+
+                case R.id.menuTTS:
+                    toggleTTS(true);
+                    return true;
+            }
+
+            return articleActionsHelper.handleContextItemSelected(this, article, item);
+        });
+
         if (fullscreenArticleView) {
             ActionBar actionBar = getSupportActionBar();
             if (actionBar != null) actionBar.hide();
@@ -308,36 +339,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         menu.findItem(R.id.menuTTS).setChecked(ttsFragment != null);
 
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuArticleMarkAsRead:
-            case R.id.menuArticleMarkAsUnread:
-                markAsReadAndClose();
-                return true;
-
-            case R.id.menuDelete:
-                deleteArticle();
-                return true;
-
-            case R.id.menuIncreaseFontSize:
-                changeFontSize(true);
-                return true;
-
-            case R.id.menuDecreaseFontSize:
-                changeFontSize(false);
-                return true;
-
-            case R.id.menuTTS:
-                toggleTTS(true);
-                return true;
-        }
-
-        if (articleActionsHelper.handleContextItemSelected(this, article, item)) return true;
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

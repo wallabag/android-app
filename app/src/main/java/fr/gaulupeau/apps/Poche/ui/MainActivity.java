@@ -136,22 +136,6 @@ public class MainActivity extends AppCompatActivity
             if (headerView != null) {
                 lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
             }
-
-            // Set different colors for items in the navigation bar in dark (high contrast) theme
-            if (Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
-                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                    } else {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
-                    }
-                } catch (XmlPullParserException | IOException e) {
-                    Log.e(TAG, "onCreate()", e);
-                }
-            }
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -468,23 +452,11 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch (Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
                 CharSequence aboutCharSequence = getText(R.string.aboutText);
                 String aboutString = aboutCharSequence instanceof Spanned
                         ? Html.toHtml((Spanned) aboutCharSequence)
                         : aboutCharSequence.toString();
                 new LibsBuilder()
-                        .withActivityStyle(style)
                         .withAboutIconShown(true)
                         .withAboutVersionShown(true)
                         .withAboutDescription(aboutString)

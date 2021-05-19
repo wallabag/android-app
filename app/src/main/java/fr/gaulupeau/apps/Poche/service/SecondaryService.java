@@ -24,7 +24,7 @@ public class SecondaryService extends TaskService {
 
         return new NotificationCompat.Builder(
                 this, NotificationsHelper.CHANNEL_ID_BACKGROUND_OPERATIONS)
-                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setSmallIcon(R.drawable.ic_sync)
                 .setContentTitle(getString(R.string.notification_backgroundOperations))
                 .build();
     }

@@ -169,7 +169,7 @@ public class EventProcessor {
         detailedMessage = prependAppName(detailedMessage);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
-                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setSmallIcon(R.drawable.ic_sync)
                 .setContentTitle(context.getString(R.string.notification_updatingArticles))
                 .setContentText(detailedMessage)
                 .setOngoing(true);
@@ -209,7 +209,7 @@ public class EventProcessor {
         Context context = getContext();
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
-                .setSmallIcon(R.drawable.ic_action_refresh)
+                .setSmallIcon(R.drawable.ic_sync)
                 .setContentTitle(context.getString(R.string.notification_sweepingDeletedArticles))
                 .setOngoing(true);
 
@@ -253,7 +253,7 @@ public class EventProcessor {
             Context context = getContext();
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
-                    .setSmallIcon(R.drawable.ic_action_refresh)
+                    .setSmallIcon(R.drawable.ic_sync)
                     .setContentTitle(context.getString(R.string.notification_downloadingImages))
                     .setOngoing(true);
 
@@ -306,7 +306,7 @@ public class EventProcessor {
                 Context context = getContext();
 
                 notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_SYNC)
-                        .setSmallIcon(R.drawable.ic_action_refresh)
+                        .setSmallIcon(R.drawable.ic_sync)
                         .setContentTitle(getContext().getString(R.string.notification_syncingQueue))
                         .setOngoing(true);
 
