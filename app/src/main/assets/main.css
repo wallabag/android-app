@@ -219,7 +219,7 @@ header.mbm {
 }
 
 #article blockquote {
-  border-left: 5px solid    #018786; /* material light accent */
+  border-left: 5px solid #ee6e73;
   padding-left: 1.25rem;
   padding-right: 0.25rem;
   font-style: italic;
