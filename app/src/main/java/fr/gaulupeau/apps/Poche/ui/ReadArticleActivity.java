@@ -35,6 +35,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.webkit.WebSettingsCompat;
 import androidx.webkit.WebViewFeature;
 
@@ -133,7 +134,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean annotationsEnabled;
     private boolean onyxWorkaroundEnabled;
 
-    private ScrollView scrollView;
+    private NestedScrollView scrollView;
     private View scrollViewLastChild;
     private WebView webViewContent;
     private TextView loadingPlaceholder;
