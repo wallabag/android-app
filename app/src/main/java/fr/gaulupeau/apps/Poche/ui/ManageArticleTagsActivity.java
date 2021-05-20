@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -86,6 +87,10 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
         Log.d(TAG, "onCreate() started");
 
         setContentView(R.layout.activity_manage_article_tags);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         String[] currentTagsArray = null;
         String text;

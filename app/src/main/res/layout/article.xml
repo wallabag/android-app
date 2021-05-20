@@ -2,93 +2,118 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/viewMain"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity">
 
-    <ScrollView
-        android:id="@+id/scroll"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        tools:ignore="UselessParent">
+        android:layout_weight="1">
 
-        <LinearLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            tools:ignore="WebViewLayout">
+            android:layout_height="wrap_content">
 
-            <WebView
-                android:id="@+id/webViewContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:navigationIcon="@drawable/ic_back" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:ignore="UselessParent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="15sp"
-                android:paddingRight="15sp">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="5sp"
-                    android:layout_marginTop="5sp"
-                    android:background="#000000"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/tv_loading_article"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="@string/loading_article_text"/>
+                <WebView
+                    android:id="@+id/webViewContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:isScrollContainer="false" />
 
                 <LinearLayout
-                    android:id="@+id/bottomTools"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-                    <ImageButton
-                        android:id="@+id/btnGoPrevious"
+                    android:orientation="vertical"
+                    android:paddingLeft="15sp"
+                    android:paddingRight="15sp">
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dip"
+                        android:layout_marginTop="5sp"
+                        android:layout_marginBottom="5sp"
+                        android:background="#000000"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_loading_article"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/menuPrevious"
-                        android:src="@drawable/ic_action_previous_item"
-                        android:layout_weight="1"/>
-                    <Button
-                        android:id="@+id/btnMarkRead"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/btnMarkRead"
-                        android:layout_weight="6"/>
-                    <Button
-                        android:id="@+id/btnMarkUnread"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="@string/btnMarkUnread"
-                        android:layout_weight="6"
-                        android:visibility="gone"/>
-                    <ImageButton
-                        android:id="@+id/btnGoNext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/menuNext"
-                        android:src="@drawable/ic_action_next_item"
-                        android:layout_weight="1"/>
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/loading_article_text"
+                        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                    <LinearLayout
+                        android:id="@+id/bottomTools"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <ImageButton
+                            android:id="@+id/btnGoPrevious"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/menuPrevious"
+                            android:src="@drawable/ic_action_previous_item" />
+
+                        <Button
+                            android:id="@+id/btnMarkRead"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="6"
+                            android:text="@string/btnMarkRead" />
+
+                        <Button
+                            android:id="@+id/btnMarkUnread"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="6"
+                            android:text="@string/btnMarkUnread"
+                            android:visibility="gone" />
+
+                        <ImageButton
+                            android:id="@+id/btnGoNext"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:contentDescription="@string/menuNext"
+                            android:src="@drawable/ic_action_next_item" />
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-    </ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

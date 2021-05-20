@@ -88,7 +88,7 @@ public class Settings {
             } else { // preferences are not migrated -- set some default values
                 boolean isOnyxDevice = Build.MANUFACTURER.equals("Onyx");
                 boolean isEreader = isOnyxDevice || Build.MODEL.equals("NOOK");
-                Themes.Theme theme = isEreader ? Themes.Theme.E_INK : Themes.Theme.LIGHT;
+                Themes.Theme theme = isEreader ? Themes.Theme.E_INK : Themes.Theme.FOLLOW_SYSTEM;
                 prefEditor.putString(context.getString(R.string.pref_key_ui_theme), theme.toString());
                 prefEditor.putBoolean(context.getString(R.string.pref_key_ui_onyxworkaround_enabled), isOnyxDevice);
             }
@@ -441,7 +441,7 @@ public class Settings {
             } catch(IllegalArgumentException ignored) {}
         }
 
-        return theme != null ? theme : Themes.Theme.LIGHT;
+        return theme != null ? theme : Themes.Theme.FOLLOW_SYSTEM;
     }
 
     public void setTheme(Themes.Theme theme) {

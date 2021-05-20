@@ -11,26 +11,27 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="?attr/appBarOverlayTheme">
+        app:elevation="0dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="?attr/popupOverlayTheme"/>
+                app:navigationIcon="@drawable/ic_menu_24dp"
+                android:elevation="4dp"/>
 
-            <ProgressBar
+            <com.google.android.material.progressindicator.LinearProgressIndicator
                 android:id="@+id/progressBar"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:visibility="gone"
-                android:layout_gravity="bottom"
-                style="?android:attr/progressBarStyleHorizontal"/>
+                android:layout_height="14dp"
+                android:indeterminate="true"
+                android:visibility="invisible"
+                app:hideAnimationBehavior="inward"
+                app:showAnimationBehavior="outward" />
 
         </FrameLayout>
 

@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -78,6 +79,12 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_settings);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         if(savedInstanceState == null) {
             Intent intent = getIntent();
@@ -302,7 +309,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             goToFragment.setArguments(bundle);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, goToFragment)
+                    .replace(R.id.content, goToFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             if(!noBackStack && !PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
             ft.commitAllowingStateLoss();

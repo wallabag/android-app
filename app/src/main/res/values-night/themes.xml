@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.App" parent="Base.Theme.App">
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <style name="Theme.App.NoActionBar" parent="Base.Theme.App.NoActionBar" />
+
+    <style name="Theme.App.Contrast" parent="Theme.App">
+        <item name="android:colorBackground">@color/darkContrastBlack</item>
+    </style>
+
+    <style name="Theme.App.Contrast.NoActionBar" parent="Base.Theme.App.Contrast.NoActionBar" />
+
+    <style name="Theme.App.Solarized" parent="Theme.App">
+        <item name="colorPrimary">@color/solarizedBase01</item>
+        <item name="colorPrimaryVariant">@color/solarizedBase01</item>
+        <item name="colorSecondary">@color/solarizedYellow</item>
+        <item name="colorSurface">@color/solarizedBase02</item>
+        <item name="android:colorBackground">@color/solarizedBase03</item>
+        <item name="colorError">@color/solarizedRed</item>
+        <item name="colorOnPrimary">@color/solarizedBase03</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnSurface">@color/solarizedBase00</item>
+        <item name="colorOnError">#FFFBFA</item>
+        <item name="colorOnBackground">@color/solarizedBase01</item>
+    </style>
+
+    <style name="Theme.App.Solarized.NoActionBar" parent="Base.Theme.App.Solarized.NoActionBar" />
+
+    <style name="Theme.App.DialogTheme" parent="Base.Theme.App.DialogTheme" />
+
+    <style name="Theme.App.ProxyTheme" parent="Base.Theme.App.ProxyTheme" />
+</resources>

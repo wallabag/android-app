@@ -78,7 +78,7 @@
         android:orientation="horizontal">
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/prev_button"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -90,7 +90,7 @@
             android:background="?android:attr/dividerVertical" />
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:id="@+id/next_button"
             android:layout_width="0dp"
             android:layout_weight="1"

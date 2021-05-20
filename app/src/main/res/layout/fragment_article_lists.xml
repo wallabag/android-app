@@ -10,7 +10,8 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/articles_list_tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/articles_list_pager"

@@ -17,7 +17,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
 
     private ConfigurationTestHelper configurationTestHelper;
 
-    private ProgressBar progressBar;
+    private LinearProgressIndicator progressBar;
 
     private NavigationView navigationView;
     private TextView lastUpdateTimeView;
@@ -135,22 +135,6 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             if (headerView != null) {
                 lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
-            }
-
-            // Set different colors for items in the navigation bar in dark (high contrast) theme
-            if (Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
-                @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
-                try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                    } else {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
-                    }
-                } catch (XmlPullParserException | IOException e) {
-                    Log.e(TAG, "onCreate()", e);
-                }
             }
         }
 
@@ -468,23 +452,11 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch (Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
                 CharSequence aboutCharSequence = getText(R.string.aboutText);
                 String aboutString = aboutCharSequence instanceof Spanned
                         ? Html.toHtml((Spanned) aboutCharSequence)
                         : aboutCharSequence.toString();
                 new LibsBuilder()
-                        .withActivityStyle(style)
                         .withAboutIconShown(true)
                         .withAboutVersionShown(true)
                         .withAboutDescription(aboutString)
@@ -546,8 +518,10 @@ public class MainActivity extends AppCompatActivity
 
         if (progressBar != null) {
             progressBar.setIndeterminate(false);
-            progressBar.setMax(event.getTotal());
-            progressBar.setProgress(event.getCurrent());
+            if (event.getTotal() > 0) {
+                progressBar.setMax(event.getTotal());
+                progressBar.setProgressCompat(event.getCurrent(), true);
+            }
         }
     }
 
@@ -585,7 +559,7 @@ public class MainActivity extends AppCompatActivity
         updateRunning = started;
 
         if (progressBar != null) {
-            progressBar.setVisibility(started ? View.VISIBLE : View.GONE);
+            progressBar.setVisibility(started ? View.VISIBLE : View.INVISIBLE);
             progressBar.setIndeterminate(true);
         }
     }
