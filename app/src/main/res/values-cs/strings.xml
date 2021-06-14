@@ -347,4 +347,5 @@
     <string name="articleList_ArchivedMark">Značka Archivováno</string>
     <string name="articleList_favoriteMark">Značka Oblíbené</string>
     <string name="testConnection_errorMessage_httpAuth">Ověření HTTP selhalo</string>
+    <string name="notification_stacktrace">Sledování zásobníku:</string>
 </resources>

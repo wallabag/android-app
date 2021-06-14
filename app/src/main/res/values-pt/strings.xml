@@ -23,7 +23,7 @@
     <string name="menu_syncLocalChanges">Sincronizar mudanças locais</string>
     <string name="d_deleteArticle_title">Deletar artigo?</string>
     <string name="d_deleteArticle_message">Tem certeza que deseja deletar o artigo?</string>
-    <string name="txtNetOffline">Por favor checar conexão com Internet!</string>
+    <string name="txtNetOffline">Por favor, verifique a conexão com Internet!</string>
     <string name="txtConfigNotSet">Por favor configure a app antes de sincronizar.</string>
     <string name="txtUrlCopied">URL do artigo copiada para prancheta</string>
     <string name="dialog_add_label">Adicionar um novo artigo</string>
@@ -51,9 +51,9 @@
     <string name="testConnection_progressDialogMessage">Testando conexão…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorreta</string>
     <string name="testConnection_errorMessage_unsupportedServerVersion">Versão de servidor não suportada detectada</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">serviço wallabag não encontrado — checar URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">serviço wallabag não encontrado — verificar URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticação HTTP falhou</string>
-    <string name="testConnection_errorMessage_incorrectCredentials">Não pode logar — checar nome de utilizador e palavra-passe</string>
+    <string name="testConnection_errorMessage_incorrectCredentials">Não pode logar — verificar o nome de utilizador e palavra-passe</string>
     <string name="testConnection_errorMessage_authProblems">Problemas relacionados à autorização. Esse normalmente são causados por redirecionamentos HTTP.</string>
     <string name="testConnection_errorMessage_unknown">Erro desconhecido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erro desconhecido: %s</string>
@@ -109,8 +109,8 @@
     <string name="pref_name_storage_dbPath_dbMoved">Base de dados movida</string>
     <string name="connectionWizard_summary_text">Clique para gravar e ir para o ecrã principal.</string>
     <string name="menu_changeTitle">Mudar o título</string>
-    <string name="manageTags_title">Gerenciar tags</string>
-    <string name="menu_manageTags">Gerenciar tags</string>
+    <string name="manageTags_title">Gerir tags</string>
+    <string name="menu_manageTags">Gerir tags</string>
     <string name="nav_main_tags">Tags</string>
     <string name="title_main_tag">Tag: %s</string>
     <string name="nav_main_tagged_articles">Artigos com tag</string>
