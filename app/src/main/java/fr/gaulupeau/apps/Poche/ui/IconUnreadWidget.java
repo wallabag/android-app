@@ -21,7 +21,7 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
 
     private static final String TAG = IconUnreadWidget.class.getSimpleName();
 
-    private static final int MAX_UNREAD_COUNT = 999;
+    private static final int MAX_UNREAD_COUNT = 9999;
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
