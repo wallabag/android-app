@@ -403,6 +403,11 @@ public class OperationsWorker extends BaseWorker {
     public Annotation addAnnotation(int articleId, Annotation annotation) {
         Log.d(TAG, String.format("addAnnotation(%d, %s) started", articleId, annotation));
 
+        int maxQuoteLength = 10000;
+        if (annotation.getQuote() != null && annotation.getQuote().length() > maxQuoteLength) {
+            annotation.setQuote(annotation.getQuote().substring(0, maxQuoteLength - 1) + '…');
+        }
+
         Article article = getArticle(articleId);
 
         Long annotationId = annotation.getId();
