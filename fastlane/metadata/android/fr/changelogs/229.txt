@@ -1,0 +1,9 @@
+- @cheywood a amélioré le style des citations.
+- @scubajeff a corrigé les actions personnalisées lors de la sélection de texte.
+- Jeff Held (@solkaz) a corrigé un crash lors de la recherche avec certains caractères.
+- @Strubbl a augmenté le nombre maximum pouvant être affiché dans le widget.
+- Correction du cache hors-ligne des images sous Android 10+.
+- Correction d'un problème avec la suppression des articles dans certaines situations.
+- Correction d'un problème avec les longues annotations qui bloquaient la synchronisation.
+- Taco (@TacoTheDank) a amélioré des bouts de code.
+- Mise à jour des traductions.
