@@ -1,0 +1,9 @@
+- @cheywood improved quote style.
+- @scubajeff fixed custom text selection actions.
+- Jeff Held (@solkaz) fixed a crash during search when certain characters are used.
+- @Strubbl increased max widget counter value.
+- Fixed offline image caching on Android 10+.
+- Fixed a problem with deleted article sweeping in some situations.
+- Fixed a problem with long annotations blocking sync.
+- Taco (@TacoTheDank) improved some code.
+- Updated translations.
