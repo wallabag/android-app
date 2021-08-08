@@ -19,7 +19,6 @@ import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
-import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -684,10 +683,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 super.onPageFinished(view, url);
             }
 
+            @SuppressWarnings("deprecation") // the suggested method is not called before API 24
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                String url = request.getUrl().toString();
-
+            public boolean shouldOverrideUrlLoading(WebView webView, String url) {
                 // If we try to open current URL, do not propose to save it, directly open browser
                 if (url.equals(articleUrl)) {
                     openURL(url);
