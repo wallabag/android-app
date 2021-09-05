@@ -46,7 +46,7 @@
     <string name="d_add_fail_title">Fail</string>
     <string name="d_add_fail_text">Couldn\'t find a URL in share string:\n</string>
     <string name="d_configurationChanged_title">Parameters changed</string>
-    <string name="d_configurationChanged_message">Test the connection to check if the new changes work.</string>
+    <string name="d_configurationChanged_message">Test the connection to check if the new parameters work.</string>
     <string name="d_configurationChanged_answer_decline">Not now</string>
     <string name="d_configurationIsQuestionable_title">Problem detected</string>
     <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
@@ -57,11 +57,11 @@
     <string name="testConnection_errorMessage_incorrectUrl">Incorrect URL</string>
     <string name="testConnection_errorMessage_unsupportedServerVersion">The server version is unsupported</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Could not find wallabag service — check URL</string>
-    <string name="testConnection_errorMessage_httpAuth">Could not log in via HTTP</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP authentication failed</string>
     <string name="testConnection_errorMessage_noCSRF">Could not parse login form</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Can\'t log in — check username and password</string>
-    <string name="testConnection_errorMessage_authProblems">Could not log in. Make sure there are no HTTP-redirects.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login. Usually caused by two-factor authentication, (which the app doesn\'t support yet).</string>
+    <string name="testConnection_errorMessage_authProblems">Could not log in (usually caused by HTTP-redirections)</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unknown page after login. Usually caused by two-factor authentication (which the app doesn\'t support yet).</string>
     <string name="testConnection_errorMessage_unknown">Unknown error</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unknown error: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Consider changing URL</string>
@@ -194,7 +194,7 @@
     <string name="pref_desc_connection_autofill">Test connection and fill in client ID and client secret</string>
 
     <string name="pref_categoryName_connection_advanced">Advanced connection settings</string>
-    <string name="pref_categoryName_connection_advanced_httpAuth">Basic HTTP Authentication</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basic authentication</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">If you don\'t know what it is, leave it empty</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP auth username</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP auth password</string>
@@ -207,14 +207,14 @@
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
     <string name="pref_name_ui_article_handlePreformattedText">Handling Long Preformatted Text</string>
-    <string name="pref_desc_ui_article_handlePreformattedText">How To handle preformatted text too long to show in full.</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">How to handle preformatted text too long to show in full.</string>
     <string-array name="pref_option_handlePreformattedText">
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
     <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog allowing favoriting/archiving/tagging a newly added article (instead of a toast message).</string>
-    <string name="pref_name_ui_article_fullscreen">Fullscreen Articles</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog allowing favoriting/archiving/tagging a newly added article (or a toast message otherwise)</string>
+    <string name="pref_name_ui_article_fullscreen">Fullscreen articles</string>
     <string name="pref_desc_ui_article_fullscreen">Hides system and app bars when reading articles</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox theme workaround</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Prevent Onyx devices forcing black link colors</string>
@@ -230,11 +230,11 @@
     <string name="pref_name_ui_screenScrolling_smooth">Smooth scrolling</string>
     <string name="pref_categoryName_ui_misc">Misc</string>
     <string name="pref_name_ui_disableTouch_enabled">No touch input</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Press the \"No touch input button\" (camera button by default) to block or unblock touch input on the reading screen (system controls are unaffected)</string>
-    <string name="pref_name_ui_disableTouch_keyCode">Button preventing touch input</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Press to select a button to turn on and off touch input</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Press the \"No touch input\" button (camera button by default) to block or unblock touch input on the reading screen (system controls are unaffected)</string>
+    <string name="pref_name_ui_disableTouch_keyCode">\"No touch input\" button</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Select a button to turn on and off touch input</string>
     <string name="pref_name_ui_scrollOverBottom">Scroll past bottom to mark as read</string>
-    <string name="pref_desc_ui_scrollOverBottom">Press to set how many times scrolling past the bottom marks an article as read</string>
+    <string name="pref_desc_ui_scrollOverBottom">Set how many times scrolling past the bottom marks an article as read</string>
     <string name="pref_name_ui_swipeArticles">Swipe Articles</string>
     <string name="pref_desc_ui_swipeArticles">Swipe ← or → inside an article to go to previous or next article</string>
     <string name="pref_name_ui_previewImage_enabled">Preview Image</string>
@@ -250,7 +250,7 @@
     <string name="pref_name_tts_fastForwardTime">Fast-forward skip time</string>
     <string name="pref_desc_tts_fastForwardTime">Number of seconds pressing \"Fast Forward\" skips forwards</string>
     <string name="pref_name_tts_rewindTime">Rewind skip time</string>
-    <string name="pref_desc_tts_rewindTime">Number of seconds pressing \"Fast Rewind\" skips backwards</string>
+    <string name="pref_desc_tts_rewindTime">Number of seconds pressing \"Rewind\" skips backwards</string>
     <string name="pref_name_tts_nextButtonIsFastForward">\"Next\" button fast-forwards</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">Pressing \"Next\" media button fast-forwards instead of skipping to next article</string>
     <string name="pref_name_tts_previousButtonIsRewind">\"Previous\" button rewinds</string>
@@ -263,9 +263,9 @@
     <string name="pref_desc_sync_syncTypes">Press for more info about syncing types</string>
     <string name="pref_desc_sync_syncTypes_text">\"Full\" and \"Fast\" are the two main syncing types.\n\n
         \"Full\" deletes all local content and re-downloads it. (The option is there in the menu as a last resort.)\n\n
-        \"Fast\" (incremental) downloads any changes made since the previous sync to reduce time and bandwidth. It can\'t detect or delete remotely deleted articles. (Pull ↓ beyond the top position scrollbar in any article list to use it).\n\n
-        Use \"Deleted article sweep\" to auto-remove any local articles not found by it on the server. Takes a while, but saves traffic over the \"Full\" sync.\n\n
-        Local changes are always synced from the client to the server before updating local content. (If it fails nothing happens.)
+        \"Fast\" (incremental) downloads any changes made since the previous sync to save time and bandwidth. It can\'t detect and delete remotely deleted articles. (Pull ↓ beyond the top position scrollbar in any article list to use it).\n\n
+        Use \"Deleted article sweep\" to auto-remove any local articles not found on the server. Takes a while, but saves traffic over the \"Full\" sync.\n\n
+        Local changes are always synced from the client to the server before updating local content (if it fails, nothing is lost).
     </string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Deleted article sweep\" after \"Fast\" sync</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">The description of different sync types above has more info</string>
@@ -288,7 +288,7 @@
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync for local changes</string>
     <string name="pref_desc_autoSyncQueue_enabled">Syncs local changes (added links, archived articles, etc.) to the server once online again.</string>
     <string name="pref_name_imageCache_enabled">Put article images in cache</string>
-    <string name="pref_desc_imageCache_enabled">Auto-download all images from every article onto the device. (Takes up a lot of time and space if the article list is long.)</string>
+    <string name="pref_desc_imageCache_enabled">Auto-download all images from every article onto the device (takes up a lot of time and space if the article list is long)</string>
 
     <string name="pref_name_storage_dbPath">Database location</string>
     <string name="pref_name_storage_dbPath_internalStorage">Internal storage</string>
@@ -304,15 +304,15 @@
     <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Uses ICU tokenizer for full-text-search indexing (generic unicode61 tokenizer is used otherwise). May improve search results for CJK languages. \"Full update\" is required for the option to take effect.</string>
     <string name="pref_name_misc_wipeDB">Clear Database</string>
     <string name="pref_desc_misc_wipeDB">Deletes articles and all unsynced local changes and URLs from the local database</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">Wipe Database?</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Clear Database?</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Are you sure you want to clear the database?</string>
     <string name="pref_categoryName_misc_localQueue">Local changes</string>
     <string name="pref_name_misc_localQueue_notice">Warning</string>
     <string name="pref_desc_misc_localQueue_notice">Don\'t do anything here unless you know what you\'re doing!</string>
-    <string name="pref_name_misc_localQueue_dumpToFile">Dump to file</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Dumps all local changes to a TXT file (to study yourself or attach to a bug-report)</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Save to file</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Saves all local changes to a TXT file (for studying it yourself or attaching it to a bug report)</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Remove first local queue item</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Removes the first unsynced item. May help with repeating errors during notifications syncing. Tip: Save all local changes to a file first.</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Removes the first unsynced item. May help with repeating error notifications during syncing. Tip: Save all local changes to a file first.</string>
     <string name="pref_name_misc_logging_logcatToFile">Save logcat output to a file</string>
     <string name="pref_desc_misc_logging_logcatToFile">Saves logcat output (Android app log) to a file in /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
 
@@ -332,7 +332,7 @@
 
     <string name="connectionWizard_welcome_titleMessage">Welcome to wallabag.</string>
     <string name="connectionWizard_welcome_text">Set up a connection using the wizard first.</string>
-    <string name="connectionWizard_welcome_rerunNotice">(Re-run the connection wizard from \"Settings\" at any time.)</string>
+    <string name="connectionWizard_welcome_rerunNotice">(You can re-run the connection wizard from \"Settings\" at any time.)</string>
     <string name="connectionWizard_welcome_prev">Skip</string>
     <string name="connectionWizard_welcome_next">Next</string>
 
