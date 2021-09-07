@@ -117,7 +117,8 @@
     <string name="menu_changeTitle">Verander de titel</string>
     <string name="manageTags_save">Bewaar</string>
     <string name="manageTags_addNew">Voeg toe</string>
-    <string name="content_estimatedReadingTime">Geschatte leestijd: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Geschatte leestijd</string>
     <string name="lastUpdateTimeLabel">Laatste update: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="nav_main_articles">Artikelen</string>
@@ -183,7 +184,6 @@
     <string name="notification_action_media_rewind">Terugspoelen</string>
     <string name="tts_image">Afbeelding: %s</string>
     <string name="articleContent_previewImageAltText">Voorbeeld afbeelding</string>
-    <string name="articleContent_globeIconAltText">Wereldbol icoon</string>
     <string name="contentIsTooLong">De inhoud van het artikel is te lang om weer te geven</string>
     <string name="untagged">&lt;ongelabeld&gt;</string>
     <string name="title">Titel</string>

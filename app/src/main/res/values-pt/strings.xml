@@ -69,7 +69,8 @@
     <string name="connectionWizard_welcome_next">Seguinte</string>
     <string name="connectionWizard_welcome_prev">Pular</string>
     <string name="connectionWizard_welcome_titleMessage">Ben-vindo ao wallabag.</string>
-    <string name="content_estimatedReadingTime">Tempo estimado de leitura: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Tempo estimado de leitura</string>
     <string name="d_checkCredentials_errorMessage_unknown">Error desconhecido</string>
     <string name="d_checkCredentials_errorMessage_notFound">API não encontrada</string>
     <string name="d_checkCredentials_errorMessage_notFoundWithMessage">API não encontrada: %s</string>

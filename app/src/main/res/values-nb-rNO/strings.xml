@@ -113,7 +113,8 @@
     <string name="manageTags_textField_hint">Én eller flere etiketter, kommainndelt</string>
     <string name="manageTags_addNew">Legg til</string>
     <string name="manageTags_currentTags">Valgte etiketter:</string>
-    <string name="content_estimatedReadingTime">Antatt lesetid: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Antatt lesetid</string>
     <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
     <string name="navigation_drawer_close">Lukk navigasjonsskuff</string>
     <string name="nav_main_articles">Artikler</string>

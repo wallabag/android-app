@@ -76,7 +76,8 @@
     <string name="pref_name_ui_swipeArticles">기사들을 넘김</string>
     <string name="pref_desc_ui_keepScreenOn">기사를 읽는 동안 화면을 계속 켜 두십시오</string>
     <string name="connectionWizard_provider_general_titleMessage">기본 구성</string>
-    <string name="content_estimatedReadingTime">예상 판독 시간: %s분</string>
+    <string name="content_estimatedReadingTime">%s분</string>
+    <string name="content_estimatedReadingTimeTTSLabel">예상 판독 시간</string>
     <string name="nav_other_settings">설정</string>
     <string name="notification_channel_group_name_tts">TTS</string>
     <string name="menu_lists_search">찾기</string>

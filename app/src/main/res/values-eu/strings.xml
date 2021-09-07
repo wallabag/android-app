@@ -122,7 +122,8 @@
     <string name="manageTags_textField_hint">Etiketa bat edo gehiago koma bidez bereizita</string>
     <string name="manageTags_addNew">Gehitu</string>
     <string name="manageTags_currentTags">Etiketa hautatuak:</string>
-    <string name="content_estimatedReadingTime">Irakurketa denbora estimatua: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Irakurketa denbora estimatua</string>
     <string name="navigation_drawer_open">Ireki nabigatzeko menu lerrakorra</string>
     <string name="navigation_drawer_close">Itxi nabigatzeko menu lerrakorra</string>
     <string name="nav_main_articles">Artikuluak</string>

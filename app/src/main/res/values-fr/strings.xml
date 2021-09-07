@@ -137,7 +137,8 @@
     <string name="manageTags_textField_hint">Une ou plusieurs étiquettes séparées par des virgules</string>
     <string name="manageTags_addNew">Ajouter</string>
     <string name="manageTags_currentTags">Étiquettes sélectionnées :</string>
-    <string name="content_estimatedReadingTime">Temps de lecture estimé : %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Temps de lecture estimé</string>
     <string name="lastUpdateTimeLabel">Dernière mise à jour : %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="navigation_drawer_open">Ouvrir le menu de navigation</string>
@@ -311,7 +312,6 @@
     <string name="notification_action_media_pause">Pause</string>
     <string name="tts_image">Image : %s</string>
     <string name="articleContent_previewImageAltText">Image d\'aperçu</string>
-    <string name="articleContent_globeIconAltText">Icône d\'un globe</string>
     <string name="contentIsTooLong">Le contenu de l\'article est trop long pour être affiché</string>
     <string name="untagged">&lt;non étiqueté&gt;</string>
     <string name="title">Titre</string>

@@ -204,7 +204,8 @@
     <string name="manageTags_textField_hint">カンマで区切られた 1 つまたは複数のタグ</string>
     <string name="manageTags_addNew">追加</string>
     <string name="manageTags_currentTags">選択されたタグ:</string>
-    <string name="content_estimatedReadingTime">推定読書時間: %s 分</string>
+    <string name="content_estimatedReadingTime">%s 分</string>
+    <string name="content_estimatedReadingTimeTTSLabel">推定読書時間</string>
     <string name="navigation_drawer_open">ナビゲーションドロワーを開く</string>
     <string name="navigation_drawer_close">ナビゲーションドロワーを閉じる</string>
     <string name="nav_main_articles">記事</string>
@@ -307,7 +308,6 @@
     <string name="notification_action_media_rewind">巻き戻し</string>
     <string name="tts_image">画像 : %s</string>
     <string name="articleContent_previewImageAltText">プレビュー画像</string>
-    <string name="articleContent_globeIconAltText">地球のアイコン</string>
     <string name="contentIsTooLong">記事の内容が長すぎて表示できません</string>
     <string name="untagged">&lt;タグなし&gt;</string>
     <string name="title">タイトル</string>

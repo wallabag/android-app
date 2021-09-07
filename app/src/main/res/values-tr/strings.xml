@@ -122,7 +122,8 @@
     <string name="manageTags_textField_hint">Bir veya daha fazla (virgülle ayrılmış) etiket</string>
     <string name="manageTags_addNew">Ekle</string>
     <string name="manageTags_currentTags">Seçili etiketler:</string>
-    <string name="content_estimatedReadingTime">Tahmini okuma süresi: %s dk</string>
+    <string name="content_estimatedReadingTime">%s dk</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Tahmini okuma süresi</string>
     <string name="navigation_drawer_open">Navigasyon menüsünü aç</string>
     <string name="navigation_drawer_close">Navigasyon menüsünü kapat</string>
     <string name="nav_main_articles">Makaleler</string>
@@ -309,7 +310,6 @@
     <string name="notification_action_media_rewind">Geri sar</string>
     <string name="tts_image">Resim: %s</string>
     <string name="articleContent_previewImageAltText">Resmi önizle</string>
-    <string name="articleContent_globeIconAltText">Küre ikonu</string>
     <string name="contentIsTooLong">Makale içeriği görüntülenemeyecek kadar uzun</string>
     <string name="untagged">&lt;etiketlenmemiş&gt;</string>
     <string name="title">Başlık</string>

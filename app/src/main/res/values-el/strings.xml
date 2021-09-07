@@ -20,7 +20,6 @@
     <string name="notification_action_media_rewind">Γρήγορη επιστροφή</string>
     <string name="tts_image">Εικόνα: %s</string>
     <string name="articleContent_previewImageAltText">Προεπισκόπηση εικόνας</string>
-    <string name="articleContent_globeIconAltText">Εικόνα υδρογείου</string>
     <string name="contentIsTooLong">Το περιεχόμενο αυτού του άρθρου είναι πολύ μακρύ για να προβληθεί</string>
     <string name="untagged">&lt;χωρίς ετικέτα&gt;</string>
     <string name="title">Τίτλος</string>
@@ -196,7 +195,8 @@
     <string name="navigation_drawer_open">Άνοιγμα μενού πλοήγησης</string>
     <string name="listItem_estimatedReadingTime">%d λεπτά</string>
     <string name="lastUpdateTimeLabel">Τελευταία ενημέρωση: %s</string>
-    <string name="content_estimatedReadingTime">Εκτιμώμενος χρόνος ανάγνωσης: %s λεπτά</string>
+    <string name="content_estimatedReadingTime">%s λεπτά</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Εκτιμώμενος χρόνος ανάγνωσης</string>
     <string name="manageTags_addMoreTags">Προσθήκη περισσότερων ετικετών:</string>
     <string name="manageTags_currentTags_none">Κανένα</string>
     <string name="manageTags_currentTags">Επιλεγμένες ετικέτες:</string>

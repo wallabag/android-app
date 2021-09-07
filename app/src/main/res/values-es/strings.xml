@@ -133,7 +133,8 @@
     <string name="manageTags_textField_hint">Una o varias etiquetas separadas por comas</string>
     <string name="manageTags_addNew">Añadir</string>
     <string name="manageTags_currentTags">Etiquetas seleccionadas:</string>
-    <string name="content_estimatedReadingTime">Tiempo estimado de lectura: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Tiempo estimado de lectura</string>
     <string name="lastUpdateTimeLabel">Última actualización: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="navigation_drawer_open">Abrir caja de navegación</string>
@@ -274,7 +275,6 @@
     <string name="notification_action_media_rewind">Rebobinar</string>
     <string name="tts_image">Imagen: %s</string>
     <string name="articleContent_previewImageAltText">Imagen de previsualización</string>
-    <string name="articleContent_globeIconAltText">Icono flotante</string>
     <string name="contentIsTooLong">El contenido del artículo es demasiado largo para mostrar</string>
     <string name="untagged">&lt;sin etiquetas&gt;</string>
     <string name="title">Título</string>
