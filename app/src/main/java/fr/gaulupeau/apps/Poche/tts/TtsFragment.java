@@ -47,6 +47,7 @@ import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.ui.MainActivity;
 import fr.gaulupeau.apps.Poche.ui.ReadArticleActivity;
+import fr.gaulupeau.apps.Poche.utils.IntentUtils;
 
 /**
  * Text To Speech (TTS) User Interface.
@@ -185,7 +186,8 @@ public class TtsFragment extends Fragment {
         Intent mainFocusIntent = new Intent(Intent.ACTION_MAIN);
         mainFocusIntent.setClass(activity, MainActivity.class);
         mainFocusIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        notificationPendingIntent = PendingIntent.getActivity(activity, 0, mainFocusIntent, 0);
+        notificationPendingIntent = PendingIntent.getActivity(
+                activity, 0, mainFocusIntent, IntentUtils.FLAG_IMMUTABLE);
 
         TTS_DATA.init(activity, this::startActivityForResult);
     }

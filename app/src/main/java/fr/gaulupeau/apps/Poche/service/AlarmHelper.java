@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
+import fr.gaulupeau.apps.Poche.utils.IntentUtils;
+
 import static fr.gaulupeau.apps.Poche.data.Settings.enableComponent;
 
 public class AlarmHelper {
@@ -41,7 +43,7 @@ public class AlarmHelper {
 
     public static PendingIntent getAlarmIntent(Context context) {
         Intent intent = new Intent(context, AlarmReceiver.class);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, IntentUtils.FLAG_IMMUTABLE);
     }
 
     private static AlarmManager getAlarmManager(Context context) {

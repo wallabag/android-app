@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.UUID;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.utils.IntentUtils;
 
 public class NotificationActionReceiver extends BroadcastReceiver {
 
@@ -29,7 +30,7 @@ public class NotificationActionReceiver extends BroadcastReceiver {
         // make the intent unique, so `PendingIntent` creates a **new** pending intent
         intent.setData(Uri.parse("uuid:" + UUID.randomUUID()));
 
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, IntentUtils.FLAG_IMMUTABLE);
     }
 
     @Override

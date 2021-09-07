@@ -13,6 +13,7 @@ import android.widget.RemoteViews;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
+import fr.gaulupeau.apps.Poche.utils.IntentUtils;
 
 /**
  * Implementation of App Widget functionality.
@@ -54,7 +55,8 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
         Intent intent = new Intent(context, MainActivity.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidgetId, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context, appWidgetId, intent, IntentUtils.FLAG_IMMUTABLE);
         views.setOnClickPendingIntent(R.id.icon_unread_layout, pendingIntent);
 
         // Instruct the widget manager to update the widget

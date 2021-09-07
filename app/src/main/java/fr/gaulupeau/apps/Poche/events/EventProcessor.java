@@ -36,6 +36,7 @@ import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.IconUnreadWidget;
 import fr.gaulupeau.apps.Poche.ui.NotificationsHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
+import fr.gaulupeau.apps.Poche.utils.IntentUtils;
 import fr.gaulupeau.apps.Poche.utils.WallabagFileProvider;
 
 import static fr.gaulupeau.apps.Poche.ui.NotificationsHelper.CHANNEL_ID_DOWNLOADING_ARTICLES;
@@ -379,7 +380,8 @@ public class EventProcessor {
             intent.setDataAndType(uri, mimeType);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            PendingIntent contentIntent = PendingIntent.getActivity(
+                    context, 0, intent, IntentUtils.FLAG_IMMUTABLE);
 
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context, CHANNEL_ID_DOWNLOADING_ARTICLES)
                     .setContentTitle(context.getString(R.string.downloadAsFileArticleDownloaded))
@@ -467,7 +469,7 @@ public class EventProcessor {
 
                         Intent intent = new Intent(context, SettingsActivity.class);
                         PendingIntent contentIntent = PendingIntent.getActivity(
-                                context, 0, intent, 0);
+                                context, 0, intent, IntentUtils.FLAG_IMMUTABLE);
 
                         String detailedText = context.getString(
                                 errorType == ActionResult.ErrorType.INCORRECT_CREDENTIALS
