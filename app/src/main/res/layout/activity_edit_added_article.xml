@@ -36,7 +36,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="4dp"
             android:contentDescription="@string/add_to_favorites"
-            android:onClick="onFavoriteClick"
             app:srcCompat="@drawable/ic_star_border_black_24dp" />
 
         <ImageButton
@@ -46,7 +45,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="4dp"
             android:contentDescription="@string/btnMarkRead"
-            android:onClick="onArchiveClick"
             app:srcCompat="@drawable/ic_done_black_24dp" />
 
         <ImageButton
@@ -56,7 +54,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="4dp"
             android:contentDescription="@string/menu_manageTags"
-            android:onClick="onTagClick"
             app:srcCompat="?attr/icon_tag" />
 
         <ImageButton
@@ -67,7 +64,6 @@
             android:layout_margin="4dp"
             android:contentDescription="@string/articleEdit_openArticle"
             android:enabled="false"
-            android:onClick="onOpenClick"
             app:srcCompat="?attr/icon_open" />
     </LinearLayout>
 

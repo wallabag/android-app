@@ -99,6 +99,8 @@ public class ManageArticleTagsActivity extends BaseActionBarActivity {
 
         if (!loadArticle()) return;
 
+        findViewById(R.id.tag_add_button).setOnClickListener(this::addButtonPressed);
+
         suggestedTagsAdapter = new TagListAdapter(suggestedTags, this::suggestedTagClicked);
 
         currentTagsAdapter = new TagListAdapter(
