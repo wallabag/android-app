@@ -318,13 +318,4 @@ header.mbm {
     font-size: 1.2em;
     margin-bottom:0px;
   }
-
-  .mbm .domain {
-    margin-top:0px;
-    margin-left:0px;
-   }
-
-   #domainimg {
-    vertical-align:top;
-   }
 }
