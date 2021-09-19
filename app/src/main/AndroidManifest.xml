@@ -31,7 +31,8 @@
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.SplashActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +40,8 @@
         </activity>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.MainActivity"
-            android:theme="@style/LightTheme.NoActionBar">
+            android:theme="@style/LightTheme.NoActionBar"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -59,7 +61,8 @@
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:theme="@style/ProxyTheme">
+            android:theme="@style/ProxyTheme"
+            android:exported="true">
             <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.SEND" />
 
@@ -74,7 +77,8 @@
             android:enabled="false"
             android:excludeFromRecents="true"
             android:noHistory="true"
-            android:theme="@style/ProxyTheme">
+            android:theme="@style/ProxyTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -103,14 +107,18 @@
             android:name="fr.gaulupeau.apps.Poche.ui.EditAddedArticleActivity"
             android:theme="@style/DialogTheme" />
 
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity">
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
-        <activity android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity">
+        <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -119,7 +127,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="androidx.media.session.MediaButtonReceiver">
+        <receiver
+            android:name="androidx.media.session.MediaButtonReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -133,7 +143,9 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="fr.gaulupeau.apps.Poche.ui.IconUnreadWidget">
+        <receiver
+            android:name="fr.gaulupeau.apps.Poche.ui.IconUnreadWidget"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -144,7 +156,8 @@
         </receiver>
         <receiver
             android:name="fr.gaulupeau.apps.Poche.service.BootReceiver"
-            android:enabled="false">
+            android:enabled="false"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
