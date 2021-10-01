@@ -52,14 +52,12 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     private static final int PROVIDER_NO = -1;
     private static final int PROVIDER_WALLABAG_IT = 0;
-    private static final int PROVIDER_FRAMABAG = 1;
 
     private static final String PAGE_NONE = "";
     private static final String PAGE_WELCOME = "welcome";
     private static final String PAGE_PROVIDER_SELECTION = "provider_selection";
     private static final String PAGE_CONFIG_GENERIC = "config_generic";
     private static final String PAGE_CONFIG_WALLABAG_IT = "config_wallabag_it";
-    private static final String PAGE_CONFIG_FRAMABAG = "config_framabag";
     private static final String PAGE_SUMMARY = "summary";
 
     public static void runWizard(Context context, boolean skipWelcome) {
@@ -126,10 +124,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 if(WallabagItConfigFragment.WALLABAG_IT_HOSTNAME.equals(url)
                         || ("https://" + WallabagItConfigFragment.WALLABAG_IT_HOSTNAME).equals(url)) {
                     bundle.putInt(DATA_PROVIDER, PROVIDER_WALLABAG_IT);
-                    filledOutSomething = true;
-                } else if(FramabagConfigFragment.FRAMABAG_HOSTNAME.equals(url)
-                        || ("https://" + FramabagConfigFragment.FRAMABAG_HOSTNAME).equals(url)) {
-                    bundle.putInt(DATA_PROVIDER, PROVIDER_FRAMABAG);
                     filledOutSomething = true;
                 } else if(!TextUtils.isEmpty(url) && !"https://".equals(url)) {
                     bundle.putString(DATA_URL, url);
@@ -277,10 +271,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                         goToFragment = new WallabagItConfigFragment();
                         break;
 
-                    case PROVIDER_FRAMABAG:
-                        goToFragment = new FramabagConfigFragment();
-                        break;
-
                     default:
                         goToFragment = new GenericConfigFragment();
                         break;
@@ -289,7 +279,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             case PAGE_CONFIG_GENERIC:
             case PAGE_CONFIG_WALLABAG_IT:
-            case PAGE_CONFIG_FRAMABAG:
                 goToFragment = new SummaryFragment();
                 break;
 
@@ -430,10 +419,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 switch(radioGroup.getCheckedRadioButtonId()) {
                     case R.id.providerWallabagIt:
                         provider = PROVIDER_WALLABAG_IT;
-                        break;
-
-                    case R.id.providerFramabag:
-                        provider = PROVIDER_FRAMABAG;
                         break;
 
                     default:
@@ -595,29 +580,6 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             super.gatherData();
 
             url = "https://" + WALLABAG_IT_HOSTNAME;
-            tryPossibleURLs = false;
-        }
-
-    }
-
-    public static class FramabagConfigFragment extends GenericConfigFragment {
-
-        public String getPageName() {
-            return PAGE_CONFIG_FRAMABAG;
-        }
-
-        static final String FRAMABAG_HOSTNAME = "framabag.org";
-
-        @Override
-        protected int getLayoutResourceID() {
-            return R.layout.connection_wizard_framabag_config_fragment;
-        }
-
-        @Override
-        protected void gatherData() {
-            super.gatherData();
-
-            url = "https://" + FRAMABAG_HOSTNAME;
             tryPossibleURLs = false;
         }
 

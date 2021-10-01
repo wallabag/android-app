@@ -73,9 +73,6 @@
     <string name="connectionWizard_summary_toastMessage">تنظیمات تکمیل شد</string>
     <string name="connectionWizard_summary_text">برای ذخیره و رفتن به صفحه اصلی کلیک کنید.</string>
     <string name="connectionWizard_summary_titleMessage">همه چیز مرتب است.</string>
-    <string name="connectionWizard_provider_framabag_next">اتصال</string>
-    <string name="connectionWizard_provider_framabag_prev">قبل</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">پیکربندی Framabag</string>
     <string name="connectionWizard_provider_wallabagit_next">اتصال</string>
     <string name="connectionWizard_provider_wallabagit_prev">قبل</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">پیکربندی wallabag.it</string>
@@ -84,7 +81,6 @@
     <string name="connectionWizard_provider_general_titleMessage">پیکربندی ابتدایی</string>
     <string name="connectionWizard_providerSelection_next">بعدی</string>
     <string name="connectionWizard_providerSelection_prev">صرف نظر</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">اگر حسابی روی https://framabag.org دارید این گزینه را انتخاب کنید</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">اگر حسابی روی https://wallabag.it دارید این گزینه را انتخاب کنید</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">این گزینه را برای وارد کردن تنظیمات مورد نیاز به صورت دستی انتخاب کنید</string>
     <string name="connectionWizard_providerSelection_provider_general_name">سایر</string>
@@ -204,8 +200,7 @@
     <string name="pref_desc_connection_url">مثال‌ها:
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_url">نشانی والابگ</string>
     <string name="pref_categoryName_connection">اتصال</string>
     <string name="pref_desc_runConnectionWizard">به شما برای انجام تنظیمات یک اتصال کمک می‌کند</string>

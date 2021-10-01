@@ -162,8 +162,7 @@
     <string name="pref_desc_connection_url">Eksempler:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP-autentiseringsbrukernavn</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP-autentiseringspassord</string>
@@ -254,10 +253,6 @@
     <string name="pref_name_storage_dbPath_dbMoved">Database flyttet</string>
     <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
     <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Velg dette hvis du har en konto på https://framabag.org</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag-oppsett</string>
-    <string name="connectionWizard_provider_framabag_prev">Tilbake</string>
-    <string name="connectionWizard_provider_framabag_next">Koble til</string>
     <string name="remove_tag">Fjern etikett</string>
     <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
     <string name="markedAsRead">Artikkel merket som lest</string>

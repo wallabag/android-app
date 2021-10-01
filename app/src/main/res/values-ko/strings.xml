@@ -3,7 +3,6 @@
     <string name="notification_expandedError">에러:%s</string>
     <string name="wrongUsernameOrPassword_errorMessage">로그인할 수 없음: 잘못된 사용자 이름 또는 암호일 수 있음</string>
     <string name="pref_option_autoSync_interval_1h">1 시간</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org에 계정이 있는 경우 이 옵션을 선택하십시오</string>
     <string name="pref_desc_ui_readingSpeed">읽기 속도(분당 단어로 측정됨). 예상 판독 시간을 계산하는 데 사용된다.</string>
     <string name="pref_name_imageCache_enabled">문서 이미지를 캐시에 저장</string>
     <string name="manageTags_title">태그 관리</string>
@@ -115,7 +114,6 @@
     <string name="notification_channel_name_error">에러</string>
     <string name="loading_article_text">로딩…</string>
     <string name="message_disableTouch_inputDisabled">터치식 입력이 비활성화</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag 구성</string>
     <string name="pref_desc_ui_previewImage_enabled">문서 앞에 미리 보기 이미지 표시</string>
     <string name="ttsFastForward">빨리감기</string>
     <string name="feedName_archived">보관됨</string>
@@ -143,7 +141,6 @@
     <string name="remove_tag">태그 삭제</string>
     <string name="nav_other_about">대해서</string>
     <string name="ttsOptions">옵션</string>
-    <string name="connectionWizard_provider_framabag_prev">이전</string>
     <string name="themeName_light_contrast">밝기(높은 대비)</string>
     <string name="pref_name_connection_password">비밀번호</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 구성</string>
@@ -158,8 +155,7 @@
     <string name="pref_name_ui_article_textAlignment_justify">문자 정렬: 정당화</string>
     <string name="pref_categoryName_autoSync">자동 동기화</string>
     <string name="manageTags_addNew">추가</string>
-    <string name="connectionWizard_provider_framabag_next">연결</string>
-    <string name="aboutText"><b>안드로이드용 wallabag 앱 </b> 
+    <string name="aboutText"><b>안드로이드용 wallabag 앱 </b>
 \n왈라백은 스스로 호스팅할 수 있는 앱으로, 더 이상 어떤 콘텐츠도 놓치지 않도록 해준다. 압축을 푼 콘텐츠를 여유롭게 클릭, 저장 및 읽어보십시오.</string>
     <string name="downloadAsFileArticleDownloadedDetail">기사가 %s 다운로드되었다</string>
     <string name="connectionWizard_summary_next">설정 저장</string>
@@ -268,8 +264,7 @@
     <string name="pref_desc_connection_url">예시:
 \nhttps://wallabag.example.com
 \nhttps://example.com/wallabag
-\nhttps://app.wallabag.it
-\nhttps://framabag.org</string>
+\nhttps://app.wallabag.it</string>
     <string name="pref_name_storage_dbPath_internalStorage">내부 저장소</string>
     <string name="connectionWizard_welcome_rerunNotice">항상 \"설정\"에서 연결 마법사를 다시 실행할 수 있다.</string>
     <string name="testConnection_errorMessage_unknown">알수없는 오류</string>

@@ -115,8 +115,7 @@
         Példák:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">Felhasználónév</string>
     <string name="pref_name_connection_password">Jelszó</string>
@@ -168,7 +167,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Egyéb</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Válassza ezt ha kézzel szeretné megadni a beállításokat</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Válassza ezt a beállítást, ha van egy fiókja itt: https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Kihagyás</string>
     <string name="connectionWizard_providerSelection_next">Következő</string>
     <string name="connectionWizard_provider_general_titleMessage">Alapkonfiguráció</string>
@@ -177,9 +175,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it konfiguráció</string>
     <string name="connectionWizard_provider_wallabagit_prev">Vissza</string>
     <string name="connectionWizard_provider_wallabagit_next">Csatlakozás</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguráció</string>
-    <string name="connectionWizard_provider_framabag_prev">Vissza</string>
-    <string name="connectionWizard_provider_framabag_next">Csatlakozás</string>
     <string name="connectionWizard_summary_titleMessage">Minden kész.</string>
     <string name="connectionWizard_summary_text">Kattintson a mentéshez, és a fő képernyőhöz való visszajutáshoz.</string>
     <string name="connectionWizard_summary_toastMessage">Beállítás kész</string>

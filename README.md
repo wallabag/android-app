@@ -26,7 +26,7 @@ wallabag is available on the Google Play Store and F-Droid.
 
 wallabag has been made for you to comfortably read and archive your articles.
 You can download wallabag from wallabag.org and follow the instructions to install it on your own server.
-Alternatively, you can directly sign up for [wallabag.it](https://wallabag.it) or [Framabag](https://framabag.org).
+Alternatively, you can directly sign up for [wallabag.it](https://wallabag.it).
 
 This android application allows you to put a link in your wallabag instance, letting you read your wallabag links offline.
 
@@ -36,7 +36,7 @@ wallabag is a creation from Nicolas Lœuillet released under the MIT License (Ex
 ## Features
 
 The android app lets you:
-- Connect to your self-hosted wallabag instance or connect to your [wallabag.it](https://wallabag.it) or [Framabag](https://framabag.org) account.
+- Connect to your self-hosted wallabag instance or connect to your [wallabag.it](https://wallabag.it) account.
 - Supports wallabag 2.0 and higher.
 - Completely ad-free.
 - Increase and decrease the size of the font and also switch between a serif or sans-serif font for a more comfortable reading experience.
