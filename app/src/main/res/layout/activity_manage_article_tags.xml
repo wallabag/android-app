@@ -58,7 +58,8 @@
                     android:id="@+id/tag_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manageTags_textField_hint" />
+                    android:hint="@string/manageTags_textField_hint"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
