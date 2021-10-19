@@ -300,4 +300,20 @@
     <string name="notification_channel_name_background_operations">Operazioni nello sfondo</string>
     <string name="notification_backgroundOperations">Operazioni nello sfondo</string>
     <string name="pref_desc_ui_previewImage_enabled">Visualizza l\'immagine di anteprima prima dell\'articolo</string>
+    <string name="menu_tag">Aggiungi un\'etichetta</string>
+    <string name="title">Titolo</string>
+    <string name="articleEdit_openArticle">Apri l\'articolo</string>
+    <string name="articleContent_previewImageAltText">Anteprima dell\'immagine</string>
+    <string name="untagged">&lt;senza etichetta&gt;</string>
+    <string name="articleContent_globeIconAltText">Icona di globo</string>
+    <string name="notification_action_media_play">Riproduci</string>
+    <string name="notification_action_media_next">Successivo</string>
+    <string name="notification_action_media_fastforward">Avanti veloce</string>
+    <string name="pref_name_ui_mathRendering_enabled">Rendering matematico</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Delimitatori matematici</string>
+    <string name="pref_name_tts_fastForwardTime">Avanzamento rapido</string>
+    <string name="tts_image">Immagine: %s</string>
+    <string name="notification_action_media_rewind">Riavvolgi</string>
+    <string name="notification_action_media_pause">Pausa</string>
+    <string name="contentIsTooLong">Il contenuto dell\'articolo è troppo lungo per essere visualizzato</string>
 </resources>
