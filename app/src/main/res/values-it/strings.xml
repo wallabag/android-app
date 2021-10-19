@@ -316,4 +316,9 @@
     <string name="notification_action_media_rewind">Riavvolgi</string>
     <string name="notification_action_media_pause">Pausa</string>
     <string name="contentIsTooLong">Il contenuto dell\'articolo è troppo lungo per essere visualizzato</string>
+    <string name="misc_logging_logcatToFile_result_saved">Registri salvati in %s</string>
+    <string name="misc_logging_logcatToFile_result_error">Errore: %s</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">Si prega di installare uno scanner di codici QR</string>
+    <string name="pref_name_misc_appendWallabagMention">Aggiungi la menzione wallabag</string>
+    <string name="misc_localQueue_dumpToFile_header">Se hai problemi con la sincronizzazione, segnala il tuo problema qui: %s</string>
 </resources>
