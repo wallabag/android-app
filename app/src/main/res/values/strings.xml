@@ -295,6 +295,8 @@
     <string name="pref_name_storage_dbPath_dbMoved">Database moved</string>
 
     <string name="pref_categoryName_miscellaneous">Miscellaneous</string>
+    <string name="pref_name_misc_addTitleToSharedText">Add title to shared text</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Add the article title to the shared text</string>
     <string name="pref_name_misc_appendWallabagMention">Append wallabag mention</string>
     <string name="pref_desc_misc_appendWallabagMention">Append \"via @wallabagapp\" to shared texts</string>
     <string name="pref_name_misc_handleHttpScheme">Handle HTTP scheme</string>
