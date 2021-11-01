@@ -183,8 +183,7 @@
         Examples:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
@@ -341,8 +340,6 @@
     <string name="connectionWizard_providerSelection_provider_general_desc">Select this to input required settings manually</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_name" translatable="false">wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Select this option if you have an account on https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_name" translatable="false">Framabag</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Select this if you have an account on https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Skip</string>
     <string name="connectionWizard_providerSelection_next">Next</string>
 
@@ -353,10 +350,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuration</string>
     <string name="connectionWizard_provider_wallabagit_prev">Back</string>
     <string name="connectionWizard_provider_wallabagit_next">Connect</string>
-
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuration</string>
-    <string name="connectionWizard_provider_framabag_prev">Back</string>
-    <string name="connectionWizard_provider_framabag_next">Connect</string>
 
     <string name="connectionWizard_summary_titleMessage">All done.</string>
     <string name="connectionWizard_summary_text">Click to save and go to the main screen.</string>

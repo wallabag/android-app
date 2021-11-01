@@ -113,8 +113,7 @@
         例:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">ユーザー名</string>
     <string name="pref_name_connection_password">パスワード</string>
@@ -166,7 +165,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">その他</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">必要な設定を手動で行う場合は、このオプションを選択してください</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">https://wallabag.it にアカウントを持っている場合は、このオプションを選択してください</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">https://framabag.org にアカウントを持っている場合は、このオプションを選択してください</string>
     <string name="connectionWizard_providerSelection_prev">スキップ</string>
     <string name="connectionWizard_providerSelection_next">次へ</string>
     <string name="connectionWizard_provider_general_titleMessage">基本的な構成</string>
@@ -175,9 +173,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it の構成</string>
     <string name="connectionWizard_provider_wallabagit_prev">戻る</string>
     <string name="connectionWizard_provider_wallabagit_next">接続</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag の構成</string>
-    <string name="connectionWizard_provider_framabag_prev">戻る</string>
-    <string name="connectionWizard_provider_framabag_next">接続</string>
     <string name="connectionWizard_summary_titleMessage">すべて完了しました。</string>
     <string name="connectionWizard_summary_text">クリックすると、保存して、メイン画面に移動します。</string>
     <string name="connectionWizard_summary_toastMessage">セットアップは完了です</string>

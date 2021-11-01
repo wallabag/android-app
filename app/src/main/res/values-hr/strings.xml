@@ -52,7 +52,6 @@
 \n  Za otklanjanje nedostatak vrste „Brze” sinkronizacije, „Čišćenje izbrisanih članaka” provjerava svaki lokalni članak i pita poslužitelja, je li još uvijek prisutan na poslužitelju – ako ne, lokalni se članak uklanja. Ovisno o broju članaka, traje neko vrijeme, ali štedi promet putem „Potpune” sinkronizacije.
 \n
 \n  Nijedna od ovih funkcija ne utječe na sinkronizaciju između klijenta i poslužitelja: tvoje lokalne promjene uvijek će se poslati poslužitelju prije aktualiziranja lokalnog sadržaja."</string>
-    <string name="connectionWizard_provider_framabag_prev">Natrag</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Nepoznata stranica nakon prijave. Uzrok tome je obično aktivirana dvofaktorska autentifikacija, što program još ne podržava</string>
     <string name="noPreviousArticle">Nema prethodnog članka u trenutačnom popisu</string>
     <string name="d_checkCredentials_errorMessage_unknown">Nepoznata greška</string>
@@ -146,11 +145,9 @@
     <string name="tts_image">Slika: %s</string>
     <string name="menu_lists_fullUpdate">Potpuno aktualiziranje</string>
     <string name="d_disableTouch_currentCode">Trenutačno odabrani tipkovnički kod (za mijenjanje koda, pritisni gumb):</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag konfiguracija</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Uklanja prvu nesinkroniziranu stavku. Može pomoći, ako tijekom sinkronizacije dobiješ ponavljajuće obavijesti o grešci. U svakom slučaju, najprije ispiši sve lokalne promjene u datoteku</string>
     <string name="notification_updatingArticles_full">Izvršavanje potpunog aktualiziranja</string>
     <string name="testConnection_errorMessage_authProblems">Problemi u vezi s autorizacijom. Uzrok tomu su obično HTTP-preusmjeravanja.</string>
-    <string name="connectionWizard_provider_framabag_next">Spoji</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Osalo</string>
     <string name="menu_manageTags">Upravljaj oznakama</string>
     <string name="voiceHeight">Visina glasa</string>
@@ -202,7 +199,6 @@
     <string name="pref_desc_ui_showArticleAddedDialog">Prikazuje dijaloški okvir koji omogućuje dodavanje u omiljene/arhiv/označivanje novo dodanog članka. Ako je opcija deaktivirana, prikazat će se poruka.</string>
     <string name="message_disableTouch_inputEnabled">Unos dodirom aktiviran</string>
     <string name="notification_action_media_fastforward">Naprijed</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Odaberi ovo, ako imaš račun na https://framabag.org</string>
     <string name="pref_name_ui_screenScrolling_smooth">Koristi neisprekidano klizanje</string>
     <string name="d_configurationIsQuestionable_title">Otkriven problem</string>
     <string name="notification_action_media_play">Pokreni</string>
@@ -333,8 +329,7 @@
     <string name="pref_desc_connection_url">Primjeri:
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_categoryName_ui">Korisničko sučelje</string>
     <string name="d_checkCredentials_errorMessage_notFoundWithMessage">Sučelje nije pronađeno: %s</string>
     <string name="pref_name_ui_screenScrolling_percent">Postotak visine ekrana za klizanje</string>

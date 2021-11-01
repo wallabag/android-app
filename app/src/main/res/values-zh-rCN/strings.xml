@@ -161,8 +161,7 @@
     <string name="pref_desc_connection_url">示例：
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_username">用户名</string>
     <string name="pref_name_connection_password">密码</string>
     <string name="pref_name_connection_api_clientID">客户端 ID</string>
@@ -253,7 +252,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">其他</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">选择此选项以手动输入所需的设置</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">如果您在 https://wallabag.it 上有帐户，请选择此项</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">如果您在 https://framabag.org 上有帐户，请选择此项</string>
     <string name="connectionWizard_providerSelection_prev">跳过</string>
     <string name="connectionWizard_providerSelection_next">下一步</string>
     <string name="connectionWizard_provider_general_titleMessage">基本配置</string>
@@ -262,9 +260,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 配置</string>
     <string name="connectionWizard_provider_wallabagit_prev">上一步</string>
     <string name="connectionWizard_provider_wallabagit_next">连接</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag 配置</string>
-    <string name="connectionWizard_provider_framabag_prev">上一步</string>
-    <string name="connectionWizard_provider_framabag_next">连接</string>
     <string name="connectionWizard_summary_titleMessage">全部完成。</string>
     <string name="connectionWizard_summary_text">单击此处保存并转到主屏幕。</string>
     <string name="connectionWizard_summary_toastMessage">设置完成</string>
