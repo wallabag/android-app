@@ -349,4 +349,6 @@
     <string name="pref_name_ui_mathRendering_delimiters">Mathematische Trennzeichen</string>
     <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Verwendet den ICU-Tokenizer für die Indizierung der Volltextsuche (andernfalls wird der generische Unicode61-Tokenizer verwendet). Kann die Suchergebnisse für die koreanische, chinesische und japanische Sprachen verbessern. „Vollständige Aktualisierung“ ist erforderlich, damit die Option wirksam wird</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Verwenden Sie den ICU-Tokenizer für die Volltextsuche</string>
+    <string name="pref_name_misc_addTitleToSharedText">Füge Titel zum geteilten Text hinzu</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Fügt den Artikeltitel zu dem zu teilenden Text hinzu</string>
 </resources>
