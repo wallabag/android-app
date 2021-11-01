@@ -161,8 +161,7 @@
     <string name="pref_desc_connection_url">Exemples :
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
@@ -255,7 +254,6 @@
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres manuellement</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Choisissez cette option si vous avez un compte sur https://wallabag.it</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Choisissez cette option si vous avez un compte sur https://framabag.org</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
     <string name="connectionWizard_provider_general_titleMessage">Configuration de base</string>
@@ -264,9 +262,6 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">Configuration de wallabag.it</string>
     <string name="connectionWizard_provider_wallabagit_prev">Retour</string>
     <string name="connectionWizard_provider_wallabagit_next">Connecter</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Configuration de Framabag</string>
-    <string name="connectionWizard_provider_framabag_prev">Retour</string>
-    <string name="connectionWizard_provider_framabag_next">Connecter</string>
     <string name="connectionWizard_summary_titleMessage">C\'est fini.</string>
     <string name="connectionWizard_summary_text">Appuyez sur le bouton pour sauvegarder les paramètres et aller à l\'écran principal.</string>
     <string name="connectionWizard_summary_toastMessage">La configuration est terminée</string>

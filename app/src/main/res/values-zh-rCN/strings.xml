@@ -97,7 +97,7 @@
     <string name="themeName_light_contrast">明亮（高对比度）</string>
     <string name="themeName_dark">黑暗</string>
     <string name="themeName_dark_contrast">黑暗 (高对比度)</string>
-    <string name="themeName_solarized">过曝光</string>
+    <string name="themeName_solarized">过曝</string>
     <string name="menu_readArticle_increaseFontSize">增大字体</string>
     <string name="menu_readArticle_decreaseFontSize">缩小字体</string>
     <string name="aboutText"><b>适用于 Android 的 wallabag 应用</b>\n
@@ -158,18 +158,16 @@
     <string name="pref_desc_runConnectionWizard">帮助您进行基本连接设置</string>
     <string name="pref_categoryName_connection">连接</string>
     <string name="pref_name_connection_url">wallabag URL</string>
-    <string name="pref_desc_connection_url"> 示例:\n
-        https://wallabag.example.com\n
-        https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
-    </string>
+    <string name="pref_desc_connection_url">示例：
+\n https://wallabag.example.com
+\n https://example.com/wallabag
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_username">用户名</string>
     <string name="pref_name_connection_password">密码</string>
     <string name="pref_name_connection_api_clientID">客户端 ID</string>
     <string name="pref_name_connection_api_clientSecret">客户端密钥</string>
     <string name="pref_name_connection_autofill">自动填充</string>
-    <string name="pref_desc_connection_autofill">测试连接并填写客户端 ID 和客户端机密</string>
+    <string name="pref_desc_connection_autofill">测试连接并填写客户端 ID 和客户端密钥</string>
     <string name="pref_categoryName_connection_advanced">高级连接设置</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP 基本身份验证</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">如果你不知道它是什么，请勿填写</string>
@@ -180,8 +178,8 @@
     <string name="pref_name_ui_article_fontSize" formatted="false">文章文字大小 (%)</string>
     <string name="pref_name_ui_article_fontSerif">衬线字体</string>
     <string name="pref_desc_ui_article_fontSerif">文章的衬线字体</string>
-    <string name="pref_name_ui_article_textAlignment_justify">文字对齐方式: 两端对齐</string>
-    <string name="pref_desc_ui_article_textAlignment_justify">将线条延伸到相同宽度（如报纸）</string>
+    <string name="pref_name_ui_article_textAlignment_justify">文字对齐方式：两端对齐</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">将行延伸到等宽（像报纸一样）</string>
     <string name="pref_name_ui_article_fullscreen">全屏文章视图</string>
     <string name="pref_desc_ui_article_fullscreen">阅读文章时隐藏系统和应用程序栏</string>
     <string name="pref_name_ui_readingSpeed">阅读速度</string>
@@ -239,7 +237,7 @@
     <string name="pref_name_misc_appendWallabagMention">附加 walabag 水印</string>
     <string name="pref_desc_misc_appendWallabagMention">将 \"分享自 @wallabagapp\" 附加到分享文本后</string>
     <string name="pref_name_misc_handleHttpScheme">处理 HTTP 方案</string>
-    <string name="pref_desc_misc_handleHttpScheme">在 web 浏览器列表中显示 wallabag</string>
+    <string name="pref_desc_misc_handleHttpScheme">在网页浏览器列表中显示 wallabag</string>
     <string name="pref_name_misc_wipeDB">擦除数据库</string>
     <string name="pref_desc_misc_wipeDB">擦除本地数据库中的所有文章，同时删除所有未同步的本地更改和 URL</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">擦除数据库？</string>
@@ -253,8 +251,7 @@
     <string name="connectionWizard_providerSelection_titleMessage">选择 wallabag 提供商</string>
     <string name="connectionWizard_providerSelection_provider_general_name">其他</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">选择此选项以手动输入所需的设置</string>
-    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">如果您在 https://wallabag.it 上有帐户，请选择此选项</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">如果您在 https://framabag.org 上有帐户，请选择此项</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">如果您在 https://wallabag.it 上有帐户，请选择此项</string>
     <string name="connectionWizard_providerSelection_prev">跳过</string>
     <string name="connectionWizard_providerSelection_next">下一步</string>
     <string name="connectionWizard_provider_general_titleMessage">基本配置</string>
@@ -263,22 +260,19 @@
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it 配置</string>
     <string name="connectionWizard_provider_wallabagit_prev">上一步</string>
     <string name="connectionWizard_provider_wallabagit_next">连接</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag 配置</string>
-    <string name="connectionWizard_provider_framabag_prev">上一步</string>
-    <string name="connectionWizard_provider_framabag_next">连接</string>
     <string name="connectionWizard_summary_titleMessage">全部完成。</string>
     <string name="connectionWizard_summary_text">单击此处保存并转到主屏幕。</string>
     <string name="connectionWizard_summary_toastMessage">设置完成</string>
     <string name="connectionWizard_summary_prev">上一步</string>
     <string name="connectionWizard_summary_next">保存设置</string>
     <string name="remove_tag">移除标签</string>
-    <string name="themeName_eink">为墨水屏</string>
-    <string name="notification_channel_group_name_tts">语音合成</string>
+    <string name="themeName_eink">墨水屏</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
     <string name="notification_channel_group_name_sync">同步</string>
     <string name="notification_channel_group_name_other">其他</string>
-    <string name="notification_channel_name_tts">wallabag语音合成</string>
+    <string name="notification_channel_name_tts">wallabag TTS</string>
     <string name="notification_channel_name_sync">同步</string>
-    <string name="notification_channel_name_downloading_articles">正在下载多个PDF文件</string>
+    <string name="notification_channel_name_downloading_articles">正在下载多个 PDF 文件</string>
     <string name="notification_channel_name_error">错误</string>
     <string name="pref_name_ui_article_handlePreformattedText">处理长篇预格式化的文本</string>
     <string name="pref_desc_ui_article_handlePreformattedText">如何处理太长而无法完整显示的预格式化文本。</string>
@@ -296,7 +290,7 @@
     <string name="pref_name_misc_localQueue_notice">警告</string>
     <string name="pref_desc_misc_localQueue_notice">除非您知道自己在做什么，否则不要在这里做任何事情</string>
     <string name="pref_name_misc_localQueue_dumpToFile">转储到文件</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">将所有本地更改转储到txt文件中（您可以自行研究或将其附加到错误报告中）</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">将所有本地更改转储到 txt 文件中（您可以自行研究或将其附加到错误报告中）</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">删除第一个本地队列项目</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">删除第一个未同步的项目。 如果您在同步期间收到重复的错误通知，这可能会有所帮助。 请首先确保将所有本地更改转储到文件</string>
     <string name="misc_localQueue_empty">无本地变更</string>
@@ -330,14 +324,14 @@
     <string name="pref_desc_tts_fastForwardTime">按下“快进”按钮时向前跳过的秒数</string>
     <string name="pref_name_tts_fastForwardTime">快进跳过时间</string>
     <string name="pref_categoryName_tts">文字转语音</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">对Onyx设备强制使用黑色链接色</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">启用Onyx Boox主题临时解决方法</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">显示一个对话框，该对话框允许收藏/存档/标记新添加的文章。 如果禁用该选项，则会显示一条Toast消息。</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">对 Onyx 设备强制使用黑色链接色</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">启用 Onyx Boox 主题临时解决方法</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">显示一个对话框，该对话框允许收藏/存档/标记新添加的文章。 如果禁用该选项，则会显示一条 Toast 消息。</string>
     <string name="pref_name_ui_showArticleAddedDialog">保存页面时显示对话框</string>
     <string name="misc_logging_logcatToFile_result_error">错误 ：%s</string>
     <string name="misc_logging_logcatToFile_result_saved">已将日志保存到 %s</string>
-    <string name="pref_desc_misc_logging_logcatToFile">保存logcat输出 (安卓应用日志) 到/sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/目录下的一个文件</string>
-    <string name="pref_name_misc_logging_logcatToFile">保存logcat输出到一个文件</string>
+    <string name="pref_desc_misc_logging_logcatToFile">保存 logcat 输出 (Android 应用日志) 到 /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/ 目录下的一个文件</string>
+    <string name="pref_name_misc_logging_logcatToFile">保存 logcat 输出到一个文件</string>
     <string name="manageTags_addMoreTags">添加更多标签：</string>
     <string name="manageTags_currentTags_none">无</string>
     <string name="menu_tag">添加标签</string>
@@ -347,6 +341,6 @@
     <string name="pref_name_ui_mathRendering_delimiters">数学分隔符</string>
     <string name="pref_desc_ui_mathRendering_enabled">允许通过 KaTeX 解析 LaTeX-math</string>
     <string name="pref_name_ui_mathRendering_enabled">数学函数解析</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">使用 ICU 分词器进行全文搜索索引 (否则使用通用 unicode61 分词器)。可以改善中日韩统一表意文字的搜索结果。需要“完整更新”使该选项生效</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">使用 ICU 分词器进行全文搜索索引（否则使用通用 unicode61 分词器）。可以改善中日韩文字的搜索结果。需要“完整更新”使该选项生效</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">对全文搜索使用 ICU 分词器</string>
 </resources>

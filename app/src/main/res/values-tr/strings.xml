@@ -140,8 +140,7 @@
         Örnekler:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">Kullanıcı adı</string>
     <string name="pref_name_connection_password">Şifre</string>
@@ -264,10 +263,6 @@
     <string name="pref_name_storage_dbPath_dbMoved">Veritabanı taşındı</string>
     <string name="pref_name_misc_appendWallabagMention">wallabag alıntısını sonuna ekle</string>
     <string name="pref_desc_misc_appendWallabagMention">Paylaşılan metinlerin sonuna \"via @wallabagapp\" ekle</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Eğer https://framabag.org üzerinde bir hesabınız varsa bunu seçin</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag ayarları</string>
-    <string name="connectionWizard_provider_framabag_prev">Geri</string>
-    <string name="connectionWizard_provider_framabag_next">Bağlan</string>
     <string name="remove_tag">Etiketi kaldır</string>
     <string name="menu_annotate">Not</string>
     <string name="copiedToClipboard">Panoya kopyalandı</string>

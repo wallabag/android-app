@@ -58,14 +58,14 @@
                     android:id="@+id/tag_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/manageTags_textField_hint" />
+                    android:hint="@string/manageTags_textField_hint"
+                    android:inputType="text" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
                 android:id="@+id/tag_add_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="addButtonPressed"
                 android:text="@string/manageTags_addNew" />
         </LinearLayout>
 

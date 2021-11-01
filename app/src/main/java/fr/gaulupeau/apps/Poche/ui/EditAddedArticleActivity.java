@@ -91,7 +91,13 @@ public class EditAddedArticleActivity extends AppCompatActivity {
         articleTitleTv = findViewById(R.id.editActivity_articleTitle);
         favoriteButton = findViewById(R.id.editActivity_favoriteButton);
         archiveButton = findViewById(R.id.editActivity_archiveButton);
+        ImageButton tagButton = findViewById(R.id.editActivity_tagButton);
         openButton = findViewById(R.id.editActivity_openButton);
+
+        favoriteButton.setOnClickListener(this::onFavoriteClick);
+        archiveButton.setOnClickListener(this::onArchiveClick);
+        tagButton.setOnClickListener(this::onTagClick);
+        openButton.setOnClickListener(this::onOpenClick);
 
         if (savedInstanceState != null) {
             articleId = savedInstanceState.getInt(STATE_DISCOVERED_ARTICLE_ID, -1);

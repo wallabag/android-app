@@ -65,7 +65,6 @@
     <string name="connectionWizard_providerSelection_next">Seguinte</string>
     <string name="connectionWizard_providerSelection_prev">Pular</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Outro</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Configuração de Framabag</string>
     <string name="connectionWizard_summary_toastMessage">Configuração completada</string>
     <string name="connectionWizard_welcome_next">Seguinte</string>
     <string name="connectionWizard_welcome_prev">Pular</string>
@@ -81,8 +80,7 @@
         Exemplos:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">Nome do utilizador</string>
     <string name="pref_name_sync_syncTypes">Tipos de sincronização</string>
@@ -119,7 +117,6 @@
     <string name="readSpeed">Velocidade de leitura</string>
     <string name="readVolume">Volume de leitura</string>
     <string name="markedAsRead">Artigo marcado como lido</string>
-    <string name="connectionWizard_provider_framabag_prev">Voltar</string>
     <string name="connectionWizard_provider_general_prev">Voltar</string>
     <string name="connectionWizard_provider_wallabagit_prev">Voltar</string>
     <string name="connectionWizard_summary_prev">Voltar</string>
@@ -131,7 +128,6 @@
     <string name="themeName_dark">Escuro</string>
     <string name="themeName_dark_contrast">Escuro (alto contraste)</string>
     <string name="pref_name_ui_theme">Tema da app</string>
-    <string name="connectionWizard_provider_framabag_next">Conectar</string>
     <string name="connectionWizard_provider_general_next">Conectar</string>
     <string name="connectionWizard_provider_wallabagit_next">Conectar</string>
     <string name="pref_categoryName_connection">Conexão</string>

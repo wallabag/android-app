@@ -139,8 +139,7 @@
     <string name="pref_desc_connection_url">Adibideak:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
-        https://app.wallabag.it\n
-        https://framabag.org
+        https://app.wallabag.it
     </string>
     <string name="pref_name_connection_username">Erabiltzaile-izena</string>
     <string name="pref_name_connection_password">Pasahitza</string>

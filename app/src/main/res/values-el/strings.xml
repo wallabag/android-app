@@ -37,9 +37,6 @@
     <string name="connectionWizard_summary_prev">Επιστροφή</string>
     <string name="connectionWizard_summary_text">Κάνετε κλικ για αποθήκευση και μεταβείτε στην κεντρική οθόνη.</string>
     <string name="connectionWizard_summary_titleMessage">Τέλος.</string>
-    <string name="connectionWizard_provider_framabag_next">Σύνδεση</string>
-    <string name="connectionWizard_provider_framabag_prev">Επιστροφή</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Ρύθμιση του Framabag</string>
     <string name="connectionWizard_provider_wallabagit_next">Σύνδεση</string>
     <string name="connectionWizard_provider_wallabagit_prev">Επιστροφή</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">Ρύθμιση του wallabag.it</string>
@@ -48,7 +45,6 @@
     <string name="connectionWizard_provider_general_titleMessage">Βασική ρύθμιση</string>
     <string name="connectionWizard_providerSelection_next">Συνέχεια</string>
     <string name="connectionWizard_providerSelection_prev">Προσπέραση</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Επιλέξτε αυτό αν έχετε λογαριασμό στο https://framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Επιλέξτε αυτή την επιλογή αν έχετε λογαριασμό στο https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Επιλέξτε αυτό για να εισάγετε τις απαιτούμενες ρυθμίσεις χειροκίνητα</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Άλλο</string>
@@ -183,8 +179,7 @@
     <string name="pref_desc_connection_url">Παραδείγματα:
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_url">URL wallabag</string>
     <string name="pref_categoryName_connection">Σύνδεση</string>
     <string name="pref_desc_runConnectionWizard">Σας βοηθάει να επιλέξετε βασικές ρυθμίσεις σύνδεσης</string>

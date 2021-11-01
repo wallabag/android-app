@@ -36,7 +36,6 @@
     <string name="notification_copyToClipboard">Zkopírovat do schránky</string>
     <string name="connectionWizard_summary_text">Klikněte pro uložení a přejití na hlavní obrazovku.</string>
     <string name="connectionWizard_summary_titleMessage">A je to.</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Vyberte tuto možnost, pokud máte účet na https://framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Vyberte tuto možnost, pokud máte účet na https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_titleMessage">Vyberte poskytovatele Wallabagu</string>
     <string name="connectionWizard_welcome_next">Další</string>
@@ -83,7 +82,6 @@
     <string name="connectionWizard_providerSelection_next">Další</string>
     <string name="connectionWizard_providerSelection_prev">Přeskočit</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">Konfigurace pro wallabag.it</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Konfigurace pro Framabag</string>
     <string name="pref_desc_ui_annotations_enabled">Experimentální funkce! Zobrazujte, upravujte a vytvářejte anotace</string>
     <string name="pref_name_ui_annotations_enabled">Podpora anotací</string>
     <string name="menuTTS">Převod textu na řeč</string>
@@ -94,7 +92,6 @@
     <string name="tts_image">Obrázek: %s</string>
     <string name="title">Název</string>
     <string name="connectionWizard_summary_prev">Zpět</string>
-    <string name="connectionWizard_provider_framabag_prev">Zpět</string>
     <string name="connectionWizard_provider_wallabagit_prev">Zpět</string>
     <string name="connectionWizard_provider_general_prev">Zpět</string>
     <string name="pref_name_storage_dbPath_dbMoved">Databáze byla přesunuta</string>
@@ -218,7 +215,6 @@
     <string name="connectionWizard_misc_installQrCodeScanner">Nainstalujte si prosím aplikaci na skenování QR kódů</string>
     <string name="connectionWizard_provider_general_next">Připojit</string>
     <string name="connectionWizard_provider_wallabagit_next">Připojit</string>
-    <string name="connectionWizard_provider_framabag_next">Připojit</string>
     <string name="notification_clipboardLabel">Podrobnosti o chybě</string>
     <string name="contentIsTooLong">Obsah článku je pro zobrazení příliš dlouhý</string>
     <string name="articleContent_globeIconAltText">Ikona zeměkoule</string>
@@ -330,8 +326,7 @@
     <string name="pref_desc_connection_url">Příklady:
 \n https://wallabag.domena.cz
 \n https://domena.cz/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_url">Adresa URL Wallabag</string>
     <string name="pref_categoryName_connection">Připojení</string>
     <string name="pref_desc_runConnectionWizard">Pomůže vám provést základní nastavení připojení</string>

@@ -200,9 +200,6 @@
     <string name="connectionWizard_summary_toastMessage">Configuratie afgerond</string>
     <string name="connectionWizard_summary_text">Klik om op te slaan en naar het hoofdscherm te gaan.</string>
     <string name="connectionWizard_summary_titleMessage">Klaar.</string>
-    <string name="connectionWizard_provider_framabag_next">Verbind</string>
-    <string name="connectionWizard_provider_framabag_prev">Terug</string>
-    <string name="connectionWizard_provider_framabag_titleMessage">Framabag configuratie</string>
     <string name="connectionWizard_provider_wallabagit_next">Verbind</string>
     <string name="connectionWizard_provider_wallabagit_prev">Terug</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">wallabag.it configuratie</string>
@@ -211,7 +208,6 @@
     <string name="connectionWizard_provider_general_titleMessage">Basis configuratie</string>
     <string name="connectionWizard_providerSelection_next">Volgende</string>
     <string name="connectionWizard_providerSelection_prev">Overslaan</string>
-    <string name="connectionWizard_providerSelection_provider_framabag_desc">Selecteer dit als u een account heeft bij https://framabag.org</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecteer dit als u een account heeft bij https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecteer dit om de verbinding handmatig in te stellen</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Anders</string>
@@ -335,8 +331,7 @@
     <string name="pref_desc_connection_url">Voorbeelden:
 \n https://wallabag.example.com
 \n https://example.com/wallabag
-\n https://app.wallabag.it
-\n https://framabag.org</string>
+\n https://app.wallabag.it</string>
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="pref_categoryName_connection">Verbinding</string>
     <string name="pref_desc_runConnectionWizard">Helpt u met het opzetten van de verbindingsinstellingen</string>

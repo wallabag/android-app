@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.Settings;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import wallabag.apiwrapper.WallabagService;
@@ -99,16 +100,24 @@ public class ArticleActionsHelper {
     }
 
     public void shareArticle(Context context, String articleTitle, String articleUrl) {
-        String shareText = articleUrl;
-        if (!TextUtils.isEmpty(articleTitle)) shareText = articleTitle + " " + shareText;
+        Settings settings = App.getSettings();
 
-        if (App.getSettings().isAppendWallabagMentionEnabled()) {
+        String shareText = articleUrl;
+
+        if (settings.isAddTitleToSharedTextEnabled() && !TextUtils.isEmpty(articleTitle)) {
+            shareText = articleTitle + " " + shareText;
+        }
+
+        if (settings.isAppendWallabagMentionEnabled()) {
             shareText += context.getString(R.string.share_text_extra);
         }
 
         Intent send = new Intent(Intent.ACTION_SEND);
         send.setType("text/plain");
-        if (!TextUtils.isEmpty(articleTitle)) send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+        if (!TextUtils.isEmpty(articleTitle)) {
+            send.putExtra(Intent.EXTRA_SUBJECT, articleTitle);
+            send.putExtra(Intent.EXTRA_TITLE, articleTitle);
+        }
         send.putExtra(Intent.EXTRA_TEXT, shareText);
 
         context.startActivity(Intent.createChooser(send,
