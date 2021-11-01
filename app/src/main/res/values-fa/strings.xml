@@ -35,8 +35,8 @@
     <string name="pref_desc_imageCache_enabled">همه تصاویر مربوط به تمام مقالات را به صورت خودکار بارگیری و روی دستگاه ذخیره می‌کند. بسته به طول فهرست مقالات‌تان روی والابگ، این کار می‌تواند زمان و فضای زیادی را مصرف کند.</string>
     <string name="notification_action_media_rewind">پخش معکوس</string>
     <string name="articleContent_globeIconAltText">تصویر سراسری</string>
-    <string name="pref_desc_autoSyncQueue_enabled">این تنظیم اجازه می‌دهد که تغییرات محلی (پیوندهای افزوده شده، مقالاتی بایگانی شده و...) به محض دردسترس قرار گرفتن شبکه با کارساز هم‌گام شوند.</string>
-    <string name="pref_desc_autoSync_enabled">این تنظیم، هم‌گام‌سازی خودکار تغییرات محلی (پیوندهای افزوده شده، مقالاتی بایگانی شده و...) و بارگیری مقالات جدید را بر اساس زمان‌بندی فعال می‌کند</string>
+    <string name="pref_desc_autoSyncQueue_enabled">این تنظیم اجازه می‌دهد که تغییرات محلی (پیوندهای افزوده شده، مقالاتی بایگانی شده و…) به محض دردسترس قرار گرفتن شبکه با کارساز هم‌گام شوند.</string>
+    <string name="pref_desc_autoSync_enabled">این تنظیم، هم‌گام‌سازی خودکار تغییرات محلی (پیوندهای افزوده شده، مقالاتی بایگانی شده و…) و بارگیری مقالات جدید را بر اساس زمان‌بندی فعال می‌کند</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">از تصویر پیش‌نمایش مقاله (در صورت وجود) به عنوان تصویر آلبوم استفاده می‌شود (که در اعلان دیده شده و ممکن است به عنوان تصویر پس‌زمینه صفحه قفل نمایش یابد)</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">استفاده از تصویر پیش‌نمایش برای تصویر آلبوم</string>
     <string name="pref_desc_tts_previousButtonIsRewind">فشردن دکمه رسانه «قبلی» به جای رفتن به مقاله قبلی باعث پخش معکوس می‌شود</string>
