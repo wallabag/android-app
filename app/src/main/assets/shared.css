@@ -40,7 +40,7 @@ header.mbm div.tools {
 header.mbm div.tools ul.stats {
   list-style-type: none;
   padding-left: 0;
-  margin-bottom: 0.2em;
+  margin-bottom: 0;
 }
 
 ul.stats li {
@@ -52,7 +52,17 @@ ul.stats li {
 }
 
 div.tags {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
   padding-left: 0.36em;
+}
+
+div.tag {
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  padding-left: 0.36em;
+  padding-right: 0.36em;
 }
 
 header.mbm img {
