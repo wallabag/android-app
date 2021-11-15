@@ -15,8 +15,8 @@
     <string name="page_url">URL stranice</string>
     <string name="dialog_add_label">Dodaj novi članak</string>
     <string name="txtUrlCopied">URL članka kopiran u međuspremnik</string>
-    <string name="txtConfigNotSet">Konfiguriraj program prije sinkronizacije.</string>
-    <string name="txtNetOffline">Provjeri vezu s internetom!</string>
+    <string name="txtConfigNotSet">Postavi program prije sinkronizacije.</string>
+    <string name="txtNetOffline">Najprije provjeri da si spojen/a vezu s internetom.</string>
     <string name="d_deleteArticle_message">Stvarno želiš izbrisati članak\?</string>
     <string name="d_deleteArticle_title">Izbrisati članak\?</string>
     <string name="menu_syncLocalChanges">Sinkroniziraj lokalne promjene</string>
@@ -52,7 +52,7 @@
 \n  Za otklanjanje nedostatak vrste „Brze” sinkronizacije, „Čišćenje izbrisanih članaka” provjerava svaki lokalni članak i pita poslužitelja, je li još uvijek prisutan na poslužitelju – ako ne, lokalni se članak uklanja. Ovisno o broju članaka, traje neko vrijeme, ali štedi promet putem „Potpune” sinkronizacije.
 \n
 \n  Nijedna od ovih funkcija ne utječe na sinkronizaciju između klijenta i poslužitelja: tvoje lokalne promjene uvijek će se poslati poslužitelju prije aktualiziranja lokalnog sadržaja."</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Nepoznata stranica nakon prijave. Uzrok tome je obično aktivirana dvofaktorska autentifikacija, što program još ne podržava</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Nepoznata stranica nakon prijave. Uzrok tome je obično dvofaktorska autentifikacija (koju program još ne podržava).</string>
     <string name="noPreviousArticle">Nema prethodnog članka u trenutačnom popisu</string>
     <string name="d_checkCredentials_errorMessage_unknown">Nepoznata greška</string>
     <string name="connectionWizard_welcome_prev">Preskoči</string>
@@ -105,7 +105,7 @@
     <string name="pref_desc_autoSync_enabled">Ovo omogućava automatsku sinkronizaciju lokalnih promjena (dodane veze, arhivirani članci itd.) i preuzimanje novih članaka, na osnovi rasporeda</string>
     <string name="contentIsTooLong">Sadržaj članka je predugačak da bi se mogao prikazati</string>
     <string name="pref_categoryName_autoSync">Automatska sinkronizacija</string>
-    <string name="manageTags_textField_hint">Jedna ili više oznaka odvojene zarezom</string>
+    <string name="manageTags_textField_hint">Jedna ili više oznaka (odvojene zarezom)</string>
     <string name="notification_expandedError">Greška: %s</string>
     <string name="articleContent_previewImageAltText">Pretprikaz slike</string>
     <string name="settings_parametersAutofilled">Parametri popunjeni</string>
@@ -124,8 +124,8 @@
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Nepoznata greška: %s</string>
     <string name="pref_name_connection_autofill">Automatsko ispunjavanje</string>
     <string name="menu_readArticle_increaseFontSize">Povećaj veličinu fonta</string>
-    <string name="d_configurationChanged_message">Čini se da su neki parametri promijenjeni. Preporučamo, da provjeriš vezu.</string>
-    <string name="testConnection_errorMessage_noCSRF">Greška tijekom obrade obrasca prijave</string>
+    <string name="d_configurationChanged_message">Testiraj vezu kao provjeru, je li novi parametri rade.</string>
+    <string name="testConnection_errorMessage_noCSRF">Nije bilo moguće obraditi obrazac prijave</string>
     <string name="message_couldNotOpenUrl">Neuspjelo otvaranje ovog URL-a</string>
     <string name="pref_name_ui_article_fontSerif">Serifni font</string>
     <string name="notification_stacktrace">Praćenje grešaka:</string>
@@ -147,7 +147,7 @@
     <string name="d_disableTouch_currentCode">Trenutačno odabrani tipkovnički kod (za mijenjanje koda, pritisni gumb):</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Uklanja prvu nesinkroniziranu stavku. Može pomoći, ako tijekom sinkronizacije dobiješ ponavljajuće obavijesti o grešci. U svakom slučaju, najprije ispiši sve lokalne promjene u datoteku</string>
     <string name="notification_updatingArticles_full">Izvršavanje potpunog aktualiziranja</string>
-    <string name="testConnection_errorMessage_authProblems">Problemi u vezi s autorizacijom. Uzrok tomu su obično HTTP-preusmjeravanja.</string>
+    <string name="testConnection_errorMessage_authProblems">Neuspjela prijava (obično zbog HTTP-preusmjeravanja)</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Osalo</string>
     <string name="menu_manageTags">Upravljaj oznakama</string>
     <string name="voiceHeight">Visina glasa</string>
@@ -160,7 +160,7 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Odustani</string>
     <string name="connectionWizard_providerSelection_prev">Preskoči</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Program će sinkronizirati kad ga otvoriš</string>
-    <string name="pref_name_ui_disableTouch_enabled">Deaktiviraj unos dodirom</string>
+    <string name="pref_name_ui_disableTouch_enabled">Bez unosa dodirom</string>
     <string name="pref_desc_ui_article_fullscreen">Skriva trake sustava i programa tijekom čitanja članaka</string>
     <string name="pref_name_connection_url">wallabag URL</string>
     <string name="notification_sweepingDeletedArticles">Čišćenje izbrisanih članaka</string>
@@ -168,9 +168,9 @@
 \n wallabag je program za vlastiti hosting te omogućuje da više ne propustiš nijedan sadržaj. Pritisni na izdvojeni sadržaj, spremi ga i čitaj ga u slobodno vrijeme.</string>
     <string name="d_configurationChanged_title">Parametri promijenjeni</string>
     <string name="manageTags_addMoreTags">Dodaj još oznaka:</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag usluga nije pronađena – provjeri URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Nije bilo moguće pronaći wallabag uslugu – provjeri URL</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Koristi sliku pretprikaza članka (ako postoji) kao naslov albuma (vidljivo u obavijestima i može se prikazati kao pozadina ekrana)</string>
-    <string name="notification_downloadingImages">Preuzimanje slika</string>
+    <string name="notification_downloadingImages">Preuzimanje slika …</string>
     <string name="themeName_solarized">Solarno</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Rasteže retke na jednaku dužinu (kao u novinama)</string>
     <string name="pref_option_autoSync_interval_15m">15 minuta</string>
@@ -194,12 +194,12 @@
     <string name="pref_name_ui_article_textAlignment_justify">Poravnanje teksta: Obostrano</string>
     <string name="pref_name_ui_scrollOverBottom">Klizni preko kraja članka, da bi se označio kao pročitan</string>
     <string name="remove_tag">Ukloni oznaku</string>
-    <string name="pref_desc_ui_swipeArticles">Povuci prstom lijevo ili desno u članku, za prijelaz na prethodni ili sljedeći članak</string>
+    <string name="pref_desc_ui_swipeArticles">Povuci ← ili → u članku, za prijelaz na prethodni ili sljedeći članak</string>
     <string name="connectionWizard_provider_general_next">Spoji</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Prikazuje dijaloški okvir koji omogućuje dodavanje u omiljene/arhiv/označivanje novo dodanog članka. Ako je opcija deaktivirana, prikazat će se poruka.</string>
-    <string name="message_disableTouch_inputEnabled">Unos dodirom aktiviran</string>
+    <string name="message_disableTouch_inputEnabled">Unos dodirom uključen</string>
     <string name="notification_action_media_fastforward">Naprijed</string>
-    <string name="pref_name_ui_screenScrolling_smooth">Koristi neisprekidano klizanje</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Neisprekidano klizanje</string>
     <string name="d_configurationIsQuestionable_title">Otkriven problem</string>
     <string name="notification_action_media_play">Pokreni</string>
     <string name="downloadAsFileProgressDetail">wallabag preuzima tvoj članak %1$s za %2$s</string>
@@ -216,10 +216,10 @@
     <string name="pref_name_storage_dbPath_externalStorage">Vanjsko spremište</string>
     <string name="pref_name_ui_readingSpeed">Brzina čitanja</string>
     <string name="pref_name_ui_previewImage_enabled">Pretprikaz slike</string>
-    <string name="notification_channel_group_name_sync">Sinkronizacija</string>
+    <string name="notification_channel_group_name_sync">Sinkroniziranje</string>
     <string name="pref_desc_misc_wipeDB">Briše sve članke iz lokalne baze podataka, uklanja i sve ne sinkronizirane lokalne promjene i URL-ove</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Predlažemo, da promijeniš URL u: %s</string>
-    <string name="notification_channel_name_sync">Sinkronizacija</string>
+    <string name="notification_channel_name_sync">Sinkroniziranje</string>
     <string name="pref_desc_misc_appendWallabagMention">Dijeljenim tekstovima dodaj „putem @wallabagapp”</string>
     <string name="pref_name_storage_dbPath">Mjesto baze podataka</string>
     <string name="readVolume">Količina čitanja</string>
@@ -232,10 +232,10 @@
     <string name="dialog_title_downloadFileFormat">Odaberi datotečni format</string>
     <string name="manageTags_currentTags">Odabrane oznake:</string>
     <string name="connectionWizard_welcome_titleMessage">Dobro došao/dobro došla u wallabag.</string>
-    <string name="notification_syncingQueue">Sinkroniziranje lokalnih prmjena</string>
+    <string name="notification_syncingQueue">Sinkroniziranje lokalnih promjena …</string>
     <string name="themeName_dark_contrast">Tamna (visoki kontrast)</string>
     <string name="connectionWizard_welcome_text">Prije upotrebe programa wallabag, moraš uspostaviti vezu. U tome će ti pomoći čarobnjak za vezu.</string>
-    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Kliži s gumbovima glasnoće</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Idi gore i dolje s gumbovima glasnoće</string>
     <string name="themeName_light">Svijetla</string>
     <string name="downloadAsFileProgress">wallabag preuzima tvoj članak za %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza podataka je premještena</string>
@@ -251,7 +251,7 @@
     <string name="other_searchHint">Traži po naslovu članka ili tekstu</string>
     <string name="notification_updatingArticles_fast">Izvršavanje brzog aktualiziranja</string>
     <string name="pref_name_tts_previousButtonIsRewind">Gumb „Prethodni” premata natrag</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">Aktiviraj zaobilaženje Onyx Boox teme</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Zaobilaženje Onyx Boox teme</string>
     <string name="title">Naslov</string>
     <string name="pref_categoryName_misc_localQueue">Lokalne promjene</string>
     <string name="pref_name_autoSync_interval">Vrijeme između automatskih sinkronizacija</string>
@@ -261,7 +261,7 @@
     <string name="pref_name_misc_localQueue_notice">UPOZORENJE</string>
     <string name="pref_name_autoSyncQueue_enabled">Odvojena automatska sinkronizacija za lokalne promjene</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Koristi moj</string>
-    <string name="message_disableTouch_inputDisabled">Unos dodirom deaktiviran</string>
+    <string name="message_disableTouch_inputDisabled">Unos dodirom isključen</string>
     <string name="pref_name_autoSync_type">Vrsta automatske sinkronizacije</string>
     <string name="pref_desc_ui_scrollOverBottom">Pritisni ovdje, za konfiguriranje broja klizanja preko kraja članka, da bi se članak označio kao pročitan</string>
     <string name="pref_desc_misc_localQueue_notice">Ovdje nemoj ništa raditi, osim ako znaš što radiš</string>
@@ -270,10 +270,10 @@
     <string name="d_configurationChanged_answer_decline">Ne sada</string>
     <string name="addLink_success_text">Dodano</string>
     <string name="notification_copyToClipboard">Kopiraj u međuspremnik</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Neuspjela prijava: Vjerojatno pogrešno korisničko ime ili lozinka</string>
-    <string name="scrolledOverBottom">Klizni još %d put(a) preko kraja članka, da bi se članak označio kao pročitan</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Neuspjela prijava: Možda su korisničko ime ili lozinka neispravni\?</string>
+    <string name="scrolledOverBottom">Klizni još %d put(a) dalje od kraja, kako bi se članak označio kao pročitan</string>
     <string name="pref_name_misc_appendWallabagMention">Dodaj napomenu o wallabagu</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Pritisni konfigurirani gumb (gumb kamere prema standardnim postavkama) za blokiranje/deblokiranje unosa dodirom na ekranu za čitanje (ne utječe na kontrole sustava)</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Pritisni gumb „Bez unosa dodirom” (standardno je to gumb kamere) za blokiranje/deblokiranje unosa dodirom na ekranu za čitanje (ne utječe na kontrole sustava)</string>
     <string name="connectionWizard_provider_wallabagit_next">Spoji</string>
     <string name="pref_categoryName_sync">Sinkronizacija</string>
     <string name="notification_incorrectConfiguration">Neispravna konfiguracija</string>
@@ -281,28 +281,28 @@
     <string name="testConnection_errorMessage_incorrectCredentials">Neuspjela prijava – provjeri korisničko ime i lozinku</string>
     <string name="pref_categoryName_miscellaneous">Razno</string>
     <string name="nav_main_tagged_articles">Članci s oznakama</string>
-    <string name="d_disableTouch_changeKey_title">Deaktiviraj gumb za unos dodirom</string>
+    <string name="d_disableTouch_changeKey_title">Gumb za isključivanje unosa dodirom</string>
     <string name="pref_name_misc_handleHttpScheme">Podrži HTTP shemu</string>
     <string name="previousUpdateNotFinished">Prethodno aktualiziranje još nije gotovo</string>
     <string name="pref_desc_ui_previewImage_enabled">Prikaži sliku pretprikaza prije članka</string>
     <string name="pref_option_autoSync_interval_12h">12 sati</string>
-    <string name="pref_desc_ui_readingSpeed">Tvoja brzina čitanja (mjeri se u riječima u minuti). Koristi se za izračunavanje procijenjenog vremena čitanja.</string>
+    <string name="pref_desc_ui_readingSpeed">Tvoja brzina čitanja (mjeri se u riječima u minuti), za prikaz procijenjenog vremena čitanja.</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Nepoznata greška: %s</string>
     <string name="readSpeed">Brzina čitanja</string>
     <string name="pref_name_imageCache_enabled">Stavi slike članka u predmemoriju</string>
     <string name="pref_desc_ui_keepScreenOn">Ne gasi ekran tijekom čitanja članaka</string>
-    <string name="pref_desc_ui_annotations_enabled">Eksperimentalna funkcija! Pogledaj, uredi i stvori napomene</string>
+    <string name="pref_desc_ui_annotations_enabled">Eksperimentalno! Pogledaj, uredi i stvori napomene</string>
     <string name="pref_desc_misc_handleHttpScheme">Prikaži wallabag u popisu web-preglednika</string>
-    <string name="pref_name_connection_advanced_httpAuthUsername">Korisničko ime za HTTP autentifikaciju</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">Korisničko ime HTTP autentifikacije</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP autentifikacija neuspjela</string>
     <string name="notification_updatingArticles">Aktualiziranje članaka</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Pritisni ovdje za konfiguriranje gumba, koji se koristi za deaktiviranje/aktiviranje unosa dodirom</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Odaberi gumb za aktiviranje/deaktiviranje unosa dodirom</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Odaberi ovu opciju, ako imaš račun na https://wallabag.it</string>
-    <string name="pref_name_ui_disableTouch_keyCode">Deaktiviraj gumb za unos dodirom</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Gumb „Bez unosa dodirom”</string>
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Nema pristupa sučelju: %s</string>
-    <string name="d_testConnection_urlSuggestion_message">Preporučujemo, da promijeniš URL u: %s. Ali možeš koristiti i upisani.</string>
+    <string name="d_testConnection_urlSuggestion_message">Preporučujemo mijenjanje na URL %s umjesto korištenja upisane.</string>
     <string name="pref_categoryName_connection">Veza</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">Zaobiđi Onyx uređaje, forsirajući crnu boju za poveznice</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Apriječi Onyx uređaje da forsijraju crnu boju za poveznice</string>
     <string name="themeName_light_contrast">Svijetla (visoki kontrast)</string>
     <string name="notification_channel_group_name_tts">TTS</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Koristi predloženo</string>
@@ -319,13 +319,13 @@
     <string name="pref_name_connection_api_clientID">ID klijenta</string>
     <string name="notification_channel_name_downloading_articles">Preuzimanje PDF-ova</string>
     <string name="menu_lists_search">Traži</string>
-    <string name="pref_desc_ui_tapToScroll_enabled">Kliži po ekranu, dodirujući lijevu i desnu stranu ekrana</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Idi gore i dolje dodirujući lijevu i desnu stranu ekrana</string>
     <string name="misc_localQueue_dumpToFile_header">Ako doživiš probleme sa sinkronizacijom, prijavi problem ovdje: %s</string>
     <string name="pref_name_misc_wipeDB">Izbriši bazu podataka</string>
     <string name="pref_name_autoSync_onStartup_enabled">Aktiviraj automatsku sinkronizaciju tijekom pokretanja programa</string>
     <string name="d_checkCredentials_title_fail">Provjera pristupa sučelju neuspjela</string>
     <string name="connectionWizard_summary_prev">Natrag</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Otkrivena je nepodržana verzija poslužitelja</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Verzija poslužitelja nije podržana</string>
     <string name="pref_desc_connection_url">Primjeri:
 \n https://wallabag.example.com
 \n https://example.com/wallabag
@@ -337,8 +337,8 @@
     <string name="menu_tag">Dodaj oznaku</string>
     <string name="notification_channel_name_background_operations">Operacije u pozadini</string>
     <string name="notification_backgroundOperations">Operacije u pozadini</string>
-    <string name="pref_desc_ui_mathRendering_delimiters">Odaberi ograničavače koje KaTeX treba obraditi</string>
-    <string name="pref_desc_ui_mathRendering_enabled">Aktiviraj iscrtavanje LaTeX matematike putem KaTeX-a</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Odaberi graničnike okruženja koje KaTeX treba obraditi</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Iscrtavanje LaTeX matematike putem KaTeX-a</string>
     <string name="pref_name_ui_mathRendering_delimiters">Matematički ograničavači</string>
     <string name="pref_name_ui_mathRendering_enabled">Iscrtavanje matematike</string>
     <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Koristi ICU tokenizer za indeksiranje pretraživanja teksta (inače se koristi generički tokenizer unicode61). Može poboljšati rezultate pretraživanja za kineski/japanski/korejski. „Potpuno aktualiziranje” je potrebno, da bi opcija stupila na snagu</string>
