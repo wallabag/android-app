@@ -163,10 +163,10 @@
     </string-array>
     <string name="settings_parametersAreOk">Die Parameter sind in Ordnung</string>
     <string name="settings_parametersAutofilled">Parameter ausgefüllt</string>
-    <string name="testConnection_errorMessage_authProblems">Einloggen unmöglich (Schuld sind üblicherweise HTTP-Umleitungen)</string>
+    <string name="testConnection_errorMessage_authProblems">Einloggen unmöglich (üblicherweise verursacht durch HTTP-Umleitungen)</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-Authentifizierung fehlgeschlagen</string>
-    <string name="testConnection_errorMessage_noCSRF">Fehler beim Lesen des Login-Formulars</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login. Das könnte durch aktivierte Zwei-Faktor-Authentifizierung, die z.Z. noch nicht von der App unterstützt wird, verursacht werden</string>
+    <string name="testConnection_errorMessage_noCSRF">Fehler beim Verarbeiten des Login-Formulars</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Unbekannte Seite nach Login. Das könnte durch aktivierte Zwei-Faktor-Authentifizierung, die z.Z. noch nicht von der App unterstützt wird, verursacht werden.</string>
     <string name="pref_name_autoSyncQueue_enabled">Gesonderte Synchronisation lokaler Änderungen</string>
     <string name="pref_categoryName_ui_screenScrolling">Bildschirm scrollen</string>
     <string name="pref_name_ui_volumeButtonsScrolling_enabled">Scrolle mit den Lautstärketasten</string>
@@ -183,7 +183,7 @@
     <string name="pref_desc_imageCache_enabled">Lädt automatisch alle Bilder aus jedem Artikel herunter und speichert sie auf dem Gerät. Abhängig von der Länge deiner wallabag Artikelliste kann dies sehr lange dauern und viel Speicherplatz beanspruchen.</string>
     <string name="nav_other_settings">Einstellungen</string>
     <string name="nav_other_about">Über</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Die Server Version ist veraltet</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Die Server-Version wird nicht unterstützt</string>
     <string name="getCredentials_progressDialogMessage">API-Anmeldeinformationen werden abgerufen…</string>
     <string name="d_getCredentials_title_fail">API-Anmeldeinformationen konnten nicht abgerufen werden</string>
     <string name="d_getCredentials_title_message">Etwas ging schief. Überprüfe deine Internetverbindung und versuche es erneut.</string>
@@ -205,7 +205,7 @@
     <string name="menu_manageTags">Tags verwalten</string>
     <string name="manageTags_title">Tags verwalten</string>
     <string name="manageTags_save">Speichern</string>
-    <string name="manageTags_textField_hint">Ein oder mehrere (durch Komma getrennte) Tag(s)</string>
+    <string name="manageTags_textField_hint">Ein oder mehrere (durch Komma getrennte) Tags</string>
     <string name="manageTags_addNew">Hinzufügen</string>
     <string name="manageTags_currentTags">Ausgewählte Tags:</string>
     <string name="content_estimatedReadingTime">Geschätzte Lesezeit: %s min</string>
