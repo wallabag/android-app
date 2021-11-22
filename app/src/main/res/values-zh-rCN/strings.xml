@@ -26,7 +26,7 @@
     <string name="menu_syncLocalChanges">同步本地更改</string>
     <string name="d_deleteArticle_title">删除文章？</string>
     <string name="d_deleteArticle_message">您确定想要删除这篇文章吗？</string>
-    <string name="txtNetOffline">请检查网络连接！</string>
+    <string name="txtNetOffline">首先确保您已连接到 Internet。</string>
     <string name="txtConfigNotSet">请在同步前配置应用。</string>
     <string name="txtUrlCopied">文章 URL 已复制到剪贴板</string>
     <string name="dialog_add_label">添加新文章</string>
@@ -46,7 +46,7 @@
     <string name="d_add_fail_text">在分享的字符串中找不到 URL:
 \n</string>
     <string name="d_configurationChanged_title">参数已更改</string>
-    <string name="d_configurationChanged_message">似乎有些参数已经改变了。建议执行连接测试。</string>
+    <string name="d_configurationChanged_message">测试连接以检查新参数是否有效。</string>
     <string name="d_configurationChanged_answer_decline">稍后执行</string>
     <string name="d_configurationIsQuestionable_title">检测到问题</string>
     <string name="d_configurationIsQuestionable_message">刚刚发生了一个连接错误。建议执行连接测试。</string>
@@ -55,20 +55,20 @@
     <string name="settings_parametersAutofilled">参数已填充</string>
     <string name="testConnection_progressDialogMessage">正在测试连接…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL 不正确</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">检测到不支持的服务器版本</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">未找到 wallabag 服务-检查 URL</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">服务器版本不受支持</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">找不到 wallabag 服务-检查 URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP 身份验证失败</string>
-    <string name="testConnection_errorMessage_noCSRF">登录表单解析错误</string>
+    <string name="testConnection_errorMessage_noCSRF">无法解析登录表单</string>
     <string name="testConnection_errorMessage_incorrectCredentials">无法登录-请检查用户名和密码</string>
-    <string name="testConnection_errorMessage_authProblems">与授权相关的问题。这些问题通常由 HTTP 重定向引起。</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">登录后未知页面。这通常是由于启用了应用尚不支持的双因素验证</string>
+    <string name="testConnection_errorMessage_authProblems">无法登录（通常由 HTTP 重定向引起）</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">登录后出现未知页面。通常是由双因素认证引起的（本应用尚不支持双因素认证）。</string>
     <string name="testConnection_errorMessage_unknown">未知错误</string>
     <string name="testConnection_errorMessage_unknownWithMessage">未知错误: %s</string>
     <string name="d_testConnection_urlSuggestion_title">考虑更改 URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">使用建议</string>
     <string name="d_testConnection_urlSuggestion_declineButton">使用我的</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">取消</string>
-    <string name="d_testConnection_urlSuggestion_message">建议将URL更改为：%s，但也可以使用输入的 URL 。</string>
+    <string name="d_testConnection_urlSuggestion_message">建议将 URL 更改为 %s，而不是使用输入的 URL。</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">建议将URL更改为：%s</string>
     <string name="d_testConnection_fail_title">测试连接失败</string>
     <string name="getCredentials_progressDialogMessage">正在获取 API 凭据…</string>
@@ -82,7 +82,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">无法访问 API: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">未知错误</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">未知错误: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">无法登录: 可能是错误的用户名或密码</string>
+    <string name="wrongUsernameOrPassword_errorMessage">无法登录。也许用户名或密码是错的？</string>
     <string name="previousUpdateNotFinished">上一个更新尚未完成</string>
     <string name="feedName_favorites">收藏</string>
     <string name="feedName_archived">存档</string>
@@ -90,7 +90,7 @@
     <string name="articleList_favoriteMark">收藏标记</string>
     <string name="articleList_ArchivedMark">存档标记</string>
     <string name="noPreviousArticle">当前列表中没有以前的文章</string>
-    <string name="scrolledOverBottom">再上划 %d 次将文章标为已读</string>
+    <string name="scrolledOverBottom">再滚动到底部 %d 次将文章标为已读</string>
     <string name="markedAsRead">文章已标记为已读</string>
     <string name="noNextArticle">当前列表中没有更多文章了</string>
     <string name="themeName_light">明亮</string>
@@ -117,8 +117,8 @@
     <string name="notification_updatingArticles_full">执行完整更新</string>
     <string name="notification_updatingArticles_fast">执行快速更新</string>
     <string name="notification_sweepingDeletedArticles">彻底删除已删除文章</string>
-    <string name="notification_downloadingImages">下载图片</string>
-    <string name="notification_syncingQueue">同步本地更改</string>
+    <string name="notification_downloadingImages">下载图片中…</string>
+    <string name="notification_syncingQueue">同步本地更改中…</string>
     <string name="notification_error">错误</string>
     <string name="notification_incorrectCredentials">凭据不正确</string>
     <string name="notification_incorrectConfiguration">配置不正确</string>
@@ -152,8 +152,8 @@
     <string name="message_couldNotOpenUrl">无法打开此 URL</string>
     <string name="message_disableTouch_inputDisabled">触摸输入已禁用</string>
     <string name="message_disableTouch_inputEnabled">触摸输入已启用</string>
-    <string name="d_disableTouch_changeKey_title">禁用触摸输入按钮</string>
-    <string name="d_disableTouch_currentCode">当前选择的关键代码（点击按钮更改）：</string>
+    <string name="d_disableTouch_changeKey_title">关闭触摸输入的按钮</string>
+    <string name="d_disableTouch_currentCode">当前选择的键控代码（点击按钮更改）：</string>
     <string name="pref_name_runConnectionWizard">运行连接向导</string>
     <string name="pref_desc_runConnectionWizard">帮助您进行基本连接设置</string>
     <string name="pref_categoryName_connection">连接</string>
@@ -180,44 +180,44 @@
     <string name="pref_desc_ui_article_fontSerif">文章的衬线字体</string>
     <string name="pref_name_ui_article_textAlignment_justify">文字对齐方式：两端对齐</string>
     <string name="pref_desc_ui_article_textAlignment_justify">将行延伸到等宽（像报纸一样）</string>
-    <string name="pref_name_ui_article_fullscreen">全屏文章视图</string>
+    <string name="pref_name_ui_article_fullscreen">全屏文章</string>
     <string name="pref_desc_ui_article_fullscreen">阅读文章时隐藏系统和应用程序栏</string>
     <string name="pref_name_ui_readingSpeed">阅读速度</string>
-    <string name="pref_desc_ui_readingSpeed">您的阅读速度 (以每分钟字数计算)。用于计算估计的读取时间。</string>
+    <string name="pref_desc_ui_readingSpeed">您的阅读速度 (以每分钟单词数计算)。用于估算阅读所需时间。</string>
     <string name="pref_name_ui_keepScreenOn">阅读时保持屏幕开启</string>
     <string name="pref_desc_ui_keepScreenOn">阅读文章时保持屏幕开启</string>
     <string name="pref_categoryName_ui_screenScrolling">屏幕滚动</string>
-    <string name="pref_name_ui_volumeButtonsScrolling_enabled">使用音量键滚动</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">使用音量键上下滚动</string>
     <string name="pref_name_ui_tapToScroll_enabled">点击滚动</string>
-    <string name="pref_desc_ui_tapToScroll_enabled">通过点击屏幕左右两侧滚动屏幕</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">轻按屏幕左右两侧上下滚动</string>
     <string name="pref_name_ui_screenScrolling_percent">屏幕滚动的高度百分比</string>
-    <string name="pref_name_ui_screenScrolling_smooth">使用平滑滚动</string>
+    <string name="pref_name_ui_screenScrolling_smooth">平滑滚动</string>
     <string name="pref_categoryName_ui_misc">杂项</string>
     <string name="pref_name_ui_disableTouch_enabled">禁用触摸输入</string>
-    <string name="pref_desc_ui_disableTouch_enabled">按下已配置的按钮（默认为相机按钮）以阻止/取消阻止阅读屏幕上的触摸输入（系统控制不受影响）</string>
-    <string name="pref_name_ui_disableTouch_keyCode">禁用触摸输入按钮</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">按此处配置用于禁用/启用触摸输入的按钮</string>
-    <string name="pref_name_ui_scrollOverBottom">在底部上划以标记为已读</string>
-    <string name="pref_desc_ui_scrollOverBottom">按此处配置您需要在底部上划以标记文章为已读的次数</string>
-    <string name="pref_categoryName_sync">同步</string>
-    <string name="pref_name_sync_syncTypes">同步类型</string>
+    <string name="pref_desc_ui_disableTouch_enabled">按下“禁用触摸输入”按钮（默认为相机按钮）来屏蔽或启用阅读屏幕上的触摸输入（不影响系统控制）</string>
+    <string name="pref_name_ui_disableTouch_keyCode">“禁用触摸输入”按钮</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">选择用于禁用/启用触摸输入的按钮</string>
+    <string name="pref_name_ui_scrollOverBottom">滚动到底部以标记为已读</string>
+    <string name="pref_desc_ui_scrollOverBottom">设置需要滚动到底部多少次才将文章标记为已读</string>
+    <string name="pref_categoryName_sync">同步中</string>
+    <string name="pref_name_sync_syncTypes">同步方式</string>
     <string name="pref_desc_sync_syncTypes">按下以显示更多关于同步类型的信息</string>
     <string name="pref_desc_sync_syncTypes_text">有两种主要的同步类型: \"完整\" 和 \"快速\"。
 \n
 \n \"完整\" 同步将删除所有本地内容并再次下载。可以从 \"选项\" 菜单中启动，作为最后的手段。
 \n
-\n \"快速\" 同步 (增量) 只下载自上一次同步以来所做的更改，减少了花费的时间和带宽。但是，此方法有缺点: 它无法检测远程删除的文章 (因此在 \"快速\" 同步期间没有删除任何本地文章)。在任何文章列表中的顶部位置下拉滚动条以启动 \"快速\" 同步。
+\n \"快速\" 同步 (增量) 只下载自上一次同步以来所做的更改，可节省时间和带宽。但是，此方法有缺点: 它无法检测和删除远程删除的文章 (在任何文章列表中的顶部位置下拉滚动条以启动 \"快速\" 同步。）
 \n
-\n 为了弥补 \"快速\" 同步类型的缺点，\"扫描已删除文章\" 检查每个本地文章，并询问服务器此文章是否仍然存在于服务器上-如果没有, 则删除本地文章。根据您拥有文章的数量，它需要一段时间，但相比 \"完全\" 同步可以节省流量。
+\n\"扫描已删除文章\" 检查每篇本地文章，并询问服务器此文章是否仍然存在于服务器上。如果没有, 则删除本地文章。根据您拥有文章的数量，它需要一段时间，但相比 \"完全\" 同步可以节省流量。
 \n
-\n 这些功能都不影响客户端到服务器的同步: 在更新本地内容之前，您的本地更改始终会发送到服务器。</string>
+\n本地更改总是在更新本地内容之前先从客户端同步到服务器（即使失败，也不会丢失任何内容）。</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">在 \"快速\" 同步后启用 \"扫描已删除文章\"</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">阅读上述不同同步类型的说明以了解更多信息</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">阅读上方不同同步类型的说明了解更多信息</string>
     <string name="pref_categoryName_autoSync">自动同步</string>
-    <string name="pref_name_autoSync_onStartup_enabled">在应用启动时启用自动同步</string>
+    <string name="pref_name_autoSync_onStartup_enabled">应用启动时自动同步</string>
     <string name="pref_decs_autoSync_onStartup_enabled">应用会在打开时同步</string>
-    <string name="pref_name_autoSync_enabled">启用自动同步</string>
-    <string name="pref_desc_autoSync_enabled">这样就可以自动同步本地更改 (添加的链接、存档的文章等), 并根据时间表下载新文章</string>
+    <string name="pref_name_autoSync_enabled">自动同步</string>
+    <string name="pref_desc_autoSync_enabled">自动同步本地更改(添加的链接、存档的文章等)，并根据计划下载新的文章</string>
     <string name="pref_name_autoSync_interval">自动同步间隔</string>
     <string name="pref_option_autoSync_interval_15m">15 分钟</string>
     <string name="pref_option_autoSync_interval_30m">30 分钟</string>
@@ -226,9 +226,9 @@
     <string name="pref_option_autoSync_interval_24h">24 小时</string>
     <string name="pref_name_autoSync_type">自动同步类型</string>
     <string name="pref_name_autoSyncQueue_enabled">本地更改的独立自动同步</string>
-    <string name="pref_desc_autoSyncQueue_enabled">这允许本地更改 (添加的链接、存档的文章等) 在网络可用后立即同步到服务器。</string>
+    <string name="pref_desc_autoSyncQueue_enabled">再次联网后将本地更改（添加的链接、存档的文章等）同步到服务器。</string>
     <string name="pref_name_imageCache_enabled">将文章图片放入缓存中</string>
-    <string name="pref_desc_imageCache_enabled">自动下载每篇文章中的所有图片, 并将其保存到设备中。根据您的 wallabag 文章列表的长度, 这可能会花费大量的时间和空间。</string>
+    <string name="pref_desc_imageCache_enabled">自动下载每篇文章的所有图片到设备上（如果文章列表很长，会占用很多时间和空间）</string>
     <string name="pref_name_storage_dbPath">数据库位置</string>
     <string name="pref_name_storage_dbPath_internalStorage">内部存储</string>
     <string name="pref_name_storage_dbPath_externalStorage">外部存储</string>
@@ -239,18 +239,18 @@
     <string name="pref_name_misc_handleHttpScheme">处理 HTTP 方案</string>
     <string name="pref_desc_misc_handleHttpScheme">在网页浏览器列表中显示 wallabag</string>
     <string name="pref_name_misc_wipeDB">擦除数据库</string>
-    <string name="pref_desc_misc_wipeDB">擦除本地数据库中的所有文章，同时删除所有未同步的本地更改和 URL</string>
+    <string name="pref_desc_misc_wipeDB">从本地数据库中删除文章、所有未同步的本地更改及 URL</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">擦除数据库？</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">您确定要擦除数据库吗？</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">确定要擦除数据库吗？</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">使用的连接 URI 不正确</string>
     <string name="connectionWizard_welcome_titleMessage">欢迎来到 wallabag 。</string>
-    <string name="connectionWizard_welcome_text">在您可以使用 wallabag 应用之前，您需要设置连接。连接向导将帮助您完成此设置。</string>
-    <string name="connectionWizard_welcome_rerunNotice">您始终可以从 \"设置\" 中重新运行 \"连接向导\"。</string>
+    <string name="connectionWizard_welcome_text">首先使用向导建立连接。</string>
+    <string name="connectionWizard_welcome_rerunNotice">（您随时可以从“设置”重新运行连接向导。）</string>
     <string name="connectionWizard_welcome_prev">跳过</string>
     <string name="connectionWizard_welcome_next">下一步</string>
     <string name="connectionWizard_providerSelection_titleMessage">选择 wallabag 提供商</string>
     <string name="connectionWizard_providerSelection_provider_general_name">其他</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">选择此选项以手动输入所需的设置</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">手动输入设置</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">如果您在 https://wallabag.it 上有帐户，请选择此项</string>
     <string name="connectionWizard_providerSelection_prev">跳过</string>
     <string name="connectionWizard_providerSelection_next">下一步</string>
@@ -262,16 +262,16 @@
     <string name="connectionWizard_provider_wallabagit_next">连接</string>
     <string name="connectionWizard_summary_titleMessage">全部完成。</string>
     <string name="connectionWizard_summary_text">单击此处保存并转到主屏幕。</string>
-    <string name="connectionWizard_summary_toastMessage">设置完成</string>
+    <string name="connectionWizard_summary_toastMessage">已完成配置</string>
     <string name="connectionWizard_summary_prev">上一步</string>
     <string name="connectionWizard_summary_next">保存设置</string>
     <string name="remove_tag">移除标签</string>
     <string name="themeName_eink">墨水屏</string>
     <string name="notification_channel_group_name_tts">TTS</string>
-    <string name="notification_channel_group_name_sync">同步</string>
+    <string name="notification_channel_group_name_sync">同步中</string>
     <string name="notification_channel_group_name_other">其他</string>
     <string name="notification_channel_name_tts">wallabag TTS</string>
-    <string name="notification_channel_name_sync">同步</string>
+    <string name="notification_channel_name_sync">同步中</string>
     <string name="notification_channel_name_downloading_articles">正在下载多个 PDF 文件</string>
     <string name="notification_channel_name_error">错误</string>
     <string name="pref_name_ui_article_handlePreformattedText">处理长篇预格式化的文本</string>
@@ -285,21 +285,21 @@
     <string name="notification_clipboardLabel">错误详情</string>
     <string name="copiedToClipboard">已复制到剪贴板</string>
     <string name="connectionWizard_misc_scanQrCode">扫描一个二维码</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">请安装一款二维码扫描器</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">（请先安装一款二维码扫描器）</string>
     <string name="pref_categoryName_misc_localQueue">本地变更</string>
     <string name="pref_name_misc_localQueue_notice">警告</string>
-    <string name="pref_desc_misc_localQueue_notice">除非您知道自己在做什么，否则不要在这里做任何事情</string>
-    <string name="pref_name_misc_localQueue_dumpToFile">转储到文件</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">将所有本地更改转储到 txt 文件中（您可以自行研究或将其附加到错误报告中）</string>
+    <string name="pref_desc_misc_localQueue_notice">除非您知道自己在做什么，否则不要在这里做任何事情！</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">保存到文件</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">将所有本地更改保存为 TXT 文件（用于自己研究或将其附加到 bug 报告中)</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">删除第一个本地队列项目</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">删除第一个未同步的项目。 如果您在同步期间收到重复的错误通知，这可能会有所帮助。 请首先确保将所有本地更改转储到文件</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">删除第一个未同步项。可能有助于在同步过程中重复错误通知。提示：首先将所有本地更改保存到文件中。</string>
     <string name="misc_localQueue_empty">无本地变更</string>
     <string name="misc_localQueue_removeFirstItem_done">完成</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">转储到%s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">保存为 %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">错误：%s</string>
-    <string name="misc_localQueue_dumpToFile_header">如果您在同步方面遇到问题，请在此处报告您的问题：%s</string>
+    <string name="misc_localQueue_dumpToFile_header">请在此处报告同步问题：%s</string>
     <string name="pref_name_ui_annotations_enabled">注释支持</string>
-    <string name="pref_desc_ui_annotations_enabled">实验性功能！ 查看，编辑和创建注释</string>
+    <string name="pref_desc_ui_annotations_enabled">实验性功能！ 查看、编辑和创建注释</string>
     <string name="menu_annotate">注释</string>
     <string name="notification_action_media_next">下一个</string>
     <string name="notification_action_media_fastforward">快进</string>
@@ -313,8 +313,8 @@
     <string name="untagged">&lt;未标记&gt;</string>
     <string name="title">标题</string>
     <string name="articleEdit_openArticle">打开文章</string>
-    <string name="pref_desc_tts_showPreviewAsAlbumArt">将文章预览图像（如果存在）用作专辑封面（在通知中可见，并且可显示为锁屏背景）</string>
-    <string name="pref_name_tts_showPreviewAsAlbumArt">将预览用作专辑封面</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">将文章预览图（如果有）用作专辑封面图（显示在通知和/或用作锁屏背景）</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">将预览图用作专辑封面</string>
     <string name="pref_name_tts_previousButtonIsRewind">“上一个”按钮后退</string>
     <string name="pref_desc_tts_previousButtonIsRewind">按下“上一个”媒体按钮后退，而不是跳到上一篇文章</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">按下“下一个”媒体按钮时快进，而不是跳到下一篇文章</string>
@@ -324,9 +324,9 @@
     <string name="pref_desc_tts_fastForwardTime">按下“快进”按钮时向前跳过的秒数</string>
     <string name="pref_name_tts_fastForwardTime">快进跳过时间</string>
     <string name="pref_categoryName_tts">文字转语音</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">对 Onyx 设备强制使用黑色链接色</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">启用 Onyx Boox 主题临时解决方法</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">显示一个对话框，该对话框允许收藏/存档/标记新添加的文章。 如果禁用该选项，则会显示一条 Toast 消息。</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">防止 Onyx 设备强制使用黑色链接色</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox 主题临时解决方法</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">显示一个对话框，允许收藏/归档/标记新添加的文章 （否则显示 Toast 消息）</string>
     <string name="pref_name_ui_showArticleAddedDialog">保存页面时显示对话框</string>
     <string name="misc_logging_logcatToFile_result_error">错误 ：%s</string>
     <string name="misc_logging_logcatToFile_result_saved">已将日志保存到 %s</string>
@@ -339,8 +339,10 @@
     <string name="notification_backgroundOperations">后台操作</string>
     <string name="pref_desc_ui_mathRendering_delimiters">选择 KaTeX 应该处理的环境分隔符</string>
     <string name="pref_name_ui_mathRendering_delimiters">数学分隔符</string>
-    <string name="pref_desc_ui_mathRendering_enabled">允许通过 KaTeX 解析 LaTeX-math</string>
+    <string name="pref_desc_ui_mathRendering_enabled">通过 KaTeX 渲染 LaTeX-math</string>
     <string name="pref_name_ui_mathRendering_enabled">数学函数解析</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">使用 ICU 分词器进行全文搜索索引（否则使用通用 unicode61 分词器）。可以改善中日韩文字的搜索结果。需要“完整更新”使该选项生效</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">使用 ICU 分词器进行全文搜索索引（否则使用通用 unicode61 分词器）。可以改善中日韩文字的搜索结果。需要“完整更新”使该选项生效。</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">对全文搜索使用 ICU 分词器</string>
+    <string name="pref_name_misc_addTitleToSharedText">添加标题至共享文本</string>
+    <string name="pref_desc_misc_addTitleToSharedText">将文章标题添加到共享文本中</string>
 </resources>

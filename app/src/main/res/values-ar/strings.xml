@@ -1,2 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="btnMarkRead">علامة كمقروءة</string>
+    <string name="remove_from_favorites">إزالة من المفضلة</string>
+    <string name="menuShare">مشاركة</string>
+    <string name="menuNext">المقال التالي</string>
+    <string name="menuPrevious">المقال السابق</string>
+    <string name="menuDelete">حذف</string>
+    <string name="menuOpenOriginal">فتح الأصلي</string>
+    <string name="menuCopyOriginalURL">انسخ عنوان الموقع الأصلي</string>
+    <string name="ttsSpeed">تقييم</string>
+    <string name="ttsVolume">الصوت</string>
+    <string name="ttsLanguage">اللغة</string>
+    <string name="ttsVoice">اختر صوت</string>
+    <string name="ttsAutoplayNextArticle">تشغيل تلقائي للمقال التالي</string>
+    <string name="ttsPlayPause">تشغيل / توقف</string>
+    <string name="ttsOptions">خيارات</string>
+    <string name="menu_open_random_article">مقال عشوائي</string>
+    <string name="d_deleteArticle_title">حذف المقال؟</string>
+    <string name="d_deleteArticle_message">هل أنت متأكد من رغبتك في حذف المقال؟</string>
+    <string name="txtUrlCopied">تم نسخ عنوان المقال إلى الحافظة</string>
+    <string name="dialog_add_label">إضافة مقال جديد</string>
+    <string name="page_url">عنوان ويب الصفحة</string>
+</resources>
