@@ -1,2 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="remove_from_favorites">Eliminar dos Favoritos</string>
+    <string name="btnMarkRead">Marcar como Lido</string>
+    <string name="add_to_favorites">Engadir a Favoritos</string>
+    <string name="menuDelete">Eliminar</string>
+    <string name="btnMarkUnread">Marcar como Pendente</string>
+    <string name="ttsPlayPause">Repro. / Pausa</string>
+    <string name="txtUrlCopied">Copiado o URL do artigo ao portapapeis</string>
+    <string name="menuShare">Compartir</string>
+    <string name="menuNext">Artigo seguinte</string>
+    <string name="menuPrevious">Artigo Anterior</string>
+    <string name="menuOpenOriginal">Abrir o orixinal</string>
+    <string name="menuCopyOriginalURL">Copiar URL orixinal</string>
+    <string name="ttsSpeed">Valorar</string>
+    <string name="menuTTS">Texto a Fala</string>
+    <string name="ttsVolume">Volume</string>
+    <string name="ttsLanguage">Elexir Idioma</string>
+    <string name="ttsVoice">Elexir Voz</string>
+    <string name="ttsError">Erro no Texto a Fala</string>
+    <string name="ttsAutoplayNextArticle">Repr.Auto. Seguinte Art.</string>
+    <string name="ttsFastRewind">Retroceso rápido</string>
+    <string name="ttsFastForward">Avance rápido</string>
+    <string name="ttsOptions">Opcións</string>
+    <string name="menu_open_random_article">Abrir artigo ao chou</string>
+    <string name="menu_syncLocalChanges">Sincr. cambios locais</string>
+    <string name="d_deleteArticle_title">Eliminar artigo\?</string>
+    <string name="d_deleteArticle_message">Tes a certeza de querer eliminar o artigo\?</string>
+    <string name="txtNetOffline">Primeiro comproba que tes conexión a internet.</string>
+    <string name="txtConfigNotSet">Configura a app antes de sincronizar.</string>
+    <string name="dialog_add_label">Engadir novo artigo</string>
+</resources>
