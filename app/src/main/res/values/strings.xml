@@ -329,6 +329,8 @@
     <string name="issues_url" translatable="false">https://github.com/wallabag/android-app/issues</string>
 
     <string name="connectionWizard_misc_scanQrCode">Scan a QR code</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Or configure the app using a QR code\n
+        (available in the \"Config\" section of the web application)</string>
     <string name="connectionWizard_misc_installQrCodeScanner">(Install a QR-code scanner first.)</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Incorrect connection URI used</string>
 
