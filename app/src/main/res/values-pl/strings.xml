@@ -127,7 +127,8 @@
     <string name="manageTags_textField_hint">Jeden lub wiecej tagów oddzielonych przecinkami</string>
     <string name="manageTags_addNew">Dodaj</string>
     <string name="manageTags_currentTags">Wybrane tagi:</string>
-    <string name="content_estimatedReadingTime">Szacowany czas czytania: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Szacowany czas czytania</string>
     <string name="navigation_drawer_open">Otwórz szufladę nawigacyjną</string>
     <string name="navigation_drawer_close">Zamknij szufladę nawigacyjną</string>
     <string name="nav_main_articles">Artykuły</string>

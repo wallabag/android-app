@@ -903,12 +903,13 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         String htmlBase = getHtmlBase();
 
         String extraHead = getExtraHead();
-        String header = getHeader();
+        String stats = getStats();
+        String tags = getTags();
+        String previewImage = getPreviewImage();
         String htmlContent = getHtmlContent();
 
         return String.format(htmlBase, cssName, extraHead, classAttr, escapeHtml(articleTitle),
-                getString(R.string.articleContent_globeIconAltText),
-                escapeHtml(articleUrl), escapeHtml(articleDomain), header, htmlContent);
+                escapeHtml(articleUrl), escapeHtml(articleDomain), stats, tags, previewImage, htmlContent);
     }
 
     private String getHtmlBase() {
@@ -938,36 +939,50 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         return extra;
     }
 
-    private String getHeader() {
-        StringBuilder header = new StringBuilder();
+    private String getStats() {
+        StringBuilder stats = new StringBuilder();
 
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
-            header.append("<span style=\"white-space: nowrap;\">");
-
-            header.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
+            stats.append("<li>");
+            // Material icon 'today'
+            stats.append("\t<i class=\"material-icons no-tts\">&#xE8DF</i>");
+            stats.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
                     .append(' ')
                     .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));
-
-            header.append("</span>");
+            stats.append("</li>");
         }
 
         if (!TextUtils.isEmpty(article.getAuthors())) {
-            header.append(' ');
-            header.append(escapeHtml(article.getAuthors()));
+            stats.append("<li>");
+            // Material icon 'person'
+            stats.append("\t<i class=\"material-icons no-tts\">&#xE7FD</i>");
+            stats.append(escapeHtml(article.getAuthors()));
+            stats.append("</li>");
         }
 
-        header.append("<br>\n");
-
         int estimatedReadingTime = article.getEstimatedReadingTime(settings.getReadingSpeed());
-        header.append(escapeHtml(getString(R.string.content_estimatedReadingTime,
+        stats.append("<li>");
+        // Material icon 'timer'
+        stats.append("\t<i class=\"material-icons no-tts\">&#xE425</i>");
+        stats.append("<span class=\"tts-only\">")
+                .append(getString(R.string.content_estimatedReadingTimeTTSLabel))
+                .append("</span>");
+        stats.append(escapeHtml(getString(R.string.content_estimatedReadingTime,
                 estimatedReadingTime > 0 ? estimatedReadingTime : "< 1")));
+        stats.append("</li>");
 
-        addTags(header);
+        String statsString = stats.toString();
+
+        if (BuildConfig.DEBUG) Log.d(TAG, "getStats() statsString: " + statsString);
+        return statsString;
+    }
+
+    private String getPreviewImage() {
+        StringBuilder previewImage = new StringBuilder();
 
         if (settings.isPreviewImageEnabled() && !TextUtils.isEmpty(article.getPreviewPictureURL())) {
-            header.append("<br>\n");
-            header.append("<img")
+            previewImage.append("<img")
                     .append(" alt=\"")
                     .append(escapeHtml(getString(R.string.articleContent_previewImageAltText)))
                     .append('"')
@@ -976,27 +991,33 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                     .append("\"/>");
         }
 
-        String headerString = header.toString();
+        String previewImageString = previewImage.toString();
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "getHeader() headerString: " + headerString);
+        if (BuildConfig.DEBUG) Log.d(TAG, "getPreviewImage() previewImageString: " + previewImageString);
 
-        return doImageUrlReplacements(headerString);
+        return doImageUrlReplacements(previewImageString);
     }
 
-    private void addTags(StringBuilder header) {
+    private String getTags() {
+        StringBuilder tags = new StringBuilder();
+
         if (!article.getTags().isEmpty()) {
             Tag.sortTagListByLabel(article.getTags());
-
-            header.append("<br>");
+            tags.append("<div class=\"tags\">");
 
             for (Tag tag : article.getTags()) {
-                header.append("<div class=\"tag\">");
-                header.append("<a href=\"tag://").append(tag.getId()).append("\">")
+                tags.append("<div class=\"tag\">");
+                tags.append("<a href=\"tag://").append(tag.getId()).append("\">")
                         .append(escapeHtml(tag.getLabel()))
                         .append("</a>");
-                header.append("</div>");
+                tags.append("</div>");
             }
+            tags.append("</div>");
         }
+        String tagsString = tags.toString();
+        if (BuildConfig.DEBUG) Log.d(TAG, "getTags() tagsString: " + tagsString);
+
+        return tagsString;
     }
 
     private String getHtmlContent() {

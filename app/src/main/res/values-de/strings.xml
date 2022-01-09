@@ -208,7 +208,8 @@
     <string name="manageTags_textField_hint">Ein oder mehrere (durch Komma getrennte) Tags</string>
     <string name="manageTags_addNew">Hinzufügen</string>
     <string name="manageTags_currentTags">Ausgewählte Tags:</string>
-    <string name="content_estimatedReadingTime">Geschätzte Lesezeit: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Geschätzte Lesezeit</string>
     <string name="navigation_drawer_open">Navigationsleiste öffnen</string>
     <string name="navigation_drawer_close">Navigationsleiste schließen</string>
     <string name="nav_main_articles">Artikel</string>
@@ -314,7 +315,6 @@
     <string name="notification_action_media_rewind">Zurückspulen</string>
     <string name="tts_image">Bild: %s</string>
     <string name="articleContent_previewImageAltText">Vorschaubild</string>
-    <string name="articleContent_globeIconAltText">Globussymbol</string>
     <string name="contentIsTooLong">Der Artikelinhalt ist zu lang, um dargestellt zu werden</string>
     <string name="untagged">&lt;nicht markiert&gt;</string>
     <string name="title">Titel</string>

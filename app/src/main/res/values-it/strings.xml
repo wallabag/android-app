@@ -127,7 +127,8 @@
     <string name="manageTags_textField_hint">Una o più etichette separate da virgole</string>
     <string name="manageTags_addNew">Aggiungi</string>
     <string name="manageTags_currentTags">Etichette selezionate:</string>
-    <string name="content_estimatedReadingTime">Tempo di lettura stimato: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Tempo di lettura stimato</string>
     <string name="navigation_drawer_open">Apri menù di navigazione</string>
     <string name="navigation_drawer_close">Chiudi menù di navigazione</string>
     <string name="nav_main_articles">Articoli</string>
@@ -305,7 +306,6 @@
     <string name="articleEdit_openArticle">Apri l\'articolo</string>
     <string name="articleContent_previewImageAltText">Anteprima dell\'immagine</string>
     <string name="untagged">&lt;senza etichetta&gt;</string>
-    <string name="articleContent_globeIconAltText">Icona di globo</string>
     <string name="notification_action_media_play">Riproduci</string>
     <string name="notification_action_media_next">Successivo</string>
     <string name="notification_action_media_fastforward">Avanti veloce</string>

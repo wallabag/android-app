@@ -137,7 +137,8 @@
     <string name="manageTags_textField_hint">以逗号分隔的一个或多个标签</string>
     <string name="manageTags_addNew">添加</string>
     <string name="manageTags_currentTags">所选标签:</string>
-    <string name="content_estimatedReadingTime">预计阅读时间：%s 分钟</string>
+    <string name="content_estimatedReadingTime">%s 分钟</string>
+    <string name="content_estimatedReadingTimeTTSLabel">预计阅读时间</string>
     <string name="lastUpdateTimeLabel">最后更新: %s</string>
     <string name="listItem_estimatedReadingTime">%d 分钟</string>
     <string name="navigation_drawer_open">打开导航菜单</string>
@@ -308,7 +309,6 @@
     <string name="notification_action_media_rewind">后退</string>
     <string name="tts_image">图像：%s</string>
     <string name="articleContent_previewImageAltText">预览图像</string>
-    <string name="articleContent_globeIconAltText">全局图标</string>
     <string name="contentIsTooLong">文章内容太长而无法显示</string>
     <string name="untagged">&lt;未标记&gt;</string>
     <string name="title">标题</string>

@@ -40,7 +40,10 @@ function traverse(element, callback) {
 }
 
 function shouldSkip(element) {
-    return element.tagName === 'SCRIPT' || element.tagName === 'NOSCRIPT';
+    return element.nodeType === Node.COMMENT_NODE
+        || element.tagName === 'SCRIPT' || element.tagName === 'NOSCRIPT'
+        // Skip stats icons
+        || (element.tagName === 'I' && element.classList.contains('no-tts'));
 }
 
 function prepareTextAndExtras(s, extras, emphasisStarts, limit) {

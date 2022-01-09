@@ -124,7 +124,8 @@
     <string name="pref_name_connection_username">Uživatelské jméno</string>
     <string name="nav_other_settings">Nastavení</string>
     <string name="lastUpdateTimeLabel">Poslední aktualizace: %s</string>
-    <string name="content_estimatedReadingTime">Předpokládaný čas čtení: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Předpokládaný čas čtení</string>
     <string name="manageTags_save">Uložit</string>
     <string name="notification_channel_name_error">Chyby</string>
     <string name="notification_channel_group_name_other">Ostatní</string>
@@ -217,7 +218,6 @@
     <string name="connectionWizard_provider_wallabagit_next">Připojit</string>
     <string name="notification_clipboardLabel">Podrobnosti o chybě</string>
     <string name="contentIsTooLong">Obsah článku je pro zobrazení příliš dlouhý</string>
-    <string name="articleContent_globeIconAltText">Ikona zeměkoule</string>
     <string name="other_searchHint">Hledat podle názvu článku nebo textu</string>
     <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co děláte</string>
     <string name="pref_categoryName_misc_localQueue">Místní změny</string>

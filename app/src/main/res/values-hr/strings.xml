@@ -178,7 +178,6 @@
     <string name="misc_localQueue_dumpToFile_result_error">Greška: %s</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Ispiši u datoteku</string>
     <string name="notification_incorrectCredentials">Neispravni podaci za prijavu</string>
-    <string name="articleContent_globeIconAltText">Ikona globusa</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Ako ne znaš o čemu se radi, ostavi prazno</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Stvarno želiš izbrisati bazu podataka\?</string>
     <string name="downloadAsFileArticleDownloadedDetail">Članak %s preuzet</string>
@@ -255,7 +254,8 @@
     <string name="title">Naslov</string>
     <string name="pref_categoryName_misc_localQueue">Lokalne promjene</string>
     <string name="pref_name_autoSync_interval">Vrijeme između automatskih sinkronizacija</string>
-    <string name="content_estimatedReadingTime">Procijenjeno vrijeme čitanja: %s min</string>
+    <string name="content_estimatedReadingTime">%s min</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Procijenjeno vrijeme čitanja</string>
     <string name="misc_localQueue_empty">Nema lokalnih prmjena</string>
     <string name="notification_channel_group_name_other">Ostalo</string>
     <string name="pref_name_misc_localQueue_notice">UPOZORENJE</string>

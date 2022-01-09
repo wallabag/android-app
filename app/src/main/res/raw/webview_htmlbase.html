@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="%1$s.css" media="all" id="main-theme">
 		<link rel="stylesheet" href="ratatouille.css" media="all" id="extra-theme">
+		<link rel="stylesheet" href="shared.css" media="all" id="shared-theme">
 		%2$s
 	</head>
 	<div id="main">
@@ -13,12 +14,21 @@
 				<div id="article">
 					<header class="mbm">
 						<h1>%4$s</h1>
-						<img id="domainimg" alt="%5$s" src="file:///android_asset/ic_action_web_site.png" />
-						<em class="domain"><a href="%6$s">%7$s</a></em>
+                        <div class="tools">
+                          <ul class="stats">
+                            <li>
+                              <!-- Material icon 'link' -->
+                              <i class="material-icons no-tts">&#xE157</i>
+                              <em class="domain"><a href="%5$s">%6$s</a></em>
+                            </li>
+						    %7$s
+                          </ul>
+                        </div>
 						%8$s
+                        %9$s
 					</header>
 					<article>
-						%9$s
+						%10$s
 					</article>
 				</div>
 			</div>

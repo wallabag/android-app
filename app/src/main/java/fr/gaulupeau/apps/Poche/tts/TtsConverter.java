@@ -179,8 +179,7 @@ class TtsConverter {
 
     private CharSequence convert(ImageItem item) {
         if (!TextUtils.isEmpty(item.altText)) {
-            if (item.altText.equals(context.getString(R.string.articleContent_globeIconAltText))
-                    || item.altText.equals(context.getString(R.string.articleContent_previewImageAltText))) {
+            if (item.altText.equals(context.getString(R.string.articleContent_previewImageAltText))) {
                 return null;
             }
         }

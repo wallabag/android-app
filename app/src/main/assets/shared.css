@@ -1,0 +1,75 @@
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url('MaterialIcons-Regular.ttf') format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+header.mbm {
+  margin-bottom: 0.7em;
+}
+
+header.mbm h1 {
+  padding-bottom: 0.3em;
+}
+
+ul.stats li i.material-icons {
+  padding-left: 0.18em;
+  padding-right: 0.18em;
+}
+
+header.mbm div.tools {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+header.mbm div.tools ul.stats {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+ul.stats li {
+  list-style-type: none;
+  display: inline-flex;
+  vertical-align; middle;
+  white-space: nowrap;
+  padding-left: 0.18em;
+}
+
+div.tags {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-left: 0.36em;
+}
+
+div.tag {
+  margin-left: 0.3em;
+  margin-right: 0.3em;
+  padding-left: 0.36em;
+  padding-right: 0.36em;
+}
+
+header.mbm img {
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+span.tts-only {
+  display: none;
+}

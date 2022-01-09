@@ -203,7 +203,8 @@
     <string name="manageTags_textField_hint">Один или несколько тегов (через запятую)</string>
     <string name="manageTags_addNew">Добавить</string>
     <string name="manageTags_currentTags">Выбранные теги:</string>
-    <string name="content_estimatedReadingTime">Время чтения: %s мин</string>
+    <string name="content_estimatedReadingTime">%s мин</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Время чтения</string>
     <string name="navigation_drawer_open">Открыть панель навигации</string>
     <string name="navigation_drawer_close">Закрыть панель навигации</string>
     <string name="nav_main_articles">Статьи</string>
@@ -309,7 +310,6 @@
     <string name="notification_action_media_rewind">Перемотка назад</string>
     <string name="tts_image">Изображение: %s</string>
     <string name="articleContent_previewImageAltText">Изображение предварительного просмотра</string>
-    <string name="articleContent_globeIconAltText">Иконка земного шара</string>
     <string name="contentIsTooLong">Содержимое статьи слишком длинное для отображения</string>
     <string name="untagged">&lt;без тегов&gt;</string>
     <string name="title">Заголовок</string>

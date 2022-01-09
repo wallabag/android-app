@@ -203,7 +203,8 @@
     <string name="manageTags_textField_hint">Egy vagy több címke, vesszővel elválasztva</string>
     <string name="manageTags_addNew">Hozzáad</string>
     <string name="manageTags_currentTags">Választott címkék:</string>
-    <string name="content_estimatedReadingTime">Becsült olvasási idő: %s perc</string>
+    <string name="content_estimatedReadingTime">%s perc</string>
+    <string name="content_estimatedReadingTimeTTSLabel">Becsült olvasási idő</string>
     <string name="navigation_drawer_open">Navigációs fiók megnyitása</string>
     <string name="navigation_drawer_close">Navigációs fiók bezárása</string>
     <string name="nav_main_articles">Cikkek</string>
