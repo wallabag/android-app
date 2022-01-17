@@ -54,11 +54,19 @@
                     android:text="@string/connectionWizard_providerSelection_provider_general_desc" />
             </RadioGroup>
 
-            <Button
-                android:id="@+id/scanQrCodeButton"
-                android:layout_gravity="center"
+            <TextView
+                android:layout_marginTop="30dp"
+                android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/connectionWizard_misc_scanQrCode_desc" />
+
+            <Button
+                android:id="@+id/scanQrCodeButton"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:drawableStart="@drawable/ic_qrcode_24dp"
                 android:text="@string/connectionWizard_misc_scanQrCode" />
 
