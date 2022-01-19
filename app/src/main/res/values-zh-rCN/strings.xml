@@ -345,4 +345,6 @@
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">对全文搜索使用 ICU 分词器</string>
     <string name="pref_name_misc_addTitleToSharedText">添加标题至共享文本</string>
     <string name="pref_desc_misc_addTitleToSharedText">将文章标题添加到共享文本中</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">或使用二维码配置应用
+\n (可在 web 应用程序的“配置”部分获得)</string>
 </resources>
