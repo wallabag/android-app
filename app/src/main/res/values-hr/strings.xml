@@ -345,4 +345,6 @@
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Koristi ICU tokenizer za pretraživanje teksta</string>
     <string name="pref_name_misc_addTitleToSharedText">Dodaj naslov dijeljenom tekstu</string>
     <string name="pref_desc_misc_addTitleToSharedText">Dodaj naslov članka dijeljenom tekstu</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Ili konfiguriraj program pomoću QR koda
+\n (dostupno u odjeljku „Konfiguracija” web-programa)</string>
 </resources>
