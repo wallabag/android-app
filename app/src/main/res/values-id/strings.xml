@@ -109,4 +109,11 @@
     <string name="readVolume">Volume baca</string>
     <string name="downloadAsFileTouchToOpen">Sentuh untuk membuka</string>
     <string name="downloadAsFileArticleDownloadedDetail">Artikel %s diunduh</string>
+    <string name="notification_updatingArticles_full">Melakukan pembaruan penuh</string>
+    <string name="notification_updatingArticles_fast">Melakukan pembaruan cepat</string>
+    <string name="menuCopyOriginalURL">Salin URL asli</string>
+    <string name="ttsSpeed">Nilai</string>
+    <string name="downloadAsFileProgressDetail">wallabag mengunduh artikel Anda %1$s di %2$s</string>
+    <string name="downloadAsFileProgress">wallabag mengunduh artikel Anda di %s</string>
+    <string name="notification_updatingArticles">Memperbarui artikel</string>
 </resources>
