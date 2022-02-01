@@ -17,14 +17,12 @@ android {
             }
         }
     }
-
-    lintOptions {
-        lintConfig file("lint.xml")
-    }
-
     packagingOptions {
-        exclude("META-INF/*.kotlin_module")
+        resources {
+            excludes += ['META-INF/*.kotlin_module']
+        }
     }
+
 
     buildTypes {
         release {
@@ -44,6 +42,9 @@ android {
                 srcDir 'src-gen'
             }
         }
+    }
+    lint {
+        lintConfig file('lint.xml')
     }
 }
 
