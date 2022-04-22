@@ -43,15 +43,15 @@
     <string name="ttsFastRewind">Brzo prematanje natrag</string>
     <string name="menuTTS">Tekst u govor</string>
     <string name="remove_from_favorites">Ukloni iz favorita</string>
-    <string name="pref_desc_sync_syncTypes_text">"Postoje dvije glavne vrste sinkronizacije: „Potpuna” i „Brza”.
+    <string name="pref_desc_sync_syncTypes_text">Postoje dvije glavne vrste sinkronizacije: „Potpuna” i „Brza”.
 \n
-\n  „Potpuna” sinkronizacija briše sav lokalni sadržaj i ponovo ga preuzima. Dostupno u izbornika opcija, kao zadnja mogućnost.
+\n „Potpuna” sinkronizacija briše sav lokalni sadržaj i ponovo ga preuzima. (Opcija je dostupna u izbornika, kao zadnja mogućnost.)
 \n
-\n  „Brza” sinkronizacija (inkrementalno) preuzima samo promjene, napravljene u prethodnoj sinkronizaciji, smanjujući vrijeme i promet. Međutim, ova metoda ima nedostatak: ne može otkriti udaljeno izbrisani članak (tako da se lokalni članci ne brišu tijekom „Brze” sinkronizacije). Za pokretanje, povuci prema dolje preko najviše pozicije klizne trake u bilo kojem popisu članaka.
+\n „Brza” (inkrementalna) sinkronizacija preuzima samo promjene napravljene u prethodnoj sinkronizaciji, smanjujući vrijeme i promet. Ne može otkriti udaljeno izbrisane članke. (Za korištenje u bilo kojem popisu članaka, povuci ↓ van najviše pozicije klizne trake .
 \n
-\n  Za otklanjanje nedostatak vrste „Brze” sinkronizacije, „Čišćenje izbrisanih članaka” provjerava svaki lokalni članak i pita poslužitelja, je li još uvijek prisutan na poslužitelju – ako ne, lokalni se članak uklanja. Ovisno o broju članaka, traje neko vrijeme, ali štedi promet putem „Potpune” sinkronizacije.
+\n Koristi „Čišćenje izbrisanih članaka” za automatsko uklanjanje lokalnih članaka koji nisu pronađeni na poslužitelju. Traje neko vrijeme, ali štedi promet u odnosu na „Potpunu” sinkronizaciju.
 \n
-\n  Nijedna od ovih funkcija ne utječe na sinkronizaciju između klijenta i poslužitelja: tvoje lokalne promjene uvijek će se poslati poslužitelju prije aktualiziranja lokalnog sadržaja."</string>
+\n Lokalne promjene se uvijek sinkroniziraju od klijenta prema poslužitelju prije aktualiziranja lokalnog sadržaja (ako ne uspije, ništa se ne gubi).</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">Nepoznata stranica nakon prijave. Uzrok tome je obično dvofaktorska autentifikacija (koju program još ne podržava).</string>
     <string name="noPreviousArticle">Nema prethodnog članka u trenutačnom popisu</string>
     <string name="d_checkCredentials_errorMessage_unknown">Nepoznata greška</string>
@@ -345,4 +345,6 @@
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Koristi ICU tokenizer za pretraživanje teksta</string>
     <string name="pref_name_misc_addTitleToSharedText">Dodaj naslov dijeljenom tekstu</string>
     <string name="pref_desc_misc_addTitleToSharedText">Dodaj naslov članka dijeljenom tekstu</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Ili konfiguriraj program pomoću QR koda
+\n (dostupno u odjeljku „Konfiguracija” web-programa)</string>
 </resources>
