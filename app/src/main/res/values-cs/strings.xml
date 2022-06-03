@@ -186,7 +186,7 @@
     <string name="d_urlAction_title">Vyberte akci pro adresu URL</string>
     <string name="menu_syncLocalChanges">Synchronizovat místní změny</string>
     <string name="pref_name_storage_dbPath_internalStorage">Interní úložiště</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Externí úložiště</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Externí úložiště: %s</string>
     <string name="settings_parametersAutofilled">Parametry vyplněny</string>
     <string name="nav_add">Přidat novou položku</string>
     <string name="navigation_drawer_close">Zavřít navigační panel</string>

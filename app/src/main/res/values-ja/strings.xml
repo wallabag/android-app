@@ -252,7 +252,7 @@
     <string name="pref_desc_ui_disableTouch_keyCode">ここを押して、タッチ入力を無効/有効にするために使用するボタンを設定します</string>
     <string name="pref_name_storage_dbPath">データベースの場所</string>
     <string name="pref_name_storage_dbPath_internalStorage">内部ストレージ</string>
-    <string name="pref_name_storage_dbPath_externalStorage">外部ストレージ</string>
+    <string name="pref_name_storage_dbPath_externalStorage">外部ストレージ: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">データベースを移動しました</string>
     <string name="pref_name_misc_appendWallabagMention">wallabag のメンションを追加</string>
     <string name="pref_desc_misc_appendWallabagMention">共有テキストに \"via @wallabagapp\" を追加</string>

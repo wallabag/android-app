@@ -234,7 +234,7 @@
     <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images dans chaque article et les sauvegarde sur l\'appareil. En fonction du nombre d\'articles de votre instance wallabag, cela peut prendre un moment et utiliser beaucoup d\'espace disque sur votre appareil.</string>
     <string name="pref_name_storage_dbPath">Emplacement de la base de données</string>
     <string name="pref_name_storage_dbPath_internalStorage">Stockage interne</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Stockage externe</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Stockage externe: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">La base de données a été déplacée</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>

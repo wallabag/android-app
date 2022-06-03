@@ -49,7 +49,7 @@
     <string name="pref_name_autoSync_type">자동 동기화 유형</string>
     <string name="pref_name_ui_screenScrolling_smooth">부드러운 스크롤 사용</string>
     <string name="menu_open_random_article">랜덤 기사 열기</string>
-    <string name="pref_name_storage_dbPath_externalStorage">외부 저장소</string>
+    <string name="pref_name_storage_dbPath_externalStorage">외부 저장소: %s</string>
     <string name="checkCredentials_progressDialogMessage">API 액세스를 테스트하는 중…</string>
     <string name="pref_categoryName_connection_advanced">고급 연결 설정</string>
     <string name="noNextArticle">현재 목록에 더 이상 기사 없음</string>
