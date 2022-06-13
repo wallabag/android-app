@@ -61,7 +61,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.3.1'
     implementation 'org.greenrobot:greendao:3.3.0'
     annotationProcessor 'org.greenrobot:eventbus-annotation-processor:3.3.1'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:4.9.3'
     implementation 'org.conscrypt:conscrypt-android:2.5.2'
     implementation 'com.facebook.stetho:stetho:1.6.0'
