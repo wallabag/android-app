@@ -68,7 +68,7 @@
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
-    <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
+    <string name="d_testConnection_urlSuggestion_message">Changer l\'URL pour %s est recommandé à la place de celle entrée.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_fail_title">Échec</string>
     <string name="getCredentials_progressDialogMessage">Récupération des identifiants de l\'API…</string>
@@ -347,4 +347,6 @@
     <string name="pref_name_ui_mathRendering_delimiters">Délimiteurs mathématiques</string>
     <string name="pref_desc_ui_mathRendering_enabled">Activer le rendu de contenu mathématique en LaTeX via KaTeX</string>
     <string name="pref_name_ui_mathRendering_enabled">Rendu du contenu mathématique</string>
+    <string name="pref_name_misc_addTitleToSharedText">Ajouter un titre pour partager le texte</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Ajouter un titre à l\'article pour partager le texte</string>
 </resources>
