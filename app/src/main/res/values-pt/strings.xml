@@ -24,7 +24,7 @@
     <string name="d_deleteArticle_title">Deletar artigo?</string>
     <string name="d_deleteArticle_message">Tem certeza que deseja deletar o artigo?</string>
     <string name="txtNetOffline">Por favor, verifique a conexão com Internet!</string>
-    <string name="txtConfigNotSet">Por favor configure a app antes de sincronizar.</string>
+    <string name="txtConfigNotSet">Por favor, configure a app antes de sincronizar.</string>
     <string name="txtUrlCopied">URL do artigo copiada para prancheta</string>
     <string name="dialog_add_label">Adicionar um novo artigo</string>
     <string name="page_url">URL da Página</string>
