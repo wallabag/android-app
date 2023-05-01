@@ -21,4 +21,6 @@
     <string name="txtUrlCopied">تم نسخ عنوان المقال إلى الحافظة</string>
     <string name="dialog_add_label">إضافة مقال جديد</string>
     <string name="page_url">عنوان ويب الصفحة</string>
+    <string name="add_to_favorites">إضافة إلى المفضلة</string>
+    <string name="txtNetOffline">يرجى التحقق من الوصول إلى الإنترنت</string>
 </resources>
