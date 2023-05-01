@@ -67,7 +67,7 @@ public class StorageHelper {
         return !externalStoragePaths.isEmpty() ? externalStoragePaths.get(0) : null;
     }
 
-    public static List<String> getExternalStoragePaths() {
+    private static List<String> getExternalStoragePaths() {
         List<String> usableExternalFilesDirs = new ArrayList<>();
 
         for (File extStorageDir : ContextCompat.getExternalFilesDirs(App.getInstance(), null)) {
@@ -82,6 +82,16 @@ public class StorageHelper {
         }
 
         return usableExternalFilesDirs;
+    }
+
+    public static List<String> getWritableExternalStoragePaths() {
+        List<String> paths = new ArrayList<>();
+        for (String path : getExternalStoragePaths()) {
+            if (isPathWritable(path)) {
+                paths.add(path);
+            }
+        }
+        return paths;
     }
 
     public static boolean isExternalStorageReadable() {

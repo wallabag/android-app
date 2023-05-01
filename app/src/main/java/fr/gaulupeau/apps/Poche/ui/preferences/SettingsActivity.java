@@ -183,11 +183,9 @@ public class SettingsActivity extends BaseActionBarActivity {
                 entriesList.add(getString(R.string.pref_name_storage_dbPath_internalStorage));
                 entryValuesList.add("");
 
-                if (StorageHelper.isExternalStorageWritable()) {
-                    for (String path : StorageHelper.getExternalStoragePaths()) {
-                        entriesList.add(getString(R.string.pref_name_storage_dbPath_externalStorage, path));
-                        entryValuesList.add(path);
-                    }
+                for (String path : StorageHelper.getWritableExternalStoragePaths()) {
+                    entriesList.add(getString(R.string.pref_name_storage_dbPath_externalStorage, path));
+                    entryValuesList.add(path);
                 }
 
                 dbPathListPreference.setEntries(entriesList.toArray(new String[0]));
