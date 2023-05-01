@@ -47,10 +47,10 @@
     <string name="d_configurationIsQuestionable_title">Probleem ontdekt</string>
     <string name="d_configurationIsQuestionable_message">Er was recentelijk een verbindingsfout. Een verbindingstest is aan te bevelen.</string>
     <string name="addLink_success_text">Toegevoegd</string>
-    <string name="settings_parametersAreOk">Parameters zijn goed</string>
+    <string name="settings_parametersAreOk">De parameters zijn goed</string>
     <string name="testConnection_progressDialogMessage">Verbinding aan het testen…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Incorrecte URL</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Serverversie wordt niet ondersteund</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">De serverversie wordt niet ondersteund</string>
     <string name="testConnection_errorMessage_wallabagNotFound">wallabag service niet gevonden - check de URL</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP Authenticatie ongeldig</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Kan niet inloggen - controleer de gebruikersnaam en het wachtwoord</string>
