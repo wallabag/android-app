@@ -12,8 +12,8 @@
     <string name="page_url">Page URL</string>
     <string name="dialog_add_label">添加新文章</string>
     <string name="txtUrlCopied">文章網址已復製到剪貼板</string>
-    <string name="txtConfigNotSet">請先配置應用，然後再進行同步。</string>
-    <string name="txtNetOffline">請檢查互聯網連接！</string>
+    <string name="txtConfigNotSet">請先設定應用程式，然後再進行同步。</string>
+    <string name="txtNetOffline">請先確認網際網路連線。</string>
     <string name="d_deleteArticle_message">確定要刪除該文章嗎？</string>
     <string name="d_deleteArticle_title">刪除文章？</string>
     <string name="menu_syncLocalChanges">同步本地更改</string>
@@ -40,4 +40,21 @@
     <string name="add_to_favorites">添加到收藏夾</string>
     <string name="btnMarkUnread">標記為未讀</string>
     <string name="btnMarkRead">標記為已讀</string>
+    <string name="d_urlAction_copyToClipboard">複製到剪貼簿</string>
+    <string name="notification_serverError">伺服器錯誤</string>
+    <string name="d_add_fail_text">在分享的字串中找不到 URL
+\n</string>
+    <string name="testConnection_progressDialogMessage">連線測試中…</string>
+    <string name="settings_parametersAutofilled">已填寫參數</string>
+    <string name="ok">確認</string>
+    <string name="d_configurationChanged_answer_decline">稍後執行</string>
+    <string name="d_configurationChanged_message">測試連線狀態以確認新參數正常運作。</string>
+    <string name="settings_parametersAreOk">參數正常</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">伺服器版本不支援</string>
+    <string name="d_configurationChanged_title">參數已變更</string>
+    <string name="d_add_fail_title">失敗</string>
+    <string name="d_configurationIsQuestionable_title">檢測到問題</string>
+    <string name="d_configurationIsQuestionable_message">最近發生了連線錯誤問題，建議執行連線測試。</string>
+    <string name="testConnection_errorMessage_incorrectUrl">URL 錯誤</string>
+    <string name="addLink_success_text">已新增</string>
 </resources>

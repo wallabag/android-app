@@ -26,8 +26,8 @@
     <string name="menu_syncLocalChanges">Sincronizar cambios locales</string>
     <string name="d_deleteArticle_title">¿Eliminar artículo?</string>
     <string name="d_deleteArticle_message">¿Seguro que quieres eliminar el artículo?</string>
-    <string name="txtNetOffline">¡Por favor, verifica tu conexión a Internet!</string>
-    <string name="txtConfigNotSet">Por favor, configura la aplicación antes de sincronizar.</string>
+    <string name="txtNetOffline">Comprueba tu conexión a Internet.</string>
+    <string name="txtConfigNotSet">Configura la aplicación antes de sincronizar.</string>
     <string name="txtUrlCopied">URL copiada al portapapeles</string>
     <string name="dialog_add_label">Añadir un nuevo artículo</string>
     <string name="page_url">URL de la página</string>
@@ -44,29 +44,29 @@
     <string name="d_add_fail_title">Fallo</string>
     <string name="d_add_fail_text">No se pudo encontrar una URL en el texto a compartir:\n</string>
     <string name="d_configurationChanged_title">Parámetros modificados</string>
-    <string name="d_configurationChanged_message">Parece que algunos parámetros han cambiado. Se recomienda hacer una prueba de conexión.</string>
+    <string name="d_configurationChanged_message">Hacer una prueba de conexión para comprobar si los nuevos parámetros funcionan.</string>
     <string name="d_configurationChanged_answer_decline">Ahora no</string>
     <string name="d_configurationIsQuestionable_title">Problema encontrado</string>
     <string name="d_configurationIsQuestionable_message">Hubo un problema de conexión recientemente. Se recomienda hacer una prueba de conexión.</string>
     <string name="addLink_success_text">Añadido</string>
-    <string name="settings_parametersAreOk">Parámetros correctos</string>
+    <string name="settings_parametersAreOk">Los parámetros son correctos</string>
     <string name="settings_parametersAutofilled">Parámetros rellenados</string>
     <string name="testConnection_progressDialogMessage">Probando conexión…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorrecta</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Detectada una versión de servidor no soportada</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">La versión del servidor no está soportada</string>
     <string name="testConnection_errorMessage_wallabagNotFound">Servicio de wallabag no encontrado — revisa la URL</string>
-    <string name="testConnection_errorMessage_httpAuth">Autenticación por HTTP fallida</string>
-    <string name="testConnection_errorMessage_noCSRF">Error al parsear el formulario de login</string>
+    <string name="testConnection_errorMessage_httpAuth">Autenticación HTTP fallida</string>
+    <string name="testConnection_errorMessage_noCSRF">No se puede parsear el formulario de login</string>
     <string name="testConnection_errorMessage_incorrectCredentials">No se pudo iniciar sesión — revisa usuario y contraseña</string>
-    <string name="testConnection_errorMessage_authProblems">Problemas relacionados con la autorización. Generalmente son causados por redirecciones HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión. Esto suele suceder al activar la autenticación en dos pasos, la cual no está soportada por la aplicación</string>
+    <string name="testConnection_errorMessage_authProblems">No se puede iniciar sesión (generalmente causado por redirecciones HTTP)</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Página desconocida después de iniciar sesión. Esto suele suceder al activar la autenticación en dos pasos (la cual todavía no está soportada por la aplicación).</string>
     <string name="testConnection_errorMessage_unknown">Error desconocido</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Error desconocido: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Considera cambiar la URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Usar la sugerida</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Usar una propia</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Cancelar</string>
-    <string name="d_testConnection_urlSuggestion_message">Se recomienda cambiar la URL a: "%s". Pero también puedes usar la que escribiste.</string>
+    <string name="d_testConnection_urlSuggestion_message">Se recomienda cambiar la URL por %s en lugar de usar la que escribiste.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Se recomienda cambiar la URL a: "%s"</string>
     <string name="d_testConnection_fail_title">Prueba de conexión fallida</string>
     <string name="getCredentials_progressDialogMessage">Obteniendo credenciales API…</string>
@@ -80,7 +80,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Sin acceso al API: %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Error desconocido</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Error desconocido: %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido: Probablemente usuario o contraseña incorrecta</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Inicio de sesión fallido. ¿Tal vez el usuario o la contraseña incorrecta es incorrecto\?</string>
     <string name="previousUpdateNotFinished">La actualización anterior aún no ha terminado</string>
     <string name="feedName_favorites">Favoritos</string>
     <string name="feedName_archived">Archivados</string>
@@ -113,8 +113,8 @@
     <string name="notification_updatingArticles_full">Realizando actualización completa</string>
     <string name="notification_updatingArticles_fast">Realizando actualización rápida</string>
     <string name="notification_sweepingDeletedArticles">Limpiando artículos eliminados</string>
-    <string name="notification_downloadingImages">Descargando imágenes</string>
-    <string name="notification_syncingQueue">Sincronizando cambios locales</string>
+    <string name="notification_downloadingImages">Descargando imágenes…</string>
+    <string name="notification_syncingQueue">Sincronizando cambios locales…</string>
     <string name="notification_error">Error</string>
     <string name="notification_incorrectCredentials">Credenciales incorrectas</string>
     <string name="notification_incorrectConfiguration">Configuración incorrecta</string>
@@ -130,7 +130,7 @@
     <string name="menu_manageTags">Cambiar etiquetas</string>
     <string name="manageTags_title">Cambiar etiquetas</string>
     <string name="manageTags_save">Guardar</string>
-    <string name="manageTags_textField_hint">Una o varias etiquetas separadas por comas</string>
+    <string name="manageTags_textField_hint">Una o varias etiquetas (separadas por comas)</string>
     <string name="manageTags_addNew">Añadir</string>
     <string name="manageTags_currentTags">Etiquetas seleccionadas:</string>
     <string name="content_estimatedReadingTime">%s min</string>
@@ -148,7 +148,7 @@
     <string name="title_main_tag">Etiqueta: %s</string>
     <string name="message_couldNotOpenUrl">No se puede abrir la URL</string>
     <string name="pref_name_runConnectionWizard">Iniciar asistente de conexión</string>
-    <string name="pref_desc_runConnectionWizard">Te ayudará a realizar una configuración de conexión básica</string>
+    <string name="pref_desc_runConnectionWizard">Ayuda a realizar una configuración de conexión básica</string>
     <string name="pref_categoryName_connection">Conexión</string>
     <string name="pref_name_connection_url">URL de wallabag</string>
     <string name="pref_desc_connection_url">
@@ -176,31 +176,31 @@
     <string name="pref_name_ui_article_textAlignment_justify">Alineación del texto: justificado</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Alinea el texto para que todas las líneas tengan el mismo ancho (como en los periódicos)</string>
     <string name="pref_name_ui_readingSpeed">Velocidad de lectura</string>
-    <string name="pref_desc_ui_readingSpeed">Tu velocidad de lectura (en palabras por minuto). Usado para calcular el tiempo estimado de lectura.</string>
+    <string name="pref_desc_ui_readingSpeed">Tu velocidad de lectura (en palabras por minuto) para calcular el tiempo estimado de lectura.</string>
     <string name="pref_categoryName_ui_screenScrolling">Desplazamiento de pantalla</string>
-    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Desplazar con botones de volumen</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Avanzar y retroceder usando los botones de volumen</string>
     <string name="pref_name_ui_tapToScroll_enabled">Tocar para desplazar</string>
-    <string name="pref_desc_ui_tapToScroll_enabled">Desplaza la pantalla tocando en los lados izquierdo y derecho de la pantalla</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Avanzar y retroceder tocando en los lados izquierdo y derecho de la pantalla</string>
     <string name="pref_name_ui_screenScrolling_percent">Porcentaje de altura de pantalla a deslizar</string>
-    <string name="pref_name_ui_screenScrolling_smooth">Usar desplazamiento suave</string>
-    <string name="pref_categoryName_sync">Sincronización</string>
-    <string name="pref_name_sync_syncTypes">Tipos de sincronización</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Desplazamiento suave</string>
+    <string name="pref_categoryName_sync">Sincronizando</string>
+    <string name="pref_name_sync_syncTypes">Formas de sincronización</string>
     <string name="pref_desc_sync_syncTypes">Pulsa para obtener más información sobre los tipos de sincronización</string>
-    <string name="pref_desc_sync_syncTypes_text">Existen dos tipos de sincronización: \"Completa\" y \"Rápida\".
+    <string name="pref_desc_sync_syncTypes_text">Los dos tipos de sincronización principales son: \"Completa\" y \"Rápida\".
 \n
-\n La sincronización \"Completa\" borra todo el contenido local y lo vuelve a descargar de nuevo. Este tipo de sincronización está disponible en el menú de opciones. Solo se recomienda utilizar esta opción como último recurso.
+\n La sincronización \"Completa\" borra todo el contenido local y lo vuelve a descargar. (Esta opción está en el menú como último recurso.)
 \n
-\n La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual tarda mucho menos tiempo y requiere menos datos. Sin embargo, este método tiene un inconveniente: no puede detectar los artículos borrados de forma remota (por lo tanto, no se eliminan artículos locales durante la sincronización \"Rápida\"). Este tipo de sincronización se ejecuta con el gesto arrastrar para actualizar (pull-to-refresh) en la lista de artículos.
+\n La sincronización \"Rápida\" (sincronización incremental) solo descarga los cambios realizados desde la sincronización anterior, lo cual tarda mucho menos tiempo y requiere menos datos. Este método no puede detectar los artículos borrados de forma remota. (Arrastra ↓ hacia abajo en la lista de artículos para usar este método).
 \n
-\n Para solventar este inconveniente de la sincronización \"Rápida\" existe una opción llamada \"limpiar artículos borrados\" que pregunta al servidor para cada artículo local si todavía existe en el servidor - si no existe, el artículo es eliminado. Dependiendo del número de artículos que tengas, esta operación puede llevar algún tiempo, pero ahorra muchos datos en comparación la sincronización \"Completa\".
+\n Usa la opción \"Limpiar artículos borrados\" para eliminar los artículos locales que no existen en el servidor. Esta operación puede llevar algún tiempo, pero ahorra muchos datos en comparación la sincronización \"Completa\".
 \n
-\n Ninguna de estas funciones afecta a la sincronización cliente-servidor: los cambios locales siempre se envían al servidor antes de actualizar el contenido local.</string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Activar \"Limpiar artículos borrados\" después de la sincronización \"Rápida\"</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Descubre los tipos de sincronización en la parte superior</string>
+\n Los cambios locales siempre se envían al servidor antes de actualizar el contenido local (si falla, no se pierde nada).</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Limpiar artículos borrados\" después de la sincronización \"Rápida\"</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">La descripción de los diferentes tipos de sincronización en la parte superior tiene más información</string>
     <string name="pref_categoryName_autoSync">Sincronización automática</string>
-    <string name="pref_name_autoSync_onStartup_enabled">Activar sincronización automática al inicio</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Sincronización automática al inicio</string>
     <string name="pref_decs_autoSync_onStartup_enabled">La aplicación se sincronizará al iniciarse</string>
-    <string name="pref_name_autoSync_enabled">Activar sincronización automática</string>
+    <string name="pref_name_autoSync_enabled">Sincronización automática</string>
     <string name="pref_desc_autoSync_enabled">Activa la sincronización automática de cambios locales (artículos añadidos, archivados, etc.) y descarga nuevos artículos siguiendo una planificación</string>
     <string name="pref_name_autoSync_interval">Intervalo de sincronización automática</string>
     <string name="pref_option_autoSync_interval_15m">15 minutos</string>
@@ -214,9 +214,9 @@
         <item>Completa</item>
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Sincronizar cambios locales por separado</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Esto permite sincronizar cambios locales (enlaces añadidos, artículos archivados, etc.) con el servidor tan pronto haya una conexión disponible.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Sincronizar los cambios locales (enlaces añadidos, artículos archivados, etc.) con el servidor tan pronto haya conexión.</string>
     <string name="pref_name_imageCache_enabled">Cachear imágenes de los artículos</string>
-    <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo. Dependiendo del tamaño de la lista de artículos, esto puede tardar bastante tiempo y consumir mucho espacio.</string>
+    <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo (tarda bastante tiempo y consume bastante espacio si la lista de artículos es larga)</string>
     <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>
     <string name="pref_name_storage_dbPath_internalStorage">Almacenamiento interno</string>
     <string name="pref_name_storage_dbPath_externalStorage">Almacenamiento externo</string>
@@ -227,18 +227,18 @@
     <string name="pref_name_misc_handleHttpScheme">Manejar esquema HTTP</string>
     <string name="pref_desc_misc_handleHttpScheme">Mostrar wallabag en la lista de navegadores web</string>
     <string name="pref_name_misc_wipeDB">Limpiar base de datos</string>
-    <string name="pref_desc_misc_wipeDB">Limpia todos los artículos de la base de datos local, también elimina cambios locales no sincronizados y las URLs</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">¿Limpiar base de datos?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que quieres limpiar la base de datos?</string>
+    <string name="pref_desc_misc_wipeDB">Elimina todos los artículos y todos los cambios locales no sincronizados y las URLs de la base de datos local</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">¿Limpiar base de datos\?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">¿Seguro que quieres limpiar la base de datos\?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de conexión incorrecta</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenido a wallabag.</string>
-    <string name="connectionWizard_welcome_text">Antes de usar la aplicación wallabag necesitas configurar una conexión. El asistente de conexión te ayudará a hacerlo.</string>
-    <string name="connectionWizard_welcome_rerunNotice">Siempre puedes volver a ejecutar el asistente de conexión desde el menú de Ajustes.</string>
+    <string name="connectionWizard_welcome_text">Configure la conexión usando el asistente.</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Siempre puedes volver a ejecutar el asistente de conexión desde el menú de \"Ajustes\".)</string>
     <string name="connectionWizard_welcome_prev">Saltar</string>
     <string name="connectionWizard_welcome_next">Siguiente</string>
     <string name="connectionWizard_providerSelection_titleMessage">Selecciona un proveedor de wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Otro</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Selecciona esta opción para introducir los ajustes requeridos manualmente</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Permite escribir la configuración manualmente</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecciona esta opción si tienes una cuenta en https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_prev">Saltar</string>
     <string name="connectionWizard_providerSelection_next">Siguiente</string>
@@ -262,11 +262,11 @@
     <string name="d_urlAction_copyToClipboard">Copiar al portapapeles</string>
     <string name="pref_name_ui_previewImage_enabled">Imagen de vista previa</string>
     <string name="notification_channel_name_error">Errores</string>
-    <string name="notification_channel_name_sync">Sincronización</string>
-    <string name="notification_channel_group_name_sync">Sincronización</string>
+    <string name="notification_channel_name_sync">Sincronizando</string>
+    <string name="notification_channel_group_name_sync">Sincronizando</string>
     <string name="notification_channel_group_name_other">Otro</string>
     <string name="notification_channel_name_downloading_articles">Descargando PDFs</string>
-    <string name="pref_desc_ui_swipeArticles">Desliza a la derecha o a la izquierda dentro de un artículo para ir al artículo anterior o al siguiente</string>
+    <string name="pref_desc_ui_swipeArticles">Desliza ← o → dentro de un artículo para ir al artículo anterior o al siguiente</string>
     <string name="pref_name_ui_disableTouch_keyCode">Botón para desactivar la entrada táctil</string>
     <string name="notification_action_media_next">Siguiente</string>
     <string name="notification_action_media_fastforward">Avance rápido</string>
@@ -284,48 +284,48 @@
     <string name="notification_clipboardLabel">Detalles del error</string>
     <string name="notification_copyToClipboard">Copiar al portapapeles</string>
     <string name="notification_stacktrace">Traza de error:</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Por favor, instale un escáner de códigos QR</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Instale un escáner de códigos QR antes.)</string>
     <string name="connectionWizard_misc_scanQrCode">Escanea un código QR</string>
-    <string name="misc_localQueue_dumpToFile_header">Si tiene problemas con la sincronización, informe del problema aquí: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Informe de los problemas de sincronización aquí: %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Error: %s</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">Volcado en %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Guardado en %s</string>
     <string name="misc_localQueue_removeFirstItem_done">Hecho</string>
     <string name="misc_localQueue_empty">Sin cambios locales</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Elimina el primer artículo no sincronizado. Puede ayudar si recibe notificaciones de error repetidas durante la sincronización. Asegúrese de volcar todos los cambios locales a un archivo primero</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Elimina el primer artículo no sincronizado. Puede ayudar si recibe notificaciones de error repetidas durante la sincronización. Consejo: Asegúrese de guardar todos los cambios locales a un archivo primero.</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Eliminar el primer artículo de la cola local</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Vuelca todos los cambios locales en un archivo txt (puede revisarlo usted mismo o adjuntarlo a un informe de error)</string>
-    <string name="pref_name_misc_localQueue_dumpToFile">Volcado a archivo</string>
-    <string name="pref_desc_misc_localQueue_notice">No toques nada en esta sección a menos que sepas lo que estás haciendo</string>
-    <string name="pref_name_misc_localQueue_notice">ADVERTENCIA</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Guarda todos los cambios locales en un archivo TXT (puede revisarlo usted mismo o adjuntarlo a un informe de error)</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Guardar en un archivo</string>
+    <string name="pref_desc_misc_localQueue_notice">¡No toques nada en esta sección a menos que sepas lo que estás haciendo!</string>
+    <string name="pref_name_misc_localQueue_notice">Aviso</string>
     <string name="pref_categoryName_misc_localQueue">Cambios locales</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Usar la imagen de vista previa del artículo (si existe) como carátula del álbum (visible en la notificación y puede mostrarse como fondo de la pantalla de bloqueo)</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">Usar imagen de vista previa como carátula</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Al presionar el botón multimedia \"anterior\" se rebobina en lugar de saltar al artículo anterior</string>
-    <string name="pref_name_tts_previousButtonIsRewind">El botón \"anterior\" rebobina</string>
-    <string name="pref_name_tts_nextButtonIsFastForward">El botón \"siguiente\" avanza rápidamente</string>
-    <string name="pref_desc_tts_nextButtonIsFastForward">Al presionar el botón multimedia \"siguiente\", se avanza rápidamente en lugar de saltar al siguiente artículo</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Al presionar el botón multimedia \"Anterior\" se rebobina en lugar de saltar al artículo anterior</string>
+    <string name="pref_name_tts_previousButtonIsRewind">El botón \"Anterior\" rebobina</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">El botón \"Siguiente\" avanza rápidamente</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Al presionar el botón multimedia \"Siguiente\", se avanza rápidamente en lugar de saltar al siguiente artículo</string>
     <string name="pref_name_tts_rewindTime">Intervalo del botón rebobinar</string>
     <string name="pref_name_tts_fastForwardTime">Intervalo del botón avance rápido</string>
-    <string name="pref_desc_tts_rewindTime">El número de segundos del salto hacia atrás cuando se presiona el botón \"rebobinar\"</string>
-    <string name="pref_desc_tts_fastForwardTime">El número de segundos del salto hacia adelante cuando se presiona el botón \"avance rápido\"</string>
+    <string name="pref_desc_tts_rewindTime">Número de segundos del salto hacia atrás cuando se presiona el botón \"Rebobinar\"</string>
+    <string name="pref_desc_tts_fastForwardTime">Número de segundos del salto hacia adelante cuando se presiona el botón \"Avance Rápido\"</string>
     <string name="pref_categoryName_tts">Texto-a-voz (TTS)</string>
-    <string name="pref_desc_ui_annotations_enabled">Funcionalidad experimental! Ver, editar y crear anotaciones</string>
+    <string name="pref_desc_ui_annotations_enabled">¡Experimental! Ver, editar y crear anotaciones</string>
     <string name="pref_name_ui_annotations_enabled">Soporte de anotaciones</string>
     <string name="pref_desc_ui_previewImage_enabled">Mostrar la imagen de vista previa antes del artículo</string>
     <string name="pref_name_ui_swipeArticles">Deslizar artículos (swipe)</string>
-    <string name="pref_desc_ui_scrollOverBottom">Pulse aquí para configurar el número de veces que necesita desplazarse hacia abajo para marcar un artículo como leído</string>
+    <string name="pref_desc_ui_scrollOverBottom">Configura el número de desplazamientos hacia abajo para marcar un artículo como leído</string>
     <string name="pref_name_ui_scrollOverBottom">Desplazarse hacia abajo para marcar como leído</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Pulse aquí para configurar el botón utilizado para habilitar / deshabilitar la entrada táctil</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Pulsa el botón configurado (por defecto, el botón de la cámara) para bloquear / desbloquear la entrada táctil en la pantalla de lectura (los controles del sistema no se ven afectados)</string>
-    <string name="pref_name_ui_disableTouch_enabled">Deshabilitar entrada táctil</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Seleccione un botón para activar / desactivar la entrada táctil</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Pulsa el botón \"desactivar entrada táctil\" (por defecto el botón de la cámara) para bloquear / desbloquear la entrada táctil en la pantalla de lectura (los controles del sistema no se ven afectados)</string>
+    <string name="pref_name_ui_disableTouch_enabled">Desactivar entrada táctil</string>
     <string name="pref_categoryName_ui_misc">Miscelánea</string>
     <string name="pref_desc_ui_keepScreenOn">Mantener la pantalla encendida mientras lees un artículo</string>
     <string name="pref_name_ui_keepScreenOn">Mantener la pantalla encendida mientras lees</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">Solución alternativa para dispositivos Onyx que fuerza enlaces de color negro</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">Habilite la solución del tema Onyx Boox</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Evitar que los dispositivos Onyx fuercen enlaces de color negro</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Arreglo para el tema Onyx Boox</string>
     <string name="pref_desc_ui_article_fullscreen">Oculta las barras del sistema y de aplicación al leer artículos</string>
     <string name="pref_name_ui_article_fullscreen">Vista a pantalla completa</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Muestra un cuadro de diálogo que permite marcar / archivar / etiquetar un artículo recién agregado. Se mostrará una notificación si la opción está desactivada.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Muestra un cuadro de diálogo que permite marcar / archivar / etiquetar un artículo recién agregado (o una notificación en caso contrario)</string>
     <string name="pref_name_ui_showArticleAddedDialog">Mostrar una ventana al añadir</string>
     <string name="pref_desc_ui_article_handlePreformattedText">Cómo manejar texto preformateado que es demasiado largo para mostrarse por completo.</string>
     <string name="pref_name_ui_article_handlePreformattedText">Texto preformateado largo</string>
@@ -343,4 +343,13 @@
     <string name="notification_backgroundOperations">Operaciones en segundo plano</string>
     <string name="menu_tag">Añadir etiqueta</string>
     <string name="pref_name_ui_mathRendering_enabled">Representar notación matemática</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Delimitadores matemáticos</string>
+    <string name="pref_name_misc_addTitleToSharedText">Añadir un título al texto compartido</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Añadir el título del artículo al texto compartido</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">Usar el tokenizador ICU para la búsqueda de texto completa (full-text-search)</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Renderizar LaTeX utilizando KaTeX</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Selecciona los delimitadores de entorno que KaTeX debe procesar</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">O configura la aplicación usando un código QR
+\n (disponible en la sección de \"Configuración\" de la aplicación web)</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Usa el tokenizador ICU para indexar la búsqueda de texto completo (full-text-search) (si no, se utiliza el tokenizador genérico unicode61). Puede mejorar los resultados de la búsqueda para idiomas CJK. Para que esta opción se aplique es necesario realizar una \"actualización Completa\".</string>
 </resources>

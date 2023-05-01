@@ -118,7 +118,7 @@
     <string name="connectionWizard_summary_toastMessage">Einrichtung ist vollständig</string>
     <string name="connectionWizard_welcome_next">Weiter</string>
     <string name="connectionWizard_welcome_prev">Überspringen</string>
-    <string name="connectionWizard_welcome_rerunNotice">Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.)</string>
     <string name="connectionWizard_welcome_text">Bevor du die wallabag-App nutzen kannst, musst du die Verbindung zu deinem wallabag-Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
     <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag.</string>
     <string name="d_configurationChanged_answer_decline">Nicht jetzt</string>
@@ -351,4 +351,6 @@
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Verwenden Sie den ICU-Tokenizer für die Volltextsuche</string>
     <string name="pref_name_misc_addTitleToSharedText">Füge Titel zum geteilten Text hinzu</string>
     <string name="pref_desc_misc_addTitleToSharedText">Fügt den Artikeltitel zu dem zu teilenden Text hinzu</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Oder konfiguriere die App mit einem QR-Code
+\n (verfügbar in der \"Konfiguration\" Sektion der Web-Applikation</string>
 </resources>

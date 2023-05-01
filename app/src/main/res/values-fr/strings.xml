@@ -26,7 +26,7 @@
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
     <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
     <string name="d_deleteArticle_message">Êtes vous sûr·e de vouloir supprimer l\'article \?</string>
-    <string name="txtNetOffline">Merci de vérifier la connexion internet !</string>
+    <string name="txtNetOffline">Vérifiez que vous êtes bien connecté à Internet</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser.</string>
     <string name="txtUrlCopied">L\'URL de l\'article a été copiée dans le presse papier</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
@@ -46,7 +46,7 @@
     <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé :
 \n</string>
     <string name="d_configurationChanged_title">Paramètres modifiés</string>
-    <string name="d_configurationChanged_message">Il semble que certains paramètres aient été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
+    <string name="d_configurationChanged_message">Certains paramètres ont été modifiés. Il est recommandé d\'effectuer un test de connexion.</string>
     <string name="d_configurationChanged_answer_decline">Pas maintenant</string>
     <string name="d_configurationIsQuestionable_title">Problème détecté</string>
     <string name="d_configurationIsQuestionable_message">Il y a eu une erreur de connexion récemment. Il est recommandé d\'effectuer un test de connexion.</string>
@@ -55,20 +55,20 @@
     <string name="settings_parametersAutofilled">Paramètres récupérés</string>
     <string name="testConnection_progressDialogMessage">Test de la connexion en cours…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorrecte</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Détection d\'une version du serveur non prise en charge</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Version du serveur non prise en charge</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Service wallabag non trouvé à cette adresse — Vérifiez l’URL</string>
     <string name="testConnection_errorMessage_httpAuth">Échec de l\'authentification HTTP</string>
     <string name="testConnection_errorMessage_noCSRF">Erreur lors de l\'analyse de la page de connexion</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Impossible de se connecter – vérifiez le nom d’utilisateur et le mot de passe</string>
-    <string name="testConnection_errorMessage_authProblems">Problèmes d\'autorisation. Ceux-ci sont souvent causés par des redirections HTTP.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion. Celle-ci peut survenir lors de l\'utilisation d\'un second facteur d\'authentification, ce qui n\'est pas encore possible pour cette application</string>
+    <string name="testConnection_errorMessage_authProblems">Connexion impossible (problème habituellement causé par des redirections HTTP)</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Page inconnue après la page de connexion. Celle-ci peut survenir lors de l\'utilisation d\'un second facteur d\'authentification, ce qui n\'est pas encore possible pour cette application.</string>
     <string name="testConnection_errorMessage_unknown">Erreur inconnue</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
     <string name="d_testConnection_urlSuggestion_title">Essayez de changer l\'URL</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Utiliser l\'URL suggérée</string>
     <string name="d_testConnection_urlSuggestion_cancelButton">Annuler</string>
     <string name="d_testConnection_urlSuggestion_declineButton">Utiliser mon URL</string>
-    <string name="d_testConnection_urlSuggestion_message">Il est recommandé de changer l\'URL à : "%s". Mais vous pouvez également utiliser celle tapée.</string>
+    <string name="d_testConnection_urlSuggestion_message">Changer l\'URL pour %s est recommandé à la place de celle entrée.</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Il est recommandé de changer l\'URL à : "%s"</string>
     <string name="d_testConnection_fail_title">Échec</string>
     <string name="getCredentials_progressDialogMessage">Récupération des identifiants de l\'API…</string>
@@ -347,4 +347,6 @@
     <string name="pref_name_ui_mathRendering_delimiters">Délimiteurs mathématiques</string>
     <string name="pref_desc_ui_mathRendering_enabled">Activer le rendu de contenu mathématique en LaTeX via KaTeX</string>
     <string name="pref_name_ui_mathRendering_enabled">Rendu du contenu mathématique</string>
+    <string name="pref_name_misc_addTitleToSharedText">Ajouter un titre pour partager le texte</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Ajouter un titre à l\'article pour partager le texte</string>
 </resources>

@@ -346,4 +346,6 @@
     <string name="pref_desc_misc_addTitleToSharedText">Добавлять заголовок статьи к тексту при использовании \"Поделиться\"</string>
     <string name="pref_desc_ui_mathRendering_enabled">Отображение LaTeX при помощи KaTeX</string>
     <string name="pref_desc_ui_mathRendering_delimiters">Выберите разделители, которые должен обрабатывать KaTeX</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Или настройте приложение с помощью QR-кода
+\n(доступно в разделе «Конфигурация» веб-приложения)</string>
 </resources>
