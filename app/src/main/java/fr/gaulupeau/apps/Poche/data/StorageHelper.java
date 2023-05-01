@@ -56,32 +56,15 @@ public class StorageHelper {
         }
     }
 
-    private static String getFirstExternalStoragePath() {
-        File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-        for (File extStorageDir : externalFilesDirs) {
-            if (extStorageDir == null) {
-                continue;
-            }
-
-            return extStorageDir.getPath();
-        }
-        return null;
-    }
-
     public static String getExternalStoragePath() {
         String storagePathSetting = App.getSettings().getDbPath();
 
-        if ("external".equals(storagePathSetting)) {
-            File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            for (File extStorageDir : externalFilesDirs) {
-                if (extStorageDir == null) {
-                    continue;
-                }
-
-                return extStorageDir.getPath();
-            }
+        if (!TextUtils.isEmpty(storagePathSetting)) {
+            return storagePathSetting;
         }
-        return storagePathSetting;
+
+        List<String> externalStoragePaths = getExternalStoragePaths();
+        return !externalStoragePaths.isEmpty() ? externalStoragePaths.get(0) : null;
     }
 
     public static List<String> getExternalStoragePaths() {
@@ -102,10 +85,7 @@ public class StorageHelper {
     }
 
     public static boolean isExternalStorageReadable() {
-        String storagePath = App.getSettings().getDbPath();
-        if (TextUtils.isEmpty(storagePath)) {
-            storagePath = getFirstExternalStoragePath();
-        }
+        String storagePath = getExternalStoragePath();
         if (storagePath == null) return false;
 
         File f = new File(storagePath);
@@ -113,11 +93,7 @@ public class StorageHelper {
     }
 
     public static boolean isExternalStorageWritable() {
-        String storagePath = App.getSettings().getDbPath();
-        if (TextUtils.isEmpty(storagePath)) {
-            storagePath = getFirstExternalStoragePath();
-        }
-        return isPathWritable(storagePath);
+        return isPathWritable(getExternalStoragePath());
     }
 
     private static boolean isPathWritable(String path) {
