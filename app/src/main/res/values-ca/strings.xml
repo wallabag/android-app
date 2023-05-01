@@ -37,7 +37,7 @@
     <string name="notification_channel_name_background_operations">Operacions en segon pla</string>
     <string name="content_estimatedReadingTimeTTSLabel">Temps estimat de lectura</string>
     <string name="lastUpdateTimeLabel">Última actualització: %s</string>
-    <string name="listItem_estimatedReadingTime">%s min</string>
+    <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="nav_main_articles">Articles</string>
     <string name="pref_name_runConnectionWizard">Executar l\'assistent de connexió</string>
     <string name="pref_desc_runConnectionWizard">Ajuda a configurar la configuració de connexió bàsica</string>
