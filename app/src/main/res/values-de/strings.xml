@@ -44,7 +44,7 @@
     <string name="addLink_success_text">Hinzugefügt</string>
     <string name="testConnection_progressDialogMessage">Verbindung wird überprüft…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Falsche URL</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-Dienst nicht gefunden – überprüfe bitte die URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Konnte wallabag-Dienst nicht finden – überprüfe bitte die URL</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Anmeldung fehlgeschlagen – überprüfe bitte Benutzername und Passwort</string>
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
