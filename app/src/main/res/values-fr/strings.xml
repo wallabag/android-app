@@ -90,7 +90,7 @@
     <string name="articleList_favoriteMark">Marqué comme favori</string>
     <string name="articleList_ArchivedMark">Marqué comme archivé</string>
     <string name="noPreviousArticle">Il n\'y pas d\'article précédent dans la liste actuelle</string>
-    <string name="scrolledOverBottom">Faites défiler %d fois plus en bas pour marquer l\'article comme lu</string>
+    <string name="scrolledOverBottom">Faites défiler %d fois plus bas pour marquer l\'article comme lu</string>
     <string name="markedAsRead">Article marqué comme lu</string>
     <string name="noNextArticle">Il n\'y pas d\'article suivant dans la liste actuelle</string>
     <string name="themeName_light">Clair</string>
@@ -117,7 +117,7 @@
     <string name="notification_updatingArticles_full">Mise à jour complète en cours</string>
     <string name="notification_updatingArticles_fast">Mise à jour rapide en cours</string>
     <string name="notification_sweepingDeletedArticles">Nettoyage des articles supprimés</string>
-    <string name="notification_downloadingImages">Téléchargement des images</string>
+    <string name="notification_downloadingImages">Téléchargement des images…</string>
     <string name="notification_syncingQueue">Synchronisation des changements locaux en cours</string>
     <string name="notification_error">Erreur</string>
     <string name="notification_incorrectCredentials">Identifiants incorrects</string>
@@ -273,10 +273,10 @@
     <string name="pref_desc_ui_keepScreenOn">Garder l\'écran actif pendant la lecture d\'un article</string>
     <string name="themeName_eink">Pour les affichages à encre électronique</string>
     <string name="notification_channel_group_name_tts">TTS</string>
-    <string name="notification_channel_group_name_sync">Synchronisation</string>
+    <string name="notification_channel_group_name_sync">Synchronisation en cours</string>
     <string name="notification_channel_group_name_other">Autre</string>
     <string name="notification_channel_name_tts">wallabag TTS</string>
-    <string name="notification_channel_name_sync">Synchronisation</string>
+    <string name="notification_channel_name_sync">Synchronisation en cours</string>
     <string name="notification_channel_name_downloading_articles">Téléchargement de fichiers PDF</string>
     <string name="notification_channel_name_error">Erreurs</string>
     <string name="pref_name_ui_article_handlePreformattedText">Traitement du texte long préformaté</string>
@@ -324,7 +324,7 @@
     <string name="pref_categoryName_tts">Synthèse vocale</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Solution pour appareils Onyx qui forcent l\'affichage des liens en noir</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Activer le thème alternatif pour Onyx Boox</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification toast sera affichée à la place si l\'option est désactivée.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification sera affichée à la place si l\'option est désactivée.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
     <string name="manageTags_addMoreTags">Ajouter plus d\'étiquettes :</string>
     <string name="manageTags_currentTags_none">Aucune</string>
