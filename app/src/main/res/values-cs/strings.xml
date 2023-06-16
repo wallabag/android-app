@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_desc_tts_fastForwardTime">Počet sekund, o které chcete přeskočit vpřed po stisknutí tlačítka „Rychle vpřed“</string>
-    <string name="pref_desc_tts_rewindTime">Počet sekund, o které chcete přeskočit zpět po stisknutí tlačítka „Posunout zpět“</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Neznámá stránka po přihlášení. To je obvykle způsobeno povoleným dvojúrovňovým ověřováním, které zatím ještě není aplikací podporováno</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">Služba Wallabag nenalezena — zkontrolujte adresu URL</string>
+    <string name="pref_desc_tts_fastForwardTime">Počet sekund, o které přeskočit vpřed po stisknutí tlačítka „Rychle vpřed“</string>
+    <string name="pref_desc_tts_rewindTime">Počet sekund, o které přeskočit zpět po stisknutí tlačítka „Posunout zpět“</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Neznámá stránka po přihlášení. Obvykle způsobeno dvojúrovňovým ověřováním (které aplikace zatím nepodporuje).</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Nelze nalézt službu Wallabag — zkontrolujte adresu URL</string>
     <string name="d_add_fail_text">Ve sdíleném řetězci nelze nalézt adresu URL:
 \n</string>
     <string name="dialog_add_label">Přidat nový článek</string>
@@ -28,10 +28,10 @@
     <string name="d_checkCredentials_title_fail">Test přístupu k API selhal</string>
     <string name="checkCredentials_progressDialogMessage">Testování přístupu k API…</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">Je doporučeno změnit adresu URL na: %s</string>
-    <string name="d_testConnection_urlSuggestion_message">Je doporučeno změnit adresu URL na: %s. Ale můžete použít i tu zadanou.</string>
+    <string name="d_testConnection_urlSuggestion_message">Je doporučeno změnit adresu URL na %s namísto použití zadané.</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Nelze se přihlásit — zkontrolujte uživatelské jméno a heslo</string>
     <string name="settings_parametersAreOk">Parametry jsou v pořádku</string>
-    <string name="d_configurationChanged_message">Zdá se, že některé parametry byly změněny. Je doporučeno provést test připojení.</string>
+    <string name="d_configurationChanged_message">Otestujte připojení a zkontrolujte, zda nové parametry fungují.</string>
     <string name="copiedToClipboard">Zkopírováno do schránky</string>
     <string name="notification_copyToClipboard">Zkopírovat do schránky</string>
     <string name="connectionWizard_summary_text">Klikněte pro uložení a přejití na hlavní obrazovku.</string>
@@ -40,7 +40,7 @@
     <string name="connectionWizard_providerSelection_titleMessage">Vyberte poskytovatele Wallabagu</string>
     <string name="connectionWizard_welcome_next">Další</string>
     <string name="connectionWizard_welcome_prev">Přeskočit</string>
-    <string name="pref_name_autoSync_onStartup_enabled">Povolit automatickou synchronizaci při spuštění aplikace</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Automatická synchronizace po spuštění aplikace</string>
     <string name="pref_categoryName_autoSync">Automatická synchronizace</string>
     <string name="noNextArticle">V aktuálním seznamu nejsou žádné další články</string>
     <string name="noPreviousArticle">V aktuálním seznamu není žádný předchozí článek</string>
@@ -59,7 +59,7 @@
     <string name="themeName_eink">Pro e-ink obrazovky</string>
     <string name="themeName_light_contrast">Světlý (vysoký kontrast)</string>
     <string name="themeName_light">Světlý</string>
-    <string name="manageTags_textField_hint">Jeden nebo více štítků oddělených čárkami</string>
+    <string name="manageTags_textField_hint">Jeden nebo více štítků (oddělených čárkami)</string>
     <string name="manageTags_currentTags_none">Žádný</string>
     <string name="notification_action_media_pause">Pozastavit</string>
     <string name="untagged">&lt;bez štítků&gt;</string>
@@ -74,7 +74,7 @@
     <string name="menu_manageTags">Spravovat štítky</string>
     <string name="feedName_archived">Archivováno</string>
     <string name="ttsError">Chyba při převodu textu na řeč</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Nelze se přihlásit. Pravděpodobně chybné uživatelské jméno nebo heslo</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Nelze se přihlásit. Možná je chybné uživatelské jméno nebo heslo\?</string>
     <string name="connectionWizard_summary_next">Uložit nastavení</string>
     <string name="connectionWizard_summary_toastMessage">Nastavení bylo dokončeno</string>
     <string name="articleEdit_openArticle">Otevřít článek</string>
@@ -82,7 +82,7 @@
     <string name="connectionWizard_providerSelection_next">Další</string>
     <string name="connectionWizard_providerSelection_prev">Přeskočit</string>
     <string name="connectionWizard_provider_wallabagit_titleMessage">Konfigurace pro wallabag.it</string>
-    <string name="pref_desc_ui_annotations_enabled">Experimentální funkce! Zobrazujte, upravujte a vytvářejte anotace</string>
+    <string name="pref_desc_ui_annotations_enabled">Experimentální! Zobrazujte, upravujte a vytvářejte anotace</string>
     <string name="pref_name_ui_annotations_enabled">Podpora anotací</string>
     <string name="menuTTS">Převod textu na řeč</string>
     <string name="pref_desc_ui_article_fontSerif">Použít v článcích písmo s patkami</string>
@@ -116,9 +116,9 @@
     <string name="pref_option_autoSync_interval_30m">30 minut</string>
     <string name="pref_option_autoSync_interval_15m">15 minut</string>
     <string name="pref_name_autoSync_interval">Interval automatické synchronizace</string>
-    <string name="pref_name_autoSync_enabled">Povolit automatickou synchronizaci</string>
+    <string name="pref_name_autoSync_enabled">Automatická synchronizace</string>
     <string name="pref_decs_autoSync_onStartup_enabled">Aplikace se bude synchronizovat při otevření</string>
-    <string name="pref_desc_ui_readingSpeed">Vaše rychlost čtení (měřená ve slovech za minutu). Používá se pro výpočet předpokládaného času čtení.</string>
+    <string name="pref_desc_ui_readingSpeed">Vaše rychlost čtení (ve slovech za minutu) pro zobrazení předpokládaného času čtení.</string>
     <string name="pref_name_ui_readingSpeed">Rychlost čtení</string>
     <string name="pref_name_connection_password">Heslo</string>
     <string name="pref_name_connection_username">Uživatelské jméno</string>
@@ -134,8 +134,8 @@
     <string name="notification_serverError">Chyba serveru</string>
     <string name="notification_incorrectConfiguration">Nesprávná konfigurace</string>
     <string name="notification_error">Chyba</string>
-    <string name="notification_syncingQueue">Synchronizace místních změn</string>
-    <string name="notification_downloadingImages">Stahování obrázků</string>
+    <string name="notification_syncingQueue">Synchronizace místních změn…</string>
+    <string name="notification_downloadingImages">Stahování obrázků…</string>
     <string name="notification_updatingArticles">Aktualizace článků</string>
     <string name="downloadAsFileArticleDownloaded">Článek byl stažen</string>
     <string name="downloadAsFilePathStart">Stahování článku</string>
@@ -152,7 +152,7 @@
     <string name="d_testConnection_urlSuggestion_cancelButton">Zrušit</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Neznámá chyba: %s</string>
     <string name="testConnection_errorMessage_unknown">Neznámá chyba</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Rozpoznána nepodporovaná verze serveru</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Verze serveru je nepodporovaná</string>
     <string name="testConnection_errorMessage_incorrectUrl">Nesprávná adresa URL</string>
     <string name="testConnection_progressDialogMessage">Testování připojení…</string>
     <string name="addLink_success_text">Přidáno</string>
@@ -167,7 +167,7 @@
     <string name="share_text_extra">" prostřednictvím aplikace Wallabag"</string>
     <string name="share_article_title">Sdílet článek</string>
     <string name="page_url">Adresa URL stránky</string>
-    <string name="txtNetOffline">Zkontrolujte připojení k internetu, prosím!</string>
+    <string name="txtNetOffline">Nejprve se ujistěte, že jste připojeni k internetu.</string>
     <string name="d_deleteArticle_message">Opravdu chcete odstranit tento článek\?</string>
     <string name="d_deleteArticle_title">Odstranit článek\?</string>
     <string name="menu_open_random_article">Otevřít náhodný článek</string>
@@ -196,7 +196,7 @@
     <string name="notification_updatingArticles_full">Probíhá úplná aktualizace</string>
     <string name="menu_lists_fullUpdate">Úplná aktualizace</string>
     <string name="pref_name_autoSync_type">Typ automatické synchronizace</string>
-    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Posouvat s tlačítky hlasitosti</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">Přejít nahoru a dolů pomocí tlačítek hlasitosti</string>
     <string name="pref_categoryName_ui_screenScrolling">Posouvání obrazovky</string>
     <string name="readVolume">Hlasitost čtení</string>
     <string name="voiceHeight">Výška hlasu</string>
@@ -206,7 +206,7 @@
     <string name="getCredentials_progressDialogMessage">Získávání přihlašovacích údajů k API…</string>
     <string name="txtConfigNotSet">Před synchronizací nakonfigurujte aplikaci.</string>
     <string name="pref_name_imageCache_enabled">Uložit obrázky z článků do mezipaměti</string>
-    <string name="pref_desc_imageCache_enabled">Automaticky stáhne všechny obrázky ze všech článků a uloží je do zařízení. V závislosti na délce seznamu článků ve Wallabagu to může zabrat hodně času a místa.</string>
+    <string name="pref_desc_imageCache_enabled">Automaticky stáhnout všechny obrázky ze všech článků do zařízení (zabírá hodně času a místa , pokud je seznam článků dlouhý)</string>
     <string name="pref_desc_misc_handleHttpScheme">Zobrazit Wallabag na seznamu webových prohlížečů</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Vypsat do souboru</string>
     <string name="misc_localQueue_empty">Žádné lokální změny</string>
@@ -219,65 +219,65 @@
     <string name="notification_clipboardLabel">Podrobnosti o chybě</string>
     <string name="contentIsTooLong">Obsah článku je pro zobrazení příliš dlouhý</string>
     <string name="other_searchHint">Hledat podle názvu článku nebo textu</string>
-    <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co děláte</string>
+    <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co děláte!</string>
     <string name="pref_categoryName_misc_localQueue">Místní změny</string>
     <string name="pref_desc_misc_appendWallabagMention">Připojí ke sdílenému textu \"prostřednictvím aplikace Wallabag\"</string>
     <string name="pref_name_misc_appendWallabagMention">Zmínit Wallabag při sdílení</string>
     <string name="pref_name_ui_keepScreenOn">Nevypínat obrazovku při čtení</string>
-    <string name="scrolledOverBottom">Ještě %dx posuňte přes spodek pro označení článku jako přečteného</string>
+    <string name="scrolledOverBottom">Posuňte ještě %dx přes spodek pro označení článku jako přečteného</string>
     <string name="pref_name_ui_article_textAlignment_justify">Zarovnání textu: Do bloku</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Velikost textu článku (v %)</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Pokud nevíte, co to je, nechte to prázdné</string>
     <string name="message_couldNotOpenUrl">Tuto adresu URL nelze otevřít</string>
     <string name="menu_lists_changeSortOrder">Obrátit pořadí řazení</string>
     <string name="menu_lists_search">Hledat</string>
-    <string name="pref_desc_ui_article_handlePreformattedText">Jak zacházet s předformátovaným textem, který je příliš dlouhý na to, aby se zobrazil celý.</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">Jak zacházet s předformátovaným textem příliš dlouhým na to, aby se zobrazil celý.</string>
     <string name="pref_name_ui_article_handlePreformattedText">Zpracování dlouhého předformátovaného textu</string>
     <string name="notification_channel_name_background_operations">Operace na pozadí</string>
     <string name="pref_desc_ui_article_fullscreen">Při čtení článků skryje panely systému a aplikací</string>
-    <string name="pref_name_ui_article_fullscreen">Zobrazit články na celou obrazovku</string>
+    <string name="pref_name_ui_article_fullscreen">Články na celou obrazovku</string>
     <string name="pref_name_ui_showArticleAddedDialog">Při přidávání článku zobrazit dialogové okno</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Zobrazí dialogové okno, které umožňuje oblíbené / archivovat / označit nově přidaný článek jako oblíbený, archivovaný nebo k němu přidat štítky. Pokud je tato možnost zakázána, zobrazí se místo toho informační zpráva.</string>
-    <string name="connectionWizard_welcome_rerunNotice">Průvodce nastavením může kdykoliv znovu spustit z „Nastavení“.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Zobrazí dialogové okno umožňující označit nově přidaný článek jako oblíbený, archivovaný nebo k němu přidat štítky (nebo se v opačném případě zobrazí informační zpráva)</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Průvodce připojením můžete kdykoli znovu spustit z „Nastavení“.)</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Jiný</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Vyberte tuto možnost pro ruční zadání požadovaného nastavení</string>
     <string name="pref_desc_ui_previewImage_enabled">Zobrazit před článkem náhledový obrázek</string>
     <string name="pref_name_ui_previewImage_enabled">Náhledový obrázek</string>
-    <string name="pref_name_ui_disableTouch_keyCode">Tlačítko pro zakázání dotykového zadávání</string>
-    <string name="pref_name_ui_disableTouch_enabled">Zakázat dotykové zadávání</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Tlačítko „Žádné dotykové zadávání“</string>
+    <string name="pref_name_ui_disableTouch_enabled">Žádné dotykové zadávání</string>
     <string name="pref_categoryName_tts">Převod textu na řeč</string>
     <string name="pref_categoryName_sync">Synchronizace</string>
-    <string name="message_disableTouch_inputEnabled">Dotykové zadávání bylo povoleno</string>
-    <string name="message_disableTouch_inputDisabled">Dotykové zadávání bylo zakázáno</string>
+    <string name="message_disableTouch_inputEnabled">Dotykové zadávání zapnuto</string>
+    <string name="message_disableTouch_inputDisabled">Dotykové zadávání vypnuto</string>
     <string name="downloadAsFileTouchToOpen">Klepněte pro otevření</string>
-    <string name="testConnection_errorMessage_authProblems">Problémy související s oprávněním. Obvykle jsou způsobeny HTTP přesměrováním.</string>
+    <string name="testConnection_errorMessage_authProblems">Nelze se přihlásit (obvykle způsobeno HTTP přesměrováními)</string>
     <string name="d_add_fail_title">Selhání</string>
-    <string name="pref_desc_sync_syncTypes">Stiskněte pro zobrazení více informací o typech synchronizace</string>
-    <string name="pref_name_sync_syncTypes">Typy synchronizace</string>
+    <string name="pref_desc_sync_syncTypes">Stiskněte pro více informací o typech synchronizace</string>
+    <string name="pref_name_sync_syncTypes">Způsoby synchronizace</string>
     <string name="pref_name_runConnectionWizard">Spustit průvodce připojením</string>
     <string name="notification_backgroundOperations">Operace na pozadí</string>
-    <string name="testConnection_errorMessage_noCSRF">Chyba analýzy přihlašovacího formuláře</string>
+    <string name="testConnection_errorMessage_noCSRF">Nelze analýzovat přihlašovací formulář</string>
     <string name="menu_annotate">Anotace</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Byl použit nesprávný identifikátor URI připojení</string>
     <string name="misc_logging_logcatToFile_result_saved">Protokoly uloženy do %s</string>
     <string name="pref_desc_misc_logging_logcatToFile">Uloží výstup logcat (protokol aplikace pro Android) do souboru v /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
     <string name="pref_name_misc_logging_logcatToFile">Uložit výstup logcat do souboru</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Odebere první nesynchronizovanou položku. Může vám to pomoci, pokud budete během synchronizace dostávat opakovaná oznámení o chybě. Nezapomeňte nejprve vypsat všechny místní změny do souboru</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Odebere první nesynchronizovanou položku. Může pomoci s opakovanými oznámeními o chybě během synchronizace. Tip: Všechny místní změny nejprve uložte do souboru.</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Odebrat první položku místní fronty</string>
     <string name="pref_desc_misc_localQueue_dumpToFile">Vypíše všechny místní změny do souboru txt (můžete si ho sami prostudovat nebo připojit k hlášení o chybě)</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Opravdu chcete vymazat databázi\?</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Vymazat databázi\?</string>
     <string name="pref_desc_misc_wipeDB">Vymaže všechny články z místní databáze a odebere také všechny nesynchronizované místní změny a adresy URL</string>
     <string name="pref_name_misc_wipeDB">Vymazat databázi</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Používá tokenizér ICU pro indexování fulltextového vyhledávání (jinak se používá obecný tokenizér unicode61). Může zlepšit výsledky hledání pro čínské, japonské a korejské jazyky. Možnost se projeví až po \"Úplné aktualizaci\"</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Používá tokenizér ICU pro indexování fulltextového vyhledávání (jinak se používá obecný tokenizér unicode61). Může zlepšit výsledky hledání pro čínské, japonské a korejské jazyky. Možnost se projeví až po „Úplné aktualizaci“.</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Pro fulltextové vyhledávání použít tokenizér ICU</string>
     <string name="pref_name_misc_handleHttpScheme">Zpracovat schéma HTTP</string>
     <string name="pref_categoryName_miscellaneous">Různé</string>
     <string name="pref_desc_autoSyncQueue_enabled">Toto umožňuje synchronizovat místní změny (přidané odkazy, archivované články atd.) se serverem, jakmile bude k dispozici síť.</string>
     <string name="pref_name_autoSyncQueue_enabled">Samostatná automatická synchronizace pro místní změny</string>
     <string name="pref_desc_autoSync_enabled">Toto povolí automatickou synchronizaci místních změn (přidané odkazy, archivované články atd.) a stahování nových článků podle plánu</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Více informací naleznete výše v popisu různých typů synchronizace</string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">Povolit \"Úklid odstraněného článku\" po \"Rychlé\" synchronizaci</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Více informací najdete v popisu různých typů synchronizace výše</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">„Úklid odstraněného článku“ po „Rychlé“ synchronizaci</string>
     <string name="pref_desc_sync_syncTypes_text">Existují dva hlavní typy synchronizace: \"Plná\" a \"Rychlá\".
 \n
 \n\"Plná\" synchronizace odstraní veškerý místní obsah a znovu ho stáhne. Je dostupná v nabídce možností jako poslední možnost.
@@ -287,32 +287,32 @@
 \nPro nápravu nedostatku \"Rychlé\" synchronizace zkontroluje \"Úklid odstraněného článku\" každý místní článek a zeptá se serveru, zda je na serveru stále přítomen – pokud ne, bude místní článek odebrán. V závislosti na počtu článků, které máte, to chvíli trvá, ale šetří to provoz \"Plné\" synchronizace.
 \n
 \nŽádná z těchto funkcí neovlivňuje synchronizaci mezi klientem a serverem: Vaše místní změny budou vždy odeslány na server před aktualizací místního obsahu.</string>
-    <string name="pref_desc_tts_showPreviewAsAlbumArt">Použít obrázek náhledu článku (pokud je k dispozici) jako obrázek alba (viditelný v oznámení a může se zobrazit jako pozadí uzamčené obrazovky)</string>
-    <string name="pref_name_tts_showPreviewAsAlbumArt">Použít náhled jako obrázek alba</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Stisknutí tlačítka \"předchozí\" u médií přeskočí rychle zpět namísto přeskočení na předchozí článek</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Použít obrázek náhledu článku (pokud je k dispozici) jako obal alba (zobrazený v oznámení a případně jako pozadí zamykací obrazovky)</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Náhledový obrázek jako obrázek alba</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Stisknutí tlačítka \"Předchozí\" u médií přeskočí rychle zpět namísto přeskočení na předchozí článek</string>
     <string name="pref_name_tts_previousButtonIsRewind">Tlačítko \"předchozí\" přeskakuje zpět</string>
-    <string name="pref_desc_tts_nextButtonIsFastForward">Stisknutí tlačítka \"další\" u médií přeskočí rychle vpřed namísto přeskočení na další článek</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Stisknutí tlačítka \"Další\" u médií přeskočí rychle vpřed namísto přeskočení na další článek</string>
     <string name="pref_name_tts_nextButtonIsFastForward">Tlačítko \"Další\" přeskakuje vpřed</string>
     <string name="pref_name_tts_rewindTime">Čas přeskočení zpět</string>
     <string name="pref_name_tts_fastForwardTime">Čas rychlého přeskočení vpřed</string>
-    <string name="pref_desc_ui_mathRendering_delimiters">Vyberte oddělovače prostředí, které má KaTeX zpracovat</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Vyberte oddělovače prostředí, které by mělo zpracovat KaTeX</string>
     <string name="pref_name_ui_mathRendering_delimiters">Oddělovače matematiky</string>
-    <string name="pref_desc_ui_mathRendering_enabled">Povolit vykreslování LaTeX-math prostřednictvím KaTeX</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Vykreslování LaTeX-math prostřednictvím KaTeX</string>
     <string name="pref_name_ui_mathRendering_enabled">Vykreslování matematiky</string>
-    <string name="pref_desc_ui_swipeArticles">Potažením doleva nebo doprava uvnitř článku přejdete na předchozí nebo následující článek</string>
+    <string name="pref_desc_ui_swipeArticles">Potažením ← nebo → uvnitř článku přejdete na předchozí nebo následující článek</string>
     <string name="pref_name_ui_swipeArticles">Potažení článků</string>
-    <string name="pref_desc_ui_scrollOverBottom">Stisknutím zde nakonfigurujte, kolikrát je potřeba posunout přes spodek pro označení článku jako přečteného</string>
+    <string name="pref_desc_ui_scrollOverBottom">Nastavte, kolikrát posunout přes spodek pro označení článku jako přečteného</string>
     <string name="pref_name_ui_scrollOverBottom">Posunout přes spodek pro označení jako přečteného</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Stisknutím zde nakonfigurujete tlačítko použité pro zakázání nebo povolení dotykového zadávání</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Stisknutí nakonfigurovaného tlačítka (ve výchozím nastavení tlačítko fotoaparátu) zablokuje nebo odblokuje dotykové zadávání na obrazovce pro čtení (ovládací prvky systému nejsou ovlivněny)</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Vyberte tlačítko pro vypnutí a zapnutí dotykového zadávání</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Stiskněte tlačítko „Žádné dotykové zadávání“ (ve výchozím nastavení tlačítko fotoaparátu) pro zablokování nebo odblokování dotykového zadávání na obrazovce pro čtení (ovládací prvky systému nejsou ovlivněny)</string>
     <string name="pref_categoryName_ui_misc">Různé</string>
-    <string name="pref_name_ui_screenScrolling_smooth">Používat hladké posouvání</string>
+    <string name="pref_name_ui_screenScrolling_smooth">Hladké posouvání</string>
     <string name="pref_name_ui_screenScrolling_percent">Procento výšky obrazovky, o které posouvat</string>
-    <string name="pref_desc_ui_tapToScroll_enabled">Posouvat obrazovku klepnutím na levou a pravou stranu obrazovky</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">Přejít nahoru a dolů klepnutím na levou a pravou stranu obrazovky</string>
     <string name="pref_name_ui_tapToScroll_enabled">Posouvat klepnutím</string>
-    <string name="pref_desc_ui_keepScreenOn">Nevypínat obrazovku při čtení článku</string>
-    <string name="pref_desc_ui_onyxworkaround_enabled">Alternativní řešení pro zařízení Onyx vynucující černou barvu odkazů</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">Povolit alternativní řešení pro motiv Onyx Boox</string>
+    <string name="pref_desc_ui_keepScreenOn">Nenechat obrazovku vypnout při čtení článku</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Zabránit zařízením Onyx vynucení černé barvy odkazů</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Alternativní řešení pro motiv Onyx Boox</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Roztahuje řádky na stejnou šířku (jako v novinách)</string>
     <string name="pref_name_ui_article_fontSerif">Typ písma s patkami</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">Heslo ověřování HTTP</string>
@@ -329,9 +329,9 @@
 \n https://app.wallabag.it</string>
     <string name="pref_name_connection_url">Adresa URL Wallabag</string>
     <string name="pref_categoryName_connection">Připojení</string>
-    <string name="pref_desc_runConnectionWizard">Pomůže vám provést základní nastavení připojení</string>
+    <string name="pref_desc_runConnectionWizard">Pomůže provést základní nastavení připojení</string>
     <string name="d_disableTouch_currentCode">Aktuálně vybraný kód klíče (stiskněte tlačítko pro jeho změnu):</string>
-    <string name="d_disableTouch_changeKey_title">Tlačítko pro zakázání dotykového zadávání</string>
+    <string name="d_disableTouch_changeKey_title">Tlačítko pro vypnutí dotykového zadávání</string>
     <string name="menu_lists_sweepDeletedArticles">\"Uklidit\" odstraněné články</string>
     <string name="notification_channel_name_tts">Převod textu na řeč Wallabag</string>
     <string name="notification_channel_group_name_tts">Převod textu na řeč</string>
@@ -343,4 +343,8 @@
     <string name="articleList_favoriteMark">Značka Oblíbené</string>
     <string name="testConnection_errorMessage_httpAuth">Ověření HTTP selhalo</string>
     <string name="notification_stacktrace">Sledování zásobníku:</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Nebo konfigurujte aplikaci pomocí QR kódu
+\n (dostupné v sekci „Nastavení“ ve webové aplikaci)</string>
+    <string name="pref_name_misc_addTitleToSharedText">Přidat název ke sdílenému textu</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Přidat název článku ke sdílenému textu</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btnMarkUnread">വായിച്ചിട്ടില്ലെന്ന് അടയാളപ്പെടുത്തുക</string>
+    <string name="add_to_favorites">ഇഷ്ടപെട്ടവയിലേക്ക് ചേര്ക്കുക</string>
+    <string name="menuShare">പങ്കിടുക</string>
+    <string name="menuPrevious">മുൻ ലേഖനം</string>
+    <string name="menuDelete">ഇല്ലാതാക്കുക</string>
+    <string name="menuOpenOriginal">ഒറിജിനൽ തുറക്കുക</string>
+    <string name="ttsLanguage">ഭാഷ തിരഞ്ഞെടുക്കുക</string>
+    <string name="btnMarkRead">വായിച്ചതായി അടയാളപ്പെടുത്തുക</string>
+    <string name="menuNext">അടുത്ത ലേഖനം</string>
+    <string name="remove_from_favorites">പ്രിയപ്പെട്ടവയിൽ നിന്ന് നീക്കം ചെയ്യുക</string>
+    <string name="menu_open_random_article">ക്രമരഹിതമായ ലേഖനം തുറക്കുക</string>
+    <string name="menu_syncLocalChanges">പ്രാദേശിക മാറ്റങ്ങൾ സമന്വയിപ്പിക്കുക</string>
+</resources>
