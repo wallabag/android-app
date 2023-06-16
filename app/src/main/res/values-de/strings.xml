@@ -49,7 +49,7 @@
     <string name="testConnection_errorMessage_unknown">Unbekannter Fehler</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Unbekannter Fehler: %s</string>
     <string name="d_testConnection_fail_title">Verbindungstest fehlgeschlagen</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Anmeldung nicht möglich: Sind Benutzername oder Passwort korrekt\?</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Anmeldung nicht möglich: Sind Benutzername und Passwort korrekt\?</string>
     <string name="previousUpdateNotFinished">Vorherige Aktualisierung noch nicht fertig</string>
     <string name="feedName_favorites">Favoriten</string>
     <string name="feedName_archived">Archiviert</string>
@@ -122,7 +122,7 @@
     <string name="connectionWizard_welcome_text">Bevor du die wallabag-App nutzen kannst, musst du die Verbindung zu deinem wallabag-Service einrichten. Der Verbindungsassistent hilft dir dabei.</string>
     <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag.</string>
     <string name="d_configurationChanged_answer_decline">Nicht jetzt</string>
-    <string name="d_configurationChanged_message">Teste die Verbindung um zu sehen ob die neuen Einstellungen funktionieren.</string>
+    <string name="d_configurationChanged_message">Teste die Verbindung, um zu sehen, ob die neuen Einstellungen funktionieren.</string>
     <string name="d_configurationChanged_title">Parameter geändert</string>
     <string name="d_configurationIsQuestionable_message">Es gab kürzlich einen Verbindungsfehler. Es ist empfohlen einen Verbindungstest durchzuführen.</string>
     <string name="d_configurationIsQuestionable_title">Problem erkannt</string>
@@ -255,13 +255,13 @@
     <string name="message_couldNotOpenUrl">Konnte die URL nicht öffnen</string>
     <string name="message_disableTouch_inputDisabled">Toucheingabe deaktiviert</string>
     <string name="message_disableTouch_inputEnabled">Toucheingabe aktiviert</string>
-    <string name="d_disableTouch_changeKey_title">Button zum deaktivieren der Toucheingaben</string>
+    <string name="d_disableTouch_changeKey_title">Button zum Deaktivieren der Toucheingaben</string>
     <string name="d_disableTouch_currentCode">Aktuell gewählte Taste (drücke eine Taste, um dies zu ändern):</string>
     <string name="pref_categoryName_ui_misc">Verschiedenes</string>
     <string name="pref_name_ui_disableTouch_enabled">Deaktiviere Toucheingaben</string>
     <string name="pref_desc_ui_disableTouch_enabled">Drücke die konfigurierte Taste (Standard ist die Kamerataste), um Toucheingaben auf dem Lesebildschirm zu de-/aktivieren (Systemtasteneingaben sind nicht betroffen)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Taste zum Deaktivieren von Toucheingaben</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Wähle eine Taste um Toucheingaben an oder aus zu schalten</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Wähle eine Taste, um Toucheingaben an- oder auszuschalten</string>
     <string name="pref_name_storage_dbPath">Datenbankspeicherort</string>
     <string name="pref_name_storage_dbPath_internalStorage">Interner Speicher</string>
     <string name="pref_name_storage_dbPath_externalStorage">Externer Speicher</string>
@@ -272,7 +272,7 @@
     <string name="scrolledOverBottom">Noch %d mal über den Rand hinaus scrollen, um den Artikel als gelesen zu markieren</string>
     <string name="markedAsRead">Artikel als gelesen markiert</string>
     <string name="pref_name_ui_scrollOverBottom">Scrolle über das Artikelende hinaus, um ihn als gelesen zu markieren</string>
-    <string name="pref_desc_ui_scrollOverBottom">Wie oft muss über den Rand hinausgescrollt werden, um einen Artikel als gelesen zu markieren</string>
+    <string name="pref_desc_ui_scrollOverBottom">Wie oft über den Rand hinausgescrollt werden muss, um einen Artikel als gelesen zu markieren</string>
     <string name="pref_name_ui_swipeArticles">Artikel durch Wischen wechseln</string>
     <string name="pref_desc_ui_swipeArticles">Innerhalb eines Artikels nach links oder rechts wischen, um zum vorherigen/nächsten Artikel zu wechseln</string>
     <string name="pref_name_ui_article_fullscreen">Vollbildansicht für Artikel</string>
@@ -331,7 +331,7 @@
     <string name="pref_desc_tts_fastForwardTime">Die Zahl der Sekunden, die vorgespult werden soll, wenn der Schnellvorlauf-Knopf gedrückt wurde</string>
     <string name="pref_categoryName_tts">Text zu Sprache</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Verhindert bei Onyx-Geräten, dass die Farbe Schwarz für Links erzwungen wird.</string>
-    <string name="pref_name_ui_onyxworkaround_enabled">Umgehung des Problems beim Onyx Boo Design.</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Umgehung der Probleme beim Onyx Boox Design.</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Zeigt einen Dialog, der es ermöglicht neu hinzugefügte Artikel zu favorisieren, archivieren oder zu verschlagworten. Wenn die Option deaktiviert ist, wird eine kurze Benachrichtung angezeigt.</string>
     <string name="pref_name_ui_showArticleAddedDialog">Zeige einen Dialog beim Hinzufügen von Artikeln</string>
     <string name="misc_logging_logcatToFile_result_error">Fehler: %s</string>
