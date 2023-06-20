@@ -18,9 +18,9 @@
     <string name="d_testConnection_urlSuggestion_declineButton">Použít moji</string>
     <string name="d_testConnection_urlSuggestion_acceptButton">Použít doporučenou</string>
     <string name="d_testConnection_urlSuggestion_title">Zvažte změnu adresy URL</string>
-    <string name="connectionWizard_welcome_text">Předtím, než budete moci používat aplikaci Wallabag, musíte nastavit připojení. Tento průvodce připojením vám s tím pomůže.</string>
+    <string name="connectionWizard_welcome_text">Nejprve nastavte připojení pomocí průvodce.</string>
     <string name="connectionWizard_welcome_titleMessage">Vítejte ve Wallabagu.</string>
-    <string name="misc_localQueue_dumpToFile_header">Pokud narazíte na potíže se synchronizací, nahlaste prosím svůj problém zde: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Problém se synchronizací nahlaste zde: %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Chyba: %s</string>
     <string name="misc_logging_logcatToFile_result_error">Chyba: %s</string>
     <string name="d_getCredentials_title_message">Něco se pokazilo. Zkontrolujte připojení k internetu a zkuste to znovu.</string>
@@ -78,10 +78,10 @@
     <string name="connectionWizard_summary_next">Uložit nastavení</string>
     <string name="connectionWizard_summary_toastMessage">Nastavení bylo dokončeno</string>
     <string name="articleEdit_openArticle">Otevřít článek</string>
-    <string name="connectionWizard_provider_general_titleMessage">Základní konfigurace</string>
+    <string name="connectionWizard_provider_general_titleMessage">Základní nastavení</string>
     <string name="connectionWizard_providerSelection_next">Další</string>
     <string name="connectionWizard_providerSelection_prev">Přeskočit</string>
-    <string name="connectionWizard_provider_wallabagit_titleMessage">Konfigurace pro wallabag.it</string>
+    <string name="connectionWizard_provider_wallabagit_titleMessage">Nastavení wallabag.it</string>
     <string name="pref_desc_ui_annotations_enabled">Experimentální! Zobrazujte, upravujte a vytvářejte anotace</string>
     <string name="pref_name_ui_annotations_enabled">Podpora anotací</string>
     <string name="menuTTS">Převod textu na řeč</string>
@@ -108,7 +108,7 @@
     <string name="ttsVolume">Hlasitost</string>
     <string name="menuCopyOriginalURL">Kopírovat URL původního</string>
     <string name="menuOpenOriginal">Otevřít původní</string>
-    <string name="pref_name_misc_localQueue_notice">UPOZORNĚNÍ</string>
+    <string name="pref_name_misc_localQueue_notice">Upozornění</string>
     <string name="pref_name_storage_dbPath">Umístění databáze</string>
     <string name="pref_option_autoSync_interval_24h">24 hodin</string>
     <string name="pref_option_autoSync_interval_12h">12 hodin</string>
@@ -164,7 +164,7 @@
     <string name="no_articles">Žádné články</string>
     <string name="negative_answer">Ne</string>
     <string name="positive_answer">Ano</string>
-    <string name="share_text_extra">" prostřednictvím aplikace Wallabag"</string>
+    <string name="share_text_extra">" prostřednictvím @wallabagapp"</string>
     <string name="share_article_title">Sdílet článek</string>
     <string name="page_url">Adresa URL stránky</string>
     <string name="txtNetOffline">Nejprve se ujistěte, že jste připojeni k internetu.</string>
@@ -208,21 +208,21 @@
     <string name="pref_name_imageCache_enabled">Uložit obrázky z článků do mezipaměti</string>
     <string name="pref_desc_imageCache_enabled">Automaticky stáhnout všechny obrázky ze všech článků do zařízení (zabírá hodně času a místa , pokud je seznam článků dlouhý)</string>
     <string name="pref_desc_misc_handleHttpScheme">Zobrazit Wallabag na seznamu webových prohlížečů</string>
-    <string name="pref_name_misc_localQueue_dumpToFile">Vypsat do souboru</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Uložit do souboru</string>
     <string name="misc_localQueue_empty">Žádné lokální změny</string>
     <string name="misc_localQueue_removeFirstItem_done">Hotovo</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">Vypsáno do %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Uloženo jako %s</string>
     <string name="connectionWizard_misc_scanQrCode">Naskenujte QR kód</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Nainstalujte si prosím aplikaci na skenování QR kódů</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Nejprve nainstalujte aplikaci na skenování QR kódů.)</string>
     <string name="connectionWizard_provider_general_next">Připojit</string>
     <string name="connectionWizard_provider_wallabagit_next">Připojit</string>
     <string name="notification_clipboardLabel">Podrobnosti o chybě</string>
-    <string name="contentIsTooLong">Obsah článku je pro zobrazení příliš dlouhý</string>
+    <string name="contentIsTooLong">Obsah článku je příliš dlouhý pro zobrazení</string>
     <string name="other_searchHint">Hledat podle názvu článku nebo textu</string>
     <string name="pref_desc_misc_localQueue_notice">Nic tu nedělejte, pokud nevíte, co děláte!</string>
     <string name="pref_categoryName_misc_localQueue">Místní změny</string>
-    <string name="pref_desc_misc_appendWallabagMention">Připojí ke sdílenému textu \"prostřednictvím aplikace Wallabag\"</string>
-    <string name="pref_name_misc_appendWallabagMention">Zmínit Wallabag při sdílení</string>
+    <string name="pref_desc_misc_appendWallabagMention">Připojit ke sdílenému textu „prostřednictvím @wallabagapp“</string>
+    <string name="pref_name_misc_appendWallabagMention">Připojit zmínku Wallabagu</string>
     <string name="pref_name_ui_keepScreenOn">Nevypínat obrazovku při čtení</string>
     <string name="scrolledOverBottom">Posuňte ještě %dx přes spodek pro označení článku jako přečteného</string>
     <string name="pref_name_ui_article_textAlignment_justify">Zarovnání textu: Do bloku</string>
@@ -240,7 +240,7 @@
     <string name="pref_desc_ui_showArticleAddedDialog">Zobrazí dialogové okno umožňující označit nově přidaný článek jako oblíbený, archivovaný nebo k němu přidat štítky (nebo se v opačném případě zobrazí informační zpráva)</string>
     <string name="connectionWizard_welcome_rerunNotice">(Průvodce připojením můžete kdykoli znovu spustit z „Nastavení“.)</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Jiný</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Vyberte tuto možnost pro ruční zadání požadovaného nastavení</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Umožní vám zadat nastavení ručně</string>
     <string name="pref_desc_ui_previewImage_enabled">Zobrazit před článkem náhledový obrázek</string>
     <string name="pref_name_ui_previewImage_enabled">Náhledový obrázek</string>
     <string name="pref_name_ui_disableTouch_keyCode">Tlačítko „Žádné dotykové zadávání“</string>
@@ -264,35 +264,35 @@
     <string name="pref_name_misc_logging_logcatToFile">Uložit výstup logcat do souboru</string>
     <string name="pref_desc_misc_localQueue_removeFirstItem">Odebere první nesynchronizovanou položku. Může pomoci s opakovanými oznámeními o chybě během synchronizace. Tip: Všechny místní změny nejprve uložte do souboru.</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Odebrat první položku místní fronty</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Vypíše všechny místní změny do souboru txt (můžete si ho sami prostudovat nebo připojit k hlášení o chybě)</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Uloží všechny místní změny do souboru TXT (pro samostatné prostudování nebo připojení k hlášení o chybě)</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">Opravdu chcete vymazat databázi\?</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Vymazat databázi\?</string>
-    <string name="pref_desc_misc_wipeDB">Vymaže všechny články z místní databáze a odebere také všechny nesynchronizované místní změny a adresy URL</string>
+    <string name="pref_desc_misc_wipeDB">Odstraní články a všechny nesynchronizované místní změny a adresy URL z místní databáze</string>
     <string name="pref_name_misc_wipeDB">Vymazat databázi</string>
     <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Používá tokenizér ICU pro indexování fulltextového vyhledávání (jinak se používá obecný tokenizér unicode61). Může zlepšit výsledky hledání pro čínské, japonské a korejské jazyky. Možnost se projeví až po „Úplné aktualizaci“.</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Pro fulltextové vyhledávání použít tokenizér ICU</string>
     <string name="pref_name_misc_handleHttpScheme">Zpracovat schéma HTTP</string>
     <string name="pref_categoryName_miscellaneous">Různé</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Toto umožňuje synchronizovat místní změny (přidané odkazy, archivované články atd.) se serverem, jakmile bude k dispozici síť.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Synchronizuje místní změny (přidané odkazy, archivované články atd.) se serverem, jakmile je znovu online.</string>
     <string name="pref_name_autoSyncQueue_enabled">Samostatná automatická synchronizace pro místní změny</string>
-    <string name="pref_desc_autoSync_enabled">Toto povolí automatickou synchronizaci místních změn (přidané odkazy, archivované články atd.) a stahování nových článků podle plánu</string>
+    <string name="pref_desc_autoSync_enabled">Automaticky synchronizuje místní změny (přidané odkazy, archivované články atd.) a stahuje nové články podle plánu</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Více informací najdete v popisu různých typů synchronizace výše</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">„Úklid odstraněného článku“ po „Rychlé“ synchronizaci</string>
-    <string name="pref_desc_sync_syncTypes_text">Existují dva hlavní typy synchronizace: \"Plná\" a \"Rychlá\".
+    <string name="pref_desc_sync_syncTypes_text">„Plná“ a „Rychlá“ jsou dva hlavní typy synchronizace.
 \n
-\n\"Plná\" synchronizace odstraní veškerý místní obsah a znovu ho stáhne. Je dostupná v nabídce možností jako poslední možnost.
+\n „Plná“ odstraní veškerý místní obsah a znovu jej stáhne. (Tato možnost je zde v nabídce jako poslední možnost.)
 \n
-\n\"Rychlá\" synchronizace (přírůstková) stahuje pouze změny provedené od předchozí synchronizace, což snižuje čas a vynaloženou šířku pásma. Tato metoda má však nedostatek: Neumí rozpoznat vzdáleně odstraněný článek (takže během \"Rychlé\" synchronizace nebudou odstraněny žádné místní články). Pro spuštění táhněte dolů za nejvýše položeným posuvníkem v libovolném seznamu článků.
+\n „Rychlá“ (přírůstková) stahuje všechny změny provedené od předchozí synchronizace, aby se ušetřil čas a šířka pásma. Nedokáže rozpoznat a odstranit vzdáleně odstraněné články. (Pro použití potáhněte ↓ za nejvýše položeným posuvníkem v libovolném seznamu článků.)
 \n
-\nPro nápravu nedostatku \"Rychlé\" synchronizace zkontroluje \"Úklid odstraněného článku\" každý místní článek a zeptá se serveru, zda je na serveru stále přítomen – pokud ne, bude místní článek odebrán. V závislosti na počtu článků, které máte, to chvíli trvá, ale šetří to provoz \"Plné\" synchronizace.
+\n Použijte „Úklid odstraněných článků“ pro automatické odebrání všech místních článků, které nebyly nalezeny na serveru. Chvíli to trvá, ale ušetří to provoz oproti „Plné“ synchronizaci.
 \n
-\nŽádná z těchto funkcí neovlivňuje synchronizaci mezi klientem a serverem: Vaše místní změny budou vždy odeslány na server před aktualizací místního obsahu.</string>
+\n Místní změny jsou vždy synchronizovány z klienta na server před aktualizací místního obsahu (pokud to selže, nic se neztratí).</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Použít obrázek náhledu článku (pokud je k dispozici) jako obal alba (zobrazený v oznámení a případně jako pozadí zamykací obrazovky)</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">Náhledový obrázek jako obrázek alba</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Stisknutí tlačítka \"Předchozí\" u médií přeskočí rychle zpět namísto přeskočení na předchozí článek</string>
-    <string name="pref_name_tts_previousButtonIsRewind">Tlačítko \"předchozí\" přeskakuje zpět</string>
-    <string name="pref_desc_tts_nextButtonIsFastForward">Stisknutí tlačítka \"Další\" u médií přeskočí rychle vpřed namísto přeskočení na další článek</string>
-    <string name="pref_name_tts_nextButtonIsFastForward">Tlačítko \"Další\" přeskakuje vpřed</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Stisknutí tlačítka „Předchozí“ u médií přeskočí rychle zpět namísto přeskočení na předchozí článek</string>
+    <string name="pref_name_tts_previousButtonIsRewind">Tlačítko „Předchozí“ přeskakuje zpět</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Stisknutí tlačítka „Další“ u médií přeskočí rychle vpřed namísto přeskočení na další článek</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">Tlačítko „Další“ přeskakuje vpřed</string>
     <string name="pref_name_tts_rewindTime">Čas přeskočení zpět</string>
     <string name="pref_name_tts_fastForwardTime">Čas rychlého přeskočení vpřed</string>
     <string name="pref_desc_ui_mathRendering_delimiters">Vyberte oddělovače prostředí, které by mělo zpracovat KaTeX</string>
@@ -332,19 +332,19 @@
     <string name="pref_desc_runConnectionWizard">Pomůže provést základní nastavení připojení</string>
     <string name="d_disableTouch_currentCode">Aktuálně vybraný kód klíče (stiskněte tlačítko pro jeho změnu):</string>
     <string name="d_disableTouch_changeKey_title">Tlačítko pro vypnutí dotykového zadávání</string>
-    <string name="menu_lists_sweepDeletedArticles">\"Uklidit\" odstraněné články</string>
+    <string name="menu_lists_sweepDeletedArticles">„Uklidit“ odstraněné články</string>
     <string name="notification_channel_name_tts">Převod textu na řeč Wallabag</string>
     <string name="notification_channel_group_name_tts">Převod textu na řeč</string>
     <string name="downloadAsFileProgress">Wallabag stahuje váš článek do %s</string>
     <string name="downloadAsFileProgressDetail">Wallabag stahuje váš článek %1$s do %2$s</string>
     <string name="aboutText"><b>Aplikace Wallabag pro Android</b>
-\n Wallabag je samohostitelná aplikace, díky které už nezmeškáte žádný obsah. Klikněte, uložte a přečtěte si extrahovaný obsah ve svém volném čase.</string>
+\n Wallabag je samostatně hostovatelná aplikace, díky které už nezmeškáte žádný obsah. Klikněte, uložte a přečtěte si extrahovaný obsah ve svém volném čase.</string>
     <string name="articleList_ArchivedMark">Značka Archivováno</string>
     <string name="articleList_favoriteMark">Značka Oblíbené</string>
     <string name="testConnection_errorMessage_httpAuth">Ověření HTTP selhalo</string>
     <string name="notification_stacktrace">Sledování zásobníku:</string>
     <string name="connectionWizard_misc_scanQrCode_desc">Nebo konfigurujte aplikaci pomocí QR kódu
-\n (dostupné v sekci „Nastavení“ ve webové aplikaci)</string>
+\n (dostupné v sekci „Konfigurace“ ve webové aplikaci)</string>
     <string name="pref_name_misc_addTitleToSharedText">Přidat název ke sdílenému textu</string>
     <string name="pref_desc_misc_addTitleToSharedText">Přidat název článku ke sdílenému textu</string>
 </resources>
