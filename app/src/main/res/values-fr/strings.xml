@@ -349,4 +349,6 @@
     <string name="pref_name_ui_mathRendering_enabled">Rendu du contenu mathématique</string>
     <string name="pref_name_misc_addTitleToSharedText">Ajouter un titre pour partager le texte</string>
     <string name="pref_desc_misc_addTitleToSharedText">Ajouter un titre à l\'article pour partager le texte</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Ou utilisez un QR code pour configurer l\'application
+\n (voir \"Configuration\" &gt; \"Paramètres\" sur l\'application web)</string>
 </resources>
