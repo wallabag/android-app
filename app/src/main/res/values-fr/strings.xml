@@ -82,7 +82,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Impossible d\'accéder à l\'API : %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Erreur inconnue</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : Vérifiez votre identifiant et mot de passe.</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : vérifiez vos identifiant et mot de passe.</string>
     <string name="previousUpdateNotFinished">La mise à jour précédente n\'est pas terminée</string>
     <string name="feedName_favorites">Favoris</string>
     <string name="feedName_archived">Archivés</string>
@@ -118,7 +118,7 @@
     <string name="notification_updatingArticles_fast">Mise à jour rapide en cours</string>
     <string name="notification_sweepingDeletedArticles">Nettoyage des articles supprimés</string>
     <string name="notification_downloadingImages">Téléchargement des images…</string>
-    <string name="notification_syncingQueue">Synchronisation des changements locaux en cours</string>
+    <string name="notification_syncingQueue">Synchronisation des changements locaux…</string>
     <string name="notification_error">Erreur</string>
     <string name="notification_incorrectCredentials">Identifiants incorrects</string>
     <string name="notification_incorrectConfiguration">Configuration incorrecte</string>
@@ -194,8 +194,8 @@
     <string name="pref_categoryName_ui_misc">Divers</string>
     <string name="pref_name_ui_disableTouch_enabled">Désactiver l\'interface tactile</string>
     <string name="pref_desc_ui_disableTouch_enabled">Appuyez sur le bouton \"Désactiver l\'interface tactile\" (bouton de la caméra par défaut) pour bloquer ou débloquer la saisie tactile sur l\'écran de lecture (les commandes du système ne sont pas affectées).</string>
-    <string name="pref_name_ui_disableTouch_keyCode">Bouton de désactivation de l\'interface tactile</string>
-    <string name="pref_desc_ui_disableTouch_keyCode">Appuyez ici pour configurer le bouton permettant la (dés)activation de l\'interface tactile</string>
+    <string name="pref_name_ui_disableTouch_keyCode">Bouton \"Désactivation l\'interface tactile\"</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">Sélectionner un bouton pour (dés)activer l\'interface tactile</string>
     <string name="pref_name_ui_scrollOverBottom">Faire défiler la page vers le bas pour marquer comme lu</string>
     <string name="pref_desc_ui_scrollOverBottom">Configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string>
     <string name="pref_categoryName_sync">Synchronisation</string>
@@ -213,10 +213,10 @@
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Vérifier les articles supprimés après une synchronisation rapide</string>
     <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire ci-dessus la description des types de synchronisation pour plus d\'informations</string>
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
-    <string name="pref_name_autoSync_onStartup_enabled">Activer la synchronisation automatique lors du lancement de l\'application</string>
+    <string name="pref_name_autoSync_onStartup_enabled">Synchronisation automatique au lancement de l\'application</string>
     <string name="pref_decs_autoSync_onStartup_enabled">L\'application se synchonisera lorsque vous l\'ouvrirez</string>
-    <string name="pref_name_autoSync_enabled">Activer la synchronisation automatique</string>
-    <string name="pref_desc_autoSync_enabled">Ceci permet la synchronisation automatique des changement locaux (ajout de liens, articles archivés, etc.) et le téléchargement de nouveaux articles périodiquement</string>
+    <string name="pref_name_autoSync_enabled">Synchronisation automatique</string>
+    <string name="pref_desc_autoSync_enabled">Synchronise automatiquement les changement locaux (liens ajoutés, articles archivés, etc.) et télécharge les nouveaux articles périodiquement</string>
     <string name="pref_name_autoSync_interval">Intervalle de synchronisation automatique</string>
     <string name="pref_option_autoSync_interval_15m">15 minutes</string>
     <string name="pref_option_autoSync_interval_30m">30 minutes</string>
@@ -229,9 +229,9 @@
         <item>Complète</item>
     </string-array>
     <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
-    <string name="pref_desc_autoSyncQueue_enabled">Ceci permet de synchroniser les changements locaux (ajout de liens, articles archivés, etc.) avec le serveur dès que le réseau devient accessible.</string>
+    <string name="pref_desc_autoSyncQueue_enabled">Synchronise les changements locaux (liens ajoutés, articles archivés, etc.) avec le serveur dès que le réseau redevient accessible.</string>
     <string name="pref_name_imageCache_enabled">Mettre les images de l\'article en cache</string>
-    <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images dans chaque article et les sauvegarde sur l\'appareil. En fonction du nombre d\'articles de votre instance wallabag, cela peut prendre un moment et utiliser beaucoup d\'espace disque sur votre appareil.</string>
+    <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images de chaque article sur l\'appareil (prend du temps et de l\'espace disque si le nombre d\'articles est important)</string>
     <string name="pref_name_storage_dbPath">Emplacement de la base de données</string>
     <string name="pref_name_storage_dbPath_internalStorage">Stockage interne</string>
     <string name="pref_name_storage_dbPath_externalStorage">Stockage externe</string>
@@ -247,8 +247,8 @@
     <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de connexion incorrecte</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag.</string>
-    <string name="connectionWizard_welcome_text">Vous devez configurer une connexion pour utiliser l\'application wallabag. Cet assistant vous aidera à effectuer cette tâche.</string>
-    <string name="connectionWizard_welcome_rerunNotice">Vous pouvez relancer l\'assistant de configuration depuis les paramètres de l\'application.</string>
+    <string name="connectionWizard_welcome_text">Configurer au préalable une connexion avec l\'aide de l\'assistant</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Vous pouvez relancer l\'assistant de configuration depuis les paramètres.)</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
     <string name="connectionWizard_welcome_next">Suivant</string>
     <string name="connectionWizard_providerSelection_titleMessage">Choisissez votre fournisseur de wallabag</string>
@@ -290,21 +290,21 @@
     <string name="notification_clipboardLabel">Détails de l\'erreur</string>
     <string name="notification_copyToClipboard">Copier dans le presse-papiers</string>
     <string name="notification_stacktrace">Pile d\'erreur :</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Veuillez installer un lecteur de codes QR</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Installez un lecteur de QR-codes au préalable.)</string>
     <string name="connectionWizard_misc_scanQrCode">Scanner un code QR</string>
-    <string name="misc_localQueue_dumpToFile_header">Si vous avez des soucis avec la synchronisation, merci d\'indiquer votre problème ici : %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Signalez les problèmes de synchronisation ici : %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Erreur : %s</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">Exporté dans %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Sauvegardé dans %s</string>
     <string name="misc_localQueue_removeFirstItem_done">Fait</string>
     <string name="misc_localQueue_empty">Pas de changement local</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Enlever le premier élément non-synchronisé. Peut aider si vous avez des notification d\'erreur répétitives durant la synchronisation. Assurez-vous d\'exporter les changements locaux dans un fichier au préalable</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Enlève le premier élément non-synchronisé. Peut aider si vous avez des notifications d\'erreur répétitives durant la synchronisation. Assurez-vous d\'exporter les changements locaux dans un fichier au préalable</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Enlever le premier élément local de la file d\'attente</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Exporte toutes les modifications locales dans un fichier .txt (que vous pouvez étudiez vous-même ou joindre à un rapport de bug)</string>
-    <string name="pref_name_misc_localQueue_dumpToFile">Exporter dans un fichier</string>
-    <string name="pref_desc_misc_localQueue_notice">Ne touchez à rien ici sauf si vous savez ce que vous faites</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Sauvegarde toute les modifications locales dans un fichier .txt (pour l\'examiner ou le joindre à un rapport de bug)</string>
+    <string name="pref_name_misc_localQueue_dumpToFile">Sauvegarder dans un fichier</string>
+    <string name="pref_desc_misc_localQueue_notice">Ne touchez à rien ici sauf si vous savez ce que vous faites!</string>
     <string name="pref_name_misc_localQueue_notice">ATTENTION</string>
     <string name="pref_categoryName_misc_localQueue">Changements locaux</string>
-    <string name="pref_desc_ui_annotations_enabled">Fonction expérimentale ! Affichez, éditez et créez des annotations</string>
+    <string name="pref_desc_ui_annotations_enabled">Expérimental ! Affichez, éditez et créez des annotations</string>
     <string name="pref_name_ui_annotations_enabled">Gestion des annotations</string>
     <string name="notification_action_media_next">Suivant</string>
     <string name="notification_action_media_fastforward">Avance rapide</string>
@@ -312,7 +312,7 @@
     <string name="notification_action_media_pause">Pause</string>
     <string name="tts_image">Image : %s</string>
     <string name="articleContent_previewImageAltText">Image d\'aperçu</string>
-    <string name="contentIsTooLong">Le contenu de l\'article est trop long pour être affiché</string>
+    <string name="contentIsTooLong">Contenu de l\'article trop long pour être affiché</string>
     <string name="untagged">&lt;non étiqueté&gt;</string>
     <string name="title">Titre</string>
     <string name="articleEdit_openArticle">Ouvrir l\'article</string>
@@ -345,7 +345,7 @@
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Utilisez le jetoniseur ICU pour la recherche en texte intégral</string>
     <string name="pref_desc_ui_mathRendering_delimiters">Sélectionnez les délimiteurs d\'environnement que KaTeX doit traiter</string>
     <string name="pref_name_ui_mathRendering_delimiters">Délimiteurs mathématiques</string>
-    <string name="pref_desc_ui_mathRendering_enabled">Activer le rendu de contenu mathématique en LaTeX via KaTeX</string>
+    <string name="pref_desc_ui_mathRendering_enabled">Rendu de contenu mathématique en LaTeX via KaTeX</string>
     <string name="pref_name_ui_mathRendering_enabled">Rendu du contenu mathématique</string>
     <string name="pref_name_misc_addTitleToSharedText">Ajouter un titre pour partager le texte</string>
     <string name="pref_desc_misc_addTitleToSharedText">Ajouter un titre à l\'article pour partager le texte</string>
