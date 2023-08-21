@@ -16,6 +16,8 @@ jobs:
 
       - name: Setup Java JDK
         uses: actions/setup-java@v3.12.0
+        with:
+          distribution: 'temurin'
 
       - name: Cache Gradle packages
         uses: actions/cache@v2
