@@ -321,7 +321,7 @@
     <string name="articleEdit_openArticle">Artikel öffnen</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">Nutze Vorschaubild als Albumgrafik</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Nutze das Artikelvorschaubild (wenn es eines gibt) als Albumgrafik (sichtbar in Benachrichtigungen und vielleicht im Sperrbildschirm als Hintergrund)</string>
-    <string name="pref_desc_tts_previousButtonIsRewind">Das Drücken des Zurück-Buttons spult zurück, anstatt zum vorigen Artikel zu springen</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Das Drücken des Zurück-Knopfs spult zurück, anstatt zum vorigen Artikel zu springen</string>
     <string name="pref_name_tts_previousButtonIsRewind">Zurück-Button spult zurück</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">Das Drücken des Weiterknopf spult vor anstatt zum nächsten Artikel zu springen</string>
     <string name="pref_name_tts_nextButtonIsFastForward">Weiter-Button spult vor</string>
