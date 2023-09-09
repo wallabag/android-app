@@ -119,7 +119,7 @@
     <string name="connectionWizard_welcome_next">Weiter</string>
     <string name="connectionWizard_welcome_prev">Überspringen</string>
     <string name="connectionWizard_welcome_rerunNotice">(Du kannst den Verbindungsassistenten jederzeit vom Einstellungsmenü erneut starten.)</string>
-    <string name="connectionWizard_welcome_text">Zuerst eine Verbindung mit Verbindungsassistent einrichten</string>
+    <string name="connectionWizard_welcome_text">Zuerst eine Verbindung mit Verbindungsassistent einrichten.</string>
     <string name="connectionWizard_welcome_titleMessage">Willkommen bei wallabag.</string>
     <string name="d_configurationChanged_answer_decline">Nicht jetzt</string>
     <string name="d_configurationChanged_message">Führe einen Verbindungstest durch, um zu überprüfen, ob die neuen Parameter funktionieren.</string>
