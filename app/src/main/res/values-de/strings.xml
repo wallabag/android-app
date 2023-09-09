@@ -304,7 +304,7 @@
     <string name="misc_localQueue_removeFirstItem_done">Fertig</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">Gespeichert als %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Fehler: %s</string>
-    <string name="misc_localQueue_dumpToFile_header">Fehlerbericht für Synchronisierungs-Probleme hier anlegen: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Fehlerbericht für Synchronisierungsprobleme hier anlegen: %s</string>
     <string name="menu_annotate">Anmerkung erstellen</string>
     <string name="pref_desc_ui_annotations_enabled">Experimentell! Anmerkungen anzeigen, bearbeiten und erstellen</string>
     <string name="pref_name_ui_annotations_enabled">Unterstützung von Anmerkungen</string>
