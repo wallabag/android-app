@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.1.0'
         classpath 'org.greenrobot:greendao-gradle-plugin:3.3.1'
     }
 }
@@ -21,7 +21,7 @@ allprojects {
 
 tasks {
     wrapper {
-        gradleVersion = "7.0.2"
+        gradleVersion = "8.3"
         distributionType = Wrapper.DistributionType.ALL
     }
 }
