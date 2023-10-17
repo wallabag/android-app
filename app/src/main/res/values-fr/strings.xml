@@ -26,7 +26,7 @@
     <string name="menu_syncLocalChanges">Synchroniser les changements locaux</string>
     <string name="d_deleteArticle_title">Supprimer l\'article ?</string>
     <string name="d_deleteArticle_message">Êtes vous sûr·e de vouloir supprimer l\'article \?</string>
-    <string name="txtNetOffline">Vérifiez que vous êtes bien connecté à Internet</string>
+    <string name="txtNetOffline">Vérifiez que vous êtes bien connecté à Internet.</string>
     <string name="txtConfigNotSet">Merci de configurer les paramètres avant de synchroniser.</string>
     <string name="txtUrlCopied">L\'URL de l\'article a été copiée dans le presse papier</string>
     <string name="dialog_add_label">Ajouter un nouvel article</string>
@@ -82,7 +82,7 @@
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">Impossible d\'accéder à l\'API : %s</string>
     <string name="d_checkCredentials_errorMessage_unknown">Erreur inconnue</string>
     <string name="d_checkCredentials_errorMessage_unknownWithMessage">Erreur inconnue : %s</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter : vérifiez vos identifiant et mot de passe.</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Impossible de se connecter. L\'identifiant ou le mot de passe est peut-être erroné \?</string>
     <string name="previousUpdateNotFinished">La mise à jour précédente n\'est pas terminée</string>
     <string name="feedName_favorites">Favoris</string>
     <string name="feedName_archived">Archivés</string>
@@ -192,26 +192,26 @@
     <string name="pref_name_ui_screenScrolling_percent">Pourcentage de la hauteur d\'écran à faire défiler</string>
     <string name="pref_name_ui_screenScrolling_smooth">Défilement fluide</string>
     <string name="pref_categoryName_ui_misc">Divers</string>
-    <string name="pref_name_ui_disableTouch_enabled">Désactiver l\'interface tactile</string>
-    <string name="pref_desc_ui_disableTouch_enabled">Appuyez sur le bouton \"Désactiver l\'interface tactile\" (bouton de la caméra par défaut) pour bloquer ou débloquer la saisie tactile sur l\'écran de lecture (les commandes du système ne sont pas affectées).</string>
+    <string name="pref_name_ui_disableTouch_enabled">Pas d\'interface tactile</string>
+    <string name="pref_desc_ui_disableTouch_enabled">Appuyez sur le bouton « Désactiver l\'interface tactile » (bouton de la caméra par défaut) pour bloquer ou débloquer la saisie tactile sur l\'écran de lecture (les commandes du système ne sont pas affectées)</string>
     <string name="pref_name_ui_disableTouch_keyCode">Bouton \"Désactivation l\'interface tactile\"</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Sélectionner un bouton pour (dés)activer l\'interface tactile</string>
     <string name="pref_name_ui_scrollOverBottom">Faire défiler la page vers le bas pour marquer comme lu</string>
     <string name="pref_desc_ui_scrollOverBottom">Configurer le nombre de fois que vous avez besoin de \"faire défiler vers le bas\" pour marquer un article comme lu</string>
-    <string name="pref_categoryName_sync">Synchronisation</string>
-    <string name="pref_name_sync_syncTypes">Types de synchronisation</string>
-    <string name="pref_desc_sync_syncTypes">Appuyer ici pour en savoir plus à propos des types de synchronisation</string>
-    <string name="pref_desc_sync_syncTypes_text">Il y a deux principaux modes de types de synchronisation : « Complet » et « Rapide ».
+    <string name="pref_categoryName_sync">Synchro en cours</string>
+    <string name="pref_name_sync_syncTypes">Manières de synchroniser</string>
+    <string name="pref_desc_sync_syncTypes">Appuyer pour plus d\'informations sur les types de synchronisation</string>
+    <string name="pref_desc_sync_syncTypes_text">« Pleine » et « Rapide » sont les deux principaux types de synchronisation.
 \n
-\n Le mode complet supprime tout le contenu local et le télécharge à nouveau. Ce mode de synchronisation est disponible dans les options du menu. Il est recommandé d\'utiliser cette option uniquement en dernier recours.
+\n« Pleine » supprime tout le contenu local et le recharge. (L\'option est là dans le menu en dernier recours.)
 \n
-\n La synchronisation rapide (incrémentielle) télécharge uniquement les changements effectués depuis la synchronisation précédente, qui est habituellement bien plus rapide et utilise moins de bande passante. Toutefois, cette méthode à un désavantage : elle ne peut pas détecter les articles supprimés sur le serveur (donc les articles locaux ne sont pas supprimés durant la synchronisation rapide). Ce type de synchronisation est exécutée via le geste « tirez pour rafraîchir » sur l\'écran de la liste des articles.
+\n« Rapide » (incrémental) télécharge tout changement effectué depuis le synchronisation précédent pour gagner du temps et de la bande passante. Il ne peut pas détecter et supprimer des articles supprimés à distance. (Glisser ↓ au-delà de la barre de la position supérieure dans n\'importe quelle liste d\'article pour l\'utiliser).
 \n
-\n Pour remédier à cette lacune, il y a une option pour exécuter le nettoyage des articles supprimés qui demande au serveur si pour chaque article local il existe encore sur le serveur – si ce n\'est pas le cas, l\'article local est supprimé. En fonction du nombre d\'articles que vous avez, cette opération peut prendre du temps, mais cela économise beaucoup de bande passante par rapport à la synchronisation complète.
+\nUtilisez « Retirer l\'article balayer » pour auto-enlever tout article local non trouvé sur le serveur. Ça prend un certain temps, mais sauve le trafic sur le synchronisation « Pleine ».
 \n
-\n Aucune de ces fonctions n\'affecte la synchronisation client à serveur : vos changements locaux seront toujours envoyés au serveur avant de mettre à jour le contenu local.</string>
+\nLes modifications locales sont toujours synchronisées du client au serveur avant de mettre à jour le contenu local (si elle échoue, rien n\'est perdu).</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">Vérifier les articles supprimés après une synchronisation rapide</string>
-    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">Lire ci-dessus la description des types de synchronisation pour plus d\'informations</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">La description de différents types de synchronisation ci-dessus a plus d\'info</string>
     <string name="pref_categoryName_autoSync">Synchronisation automatique</string>
     <string name="pref_name_autoSync_onStartup_enabled">Synchronisation automatique au lancement de l\'application</string>
     <string name="pref_decs_autoSync_onStartup_enabled">L\'application se synchonisera lorsque vous l\'ouvrirez</string>
@@ -228,7 +228,7 @@
         <item>Rapide</item>
         <item>Complète</item>
     </string-array>
-    <string name="pref_name_autoSyncQueue_enabled">Changements locaux</string>
+    <string name="pref_name_autoSyncQueue_enabled">Synchro automatique séparée pour les changements locaux</string>
     <string name="pref_desc_autoSyncQueue_enabled">Synchronise les changements locaux (liens ajoutés, articles archivés, etc.) avec le serveur dès que le réseau redevient accessible.</string>
     <string name="pref_name_imageCache_enabled">Mettre les images de l\'article en cache</string>
     <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images de chaque article sur l\'appareil (prend du temps et de l\'espace disque si le nombre d\'articles est important)</string>
@@ -240,20 +240,20 @@
     <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Ajouter « via @wallabagapp » aux articles partagés</string>
     <string name="pref_name_misc_handleHttpScheme">Prendre en charge les URI HTTP</string>
-    <string name="pref_desc_misc_handleHttpScheme">Montrer wallabag dans la liste des navigateurs</string>
-    <string name="pref_name_misc_wipeDB">Purger la base de données</string>
-    <string name="pref_desc_misc_wipeDB">Supprime tous les articles de la base de données locale, ainsi que tous les changements et URL non synchronisés</string>
-    <string name="pref_name_misc_wipeDB_confirmTitle">Purger la base de données ?</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Êtes vous certain de vouloir purger la base de données ?</string>
+    <string name="pref_desc_misc_handleHttpScheme">Afficher wallabag dans la liste des navigateurs</string>
+    <string name="pref_name_misc_wipeDB">Effacer la base de données</string>
+    <string name="pref_desc_misc_wipeDB">Supprime les articles et tous les changements et URL locaux non enregistrés de la base de données locale</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">Effacer la base de données \?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Êtes-vous sûr·e de vouloir effacer la base de données \?</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">URI de connexion incorrecte</string>
     <string name="connectionWizard_welcome_titleMessage">Bienvenue sur wallabag.</string>
-    <string name="connectionWizard_welcome_text">Configurer au préalable une connexion avec l\'aide de l\'assistant</string>
+    <string name="connectionWizard_welcome_text">Créer une connexion en utilisant l\'assistant d\'abord.</string>
     <string name="connectionWizard_welcome_rerunNotice">(Vous pouvez relancer l\'assistant de configuration depuis les paramètres.)</string>
     <string name="connectionWizard_welcome_prev">Ignorer</string>
     <string name="connectionWizard_welcome_next">Suivant</string>
     <string name="connectionWizard_providerSelection_titleMessage">Choisissez votre fournisseur de wallabag</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Autre</string>
-    <string name="connectionWizard_providerSelection_provider_general_desc">Choisissez cette option pour entrer les paramètres manuellement</string>
+    <string name="connectionWizard_providerSelection_provider_general_desc">Vous permet de taper dans les paramètres manuellement</string>
     <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Choisissez cette option si vous avez un compte sur https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_prev">Ignorer</string>
     <string name="connectionWizard_providerSelection_next">Suivant</string>
@@ -297,12 +297,12 @@
     <string name="misc_localQueue_dumpToFile_result_dumped">Sauvegardé dans %s</string>
     <string name="misc_localQueue_removeFirstItem_done">Fait</string>
     <string name="misc_localQueue_empty">Pas de changement local</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Enlève le premier élément non-synchronisé. Peut aider si vous avez des notifications d\'erreur répétitives durant la synchronisation. Assurez-vous d\'exporter les changements locaux dans un fichier au préalable</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Enlève le premier élément non synchronisé. Peut aider si vous avez des notifications d\'erreur répétitives durant la synchronisation. Assurez-vous d\'exporter les changements locaux dans un fichier au préalable.</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Enlever le premier élément local de la file d\'attente</string>
     <string name="pref_desc_misc_localQueue_dumpToFile">Sauvegarde toute les modifications locales dans un fichier .txt (pour l\'examiner ou le joindre à un rapport de bug)</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Sauvegarder dans un fichier</string>
-    <string name="pref_desc_misc_localQueue_notice">Ne touchez à rien ici sauf si vous savez ce que vous faites!</string>
-    <string name="pref_name_misc_localQueue_notice">ATTENTION</string>
+    <string name="pref_desc_misc_localQueue_notice">Ne touchez à rien ici sauf si vous savez ce que vous faites !</string>
+    <string name="pref_name_misc_localQueue_notice">Attention</string>
     <string name="pref_categoryName_misc_localQueue">Changements locaux</string>
     <string name="pref_desc_ui_annotations_enabled">Expérimental ! Affichez, éditez et créez des annotations</string>
     <string name="pref_name_ui_annotations_enabled">Gestion des annotations</string>
@@ -320,28 +320,28 @@
     <string name="misc_logging_logcatToFile_result_saved">Journaux enregistrés dans %s</string>
     <string name="pref_desc_misc_logging_logcatToFile">Enregistre la sortie du logcat (journaux système des applications Android) dans un fichier sous /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
     <string name="pref_name_misc_logging_logcatToFile">Enregistrer la sorte logcat dans un fichier</string>
-    <string name="pref_desc_tts_fastForwardTime">Le nombre de secondes à sauter lorsque le bouton « avance rapide » est utilisé</string>
+    <string name="pref_desc_tts_fastForwardTime">Nombre de secondes à sauter en appuyant sur « Avance rapide »</string>
     <string name="pref_categoryName_tts">Synthèse vocale</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Empêcher les appareils Onyx de forcer les couleurs des liens en noir</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Thème alternatif pour Onyx Boox</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification sera affichée à la place si l\'option est désactivée.</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification sera affichée à la place si l\'option est désactivée</string>
     <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
     <string name="manageTags_addMoreTags">Ajouter plus d\'étiquettes :</string>
     <string name="manageTags_currentTags_none">Aucune</string>
     <string name="notification_action_media_rewind">Retour rapide</string>
-    <string name="pref_desc_tts_showPreviewAsAlbumArt">Utilise l\'image d\'aperçu de l\'article (si présente) en tant que pochette de l\'album (visible dans la notification et possiblement affichée en tant que fond d\'écran de l\'écran de verrouillage)</string>
-    <string name="pref_name_tts_showPreviewAsAlbumArt">Utiliser l\'aperçu en tant que pochette de l\'album</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">Utiliser l\'image de prévisualisation de l\'article (si présent) comme l\'album cover-art (selon la notification et éventuellement comme fond de serrure)</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">Prévisualiser l\'image en couverture d\'album</string>
     <string name="pref_desc_tts_previousButtonIsRewind">Appuyer sur le bouton « Précédent » fait un retour rapide au lieu de passer à l\'article précédent</string>
     <string name="pref_name_tts_previousButtonIsRewind">Le bouton « Précédent » fait un retour rapide</string>
     <string name="pref_desc_tts_nextButtonIsFastForward">Appuyer sur le bouton « Suivant » fait une avance rapide au lieu de passer à l\'article suivant</string>
     <string name="pref_name_tts_nextButtonIsFastForward">Le bouton « Suivant » fait une avance rapide</string>
-    <string name="pref_desc_tts_rewindTime">Le nombre de secondes à sauter quand on appuie sur le bouton « retour rapide »</string>
+    <string name="pref_desc_tts_rewindTime">Nombre de secondes en appuyant « Retour arrière »</string>
     <string name="pref_name_tts_rewindTime">Retour rapide</string>
     <string name="pref_name_tts_fastForwardTime">Avance rapide</string>
     <string name="menu_tag">Ajouter une étiquette</string>
     <string name="notification_channel_name_background_operations">Opérations en tâche de fond</string>
     <string name="notification_backgroundOperations">Opérations en tâche de fond</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Utilise le jetoniseur ICU pour l\'indexation de recherche en texte intégral (le jetoniseur générique unicode61 est utilisé dans le cas contraire). Peut améliorer les résultats de recherche pour les langues coréenne, chinoise et japonaise. Une « mise à jour complète » est requise pour que l\'option prenne effet</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Utilise le jetoniseur ICU pour l\'indexation de recherche en texte intégral (le jetoniseur générique unicode61 est utilisé dans le cas contraire). Peut améliorer les résultats de recherche pour les langues coréenne, chinoise et japonaise. Une « mise à jour complète » est requise pour que l\'option prenne effet.</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">Utilisez le jetoniseur ICU pour la recherche en texte intégral</string>
     <string name="pref_desc_ui_mathRendering_delimiters">Sélectionnez les délimiteurs d\'environnement que KaTeX doit traiter</string>
     <string name="pref_name_ui_mathRendering_delimiters">Délimiteurs mathématiques</string>
