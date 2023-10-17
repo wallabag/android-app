@@ -292,7 +292,7 @@
     <string name="notification_clipboardLabel">Fehlerdetails</string>
     <string name="copiedToClipboard">In Zwischenablage kopiert</string>
     <string name="connectionWizard_misc_scanQrCode">Scanne einen QR-Code</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">(Zuerst QR-Code Scanner installieren)</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Zuerst QR-Code Scanner installieren.)</string>
     <string name="pref_categoryName_misc_localQueue">Lokale Änderungen</string>
     <string name="pref_name_misc_localQueue_notice">Warnung</string>
     <string name="pref_desc_misc_localQueue_notice">Tu hier nichts bevor du nicht weißt, was du hier tust!</string>
@@ -305,7 +305,7 @@
     <string name="misc_localQueue_dumpToFile_result_dumped">Gespeichert als %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Fehler: %s</string>
     <string name="misc_localQueue_dumpToFile_header">Fehlerbericht für Synchronisierungsprobleme hier anlegen: %s</string>
-    <string name="menu_annotate">Anmerkung erstellen</string>
+    <string name="menu_annotate">Anmerken</string>
     <string name="pref_desc_ui_annotations_enabled">Experimentell! Anmerkungen anzeigen, bearbeiten und erstellen</string>
     <string name="pref_name_ui_annotations_enabled">Unterstützung von Anmerkungen</string>
     <string name="notification_action_media_next">Nächster</string>
@@ -340,7 +340,7 @@
     <string name="pref_name_misc_logging_logcatToFile">Speichere die Logcat-Ausgabe in eine Datei</string>
     <string name="manageTags_addMoreTags">Mehr Tags hinzufügen:</string>
     <string name="manageTags_currentTags_none">Keine</string>
-    <string name="menu_tag">Tag hinzufügen</string>
+    <string name="menu_tag">Taggen</string>
     <string name="notification_channel_name_background_operations">Hintergrundoperationen</string>
     <string name="notification_backgroundOperations">Hintergrundoperationen</string>
     <string name="pref_desc_ui_mathRendering_enabled">Mathematische LaTeX-Inhalte mithilfe von KaTeX darstellen</string>
