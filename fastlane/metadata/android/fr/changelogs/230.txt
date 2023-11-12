@@ -1,0 +1,8 @@
+- Ajout du support d'Android 14
+- Ajout d'une option pour mettre le titre dans le texte partagé à partir du menu de partage
+- Amélioration du style de l'en-tête des articles
+- Changement de l'apparence du bouton « Scanner un QR-code » à la configuration
+- Amélioration de certains labels
+- Suppression des mentions de Framabag
+- Mise à jour des dépendances
+- Mise à jour des traductions

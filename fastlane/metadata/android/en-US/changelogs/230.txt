@@ -1,0 +1,8 @@
+- Added support for Android 14
+- Added option to put title in shared text from share menu
+- Improved the style of the article header
+- Changed the appearance of the “Scan a QR-code” button in configuration
+- Improvement of certain labels
+- Removal of Framabag mentions
+- Updating dependencies
+- Updating translations
