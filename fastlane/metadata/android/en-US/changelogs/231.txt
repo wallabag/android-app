@@ -1,0 +1,1 @@
+- Add monochromatic app icon for Android 13+
