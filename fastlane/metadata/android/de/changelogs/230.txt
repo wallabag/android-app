@@ -1,0 +1,8 @@
+- Unterstützung für Android 14
+- Option, den Titel in einen geteilten Text vom Teilen-Menü zu schreiben, hinzugefügt
+- Verbesserung des Aussehens vom Artikelkopf
+- Button für das Scannen eines QR-Codes in der Konfiguration geändert
+- Verbesserung von einigen Labeln
+- Entfern der Referenzen zu Framabag
+- Abhängigkeiten aktualisiert
+- Übersetzungen aktualisiert
