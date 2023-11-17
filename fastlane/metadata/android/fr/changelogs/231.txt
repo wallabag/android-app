@@ -1,0 +1,1 @@
+- Ajout d'une icône d'application monochromatique pour Android 13+
