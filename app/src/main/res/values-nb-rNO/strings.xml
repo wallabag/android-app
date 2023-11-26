@@ -11,7 +11,7 @@
     <string name="menuOpenOriginal">Åpne opprinnelig</string>
     <string name="menuTTS">Tekst-til-tale</string>
     <string name="ttsSpeed">Hastighet</string>
-    <string name="ttsPitch">Frekvens</string>
+    <string name="ttsPitch">Tonehøyde</string>
     <string name="ttsVolume">Lydstyrke</string>
     <string name="ttsLanguage">Velg språk</string>
     <string name="ttsVoice">Velg stemme</string>
@@ -25,7 +25,7 @@
     <string name="menu_syncLocalChanges">Synkroniser lokale endringer</string>
     <string name="d_deleteArticle_title">Slett artikkel?</string>
     <string name="d_deleteArticle_message">Er du sikker på at du ønsker å slette artikkelen?</string>
-    <string name="txtNetOffline">Sjekk interttilknytningen!</string>
+    <string name="txtNetOffline">Sjekk tilkobling til internett!</string>
     <string name="txtConfigNotSet">Sett opp programmet før du synkroniserer.</string>
     <string name="dialog_add_label">Legg til ny artikkel</string>
     <string name="page_url">Sidens nettadresse</string>
@@ -42,7 +42,7 @@
     <string name="d_add_fail_title">Feil</string>
     <string name="d_add_fail_text">Kunne ikke funne nettadresse i delingsstreng:\n</string>
     <string name="d_configurationChanged_title">Parameter endret</string>
-    <string name="d_configurationChanged_message">Det later til at noen parameter har blitt endret. Det anbefales å utføre en tilkoblingstest.</string>
+    <string name="d_configurationChanged_message">Test tilkoblingen for å sjekke om de nye parameterne fungerer.</string>
     <string name="d_configurationChanged_answer_decline">Ikke nå</string>
     <string name="d_configurationIsQuestionable_title">Problem oppdaget</string>
     <string name="d_configurationIsQuestionable_message">Det var et tilkoblingsproblem nylig. Det anbefales å utføre en tilkoblingstest.</string>
@@ -107,23 +107,23 @@
     <string name="menu_lists_fullUpdate">Full oppdatering</string>
     <string name="other_searchHint">Søk etter artikkeltittel eller tekst</string>
     <string name="menu_changeTitle">Endre tittel</string>
-    <string name="menu_manageTags">Behandle etiketter</string>
-    <string name="manageTags_title">Behandle etiketter</string>
+    <string name="menu_manageTags">Behandle stikkord</string>
+    <string name="manageTags_title">Behandle stikkord</string>
     <string name="manageTags_save">Lagre</string>
-    <string name="manageTags_textField_hint">Én eller flere etiketter, kommainndelt</string>
+    <string name="manageTags_textField_hint">Én eller flere kommadelte stikkord</string>
     <string name="manageTags_addNew">Legg til</string>
-    <string name="manageTags_currentTags">Valgte etiketter:</string>
+    <string name="manageTags_currentTags">Valgte stikkord:</string>
     <string name="content_estimatedReadingTime">%s min</string>
     <string name="content_estimatedReadingTimeTTSLabel">Antatt lesetid</string>
     <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
     <string name="navigation_drawer_close">Lukk navigasjonsskuff</string>
     <string name="nav_main_articles">Artikler</string>
-    <string name="nav_main_tags">Etiketter</string>
+    <string name="nav_main_tags">Stikkord</string>
     <string name="nav_main_tagged_articles">Merkede artikler</string>
     <string name="nav_add">Legg til ny oppføring</string>
     <string name="nav_other_settings">Innstillinger</string>
     <string name="nav_other_about">Om</string>
-    <string name="title_main_tag">Etikett: %s</string>
+    <string name="title_main_tag">Stikkord: %s</string>
     <string name="pref_name_runConnectionWizard">Kjør tilkoblingsveiviser</string>
     <string name="pref_desc_runConnectionWizard">Geleider deg gjennom de mest grunnleggende tilkoblingsinnstillingene</string>
     <string name="pref_categoryName_connection">Tilkobling</string>
@@ -158,8 +158,8 @@
     <string name="noPreviousArticle">Det er ingen tidligere artikkel i gjeldende liste</string>
     <string name="noNextArticle">Ingen flere artikler i gjeldende liste</string>
     <string name="themeName_solarized">Solarisert</string>
-    <string name="aboutText"><b>wallabag-programfor Android</b>
-\n wallabag er et program du tjener som vertskap for selv, noe som betyr at du aldri mer vil miste innhold. Klikk, lagre, og les når du kan. Det henter ut innholdet slik at du kan lese det når du har tid.</string>
+    <string name="aboutText"><b>wallabag app for Android</b>
+\n wallabag er en egendriftbar app, som gjør at du ikke vil gå glipp av noe innhold lenger. Klikk, lagre og les artikler når det passer deg.</string>
     <string name="pref_desc_connection_url">Eksempler:\n
         https://wallabag.example.com\n
         https://example.com/wallabag\n
@@ -254,7 +254,7 @@
     <string name="pref_name_storage_dbPath_dbMoved">Database flyttet</string>
     <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
     <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>
-    <string name="remove_tag">Fjern etikett</string>
+    <string name="remove_tag">Fjern stikkord</string>
     <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
     <string name="markedAsRead">Artikkel merket som lest</string>
     <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
@@ -314,12 +314,34 @@
     <string name="pref_name_tts_showPreviewAsAlbumArt">Bruk forhåndsvisning som omslagsbilde</string>
     <string name="pref_name_tts_previousButtonIsRewind">«Forrige»-knapp spoler tilbake</string>
     <string name="pref_name_tts_nextButtonIsFastForward">«Neste»-knapp for hurtigspoling</string>
-    <string name="manageTags_addMoreTags">Legg til flere etiketter:</string>
+    <string name="manageTags_addMoreTags">Legg til flere stikkord:</string>
     <string name="manageTags_currentTags_none">Ingen</string>
     <string name="notification_channel_name_background_operations">Bakgrunnsoperasjoner</string>
     <string name="notification_backgroundOperations">Bakgrunnsoperasjoner</string>
     <string name="contentIsTooLong">Kan ikke vise hele artikkelens innhold</string>
-    <string name="menu_tag">Legg till etikett</string>
+    <string name="menu_tag">Legg til stikkord</string>
     <string name="misc_logging_logcatToFile_result_error">Feil: %s</string>
     <string name="pref_name_misc_logging_logcatToFile">Lagre logcat-utdata i fil</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">Trykk «Neste»-knappen vil spole fremover i stedet for å hoppe til neste artikkel</string>
+    <string name="pref_desc_misc_logging_logcatToFile">Lagrer logcat-resultat (Android-applogg) til en fil i /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
+    <string name="misc_logging_logcatToFile_result_saved">Logger lagret til %s</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">Eller konfigurer appen med en QR-kode
+\n (tilgjengelig i «Konfigurasjon»-delen av nettapplikasjonen)</string>
+    <string name="pref_name_ui_mathRendering_delimiters">Matematisk skilletegn</string>
+    <string name="pref_name_ui_annotations_enabled">Støtte for annotation</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Bruker ICU-tokenizer for fulltekstsøk-indeksering (ellers brukes generisk unicode61-tokenizer). Kan forbedre søkeresultat for CJK-språk. «Full oppdatering» kreves for at alternativet skal tre i kraft.</string>
+    <string name="pref_name_misc_ftsIcuTokenizer_enabled">Bruk ICU-tokenizer for fulltekstsøk</string>
+    <string name="menu_annotate">Annoter</string>
+    <string name="pref_desc_misc_addTitleToSharedText">Legg til artikkeltittel til delte tekst</string>
+    <string name="pref_desc_tts_rewindTime">Antall sekunder trykk «Bakover» hopper bakover</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">Forhindra at Onyx-enheter tvinger svarte lenkefarger</string>
+    <string name="pref_name_misc_addTitleToSharedText">Legg til tittel til delt tekst</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">Velg miljøavgrensningene som KaTeX skal behandle</string>
+    <string name="pref_name_ui_showArticleAddedDialog">VIs dialog ved innhenting</string>
+    <string name="pref_name_tts_fastForwardTime">Spole forover hopptid</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">Trykk «Forrige»-knappen vil spole bakover i stedet for å hoppe til forrige artikkel</string>
+    <string name="untagged">&lt;uten_stikkord&gt;</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox drakt løsning</string>
+    <string name="pref_desc_ui_annotations_enabled">Eksperimentell! Se, rediger og lag annotasjon</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">Viser en dialogboks som tillater favoritt/arkivering/merking av en nylig lagt til artikkel (eller ellers en slettemelding)</string>
 </resources>
