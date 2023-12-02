@@ -7,7 +7,6 @@ gen/
 *.apk
 *.ap_
 *.class
-.idea/
 .gradle/
 build/
 local.properties
