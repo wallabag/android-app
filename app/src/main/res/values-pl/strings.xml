@@ -82,8 +82,8 @@
     <string name="wrongUsernameOrPassword_errorMessage">Nie można się zalogować. Może nazwa użytkownika lub hasło są błędne\?</string>
     <string name="previousUpdateNotFinished">Poprzednia aktualizacja nie została jeszcze zakończona</string>
     <string name="feedName_favorites">Ulubione</string>
-    <string name="feedName_archived">Zarchiwizowane</string>
-    <string name="feedName_unread">Nieprzeczytane</string>
+    <string name="feedName_archived">Archiwum</string>
+    <string name="feedName_unread">Do przeczytania</string>
     <string name="articleList_favoriteMark">Dodaj zaznaczone do ulubionych</string>
     <string name="articleList_ArchivedMark">Zarchiwizuj zaznaczone</string>
     <string name="noPreviousArticle">Aktualna lista nie posiada poprzedniego artykułu</string>
