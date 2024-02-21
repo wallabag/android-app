@@ -23,4 +23,5 @@
     <string name="page_url">عنوان ويب الصفحة</string>
     <string name="add_to_favorites">إضافة إلى المفضلة</string>
     <string name="txtNetOffline">يرجى التحقق من الوصول إلى الإنترنت</string>
+    <string name="nav_other_settings">اﻹعدادات</string>
 </resources>
