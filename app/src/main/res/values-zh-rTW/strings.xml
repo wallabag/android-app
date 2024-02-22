@@ -87,7 +87,7 @@
     <string name="manageTags_currentTags">已選擇標籤：</string>
     <string name="themeName_dark_contrast">深色（高對比）</string>
     <string name="feedName_archived">已歸檔</string>
-    <string name="feedName_favorites">收藏夾</string>
+    <string name="feedName_favorites">收藏</string>
     <string name="connectionWizard_providerSelection_prev">略過</string>
     <string name="untagged">（未標籤）</string>
     <string name="menu_tag">添加標籤</string>
@@ -165,4 +165,6 @@
     <string name="nav_main_articles">文章</string>
     <string name="scrolledOverBottom">往下滾動最底部 %d 次以標記為已讀</string>
     <string name="manageTags_textField_hint">一個或更多標籤（用半形逗號分隔）</string>
+    <string name="content_estimatedReadingTimeTTSLabel">閱讀約需時</string>
+    <string name="wrongUsernameOrPassword_errorMessage">不能登入。會否是使用者名稱或密碼不對？</string>
 </resources>
