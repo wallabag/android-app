@@ -162,4 +162,7 @@
     <string name="d_checkCredentials_errorMessage_notFoundWithMessage">找不到 API：%s</string>
     <string name="d_checkCredentials_errorMessage_notFound">找不到 API</string>
     <string name="notification_channel_name_downloading_articles">正在下載 PDF</string>
+    <string name="nav_main_articles">文章</string>
+    <string name="scrolledOverBottom">往下滾動最底部 %d 次以標記為已讀</string>
+    <string name="manageTags_textField_hint">一個或更多標籤（用半形逗號分隔）</string>
 </resources>
