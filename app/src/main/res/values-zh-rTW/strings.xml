@@ -169,4 +169,6 @@
     <string name="wrongUsernameOrPassword_errorMessage">不能登入。會否是使用者名稱或密碼不對？</string>
     <string name="pref_name_ui_annotations_enabled">註釋支援</string>
     <string name="pref_desc_ui_annotations_enabled">實驗中！查看，編輯及建立註釋</string>
+    <string name="connectionWizard_welcome_titleMessage">歡迎使用 wallabag。</string>
+    <string name="menu_changeTitle">變更標題</string>
 </resources>
