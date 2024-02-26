@@ -30,8 +30,8 @@
     <string name="ttsPitch">音調</string>
     <string name="ttsSpeed">速率</string>
     <string name="menuTTS">文字轉語音</string>
-    <string name="menuCopyOriginalURL">複製原始網址</string>
-    <string name="menuOpenOriginal">打開原文</string>
+    <string name="menuCopyOriginalURL">複製原文網址</string>
+    <string name="menuOpenOriginal">開啟原文</string>
     <string name="menuDelete">刪除</string>
     <string name="menuPrevious">上一篇</string>
     <string name="menuNext">下一篇</string>
