@@ -30,14 +30,14 @@
     <string name="ttsPitch">音調</string>
     <string name="ttsSpeed">速率</string>
     <string name="menuTTS">文字轉語音</string>
-    <string name="menuCopyOriginalURL">複製原始網址</string>
-    <string name="menuOpenOriginal">打開原文</string>
+    <string name="menuCopyOriginalURL">複製原文網址</string>
+    <string name="menuOpenOriginal">開啟原文</string>
     <string name="menuDelete">刪除</string>
     <string name="menuPrevious">上一篇</string>
     <string name="menuNext">下一篇</string>
     <string name="menuShare">分享</string>
-    <string name="remove_from_favorites">從收藏夾中刪除</string>
-    <string name="add_to_favorites">添加到收藏夾</string>
+    <string name="remove_from_favorites">從收藏中刪除</string>
+    <string name="add_to_favorites">添加到收藏</string>
     <string name="btnMarkUnread">標記為未讀</string>
     <string name="btnMarkRead">標記為已讀</string>
     <string name="d_urlAction_copyToClipboard">複製到剪貼簿</string>
@@ -86,8 +86,8 @@
     <string name="manageTags_addNew">添加</string>
     <string name="manageTags_currentTags">已選擇標籤：</string>
     <string name="themeName_dark_contrast">深色（高對比）</string>
-    <string name="feedName_archived">已歸檔</string>
-    <string name="feedName_favorites">收藏夾</string>
+    <string name="feedName_archived">已封存</string>
+    <string name="feedName_favorites">收藏</string>
     <string name="connectionWizard_providerSelection_prev">略過</string>
     <string name="untagged">（未標籤）</string>
     <string name="menu_tag">添加標籤</string>
@@ -165,4 +165,10 @@
     <string name="nav_main_articles">文章</string>
     <string name="scrolledOverBottom">往下滾動最底部 %d 次以標記為已讀</string>
     <string name="manageTags_textField_hint">一個或更多標籤（用半形逗號分隔）</string>
+    <string name="content_estimatedReadingTimeTTSLabel">閱讀約需時</string>
+    <string name="wrongUsernameOrPassword_errorMessage">不能登入。會否是使用者名稱或密碼不對？</string>
+    <string name="pref_name_ui_annotations_enabled">註釋支援</string>
+    <string name="pref_desc_ui_annotations_enabled">實驗中！查看，編輯及建立註釋</string>
+    <string name="connectionWizard_welcome_titleMessage">歡迎使用 wallabag。</string>
+    <string name="menu_changeTitle">變更標題</string>
 </resources>
