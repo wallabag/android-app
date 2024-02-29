@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.pm.ServiceInfo;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -1142,7 +1143,7 @@ public class TtsService extends Service {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
                     startForeground(NOTIFICATION_ID, generateNotification());
                 } else {
-                    startForeground(NOTIFICATION_ID, generateNotification(), FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
+                    startForeground(NOTIFICATION_ID, generateNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
                 }
                 isForeground = true;
             }
