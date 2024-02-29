@@ -1139,9 +1139,9 @@ public class TtsService extends Service {
             if (!isForeground) {
                 Log.v(TAG, "setForegroundAndNotification() startForeground()");
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU) {
-                    startForeground(NOTIFICATION_ID, generateNotification())
+                    startForeground(NOTIFICATION_ID, generateNotification());
                 } else {
-                    startForeground(NOTIFICATION_ID, generateNotification(), FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+                    startForeground(NOTIFICATION_ID, generateNotification(), FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK);
                 }
                 isForeground = true;
             }
