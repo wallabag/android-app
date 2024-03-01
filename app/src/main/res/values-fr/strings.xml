@@ -234,7 +234,7 @@
     <string name="pref_desc_imageCache_enabled">Télécharge automatiquement toutes les images de chaque article sur l\'appareil (prend du temps et de l\'espace disque si le nombre d\'articles est important)</string>
     <string name="pref_name_storage_dbPath">Emplacement de la base de données</string>
     <string name="pref_name_storage_dbPath_internalStorage">Stockage interne</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Stockage externe</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Stockage externe: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">La base de données a été déplacée</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_name_misc_appendWallabagMention">Ajouter la mention wallabag</string>

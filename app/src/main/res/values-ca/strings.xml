@@ -89,7 +89,7 @@
     <string name="pref_desc_imageCache_enabled">Descarregar automàticament totes les imatges de cada article al dispositiu (ocupa molt de temps i espai si la llista d\'articles és llarga)</string>
     <string name="pref_name_storage_dbPath">Ubicació de la base de dades</string>
     <string name="pref_name_storage_dbPath_internalStorage">Emmagatzematge intern</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Emmagatzematge extern</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Emmagatzematge extern: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Base de dades reubicada</string>
     <string name="pref_categoryName_miscellaneous">Divers</string>
     <string name="pref_name_misc_addTitleToSharedText">Afegir títol al text compartit</string>

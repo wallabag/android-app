@@ -268,7 +268,7 @@
     <string name="pref_desc_ui_scrollOverBottom">Ustaw, ile razy przewinięcie poza dół oznacza artykuł jako przeczytany</string>
     <string name="pref_name_storage_dbPath">Lokalizacja bazy danych</string>
     <string name="pref_name_storage_dbPath_internalStorage">Pamięć wewnętrzna</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Pamięć zewnętrzna</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Pamięć zewnętrzna: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Baza danych została przeniesiona</string>
     <string name="pref_name_misc_appendWallabagMention">Dołącz wzmiankę o wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Dołącz \"przez @wallabagapp\" do udostępnionych tekstów</string>

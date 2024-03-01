@@ -276,7 +276,7 @@
     <string name="pref_categoryName_misc_localQueue">Cambiamenti locali</string>
     <string name="pref_desc_misc_appendWallabagMention">Aggiungi «via @wallabagapp» ai testi condivisi</string>
     <string name="pref_name_storage_dbPath_dbMoved">Banca dati spostata</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Archiviazione esterna</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Archiviazione esterna: %s</string>
     <string name="pref_name_storage_dbPath_internalStorage">Archiviazione interna</string>
     <string name="pref_name_storage_dbPath">Posizione della banca dati</string>
     <string name="pref_name_ui_previewImage_enabled">Anteprima immagine</string>

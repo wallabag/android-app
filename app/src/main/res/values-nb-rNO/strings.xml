@@ -250,7 +250,7 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Trykk her for å sette opp tasten brukt for å skru på/av trykkinndata</string>
     <string name="pref_name_storage_dbPath">Databaseplassering</string>
     <string name="pref_name_storage_dbPath_internalStorage">Internt lagringsmedium</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Eksternt lagringsmedium</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Eksternt lagringsmedium: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Database flyttet</string>
     <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
     <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>

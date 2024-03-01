@@ -263,7 +263,7 @@
     <string name="pref_desc_ui_scrollOverBottom">Kaç kez en alta kaydırmanın bir makaleyi okundu olarak işaretlediğini ayarlayın</string>
     <string name="pref_name_storage_dbPath">Veri tabanı konumu</string>
     <string name="pref_name_storage_dbPath_internalStorage">Dahili hafıza</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Harici hafıza</string>
+    <string name="pref_name_storage_dbPath_externalStorage">Harici hafıza: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Veri tabanı taşındı</string>
     <string name="pref_name_misc_appendWallabagMention">wallabag alıntısını sonuna ekle</string>
     <string name="pref_desc_misc_appendWallabagMention">Paylaşılan metinlerin sonuna \"via @wallabagapp\" ekle</string>

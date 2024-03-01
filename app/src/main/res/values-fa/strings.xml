@@ -118,7 +118,7 @@
     <string name="pref_name_misc_appendWallabagMention">افزودن اشاره به والابگ</string>
     <string name="pref_categoryName_miscellaneous">متفرقه</string>
     <string name="pref_name_storage_dbPath_dbMoved">پایگاه داده منتقل شد</string>
-    <string name="pref_name_storage_dbPath_externalStorage">حافظه خارجی</string>
+    <string name="pref_name_storage_dbPath_externalStorage">حافظه خارجی: %s</string>
     <string name="pref_name_storage_dbPath_internalStorage">حافظه داخلی</string>
     <string name="pref_name_storage_dbPath">مکان پایگاه داده</string>
     <string name="pref_name_imageCache_enabled">قرار دادن تصاویر مقاله در حافظه نهان</string>
