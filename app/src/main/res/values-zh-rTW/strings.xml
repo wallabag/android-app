@@ -171,4 +171,5 @@
     <string name="pref_desc_ui_annotations_enabled">實驗中！查看，編輯及建立註釋</string>
     <string name="connectionWizard_welcome_titleMessage">歡迎使用 wallabag。</string>
     <string name="menu_changeTitle">變更標題</string>
+    <string name="pref_name_connection_api_clientSecret">用戶端密碼</string>
 </resources>
