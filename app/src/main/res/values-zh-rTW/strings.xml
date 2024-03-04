@@ -173,4 +173,7 @@
     <string name="menu_changeTitle">變更標題</string>
     <string name="pref_name_connection_api_clientSecret">用戶端密碼</string>
     <string name="markedAsRead">已標為已讀文章</string>
+    <string name="pref_name_connection_autofill">自動填入</string>
+    <string name="pref_name_autoSync_onStartup_enabled">開啟程式時自動同步</string>
+    <string name="pref_decs_autoSync_onStartup_enabled">將在開啟程式時進行同步</string>
 </resources>
