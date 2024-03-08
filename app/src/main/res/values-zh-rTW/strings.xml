@@ -163,7 +163,7 @@
     <string name="d_checkCredentials_errorMessage_notFound">找不到 API</string>
     <string name="notification_channel_name_downloading_articles">正在下載 PDF</string>
     <string name="nav_main_articles">文章</string>
-    <string name="scrolledOverBottom">往下滾動最底部 %d 次以標記為已讀</string>
+    <string name="scrolledOverBottom">向下捲動至文章底端 %d 次後即標記為已讀</string>
     <string name="manageTags_textField_hint">一個或更多標籤（用半形逗號分隔）</string>
     <string name="content_estimatedReadingTimeTTSLabel">閱讀約需時</string>
     <string name="wrongUsernameOrPassword_errorMessage">不能登入。會否是使用者名稱或密碼不對？</string>
@@ -176,4 +176,12 @@
     <string name="pref_name_connection_autofill">自動填入</string>
     <string name="pref_name_autoSync_onStartup_enabled">開啟程式時自動同步</string>
     <string name="pref_decs_autoSync_onStartup_enabled">將在開啟程式時進行同步</string>
+    <string name="pref_categoryName_ui_screenScrolling">捲動螢幕</string>
+    <string name="pref_name_ui_tapToScroll_enabled">點擊捲動</string>
+    <string name="pref_name_ui_screenScrolling_percent">捲動範圍的百分比</string>
+    <string name="pref_name_ui_scrollOverBottom">向下捲動至底端時標記為已讀</string>
+    <string name="pref_name_ui_volumeButtonsScrolling_enabled">使用音量按鈕捲動頁面</string>
+    <string name="pref_desc_ui_tapToScroll_enabled">輕觸螢幕的左右兩側以上下捲動頁面</string>
+    <string name="pref_name_ui_screenScrolling_smooth">平滑捲動</string>
+    <string name="pref_desc_ui_scrollOverBottom">設定向下捲動至文章底端幾次才標記為已讀</string>
 </resources>
