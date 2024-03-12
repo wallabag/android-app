@@ -184,4 +184,7 @@
     <string name="pref_desc_ui_tapToScroll_enabled">輕觸螢幕的左右兩側以上下捲動頁面</string>
     <string name="pref_name_ui_screenScrolling_smooth">平滑捲動</string>
     <string name="pref_desc_ui_scrollOverBottom">設定向下捲動至文章底端幾次才標記為已讀</string>
+    <string name="nav_main_tagged_articles">已標籤文章</string>
+    <string name="menu_readArticle_increaseFontSize">放大文字</string>
+    <string name="menu_readArticle_decreaseFontSize">縮小文字</string>
 </resources>
