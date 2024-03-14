@@ -187,4 +187,5 @@
     <string name="nav_main_tagged_articles">已標籤文章</string>
     <string name="menu_readArticle_increaseFontSize">放大文字</string>
     <string name="menu_readArticle_decreaseFontSize">縮小文字</string>
+    <string name="pref_desc_misc_appendWallabagMention">於分享文本內加上「來自 @wallabagapp」</string>
 </resources>
