@@ -62,7 +62,7 @@
     <string name="content_estimatedReadingTime">約 %s 分鐘</string>
     <string name="lastUpdateTimeLabel">最近更新：%s</string>
     <string name="nav_main_tags">標籤</string>
-    <string name="nav_add">添加新項目</string>
+    <string name="nav_add">添加新條目</string>
     <string name="nav_other_settings">設定</string>
     <string name="nav_other_about">關於</string>
     <string name="title_main_tag">標籤：%s</string>
@@ -192,4 +192,14 @@
     <string name="notification_downloadingImages">正在下載圖像……</string>
     <string name="articleList_ArchivedMark">封存標記</string>
     <string name="testConnection_errorMessage_unknownPageAfterLogin">登入後跳轉到不明頁面。通常成因是啟用了雙重驗證（目前版本的應用程式尚未支援） 。</string>
+    <string name="d_getCredentials_title_fail">未能取得 API 憑證</string>
+    <string name="getCredentials_progressDialogMessage">正在取得 API 憑證……</string>
+    <string name="d_testConnection_urlSuggestion_message_mandatory">建議將網址變更為：%s</string>
+    <string name="d_testConnection_urlSuggestion_declineButton">使用自己的</string>
+    <string name="d_testConnection_urlSuggestion_title">請考慮變更網址</string>
+    <string name="testConnection_errorMessage_noCSRF">無法分析登入表格</string>
+    <string name="testConnection_errorMessage_authProblems">不能登入（起因通常是 HTTP 重定向）</string>
+    <string name="testConnection_errorMessage_httpAuth">HTTP 驗證失敗</string>
+    <string name="d_testConnection_urlSuggestion_acceptButton">使用提議</string>
+    <string name="d_testConnection_urlSuggestion_message">建議將網址變更為%s，而非先前輸入的。</string>
 </resources>
