@@ -188,4 +188,8 @@
     <string name="menu_readArticle_increaseFontSize">放大文字</string>
     <string name="menu_readArticle_decreaseFontSize">縮小文字</string>
     <string name="pref_desc_misc_appendWallabagMention">於分享文本內加上「來自 @wallabagapp」</string>
+    <string name="articleEdit_openArticle">開啟文章</string>
+    <string name="notification_downloadingImages">正在下載圖像……</string>
+    <string name="articleList_ArchivedMark">封存標記</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">登入後跳轉到不明頁面。通常成因是啟用了雙重驗證（目前版本的應用程式尚未支援） 。</string>
 </resources>
