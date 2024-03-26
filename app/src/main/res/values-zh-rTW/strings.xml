@@ -230,4 +230,18 @@
     <string name="notification_incorrectCredentials">不正確憑證</string>
     <string name="notification_incorrectConfiguration">不正確設置</string>
     <string name="menu_lists_sweepDeletedArticles">「清掃」已刪文章</string>
+    <string name="message_disableTouch_inputDisabled">關閉輕觸輸入</string>
+    <string name="d_disableTouch_changeKey_title">關閉輕觸輸入的按鈕</string>
+    <string name="message_disableTouch_inputEnabled">開啟輕觸輸入</string>
+    <string name="pref_desc_sync_sweepingAfterFastSync_enabled">請參閱上方的同步類型詳情</string>
+    <string name="pref_name_autoSync_interval">自動同步間隔</string>
+    <string name="pref_name_sync_syncTypes">同步方式</string>
+    <string name="pref_categoryName_sync">同步</string>
+    <string name="menu_lists_fullUpdate">完整更新</string>
+    <string name="notification_sweepingDeletedArticles">清除已刪除文章</string>
+    <string name="notification_channel_group_name_sync">進行同步</string>
+    <string name="notification_channel_name_sync">進行同步</string>
+    <string name="pref_desc_sync_syncTypes">按此以顯示同步類型詳情</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">快速同步後清除已刪文章</string>
+    <string name="d_disableTouch_currentCode">使用中的鍵碼（按下按鈕以變更） ：</string>
 </resources>
