@@ -244,4 +244,12 @@
     <string name="pref_desc_sync_syncTypes">按此以顯示同步類型詳情</string>
     <string name="pref_name_sync_sweepingAfterFastSync_enabled">快速同步後清除已刪文章</string>
     <string name="d_disableTouch_currentCode">使用中的鍵碼（按下按鈕以變更） ：</string>
+    <string name="pref_categoryName_connection_advanced_httpAuth">基本 HTTP 驗證</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">如不知道其意思，留空即可</string>
+    <string name="pref_name_ui_article_fontSize" formatted="false">文章字體大小（百分比）</string>
+    <string name="pref_name_ui_article_fontSerif">襯線體</string>
+    <string name="pref_desc_ui_article_fontSerif">文章內襯線體</string>
+    <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 驗證使用者名稱</string>
+    <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 驗證密碼</string>
+    <string name="pref_desc_connection_autofill">測試連線和填寫用戶端的 ID 及密碼</string>
 </resources>
