@@ -252,4 +252,19 @@
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP 驗證使用者名稱</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP 驗證密碼</string>
     <string name="pref_desc_connection_autofill">測試連線和填寫用戶端的 ID 及密碼</string>
+    <string name="pref_name_ui_article_textAlignment_justify">文字排版：兩端對齊</string>
+    <string name="pref_desc_ui_article_textAlignment_justify">每行文字等闊（和英文報章相同）</string>
+    <string name="pref_name_ui_article_handlePreformattedText">處理較長的預先格式化原始內容</string>
+    <string name="pref_name_ui_showArticleAddedDialog">儲存頁面時顯示對話方塊</string>
+    <string name="pref_name_ui_article_fullscreen">以全螢幕模式瀏覽文章</string>
+    <string name="pref_desc_ui_article_fullscreen">閱讀文章時隱藏系統及應用程式導覽</string>
+    <string name="pref_desc_ui_readingSpeed">你的閱讀速度（以單詞每分鐘為單位）用來估算閱讀需時。</string>
+    <string name="pref_name_ui_keepScreenOn">閱讀時保持螢幕開啟</string>
+    <string name="pref_desc_ui_article_handlePreformattedText">如何處理因內文太長而無法完整顯示的格式化內容。</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">顯示用以收藏、封存和標籤文章的對話方塊（或其他簡易提示訊息）</string>
+    <string name="pref_name_ui_onyxworkaround_enabled">Onyx Boox 佈景主題的權變措施</string>
+    <string name="pref_name_ui_disableTouch_enabled">禁止輕觸輸入</string>
+    <string name="pref_desc_ui_onyxworkaround_enabled">防止 Onyx 裝置強制使用黑色代表連結</string>
+    <string name="pref_desc_ui_keepScreenOn">防止閱讀文章時螢幕進入休眠狀態</string>
+    <string name="pref_name_ui_disableTouch_keyCode">「禁止輕觸輸入」按鈕</string>
 </resources>
