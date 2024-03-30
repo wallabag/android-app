@@ -267,4 +267,16 @@
     <string name="pref_desc_ui_onyxworkaround_enabled">防止 Onyx 裝置強制使用黑色代表連結</string>
     <string name="pref_desc_ui_keepScreenOn">防止閱讀文章時螢幕進入休眠狀態</string>
     <string name="pref_name_ui_disableTouch_keyCode">「禁止輕觸輸入」按鈕</string>
+    <string name="pref_desc_ui_swipeArticles">於文章內 ← 或 → 觸控滑動以前往上一篇或下一篇文章</string>
+    <string name="pref_desc_ui_disableTouch_keyCode">選擇開關輕觸輸入的按鈕</string>
+    <string name="pref_name_ui_swipeArticles">觸控滑動文章</string>
+    <string name="pref_desc_ui_previewImage_enabled">在文章頁面優先顯示預覽圖像</string>
+    <string name="pref_name_ui_mathRendering_enabled">顯示公式</string>
+    <string name="pref_desc_ui_mathRendering_enabled">使用 KaTeX 渲染 LaTeX 的公式</string>
+    <string name="pref_name_ui_mathRendering_delimiters">數學表達式</string>
+    <string name="pref_desc_ui_mathRendering_delimiters">請選擇 KaTeX 執行運算的時機</string>
+    <string name="pref_name_tts_fastForwardTime">快轉略時</string>
+    <string name="pref_name_tts_rewindTime">快退略時</string>
+    <string name="pref_desc_tts_fastForwardTime">按下「快轉」時跳過的秒數</string>
+    <string name="pref_desc_tts_rewindTime">按下「快退」時返回的秒數</string>
 </resources>
