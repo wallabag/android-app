@@ -279,4 +279,15 @@
     <string name="pref_name_tts_rewindTime">快退略時</string>
     <string name="pref_desc_tts_fastForwardTime">按下「快轉」時跳過的秒數</string>
     <string name="pref_desc_tts_rewindTime">按下「快退」時返回的秒數</string>
+    <string name="notification_action_media_next">下一個</string>
+    <string name="notification_action_media_pause">暫停</string>
+    <string name="notification_action_media_rewind">快退</string>
+    <string name="pref_name_tts_nextButtonIsFastForward">「下一個」按鈕變更為快轉</string>
+    <string name="pref_name_tts_previousButtonIsRewind">「上一個」按鈕變更為快退</string>
+    <string name="contentIsTooLong">因文章內容過長而未能完整顯示</string>
+    <string name="menu_annotate">註釋</string>
+    <string name="pref_desc_tts_nextButtonIsFastForward">媒體控制項中的「下一個」按鈕為快轉用途而非跳到下一篇文章</string>
+    <string name="pref_desc_tts_previousButtonIsRewind">媒體控制項中的「上一個」按鈕為快退用途而非返回上一篇文章</string>
+    <string name="pref_name_tts_showPreviewAsAlbumArt">預覽圖像作為專輯封面</string>
+    <string name="pref_desc_tts_showPreviewAsAlbumArt">使用文章的預覽圖像（如有）作為專輯封面（顯示於通知以及媒體控制項的背景）</string>
 </resources>
