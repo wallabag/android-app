@@ -290,4 +290,10 @@
     <string name="pref_desc_tts_previousButtonIsRewind">媒體控制項中的「上一個」按鈕為快退用途而非返回上一篇文章</string>
     <string name="pref_name_tts_showPreviewAsAlbumArt">預覽圖像作為專輯封面</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">使用文章的預覽圖像（如有）作為專輯封面（顯示於通知以及媒體控制項的背景）</string>
+    <string name="pref_name_autoSync_type">自動同步類型</string>
+    <string name="pref_desc_autoSyncQueue_enabled">連上伺服器時同步本機變更（新增的連結、已封存文章等） 。</string>
+    <string name="pref_name_imageCache_enabled">把文章圖像保存至快取</string>
+    <string name="pref_name_storage_dbPath">資料庫位置</string>
+    <string name="pref_name_storage_dbPath_dbMoved">已移動資料庫</string>
+    <string name="pref_name_misc_wipeDB">清理資料庫</string>
 </resources>
