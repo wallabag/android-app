@@ -303,4 +303,7 @@
     <string name="pref_name_misc_addTitleToSharedText">分享時添加標題</string>
     <string name="pref_name_storage_dbPath_externalStorage">外部儲存空間</string>
     <string name="pref_categoryName_misc_localQueue">本機變更</string>
+    <string name="pref_name_misc_wipeDB_confirmTitle">清除資料庫？</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">你確定要清理資料庫嗎？</string>
+    <string name="pref_desc_misc_localQueue_notice">除非你完全理解自己在做甚麼，否則敬請勿動！</string>
 </resources>
