@@ -306,4 +306,6 @@
     <string name="pref_name_misc_wipeDB_confirmTitle">清除資料庫？</string>
     <string name="pref_name_misc_wipeDB_confirmMessage">你確定要清理資料庫嗎？</string>
     <string name="pref_desc_misc_localQueue_notice">除非你完全理解自己在做甚麼，否則敬請勿動！</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">已儲存為 %s</string>
+    <string name="notification_clipboardLabel">錯誤詳情</string>
 </resources>
