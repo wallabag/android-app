@@ -311,4 +311,5 @@
     <string name="connectionWizard_misc_incorrectConnectionURI">使用了不正確的連線 URI</string>
     <string name="notification_stacktrace">堆疊追蹤：</string>
     <string name="connectionWizard_welcome_text">請先使用連線精靈進行設定。</string>
+    <string name="misc_logging_logcatToFile_result_saved">記錄檔已儲存至 %s</string>
 </resources>
