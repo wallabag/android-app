@@ -312,4 +312,6 @@
     <string name="notification_stacktrace">堆疊追蹤：</string>
     <string name="connectionWizard_welcome_text">請先使用連線精靈進行設定。</string>
     <string name="misc_logging_logcatToFile_result_saved">記錄檔已儲存至 %s</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">（請先安裝 QR 碼掃描器）</string>
+    <string name="misc_localQueue_empty">沒有本機變更</string>
 </resources>
