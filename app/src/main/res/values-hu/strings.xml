@@ -251,7 +251,7 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Nyomja meg itt az érintéses bevitelt tiltó/engedélyező gomb beállításához</string>
     <string name="pref_name_storage_dbPath">Adatbázis helye</string>
     <string name="pref_name_storage_dbPath_internalStorage">Belső tárhely</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Külső tárhely: %s</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Külső tárhely: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Az adatbázis elköltözött</string>
     <string name="pref_name_misc_appendWallabagMention">Mellékelje a wallabag-ra való utalást</string>
     <string name="pref_desc_misc_appendWallabagMention">Hozzáfűzi \"a @wallabagapp segítségével\"-t a megosztott szövegekhez</string>

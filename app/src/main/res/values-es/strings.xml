@@ -219,7 +219,7 @@
     <string name="pref_desc_imageCache_enabled">Descarga automáticamente todas las imágenes de cada artículo y las guarda en el dispositivo (tarda bastante tiempo y consume bastante espacio si la lista de artículos es larga)</string>
     <string name="pref_name_storage_dbPath">Ubicación de la base de datos</string>
     <string name="pref_name_storage_dbPath_internalStorage">Almacenamiento interno</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Almacenamiento externo: %s</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Almacenamiento externo: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Base de datos reubicada</string>
     <string name="pref_categoryName_miscellaneous">Misceláneos</string>
     <string name="pref_name_misc_appendWallabagMention">Añadir mención a wallabag</string>
