@@ -245,7 +245,7 @@
     <string name="pref_desc_imageCache_enabled">Descargar de xeito automático todas as imaxes dos artigos no dispositivo (levaralle bastante tempo e espazo se a lista de artigos é moi longa)</string>
     <string name="pref_name_storage_dbPath">Localización da base de datos</string>
     <string name="pref_name_storage_dbPath_internalStorage">Almacenaxe interna</string>
-    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Almacenaxe externa</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Almacenaxe externa: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Moveuse a base de datos</string>
     <string name="pref_name_misc_appendWallabagMention">Incluír mención a wallabag</string>
     <string name="pref_desc_misc_appendWallabagMention">Engadir \"vía @wallabagapp\" aos textos compartidos</string>
