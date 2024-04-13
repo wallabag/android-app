@@ -1,6 +1,7 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
@@ -15,7 +16,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import fr.gaulupeau.apps.Poche.App;
@@ -28,8 +31,6 @@ public class StorageHelper {
     }
 
     private static final String TAG = StorageHelper.class.getSimpleName();
-
-    private static String externalStoragePath;
 
     public static String readRawString(int id) {
         try {
@@ -56,41 +57,59 @@ public class StorageHelper {
     }
 
     public static String getExternalStoragePath() {
-        if(externalStoragePath == null) {
-            String returnPath = null;
-            File[] externalFilesDirs = ContextCompat.getExternalFilesDirs(App.getInstance(), null);
-            // TODO: better SD Card detection
-            for(File extStorageDir: externalFilesDirs) {
-                if(extStorageDir == null) {
-                    Log.w(TAG, "getExternalStoragePath() extStorageDir is null");
-                    continue;
-                }
+        String storagePathSetting = App.getSettings().getDbPath();
 
-                returnPath = extStorageDir.getPath();
-                Log.d(TAG, "getExternalStoragePath() extStorageDir.getPath(): " + returnPath);
-                break;
-            }
-
-            Log.d(TAG, "getExternalStoragePath() returnPath: " + returnPath);
-            return externalStoragePath = returnPath;
+        if (!TextUtils.isEmpty(storagePathSetting)) {
+            return storagePathSetting;
         }
 
-        return externalStoragePath;
+        List<String> externalStoragePaths = getExternalStoragePaths();
+        return !externalStoragePaths.isEmpty() ? externalStoragePaths.get(0) : null;
+    }
+
+    private static List<String> getExternalStoragePaths() {
+        List<String> usableExternalFilesDirs = new ArrayList<>();
+
+        for (File extStorageDir : ContextCompat.getExternalFilesDirs(App.getInstance(), null)) {
+            if (extStorageDir == null) {
+                Log.w(TAG, "getExternalStoragePaths() extStorageDir is null");
+                continue;
+            }
+
+            usableExternalFilesDirs.add(extStorageDir.getPath());
+            Log.d(TAG, "getExternalStoragePaths() extStorageDir.getPath(): "
+                    + extStorageDir.getPath());
+        }
+
+        return usableExternalFilesDirs;
+    }
+
+    public static List<String> getWritableExternalStoragePaths() {
+        List<String> paths = new ArrayList<>();
+        for (String path : getExternalStoragePaths()) {
+            if (isPathWritable(path)) {
+                paths.add(path);
+            }
+        }
+        return paths;
     }
 
     public static boolean isExternalStorageReadable() {
-        String externalStoragePath = getExternalStoragePath();
-        if(externalStoragePath == null) return false;
+        String storagePath = getExternalStoragePath();
+        if (storagePath == null) return false;
 
-        File f = new File(externalStoragePath);
+        File f = new File(storagePath);
         return f.exists() && f.canRead();
     }
 
     public static boolean isExternalStorageWritable() {
-        String externalStoragePath = getExternalStoragePath();
-        if(externalStoragePath == null) return false;
+        return isPathWritable(getExternalStoragePath());
+    }
 
-        File f = new File(externalStoragePath);
+    private static boolean isPathWritable(String path) {
+        if (path == null) return false;
+
+        File f = new File(path);
         return f.exists() && f.canWrite();
     }
 
@@ -144,11 +163,12 @@ public class StorageHelper {
     }
 
     public static File dumpQueueData(String data) throws IOException {
-        if (!isExternalStorageWritable()) {
+        String externalStoragePath = getExternalStoragePath();
+        if (!isPathWritable(externalStoragePath)) {
             throw new IllegalStateException("External storage is not writable!");
         }
 
-        String path = getExternalStoragePath() + "/"
+        String path = externalStoragePath + "/"
                 + "Local_changes_"
                 + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date())
                 + ".txt";
