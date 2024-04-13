@@ -1149,10 +1149,13 @@ public class TtsService extends Service {
             }
         } else {
             if (isForeground) {
-                boolean removeNotification = !showNotification;
                 Log.v(TAG, "setForegroundAndNotification()" +
-                        " stopForeground(remove notification: " + removeNotification + ")");
-                stopForeground(removeNotification);
+                        " stopForeground(STOP_FOREGROUND_REMOVE");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    stopForeground(STOP_FOREGROUND_REMOVE);
+                } else {
+                    stopForeground(true);
+                }
                 isForeground = false;
             }
         }
