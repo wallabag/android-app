@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
@@ -47,6 +47,9 @@ android {
         lintConfig file('lint.xml')
     }
     namespace 'fr.gaulupeau.apps.InThePoche'
+    buildFeatures {
+        buildConfig true
+    }
 }
 
 greendao {
