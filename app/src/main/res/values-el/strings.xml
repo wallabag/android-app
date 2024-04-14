@@ -84,7 +84,7 @@
     <string name="pref_name_misc_appendWallabagMention">Προσθήκη αναφοράς wallabag</string>
     <string name="pref_categoryName_miscellaneous">Ποικίλα</string>
     <string name="pref_name_storage_dbPath_dbMoved">Η βάση δεδομένων μετακινήθηκε</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Εξωτερικός αποθηκευτικός χώρος: %s</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Εξωτερικός αποθηκευτικός χώρος: %s</string>
     <string name="pref_name_storage_dbPath_internalStorage">Εσωτερικός αποθηκευτικός χώρος</string>
     <string name="pref_name_storage_dbPath">Τοποθεσία βάσης δεδομένων</string>
     <string name="pref_desc_autoSync_enabled">Συγχρονίζει τοπικές αλλαγές (προσθήκη συνδέσμων, αρχειοθετημένα άρθρα, κλπ.) αυτόματα και κατεβάζει καινούρια άρθρα σύμφωνα με το πρόγραμμα</string>

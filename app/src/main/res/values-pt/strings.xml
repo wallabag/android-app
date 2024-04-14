@@ -122,7 +122,7 @@
     <string name="connectionWizard_provider_wallabagit_prev">Voltar</string>
     <string name="connectionWizard_summary_prev">Voltar</string>
     <string name="notification_downloadingImages">Baixando imagens</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Armazenamento externo: %s</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Armazenamento externo: %s</string>
     <string name="notification_channel_name_error">Erros</string>
     <string name="notification_error">Erro</string>
     <string name="notification_expandedError">Erro: %s</string>

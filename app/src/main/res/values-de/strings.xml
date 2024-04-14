@@ -264,7 +264,7 @@
     <string name="pref_desc_ui_disableTouch_keyCode">Wähle eine Taste, um Toucheingaben an- oder auszuschalten</string>
     <string name="pref_name_storage_dbPath">Datenbankspeicherort</string>
     <string name="pref_name_storage_dbPath_internalStorage">Interner Speicher</string>
-    <string name="pref_name_storage_dbPath_externalStorage">Externer Speicher: %s</string>
+    <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Externer Speicher: %s</string>
     <string name="pref_name_storage_dbPath_dbMoved">Datenbank verschoben</string>
     <string name="pref_name_misc_appendWallabagMention">Hänge wallabag Erwähnung an</string>
     <string name="pref_desc_misc_appendWallabagMention">Hänge „via @wallabagapp“ an geteilte Text an</string>
