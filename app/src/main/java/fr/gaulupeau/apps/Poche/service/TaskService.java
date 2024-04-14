@@ -217,7 +217,7 @@ public abstract class TaskService extends Service {
         if (foreground) {
             startForeground(getForegroundNotificationId(), getForegroundNotification());
         } else {
-            stopForeground(true);
+            stopForeground(STOP_FOREGROUND_REMOVE);
         }
     }
 
