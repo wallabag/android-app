@@ -1,0 +1,4 @@
+- Allow the user to select their SD card and other external storage paths in addition to emulated SD storage
+- Fix crash when using TTS on Android 13+
+- Update dependencies
+- Various translations

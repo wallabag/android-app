@@ -1,0 +1,4 @@
+- Permettre à l'utilisateur de sélectionner sa carte SD et d'autres chemins de stockage externes en plus du stockage SD émulé
+- Correction d'un crash lors de l'utilisation de TTS sur Android 13+
+- Mise à jour des dépendances
+- Diverses traductions
