@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdk 34
@@ -56,11 +55,6 @@ android {
     buildFeatures {
         buildConfig true
     }
-}
-
-greendao {
-    schemaVersion 108
-    daoPackage 'fr.gaulupeau.apps.Poche.data.dao'
 }
 
 dependencies {
