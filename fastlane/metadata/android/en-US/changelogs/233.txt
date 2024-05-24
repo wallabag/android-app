@@ -1,0 +1,2 @@
+- Bump Gradle and Java toolchain versions
+- Remove non-FLOSS Greendao plugin (responsible for exclusion from F-Droid)

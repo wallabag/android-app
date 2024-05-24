@@ -1,0 +1,2 @@
+- Mise à jour des versions de Gradle et de la toolchain Java
+- Suppression du plugin Greendao non FLOSS (responsable de l'exclusion dans F-Droid)
