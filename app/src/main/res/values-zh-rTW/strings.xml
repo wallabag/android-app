@@ -213,7 +213,7 @@
     <string name="d_checkCredentials_errorMessage_noAccess">未能存取 API</string>
     <string name="d_checkCredentials_errorMessage_noAccessWithMessage">未能存取 API：%s</string>
     <string name="menu_lists_changeSortOrder">變更排序</string>
-    <string name="other_searchHint">搜尋文章標題或文字</string>
+    <string name="other_searchHint">按文章標題或文字搜尋</string>
     <string name="voiceHeight">聲線音高</string>
     <string name="d_getCredentials_title_message">出現了一些問題。請檢查你的網絡連線然後再次嘗試。</string>
     <string name="notification_syncingQueue">正在同步本機變更……</string>
@@ -275,8 +275,8 @@
     <string name="pref_desc_ui_mathRendering_enabled">使用 KaTeX 渲染 LaTeX 的公式</string>
     <string name="pref_name_ui_mathRendering_delimiters">數學表達式</string>
     <string name="pref_desc_ui_mathRendering_delimiters">請選擇 KaTeX 執行運算的時機</string>
-    <string name="pref_name_tts_fastForwardTime">快轉略時</string>
-    <string name="pref_name_tts_rewindTime">快退略時</string>
+    <string name="pref_name_tts_fastForwardTime">快進跳過時間</string>
+    <string name="pref_name_tts_rewindTime">快退跳過時間</string>
     <string name="pref_desc_tts_fastForwardTime">按下「快轉」時跳過的秒數</string>
     <string name="pref_desc_tts_rewindTime">按下「快退」時返回的秒數</string>
     <string name="notification_action_media_next">下一個</string>
@@ -316,4 +316,9 @@
     <string name="misc_localQueue_empty">沒有本機變更</string>
     <string name="downloadAsFileProgressDetail">wallabag 下載你的文章 %1$s 到 %2$s</string>
     <string name="downloadAsFileProgress">wallabag 下載你的文章至 %s</string>
+    <string name="navigation_drawer_close">關閉導航抽屜</string>
+    <string name="notification_updatingArticles_full">正在執行完整更新</string>
+    <string name="notification_updatingArticles_fast">正在執行快速更新</string>
+    <string name="navigation_drawer_open">開啟導航抽屜</string>
+    <string name="notification_updatingArticles">正在更新文章</string>
 </resources>
