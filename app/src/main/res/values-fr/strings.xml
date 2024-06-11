@@ -290,7 +290,7 @@
     <string name="notification_clipboardLabel">Détails de l\'erreur</string>
     <string name="notification_copyToClipboard">Copier dans le presse-papiers</string>
     <string name="notification_stacktrace">Pile d\'erreur :</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">(Installez un lecteur de QR-codes au préalable.)</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Installez un lecteur de QR codes au préalable.)</string>
     <string name="connectionWizard_misc_scanQrCode">Scanner un code QR</string>
     <string name="misc_localQueue_dumpToFile_header">Signalez les problèmes de synchronisation ici : %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Erreur : %s</string>
