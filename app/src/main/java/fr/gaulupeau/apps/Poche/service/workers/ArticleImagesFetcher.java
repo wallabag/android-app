@@ -66,7 +66,7 @@ public class ArticleImagesFetcher extends BaseNetworkWorker {
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull())
                 .where(ArticleDao.Properties.ImagesDownloaded.eq(false))
-                .orderAsc(ArticleDao.Properties.ArticleId);
+                .orderAsc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId);
 
         int totalNumber = (int) queryBuilder.count();
         Log.d(TAG, "fetchImages() total number: " + totalNumber);

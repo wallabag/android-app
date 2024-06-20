@@ -145,7 +145,8 @@ public class DeletedArticleSweeper extends BaseNetworkWorker {
 
         QueryBuilder<Article> queryBuilder = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull())
-                .orderDesc(ArticleDao.Properties.ArticleId).limit(dbQuerySize);
+                .orderDesc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId)
+                .limit(dbQuerySize);
 
         List<Long> articlesToDelete = new ArrayList<>();
 
