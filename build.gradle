@@ -6,7 +6,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.4.2'
+        classpath 'com.android.tools.build:gradle:8.5.1'
     }
 }
 
@@ -20,7 +20,7 @@ allprojects {
 
 tasks {
     wrapper {
-        gradleVersion = "8.6"
+        gradleVersion = "8.7"
         distributionType = Wrapper.DistributionType.ALL
     }
 }
