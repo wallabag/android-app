@@ -171,9 +171,9 @@
 \n https://app.wallabag.it</string>
     <string name="pref_name_connection_password">Contrasinal</string>
     <string name="pref_name_connection_api_clientID">ID do Cliente</string>
-    <string name="pref_name_connection_api_clientSecret">Segreda do Cliente</string>
+    <string name="pref_name_connection_api_clientSecret">Chave secreta</string>
     <string name="pref_name_connection_autofill">Autocompletar</string>
-    <string name="pref_desc_connection_autofill">Comprobar a conexión e encher o ID e Chave secreta do cliente</string>
+    <string name="pref_desc_connection_autofill">Comprobar a conexión e completar co ID e Chave secreta do cliente</string>
     <string name="pref_categoryName_connection_advanced">Axustes avanzados de conexión</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">Autenticación Básica HTTP</string>
     <string name="pref_categoryDesc_connection_advanced_httpAuth">Se non sabes o que é, déixao baleiro</string>
