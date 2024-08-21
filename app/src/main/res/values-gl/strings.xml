@@ -15,8 +15,8 @@
     <string name="ttsSpeed">Valorar</string>
     <string name="menuTTS">Texto a Fala</string>
     <string name="ttsVolume">Volume</string>
-    <string name="ttsLanguage">Elexir Idioma</string>
-    <string name="ttsVoice">Elexir Voz</string>
+    <string name="ttsLanguage">Elixir Idioma</string>
+    <string name="ttsVoice">Elixir Voz</string>
     <string name="ttsError">Erro no Texto a Fala</string>
     <string name="ttsAutoplayNextArticle">Repr.Auto. Seguinte Art.</string>
     <string name="ttsFastRewind">Retroceso rápido</string>
