@@ -158,7 +158,7 @@
     <string name="manageTags_addMoreTags">Engadir máis etiquetas:</string>
     <string name="content_estimatedReadingTimeTTSLabel">Tempo estimado de lectura</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
-    <string name="nav_other_about">Acerca de</string>
+    <string name="nav_other_about">Sobre</string>
     <string name="title_main_tag">Etiqueta: %s</string>
     <string name="d_disableTouch_changeKey_title">Botón para apagar o soporte táctil</string>
     <string name="d_disableTouch_currentCode">Tecla actualmente seleccionada (preme un botón para cambialo):</string>
