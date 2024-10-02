@@ -89,6 +89,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
+                <data android:host="app.wallabag.it" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -98,6 +99,7 @@
 
                 <data android:scheme="http" />
                 <data android:scheme="https" />
+                <data android:host="app.wallabag.it" />
                 <data android:mimeType="text/html" />
                 <data android:mimeType="text/plain" />
                 <data android:mimeType="application/xhtml+xml" />
