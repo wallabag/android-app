@@ -324,7 +324,7 @@
     <string name="menu_annotate">சிறுகுறிப்பு</string>
     <string name="articleEdit_openArticle">திறந்த கட்டுரை</string>
     <string name="title">தலைப்பு</string>
-    <string name="untagged">&lt;! [Cdata [&lt;oundaged&gt;]]&gt;</string>
+    <string name="untagged"><![CDATA[<oundaged>]]></string>
     <string name="contentIsTooLong">கட்டுரை உள்ளடக்கம் காண்பிக்க மிக நீண்டது</string>
     <string name="articleContent_previewImageAltText">படம் முன்னோட்டம்</string>
     <string name="tts_image">படங்கள்</string>
