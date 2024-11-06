@@ -327,7 +327,7 @@
     <string name="untagged"><![CDATA[<oundaged>]]></string>
     <string name="contentIsTooLong">கட்டுரை உள்ளடக்கம் காண்பிக்க மிக நீண்டது</string>
     <string name="articleContent_previewImageAltText">படம் முன்னோட்டம்</string>
-    <string name="tts_image">படங்கள்</string>
+    <string name="tts_image">படங்கள் %s</string>
     <string name="notification_action_media_rewind">முன்னாடி</string>
     <string name="notification_action_media_pause">இடைநிறுத்தம்</string>
     <string name="notification_action_media_play">விளையாடுங்கள்</string>
