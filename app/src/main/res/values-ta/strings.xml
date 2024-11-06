@@ -114,7 +114,7 @@
     <string name="downloadAsFileArticleDownloaded">கட்டுரை பதிவிறக்கம் செய்யப்பட்டது</string>
     <string name="downloadAsFileArticleDownloadedDetail">கட்டுரைகள் பதிவிறக்கம்</string>
     <string name="downloadAsFileTouchToOpen">திறக்கத் தொடவும்</string>
-    <string name="downloadAsFileProgressDetail">வாலபாக் உங்கள் கட்டுரையை %1 $ s %2 $ s இல் பதிவிறக்குகிறது</string>
+    <string name="downloadAsFileProgressDetail">வாலபாக் உங்கள் கட்டுரையை %1$s %2$s இல் பதிவிறக்குகிறது</string>
     <string name="downloadAsFileProgress">வாலபாக் உங்கள் கட்டுரையை %s இல் பதிவிறக்குகிறார்</string>
     <string name="notification_updatingArticles">கட்டுரைகளைப் புதுப்பித்தல்</string>
     <string name="notification_updatingArticles_full">முழு புதுப்பிப்பைச் செய்கிறது</string>
