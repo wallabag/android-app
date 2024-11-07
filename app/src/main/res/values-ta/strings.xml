@@ -112,7 +112,7 @@
     <string name="dialog_title_downloadFileFormat">கோப்பு வடிவமைப்பைத் தேர்ந்தெடுக்கவும்</string>
     <string name="downloadAsFilePathStart">கட்டுரை பதிவிறக்குகிறது</string>
     <string name="downloadAsFileArticleDownloaded">கட்டுரை பதிவிறக்கம் செய்யப்பட்டது</string>
-    <string name="downloadAsFileArticleDownloadedDetail">கட்டுரைகள் %s பதிவிறக்கம்</string>
+    <string name="downloadAsFileArticleDownloadedDetail">கட்டுரை %s பதிவிறக்கம்</string>
     <string name="downloadAsFileTouchToOpen">திறக்கத் தொடவும்</string>
     <string name="downloadAsFileProgressDetail">வாலபாக் உங்கள் கட்டுரையை %1$s %2$s இல் பதிவிறக்குகிறது</string>
     <string name="downloadAsFileProgress">வாலபாக் உங்கள் கட்டுரையை %s இல் பதிவிறக்குகிறார்</string>
@@ -327,7 +327,7 @@
     <string name="untagged"><![CDATA[<oundaged>]]></string>
     <string name="contentIsTooLong">கட்டுரை உள்ளடக்கம் காண்பிக்க மிக நீண்டது</string>
     <string name="articleContent_previewImageAltText">படம் முன்னோட்டம்</string>
-    <string name="tts_image">படங்கள் %s</string>
+    <string name="tts_image">படம்: %s</string>
     <string name="notification_action_media_rewind">முன்னாடி</string>
     <string name="notification_action_media_pause">இடைநிறுத்தம்</string>
     <string name="notification_action_media_play">விளையாடுங்கள்</string>
