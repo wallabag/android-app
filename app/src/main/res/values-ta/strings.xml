@@ -154,7 +154,7 @@
     <string name="content_estimatedReadingTime">%s min</string>
     <string name="content_estimatedReadingTimeTTSLabel">மதிப்பிடப்பட்ட வாசிப்பு நேரம்</string>
     <string name="lastUpdateTimeLabel">கடைசி புதுப்பிப்பு: %s</string>
-    <string name="listItem_estimatedReadingTime">%D மணித்துளி</string>
+    <string name="listItem_estimatedReadingTime">%d நிமையம்</string>
     <string name="navigation_drawer_open">திறந்த வழிசெலுத்தல் அலமாரியை</string>
     <string name="navigation_drawer_close">வழிசெலுத்தல் அலமாரியை மூடு</string>
     <string name="nav_main_articles">கட்டுரைகள்</string>
@@ -279,12 +279,12 @@
     <string name="pref_name_misc_localQueue_dumpToFile">கோப்பில் சேமிக்கவும்</string>
     <string name="pref_desc_misc_localQueue_dumpToFile">அனைத்து உள்ளக மாற்றங்களையும் ஒரு TXT கோப்பில் சேமிக்கிறது (அதை நீங்களே படிப்பதற்காக அல்லது பிழை அறிக்கையில் இணைப்பது)</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">முதல் உள்ளக வரிசை உருப்படியை அகற்று</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">முதல் சொல்லப்படாத உருப்படியை நீக்குகிறது. ஒத்திசைவின் போது மீண்டும் மீண்டும் பிழை அறிவிப்புகளுக்கு உதவலாம். உதவிக்குறிப்பு: அனைத்து உள்ளக மாற்றங்களையும் முதலில் ஒரு கோப்பில் சேமிக்கவும்.</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">முதல் சொல்லப்படாத உருப்படியை நீக்குகிறது. ஒத்திசைவின்போது மீண்டும் பிழை அறிவிப்புகளுக்கு உதவலாம். உதவிக்குறிப்பு: அனைத்து உள்ளக மாற்றங்களையும் முதலில் ஒரு கோப்பில் சேமிக்கவும்.</string>
     <string name="pref_name_misc_logging_logcatToFile">LogCat வெளியீட்டை ஒரு கோப்பில் சேமிக்கவும்</string>
     <string name="pref_desc_misc_logging_logcatToFile">LogCat வெளியீட்டை (Android பயன்பாடு Log) /sdcard/android/data/fr.gaulupeau.apps.inthepoche/files/ இல் உள்ள கோப்பில் சேமிக்கிறது</string>
     <string name="misc_localQueue_empty">உள்ளக மாற்றங்கள் இல்லை</string>
     <string name="misc_localQueue_removeFirstItem_done">முடிந்தது</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">%S ஆக சேமிக்கப்பட்டது</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">%s ஆகச் சேமிக்கப்பட்டது</string>
     <string name="misc_localQueue_dumpToFile_result_error">பிழை: %s</string>
     <string name="misc_localQueue_dumpToFile_header">இங்கே ஒத்திசைவு சிக்கல்களைப் புகாரளிக்கவும்: %s</string>
     <string name="misc_logging_logcatToFile_result_saved">பதிவுகள் %s க்கு சேமிக்கப்பட்டன</string>
