@@ -400,9 +400,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     @Override
     public void onActionModeStarted(ActionMode mode) {
         Menu menu = mode.getMenu();
-
         mode.getMenuInflater().inflate(R.menu.read_article_activity, menu);
-
         menu.findItem(R.id.menu_tag).setOnMenuItemClickListener(item -> {
             webViewContent.evaluateJavascript(
                     "(function(){return window.getSelection().toString()})()",
@@ -421,7 +419,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         } else {
             annotateItem.setVisible(false);
         }
-
+        // refresh menu content
+        mode.invalidate();
         super.onActionModeStarted(mode);
     }
 
