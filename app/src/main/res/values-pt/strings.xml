@@ -23,7 +23,7 @@
     <string name="menu_syncLocalChanges">Sincronizar mudanças locais</string>
     <string name="d_deleteArticle_title">Deletar artigo?</string>
     <string name="d_deleteArticle_message">Tem certeza que deseja deletar o artigo?</string>
-    <string name="txtNetOffline">Por favor, verifique a conexão com Internet!</string>
+    <string name="txtNetOffline">Verifique se está conectado à Internet.</string>
     <string name="txtConfigNotSet">Por favor, configure a app antes de sincronizar.</string>
     <string name="txtUrlCopied">URL do artigo copiada para prancheta</string>
     <string name="dialog_add_label">Adicionar um novo artigo</string>
@@ -51,7 +51,7 @@
     <string name="testConnection_progressDialogMessage">Testando conexão…</string>
     <string name="testConnection_errorMessage_incorrectUrl">URL incorreta</string>
     <string name="testConnection_errorMessage_unsupportedServerVersion">Versão de servidor não suportada detectada</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">serviço wallabag não encontrado — verificar URL</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Serviço wallabag não encontrado — verificar URL</string>
     <string name="testConnection_errorMessage_httpAuth">Autenticação HTTP falhou</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Não pode logar — verificar o nome de utilizador e palavra-passe</string>
     <string name="testConnection_errorMessage_authProblems">Problemas relacionados à autorização. Esse normalmente são causados por redirecionamentos HTTP.</string>
