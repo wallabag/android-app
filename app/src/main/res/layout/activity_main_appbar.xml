@@ -9,31 +9,38 @@
     tools:context="fr.gaulupeau.apps.Poche.ui.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="?attr/appBarOverlayTheme">
 
-        <FrameLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways|snap">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="?attr/popupOverlayTheme"/>
+                app:layout_collapseMode="pin">
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:visibility="gone"
-                android:layout_gravity="bottom"
-                style="?android:attr/progressBarStyleHorizontal"/>
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:popupTheme="?attr/popupOverlayTheme"/>
 
-        </FrameLayout>
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:visibility="gone"
+                    android:layout_gravity="bottom"
+                    style="?android:attr/progressBarStyleHorizontal"/>
+            </FrameLayout>
 
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
