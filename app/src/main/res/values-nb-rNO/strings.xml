@@ -51,13 +51,13 @@
     <string name="settings_parametersAutofilled">Parameter utfylt</string>
     <string name="testConnection_progressDialogMessage">Tester tilkobling…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Uriktig nettadresse</string>
-    <string name="testConnection_errorMessage_unsupportedServerVersion">Ustøtter tjenerversjon oppdaget</string>
-    <string name="testConnection_errorMessage_wallabagNotFound">wallabag-tjeneste ble ikke funnet — sjekk nettadresse</string>
+    <string name="testConnection_errorMessage_unsupportedServerVersion">Tjenerversjonen er ikke støttet</string>
+    <string name="testConnection_errorMessage_wallabagNotFound">Kunne ikke finne wallabag-tjeneste — sjekk nettadresse</string>
     <string name="testConnection_errorMessage_httpAuth">HTTP-autentisering mislyktes</string>
-    <string name="testConnection_errorMessage_noCSRF">Feil ved tolkning av innloggingsskjema</string>
+    <string name="testConnection_errorMessage_noCSRF">Kunne ikke tolke innloggingsskjema</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Kan ikke logge inn — sjekk brukernavn og passord</string>
-    <string name="testConnection_errorMessage_authProblems">Autorisering-relaterte problemer. Disse forårsakes vanligvis av HTTP-videresendinger.</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Dette forårsakes som oftest av to-faktoridentifisering, som ikke støttes i programmet enda</string>
+    <string name="testConnection_errorMessage_authProblems">Kunne ikke logge inn (skyldes vanligvis HTTP-videresendinger)</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Skyldes vanligvis tofaktorautentisering (som appen ikke støtter enda)</string>
     <string name="testConnection_errorMessage_unknown">Ukjent feil</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Ukjent feil: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Overvei å endre nettadresse</string>
@@ -151,7 +151,7 @@
     <string name="pref_categoryName_sync">Synkronisering</string>
     <string name="pref_name_sync_syncTypes">Synkroniseringstyper</string>
     <string name="pref_desc_sync_syncTypes">Trykk for å vise mer info om synkroniseringstyper</string>
-    <string name="wrongUsernameOrPassword_errorMessage">Kunne ikke logge inn: Antagelig galt brukernavn eller passord</string>
+    <string name="wrongUsernameOrPassword_errorMessage">Kunne ikke logge inn. Er brukernavn eller passord feil?</string>
     <string name="previousUpdateNotFinished">Forrige oppdatering er ikke ferdig</string>
     <string name="articleList_favoriteMark">Favorittmarkering</string>
     <string name="articleList_ArchivedMark">Arkiveringsmerking</string>
