@@ -145,10 +145,10 @@
     <string name="readVolume">Volume voorlezen</string>
     <string name="notification_sweepingDeletedArticles">Schrappen van verwijderde artikelen</string>
     <string name="menu_lists_sweepDeletedArticles">\"Schrap\" verwijderde artikelen</string>
-    <string name="menu_manageTags">Tags beheren</string>
-    <string name="manageTags_title">Tags beheren</string>
-    <string name="manageTags_textField_hint">Voer een of meerdere tags in, gescheiden door komma\'s</string>
-    <string name="manageTags_currentTags">Geselecteerde tags:</string>
+    <string name="menu_manageTags">Labels beheren</string>
+    <string name="manageTags_title">Labels beheren</string>
+    <string name="manageTags_textField_hint">Voer een of meer labels in, gescheiden door komma\'s</string>
+    <string name="manageTags_currentTags">Geselecteerde labels:</string>
     <string name="navigation_drawer_open">Navigatie paneel openen</string>
     <string name="navigation_drawer_close">Navigatie paneel sluiten</string>
     <string name="nav_main_tags">Tags</string>
@@ -166,15 +166,7 @@
     <string name="d_disableTouch_currentCode">Huidige geselecteerde sleutelcode (druk op een knop om te veranderen):</string>
     <string name="manageTags_addMoreTags">Voeg meer labels toe:</string>
     <string name="manageTags_currentTags_none">Geen</string>
-    <string name="pref_desc_sync_syncTypes_text">Er zijn twee synchronisatie soorten: \"Volledig\" en \"Snel\".
-\n
-\n Bij \"Volledige\" synchronisatie wordt alle lokale inhoud verwijderd en opnieuw gedownload. Het is als laatste redmiddel beschikbaar via het optiemenu.
-\n
-\n \"Snelle\" synchronisatie (incrementeel) downloadt alleen wijzigingen die zijn aangebracht sinds de vorige synchronisatie, waardoor tijd en bandbreedte worden bespaard. Deze methode heeft echter een tekortkoming: het kan niet op afstand verwijderde artikelen detecteren (dus er worden geen lokale artikelen verwijderd tijdens \"Snelle\" synchronisatie). Trek naar beneden voorbij de bovenste schuifbalk in een artikellijst om te starten.
-\n
-\n Om de tekortkoming van het \"Snelle\" synchronisatietype te verhelpen, controleert \"Deleted article sweep\" elk lokaal artikel en vraagt de server of het nog op de server aanwezig is - zo niet, dan wordt het lokale artikel verwijderd. Afhankelijk van het aantal artikelen dat u heeft, duurt het even, maar bespaart u verkeer via de \"Volledige\" synchronisatie.
-\n
-\n Geen van deze functies heeft invloed op de client-naar-server-synchronisatie: uw lokale wijzigingen worden altijd naar de server verzonden voordat de lokale inhoud wordt bijgewerkt.</string>
+    <string name="pref_desc_sync_syncTypes_text">Er zijn twee synchronisatie soorten: \"Volledig\" en \"Snel\".\n\n Bij \"Volledige\" synchronisatie wordt alle lokale inhoud verwijderd en opnieuw gedownload. Het is als laatste redmiddel beschikbaar via het optiemenu.\n\n \"Snelle\" synchronisatie (incrementeel) downloadt alleen wijzigingen die zijn aangebracht sinds de vorige synchronisatie, waardoor tijd en bandbreedte worden bespaard. Deze methode heeft echter een tekortkoming: het kan niet op afstand verwijderde artikelen detecteren (dus er worden geen lokale artikelen verwijderd tijdens \"Snelle\" synchronisatie). Trek naar beneden voorbij de bovenste schuifbalk in een artikellijst om te starten.\n\n Om de tekortkoming van het \"Snelle\" synchronisatietype te verhelpen, controleert \"Deleted article sweep\" elk lokaal artikel en vraagt de server of het nog op de server aanwezig is - zo niet, dan wordt het lokale artikel verwijderd. Dit duurt even, afhankelijk van het aantal artikelen dat je hebt, maar het bespaart internetverkeer vergeleken met de \"Volledige\" synchronisatie.\n\n Geen van deze functies heeft invloed op de client-naar-server-synchronisatie: je lokale wijzigingen worden altijd naar de server verzonden voordat de lokale inhoud wordt bijgewerkt.</string>
     <string name="pref_desc_autoSync_enabled">Dit schakeld automatisch synchronisatie van lokale wijzigingen (toegevoegde links, gearchiveerde artikelen, etc.) in en het downloaden van nieuwe artikelen op basis van een schema</string>
     <string name="pref_desc_tts_showPreviewAsAlbumArt">Gebruik de voorbeeldafbeelding van het artikel (als deze aanwezig is) als albumhoes (zichtbaar in meldingen en kan worden weergegeven als achtergrond op het vergrendelingsscherm)</string>
     <string name="notification_action_media_next">Volgende</string>
@@ -208,35 +200,35 @@
     <string name="connectionWizard_provider_general_titleMessage">Basis configuratie</string>
     <string name="connectionWizard_providerSelection_next">Volgende</string>
     <string name="connectionWizard_providerSelection_prev">Overslaan</string>
-    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecteer dit als u een account heeft bij https://wallabag.it</string>
+    <string name="connectionWizard_providerSelection_provider_wallabagit_desc">Selecteer dit als je een account heeft bij https://wallabag.it</string>
     <string name="connectionWizard_providerSelection_provider_general_desc">Selecteer dit om de verbinding handmatig in te stellen</string>
     <string name="connectionWizard_providerSelection_provider_general_name">Anders</string>
     <string name="connectionWizard_providerSelection_titleMessage">Selecteer wallabag aanbieder</string>
     <string name="connectionWizard_welcome_next">Volgende</string>
     <string name="connectionWizard_welcome_prev">Overslaan</string>
-    <string name="connectionWizard_welcome_rerunNotice">U kan altijd de verbindingswizard opnieuw draaien vanuit \"Instellingen\".</string>
-    <string name="connectionWizard_welcome_text">Voor dat u de wallabag app kan gebruiken moet u een verbinding opzetten. De verbindingswizard helpt u hier mee.</string>
+    <string name="connectionWizard_welcome_rerunNotice">(Je kan de verbindingswizard altijd opnieuw starten vanuit \"Instellingen\".)</string>
+    <string name="connectionWizard_welcome_text">Configureer eerst een verbinding met de wizard.</string>
     <string name="connectionWizard_welcome_titleMessage">Welkom bij wallabag.</string>
     <string name="connectionWizard_misc_incorrectConnectionURI">Foute verbindings URI gebruikt</string>
     <string name="connectionWizard_misc_installQrCodeScanner">Installeer een QR-code scanner</string>
     <string name="connectionWizard_misc_scanQrCode">Scan een QR code</string>
     <string name="misc_logging_logcatToFile_result_error">Fout: %s</string>
     <string name="misc_logging_logcatToFile_result_saved">Logs opgeslagen op %s</string>
-    <string name="misc_localQueue_dumpToFile_header">Als u problemen ondervind met synchronisatie, meld dan uw probleem hier: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Rapporteer synchronisatie problemen hier: %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Fout: %s</string>
     <string name="misc_localQueue_dumpToFile_result_dumped">Opgeslagen naar %s</string>
     <string name="misc_localQueue_removeFirstItem_done">Klaar</string>
     <string name="misc_localQueue_empty">Geen lokale wijzigingen</string>
     <string name="pref_desc_misc_logging_logcatToFile">Slaat logcat-uitvoer (Android app log) op in /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/</string>
     <string name="pref_name_misc_logging_logcatToFile">Sla logcat-uitvoer op in een bestand</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">Verwijder het eerste niet gesynchroniseerde item. Dit kan helpen als u telkens dezelfde foutmelding krijgt tijdens synchronisatie. Zorg wel dat u alle lokale wijzigingen eerst opslaat naar bestand</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">Verwijder het eerste niet gesynchroniseerde item. Dit kan helpen als je telkens dezelfde foutmelding krijgt tijdens synchronisatie. Tip: sla eerst alle lokale wijzigingen op naar een bestand.</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">Verwijder het eerste lokale wachtrij item</string>
-    <string name="pref_desc_misc_localQueue_dumpToFile">Sla alle lokale wijzigingen op in een txt bestand (dit kunt u zelf bestuderen of toevoegen aan de bug report)</string>
+    <string name="pref_desc_misc_localQueue_dumpToFile">Sla alle lokale wijzigingen op in een TXT bestand (voor eigen onderzoek, of om het toe te voegen aan een bug rapport)</string>
     <string name="pref_name_misc_localQueue_dumpToFile">Opslaan naar bestand</string>
-    <string name="pref_desc_misc_localQueue_notice">Doe hier niets tenzij u weet wat u doet</string>
+    <string name="pref_desc_misc_localQueue_notice">Doe hier niets tenzij je weet wat je doet!</string>
     <string name="pref_name_misc_localQueue_notice">WAARSCHUWING</string>
     <string name="pref_categoryName_misc_localQueue">Lokale wijzigingen</string>
-    <string name="pref_name_misc_wipeDB_confirmMessage">Weet u zeker dat u de database wil wissen\?</string>
+    <string name="pref_name_misc_wipeDB_confirmMessage">Weet je zeker dat je de database wilt wissen?</string>
     <string name="pref_name_misc_wipeDB_confirmTitle">Wis database\?</string>
     <string name="pref_desc_misc_wipeDB">Wis alle artikelen van lokale database, wis ook alle niet gesynchroniseerde lokale wijzigingen en URLs</string>
     <string name="pref_name_misc_wipeDB">Wis database</string>
@@ -249,7 +241,7 @@
     <string name="pref_name_storage_dbPath_externalStorage" formatted="true">Externe opslag: %s</string>
     <string name="pref_name_storage_dbPath_internalStorage">Interne opslag</string>
     <string name="pref_name_storage_dbPath">Database locatie</string>
-    <string name="pref_desc_imageCache_enabled">Download automatisch alle afbeeldingen van elk artikel en sla deze op het apparaat op. Afhankelijke van de lengte van uw wallabag artikel lijst kan dit veel tijd en opslag in beslag nemen.</string>
+    <string name="pref_desc_imageCache_enabled">Download automatisch alle afbeeldingen van elk artikel en sla deze op het apparaat op. Afhankelijke van de lengte van je wallabag artikel lijst kan dit veel tijd en opslag in beslag nemen.</string>
     <string name="pref_name_imageCache_enabled">Plaats artikel afbeeldingen in cache</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dit accepteert lokale wijzigingen (toegevoegde links, gearchiveerde artikelen, etc.) om gesynchroniseerd te worden naar de server zodra het netwerk beschikbaar is.</string>
     <string name="pref_name_autoSyncQueue_enabled">Separate auto-sync voor lokale wijzigingen</string>
@@ -285,7 +277,7 @@
     <string name="pref_name_ui_previewImage_enabled">Voorbeeld afbeelding</string>
     <string name="pref_desc_ui_swipeArticles">Veeg links of rechts in een artikel om naar de vorige of volgende te gaan</string>
     <string name="pref_name_ui_swipeArticles">Veeg artikelen</string>
-    <string name="pref_desc_ui_scrollOverBottom">Druk hier om te configureren hoe vaak u over de bodem moet scrollen om een artikel als gelezen te markeren</string>
+    <string name="pref_desc_ui_scrollOverBottom">Configureer hoe vaak u over de bodem moet scrollen om een artikel als gelezen te markeren</string>
     <string name="pref_name_ui_scrollOverBottom">Scroll over de onderkant om te markeren als gelezen</string>
     <string name="pref_desc_ui_disableTouch_keyCode">Druk hier om de knop te configureren om aanraakinvoer in/uit te schakelen</string>
     <string name="pref_name_ui_disableTouch_keyCode">Schakel aanraakinvoerknop uit</string>
@@ -300,7 +292,7 @@
     <string name="pref_categoryName_ui_screenScrolling">Scherm scrollen</string>
     <string name="pref_desc_ui_keepScreenOn">Houdt het scherm aan tijdens het lezen van een artikel</string>
     <string name="pref_name_ui_keepScreenOn">Houdt het scherm aan tijdens het lezen</string>
-    <string name="pref_desc_ui_readingSpeed">Uw leessnelheid (gemeten in woorden per minuut). Wordt gebruikt om de verwachte leestijd te berekenen.</string>
+    <string name="pref_desc_ui_readingSpeed">Jouw leessnelheid (in woorden per minuut). Wordt gebruikt om de verwachte leestijd te berekenen.</string>
     <string name="pref_name_ui_readingSpeed">Lees snelheid</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Workaround voor Onyx apparaten om zwarte link kleuren te forceren</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Schakel Onyx Boox thema workaround in</string>
@@ -319,7 +311,7 @@
     <string name="pref_categoryName_ui">Gebruikersinterface</string>
     <string name="pref_name_connection_advanced_httpAuthPassword">HTTP Auth wachtwoord</string>
     <string name="pref_name_connection_advanced_httpAuthUsername">HTTP Auth gebruikersnaam</string>
-    <string name="pref_categoryDesc_connection_advanced_httpAuth">Als u niet weet wat het is, laat het dan leeg</string>
+    <string name="pref_categoryDesc_connection_advanced_httpAuth">Als je niet weet wat het is, laat het dan leeg</string>
     <string name="pref_categoryName_connection_advanced_httpAuth">HTTP Basis Authenticatie</string>
     <string name="pref_categoryName_connection_advanced">Geavanceerde verbindingsinstellingen</string>
     <string name="pref_desc_connection_autofill">Test verbinding en vul het gebruiker ID en gebruiker geheim in</string>

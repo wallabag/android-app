@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_channel_name_error">Tuccḍiwin</string>
+    <string name="d_testConnection_urlSuggestion_cancelButton">Semmet</string>
+    <string name="ttsVolume">Ableɣ</string>
+    <string name="menuDelete">Kkes</string>
+    <string name="positive_answer">Ih</string>
+    <string name="negative_answer">Uhu</string>
+    <string name="loading_article_text">Yessalay-d…</string>
+    <string name="ok">Ih</string>
+    <string name="addLink_success_text">Yettwarna</string>
+    <string name="feedName_favorites">Imenyafen</string>
+    <string name="themeName_light">Aceɛlal</string>
+    <string name="themeName_dark">Ubrik</string>
+    <string name="notification_channel_group_name_sync">Amtawi</string>
+    <string name="notification_channel_name_sync">Amtawi</string>
+    <string name="menu_lists_search">Nadi</string>
+    <string name="manageTags_save">Sekles</string>
+    <string name="manageTags_addNew">Rnu</string>
+    <string name="nav_main_articles">Imagraden</string>
+    <string name="nav_main_tags">Tibzimin</string>
+    <string name="nav_other_settings">Iɣewwaren</string>
+    <string name="nav_other_about">Ɣef</string>
+    <string name="pref_categoryName_connection">Tuqqna</string>
+    <string name="pref_name_connection_username">Isem n useqdac</string>
+    <string name="pref_name_connection_password">Awal n uɛeddi</string>
+    <string name="pref_name_connection_autofill">Taččart tawurmant</string>
+    <string name="pref_categoryName_ui">Udem</string>
+    <string name="pref_categoryName_tts">Aḍris ar taɣect</string>
+    <string name="ttsOptions">Tixtiṛiyin</string>
+    <string name="d_add_fail_title">Tuccḍa</string>
+    <string name="notification_channel_group_name_tts">TTS</string>
+</resources>
