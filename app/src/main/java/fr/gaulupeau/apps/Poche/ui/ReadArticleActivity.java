@@ -1358,14 +1358,15 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         QueryBuilder<Article> qb = articleDao.queryBuilder()
                 .where(ArticleDao.Properties.ArticleId.isNotNull());
 
-        if (previous) qb.where(ArticleDao.Properties.ArticleId.gt(article.getArticleId()));
-        else qb.where(ArticleDao.Properties.ArticleId.lt(article.getArticleId()));
+        // possible problem: will skip articles with the same creation date
+        if (previous) qb.where(ArticleDao.Properties.CreationDate.gt(article.getCreationDate()));
+        else qb.where(ArticleDao.Properties.CreationDate.lt(article.getCreationDate()));
 
         if (contextFavorites != null) qb.where(ArticleDao.Properties.Favorite.eq(contextFavorites));
         if (contextArchived != null) qb.where(ArticleDao.Properties.Archive.eq(contextArchived));
 
-        if (previous) qb.orderAsc(ArticleDao.Properties.ArticleId);
-        else qb.orderDesc(ArticleDao.Properties.ArticleId);
+        if (previous) qb.orderAsc(ArticleDao.Properties.CreationDate);
+        else qb.orderDesc(ArticleDao.Properties.CreationDate);
 
         List<Article> l = qb.limit(1).list();
         if (!l.isEmpty()) {
