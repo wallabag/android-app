@@ -24,7 +24,7 @@
     <string name="menu_syncLocalChanges">Synchroniseer lokale wijzigingen</string>
     <string name="d_deleteArticle_title">Verwijder artikel\?</string>
     <string name="d_deleteArticle_message">Weet je zeker dat je het artikel wilt verwijderen\?</string>
-    <string name="txtNetOffline">Controleer je internetverbinding!</string>
+    <string name="txtNetOffline">Controleer eerst je internetverbinding.</string>
     <string name="txtConfigNotSet">Configureer de app alvorens te synchroniseren.</string>
     <string name="txtUrlCopied">URL van het artikel naar clipboard gekopieerd</string>
     <string name="dialog_add_label">Voeg een nieuw artikel toe</string>
