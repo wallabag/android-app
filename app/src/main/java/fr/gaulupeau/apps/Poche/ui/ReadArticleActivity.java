@@ -26,11 +26,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -42,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Future;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
@@ -64,9 +63,13 @@ import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
+import androidx.appcompat.widget.Toolbar;
+
 import static android.text.Html.escapeHtml;
 
-public class ReadArticleActivity extends BaseActionBarActivity {
+public class ReadArticleActivity extends AppCompatActivity {
 
     public static final String EXTRA_ID = "ReadArticleActivity.id";
     public static final String EXTRA_LIST_ARCHIVED = "ReadArticleActivity.archived";
@@ -128,7 +131,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
     private boolean annotationsEnabled;
     private boolean onyxWorkaroundEnabled;
 
-    private ScrollView scrollView;
+    private NestedScrollView scrollView;
     private View scrollViewLastChild;
     private WebView webViewContent;
     private TextView loadingPlaceholder;
@@ -157,6 +160,8 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Themes.applyTheme(this);
+
         // not sure if it is relevant to WebView
         WallabagConnection.initConscrypt();
 
@@ -168,7 +173,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
 
         fullscreenArticleView = settings.isFullscreenArticleView();
         if (fullscreenArticleView) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
@@ -176,12 +180,20 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
 
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         if (fullscreenArticleView) {
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) actionBar.hide();
+            Objects.requireNonNull(getSupportActionBar()).hide();
+            toolbar.setVisibility(View.GONE);
+        } else {    // enable and handle the back button in the toolbar
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            toolbar.setNavigationOnClickListener(v -> onBackPressed());
         }
 
         Intent intent = getIntent();
@@ -434,6 +446,7 @@ public class ReadArticleActivity extends BaseActionBarActivity {
         startActivity(intent);
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onArticlesChangedEvent(ArticlesChangedEvent event) {
         Log.d(TAG, "onArticlesChangedEvent() started");
@@ -643,8 +656,6 @@ public class ReadArticleActivity extends BaseActionBarActivity {
                 customView = paramView;
 
                 //Hide action bar and bottom buttons while in fullscreen
-                hideUi(true);
-
                 FrameLayout.LayoutParams fullscreen = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
@@ -654,22 +665,9 @@ public class ReadArticleActivity extends BaseActionBarActivity {
             //Necessary for enabling watching youtube videos in fullscreen
             public void onHideCustomView() {
                 //Show action bar and bottom buttons when leaving fullscreen
-                hideUi(false);
 
                 ((FrameLayout) ReadArticleActivity.this.getWindow().getDecorView())
                         .removeView(customView);
-            }
-
-            private void hideUi(boolean hide) {
-                if (!fullscreenArticleView) {
-                    ActionBar actionBar = getSupportActionBar();
-                    if (actionBar != null) {
-                        if (hide) actionBar.hide();
-                        else actionBar.show();
-                    }
-                }
-                LinearLayout bottom = findViewById(R.id.bottomTools);
-                if (bottom != null) bottom.setVisibility(hide ? View.GONE : View.VISIBLE);
             }
         });
 

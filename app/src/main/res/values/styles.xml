@@ -45,13 +45,14 @@
         <item name="icon_autoplay">@drawable/ic_redo_24dp</item>
         <item name="icon_menu">@drawable/ic_menu_24dp</item>
         <item name="android:textColorPrimary">@color/darkContrastBlack</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="LightTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
     <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -64,7 +65,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.AppCompat">
@@ -86,13 +87,14 @@
         <item name="icon_fast_rewind">@drawable/ic_fast_rewind_white_24dp</item>
         <item name="icon_autoplay">@drawable/ic_redo_white_24dp</item>
         <item name="icon_menu">@drawable/ic_menu_white_24dp</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="DarkTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
     <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
     <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
@@ -108,7 +110,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
     <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
@@ -148,7 +150,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
     <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
     <style name="SolarizedTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
