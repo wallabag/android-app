@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 36
+    compileSdk = 36
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
@@ -49,11 +49,11 @@ android {
         }
     }
     lint {
-        lintConfig file('lint.xml')
+        lintConfig = file('lint.xml')
     }
-    namespace 'fr.gaulupeau.apps.InThePoche'
+    namespace = 'fr.gaulupeau.apps.InThePoche'
     buildFeatures {
-        buildConfig true
+        buildConfig = true
     }
 }
 
