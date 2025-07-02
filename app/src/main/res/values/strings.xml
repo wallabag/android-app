@@ -11,6 +11,8 @@
     <string name="menuDelete">Delete</string>
     <string name="menuOpenOriginal">Open original</string>
     <string name="menuCopyOriginalURL">Copy original URL</string>
+    <string name="menuOpenPublic">Open public</string>
+    <string name="menuCopyPublicURL">Copy public URL</string>
     <string name="menuTTS">Text To Speech</string>
     <string name="ttsSpeed">Rate</string>
     <string name="ttsPitch">Pitch</string>
