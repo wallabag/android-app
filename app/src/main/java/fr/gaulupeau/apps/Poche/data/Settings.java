@@ -239,6 +239,10 @@ public class Settings {
         setStringSet(context.getString(keyResourceID), values);
     }
 
+    public boolean getSelfSignedTrust(){
+        return getBoolean(R.string.pref_key_connection_selfsignedtrust,false);
+    }
+
     public String getUrl() {
         return getString(R.string.pref_key_connection_url);
     }
