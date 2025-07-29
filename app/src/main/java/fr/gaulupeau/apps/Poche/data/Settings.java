@@ -243,6 +243,10 @@ public class Settings {
         return getBoolean(R.string.pref_key_connection_selfsignedtrust,false);
     }
 
+    public void setSelfSignedTrust(boolean selfSignedTrust){
+        setBoolean(R.string.pref_key_connection_selfsignedtrust,selfSignedTrust);
+    }
+
     public String getUrl() {
         return getString(R.string.pref_key_connection_url);
     }
