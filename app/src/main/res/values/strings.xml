@@ -186,6 +186,7 @@
         https://example.com/wallabag\n
         https://app.wallabag.it
     </string>
+    <string name="pref_name_connection_selfsignedtrust">Trust self signed SSL</string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_api_clientID">Client ID</string>

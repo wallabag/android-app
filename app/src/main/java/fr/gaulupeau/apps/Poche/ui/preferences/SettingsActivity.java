@@ -95,6 +95,8 @@ public class SettingsActivity extends BaseActionBarActivity {
 
         private boolean checkUserChanged;
         private String oldUrl;
+        private boolean oldSelfSignedTrust;
+        private boolean selfsignedtrustChanged;
         private String oldHttpAuthUsername;
         private String oldUsername;
         private String oldApiClientID;
@@ -238,6 +240,10 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             checkUserChanged = false;
             oldUrl = settings.getUrl();
+
+            selfsignedtrustChanged=false;
+            oldSelfSignedTrust = settings.getSelfSignedTrust();
+
             oldHttpAuthUsername = settings.getHttpAuthUsername();
             oldUsername = settings.getUsername();
             oldApiClientID = settings.getApiClientID();
@@ -323,6 +329,11 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 Log.i(TAG, "applyChanges() calling WallabagConnection.resetWallabagService()");
                 WallabagConnection.resetWallabagService();
+            }
+
+            if(selfsignedtrustChanged){
+                selfsignedtrustChanged=false;
+
             }
 
             if(imageCachingChanged) {
@@ -420,6 +431,9 @@ public class SettingsActivity extends BaseActionBarActivity {
                 case R.string.pref_key_connection_api_clientSecret:
                     Log.i(TAG, "onSharedPreferenceChanged() invalidateConfiguration");
                     invalidateConfiguration = true;
+                    break;
+                case R.string.pref_key_connection_selfsignedtrust:
+                    selfsignedtrustChanged = true;
                     break;
 
                 case R.string.pref_key_imageCache_enabled:

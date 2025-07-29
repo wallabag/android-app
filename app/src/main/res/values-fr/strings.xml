@@ -163,6 +163,7 @@
 \n https://wallabag.example.com
 \n https://example.com/wallabag
 \n https://app.wallabag.it</string>
+    <string name="pref_name_connection_selfsignedtrust">Faites confiance aux certificats SSL auto-signés</string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
