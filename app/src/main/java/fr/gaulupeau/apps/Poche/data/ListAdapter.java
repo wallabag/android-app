@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -14,8 +15,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
+import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.data.dao.entities.Article;
 import fr.gaulupeau.apps.Poche.ui.ArticleActionsHelper;
@@ -104,6 +109,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             title.setText(article.getTitle());
             url.setText(article.getDomain());
 
+            // show author if available in url TextView
+            if(settings.getArticleListShowAuthor()) {
+                if (article.getAuthors() != null && !article.getAuthors().isEmpty()) {
+                    url.setText(url.getText() + " (" + article.getAuthors() + ")");
+                }
+            }
+
             boolean showFavourite = false;
             boolean showRead = false;
             switch (listType) {
@@ -125,6 +137,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             read.setVisibility(showRead ? View.VISIBLE : View.GONE);
             readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
                     article.getEstimatedReadingTime(settings.getReadingSpeed())));
+
+            // show date article in readingTime if active in settings
+            if(settings.getArticleListShowPublishedAt()) {
+                if (article.getPublishedAt() != null) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+
+                    readingTime.setText(simpleDateFormat.format(article.getPublishedAt()));
+                }
+            }
+
         }
 
         @Override

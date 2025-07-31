@@ -148,6 +148,21 @@
                 android:defaultValue="true"/>
         </PreferenceCategory>
         <PreferenceCategory
+            android:key="@string/pref_key_ui_articleList_category"
+            android:title="@string/pref_categoryName_ui_articleList"
+            android:persistent="false">
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_articleList_showAuthor"
+                android:title="@string/pref_name_ui_articleList_showAuthor"
+                android:summary="@string/pref_desc_ui_articleList_showAuthor"
+                android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_articleList_showPublishedAt"
+                android:title="@string/pref_name_ui_articleList_publishedAt"
+                android:summary="@string/pref_desc_ui_articleList_publishedAt"
+                android:defaultValue="false"/>
+        </PreferenceCategory>
+        <PreferenceCategory
             android:key="@string/pref_key_ui_misc_category"
             android:title="@string/pref_categoryName_ui_misc"
             android:persistent="false">

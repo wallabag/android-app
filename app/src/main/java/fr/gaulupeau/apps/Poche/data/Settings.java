@@ -247,6 +247,22 @@ public class Settings {
         setBoolean(R.string.pref_key_connection_selfsignedtrust,selfSignedTrust);
     }
 
+    public boolean getArticleListShowAuthor(){
+        return getBoolean(R.string.pref_key_ui_articleList_showAuthor,false);
+    }
+
+    public void setArticleListShowAuthor(boolean articleListShowAuthor){
+        setBoolean(R.string.pref_key_ui_articleList_showAuthor,articleListShowAuthor);
+    }
+
+    public boolean getArticleListShowPublishedAt(){
+        return getBoolean(R.string.pref_key_ui_articleList_showPublishedAt,false);
+    }
+
+    public void setArticleListShowPublishedAt(boolean articleListPublishedAt){
+        setBoolean(R.string.pref_key_ui_articleList_showPublishedAt,articleListPublishedAt);
+    }
+
     public String getUrl() {
         return getString(R.string.pref_key_connection_url);
     }

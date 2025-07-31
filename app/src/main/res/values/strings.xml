@@ -213,6 +213,11 @@
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
+    <string name="pref_categoryName_ui_articleList">Article list</string>
+    <string name="pref_name_ui_articleList_showAuthor">Author</string>
+    <string name="pref_desc_ui_articleList_showAuthor">Show article author in the article list</string>
+    <string name="pref_name_ui_articleList_publishedAt">published at</string>
+    <string name="pref_desc_ui_articleList_publishedAt">Show article publication date in the article list</string>
     <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog allowing favoriting/archiving/tagging a newly added article (or a toast message otherwise)</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen articles</string>
