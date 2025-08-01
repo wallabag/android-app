@@ -279,6 +279,14 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_articleList_showPublishedAt,articleListPublishedAt);
     }
 
+    public boolean getArticleListShowDivider() {
+        return getBoolean(R.string.pref_key_ui_articleList_showDivider,false);
+    }
+
+    public void setArticleListShowDivider(boolean articleListShowDivider) {
+        setBoolean(R.string.pref_key_ui_articleList_showDivider,articleListShowDivider);
+    }
+
     public String getUrl() {
         return getString(R.string.pref_key_connection_url);
     }

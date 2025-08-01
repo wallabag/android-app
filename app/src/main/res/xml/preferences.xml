@@ -173,6 +173,11 @@
                 android:title="@string/pref_name_ui_articleList_publishedAt"
                 android:summary="@string/pref_desc_ui_articleList_publishedAt"
                 android:defaultValue="false"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_articleList_showDivider"
+                android:title="@string/pref_name_ui_articleList_Divider"
+                android:summary="@string/pref_desc_ui_articleList_Divider"
+                android:defaultValue="false"/>
         </PreferenceCategory>
         <PreferenceCategory
             android:key="@string/pref_key_ui_misc_category"
