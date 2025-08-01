@@ -160,7 +160,7 @@
                 android:key="@string/pref_key_ui_articleList_previewPictureHeight"
                 android:title="@string/pref_name_ui_articleList_previewPictureHeight"
                 android:summary="@string/pref_desc_ui_articleList_previewPictureHeight"
-                android:defaultValue="200"
+                android:defaultValue="500"
                 android:inputType="number"
                 />
             <CheckBoxPreference
