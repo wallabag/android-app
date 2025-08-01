@@ -92,6 +92,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ImageView read;
         TextView readingTime;
         ImageView previewPicture;
+        TextView publishedAt;
 
         ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -103,6 +104,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             read = itemView.findViewById(R.id.read);
             readingTime = itemView.findViewById(R.id.estimatedReadingTime);
             previewPicture = itemView.findViewById(R.id.previewPicture);
+            publishedAt= itemView.findViewById(R.id.publishedAt);
 
 
             itemView.setOnClickListener(this);
@@ -163,11 +165,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                     article.getEstimatedReadingTime(settings.getReadingSpeed())));
 
             // show date article in readingTime if active in settings
+            publishedAt.setVisibility(View.GONE);
             if(settings.getArticleListShowPublishedAt()) {
                 if (article.getPublishedAt() != null) {
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+                    publishedAt.setVisibility(View.VISIBLE);
+                    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy: hh:mm", Locale.getDefault());
 
-                    readingTime.setText(simpleDateFormat.format(article.getPublishedAt()));
+                    //publishedAt.setText(simpleDateFormat.format(article.getPublishedAt()));
+                    var stringBuilder = new StringBuilder();
+                    stringBuilder.append(android.text.format.DateFormat.getDateFormat(context).format(article.getPublishedAt()));
+                    stringBuilder.append(' ');
+                    stringBuilder.append(android.text.format.DateFormat.getTimeFormat(context).format(article.getPublishedAt()));
+                    publishedAt.setText(stringBuilder.toString());
                 }
             }
 
