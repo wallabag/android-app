@@ -79,6 +79,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 R.string.pref_key_ui_theme,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
+                R.string.pref_key_ui_articleList_previewPictureHeight,
                 R.string.pref_key_autoSync_interval,
                 R.string.pref_key_autoSync_type,
                 R.string.pref_key_storage_dbPath

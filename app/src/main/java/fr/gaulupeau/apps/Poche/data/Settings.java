@@ -247,6 +247,22 @@ public class Settings {
         setBoolean(R.string.pref_key_connection_selfsignedtrust,selfSignedTrust);
     }
 
+    public boolean getArticleListShowPreviewPicture(){
+        return getBoolean(R.string.pref_key_ui_articleList_showPreviewPicture,false);
+    }
+
+    public void setArticleListShowPreviewPicture(boolean articleListShowPreviewPicture){
+        setBoolean(R.string.pref_key_ui_articleList_showPreviewPicture,articleListShowPreviewPicture);
+    }
+
+    public int getArticleListPreviewPictureHeight(){
+        return getInt(R.string.pref_key_ui_articleList_previewPictureHeight,500);
+    }
+
+    public void setArticleListPreviewPictureHeight(int articleListPreviewPictureHeight){
+        setInt(R.string.pref_key_ui_articleList_previewPictureHeight,articleListPreviewPictureHeight);
+    }
+
     public boolean getArticleListShowAuthor(){
         return getBoolean(R.string.pref_key_ui_articleList_showAuthor,false);
     }

@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ import fr.gaulupeau.apps.Poche.ui.ArticleActionsHelper;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_ARCHIVED;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_FAVORITES;
 import static fr.gaulupeau.apps.Poche.data.ListTypes.LIST_TYPE_UNREAD;
+
+import com.bumptech.glide.Glide;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
@@ -88,6 +91,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ImageView favourite;
         ImageView read;
         TextView readingTime;
+        ImageView previewPicture;
 
         ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -98,6 +102,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             favourite = itemView.findViewById(R.id.favourite);
             read = itemView.findViewById(R.id.read);
             readingTime = itemView.findViewById(R.id.estimatedReadingTime);
+            previewPicture = itemView.findViewById(R.id.previewPicture);
+
 
             itemView.setOnClickListener(this);
             itemView.setOnCreateContextMenuListener(this);
@@ -108,6 +114,24 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             title.setText(article.getTitle());
             url.setText(article.getDomain());
+
+            previewPicture.setVisibility(View.GONE);
+            if(settings.getArticleListShowPreviewPicture()) {
+                // set picture height from settings
+                if (settings.getArticleListPreviewPictureHeight() > 0) {
+                    previewPicture.getLayoutParams().height = settings.getArticleListPreviewPictureHeight();
+                }
+
+                previewPicture.setVisibility(View.GONE);
+                if (article.getPreviewPictureURL() != null && !article.getPreviewPictureURL().isEmpty()) {
+                    previewPicture.setVisibility(View.VISIBLE);
+                    Glide
+                            .with(context)
+                            .load(article.getPreviewPictureURL())
+                            .centerCrop()
+                            .into(previewPicture);
+                }
+            }
 
             // show author if available in url TextView
             if(settings.getArticleListShowAuthor()) {

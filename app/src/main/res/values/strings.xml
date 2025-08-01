@@ -214,6 +214,12 @@
         <item>Break lines (pre-wrap)</item>
     </string-array>
     <string name="pref_categoryName_ui_articleList">Article list</string>
+    <string name="pref_name_ui_articleList_showPreviewPicture">Preview image</string>
+    <string name="pref_desc_ui_articleList_showPreviewPicture">Show article preview image in the article list</string>
+    <string name="pref_name_ui_articleList_previewPictureHeight">Preview image height</string>
+    <string name="pref_desc_ui_articleList_previewPictureHeight">Height of the preview image in the article list (in dp)</string>
+    <string name="pref_name_ui_articleList_showTitle">Title</string>
+    <string name="pref_desc_ui_articleList_showTitle">Show article title in the article list</string>
     <string name="pref_name_ui_articleList_showAuthor">Author</string>
     <string name="pref_desc_ui_articleList_showAuthor">Show article author in the article list</string>
     <string name="pref_name_ui_articleList_publishedAt">published at</string>

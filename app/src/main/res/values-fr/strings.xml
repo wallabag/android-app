@@ -327,6 +327,10 @@
     <string name="pref_name_ui_onyxworkaround_enabled">Thème alternatif pour Onyx Boox</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification sera affichée à la place si l\'option est désactivée</string>
     <string name="pref_categoryName_ui_articleList">Liste des articles</string>
+    <string name="pref_name_ui_articleList_showPreviewPicture">Image</string>
+    <string name="pref_desc_ui_articleList_showPreviewPicture">Afficher l\'image dans la liste des articles</string>
+    <string name="pref_name_ui_articleList_previewPictureHeight">Image hauteur</string>
+    <string name="pref_desc_ui_articleList_previewPictureHeight">Hauteur de l\'image dans la liste des articles (dp)</string>
     <string name="pref_name_ui_articleList_showAuthor">Auteur</string>
     <string name="pref_desc_ui_articleList_showAuthor">Afficher l\'auteur dans la liste des articles</string>
     <string name="pref_name_ui_articleList_publishedAt">publié à</string>
