@@ -223,7 +223,7 @@
     <string name="pref_name_ui_articleList_showAuthor">Author</string>
     <string name="pref_desc_ui_articleList_showAuthor">Show article author in the article list</string>
     <string name="pref_name_ui_articleList_publishedAt">published at</string>
-    <string name="pref_desc_ui_articleList_publishedAt">Show article publication date in the article list</string>
+    <string name="pref_desc_ui_articleList_publishedAt">Show article publication date in the article list.If the publication date does not exist, display the creation date.</string>
     <string name="pref_name_ui_articleList_Divider">Divider</string>
     <string name="pref_desc_ui_articleList_Divider">Show a divider between articles in the article list</string>
     <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>

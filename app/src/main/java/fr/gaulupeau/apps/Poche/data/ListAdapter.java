@@ -167,15 +167,20 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             // show date article in readingTime if active in settings
             publishedAt.setVisibility(View.GONE);
             if(settings.getArticleListShowPublishedAt()) {
+                java.util.Date displayDate=null;
                 if (article.getPublishedAt() != null) {
-                    publishedAt.setVisibility(View.VISIBLE);
-                    //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy: hh:mm", Locale.getDefault());
+                    displayDate=article.getPublishedAt();
+                }
+                else if(article.getCreationDate()!=null){
+                    displayDate=article.getCreationDate();
+                }
 
-                    //publishedAt.setText(simpleDateFormat.format(article.getPublishedAt()));
+                if(displayDate!=null) {
+                    publishedAt.setVisibility(View.VISIBLE);
                     var stringBuilder = new StringBuilder();
-                    stringBuilder.append(android.text.format.DateFormat.getDateFormat(context).format(article.getPublishedAt()));
+                    stringBuilder.append(android.text.format.DateFormat.getDateFormat(context).format(displayDate));
                     stringBuilder.append(' ');
-                    stringBuilder.append(android.text.format.DateFormat.getTimeFormat(context).format(article.getPublishedAt()));
+                    stringBuilder.append(android.text.format.DateFormat.getTimeFormat(context).format(displayDate));
                     publishedAt.setText(stringBuilder.toString());
                 }
             }
