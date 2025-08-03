@@ -106,6 +106,7 @@
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
     <string name="themeName_solarized">Solarized</string>
+    <string name="themeName_day_night">Light/Dark (auto)</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
     <string name="aboutText"><b>wallabag app for Android</b>\n

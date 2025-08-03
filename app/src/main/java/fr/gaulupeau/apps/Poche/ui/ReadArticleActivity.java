@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -872,6 +873,17 @@ public class ReadArticleActivity extends AppCompatActivity {
             case SOLARIZED:
                 cssName = "solarized";
                 highContrast = false;
+                break;
+
+            case DAY_NIGHT:
+                cssName = "main";
+
+                int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                    cssName = "dark";
+                    break;
+                }
+
                 break;
         }
 
