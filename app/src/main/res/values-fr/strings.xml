@@ -41,6 +41,13 @@
     <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
     <string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
     <string name="d_urlAction_copyToClipboard">Copier dans le presse-papier</string>
+    <string name="dialog_switchSortOrder_label">Ordre</string>
+    <string name="d_switchSortOrder_DESC">Décroissant</string>
+    <string name="d_switchSortOrder_ASC">Croissant</string>
+    <string name="d_switchSortOrder_creationDateDESC">Date de création décroissante</string>
+    <string name="d_switchSortOrder_creationDateASC">Date de création croissante</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeDESC">Temps lecture décroissant</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeASC">Temps lecture croissant</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Échec</string>
     <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé :

@@ -42,6 +42,13 @@
     <string name="d_urlAction_openInBrowser">Open in browser</string>
     <string name="d_urlAction_addToWallabag">Add to wallabag</string>
     <string name="d_urlAction_copyToClipboard">Copy to clipboard</string>
+    <string name="dialog_switchSortOrder_label">Sort</string>
+    <string name="d_switchSortOrder_DESC">DESC</string>
+    <string name="d_switchSortOrder_ASC">ASC</string>
+    <string name="d_switchSortOrder_creationDateDESC">Creation date DESC</string>
+    <string name="d_switchSortOrder_creationDateASC">Creation date ASC</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeDESC">Reading time DESC</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeASC">Reading time ASC</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Fail</string>
     <string name="d_add_fail_text">Couldn\'t find a URL in share string:\n</string>

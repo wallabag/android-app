@@ -433,7 +433,11 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_main_changeSortOrder:
-                switchSortOrder();
+                if(FRAGMENT_TAG_LIST.equals(currentFragmentType))
+                    switchTagSortOrder();
+                else
+                    switchSortOrder();
+
                 return true;
 
             case R.id.menu_main_syncQueue:
@@ -633,23 +637,80 @@ public class MainActivity extends AppCompatActivity
         setSortOrder(fragment);
         setSearchQueryOnFragment(fragment, searchQuery);
     }
+    private void switchTagSortOrder() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_switchSortOrder_label);
+
+        int checkedItem = switch (tagsSortOrder) {
+            case DESC -> 0;
+            case ASC -> 1;
+            default -> 1;
+        };
+
+        builder.setSingleChoiceItems(
+                new CharSequence[]{
+                        getString(R.string.d_switchSortOrder_DESC),
+                        getString(R.string.d_switchSortOrder_ASC)
+                },checkedItem, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            tagsSortOrder=Sortable.SortOrder.DESC;
+                            break;
+                        case 1:
+                            tagsSortOrder=Sortable.SortOrder.ASC;
+                            break;
+                    }
+
+                    settings.setTagListSortOrder(tagsSortOrder);
+                    setSortOrder(currentFragment);
+                    dialog.dismiss(); // Dismiss the dialog after selection
+                });
+
+        builder.show();
+
+    }
 
     private void switchSortOrder() {
-        if (FRAGMENT_TAG_LIST.equals(currentFragmentType)) {
-            tagsSortOrder = tagsSortOrder == Sortable.SortOrder.DESC
-                    ? Sortable.SortOrder.ASC
-                    : Sortable.SortOrder.DESC;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(R.string.dialog_switchSortOrder_label);
 
-            settings.setTagListSortOrder(tagsSortOrder);
-        } else {
-            sortOrder = sortOrder == Sortable.SortOrder.DESC
-                    ? Sortable.SortOrder.ASC
-                    : Sortable.SortOrder.DESC;
+        int checkedItem = switch (sortOrder) {
+            case CreationDateDESC -> 0;
+            case CreationDateASC -> 1;
+            case EstimatedReadingTimeDESC -> 2;
+            case EstimatedReadingTimeASC -> 3;
+            default -> 0;
+        };
 
-            settings.setListSortOrder(sortOrder);
-        }
+        builder.setSingleChoiceItems(
+                new CharSequence[]{
+                        getString(R.string.d_switchSortOrder_creationDateDESC),
+                        getString(R.string.d_switchSortOrder_creationDateASC),
+                        getString(R.string.d_switchSortOrder_estimatedReadingTimeDESC),
+                        getString(R.string.d_switchSortOrder_estimatedReadingTimeASC)
+                },checkedItem, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            sortOrder=Sortable.SortOrder.CreationDateDESC;
+                            break;
+                        case 1:
+                            sortOrder=Sortable.SortOrder.CreationDateASC;
+                            break;
+                        case 2:
+                            sortOrder=Sortable.SortOrder.EstimatedReadingTimeDESC;
+                            break;
+                        case 3:
+                            sortOrder=Sortable.SortOrder.EstimatedReadingTimeASC;
+                            break;
+                    }
 
-        setSortOrder(currentFragment);
+                    settings.setListSortOrder(sortOrder);
+                    setSortOrder(currentFragment);
+                    dialog.dismiss(); // Dismiss the dialog after selection
+                });
+
+        builder.show();
+
     }
 
     private void setSortOrder(Fragment fragment) {

@@ -449,9 +449,9 @@ public class Settings {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 
         Sortable.SortOrder sortOrder = null;
-        if(sortOrderParam != null) {
+        if(sortOrderParam != null && !sortOrderParam.isEmpty()) {
             try {
-                sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
+                    sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
             } catch(IllegalArgumentException ignored) {}
         }
 
