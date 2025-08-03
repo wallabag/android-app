@@ -939,11 +939,20 @@ public class ReadArticleActivity extends AppCompatActivity {
     private String getStats() {
         StringBuilder stats = new StringBuilder();
 
+        stats.append("<li>");
+        // Material icon 'today'
+        stats.append("\t<i class=\"material-icons no-tts\">&#xE8DF</i>");
+        stats.append(android.text.format.DateFormat.getDateFormat(this).format(article.getCreationDate()))
+                .append(' ')
+                .append(android.text.format.DateFormat.getTimeFormat(this).format(article.getCreationDate()));
+        stats.append("</li>");
+
+
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
             stats.append("<li>");
             // Material icon 'today'
-            stats.append("\t<i class=\"material-icons no-tts\">&#xE8DF</i>");
+            stats.append("\t<i class=\"material-icons no-tts\">&#xE3C9</i>");
             stats.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
                     .append(' ')
                     .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));
