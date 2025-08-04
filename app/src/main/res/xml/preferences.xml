@@ -24,7 +24,9 @@
                 android:defaultValue="https://"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_connection_selfsignedtrust"
-                android:title="@string/pref_name_connection_selfsignedtrust" />
+                android:title="@string/pref_name_connection_selfsignedtrust"
+                android:summary="@string/pref_desc_connection_selfsignedtrust"
+                />
             <EditTextPreference
                 android:key="@string/pref_key_connection_username"
                 android:title="@string/pref_name_connection_username"
