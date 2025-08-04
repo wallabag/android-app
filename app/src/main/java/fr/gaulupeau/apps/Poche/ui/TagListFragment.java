@@ -102,7 +102,7 @@ public class TagListFragment extends RecyclerViewListFragment<Tag, TagListAdapte
                 break;
 
             default:
-                throw new IllegalStateException("Sort order not implemented: " + sortOrder);
+                //throw new IllegalStateException("Sort order not implemented: " + sortOrder);
         }
 
         return qb;

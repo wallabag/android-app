@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -873,6 +874,20 @@ public class ReadArticleActivity extends AppCompatActivity {
                 cssName = "solarized";
                 highContrast = false;
                 break;
+
+            case DAY_NIGHT_CONTRAST:
+                highContrast = true;
+            case DAY_NIGHT:
+                cssName = "main";
+
+                int nightModeFlags = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+                if (nightModeFlags == Configuration.UI_MODE_NIGHT_YES) {
+                    cssName = "dark";
+                    break;
+                }
+
+                break;
+
         }
 
         List<String> additionalClasses = new ArrayList<>();
@@ -939,11 +954,20 @@ public class ReadArticleActivity extends AppCompatActivity {
     private String getStats() {
         StringBuilder stats = new StringBuilder();
 
+        stats.append("<li>");
+        // Material icon 'today'
+        stats.append("\t<i class=\"material-icons no-tts\">&#xE8DF</i>");
+        stats.append(android.text.format.DateFormat.getDateFormat(this).format(article.getCreationDate()))
+                .append(' ')
+                .append(android.text.format.DateFormat.getTimeFormat(this).format(article.getCreationDate()));
+        stats.append("</li>");
+
+
         Date publishedAt = article.getPublishedAt();
         if (publishedAt != null) {
             stats.append("<li>");
             // Material icon 'today'
-            stats.append("\t<i class=\"material-icons no-tts\">&#xE8DF</i>");
+            stats.append("\t<i class=\"material-icons no-tts\">&#xE3C9</i>");
             stats.append(android.text.format.DateFormat.getDateFormat(this).format(publishedAt))
                     .append(' ')
                     .append(android.text.format.DateFormat.getTimeFormat(this).format(publishedAt));

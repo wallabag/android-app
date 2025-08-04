@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -43,6 +44,8 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
     private static final String DATA_PROVIDER = "provider";
     private static final String DATA_URL = "url";
+
+    private static final String DATA_TRUSTAUTOSIGNEDSSL = "trustautosignedssl";
     private static final String DATA_USERNAME = "username";
     private static final String DATA_PASSWORD = "password";
     private static final String DATA_HTTP_AUTH_USERNAME = "http_auth_username";
@@ -89,6 +92,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             boolean fillOutData = false;
             String url = null, username = null, password = null;
+            boolean selfSignedTrust=false;
 
             String dataString = intent.getDataString();
             if(dataString != null) {
@@ -112,6 +116,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 Settings settings = App.getSettings();
 
                 url = settings.getUrl();
+                selfSignedTrust=settings.getSelfSignedTrust();
                 username = settings.getUsername();
                 password = settings.getPassword();
 
@@ -440,6 +445,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         protected String url;
         protected String username, password;
+        protected boolean selfSignedTrust;
         protected String clientID, clientSecret;
         protected String httpAuthUsername, httpAuthPassword;
         protected boolean tryPossibleURLs = true;
@@ -456,11 +462,16 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
             if (v != null) {
                 EditText urlEditText = (EditText)v.findViewById(R.id.wallabag_url);
+                CheckBox selfSignedTrustCheckBox=(CheckBox)v.findViewById(R.id.wallabag_trustautosignedssl);
                 EditText usernameEditText = (EditText)v.findViewById(R.id.username);
                 EditText passwordEditText = (EditText)v.findViewById(R.id.password);
 
                 if(urlEditText != null && getArguments().containsKey(DATA_URL)) {
                     urlEditText.setText(getArguments().getString(DATA_URL));
+                }
+
+                if(selfSignedTrustCheckBox != null) {
+                    selfSignedTrustCheckBox.setChecked(getArguments().getBoolean(DATA_TRUSTAUTOSIGNEDSSL));
                 }
 
                 if(usernameEditText != null && getArguments().containsKey(DATA_USERNAME)) {
@@ -490,10 +501,12 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             if(view == null) return;
 
             EditText urlEditText = (EditText)view.findViewById(R.id.wallabag_url);
+            CheckBox selfSignedTrustCheckBox=(CheckBox)view.findViewById(R.id.wallabag_trustautosignedssl);
             EditText usernameEditText = (EditText)view.findViewById(R.id.username);
             EditText passwordEditText = (EditText)view.findViewById(R.id.password);
 
             if(urlEditText != null) url = urlEditText.getText().toString();
+            if(selfSignedTrustCheckBox!=null) selfSignedTrust=selfSignedTrustCheckBox.isChecked();
             if(usernameEditText != null) username = usernameEditText.getText().toString();
             if(passwordEditText != null) password = passwordEditText.getText().toString();
         }
@@ -552,6 +565,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         protected void populateBundleWithConnectionSettings() {
             Bundle bundle = getArguments();
             bundle.putString(DATA_URL, url);
+            bundle.putBoolean(DATA_TRUSTAUTOSIGNEDSSL, selfSignedTrust);
             bundle.putString(DATA_USERNAME, username);
             bundle.putString(DATA_PASSWORD, password);
             bundle.putString(DATA_API_CLIENT_ID, clientID);
@@ -626,6 +640,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             Settings settings = App.getSettings();
 
             String url = bundle.getString(DATA_URL);
+            boolean trustAutoSignedSsl=bundle.getBoolean(DATA_TRUSTAUTOSIGNEDSSL,false);
             String username = bundle.getString(DATA_USERNAME);
             String httpAuthUsername = bundle.getString(DATA_HTTP_AUTH_USERNAME);
             String clientID = bundle.getString(DATA_API_CLIENT_ID);
@@ -637,6 +652,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                     || !TextUtils.equals(settings.getApiClientID(), clientID);
 
             settings.setUrl(url);
+            settings.setSelfSignedTrust(trustAutoSignedSsl);
             settings.setUsername(username);
             settings.setPassword(bundle.getString(DATA_PASSWORD));
             settings.setHttpAuthUsername(httpAuthUsername);

@@ -236,13 +236,19 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
         switch (sortOrder) {
             case ASC:
+            case CreationDateASC:
                 qb.orderAsc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId);
                 break;
-
             case DESC:
+            case CreationDateDESC:
                 qb.orderDesc(ArticleDao.Properties.CreationDate, ArticleDao.Properties.ArticleId);
                 break;
-
+            case EstimatedReadingTimeASC:
+                qb.orderAsc(ArticleDao.Properties.EstimatedReadingTime, ArticleDao.Properties.ArticleId);
+                break;
+            case EstimatedReadingTimeDESC:
+                qb.orderDesc(ArticleDao.Properties.EstimatedReadingTime, ArticleDao.Properties.ArticleId);
+                break;
             default:
                 throw new IllegalStateException("Sort order not implemented: " + sortOrder);
         }

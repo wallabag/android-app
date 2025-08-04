@@ -5,6 +5,7 @@
     <string name="pref_key_connection" translatable="false">connection</string>
     <string name="pref_key_connection_category" translatable="false">connection.category</string>
     <string name="pref_key_connection_url" translatable="false">connection.url</string>
+    <string name="pref_key_connection_selfsignedtrust" translatable="false">connection.selfsignedtrust</string>
     <string name="pref_key_connection_username" translatable="false">connection.username</string>
     <string name="pref_key_connection_password" translatable="false">connection.password</string>
     <string name="pref_key_connection_api_clientID" translatable="false">connection.api.clientID</string>
@@ -33,6 +34,13 @@
     <string name="pref_key_ui_screenScrolling" translatable="false">ui.screenScrolling</string>
     <string name="pref_key_ui_screenScrolling_percent" translatable="false">ui.screenScrolling.percent</string>
     <string name="pref_key_ui_screenScrolling_smooth" translatable="false">ui.screenScrolling.smooth</string>
+
+    <string name="pref_key_ui_articleList_category" translatable="false">ui.articleList.category</string>
+    <string name="pref_key_ui_articleList_showPreviewPicture" translatable="false">ui.articleList.previewPicture</string>
+    <string name="pref_key_ui_articleList_previewPictureHeight" translatable="false">ui.articleList.pictureHeight</string>
+    <string name="pref_key_ui_articleList_showAuthor" translatable="false">ui.articleList.showAuthor</string>
+    <string name="pref_key_ui_articleList_showPublishedAt" translatable="false">ui.articleList.showPublishedAt</string>
+    <string name="pref_key_ui_articleList_showDivider" translatable="false">ui.articleList.showDivider</string>
     <string name="pref_key_ui_misc_category" translatable="false">ui.misc.category</string>
     <string name="pref_key_ui_showArticleAddedDialog_enabled" translatable="false">ui.article.showArticleAddedDialog</string>
     <string name="pref_key_ui_article_fullscreen" translatable="false">ui.article.fullscreen</string>
