@@ -41,4 +41,18 @@
         <item name="icon_tag">@drawable/ic_tag_white_24dp</item>
         <item name="icon_open">@drawable/ic_open_in_new_white_24dp</item>
     </style>
+
+    <style name="DayNightThemeContrast" parent="DayNightTheme">
+        <item name="android:windowBackground">@color/darkContrastBlack</item>
+        <item name="android:itemBackground">@color/darkContrastBlack</item> <!-- Background Color of Three-dots Menu -->
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="colorPrimary">#000000</item>
+    </style>
+
+    <style name="DayNightThemeContrast.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
 </resources>

@@ -106,6 +106,7 @@
     <string name="themeName_dark_contrast">Sombre (contraste élevé)</string>
     <string name="themeName_solarized">Solarisé</string>
     <string name="themeName_day_night">Clair/Sombre (auto)</string>
+    <string name="themeName_day_night_contrast">Clair/Sombre (contraste élevé - auto)</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="aboutText"><b>Application wallabag pour Android</b>

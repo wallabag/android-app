@@ -875,6 +875,8 @@ public class ReadArticleActivity extends AppCompatActivity {
                 highContrast = false;
                 break;
 
+            case DAY_NIGHT_CONTRAST:
+                highContrast = true;
             case DAY_NIGHT:
                 cssName = "main";
 
@@ -885,6 +887,7 @@ public class ReadArticleActivity extends AppCompatActivity {
                 }
 
                 break;
+
         }
 
         List<String> additionalClasses = new ArrayList<>();
