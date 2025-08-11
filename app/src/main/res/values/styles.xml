@@ -68,6 +68,61 @@
         <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
 
+    <style name="DayNightTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="appBarOverlayTheme">@style/DayNightTheme.AppBarOverlay</item>
+        <item name="popupOverlayTheme">@style/DayNightTheme.PopupOverlay</item>
+        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
+        <item name="icon_favorite_list">@drawable/ic_star_black_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
+        <item name="icon_read">@drawable/ic_done_white_24dp</item>
+        <item name="icon_read_list">@drawable/ic_done_black_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
+        <item name="icon_search">@drawable/ic_search_white_24dp</item>
+        <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
+        <item name="welcome_logo">@drawable/welcome</item>
+        <item name="icon_running">@drawable/ic_running_24dp</item>
+        <item name="icon_notes">@drawable/ic_musical_notes_24dp</item>
+        <item name="icon_volume">@drawable/ic_volume_up_24dp</item>
+        <item name="icon_fast_forward">@drawable/ic_fast_forward_24dp</item>
+        <item name="icon_play">@drawable/ic_play_arrow_24dp</item>
+        <item name="icon_fast_rewind">@drawable/ic_fast_rewind_24dp</item>
+        <item name="icon_autoplay">@drawable/ic_redo_24dp</item>
+        <item name="icon_menu">@drawable/ic_menu_24dp</item>
+        <item name="android:textColorPrimary">@color/darkContrastBlack</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="DayNightTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+    <style name="DayNightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="DayNightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="DayNightThemeContrast" parent="DayNightTheme">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="DayNightThemeContrast.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="DayNightDialogTheme" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="windowNoTitle">true</item>
+
+        <item name="icon_read">@drawable/ic_done_black_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_black_24dp</item>
+        <item name="icon_favorite">@drawable/ic_star_border_black_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_black_24dp</item>
+        <item name="icon_tag">@drawable/ic_tag_black_24dp</item>
+        <item name="icon_open">@drawable/ic_open_in_new_black_24dp</item>
+    </style>
+
     <style name="DarkTheme" parent="Theme.AppCompat">
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>

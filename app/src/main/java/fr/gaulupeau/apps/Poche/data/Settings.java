@@ -239,6 +239,54 @@ public class Settings {
         setStringSet(context.getString(keyResourceID), values);
     }
 
+    public boolean getSelfSignedTrust(){
+        return getBoolean(R.string.pref_key_connection_selfsignedtrust,false);
+    }
+
+    public void setSelfSignedTrust(boolean selfSignedTrust){
+        setBoolean(R.string.pref_key_connection_selfsignedtrust,selfSignedTrust);
+    }
+
+    public boolean getArticleListShowPreviewPicture(){
+        return getBoolean(R.string.pref_key_ui_articleList_showPreviewPicture,false);
+    }
+
+    public void setArticleListShowPreviewPicture(boolean articleListShowPreviewPicture){
+        setBoolean(R.string.pref_key_ui_articleList_showPreviewPicture,articleListShowPreviewPicture);
+    }
+
+    public int getArticleListPreviewPictureHeight(){
+        return getInt(R.string.pref_key_ui_articleList_previewPictureHeight,500);
+    }
+
+    public void setArticleListPreviewPictureHeight(int articleListPreviewPictureHeight){
+        setInt(R.string.pref_key_ui_articleList_previewPictureHeight,articleListPreviewPictureHeight);
+    }
+
+    public boolean getArticleListShowAuthor(){
+        return getBoolean(R.string.pref_key_ui_articleList_showAuthor,false);
+    }
+
+    public void setArticleListShowAuthor(boolean articleListShowAuthor){
+        setBoolean(R.string.pref_key_ui_articleList_showAuthor,articleListShowAuthor);
+    }
+
+    public boolean getArticleListShowPublishedAt(){
+        return getBoolean(R.string.pref_key_ui_articleList_showPublishedAt,false);
+    }
+
+    public void setArticleListShowPublishedAt(boolean articleListPublishedAt){
+        setBoolean(R.string.pref_key_ui_articleList_showPublishedAt,articleListPublishedAt);
+    }
+
+    public boolean getArticleListShowDivider() {
+        return getBoolean(R.string.pref_key_ui_articleList_showDivider,false);
+    }
+
+    public void setArticleListShowDivider(boolean articleListShowDivider) {
+        setBoolean(R.string.pref_key_ui_articleList_showDivider,articleListShowDivider);
+    }
+
     public String getUrl() {
         return getString(R.string.pref_key_connection_url);
     }
@@ -401,9 +449,9 @@ public class Settings {
         String sortOrderParam = getString(R.string.pref_key_ui_lists_sortOrder);
 
         Sortable.SortOrder sortOrder = null;
-        if(sortOrderParam != null) {
+        if(sortOrderParam != null && !sortOrderParam.isEmpty()) {
             try {
-                sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
+                    sortOrder = Sortable.SortOrder.valueOf(sortOrderParam);
             } catch(IllegalArgumentException ignored) {}
         }
 

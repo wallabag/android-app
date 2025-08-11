@@ -42,6 +42,13 @@
     <string name="d_urlAction_openInBrowser">Open in browser</string>
     <string name="d_urlAction_addToWallabag">Add to wallabag</string>
     <string name="d_urlAction_copyToClipboard">Copy to clipboard</string>
+    <string name="dialog_switchSortOrder_label">Sort</string>
+    <string name="d_switchSortOrder_DESC">DESC</string>
+    <string name="d_switchSortOrder_ASC">ASC</string>
+    <string name="d_switchSortOrder_creationDateDESC">Creation date DESC</string>
+    <string name="d_switchSortOrder_creationDateASC">Creation date ASC</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeDESC">Reading time DESC</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeASC">Reading time ASC</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Fail</string>
     <string name="d_add_fail_text">Couldn\'t find a URL in share string:\n</string>
@@ -99,6 +106,8 @@
     <string name="themeName_dark">Dark</string>
     <string name="themeName_dark_contrast">Dark (high contrast)</string>
     <string name="themeName_solarized">Solarized</string>
+    <string name="themeName_day_night">Light/Dark (auto)</string>
+    <string name="themeName_day_night_contrast">Light/Dark (high contrast - auto)</string>
     <string name="menu_readArticle_increaseFontSize">Increase font size</string>
     <string name="menu_readArticle_decreaseFontSize">Decrease font size</string>
     <string name="aboutText"><b>wallabag app for Android</b>\n
@@ -186,6 +195,8 @@
         https://example.com/wallabag\n
         https://app.wallabag.it
     </string>
+    <string name="pref_name_connection_selfsignedtrust">Self signed SSL</string>
+    <string name="pref_desc_connection_selfsignedtrust">Trust self-signed SSL certificates (not recommended)</string>
     <string name="pref_name_connection_username">Username</string>
     <string name="pref_name_connection_password">Password</string>
     <string name="pref_name_connection_api_clientID">Client ID</string>
@@ -212,6 +223,19 @@
         <item>Scroll inside window (overflow)</item>
         <item>Break lines (pre-wrap)</item>
     </string-array>
+    <string name="pref_categoryName_ui_articleList">Article list</string>
+    <string name="pref_name_ui_articleList_showPreviewPicture">Preview image</string>
+    <string name="pref_desc_ui_articleList_showPreviewPicture">Show article preview image in the article list</string>
+    <string name="pref_name_ui_articleList_previewPictureHeight">Preview image height</string>
+    <string name="pref_desc_ui_articleList_previewPictureHeight">Height of the preview image in the article list (in dp)</string>
+    <string name="pref_name_ui_articleList_showTitle">Title</string>
+    <string name="pref_desc_ui_articleList_showTitle">Show article title in the article list</string>
+    <string name="pref_name_ui_articleList_showAuthor">Author</string>
+    <string name="pref_desc_ui_articleList_showAuthor">Show article author in the article list</string>
+    <string name="pref_name_ui_articleList_publishedAt">published at</string>
+    <string name="pref_desc_ui_articleList_publishedAt">Show article publication date in the article list.If the publication date does not exist, display the creation date.</string>
+    <string name="pref_name_ui_articleList_Divider">Divider</string>
+    <string name="pref_desc_ui_articleList_Divider">Show a divider between articles in the article list</string>
     <string name="pref_name_ui_showArticleAddedDialog">Show a dialog when bagging</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Shows a dialog allowing favoriting/archiving/tagging a newly added article (or a toast message otherwise)</string>
     <string name="pref_name_ui_article_fullscreen">Fullscreen articles</string>

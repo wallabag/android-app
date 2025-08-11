@@ -12,6 +12,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.gaulupeau.apps.InThePoche.R;
+import fr.gaulupeau.apps.Poche.App;
 
 public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter<?>>
         extends Fragment implements Sortable, Searchable {
@@ -90,6 +92,16 @@ public abstract class RecyclerViewListFragment<T, V extends RecyclerView.Adapter
 
         refreshLayout = view.findViewById(getSwipeContainerResID());
         refreshLayout.setOnRefreshListener(this::onSwipeRefresh);
+
+        // add separator
+        if(App.getSettings().getArticleListShowDivider()) {
+            if (recyclerView.getItemDecorationCount() == 0) {
+                recyclerView.addItemDecoration(new DividerItemDecoration(
+                        recyclerView.getContext(),
+                        LinearLayoutManager.VERTICAL
+                ));
+            }
+        }
 
         return view;
     }

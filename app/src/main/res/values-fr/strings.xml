@@ -41,6 +41,13 @@
     <string name="d_urlAction_openInBrowser">Ouvrir dans le navigateur</string>
     <string name="d_urlAction_addToWallabag">Ajouter à wallabag</string>
     <string name="d_urlAction_copyToClipboard">Copier dans le presse-papier</string>
+    <string name="dialog_switchSortOrder_label">Ordre</string>
+    <string name="d_switchSortOrder_DESC">Décroissant</string>
+    <string name="d_switchSortOrder_ASC">Croissant</string>
+    <string name="d_switchSortOrder_creationDateDESC">Date de création décroissante</string>
+    <string name="d_switchSortOrder_creationDateASC">Date de création croissante</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeDESC">Temps lecture décroissant</string>
+    <string name="d_switchSortOrder_estimatedReadingTimeASC">Temps lecture croissant</string>
     <string name="ok">OK</string>
     <string name="d_add_fail_title">Échec</string>
     <string name="d_add_fail_text">Impossible de trouver une URL dans le texte partagé :
@@ -98,6 +105,8 @@
     <string name="themeName_dark">Sombre</string>
     <string name="themeName_dark_contrast">Sombre (contraste élevé)</string>
     <string name="themeName_solarized">Solarisé</string>
+    <string name="themeName_day_night">Clair/Sombre (auto)</string>
+    <string name="themeName_day_night_contrast">Clair/Sombre (contraste élevé - auto)</string>
     <string name="menu_readArticle_increaseFontSize">Augmenter la taille de la police</string>
     <string name="menu_readArticle_decreaseFontSize">Diminuer la taille de la police</string>
     <string name="aboutText"><b>Application wallabag pour Android</b>
@@ -163,6 +172,8 @@
 \n https://wallabag.example.com
 \n https://example.com/wallabag
 \n https://app.wallabag.it</string>
+    <string name="pref_name_connection_selfsignedtrust">Certificats SSL auto-signés</string>
+    <string name="pref_desc_connection_selfsignedtrust">Trust self-signed SSL certificates (not recommended)</string>
     <string name="pref_name_connection_username">Identifiant</string>
     <string name="pref_name_connection_password">Mot de passe</string>
     <string name="pref_name_connection_api_clientID">ID Client</string>
@@ -325,6 +336,17 @@
     <string name="pref_desc_ui_onyxworkaround_enabled">Empêcher les appareils Onyx de forcer les couleurs des liens en noir</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Thème alternatif pour Onyx Boox</string>
     <string name="pref_desc_ui_showArticleAddedDialog">Affiche une fenêtre de dialogue permettant de mettre en favori/archiver/étiqueter un article venant d\'être ajouté. Une notification sera affichée à la place si l\'option est désactivée</string>
+    <string name="pref_categoryName_ui_articleList">Liste des articles</string>
+    <string name="pref_name_ui_articleList_showPreviewPicture">Image</string>
+    <string name="pref_desc_ui_articleList_showPreviewPicture">Afficher l\'image dans la liste des articles</string>
+    <string name="pref_name_ui_articleList_previewPictureHeight">Image hauteur</string>
+    <string name="pref_desc_ui_articleList_previewPictureHeight">Hauteur de l\'image dans la liste des articles (dp)</string>
+    <string name="pref_name_ui_articleList_showAuthor">Auteur</string>
+    <string name="pref_desc_ui_articleList_showAuthor">Afficher l\'auteur dans la liste des articles</string>
+    <string name="pref_name_ui_articleList_publishedAt">publié à</string>
+    <string name="pref_desc_ui_articleList_publishedAt">Afficher la date de publication dans la liste des articles.Si la date de publication n\'éxiste pas afficher la date de création.</string>
+    <string name="pref_name_ui_articleList_Divider">Diviseur</string>
+    <string name="pref_desc_ui_articleList_Divider">Afficher un diviseur entre les articles</string>
     <string name="pref_name_ui_showArticleAddedDialog">Afficher une fenêtre de dialogue à l\'ajout</string>
     <string name="manageTags_addMoreTags">Ajouter plus d\'étiquettes :</string>
     <string name="manageTags_currentTags_none">Aucune</string>
