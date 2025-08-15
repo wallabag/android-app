@@ -340,7 +340,7 @@
 \nUsa \"Escombrat d\'articles suprimits\" per eliminar automàticament els articles locals que no es trobin al servidor. Triga una estona, però desa el trànsit a la sincronització \"Completa\".
 \n
 \nEls canvis locals sempre se sincronitzen del client al servidor abans d\'actualitzar el contingut local (si falla, no es perd res).</string>
-    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Esborrat d\'articles suprimits\" després de la sincronització \"Ràpida\".</string>
+    <string name="pref_name_sync_sweepingAfterFastSync_enabled">\"Esborrat d\'articles suprimits\" després de la sincronització \"Ràpida\"</string>
     <string name="pref_desc_misc_ftsIcuTokenizer_enabled">Utilitza el tokenitzador ICU per a la indexació de cerca a text complet (el tokenitzador unicode61 genèric s\'utilitza d\'una altra manera). Pot millorar els resultats de la cerca per a les llengües CJK. Es requereix \"actualització completa\" perquè l\'opció tingui efecte.</string>
     <string name="connectionWizard_provider_general_titleMessage">Configuració bàsica</string>
     <string name="pref_name_misc_wipeDB">Esborra la base de dades</string>
