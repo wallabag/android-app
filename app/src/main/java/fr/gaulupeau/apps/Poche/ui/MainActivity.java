@@ -17,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -113,6 +114,8 @@ public class MainActivity extends AppCompatActivity
     private String searchQueryPrevious;
     private boolean searchUIPending;
     private String selectedTag;
+
+    private ClipboardHelper clipboardHelper = new ClipboardHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -932,12 +935,18 @@ public class MainActivity extends AppCompatActivity
         @SuppressLint("InflateParams")
         final View view = getLayoutInflater().inflate(R.layout.dialog_add, null);
 
+        EditText urlEditText = view.findViewById(R.id.page_url);
+        String clipboardContent = clipboardHelper.getClipboardContent(this);
+        if (clipboardContent.toLowerCase().startsWith("https://")) {
+            urlEditText.setText(clipboardContent);
+        }
+        urlEditText.requestFocus();
+        urlEditText.selectAll();
+
         builder.setView(view);
 
-        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
-            TextView textView = view.findViewById(R.id.page_url);
-            OperationsHelper.addArticleWithUI(this, textView.getText().toString(), null);
-        });
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) ->
+                OperationsHelper.addArticleWithUI(this, urlEditText.getText().toString(), null));
         builder.setNegativeButton(android.R.string.cancel, null);
 
         builder.show();
