@@ -6,13 +6,13 @@
     android:id="@+id/viewMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="fr.gaulupeau.apps.Poche.ui.ReadArticleActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
         app:liftOnScroll="true">
 
         <androidx.appcompat.widget.Toolbar
