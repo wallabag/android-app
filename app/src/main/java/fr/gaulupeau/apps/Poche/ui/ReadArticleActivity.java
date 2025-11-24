@@ -65,6 +65,10 @@ import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.appcompat.widget.Toolbar;
 
@@ -184,7 +188,20 @@ public class ReadArticleActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
 
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.article);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.viewMain), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+            View appBar = findViewById(R.id.app_bar);
+            appBar.setPadding(insets.left, insets.top, insets.right, 0);
+
+            View mainContent = findViewById(R.id.scroll);
+            mainContent.setPadding(insets.left, 0, insets.right, insets.bottom);
+
+            return WindowInsetsCompat.CONSUMED;
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
