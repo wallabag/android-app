@@ -28,7 +28,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -156,6 +159,23 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ViewCompat.setOnApplyWindowInsetsListener(drawer, (v, windowInsets) -> {
+            // Determine the insets for the system bars, which include the status bar and navigation bar.
+            // Also include display cutouts (notches).
+            int insetTypes = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
+
+            // If you were dealing with an EditText and wanted the view to adjust for the keyboard (IME),
+            // you would also add `| WindowInsetsCompat.Type.ime()`.
+            // For example: int insetTypes = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime();
+
+            Insets insets = windowInsets.getInsets(insetTypes);
+
+            // Apply the insets as padding to the view.
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+
+            // Return the original windowInsets, as we have not consumed them.
+            return windowInsets;
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.navigation_drawer_open,
