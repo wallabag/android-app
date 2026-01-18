@@ -88,7 +88,22 @@ public class Themes {
                 R.style.SolarizedTheme,
                 R.style.SolarizedTheme_NoActionBar,
                 R.style.DialogTheme
-        );
+        ),
+        DAY_NIGHT(
+                R.string.themeName_day_night,
+                R.style.DayNightTheme,
+                R.style.DayNightTheme_NoActionBar,
+                R.style.DayNightDialogTheme
+        ),
+
+        DAY_NIGHT_CONTRAST(
+                R.string.themeName_day_night_contrast,
+                R.style.DayNightThemeContrast,
+                R.style.DayNightThemeContrast_NoActionBar,
+                R.style.DayNightDialogTheme
+        );;
+
+
 
         private int nameId;
         private int resId;

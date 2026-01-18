@@ -92,6 +92,12 @@
                         android:text="@string/btnMarkUnread"
                         android:layout_weight="6"
                         android:visibility="gone"/>
+                    <Button
+                        android:id="@+id/btnDelete"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="@string/btnDelete"
+                        android:layout_weight="6"/>
                     <ImageButton
                         android:id="@+id/btnGoNext"
                         android:layout_width="wrap_content"

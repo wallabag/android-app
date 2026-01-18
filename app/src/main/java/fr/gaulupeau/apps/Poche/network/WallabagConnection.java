@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.conscrypt.Conscrypt;
@@ -13,8 +15,14 @@ import org.conscrypt.Conscrypt;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.security.KeyManagementException;
 import java.security.Security;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
@@ -158,6 +166,23 @@ public class WallabagConnection {
         if(BuildConfig.DEBUG) {
             b.addInterceptor(new LoggingInterceptor());
             b.addNetworkInterceptor(new StethoInterceptor());
+        }
+
+        if(App.getSettings().getSelfSignedTrust()) {
+            // validate ssl
+            try {
+                TrustManager[] trustManagers = new TrustManager[]{new SelfSignedTrustManager()};
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+
+                sslContext.init(null, trustManagers, new java.security.SecureRandom());
+
+                SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+                b.sslSocketFactory(sslSocketFactory, (X509TrustManager) trustManagers[0]);
+                b.hostnameVerifier((hostname, session) -> true);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return b;
