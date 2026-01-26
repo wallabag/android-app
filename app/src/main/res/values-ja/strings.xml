@@ -25,7 +25,7 @@
     <string name="menu_syncLocalChanges">ローカルの変更を同期</string>
     <string name="d_deleteArticle_title">記事を削除しますか?</string>
     <string name="d_deleteArticle_message">記事を削除してもよろしいですか?</string>
-    <string name="txtNetOffline">インターネット接続を確認してください!</string>
+    <string name="txtNetOffline">まず、インターネットに接続されていることを確認してください。</string>
     <string name="txtConfigNotSet">同期の前に、アプリを構成してください。</string>
     <string name="page_url">ページ URL</string>
     <string name="share_article_title">記事を共有</string>
@@ -55,8 +55,8 @@
     <string name="testConnection_errorMessage_httpAuth">HTTP 認証に失敗しました</string>
     <string name="testConnection_errorMessage_noCSRF">ログイン フォーム解析エラー</string>
     <string name="testConnection_errorMessage_incorrectCredentials">ログインできません — ユーザー名とパスワードを確認してください</string>
-    <string name="testConnection_errorMessage_authProblems">認証関連の問題があります。これらは通常 HTTP リダイレクトによって引き起こされます。</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">ログイン後のページが不明です。これは通常、アプリがサポートしていない２要素認証が有効にされていることが原因です</string>
+    <string name="testConnection_errorMessage_authProblems">ログインできませんでした（通常はHTTPリダイレクトが原因です）</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">ログイン後にページが不明です。通常、二要素認証（アプリでは未対応）が原因となります。</string>
     <string name="testConnection_errorMessage_unknown">不明なエラー</string>
     <string name="testConnection_errorMessage_unknownWithMessage">原因不明のエラー: %s</string>
     <string name="d_testConnection_urlSuggestion_title">URL の変更を検討してください</string>
@@ -66,7 +66,7 @@
     <string name="d_testConnection_urlSuggestion_message">URL を変更することをお勧めします: %s。入力したものを使用することもできます。</string>
     <string name="d_testConnection_urlSuggestion_message_mandatory">URL を変更することをお勧めします: %s</string>
     <string name="d_testConnection_fail_title">接続テストに失敗しました</string>
-    <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした: おそらくユーザー名またはパスワードが間違っています</string>
+    <string name="wrongUsernameOrPassword_errorMessage">ログインできませんでした。ユーザー名またはパスワードが間違っているのではないでしょうか？</string>
     <string name="previousUpdateNotFinished">以前の更新がまだ終わっていません</string>
     <string name="feedName_favorites">お気に入り</string>
     <string name="feedName_archived">アーカイブ済</string>
@@ -93,8 +93,8 @@
     <string name="downloadAsFileTouchToOpen">タップすると開きます</string>
     <string name="downloadAsFileProgressDetail">wallabag は記事 %1$s を %2$s でダウンロードします</string>
     <string name="downloadAsFileProgress">wallabag はあなたの記事を %s でダウンロードします</string>
-    <string name="notification_downloadingImages">画像のダウンロード中</string>
-    <string name="notification_syncingQueue">ローカルの変更を同期中</string>
+    <string name="notification_downloadingImages">画像をダウンロード中…</string>
+    <string name="notification_syncingQueue">ローカルの変更を同期中…</string>
     <string name="notification_error">エラー</string>
     <string name="notification_incorrectCredentials">資格情報が正しくありません</string>
     <string name="notification_incorrectConfiguration">構成が正しくありません</string>
@@ -147,7 +147,7 @@
     <string name="pref_name_autoSyncQueue_enabled">ローカルの変更の自動同期を分離</string>
     <string name="pref_desc_autoSyncQueue_enabled">これは、ネットワークが利用可能になるとすぐにローカルの変更 (追加されたリンク、アーカイブされた記事等) をサーバーに同期することができます。</string>
     <string name="pref_name_imageCache_enabled">記事の画像をキャッシュに入れる</string>
-    <string name="pref_desc_imageCache_enabled">自動的にすべての記事からすべての画像をダウンロードして、デバイスに保存します。wallabag の記事リストの長さに応じて、これは長い時間や、容量が必要になることがあります。</string>
+    <string name="pref_desc_imageCache_enabled">すべての記事の画像をデバイスに自動ダウンロードする（記事リストが長い場合、多くの時間と容量を消費します）</string>
     <string name="pref_categoryName_miscellaneous">その他</string>
     <string name="pref_name_misc_handleHttpScheme">HTTP スキームの処理</string>
     <string name="pref_desc_misc_handleHttpScheme">Web ブラウザーのリストに wallabag を表示します</string>
@@ -158,7 +158,7 @@
     <string name="connectionWizard_misc_incorrectConnectionURI">誤った接続 URI の使用</string>
     <string name="connectionWizard_welcome_titleMessage">wallabag へようこそ。</string>
     <string name="connectionWizard_welcome_text">wallabag アプリを使用する前に、接続をセットアップする必要があります。接続ウィザードはそのお手伝いをします。</string>
-    <string name="connectionWizard_welcome_rerunNotice">\"設定\" から、いつでも接続ウィザードを再実行することができます。</string>
+    <string name="connectionWizard_welcome_rerunNotice">（設定画面からいつでも接続ウィザードを再実行できます。）</string>
     <string name="connectionWizard_welcome_prev">スキップ</string>
     <string name="connectionWizard_welcome_next">次へ</string>
     <string name="connectionWizard_providerSelection_titleMessage">wallabag プロバイダーを選択してください</string>
@@ -286,7 +286,7 @@
     <string name="pref_name_ui_annotations_enabled">注釈あり</string>
     <string name="pref_desc_ui_onyxworkaround_enabled">Onyx関連のリンクを黒色にする</string>
     <string name="pref_name_ui_onyxworkaround_enabled">Onyx Booxテーマを可能にする</string>
-    <string name="pref_desc_ui_showArticleAddedDialog">新規記事でお気に入り／アーカイブ／タグを許可するか確認します。オプションが不可でも通知されます。</string>
+    <string name="pref_desc_ui_showArticleAddedDialog">新しく追加された記事をお気に入り登録/アーカイブ/タグ付けできるダイアログを表示する（それ以外の場合はトーストメッセージを表示する）</string>
     <string name="pref_name_ui_showArticleAddedDialog">バグ発生のときに表示します</string>
     <string name="notification_channel_name_background_operations">バックグラウンド操作</string>
     <string name="notification_backgroundOperations">バックグラウンド操作</string>
@@ -329,17 +329,20 @@
     <string name="misc_localQueue_empty">ローカルに変更はありません</string>
     <string name="pref_desc_misc_logging_logcatToFile">logcatの出力（Androidアプリのログ）を /sdcard/Android/data/fr.gaulupeau.apps.InThePoche/files/ にファイルとして保存</string>
     <string name="pref_name_misc_logging_logcatToFile">logcatの出力をファイルに保存</string>
-    <string name="pref_desc_misc_localQueue_removeFirstItem">同期されていない最初のアイテムを削除します。同期中にエラー通知が繰り返されている場合は助けになるかもしれません。必ず先にすべてのローカルの変更をファイルにダンプしてください</string>
+    <string name="pref_desc_misc_localQueue_removeFirstItem">同期されていない最初のアイテムを削除します。同期中にエラー通知が繰り返されている場合は助けになるかもしれません。必ず先にすべてのローカルの変更をファイルにダンプしてください。</string>
     <string name="pref_name_misc_localQueue_removeFirstItem">最初のローカルキューアイテムを削除</string>
     <string name="pref_desc_misc_localQueue_dumpToFile">すべてのローカルの変更をtxtファイルにダンプします（学習目的やバグレポートへの添付）</string>
     <string name="pref_name_misc_localQueue_dumpToFile">ファイルをダンプ</string>
-    <string name="pref_desc_misc_localQueue_notice">何をしているか理解できない場合はここで何もしないでください</string>
+    <string name="pref_desc_misc_localQueue_notice">ここでの操作は、内容を理解している場合以外は行わないでください！</string>
     <string name="pref_name_misc_localQueue_notice">注意</string>
     <string name="pref_categoryName_misc_localQueue">ローカルの変更</string>
-    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">全文検索のインデックスにICU tokenizerを使用します(それ以外の場合は一般的なunicode61 tokenizerを使用します)。CJK言語の検索が改善される可能性があります。オプションを有効化するには\"全て更新\"が必要です</string>
+    <string name="pref_desc_misc_ftsIcuTokenizer_enabled">全文検索のインデックスにICU tokenizerを使用します(それ以外の場合は一般的なunicode61 tokenizerを使用します)。CJK言語の検索が改善される可能性があります。オプションを有効化するには\"全て更新\"が必要です。</string>
     <string name="pref_name_misc_ftsIcuTokenizer_enabled">全文検索にICU tokenizerを使用する</string>
     <string name="pref_desc_ui_mathRendering_delimiters">KaTeXが処理する区切り文字を選択</string>
     <string name="pref_name_ui_mathRendering_delimiters">数式の区切り文字</string>
     <string name="pref_desc_ui_mathRendering_enabled">KaTeXによるLaTeX-math表示を有効にする</string>
     <string name="pref_name_ui_mathRendering_enabled">数式表示</string>
+    <string name="pref_name_misc_addTitleToSharedText">共有テキストにタイトルを追加する</string>
+    <string name="pref_desc_misc_addTitleToSharedText">記事タイトルを共有テキストに追加する</string>
+    <string name="connectionWizard_misc_scanQrCode_desc">またはQRコードを使用してアプリを設定する\n（ウェブアプリケーションの「設定」セクションで利用可能）</string>
 </resources>
