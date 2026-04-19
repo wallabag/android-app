@@ -84,6 +84,20 @@
                 android:title="@string/pref_name_ui_theme_auto"
                 android:summary="@string/pref_desc_ui_theme_auto"
                 android:defaultValue="false"/>
+            <ListPreference
+                android:dependency="@string/pref_key_ui_theme_auto"
+                android:key="@string/pref_key_ui_theme_auto_light"
+                android:title="@string/pref_name_ui_theme_auto_light"
+                android:summary="@string/pref_desc_ui_theme_auto_light"
+                android:dialogTitle="@string/pref_name_ui_theme_auto_light"
+                android:defaultValue="LIGHT"/>
+            <ListPreference
+                android:dependency="@string/pref_key_ui_theme_auto"
+                android:key="@string/pref_key_ui_theme_auto_dark"
+                android:title="@string/pref_name_ui_theme_auto_dark"
+                android:summary="@string/pref_desc_ui_theme_auto_dark"
+                android:dialogTitle="@string/pref_name_ui_theme_auto_dark"
+                android:defaultValue="DARK"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
                 android:key="@string/pref_key_ui_article_fontSize"
                 android:title="@string/pref_name_ui_article_fontSize"

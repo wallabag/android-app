@@ -77,6 +77,8 @@ public class SettingsActivity extends BaseActionBarActivity {
                 R.string.pref_key_connection_api_clientID,
                 R.string.pref_key_connection_api_clientSecret,
                 R.string.pref_key_ui_theme,
+                R.string.pref_key_ui_theme_auto_light,
+                R.string.pref_key_ui_theme_auto_dark,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
                 R.string.pref_key_autoSync_interval,
@@ -145,6 +147,38 @@ public class SettingsActivity extends BaseActionBarActivity {
 
                 themeListPreference.setEntries(themeEntries);
                 themeListPreference.setEntryValues(themeEntryValues);
+            }
+
+            ListPreference autoLightThemePreference = (ListPreference)findPreference(
+                    getString(R.string.pref_key_ui_theme_auto_light));
+            if(autoLightThemePreference != null) {
+                Themes.Theme[] themes = Themes.Theme.values();
+                List<String> entries = new ArrayList<>();
+                List<String> values = new ArrayList<>();
+                for (Themes.Theme t : themes) {
+                    if (!t.isDark()) {
+                        entries.add(getString(t.getNameId()));
+                        values.add(t.toString());
+                    }
+                }
+                autoLightThemePreference.setEntries(entries.toArray(new String[0]));
+                autoLightThemePreference.setEntryValues(values.toArray(new String[0]));
+            }
+
+            ListPreference autoDarkThemePreference = (ListPreference)findPreference(
+                    getString(R.string.pref_key_ui_theme_auto_dark));
+            if(autoDarkThemePreference != null) {
+                Themes.Theme[] themes = Themes.Theme.values();
+                List<String> entries = new ArrayList<>();
+                List<String> values = new ArrayList<>();
+                for (Themes.Theme t : themes) {
+                    if (t.isDark()) {
+                        entries.add(getString(t.getNameId()));
+                        values.add(t.toString());
+                    }
+                }
+                autoDarkThemePreference.setEntries(entries.toArray(new String[0]));
+                autoDarkThemePreference.setEntryValues(values.toArray(new String[0]));
             }
 
             ListPreference autoSyncIntervalListPreference = (ListPreference)findPreference(
@@ -715,6 +749,8 @@ public class SettingsActivity extends BaseActionBarActivity {
                     break;
 
                 case R.string.pref_key_ui_theme:
+                case R.string.pref_key_ui_theme_auto_light:
+                case R.string.pref_key_ui_theme_auto_dark:
                 case R.string.pref_key_autoSync_interval:
                 case R.string.pref_key_autoSync_type:
                     setListSummaryFromContent(key);

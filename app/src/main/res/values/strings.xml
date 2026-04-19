@@ -203,6 +203,10 @@
     <string name="pref_name_ui_theme">App theme</string>
     <string name="pref_name_ui_theme_auto">Auto dark mode</string>
     <string name="pref_desc_ui_theme_auto">Switch between light and dark theme based on system settings</string>
+    <string name="pref_name_ui_theme_auto_light">Auto light theme</string>
+    <string name="pref_desc_ui_theme_auto_light">Theme to use when system is in light mode</string>
+    <string name="pref_name_ui_theme_auto_dark">Auto dark theme</string>
+    <string name="pref_desc_ui_theme_auto_dark">Theme to use when system is in dark mode</string>
     <string name="pref_name_ui_article_fontSize" formatted="false">Article text size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>

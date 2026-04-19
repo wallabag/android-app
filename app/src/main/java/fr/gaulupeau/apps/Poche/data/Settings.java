@@ -456,6 +456,36 @@ public class Settings {
         setBoolean(R.string.pref_key_ui_theme_auto, value);
     }
 
+    public Themes.Theme getAutoLightTheme() {
+        String themeName = getString(R.string.pref_key_ui_theme_auto_light);
+        Themes.Theme theme = null;
+        if(themeName != null) {
+            try {
+                theme = Themes.Theme.valueOf(themeName);
+            } catch(IllegalArgumentException ignored) {}
+        }
+        return theme != null ? theme : Themes.Theme.LIGHT;
+    }
+
+    public void setAutoLightTheme(Themes.Theme theme) {
+        setString(R.string.pref_key_ui_theme_auto_light, theme.toString());
+    }
+
+    public Themes.Theme getAutoDarkTheme() {
+        String themeName = getString(R.string.pref_key_ui_theme_auto_dark);
+        Themes.Theme theme = null;
+        if(themeName != null) {
+            try {
+                theme = Themes.Theme.valueOf(themeName);
+            } catch(IllegalArgumentException ignored) {}
+        }
+        return theme != null ? theme : Themes.Theme.DARK;
+    }
+
+    public void setAutoDarkTheme(Themes.Theme theme) {
+        setString(R.string.pref_key_ui_theme_auto_dark, theme.toString());
+    }
+
     public boolean isVolumeButtonsScrollingEnabled() {
         return getBoolean(R.string.pref_key_ui_volumeButtonsScrolling_enabled, false);
     }
