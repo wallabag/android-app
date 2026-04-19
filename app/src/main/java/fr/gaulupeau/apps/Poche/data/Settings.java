@@ -448,6 +448,14 @@ public class Settings {
         setString(R.string.pref_key_ui_theme, theme.toString());
     }
 
+    public boolean isAutoThemeEnabled() {
+        return getBoolean(R.string.pref_key_ui_theme_auto, false);
+    }
+
+    public void setAutoThemeEnabled(boolean value) {
+        setBoolean(R.string.pref_key_ui_theme_auto, value);
+    }
+
     public boolean isVolumeButtonsScrollingEnabled() {
         return getBoolean(R.string.pref_key_ui_volumeButtonsScrolling_enabled, false);
     }

@@ -9,6 +9,8 @@ import java.util.WeakHashMap;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import android.content.Context;
+import android.content.res.Configuration;
 
 public class Themes {
 
@@ -28,23 +30,38 @@ public class Themes {
         return theme;
     }
 
+    public static Theme getResolvedTheme(Context context) {
+        if (App.getSettings().isAutoThemeEnabled()) {
+            int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+            if (currentNightMode == Configuration.UI_MODE_NIGHT_YES) {
+                return Theme.DARK;
+            } else {
+                return Theme.LIGHT;
+            }
+        }
+        return theme;
+    }
+
     public static void applyTheme(Activity activity) {
         applyTheme(activity, true);
     }
 
     public static void applyTheme(Activity activity, boolean actionBar) {
-        activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
-        appliedThemes.put(activity, theme);
+        Theme resolvedTheme = getResolvedTheme(activity);
+        activity.setTheme(actionBar ? resolvedTheme.getResId() : resolvedTheme.getNoActionBarResId());
+        appliedThemes.put(activity, resolvedTheme);
     }
 
     public static void applyDialogTheme(Activity activity) {
-        activity.setTheme(theme.getDialogResId());
-        appliedThemes.put(activity, theme);
+        Theme resolvedTheme = getResolvedTheme(activity);
+        activity.setTheme(resolvedTheme.getDialogResId());
+        appliedThemes.put(activity, resolvedTheme);
     }
 
     public static void checkTheme(Activity activity) {
         Theme appliedTheme = appliedThemes.get(activity);
-        if(appliedTheme != theme) activity.recreate();
+        Theme resolvedTheme = getResolvedTheme(activity);
+        if(appliedTheme != resolvedTheme) activity.recreate();
     }
 
     public enum Theme {

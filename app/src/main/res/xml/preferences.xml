@@ -79,6 +79,11 @@
                 android:title="@string/pref_name_ui_theme"
                 android:dialogTitle="@string/pref_name_ui_theme"
                 android:defaultValue="LIGHT"/>
+            <CheckBoxPreference
+                android:key="@string/pref_key_ui_theme_auto"
+                android:title="@string/pref_name_ui_theme_auto"
+                android:summary="@string/pref_desc_ui_theme_auto"
+                android:defaultValue="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
                 android:key="@string/pref_key_ui_article_fontSize"
                 android:title="@string/pref_name_ui_article_fontSize"
