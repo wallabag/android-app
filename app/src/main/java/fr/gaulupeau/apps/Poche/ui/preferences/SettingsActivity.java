@@ -431,6 +431,12 @@ public class SettingsActivity extends BaseActionBarActivity {
                     themeChanged = true;
                     break;
 
+                case R.string.pref_key_ui_theme_auto:
+                case R.string.pref_key_ui_theme_auto_light:
+                case R.string.pref_key_ui_theme_auto_dark:
+                    themeChanged = true;
+                    break;
+
                 case R.string.pref_key_autoSync_enabled:
                     autoSyncChanged = true;
                     break;
