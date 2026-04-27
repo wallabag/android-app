@@ -205,7 +205,7 @@ public class ReadArticleActivity extends AppCompatActivity {
             toolbar.setVisibility(View.GONE);
         } else {    // enable and handle the back button in the toolbar
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-            toolbar.setNavigationOnClickListener(v -> onBackPressed());
+            toolbar.setNavigationOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         }
 
         Intent intent = getIntent();
