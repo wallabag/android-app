@@ -192,14 +192,8 @@ public class ReadArticleActivity extends AppCompatActivity {
         setContentView(R.layout.article);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.viewMain), (v, windowInsets) -> {
-            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
-
-            View appBar = findViewById(R.id.app_bar);
-            appBar.setPadding(insets.left, insets.top, insets.right, 0);
-
-            View mainContent = findViewById(R.id.scroll);
-            mainContent.setPadding(insets.left, 0, insets.right, insets.bottom);
-
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             return WindowInsetsCompat.CONSUMED;
         });
 
