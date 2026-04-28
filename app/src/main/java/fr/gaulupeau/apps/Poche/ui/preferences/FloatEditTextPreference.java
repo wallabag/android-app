@@ -3,7 +3,8 @@ package fr.gaulupeau.apps.Poche.ui.preferences;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.preference.EditTextPreference;
+import android.content.SharedPreferences;
+import androidx.preference.EditTextPreference;
 import android.util.AttributeSet;
 
 /**
@@ -36,11 +37,12 @@ public class FloatEditTextPreference extends EditTextPreference {
 
     @Override
     protected String getPersistedString(String defaultReturnValue) {
-        if(!shouldPersist() || !getSharedPreferences().contains(getKey())) {
+        SharedPreferences pref = getSharedPreferences();
+        if(!shouldPersist() || pref == null || !pref.contains(getKey())) {
             return defaultReturnValue;
         }
 
-        return String.valueOf(getSharedPreferences().getFloat(getKey(), 0));
+        return String.valueOf(pref.getFloat(getKey(), 0));
     }
 
 }

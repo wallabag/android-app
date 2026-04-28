@@ -3,7 +3,8 @@ package fr.gaulupeau.apps.Poche.ui.preferences;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.preference.ListPreference;
+import android.content.SharedPreferences;
+import androidx.preference.ListPreference;
 import android.util.AttributeSet;
 
 /**
@@ -36,11 +37,12 @@ public class LongListPreference extends ListPreference {
 
     @Override
     protected String getPersistedString(String defaultReturnValue) {
-        if(!shouldPersist() || !getSharedPreferences().contains(getKey())) {
+        SharedPreferences pref = getSharedPreferences();
+        if(!shouldPersist() || pref == null || !pref.contains(getKey())) {
             return defaultReturnValue;
         }
 
-        return String.valueOf(getSharedPreferences().getLong(getKey(), 0));
+        return String.valueOf(pref.getLong(getKey(), 0));
     }
 
 }
