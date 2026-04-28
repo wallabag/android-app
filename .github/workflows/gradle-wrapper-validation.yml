@@ -1,7 +1,6 @@
 name: "Validate Gradle Wrapper"
 on:
   push:
-    branches: [ master ]
   pull_request:
 
 jobs:
@@ -9,5 +8,5 @@ jobs:
     name: "Validation"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: actions/checkout@v6
+      - uses: gradle/actions/wrapper-validation@v6
