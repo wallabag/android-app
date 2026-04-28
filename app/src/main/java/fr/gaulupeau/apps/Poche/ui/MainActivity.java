@@ -32,7 +32,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -126,6 +128,12 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setAppearanceLightStatusBars(Themes.getCurrentTheme() == Themes.Theme.LIGHT
+                || Themes.getCurrentTheme() == Themes.Theme.LIGHT_CONTRAST
+                || Themes.getCurrentTheme() == Themes.Theme.SOLARIZED);
+
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         settings = App.getSettings();
@@ -154,6 +162,12 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             if (headerView != null) {
                 lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
+                final int originalPaddingTop = headerView.getPaddingTop();
+                ViewCompat.setOnApplyWindowInsetsListener(headerView, (v, windowInsets) -> {
+                    Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(v.getPaddingLeft(), insets.top + originalPaddingTop, v.getPaddingRight(), v.getPaddingBottom());
+                    return windowInsets;
+                });
             }
 
             // Set different colors for items in the navigation bar in dark (high contrast) theme
@@ -170,20 +184,13 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ViewCompat.setOnApplyWindowInsetsListener(drawer, (v, windowInsets) -> {
-            // Determine the insets for the system bars, which include the status bar and navigation bar.
-            // Also include display cutouts (notches).
-            int insetTypes = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout();
-
-            // If you were dealing with an EditText and wanted the view to adjust for the keyboard (IME),
-            // you would also add `| WindowInsetsCompat.Type.ime()`.
-            // For example: int insetTypes = WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime();
-
-            Insets insets = windowInsets.getInsets(insetTypes);
-
-            // Apply the insets as padding to the view.
-            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
-
-            // Return the original windowInsets, as we have not consumed them.
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Apply padding to the main content (first child) so it's not under the status bar
+            View content = drawer.getChildAt(0);
+            if (content != null) {
+                content.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            }
+            // Pass insets to other children (like NavigationView)
             return windowInsets;
         });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

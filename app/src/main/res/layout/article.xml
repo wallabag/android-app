@@ -12,13 +12,15 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:theme="?attr/appBarOverlayTheme"
         app:liftOnScroll="true">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="?attr/popupOverlayTheme"
             app:layout_scrollFlags="scroll|enterAlways|snap|enterAlwaysCollapsed" />
 
     </com.google.android.material.appbar.AppBarLayout>
