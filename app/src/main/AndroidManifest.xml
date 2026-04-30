@@ -56,6 +56,9 @@
             android:hardwareAccelerated="true"
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.ImageViewActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"
             android:label="@string/manageTags_title" />
         <activity
