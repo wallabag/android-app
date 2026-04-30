@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -15,6 +14,8 @@ import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+
+import androidx.activity.OnBackPressedCallback;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -28,7 +29,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -122,9 +128,29 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        windowInsetsController.setAppearanceLightStatusBars(Themes.getCurrentTheme() == Themes.Theme.LIGHT
+                || Themes.getCurrentTheme() == Themes.Theme.LIGHT_CONTRAST
+                || Themes.getCurrentTheme() == Themes.Theme.SOLARIZED);
+
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         settings = App.getSettings();
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    this.setEnabled(false);
+                    getOnBackPressedDispatcher().onBackPressed();
+                    this.setEnabled(true);
+                }
+            }
+        });
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -136,19 +162,20 @@ public class MainActivity extends AppCompatActivity
             View headerView = navigationView.getHeaderView(0);
             if (headerView != null) {
                 lastUpdateTimeView = headerView.findViewById(R.id.lastUpdateTime);
+                final int originalPaddingTop = headerView.getPaddingTop();
+                ViewCompat.setOnApplyWindowInsetsListener(headerView, (v, windowInsets) -> {
+                    Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(v.getPaddingLeft(), insets.top + originalPaddingTop, v.getPaddingRight(), v.getPaddingBottom());
+                    return windowInsets;
+                });
             }
 
             // Set different colors for items in the navigation bar in dark (high contrast) theme
             if (Themes.getCurrentTheme() == Themes.Theme.DARK_CONTRAST) {
                 @SuppressLint("ResourceType") XmlResourceParser parser = getResources().getXml(R.color.dark_contrast_menu_item);
                 try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
-                    } else {
-                        navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser));
-                        navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser));
-                    }
+                    navigationView.setItemTextColor(ColorStateList.createFromXml(getResources(), parser, getTheme()));
+                    navigationView.setItemIconTintList(ColorStateList.createFromXml(getResources(), parser, getTheme()));
                 } catch (XmlPullParserException | IOException e) {
                     Log.e(TAG, "onCreate()", e);
                 }
@@ -156,6 +183,16 @@ public class MainActivity extends AppCompatActivity
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ViewCompat.setOnApplyWindowInsetsListener(drawer, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Apply padding to the main content (first child) so it's not under the status bar
+            View content = drawer.getChildAt(0);
+            if (content != null) {
+                content.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            }
+            // Pass insets to other children (like NavigationView)
+            return windowInsets;
+        });
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar,
                 R.string.navigation_drawer_open,
@@ -346,16 +383,6 @@ public class MainActivity extends AppCompatActivity
         EventHelper.unregister(this);
 
         super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
