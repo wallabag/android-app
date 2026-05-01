@@ -117,6 +117,8 @@ public class SettingsActivity extends BaseActionBarActivity implements
                 R.string.pref_key_connection_api_clientID,
                 R.string.pref_key_connection_api_clientSecret,
                 R.string.pref_key_ui_theme,
+                R.string.pref_key_ui_theme_auto_light,
+                R.string.pref_key_ui_theme_auto_dark,
                 R.string.pref_key_ui_article_fontSize,
                 R.string.pref_key_ui_screenScrolling_percent,
                 R.string.pref_key_autoSync_interval,
@@ -444,6 +446,12 @@ public class SettingsActivity extends BaseActionBarActivity implements
                     themeChanged = true;
                     break;
 
+                case R.string.pref_key_ui_theme_auto:
+                case R.string.pref_key_ui_theme_auto_light:
+                case R.string.pref_key_ui_theme_auto_dark:
+                    themeChanged = true;
+                    break;
+
                 case R.string.pref_key_autoSync_enabled:
                     autoSyncChanged = true;
                     break;
@@ -760,6 +768,8 @@ public class SettingsActivity extends BaseActionBarActivity implements
                     break;
 
                 case R.string.pref_key_ui_theme:
+                case R.string.pref_key_ui_theme_auto_light:
+                case R.string.pref_key_ui_theme_auto_dark:
                 case R.string.pref_key_autoSync_interval:
                 case R.string.pref_key_autoSync_type:
                     setListSummaryFromContent(key);
