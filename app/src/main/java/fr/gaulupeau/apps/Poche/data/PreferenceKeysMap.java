@@ -1,7 +1,7 @@
 package fr.gaulupeau.apps.Poche.data;
 
 import android.content.Context;
-import android.preference.Preference;
+import androidx.preference.Preference;
 import android.text.TextUtils;
 import android.util.Log;
 

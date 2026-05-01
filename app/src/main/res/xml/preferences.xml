@@ -2,6 +2,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="@string/pref_key_main"
+    android:title="@string/nav_other_settings"
     android:persistent="false">
     <Preference
         android:key="@string/pref_key_connection_wizard"

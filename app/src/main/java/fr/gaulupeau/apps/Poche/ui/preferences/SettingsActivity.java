@@ -6,11 +6,6 @@ import android.app.AlarmManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -18,8 +13,22 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.EditTextPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceScreen;
 
+import android.view.MenuItem;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,20 +55,51 @@ import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 import fr.gaulupeau.apps.Poche.utils.LoggingUtils;
 
-public class SettingsActivity extends BaseActionBarActivity {
+public class SettingsActivity extends BaseActionBarActivity implements
+        PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+            return windowInsets;
+        });
 
         if(savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
+            getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, new SettingsFragment())
                     .commit();
         }
     }
 
-    public static class SettingsFragment extends PreferenceFragment
+    @Override
+    public boolean onPreferenceStartScreen(@NonNull PreferenceFragmentCompat caller, @NonNull PreferenceScreen pref) {
+        SettingsFragment fragment = new SettingsFragment();
+        Bundle args = new Bundle();
+        args.putString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT, pref.getKey());
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction()
+                .replace(android.R.id.content, fragment)
+                .addToBackStack(null)
+                .commit();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            if (getSupportFragmentManager().popBackStackImmediate()) {
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public static class SettingsFragment extends PreferenceFragmentCompat
             implements Preference.OnPreferenceClickListener,
             Preference.OnPreferenceChangeListener,
             SharedPreferences.OnSharedPreferenceChangeListener,
@@ -118,10 +158,8 @@ public class SettingsActivity extends BaseActionBarActivity {
         public SettingsFragment() {}
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            addPreferencesFromResource(R.xml.preferences);
+        public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
+            setPreferencesFromResource(R.xml.preferences, rootKey);
 
             settings = App.getSettings();
 
@@ -134,7 +172,7 @@ public class SettingsActivity extends BaseActionBarActivity {
             setOnClickListener(R.string.pref_key_misc_localQueue_removeFirstItem);
             setOnClickListener(R.string.pref_key_misc_logging_logcatToFile);
 
-            ListPreference themeListPreference = (ListPreference)findPreference(
+            ListPreference themeListPreference = findPreference(
                     getString(R.string.pref_key_ui_theme));
             if(themeListPreference != null) {
                 Themes.Theme[] themes = Themes.Theme.values();
@@ -149,39 +187,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                 themeListPreference.setEntryValues(themeEntryValues);
             }
 
-            ListPreference autoLightThemePreference = (ListPreference)findPreference(
-                    getString(R.string.pref_key_ui_theme_auto_light));
-            if(autoLightThemePreference != null) {
-                Themes.Theme[] themes = Themes.Theme.values();
-                List<String> entries = new ArrayList<>();
-                List<String> values = new ArrayList<>();
-                for (Themes.Theme t : themes) {
-                    if (!t.isDark()) {
-                        entries.add(getString(t.getNameId()));
-                        values.add(t.toString());
-                    }
-                }
-                autoLightThemePreference.setEntries(entries.toArray(new String[0]));
-                autoLightThemePreference.setEntryValues(values.toArray(new String[0]));
-            }
-
-            ListPreference autoDarkThemePreference = (ListPreference)findPreference(
-                    getString(R.string.pref_key_ui_theme_auto_dark));
-            if(autoDarkThemePreference != null) {
-                Themes.Theme[] themes = Themes.Theme.values();
-                List<String> entries = new ArrayList<>();
-                List<String> values = new ArrayList<>();
-                for (Themes.Theme t : themes) {
-                    if (t.isDark()) {
-                        entries.add(getString(t.getNameId()));
-                        values.add(t.toString());
-                    }
-                }
-                autoDarkThemePreference.setEntries(entries.toArray(new String[0]));
-                autoDarkThemePreference.setEntryValues(values.toArray(new String[0]));
-            }
-
-            ListPreference autoSyncIntervalListPreference = (ListPreference)findPreference(
+            ListPreference autoSyncIntervalListPreference = findPreference(
                     getString(R.string.pref_key_autoSync_interval));
             if(autoSyncIntervalListPreference != null) {
                 // may set arbitrary values on Android API 19+
@@ -201,14 +207,14 @@ public class SettingsActivity extends BaseActionBarActivity {
                 });
             }
 
-            CheckBoxPreference handleHttpSchemePreference = (CheckBoxPreference) findPreference(
+            CheckBoxPreference handleHttpSchemePreference = findPreference(
                     getString(R.string.pref_key_misc_handleHttpScheme));
             if (handleHttpSchemePreference != null) {
                 handleHttpSchemePreference.setChecked(settings.isHandlingHttpScheme());
                 handleHttpSchemePreference.setOnPreferenceChangeListener(this);
             }
 
-            ListPreference dbPathListPreference = (ListPreference)findPreference(
+            ListPreference dbPathListPreference = findPreference(
                     getString(R.string.pref_key_storage_dbPath));
             if(dbPathListPreference != null) {
                 List<String> entriesList = new ArrayList<>(2);
@@ -230,6 +236,15 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             for(int keyID: SUMMARIES_TO_INITIATE) {
                 updateSummary(keyID);
+            }
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            PreferenceScreen screen = getPreferenceScreen();
+            if (screen != null && screen.getTitle() != null) {
+                requireActivity().setTitle(screen.getTitle());
             }
         }
 
@@ -391,7 +406,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
+        public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
             Log.d(TAG, String.format("onPreferenceChange(key: %s, newValue: %s)",
                     preference.getKey(), newValue));
 
@@ -498,7 +513,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         @Override
-        public boolean onPreferenceClick(Preference preference) {
+        public boolean onPreferenceClick(@NonNull Preference preference) {
             switch (PreferenceKeysMap.getInstance().getPrefKeyId(preference)) {
                 case R.string.pref_key_connection_wizard: {
                     Activity activity = getActivity();
@@ -724,8 +739,7 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         private void setTextPreference(int preferenceID, String value) {
-            EditTextPreference preference = (EditTextPreference)
-                    findPreference(getString(preferenceID));
+            EditTextPreference preference = findPreference(getString(preferenceID));
 
             if(preference != null) {
                 preference.setText(value);
@@ -737,8 +751,7 @@ public class SettingsActivity extends BaseActionBarActivity {
 
             switch(keyResID) {
                 case R.string.pref_key_connection_url:
-                    EditTextPreference preference = (EditTextPreference)
-                            findPreference(key);
+                    EditTextPreference preference = findPreference(key);
                     if(preference != null) {
                         String value = preference.getText();
                         setSummary(key, (value == null || value.isEmpty())
@@ -769,7 +782,7 @@ public class SettingsActivity extends BaseActionBarActivity {
                     break;
 
                 case R.string.pref_key_storage_dbPath:
-                    ListPreference dbPathListPreference = (ListPreference)findPreference(
+                    ListPreference dbPathListPreference = findPreference(
                             getString(R.string.pref_key_storage_dbPath));
                     if(dbPathListPreference != null) {
                         CharSequence value = dbPathListPreference.getEntry();
@@ -792,21 +805,21 @@ public class SettingsActivity extends BaseActionBarActivity {
         }
 
         private void setEditTextSummaryFromContent(String key) {
-            EditTextPreference preference = (EditTextPreference)findPreference(key);
+            EditTextPreference preference = findPreference(key);
             if(preference != null) {
                 preference.setSummary(preference.getText());
             }
         }
 
         private void setListSummaryFromContent(String key) {
-            ListPreference preference = (ListPreference)findPreference(key);
+            ListPreference preference = findPreference(key);
             if(preference != null) {
                 preference.setSummary(preference.getEntry());
             }
         }
 
         private void setPasswordSummary(String key) {
-            EditTextPreference preference = (EditTextPreference)findPreference(key);
+            EditTextPreference preference = findPreference(key);
             if(preference != null) {
                 String value = preference.getText();
                 preference.setSummary(value == null || value.isEmpty() ? "" : "********");
