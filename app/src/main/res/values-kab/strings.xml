@@ -30,4 +30,6 @@
     <string name="ttsOptions">Tixtiṛiyin</string>
     <string name="d_add_fail_title">Tuccḍa</string>
     <string name="notification_channel_group_name_tts">TTS</string>
+    <string name="misc_localQueue_dumpToFile_result_error">Tuccḍa: %s</string>
+    <string name="misc_logging_logcatToFile_result_error">Tuccḍa: %s</string>
 </resources>
