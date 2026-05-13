@@ -646,9 +646,10 @@ public class ReadArticleActivity extends AppCompatActivity {
         WebSettings webViewSettings = webViewContent.getSettings();
         webViewSettings.setJavaScriptEnabled(true);
 
-        if (settings.isImageCacheEnabled() && !webViewSettings.getAllowFileAccess()) {
-            Log.d(TAG, "initWebView() enabling WebView file access");
-            webViewSettings.setAllowFileAccess(true);
+        boolean needsFileAccess = settings.isImageCacheEnabled();
+        if (webViewSettings.getAllowFileAccess() != needsFileAccess) {
+            Log.d(TAG, "initWebView() setting WebView file access to " + needsFileAccess);
+            webViewSettings.setAllowFileAccess(needsFileAccess);
         }
 
         initTtsController();
