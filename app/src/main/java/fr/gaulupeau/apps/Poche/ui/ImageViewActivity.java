@@ -9,7 +9,7 @@ import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.chrisbanes.photoview.PhotoView;
+import com.github.panpf.zoomimage.ZoomImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -31,7 +31,7 @@ public class ImageViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_view);
 
-        PhotoView photoView = findViewById(R.id.photoView);
+        ZoomImageView photoView = findViewById(R.id.photoView);
         ProgressBar progressBar = findViewById(R.id.progressBar);
 
         String imageUrl = getIntent().getStringExtra(EXTRA_IMAGE_URL);
