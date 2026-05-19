@@ -131,6 +131,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="fr.gaulupeau.apps.Poche.ui.AboutActivity" />
+
         <receiver
             android:name="androidx.media.session.MediaButtonReceiver"
             android:exported="true">
