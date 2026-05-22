@@ -69,7 +69,7 @@
     <string name="d_testConnection_fail_title">Tilkoblingstest mislyteks</string>
     <string name="getCredentials_progressDialogMessage">Henter API-identitetsdetaljer…</string>
     <string name="d_getCredentials_title_fail">Kunne ikke hente API-identitetsdetaljer</string>
-    <string name="d_getCredentials_title_message">Noe gikk galt. Sjekk din internettilknytning og prøv igjen.</string>
+    <string name="d_getCredentials_title_message">Noe gikk galt. Sjekk din internettforbindelse og prøv igjen.</string>
     <string name="checkCredentials_progressDialogMessage">Tester API-tilgang…</string>
     <string name="d_checkCredentials_title_fail">API-tilgangstest mislyktes</string>
     <string name="d_checkCredentials_errorMessage_notFound">API ikke funnet</string>
@@ -94,8 +94,8 @@
     <string name="notification_updatingArticles_full">Utfører full oppdatering</string>
     <string name="notification_updatingArticles_fast">Utfører rask oppdatering</string>
     <string name="notification_sweepingDeletedArticles">Koster ut slettede artikler</string>
-    <string name="notification_downloadingImages">Laster ned bilder</string>
-    <string name="notification_syncingQueue">Synkroniserer lokale endringer</string>
+    <string name="notification_downloadingImages">Laster ned bilder…</string>
+    <string name="notification_syncingQueue">Synkroniserer lokale endringer…</string>
     <string name="notification_error">Feil</string>
     <string name="notification_incorrectCredentials">Uriktige identitetsdetaljer</string>
     <string name="notification_incorrectConfiguration">Uriktig oppsett</string>
@@ -266,10 +266,10 @@
     <string name="pref_desc_ui_keepScreenOn">Behold skjermen påslått under lesning av artikler</string>
     <string name="themeName_eink">For e-blekkskjermer</string>
     <string name="notification_channel_group_name_tts">Tekst-til-tale</string>
-    <string name="notification_channel_group_name_sync">Synkronisering</string>
+    <string name="notification_channel_group_name_sync">Synkroniserer</string>
     <string name="notification_channel_group_name_other">Annet</string>
     <string name="notification_channel_name_tts">wallabag tekst-til-tale</string>
-    <string name="notification_channel_name_sync">Synkronisering</string>
+    <string name="notification_channel_name_sync">Synkroniserer</string>
     <string name="notification_channel_name_downloading_articles">Laster ned PDF-filer</string>
     <string name="notification_channel_name_error">Feil</string>
     <string name="pref_name_ui_article_handlePreformattedText">Håndtering av forhåndsformatert tekst i langt format</string>
