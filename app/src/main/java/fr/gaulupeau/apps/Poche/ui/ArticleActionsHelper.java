@@ -30,6 +30,7 @@ import wallabag.apiwrapper.WallabagService;
 public class ArticleActionsHelper {
 
     private static final String TAG = ArticleActionsHelper.class.getSimpleName();
+    final Settings settings = App.getSettings();
 
     public void initMenu(Menu menu, Article article) {
         boolean archive = Boolean.TRUE.equals(article.getArchive());
@@ -48,6 +49,8 @@ public class ArticleActionsHelper {
     }
 
     public boolean handleContextItemSelected(Activity activity, Article article, MenuItem item) {
+
+        String url = settings.getUrl();
         switch (item.getItemId()) {
             case R.id.menuArticleMarkAsRead:
             case R.id.menuArticleMarkAsUnread:
@@ -81,6 +84,16 @@ public class ArticleActionsHelper {
 
             case R.id.menuCopyOriginalURL:
                 copyUrlToClipboard(activity, article.getUrl());
+                return true;
+
+            case R.id.menuOpenPublic:
+                article.setIsPublic(Boolean.TRUE);
+                openUrl(activity, url + "/share/" + article.getPublicUid());
+                return true;
+
+            case R.id.menuCopyPublicURL:
+                article.setIsPublic(Boolean.TRUE);
+                copyUrlToClipboard(activity, url + "/share/" + article.getPublicUid());
                 return true;
 
             case R.id.menuDownloadAsFile:
