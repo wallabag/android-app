@@ -1,7 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.plugin.compose'
+apply plugin: 'com.mikepenz.aboutlibraries.plugin.android'
 
 android {
     compileSdk = 37
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
 
     defaultConfig {
         applicationId "fr.gaulupeau.apps.InThePoche"
@@ -54,12 +61,21 @@ android {
     namespace = 'fr.gaulupeau.apps.InThePoche'
     buildFeatures {
         buildConfig = true
+        compose true
     }
 }
 
 dependencies {
+    // Compose
+    def composeBom = platform("androidx.compose:compose-bom:2026.04.01")
+    implementation composeBom
+    implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material3:material3"
+    implementation "androidx.activity:activity-compose:1.13.0"
+
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.media:media:1.8.0'
+    implementation 'androidx.core:core-ktx:1.18.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
     implementation 'androidx.preference:preference:1.2.1'
@@ -72,7 +88,8 @@ dependencies {
     implementation 'org.conscrypt:conscrypt-android:2.5.3'
     implementation 'com.facebook.stetho:stetho:1.6.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.6.0'
-    implementation 'com.mikepenz:aboutlibraries:7.1.0'
+    implementation "com.mikepenz:aboutlibraries-core:14.0.1"
+    implementation "com.mikepenz:aboutlibraries-compose-m3:14.0.1"
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:v2.0.0-beta.6'
     implementation 'org.slf4j:slf4j-android:1.7.36'
 }
