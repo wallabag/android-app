@@ -11,13 +11,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.panpf.zoomimage.ZoomImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStream;
-import java.net.URL;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.network.ImageCacheUtils;
+import fr.gaulupeau.apps.Poche.network.WallabagConnection;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class ImageViewActivity extends AppCompatActivity {
 
@@ -86,15 +88,13 @@ public class ImageViewActivity extends AppCompatActivity {
 
         // Fall back to loading from network
         try {
-            URL url = new URL(imageUrl);
-            try (InputStream is = url.openStream()) {
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                byte[] chunk = new byte[8192];
-                int n;
-                while ((n = is.read(chunk)) != -1) {
-                    buffer.write(chunk, 0, n);
+            OkHttpClient client = WallabagConnection.createClient();
+            Request request = new Request.Builder().url(imageUrl).build();
+            try (Response response = client.newCall(request).execute()) {
+                ResponseBody body = response.body();
+                if (response.isSuccessful() && body != null) {
+                    return decodeBytesScaled(body.bytes());
                 }
-                return decodeBytesScaled(buffer.toByteArray());
             }
         } catch (Exception e) {
             Log.w(TAG, "loadBitmap() remote load failed", e);
@@ -103,8 +103,9 @@ public class ImageViewActivity extends AppCompatActivity {
         return null;
     }
 
-    // Canvas hardware-accelerated draw limit is ~100MB; cap at 4096px (64MB @ ARGB_8888).
-    private static final int MAX_BITMAP_DIMENSION = 4096;
+    // 2048 keeps the bitmap (~16MB @ ARGB_8888) under the Canvas draw limit and
+    // within GL_MAX_TEXTURE_SIZE on older GPUs. Article images are typically <2048px wide anyway.
+    private static final int MAX_BITMAP_DIMENSION = 2048;
 
     private static Bitmap decodeFileScaled(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -112,7 +113,12 @@ public class ImageViewActivity extends AppCompatActivity {
         BitmapFactory.decodeFile(path, options);
         options.inSampleSize = computeSampleSize(options.outWidth, options.outHeight);
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeFile(path, options);
+        try {
+            return BitmapFactory.decodeFile(path, options);
+        } catch (OutOfMemoryError e) {
+            Log.w(TAG, "decodeFileScaled() out of memory");
+            return null;
+        }
     }
 
     private static Bitmap decodeBytesScaled(byte[] data) {
@@ -121,7 +127,12 @@ public class ImageViewActivity extends AppCompatActivity {
         BitmapFactory.decodeByteArray(data, 0, data.length, options);
         options.inSampleSize = computeSampleSize(options.outWidth, options.outHeight);
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        try {
+            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        } catch (OutOfMemoryError e) {
+            Log.w(TAG, "decodeBytesScaled() out of memory");
+            return null;
+        }
     }
 
     private static int computeSampleSize(int width, int height) {

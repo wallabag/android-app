@@ -57,6 +57,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ImageViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name="fr.gaulupeau.apps.Poche.ui.ManageArticleTagsActivity"
