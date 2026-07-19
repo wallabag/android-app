@@ -40,8 +40,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.navigation.NavigationView;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -499,27 +497,11 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch (Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
                 CharSequence aboutCharSequence = getText(R.string.aboutText);
                 String aboutString = aboutCharSequence instanceof Spanned
                         ? Html.toHtml((Spanned) aboutCharSequence)
                         : aboutCharSequence.toString();
-                new LibsBuilder()
-                        .withActivityStyle(style)
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withAboutDescription(aboutString)
-                        .start(this);
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
 
