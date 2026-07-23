@@ -194,7 +194,8 @@ public class WallabagConnection {
 
         try {
             Uri uri = Uri.parse(urlString);
-            if (uri.getHost() == null) {
+            String host = uri.getHost();
+            if (host == null || host.isEmpty()) {
                 callback.onResult(false);
                 return;
             }

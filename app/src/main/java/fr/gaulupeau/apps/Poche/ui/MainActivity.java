@@ -338,17 +338,19 @@ public class MainActivity extends AppCompatActivity
 
     private void requestLocalNetworkPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) { // API 37
-            if (settings != null && settings.isConfigurationOk() && settings.getUrl() != null) {
-                WallabagConnection.checkIsLocalNetworkUrl(settings.getUrl(), isLocal -> {
-                    if (isLocal) {
-                        if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
-                            requestPermissions(
-                                    new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
-                                    REQUEST_LOCAL_NETWORK
-                            );
+            if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                if (settings != null && settings.isConfigurationOk() && settings.getUrl() != null) {
+                    WallabagConnection.checkIsLocalNetworkUrl(settings.getUrl(), isLocal -> {
+                        if (isLocal) {
+                            if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
+                                        REQUEST_LOCAL_NETWORK
+                                );
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -377,11 +379,11 @@ public class MainActivity extends AppCompatActivity
                     messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
                     messageBox.setOnDismissListener(dialog -> checkConfigurationDialog = null);
                     checkConfigurationDialog = messageBox.show();
-                } else {
-                    requestLocalNetworkPermissionIfNeeded();
                 }
             }
         }
+
+        requestLocalNetworkPermissionIfNeeded();
 
         if (tryToUpdateOnResume) {
             tryToUpdateOnResume = false;
