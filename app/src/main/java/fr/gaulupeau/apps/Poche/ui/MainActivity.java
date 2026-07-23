@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.os.Build;
@@ -131,12 +132,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) { // API 37
-            requestPermissions(
-                    new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
-                    REQUEST_LOCAL_NETWORK
-            );
-        }
+        settings = App.getSettings();
 
         WindowInsetsControllerCompat windowInsetsController =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
@@ -145,8 +141,6 @@ public class MainActivity extends AppCompatActivity
                 || Themes.getCurrentTheme() == Themes.Theme.SOLARIZED);
 
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
-
-        settings = App.getSettings();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -337,9 +331,28 @@ public class MainActivity extends AppCompatActivity
 
         Themes.checkTheme(this);
 
+        requestLocalNetworkPermissionIfNeeded();
+
         checkConfigurationOnResume = true;
 
         tryToUpdateOnResume = true;
+    }
+
+    private void requestLocalNetworkPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) { // API 37
+            if (settings != null && settings.getUrl() != null) {
+                WallabagConnection.checkIsLocalNetworkUrl(settings.getUrl(), isLocal -> {
+                    if (isLocal) {
+                        if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                            requestPermissions(
+                                    new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
+                                    REQUEST_LOCAL_NETWORK
+                            );
+                        }
+                    }
+                });
+            }
+        }
     }
 
     @Override

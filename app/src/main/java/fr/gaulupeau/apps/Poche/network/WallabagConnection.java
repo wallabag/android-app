@@ -3,6 +3,9 @@ package fr.gaulupeau.apps.Poche.network;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -13,6 +16,7 @@ import org.conscrypt.Conscrypt;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.InetAddress;
 import java.security.Security;
 import java.util.concurrent.TimeUnit;
 
@@ -135,6 +139,108 @@ public class WallabagConnection {
 
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    public static boolean isLocalNetworkUrl(String urlString) {
+        if (urlString == null || urlString.isEmpty()) return false;
+        try {
+            Uri uri = Uri.parse(urlString);
+            String host = uri.getHost();
+            if (host == null) return false;
+
+            host = host.toLowerCase();
+
+            if (host.equals("localhost") || host.equals("127.0.0.1") || host.equals("::1")) {
+                return true;
+            }
+
+            // Common local domain suffixes
+            if (host.endsWith(".local") || host.endsWith(".lan") || host.endsWith(".home")
+                    || host.endsWith(".internal") || host.endsWith(".fritz.box")) {
+                return true;
+            }
+
+            // Check if it's a numeric IP address and if it's in private ranges
+            if (isPrivateIPv4(host)) {
+                return true;
+            }
+
+            // IPv6 unique local address (fc00::/7) or link-local (fe80::/10)
+            if (host.startsWith("fc") || host.startsWith("fd") || host.startsWith("fe80")) {
+                return true;
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, "isLocalNetworkUrl() error parsing URL: " + urlString, e);
+        }
+        return false;
+    }
+
+    public interface LocalNetworkCheckCallback {
+        void onResult(boolean isLocal);
+    }
+
+    public static void checkIsLocalNetworkUrl(final String urlString, final LocalNetworkCheckCallback callback) {
+        if (urlString == null || urlString.isEmpty()) {
+            callback.onResult(false);
+            return;
+        }
+
+        // Fast path for string-based check
+        if (isLocalNetworkUrl(urlString)) {
+            callback.onResult(true);
+            return;
+        }
+
+        // Slow path: DNS resolution
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isLocal = false;
+                try {
+                    Uri uri = Uri.parse(urlString);
+                    String host = uri.getHost();
+                    if (host != null) {
+                        InetAddress[] addresses = InetAddress.getAllByName(host);
+                        for (InetAddress addr : addresses) {
+                            if (addr.isSiteLocalAddress() || addr.isLoopbackAddress() || addr.isLinkLocalAddress()) {
+                                isLocal = true;
+                                break;
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.w(TAG, "checkIsLocalNetworkUrl() DNS resolution failed for " + urlString);
+                }
+
+                final boolean result = isLocal;
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onResult(result);
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private static boolean isPrivateIPv4(String host) {
+        // Simple regex for IPv4
+        String ipv4Pattern = "^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$";
+        if (host.matches(ipv4Pattern)) {
+            try {
+                String[] parts = host.split("\\.");
+                int first = Integer.parseInt(parts[0]);
+                int second = Integer.parseInt(parts[1]);
+                if (first == 10) return true;
+                if (first == 172 && second >= 16 && second <= 31) return true;
+                if (first == 192 && second == 168) return true;
+                if (first == 169 && second == 254) return true; // link-local
+            } catch (NumberFormatException e) {
+                return false;
+            }
+        }
+        return false;
     }
 
     public static OkHttpClient createClient() {
