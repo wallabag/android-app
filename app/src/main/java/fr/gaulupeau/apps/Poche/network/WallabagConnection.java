@@ -181,7 +181,7 @@ public class WallabagConnection {
     }
 
     public static void checkIsLocalNetworkUrl(final String urlString, final LocalNetworkCheckCallback callback) {
-        if (urlString == null || urlString.isEmpty()) {
+        if (urlString == null || urlString.isEmpty() || urlString.equals("https://") || urlString.equals("http://")) {
             callback.onResult(false);
             return;
         }
@@ -189,6 +189,17 @@ public class WallabagConnection {
         // Fast path for string-based check
         if (isLocalNetworkUrl(urlString)) {
             callback.onResult(true);
+            return;
+        }
+
+        try {
+            Uri uri = Uri.parse(urlString);
+            if (uri.getHost() == null) {
+                callback.onResult(false);
+                return;
+            }
+        } catch (Exception e) {
+            callback.onResult(false);
             return;
         }
 

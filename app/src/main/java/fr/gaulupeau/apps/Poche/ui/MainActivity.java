@@ -331,8 +331,6 @@ public class MainActivity extends AppCompatActivity
 
         Themes.checkTheme(this);
 
-        requestLocalNetworkPermissionIfNeeded();
-
         checkConfigurationOnResume = true;
 
         tryToUpdateOnResume = true;
@@ -340,7 +338,7 @@ public class MainActivity extends AppCompatActivity
 
     private void requestLocalNetworkPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) { // API 37
-            if (settings != null && settings.getUrl() != null) {
+            if (settings != null && settings.isConfigurationOk() && settings.getUrl() != null) {
                 WallabagConnection.checkIsLocalNetworkUrl(settings.getUrl(), isLocal -> {
                     if (isLocal) {
                         if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
@@ -379,6 +377,8 @@ public class MainActivity extends AppCompatActivity
                     messageBox.setNegativeButton(R.string.d_configurationChanged_answer_decline, null);
                     messageBox.setOnDismissListener(dialog -> checkConfigurationDialog = null);
                     checkConfigurationDialog = messageBox.show();
+                } else {
+                    requestLocalNetworkPermissionIfNeeded();
                 }
             }
         }
@@ -954,6 +954,7 @@ public class MainActivity extends AppCompatActivity
                 this, new ConfigurationTestHelper.ResultHandler() {
             @Override
             public void onConfigurationTestSuccess(String url) {
+                requestLocalNetworkPermissionIfNeeded();
                 updateAllFeedsIfDbIsEmpty();
             }
 
