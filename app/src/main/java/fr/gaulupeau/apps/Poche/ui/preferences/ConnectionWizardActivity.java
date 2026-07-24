@@ -1,10 +1,13 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -44,6 +47,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String TAG = "ConnectionWizard";
 
     private static final int REQUEST_CODE_QR_CODE = 1;
+    private static final int REQUEST_LOCAL_NETWORK = 1001;
 
     private static final String DATA_PROVIDER = "provider";
     private static final String DATA_URL = "url";
@@ -189,6 +193,28 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 finish();
             }
         }
+    }
+
+    private void requestLocalNetworkPermissionIfNeeded(String url) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.BAKLAVA) {
+            return;
+        }
+
+        if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) == PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
+
+        WallabagConnection.checkIsLocalNetworkUrl(url, isLocal -> {
+            if (isLocal
+                    && checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
+                        REQUEST_LOCAL_NETWORK);
+            }
+        });
     }
 
     private ConnectionData parseLoginData(String connectionUri) {
@@ -511,6 +537,10 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
 
         protected void runTest() {
             cancelTest();
+
+            if (activity != null) {
+                activity.requestLocalNetworkPermissionIfNeeded(url);
+            }
 
             configurationTestHelper = new ConfigurationTestHelper(
                     activity, this, this, url, httpAuthUsername, httpAuthPassword,
