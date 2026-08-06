@@ -2,6 +2,8 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -84,6 +86,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ImageView read;
         TextView readingTime;
 
+        final Drawable defaultBackground;
+
         ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
@@ -96,35 +100,64 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
             itemView.setOnClickListener(this);
             itemView.setOnCreateContextMenuListener(this);
+
+            // must be captured before any bind() clears it: once the background has been set to
+            // null on a recycled view, the inflated ?attr/selectableItemBackground is unrecoverable
+            defaultBackground = itemView.getBackground();
+            url.setCompoundDrawablePadding(Math.round(
+                    4 * itemView.getResources().getDisplayMetrics().density));
         }
 
         void bind(Article article) {
             this.article = article;
 
-            title.setText(article.getTitle());
-            url.setText(article.getDomain());
+            boolean pending = PendingArticles.isPending(article);
+
+            title.setText(PendingArticles.displayTitle(article));
+            title.setTypeface(null, pending ? Typeface.ITALIC : Typeface.NORMAL);
+
+            itemView.setAlpha(pending ? 0.6f : 1f);
+            itemView.setBackground(pending ? null : defaultBackground);
+            itemView.setOnClickListener(pending ? null : this);
+            itemView.setClickable(!pending);
+            itemView.setOnCreateContextMenuListener(pending ? null : this);
+
+            if (pending) {
+                url.setText(R.string.listItem_pendingSync);
+                url.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        R.drawable.ic_pending_sync, 0, 0, 0);
+            } else {
+                url.setText(article.getDomain());
+                url.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0);
+            }
 
             boolean showFavourite = false;
             boolean showRead = false;
             switch (listType) {
                 case LIST_TYPE_UNREAD:
                 case LIST_TYPE_ARCHIVED:
-                    showFavourite = article.getFavorite();
+                    showFavourite = Boolean.TRUE.equals(article.getFavorite());
                     break;
 
                 case LIST_TYPE_FAVORITES:
-                    showRead = article.getArchive();
+                    showRead = Boolean.TRUE.equals(article.getArchive());
                     break;
 
                 default: // we don't actually use it right now
-                    showFavourite = article.getFavorite();
-                    showRead = article.getArchive();
+                    showFavourite = Boolean.TRUE.equals(article.getFavorite());
+                    showRead = Boolean.TRUE.equals(article.getArchive());
                     break;
             }
             favourite.setVisibility(showFavourite ? View.VISIBLE : View.GONE);
             read.setVisibility(showRead ? View.VISIBLE : View.GONE);
-            readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
-                    article.getEstimatedReadingTime(settings.getReadingSpeed())));
+
+            if (pending) {
+                readingTime.setVisibility(View.GONE);
+            } else {
+                readingTime.setVisibility(View.VISIBLE);
+                readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
+                        article.getEstimatedReadingTime(settings.getReadingSpeed())));
+            }
         }
 
         @Override

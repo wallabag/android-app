@@ -9,6 +9,7 @@ import androidx.core.util.Consumer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.DbUtils;
@@ -73,10 +74,19 @@ public class OperationsWorker extends BaseWorker {
         article = new Article();
         article.setGivenUrl(url);
         article.setOriginUrl(origin);
+        // the list queries filter on these, and SQLite's "= 0" does not match NULL
+        article.setArchive(false);
+        article.setFavorite(false);
+        article.setCreationDate(new Date());
 
         long id = getArticleDao().insertWithoutSettingPk(article);
 
         queueOfflineChange(queueHelper -> queueHelper.addLink(url, origin, id));
+
+        // queueOfflineChange only posts OfflineQueueChangedEvent, which no list subscribes to
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+        event.invalidateAll(ArticlesChangedEvent.ChangeType.ADDED);
+        postEvent(event);
 
         Log.d(TAG, "addArticle() finished");
     }

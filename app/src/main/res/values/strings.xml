@@ -153,6 +153,7 @@
     <string name="content_estimatedReadingTimeTTSLabel">Estimated reading time</string>
     <string name="lastUpdateTimeLabel">Last update: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
+    <string name="listItem_pendingSync">Waiting to sync</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

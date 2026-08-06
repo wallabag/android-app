@@ -22,6 +22,12 @@ android {
         }
     }
 
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
@@ -75,4 +81,6 @@ dependencies {
     implementation 'com.mikepenz:aboutlibraries:7.1.0'
     implementation 'com.github.di72nn.wallabag-api-wrapper:api-wrapper:v2.0.0-beta.6'
     implementation 'org.slf4j:slf4j-android:1.7.36'
+
+    testImplementation 'junit:junit:4.13.2'
 }
