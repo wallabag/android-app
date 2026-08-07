@@ -16,15 +16,4 @@ public final class PendingArticles {
     public static boolean isPending(Article article) {
         return article.getArticleId() == null;
     }
-
-    /**
-     * The title to show in a list. A pending article has no title yet, so its URL is used.
-     */
-    public static String displayTitle(Article article) {
-        String title = article.getTitle();
-        if (title != null && !title.isEmpty()) return title;
-
-        String givenUrl = article.getGivenUrl();
-        return givenUrl != null ? givenUrl : "";
-    }
 }

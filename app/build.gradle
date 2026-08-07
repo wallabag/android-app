@@ -22,12 +22,6 @@ android {
         }
     }
 
-    testOptions {
-        unitTests {
-            returnDefaultValues = true
-        }
-    }
-
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)

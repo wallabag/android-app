@@ -29,6 +29,7 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyMainFeedChanged;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 
 public class OperationsWorker extends BaseWorker {
@@ -83,10 +84,9 @@ public class OperationsWorker extends BaseWorker {
 
         queueOfflineChange(queueHelper -> queueHelper.addLink(url, origin, id));
 
-        // queueOfflineChange only posts OfflineQueueChangedEvent, which no list subscribes to
-        ArticlesChangedEvent event = new ArticlesChangedEvent();
-        event.invalidateAll(ArticlesChangedEvent.ChangeType.ADDED);
-        postEvent(event);
+        // queueOfflineChange only posts OfflineQueueChangedEvent, which no list subscribes to.
+        // A new article is always unread, so only the unread feed needs to be invalidated.
+        notifyMainFeedChanged(ArticlesChangedEvent.ChangeType.ADDED);
 
         Log.d(TAG, "addArticle() finished");
     }

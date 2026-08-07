@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.EnumSet;
+
 import fr.gaulupeau.apps.InThePoche.BuildConfig;
 import fr.gaulupeau.apps.Poche.App;
 import fr.gaulupeau.apps.Poche.EventBusIndex;
@@ -60,6 +62,20 @@ public class EventHelper {
     public static void notifyAboutArticleChange(
             Article article, ArticlesChangedEvent.ChangeType changeType) {
         postEvent(new ArticlesChangedEvent(article, changeType));
+    }
+
+    /**
+     * Notifies that the unread feed changed, without naming a specific article.
+     *
+     * <p>Unlike {@link #notifyAboutArticleChange(Article, ArticlesChangedEvent.ChangeType)} this
+     * works for a pending article: that one unboxes the article's server-side ID, which a pending
+     * article does not have.
+     */
+    public static void notifyMainFeedChanged(ArticlesChangedEvent.ChangeType changeType) {
+        ArticlesChangedEvent event = new ArticlesChangedEvent();
+        event.addChangesByFeedType(FeedsChangedEvent.FeedType.MAIN, EnumSet.of(changeType));
+
+        postEvent(event);
     }
 
     public static void notifyEverythingRemoved() {

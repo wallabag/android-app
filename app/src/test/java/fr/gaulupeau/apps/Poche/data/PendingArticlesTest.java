@@ -1,6 +1,5 @@
 package fr.gaulupeau.apps.Poche.data;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -29,28 +28,5 @@ public class PendingArticlesTest {
         article.setArticleId(42);
 
         assertFalse(PendingArticles.isPending(article));
-    }
-
-    @Test
-    public void displayTitleUsesTitleWhenPresent() {
-        assertEquals("Real title",
-                PendingArticles.displayTitle(article("https://example.com/a", "Real title")));
-    }
-
-    @Test
-    public void displayTitleFallsBackToGivenUrlWhenTitleIsNull() {
-        assertEquals("https://example.com/a",
-                PendingArticles.displayTitle(article("https://example.com/a", null)));
-    }
-
-    @Test
-    public void displayTitleFallsBackToGivenUrlWhenTitleIsEmpty() {
-        assertEquals("https://example.com/a",
-                PendingArticles.displayTitle(article("https://example.com/a", "")));
-    }
-
-    @Test
-    public void displayTitleReturnsEmptyStringWhenNothingIsAvailable() {
-        assertEquals("", PendingArticles.displayTitle(article(null, null)));
     }
 }

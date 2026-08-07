@@ -33,6 +33,17 @@ public class ArticleListItemComparatorTest {
     }
 
     @Test
+    public void sameServerIdIsTheSameItemAcrossALocalIdChange() {
+        // a FULL update deletes and re-inserts every article, so the PK is not stable
+        assertTrue(ArticleListItemComparator.isSameItem(article(1L, 42), article(7L, 42)));
+    }
+
+    @Test
+    public void differentServerIdsAreDifferentItemsEvenOnTheSameLocalId() {
+        assertFalse(ArticleListItemComparator.isSameItem(article(1L, 42), article(1L, 43)));
+    }
+
+    @Test
     public void contentsComparisonToleratesNullFlagsAndText() {
         assertTrue(ArticleListItemComparator.hasSameContents(article(1L, null), article(1L, null)));
     }
@@ -62,7 +73,7 @@ public class ArticleListItemComparatorTest {
     }
 
     @Test
-    public void articlesWithoutLocalIdsAreNeverTheSameItem() {
+    public void articlesWithoutAnyIdsAreNeverTheSameItem() {
         // rows read from the DAO always have a PK, so this cannot happen in practice;
         // the guard is deliberate, because treating null == null as "same item" would
         // collapse unrelated unsaved articles onto one row
