@@ -1,11 +1,14 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.Spanned;
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity
     private static final String FRAGMENT_ARTICLE_LISTS = "fragment_article_lists";
     private static final String FRAGMENT_TAG_LIST = "fragment_tag_list";
     private static final String FRAGMENT_TAGGED_ARTICLE_LISTS = "fragment_tagged_article_lists";
+    private static final int REQUEST_LOCAL_NETWORK = 1001;
 
     private Settings settings;
 
@@ -128,6 +132,8 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+        settings = App.getSettings();
+
         WindowInsetsControllerCompat windowInsetsController =
                 WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
         windowInsetsController.setAppearanceLightStatusBars(Themes.getCurrentTheme() == Themes.Theme.LIGHT
@@ -135,8 +141,6 @@ public class MainActivity extends AppCompatActivity
                 || Themes.getCurrentTheme() == Themes.Theme.SOLARIZED);
 
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
-
-        settings = App.getSettings();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -332,6 +336,25 @@ public class MainActivity extends AppCompatActivity
         tryToUpdateOnResume = true;
     }
 
+    private void requestLocalNetworkPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) { // API 37
+            if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                if (settings != null && settings.isConfigurationOk() && settings.getUrl() != null) {
+                    WallabagConnection.checkIsLocalNetworkUrl(settings.getUrl(), isLocal -> {
+                        if (isLocal) {
+                            if (checkSelfPermission(Manifest.permission.ACCESS_LOCAL_NETWORK) != PackageManager.PERMISSION_GRANTED) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.ACCESS_LOCAL_NETWORK},
+                                        REQUEST_LOCAL_NETWORK
+                                );
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -359,6 +382,8 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+
+        requestLocalNetworkPermissionIfNeeded();
 
         if (tryToUpdateOnResume) {
             tryToUpdateOnResume = false;
@@ -931,6 +956,7 @@ public class MainActivity extends AppCompatActivity
                 this, new ConfigurationTestHelper.ResultHandler() {
             @Override
             public void onConfigurationTestSuccess(String url) {
+                requestLocalNetworkPermissionIfNeeded();
                 updateAllFeedsIfDbIsEmpty();
             }
 
