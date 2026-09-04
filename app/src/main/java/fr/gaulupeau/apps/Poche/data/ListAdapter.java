@@ -2,6 +2,8 @@ package fr.gaulupeau.apps.Poche.data;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -84,6 +86,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         ImageView read;
         TextView readingTime;
 
+        // null until the first bind(); see applyPendingAppearance()
+        Boolean pendingAppearance;
+
         ViewHolder(View itemView, OnItemClickListener listener) {
             super(itemView);
             this.listener = listener;
@@ -101,30 +106,73 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         void bind(Article article) {
             this.article = article;
 
-            title.setText(article.getTitle());
-            url.setText(article.getDomain());
+            boolean pending = PendingArticles.isPending(article);
+            applyPendingAppearance(pending);
+
+            // deliberately not in applyPendingAppearance(): DefaultItemAnimator animates this and
+            // forces it back to 1 when the animation ends, so a flip-guarded value would be lost
+            // for good. setAlpha only invalidates, so re-applying it per bind() costs nothing.
+            itemView.setAlpha(pending ? 0.6f : 1f);
+
+            if (pending) {
+                // a pending article has no title yet, so its URL is shown instead
+                title.setText(article.getGivenUrl());
+            } else {
+                title.setText(article.getTitle());
+                url.setText(article.getDomain());
+                readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
+                        article.getEstimatedReadingTime(settings.getReadingSpeed())));
+            }
 
             boolean showFavourite = false;
             boolean showRead = false;
             switch (listType) {
                 case LIST_TYPE_UNREAD:
                 case LIST_TYPE_ARCHIVED:
-                    showFavourite = article.getFavorite();
+                    showFavourite = Boolean.TRUE.equals(article.getFavorite());
                     break;
 
                 case LIST_TYPE_FAVORITES:
-                    showRead = article.getArchive();
+                    showRead = Boolean.TRUE.equals(article.getArchive());
                     break;
 
                 default: // we don't actually use it right now
-                    showFavourite = article.getFavorite();
-                    showRead = article.getArchive();
+                    showFavourite = Boolean.TRUE.equals(article.getFavorite());
+                    showRead = Boolean.TRUE.equals(article.getArchive());
                     break;
             }
             favourite.setVisibility(showFavourite ? View.VISIBLE : View.GONE);
             read.setVisibility(showRead ? View.VISIBLE : View.GONE);
-            readingTime.setText(context.getString(R.string.listItem_estimatedReadingTime,
-                    article.getEstimatedReadingTime(settings.getReadingSpeed())));
+        }
+
+        /**
+         * Applies the parts of a row's appearance that depend on nothing but whether the article
+         * is pending. Several of the setters below (notably {@code setMaxLines} and the compound
+         * drawables) force a layout pass unconditionally, so the state is tracked per holder and
+         * only re-applied when it actually flips.
+         *
+         * <p>Only properties that nothing else mutates belong here: anything the item animator or
+         * the framework may change behind our back has to be re-applied on every bind instead.
+         */
+        private void applyPendingAppearance(boolean pending) {
+            if (pendingAppearance != null && pendingAppearance == pending) return;
+            pendingAppearance = pending;
+
+            title.setTypeface(null, pending ? Typeface.ITALIC : Typeface.NORMAL);
+            // a pending title is a raw URL, which can be arbitrarily long
+            title.setMaxLines(pending ? 2 : Integer.MAX_VALUE);
+            title.setEllipsize(pending ? TextUtils.TruncateAt.END : null);
+
+            // a pending article can't be opened or acted on; note that clearing the listeners
+            // would not disable interaction, since setting one force-enables the matching flag
+            itemView.setClickable(!pending);
+            itemView.setLongClickable(!pending);
+
+            url.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                    pending ? R.drawable.ic_pending_sync : 0, 0, 0, 0);
+            if (pending) url.setText(R.string.listItem_pendingSync);
+
+            readingTime.setVisibility(pending ? View.GONE : View.VISIBLE);
         }
 
         @Override

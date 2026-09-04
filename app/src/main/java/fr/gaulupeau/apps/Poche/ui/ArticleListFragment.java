@@ -26,6 +26,7 @@ import java.util.Random;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
+import fr.gaulupeau.apps.Poche.data.ArticleListItemComparator;
 import fr.gaulupeau.apps.Poche.data.DbConnection;
 import fr.gaulupeau.apps.Poche.data.ListAdapter;
 import fr.gaulupeau.apps.Poche.data.dao.ArticleDao;
@@ -202,8 +203,8 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     }
 
     private QueryBuilder<Article> getQueryBuilder() {
-        QueryBuilder<Article> qb = articleDao.queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.isNotNull());
+        // pending articles (no server-side ID yet) are included; see PendingArticles
+        QueryBuilder<Article> qb = articleDao.queryBuilder();
 
         if (untagged) {
             qb.where(new WhereCondition.PropertyCondition(ArticleDao.Properties.Id, " NOT IN "
@@ -272,7 +273,10 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
     }
 
     private void openRandomArticle() {
-        LazyList<Article> articles = getQueryBuilder().listLazyUncached();
+        // a pending article cannot be opened, so it must not be picked at random
+        LazyList<Article> articles = getQueryBuilder()
+                .where(ArticleDao.Properties.ArticleId.isNotNull())
+                .listLazyUncached();
 
         if (!articles.isEmpty()) {
             long id = articles.get(new Random().nextInt(articles.size())).getId();
@@ -332,21 +336,16 @@ public class ArticleListFragment extends RecyclerViewListFragment<Article, ListA
 
         @Override
         public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-            return oldList.get(oldItemPosition).getArticleId().equals(
-                    newList.get(newItemPosition).getArticleId());
+            return ArticleListItemComparator.isSameItem(
+                    oldList.get(oldItemPosition), newList.get(newItemPosition));
         }
 
         @Override
         public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
             if (forceContentUpdate) return false;
 
-            Article oldArticle = oldList.get(oldItemPosition);
-            Article newArticle = newList.get(newItemPosition);
-
-            return oldArticle.getArchive().equals(newArticle.getArchive())
-                    && oldArticle.getFavorite().equals(newArticle.getFavorite())
-                    && TextUtils.equals(oldArticle.getTitle(), newArticle.getTitle())
-                    && TextUtils.equals(oldArticle.getDomain(), newArticle.getDomain());
+            return ArticleListItemComparator.hasSameContents(
+                    oldList.get(oldItemPosition), newList.get(newItemPosition));
         }
 
     }

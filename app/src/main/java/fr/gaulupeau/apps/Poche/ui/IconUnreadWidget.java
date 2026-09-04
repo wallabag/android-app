@@ -28,8 +28,8 @@ public class IconUnreadWidget extends AppWidgetProvider { // TODO: check widget 
                                 int appWidgetId) {
         Log.d(TAG, "updateAppWidget() appWidgetId=" + appWidgetId);
 
+        // pending articles are counted too, to stay consistent with the unread list
         long unreadCount = DbConnection.getSession().getArticleDao().queryBuilder()
-                .where(ArticleDao.Properties.ArticleId.isNotNull())
                 .where(ArticleDao.Properties.Archive.eq(false))
                 .count();
 

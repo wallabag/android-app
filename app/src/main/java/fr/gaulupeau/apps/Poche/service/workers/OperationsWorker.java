@@ -9,6 +9,7 @@ import androidx.core.util.Consumer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import fr.gaulupeau.apps.Poche.data.DbUtils;
@@ -28,6 +29,7 @@ import fr.gaulupeau.apps.Poche.events.ArticlesChangedEvent;
 import fr.gaulupeau.apps.Poche.events.OfflineQueueChangedEvent;
 
 import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyAboutArticleChange;
+import static fr.gaulupeau.apps.Poche.events.EventHelper.notifyMainFeedChanged;
 import static fr.gaulupeau.apps.Poche.events.EventHelper.postEvent;
 
 public class OperationsWorker extends BaseWorker {
@@ -73,10 +75,18 @@ public class OperationsWorker extends BaseWorker {
         article = new Article();
         article.setGivenUrl(url);
         article.setOriginUrl(origin);
+        // the list queries filter on these, and SQLite's "= 0" does not match NULL
+        article.setArchive(false);
+        article.setFavorite(false);
+        article.setCreationDate(new Date());
 
         long id = getArticleDao().insertWithoutSettingPk(article);
 
         queueOfflineChange(queueHelper -> queueHelper.addLink(url, origin, id));
+
+        // queueOfflineChange only posts OfflineQueueChangedEvent, which no list subscribes to.
+        // A new article is always unread, so only the unread feed needs to be invalidated.
+        notifyMainFeedChanged(ArticlesChangedEvent.ChangeType.ADDED);
 
         Log.d(TAG, "addArticle() finished");
     }
