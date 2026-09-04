@@ -22,6 +22,7 @@ import android.webkit.HttpAuthHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -654,6 +655,7 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         initTtsController();
         initAnnotationController();
+        initImageController();
 
         webViewContent.setWebChromeClient(new WebChromeClient() {
             private View customView;
@@ -812,6 +814,22 @@ public class ReadArticleActivity extends AppCompatActivity {
         webViewContent.addJavascriptInterface(jsTtsController, "hostWebViewTextController");
     }
 
+    private void initImageController() {
+        webViewContent.addJavascriptInterface(new Object() {
+            @SuppressWarnings("unused")
+            @JavascriptInterface
+            public void onImageClicked(String imageUrl) {
+                Log.d(TAG, "onImageClicked() url: " + imageUrl);
+                Intent intent = new Intent(ReadArticleActivity.this, ImageViewActivity.class);
+                intent.putExtra(ImageViewActivity.EXTRA_IMAGE_URL, imageUrl);
+                if (article != null) {
+                    intent.putExtra(ImageViewActivity.EXTRA_ARTICLE_ID, article.getArticleId().longValue());
+                }
+                startActivity(intent);
+            }
+        }, "hostImageController");
+    }
+
     private void initAnnotationController() {
         if (!annotationsEnabled) return;
 
@@ -929,6 +947,8 @@ public class ReadArticleActivity extends AppCompatActivity {
 
     private String getExtraHead() {
         String extra = "";
+
+        extra += "\n\t\t<script src=\"image-zoom-handler.js\"></script>";
 
         if (annotationsEnabled) {
             extra += "\n" +
