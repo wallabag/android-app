@@ -15,11 +15,10 @@
         android:theme="?attr/appBarOverlayTheme"
         app:liftOnScroll="true">
 
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
             app:popupTheme="?attr/popupOverlayTheme"
             app:layout_scrollFlags="scroll|enterAlways|snap|enterAlwaysCollapsed" />
 
@@ -53,10 +52,9 @@
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#000000"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?attr/colorOutlineVariant"
                     android:visibility="gone"/>
 
                 <TextView
@@ -71,35 +69,48 @@
                     android:id="@+id/bottomTools"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:visibility="gone">
                     <ImageButton
                         android:id="@+id/btnGoPrevious"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/menuPrevious"
                         android:src="@drawable/ic_action_previous_item"
-                        android:layout_weight="1"/>
-                    <Button
+                        app:tint="?attr/colorOnSurfaceVariant"/>
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMarkRead"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/btnMarkRead"
-                        android:layout_weight="6"/>
-                    <Button
+                        app:icon="@drawable/ic_done_black_24dp"/>
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMarkUnread"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        style="@style/Widget.Material3.Button.TonalButton"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/btnMarkUnread"
-                        android:layout_weight="6"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_undo_black_24dp"/>
                     <ImageButton
                         android:id="@+id/btnGoNext"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
                         android:contentDescription="@string/menuNext"
                         android:src="@drawable/ic_action_next_item"
-                        android:layout_weight="1"/>
+                        app:tint="?attr/colorOnSurfaceVariant"/>
                 </LinearLayout>
 
             </LinearLayout>

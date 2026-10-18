@@ -1,0 +1,61 @@
+body {
+  background: var(--md-surface);
+  color: var(--md-on-surface);
+}
+
+::selection {
+  color: var(--md-on-primary-container);
+  background: var(--md-primary-container);
+}
+
+h1, h2, h3, h4,
+p, li {
+  color: var(--md-on-surface);
+}
+
+a {
+  color: var(--md-primary);
+}
+
+table, th, td {
+  border-color: var(--md-outline-variant);
+}
+
+#article h1 {
+  font-size: 1.5em;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+ul.stats li {
+  color: var(--md-on-surface-variant);
+}
+
+em.domain {
+  font-style: normal;
+}
+
+.tag {
+  border-color: var(--md-outline);
+  border-radius: 8px;
+}
+
+.tag a {
+  color: var(--md-on-surface-variant);
+}
+
+#article img {
+  border-radius: 12px;
+}
+
+#article blockquote {
+  border-left: 4px solid var(--md-primary);
+  color: var(--md-on-surface-variant);
+}
+
+#article pre {
+  border: none;
+  border-radius: 8px;
+  padding: 0.5em;
+  background: var(--md-surface-container-high);
+}

@@ -6,48 +6,57 @@
     android:persistent="false">
     <Preference
         android:key="@string/pref_key_connection_wizard"
+        android:icon="@drawable/ic_auto_fix_high_outline_24dp"
         android:title="@string/pref_name_runConnectionWizard"
         android:summary="@string/pref_desc_runConnectionWizard"
         android:persistent="false">
     </Preference>
     <PreferenceScreen
         android:key="@string/pref_key_connection"
+        android:icon="@drawable/ic_cloud_outline_24dp"
         android:title="@string/pref_categoryName_connection"
         android:persistent="false">
-        <PreferenceCategory
-            android:key="@string/pref_key_connection_category"
-            android:title="@string/pref_categoryName_connection"
-            android:persistent="false">
-            <EditTextPreference
-                android:key="@string/pref_key_connection_url"
-                android:title="@string/pref_name_connection_url"
-                android:summary="@string/pref_desc_connection_url"
-                android:defaultValue="https://"/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_username"
-                android:title="@string/pref_name_connection_username"
-                android:defaultValue=""/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_password"
-                android:title="@string/pref_name_connection_password"
-                android:inputType="textPassword"
-                android:defaultValue=""/>
-            <Preference
-                android:key="@string/pref_key_connection_autofill"
-                android:title="@string/pref_name_connection_autofill"
-                android:summary="@string/pref_desc_connection_autofill"
-                android:persistent="false"/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_api_clientID"
-                android:title="@string/pref_name_connection_api_clientID"
-                android:defaultValue=""/>
-            <EditTextPreference
-                android:key="@string/pref_key_connection_api_clientSecret"
-                android:title="@string/pref_name_connection_api_clientSecret"
-                android:defaultValue=""/>
-        </PreferenceCategory>
+        <EditTextPreference
+            android:key="@string/pref_key_connection_url"
+            android:icon="@drawable/ic_link_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_connection_url"
+            android:summary="@string/pref_desc_connection_url"
+            android:defaultValue="https://"/>
+        <EditTextPreference
+            android:key="@string/pref_key_connection_username"
+            android:icon="@drawable/ic_person_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_connection_username"
+            android:defaultValue=""/>
+        <EditTextPreference
+            android:key="@string/pref_key_connection_password"
+            android:icon="@drawable/ic_password_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_connection_password"
+            android:inputType="textPassword"
+            android:defaultValue=""/>
+        <Preference
+            android:key="@string/pref_key_connection_autofill"
+            android:icon="@drawable/ic_vpn_key_outline_24dp"
+            android:title="@string/pref_name_connection_autofill"
+            android:summary="@string/pref_desc_connection_autofill"
+            android:persistent="false"/>
+        <EditTextPreference
+            android:key="@string/pref_key_connection_api_clientID"
+            android:icon="@drawable/ic_badge_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_connection_api_clientID"
+            android:defaultValue=""/>
+        <EditTextPreference
+            android:key="@string/pref_key_connection_api_clientSecret"
+            android:icon="@drawable/ic_key_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_connection_api_clientSecret"
+            android:defaultValue=""/>
         <PreferenceScreen
             android:key="@string/pref_key_connection_advanced"
+            android:icon="@drawable/ic_tune_outline_24dp"
             android:title="@string/pref_categoryName_connection_advanced"
             android:persistent="false">
             <PreferenceCategory
@@ -57,10 +66,14 @@
                 android:persistent="false">
                 <EditTextPreference
                     android:key="@string/pref_key_connection_advanced_httpAuthUsername"
+                    android:icon="@drawable/ic_person_outline_24dp"
+                    android:dialogLayout="@layout/preference_dialog_text_input"
                     android:title="@string/pref_name_connection_advanced_httpAuthUsername"
                     android:defaultValue=""/>
                 <EditTextPreference
                     android:key="@string/pref_key_connection_advanced_httpAuthPassword"
+                    android:icon="@drawable/ic_password_outline_24dp"
+                    android:dialogLayout="@layout/preference_dialog_text_input"
                     android:title="@string/pref_name_connection_advanced_httpAuthPassword"
                     android:inputType="textPassword"
                     android:defaultValue=""/>
@@ -69,79 +82,89 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/pref_key_ui"
+        android:icon="@drawable/ic_palette_outline_24dp"
         android:title="@string/pref_categoryName_ui"
         android:persistent="false">
-        <PreferenceCategory
-            android:key="@string/pref_key_ui_category"
-            android:title="@string/pref_categoryName_ui"
-            android:persistent="false">
-            <ListPreference
-                android:key="@string/pref_key_ui_theme"
-                android:title="@string/pref_name_ui_theme"
-                android:dialogTitle="@string/pref_name_ui_theme"
-                android:defaultValue="LIGHT"/>
-            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
-                android:key="@string/pref_key_ui_article_fontSize"
-                android:title="@string/pref_name_ui_article_fontSize"
-                android:inputType="number"
-                android:defaultValue="100"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_ui_article_fontSerif"
-                android:title="@string/pref_name_ui_article_fontSerif"
-                android:summary="@string/pref_desc_ui_article_fontSerif"
-                android:defaultValue="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_ui_article_textAlignment_justify"
-                android:title="@string/pref_name_ui_article_textAlignment_justify"
-                android:summary="@string/pref_desc_ui_article_textAlignment_justify"
-                android:defaultValue="true"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_ui_onyxworkaround_enabled"
-                android:title="@string/pref_name_ui_onyxworkaround_enabled"
-                android:summary="@string/pref_desc_ui_onyxworkaround_enabled"
-                android:defaultValue="false"/>
-            <ListPreference
-                android:key="@string/pref_key_ui_article_handlePreformattedText"
-                android:title="@string/pref_name_ui_article_handlePreformattedText"
-                android:summary="@string/pref_desc_ui_article_handlePreformattedText"
-                android:dialogTitle="@string/pref_name_ui_article_handlePreformattedText"
-                android:entries="@array/pref_option_handlePreformattedText"
-                android:entryValues="@array/pref_option_handlePreformattedText_values"
-                android:defaultValue="pre-overflow"/>
-            <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
-                android:key="@string/pref_key_ui_readingSpeed"
-                android:title="@string/pref_name_ui_readingSpeed"
-                android:summary="@string/pref_desc_ui_readingSpeed"
-                android:dialogTitle="@string/pref_name_ui_readingSpeed"
-                android:entries="@array/pref_option_readingSpeed_values"
-                android:entryValues="@array/pref_option_readingSpeed_values"
-                android:defaultValue="200"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_ui_keepScreenOn"
-                android:title="@string/pref_name_ui_keepScreenOn"
-                android:summary="@string/pref_desc_ui_keepScreenOn"
-                android:defaultValue="false"/>
-        </PreferenceCategory>
+        <ListPreference
+            android:key="@string/pref_key_ui_theme"
+            android:icon="@drawable/ic_dark_mode_outline_24dp"
+            android:title="@string/pref_name_ui_theme"
+            android:dialogTitle="@string/pref_name_ui_theme"
+            android:defaultValue="LIGHT"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+            android:key="@string/pref_key_ui_article_fontSize"
+            android:icon="@drawable/ic_format_size_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_ui_article_fontSize"
+            android:inputType="number"
+            android:defaultValue="100"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_ui_article_fontSerif"
+            android:icon="@drawable/ic_font_download_outline_24dp"
+            android:title="@string/pref_name_ui_article_fontSerif"
+            android:summary="@string/pref_desc_ui_article_fontSerif"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_ui_article_textAlignment_justify"
+            android:icon="@drawable/ic_format_align_justify_outline_24dp"
+            android:title="@string/pref_name_ui_article_textAlignment_justify"
+            android:summary="@string/pref_desc_ui_article_textAlignment_justify"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_ui_onyxworkaround_enabled"
+            android:icon="@drawable/ic_chrome_reader_mode_outline_24dp"
+            android:title="@string/pref_name_ui_onyxworkaround_enabled"
+            android:summary="@string/pref_desc_ui_onyxworkaround_enabled"
+            android:defaultValue="false"/>
+        <ListPreference
+            android:key="@string/pref_key_ui_article_handlePreformattedText"
+            android:icon="@drawable/ic_code_outline_24dp"
+            android:title="@string/pref_name_ui_article_handlePreformattedText"
+            android:summary="@string/pref_desc_ui_article_handlePreformattedText"
+            android:dialogTitle="@string/pref_name_ui_article_handlePreformattedText"
+            android:entries="@array/pref_option_handlePreformattedText"
+            android:entryValues="@array/pref_option_handlePreformattedText_values"
+            android:defaultValue="pre-overflow"/>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
+            android:key="@string/pref_key_ui_readingSpeed"
+            android:icon="@drawable/ic_speed_outline_24dp"
+            android:title="@string/pref_name_ui_readingSpeed"
+            android:summary="@string/pref_desc_ui_readingSpeed"
+            android:dialogTitle="@string/pref_name_ui_readingSpeed"
+            android:entries="@array/pref_option_readingSpeed_values"
+            android:entryValues="@array/pref_option_readingSpeed_values"
+            android:defaultValue="200"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_ui_keepScreenOn"
+            android:icon="@drawable/ic_lightbulb_outline_24dp"
+            android:title="@string/pref_name_ui_keepScreenOn"
+            android:summary="@string/pref_desc_ui_keepScreenOn"
+            android:defaultValue="false"/>
         <PreferenceCategory
             android:key="@string/pref_key_ui_screenScrolling"
             android:title="@string/pref_categoryName_ui_screenScrolling"
             android:persistent="false">
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_volumeButtonsScrolling_enabled"
+                android:icon="@drawable/ic_volume_up_outline_24dp"
                 android:title="@string/pref_name_ui_volumeButtonsScrolling_enabled"
                 android:defaultValue="false"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_tapToScroll_enabled"
+                android:icon="@drawable/ic_touch_app_outline_24dp"
                 android:title="@string/pref_name_ui_tapToScroll_enabled"
                 android:summary="@string/pref_desc_ui_tapToScroll_enabled"
                 android:defaultValue="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.FloatEditTextPreference
                 android:key="@string/pref_key_ui_screenScrolling_percent"
+                android:icon="@drawable/ic_percent_outline_24dp"
+                android:dialogLayout="@layout/preference_dialog_text_input"
                 android:title="@string/pref_name_ui_screenScrolling_percent"
                 android:inputType="numberDecimal"
                 android:defaultValue="95"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_screenScrolling_smooth"
+                android:icon="@drawable/ic_unfold_more_outline_24dp"
                 android:title="@string/pref_name_ui_screenScrolling_smooth"
                 android:defaultValue="true"/>
         </PreferenceCategory>
@@ -151,52 +174,63 @@
             android:persistent="false">
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_showArticleAddedDialog_enabled"
+                android:icon="@drawable/ic_library_add_outline_24dp"
                 android:title="@string/pref_name_ui_showArticleAddedDialog"
                 android:summary="@string/pref_desc_ui_showArticleAddedDialog"
                 android:defaultValue="true"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_article_fullscreen"
+                android:icon="@drawable/ic_fullscreen_outline_24dp"
                 android:title="@string/pref_name_ui_article_fullscreen"
                 android:summary="@string/pref_desc_ui_article_fullscreen"
                 android:defaultValue="false"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_disableTouch_enabled"
+                android:icon="@drawable/ic_do_not_touch_outline_24dp"
                 android:title="@string/pref_name_ui_disableTouch_enabled"
                 android:summary="@string/pref_desc_ui_disableTouch_enabled"
                 android:defaultValue="false"/>
             <Preference
                 android:key="@string/pref_key_ui_disableTouch_keyCode"
+                android:icon="@drawable/ic_keyboard_outline_24dp"
                 android:title="@string/pref_name_ui_disableTouch_keyCode"
                 android:summary="@string/pref_desc_ui_disableTouch_keyCode"
                 android:persistent="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
                 android:key="@string/pref_key_ui_scrollOverBottom"
+                android:icon="@drawable/ic_vertical_align_bottom_outline_24dp"
+                android:dialogLayout="@layout/preference_dialog_text_input"
                 android:title="@string/pref_name_ui_scrollOverBottom"
                 android:summary="@string/pref_desc_ui_scrollOverBottom"
                 android:inputType="number"
                 android:defaultValue="3"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_swipeArticles"
+                android:icon="@drawable/ic_swipe_outline_24dp"
                 android:title="@string/pref_name_ui_swipeArticles"
                 android:summary="@string/pref_desc_ui_swipeArticles"
                 android:defaultValue="false"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_previewImage_enabled"
+                android:icon="@drawable/ic_image_outline_24dp"
                 android:title="@string/pref_name_ui_previewImage_enabled"
                 android:summary="@string/pref_desc_ui_previewImage_enabled"
                 android:defaultValue="true"/>
             <CheckBoxPreference
                 android:defaultValue="false"
                 android:key="@string/pref_key_ui_annotations_enabled"
+                android:icon="@drawable/ic_edit_note_outline_24dp"
                 android:summary="@string/pref_desc_ui_annotations_enabled"
                 android:title="@string/pref_name_ui_annotations_enabled" />
             <CheckBoxPreference
                 android:key="@string/pref_key_ui_mathRendering_enabled"
+                android:icon="@drawable/ic_functions_outline_24dp"
                 android:title="@string/pref_name_ui_mathRendering_enabled"
                 android:summary="@string/pref_desc_ui_mathRendering_enabled"
                 android:defaultValue="false"/>
             <MultiSelectListPreference
                 android:key="@string/pref_key_ui_mathRendering_delimiters"
+                android:icon="@drawable/ic_data_object_outline_24dp"
                 android:title="@string/pref_name_ui_mathRendering_delimiters"
                 android:summary="@string/pref_desc_ui_mathRendering_delimiters"
                 android:dialogTitle="@string/pref_name_ui_mathRendering_delimiters"
@@ -207,88 +241,94 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/pref_key_tts"
+        android:icon="@drawable/ic_record_voice_over_outline_24dp"
         android:persistent="false"
         android:title="@string/pref_categoryName_tts">
-        <PreferenceCategory
-            android:key="@string/pref_key_tts_category"
-            android:title="@string/pref_categoryName_tts"
-            android:persistent="false">
-            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
-                android:key="@string/pref_key_tts_fastForwardTime"
-                android:title="@string/pref_name_tts_fastForwardTime"
-                android:summary="@string/pref_desc_tts_fastForwardTime"
-                android:inputType="number"
-                android:defaultValue="30" />
-            <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
-                android:key="@string/pref_key_tts_rewindTime"
-                android:title="@string/pref_name_tts_rewindTime"
-                android:summary="@string/pref_desc_tts_rewindTime"
-                android:inputType="number"
-                android:defaultValue="10" />
-            <CheckBoxPreference
-                android:key="@string/pref_key_tts_nextButtonIsFastForward"
-                android:title="@string/pref_name_tts_nextButtonIsFastForward"
-                android:summary="@string/pref_desc_tts_nextButtonIsFastForward"
-                android:defaultValue="true" />
-            <CheckBoxPreference
-                android:key="@string/pref_key_tts_previousButtonIsRewind"
-                android:title="@string/pref_name_tts_previousButtonIsRewind"
-                android:summary="@string/pref_desc_tts_previousButtonIsRewind"
-                android:defaultValue="true" />
-            <CheckBoxPreference
-                android:key="@string/pref_key_tts_usePreviewAsAlbumArt"
-                android:title="@string/pref_name_tts_showPreviewAsAlbumArt"
-                android:summary="@string/pref_desc_tts_showPreviewAsAlbumArt"
-                android:defaultValue="true" />
-        </PreferenceCategory>
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+            android:key="@string/pref_key_tts_fastForwardTime"
+            android:icon="@drawable/ic_fast_forward_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_tts_fastForwardTime"
+            android:summary="@string/pref_desc_tts_fastForwardTime"
+            android:inputType="number"
+            android:defaultValue="30" />
+        <fr.gaulupeau.apps.Poche.ui.preferences.IntEditTextPreference
+            android:key="@string/pref_key_tts_rewindTime"
+            android:icon="@drawable/ic_fast_rewind_outline_24dp"
+            android:dialogLayout="@layout/preference_dialog_text_input"
+            android:title="@string/pref_name_tts_rewindTime"
+            android:summary="@string/pref_desc_tts_rewindTime"
+            android:inputType="number"
+            android:defaultValue="10" />
+        <CheckBoxPreference
+            android:key="@string/pref_key_tts_nextButtonIsFastForward"
+            android:icon="@drawable/ic_skip_next_outline_24dp"
+            android:title="@string/pref_name_tts_nextButtonIsFastForward"
+            android:summary="@string/pref_desc_tts_nextButtonIsFastForward"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="@string/pref_key_tts_previousButtonIsRewind"
+            android:icon="@drawable/ic_skip_previous_outline_24dp"
+            android:title="@string/pref_name_tts_previousButtonIsRewind"
+            android:summary="@string/pref_desc_tts_previousButtonIsRewind"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+            android:key="@string/pref_key_tts_usePreviewAsAlbumArt"
+            android:icon="@drawable/ic_album_outline_24dp"
+            android:title="@string/pref_name_tts_showPreviewAsAlbumArt"
+            android:summary="@string/pref_desc_tts_showPreviewAsAlbumArt"
+            android:defaultValue="true" />
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/pref_key_sync"
+        android:icon="@drawable/ic_sync_outline_24dp"
         android:title="@string/pref_categoryName_sync"
         android:persistent="false">
-        <PreferenceCategory
-            android:key="@string/pref_key_sync_category"
-            android:title="@string/pref_categoryName_sync"
-            android:persistent="false">
-            <Preference
-                android:key="@string/pref_key_sync_syncTypes_description"
-                android:title="@string/pref_name_sync_syncTypes"
-                android:summary="@string/pref_desc_sync_syncTypes"
-                android:persistent="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_sync_sweepingAfterFastSync_enabled"
-                android:title="@string/pref_name_sync_sweepingAfterFastSync_enabled"
-                android:summary="@string/pref_desc_sync_sweepingAfterFastSync_enabled"
-                android:defaultValue="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_imageCache_enabled"
-                android:title="@string/pref_name_imageCache_enabled"
-                android:summary="@string/pref_desc_imageCache_enabled"
-                android:defaultValue="false"/>
-        </PreferenceCategory>
+        <Preference
+            android:key="@string/pref_key_sync_syncTypes_description"
+            android:icon="@drawable/ic_info_outline_24dp"
+            android:title="@string/pref_name_sync_syncTypes"
+            android:summary="@string/pref_desc_sync_syncTypes"
+            android:persistent="false"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_sync_sweepingAfterFastSync_enabled"
+            android:icon="@drawable/ic_cleaning_services_outline_24dp"
+            android:title="@string/pref_name_sync_sweepingAfterFastSync_enabled"
+            android:summary="@string/pref_desc_sync_sweepingAfterFastSync_enabled"
+            android:defaultValue="false"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_imageCache_enabled"
+            android:icon="@drawable/ic_photo_library_outline_24dp"
+            android:title="@string/pref_name_imageCache_enabled"
+            android:summary="@string/pref_desc_imageCache_enabled"
+            android:defaultValue="false"/>
         <PreferenceCategory
             android:key="@string/pref_key_autoSync_category"
             android:title="@string/pref_categoryName_autoSync"
             android:persistent="false">
             <CheckBoxPreference
                 android:key="@string/pref_key_autoSync_onStartup_enabled"
+                android:icon="@drawable/ic_power_settings_new_outline_24dp"
                 android:title="@string/pref_name_autoSync_onStartup_enabled"
                 android:summary="@string/pref_decs_autoSync_onStartup_enabled"
                 android:defaultValue="true"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_autoSync_enabled"
+                android:icon="@drawable/ic_update_outline_24dp"
                 android:title="@string/pref_name_autoSync_enabled"
                 android:summary="@string/pref_desc_autoSync_enabled"
                 android:defaultValue="false"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.LongListPreference
                 android:dependency="@string/pref_key_autoSync_enabled"
                 android:key="@string/pref_key_autoSync_interval"
+                android:icon="@drawable/ic_schedule_outline_24dp"
                 android:title="@string/pref_name_autoSync_interval"
                 android:dialogTitle="@string/pref_name_autoSync_interval"
                 android:defaultValue="86400000"/>
             <fr.gaulupeau.apps.Poche.ui.preferences.IntListPreference
                 android:dependency="@string/pref_key_autoSync_enabled"
                 android:key="@string/pref_key_autoSync_type"
+                android:icon="@drawable/ic_sync_alt_outline_24dp"
                 android:title="@string/pref_name_autoSync_type"
                 android:dialogTitle="@string/pref_name_autoSync_type"
                 android:entries="@array/pref_option_autoSync_type"
@@ -296,6 +336,7 @@
                 android:defaultValue="0"/>
             <CheckBoxPreference
                 android:key="@string/pref_key_autoSyncQueue_enabled"
+                android:icon="@drawable/ic_cloud_upload_outline_24dp"
                 android:title="@string/pref_name_autoSyncQueue_enabled"
                 android:summary="@string/pref_desc_autoSyncQueue_enabled"
                 android:defaultValue="false"/>
@@ -303,73 +344,75 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="@string/pref_key_misc"
+        android:icon="@drawable/ic_miscellaneous_services_outline_24dp"
         android:title="@string/pref_categoryName_miscellaneous"
         android:persistent="false">
-        <PreferenceCategory
-            android:key="@string/pref_key_misc_category"
-            android:title="@string/pref_categoryName_miscellaneous"
-            android:persistent="false">
-            <CheckBoxPreference
-                android:key="@string/pref_key_misc_addTitleToSharedText_enabled"
-                android:title="@string/pref_name_misc_addTitleToSharedText"
-                android:summary="@string/pref_desc_misc_addTitleToSharedText"
-                android:defaultValue="true"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_misc_appendWallabagMention_enabled"
-                android:title="@string/pref_name_misc_appendWallabagMention"
-                android:summary="@string/pref_desc_misc_appendWallabagMention"
-                android:defaultValue="true"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_misc_handleHttpScheme"
-                android:title="@string/pref_name_misc_handleHttpScheme"
-                android:summary="@string/pref_desc_misc_handleHttpScheme"
-                android:defaultValue="false"
-                android:persistent="false"/>
-            <CheckBoxPreference
-                android:key="@string/pref_key_misc_ftsIcuTokenizer_enabled"
-                android:title="@string/pref_name_misc_ftsIcuTokenizer_enabled"
-                android:summary="@string/pref_desc_misc_ftsIcuTokenizer_enabled"
-                android:defaultValue="false"/>
-            <ListPreference
-                android:key="@string/pref_key_storage_dbPath"
-                android:title="@string/pref_name_storage_dbPath"
-                android:dialogTitle="@string/pref_name_storage_dbPath"
-                android:defaultValue=""/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_misc_addTitleToSharedText_enabled"
+            android:icon="@drawable/ic_title_outline_24dp"
+            android:title="@string/pref_name_misc_addTitleToSharedText"
+            android:summary="@string/pref_desc_misc_addTitleToSharedText"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_misc_appendWallabagMention_enabled"
+            android:icon="@drawable/ic_alternate_email_outline_24dp"
+            android:title="@string/pref_name_misc_appendWallabagMention"
+            android:summary="@string/pref_desc_misc_appendWallabagMention"
+            android:defaultValue="true"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_misc_handleHttpScheme"
+            android:icon="@drawable/ic_open_in_browser_outline_24dp"
+            android:title="@string/pref_name_misc_handleHttpScheme"
+            android:summary="@string/pref_desc_misc_handleHttpScheme"
+            android:defaultValue="false"
+            android:persistent="false"/>
+        <CheckBoxPreference
+            android:key="@string/pref_key_misc_ftsIcuTokenizer_enabled"
+            android:icon="@drawable/ic_manage_search_outline_24dp"
+            android:title="@string/pref_name_misc_ftsIcuTokenizer_enabled"
+            android:summary="@string/pref_desc_misc_ftsIcuTokenizer_enabled"
+            android:defaultValue="false"/>
+        <ListPreference
+            android:key="@string/pref_key_storage_dbPath"
+            android:icon="@drawable/ic_storage_outline_24dp"
+            android:title="@string/pref_name_storage_dbPath"
+            android:dialogTitle="@string/pref_name_storage_dbPath"
+            android:defaultValue=""/>
+        <Preference
+            android:key="@string/pref_key_misc_wipeDB"
+            android:icon="@drawable/ic_delete_forever_outline_24dp"
+            android:title="@string/pref_name_misc_wipeDB"
+            android:summary="@string/pref_desc_misc_wipeDB"
+            android:persistent="false"/>
+        <PreferenceScreen
+            android:key="@string/pref_key_misc_localQueue"
+            android:icon="@drawable/ic_queue_outline_24dp"
+            android:persistent="false"
+            android:title="@string/pref_categoryName_misc_localQueue">
             <Preference
-                android:key="@string/pref_key_misc_wipeDB"
-                android:title="@string/pref_name_misc_wipeDB"
-                android:summary="@string/pref_desc_misc_wipeDB"
-                android:persistent="false"/>
-            <PreferenceScreen
-                android:key="@string/pref_key_misc_localQueue"
+                android:key="@string/pref_key_misc_localQueue_notice"
+                android:icon="@drawable/ic_info_outline_24dp"
                 android:persistent="false"
-                android:title="@string/pref_categoryName_misc_localQueue">
-                <PreferenceCategory
-                    android:key="@string/pref_key_misc_localQueue_category"
-                    android:persistent="false"
-                    android:title="@string/pref_categoryName_misc_localQueue">
-                    <Preference
-                        android:key="@string/pref_key_misc_localQueue_notice"
-                        android:persistent="false"
-                        android:summary="@string/pref_desc_misc_localQueue_notice"
-                        android:title="@string/pref_name_misc_localQueue_notice" />
-                    <Preference
-                        android:key="@string/pref_key_misc_localQueue_dumpToFile"
-                        android:persistent="false"
-                        android:summary="@string/pref_desc_misc_localQueue_dumpToFile"
-                        android:title="@string/pref_name_misc_localQueue_dumpToFile" />
-                    <Preference
-                        android:key="@string/pref_key_misc_localQueue_removeFirstItem"
-                        android:persistent="false"
-                        android:summary="@string/pref_desc_misc_localQueue_removeFirstItem"
-                        android:title="@string/pref_name_misc_localQueue_removeFirstItem" />
-                </PreferenceCategory>
-            </PreferenceScreen>
+                android:summary="@string/pref_desc_misc_localQueue_notice"
+                android:title="@string/pref_name_misc_localQueue_notice" />
             <Preference
-                android:key="@string/pref_key_misc_logging_logcatToFile"
+                android:key="@string/pref_key_misc_localQueue_dumpToFile"
+                android:icon="@drawable/ic_save_outline_24dp"
                 android:persistent="false"
-                android:summary="@string/pref_desc_misc_logging_logcatToFile"
-                android:title="@string/pref_name_misc_logging_logcatToFile" />
-        </PreferenceCategory>
+                android:summary="@string/pref_desc_misc_localQueue_dumpToFile"
+                android:title="@string/pref_name_misc_localQueue_dumpToFile" />
+            <Preference
+                android:key="@string/pref_key_misc_localQueue_removeFirstItem"
+                android:icon="@drawable/ic_remove_circle_outline_24dp"
+                android:persistent="false"
+                android:summary="@string/pref_desc_misc_localQueue_removeFirstItem"
+                android:title="@string/pref_name_misc_localQueue_removeFirstItem" />
+        </PreferenceScreen>
+        <Preference
+            android:key="@string/pref_key_misc_logging_logcatToFile"
+            android:icon="@drawable/ic_bug_report_outline_24dp"
+            android:persistent="false"
+            android:summary="@string/pref_desc_misc_logging_logcatToFile"
+            android:title="@string/pref_name_misc_logging_logcatToFile" />
     </PreferenceScreen>
 </PreferenceScreen>

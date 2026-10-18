@@ -9,10 +9,14 @@ public abstract class BaseActionBarActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Themes.applyTheme(this);
+        Themes.applyTheme(this, !hasOwnToolbar());
         super.onCreate(savedInstanceState);
 
         addBackButtonToActionBar();
+    }
+
+    protected boolean hasOwnToolbar() {
+        return false;
     }
 
     @Override

@@ -1,10 +1,13 @@
 package fr.gaulupeau.apps.Poche.ui.preferences;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +20,8 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
@@ -44,6 +49,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     private static final String TAG = "ConnectionWizard";
 
     private static final int REQUEST_CODE_QR_CODE = 1;
+    private static final int REQUEST_CODE_NOTIFICATIONS_PERMISSION = 2;
 
     private static final String DATA_PROVIDER = "provider";
     private static final String DATA_URL = "url";
@@ -80,9 +86,13 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_connection_wizard);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+        setSupportActionBar(findViewById(R.id.toolbar));
+        addBackButtonToActionBar();
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.wizard_root), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             return windowInsets;
@@ -157,10 +167,19 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 currentPage = PAGE_WELCOME;
             }
 
+            if(currentPage == null) {
+                requestNotificationPermission();
+            }
+
             next(currentPage, bundle, true);
         } else {
             Log.d(TAG, "onCreate() savedInstanceState != null");
         }
+    }
+
+    @Override
+    protected boolean hasOwnToolbar() {
+        return true;
     }
 
     @Override
@@ -218,6 +237,17 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
         }
 
         return new ConnectionData(username, password, values[1]);
+    }
+
+    private void requestNotificationPermission() {
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.POST_NOTIFICATIONS},
+                    REQUEST_CODE_NOTIFICATIONS_PERMISSION);
+        }
     }
 
     private void scanQrCode() {
@@ -302,7 +332,7 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
             goToFragment.setArguments(bundle);
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, goToFragment)
+                    .replace(R.id.wizard_container, goToFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             if(!noBackStack && !PAGE_NONE.equals(currentPage)) ft.addToBackStack(null);
             ft.commitAllowingStateLoss();

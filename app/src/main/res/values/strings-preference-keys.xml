@@ -3,7 +3,6 @@
     <string name="pref_key_main" translatable="false">main</string>
 
     <string name="pref_key_connection" translatable="false">connection</string>
-    <string name="pref_key_connection_category" translatable="false">connection.category</string>
     <string name="pref_key_connection_url" translatable="false">connection.url</string>
     <string name="pref_key_connection_username" translatable="false">connection.username</string>
     <string name="pref_key_connection_password" translatable="false">connection.password</string>
@@ -18,7 +17,6 @@
     <string name="pref_key_connection_advanced_httpAuthPassword" translatable="false">connection.advanced.httpAuthPassword</string>
 
     <string name="pref_key_ui" translatable="false">ui</string>
-    <string name="pref_key_ui_category" translatable="false">ui.category</string>
     <string name="pref_key_ui_article_fontSize" translatable="false">ui.article.fontSize</string>
     <string name="pref_key_ui_article_fontSerif" translatable="false">ui.article.fontSerif</string>
     <string name="pref_key_ui_article_textAlignment_justify" translatable="false">ui.article.textAlignment.justify</string>
@@ -48,7 +46,6 @@
     <string name="pref_key_ui_mathRendering_delimiters" translatable="false">ui.mathRendering.delimiters</string>
 
     <string name="pref_key_tts" translatable="false">tts</string>
-    <string name="pref_key_tts_category" translatable="false">tts.category</string>
     <string name="pref_key_tts_fastForwardTime" translatable="false">tts.fastForwardTime</string>
     <string name="pref_key_tts_rewindTime" translatable="false">tts.rewindTime</string>
     <string name="pref_key_tts_nextButtonIsFastForward" translatable="false">tts.nextButtonIsFastForward</string>
@@ -64,7 +61,6 @@
     <string name="pref_key_tts_autoplayNext" translatable="false">tts.autoplayNext</string>
 
     <string name="pref_key_sync" translatable="false">sync</string>
-    <string name="pref_key_sync_category" translatable="false">sync.category</string>
     <string name="pref_key_sync_syncTypes_description" translatable="false">sync.category.description</string>
     <string name="pref_key_sync_sweepingAfterFastSync_enabled" translatable="false">sync.sweepingAfterFastSync.enabled</string>
     <string name="pref_key_autoSync" translatable="false">autoSync</string>
@@ -79,14 +75,12 @@
     <string name="pref_key_storage_dbPath" translatable="false">storage.dbPath</string>
 
     <string name="pref_key_misc" translatable="false">misc</string>
-    <string name="pref_key_misc_category" translatable="false">misc.category</string>
     <string name="pref_key_misc_addTitleToSharedText_enabled" translatable="false">misc.addTitleToSharedText.enabled</string>
     <string name="pref_key_misc_appendWallabagMention_enabled" translatable="false">misc.appendWallabagMention.enabled</string>
     <string name="pref_key_misc_handleHttpScheme" translatable="false">misc.handleHttpScheme</string>
     <string name="pref_key_misc_ftsIcuTokenizer_enabled" translatable="false">misc.ftsIcuTokenizer.enabled</string>
     <string name="pref_key_misc_wipeDB" translatable="false">misc.wipeDB</string>
     <string name="pref_key_misc_localQueue" translatable="false">misc.localQueue</string>
-    <string name="pref_key_misc_localQueue_category" translatable="false">misc.localQueue.category</string>
     <string name="pref_key_misc_localQueue_notice" translatable="false">misc.localQueue.notice</string>
     <string name="pref_key_misc_localQueue_dumpToFile" translatable="false">misc.localQueue.dumpToFile</string>
     <string name="pref_key_misc_localQueue_removeFirstItem" translatable="false">misc.localQueue.removeFirstItem</string>

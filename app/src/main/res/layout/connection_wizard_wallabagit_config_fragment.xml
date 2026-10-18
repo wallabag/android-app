@@ -33,8 +33,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="?android:attr/textColorPrimary"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textColor="?attr/colorOnSurface"
                 android:text="@string/connectionWizard_provider_wallabagit_titleMessage"/>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -67,33 +67,30 @@
         </LinearLayout>
     </ScrollView>
 
-    <View android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerHorizontal" />
-
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp">
 
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Material3.Button.TextButton"
             android:id="@+id/prev_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connectionWizard_provider_wallabagit_prev" />
 
-        <View android:layout_width="1dp"
-            android:layout_height="fill_parent"
-            android:background="?android:attr/dividerVertical" />
-
-        <Button
-            style="?android:attr/buttonBarButtonStyle"
-            android:id="@+id/next_button"
+        <Space
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/connectionWizard_provider_wallabagit_next" />
 

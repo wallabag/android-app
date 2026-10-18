@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -29,6 +27,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
@@ -39,9 +38,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
-import com.mikepenz.aboutlibraries.Libs;
-import com.mikepenz.aboutlibraries.LibsBuilder;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity
     private ConfigurationTestHelper configurationTestHelper;
 
     private ProgressBar progressBar;
+
+    private BottomNavigationView bottomNavigation;
 
     private NavigationView navigationView;
     private TextView lastUpdateTimeView;
@@ -188,8 +190,14 @@ public class MainActivity extends AppCompatActivity
             // Apply padding to the main content (first child) so it's not under the status bar
             View content = drawer.getChildAt(0);
             if (content != null) {
-                content.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+                content.setPadding(insets.left, insets.top, insets.right, 0);
             }
+
+            View contentFrame = findViewById(R.id.main_content_frame);
+            if (contentFrame != null) {
+                contentFrame.setPadding(0, 0, 0, insets.bottom);
+            }
+
             // Pass insets to other children (like NavigationView)
             return windowInsets;
         });
@@ -226,6 +234,13 @@ public class MainActivity extends AppCompatActivity
         });
 
         progressBar = findViewById(R.id.progressBar);
+
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        ViewCompat.setOnApplyWindowInsetsListener(bottomNavigation, (v, windowInsets) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(v.getPaddingLeft(), v.getPaddingTop(), v.getPaddingRight(), insets.bottom);
+            return windowInsets;
+        });
 
         firstSyncDone = settings.isFirstSyncDone();
 
@@ -338,6 +353,7 @@ public class MainActivity extends AppCompatActivity
 
         AppBarLayout appBarLayout = findViewById(R.id.app_bar);
         appBarLayout.setExpanded(true, true);
+        showBottomNavigation();
 
         // TODO: check logic
         if (checkConfigurationOnResume) {
@@ -345,7 +361,7 @@ public class MainActivity extends AppCompatActivity
 
             if (!Settings.checkFirstRunInit(this)) {
                 if (!settings.isConfigurationOk() && checkConfigurationDialog == null) {
-                    AlertDialog.Builder messageBox = new AlertDialog.Builder(this);
+                    MaterialAlertDialogBuilder messageBox = new MaterialAlertDialogBuilder(this);
                     messageBox.setTitle(settings.isConfigurationErrorShown()
                             ? R.string.d_configurationIsQuestionable_title
                             : R.string.d_configurationChanged_title);
@@ -499,27 +515,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.nav_about:
-                Libs.ActivityStyle style;
-                switch (Themes.getCurrentTheme()) {
-                    case DARK:
-                    case DARK_CONTRAST:
-                        style = Libs.ActivityStyle.DARK;
-                        break;
-
-                    default:
-                        style = Libs.ActivityStyle.LIGHT_DARK_TOOLBAR;
-                        break;
-                }
-                CharSequence aboutCharSequence = getText(R.string.aboutText);
-                String aboutString = aboutCharSequence instanceof Spanned
-                        ? Html.toHtml((Spanned) aboutCharSequence)
-                        : aboutCharSequence.toString();
-                new LibsBuilder()
-                        .withActivityStyle(style)
-                        .withAboutIconShown(true)
-                        .withAboutVersionShown(true)
-                        .withAboutDescription(aboutString)
-                        .start(this);
+                startActivity(new Intent(getBaseContext(), AboutActivity.class));
                 break;
         }
 
@@ -800,7 +796,41 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
+    private void updateBottomNavigation(String type) {
+        if (bottomNavigation == null) {
+            return;
+        }
+
+        boolean articleLists = FRAGMENT_ARTICLE_LISTS.equals(type)
+            || FRAGMENT_TAGGED_ARTICLE_LISTS.equals(type)
+        ;
+
+        bottomNavigation.setVisibility(articleLists ? View.VISIBLE : View.GONE);
+
+        if (articleLists) {
+            showBottomNavigation();
+        }
+    }
+
+    private void showBottomNavigation() {
+        if (bottomNavigation == null) {
+            return;
+        }
+
+        CoordinatorLayout.Behavior<?> behavior = ((CoordinatorLayout.LayoutParams)
+            bottomNavigation.getLayoutParams()).getBehavior()
+        ;
+
+        if (behavior instanceof HideBottomViewOnScrollBehavior) {
+            ((HideBottomViewOnScrollBehavior<BottomNavigationView>) behavior)
+                .slideUp(bottomNavigation)
+            ;
+        }
+    }
+
     private void updateNavigationUI(String type) {
+        updateBottomNavigation(type);
+
         if (type == null || navigationView == null) return;
 
         if (FRAGMENT_TAGGED_ARTICLE_LISTS.equals(currentFragmentType)) {
@@ -953,7 +983,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showAddBagDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(R.string.dialog_add_label);
 
         @SuppressLint("InflateParams")
