@@ -2,6 +2,7 @@ package fr.gaulupeau.apps.Poche.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,7 +31,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -64,6 +66,7 @@ import fr.gaulupeau.apps.Poche.tts.JsTtsController;
 import fr.gaulupeau.apps.Poche.tts.TtsFragment;
 import fr.gaulupeau.apps.Poche.tts.TtsHost;
 
+import androidx.annotation.AttrRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -914,6 +917,10 @@ public class ReadArticleActivity extends AppCompatActivity {
         String htmlBase = getHtmlBase();
 
         String extraHead = getExtraHead();
+        Themes.Theme currentTheme = Themes.getCurrentTheme();
+        if (currentTheme == Themes.Theme.LIGHT || currentTheme == Themes.Theme.DARK) {
+            extraHead = getMaterialColorsHead() + extraHead;
+        }
         String stats = getStats();
         String tags = getTags();
         String previewImage = getPreviewImage();
@@ -948,6 +955,26 @@ public class ReadArticleActivity extends AppCompatActivity {
         }
 
         return extra;
+    }
+
+    // Makes the article use the same colors as the app
+    private String getMaterialColorsHead() {
+        return "\n\t\t<style>:root { " +
+            getCssColorVariable("--md-surface", R.attr.colorSurface) +
+            getCssColorVariable("--md-surface-container-high", R.attr.colorSurfaceContainerHigh) +
+            getCssColorVariable("--md-on-surface", R.attr.colorOnSurface) +
+            getCssColorVariable("--md-on-surface-variant", R.attr.colorOnSurfaceVariant) +
+            getCssColorVariable("--md-primary", R.attr.colorPrimary) +
+            getCssColorVariable("--md-primary-container", R.attr.colorPrimaryContainer) +
+            getCssColorVariable("--md-on-primary-container", R.attr.colorOnPrimaryContainer) +
+            getCssColorVariable("--md-outline", R.attr.colorOutline) +
+            getCssColorVariable("--md-outline-variant", R.attr.colorOutlineVariant) +
+        "}</style><link rel=\"stylesheet\" href=\"material.css\" media=\"all\" id=\"material-theme\">";
+    }
+
+    private String getCssColorVariable(String name, @AttrRes int colorAttr) {
+        int color = MaterialColors.getColor(this, colorAttr, Color.BLACK);
+        return String.format("%s: #%06X; ", name, color & 0xFFFFFF);
     }
 
     private String getStats() {
@@ -1081,7 +1108,7 @@ public class ReadArticleActivity extends AppCompatActivity {
 
         v.<TextView>findViewById(R.id.tv_dialog_title_url).setText(url);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this)
                 .setCustomTitle(v);
 
         builder.setItems(

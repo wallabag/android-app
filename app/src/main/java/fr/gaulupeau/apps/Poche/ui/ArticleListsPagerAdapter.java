@@ -1,5 +1,6 @@
 package fr.gaulupeau.apps.Poche.ui;
 
+import androidx.annotation.DrawableRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -40,6 +41,18 @@ class ArticleListsPagerAdapter extends CachingPagerAdapter {
                 return App.getInstance().getString(R.string.feedName_archived);
             default:
                 return App.getInstance().getString(R.string.feedName_unread);
+        }
+    }
+
+    @DrawableRes
+    int getPageIcon(int position) {
+        switch(PAGES[position]) {
+            case LIST_TYPE_FAVORITES:
+                return R.drawable.ic_star_outline_24dp;
+            case LIST_TYPE_ARCHIVED:
+                return R.drawable.ic_archive_outline_24dp;
+            default:
+                return R.drawable.ic_inbox_outline_24dp;
         }
     }
 

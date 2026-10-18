@@ -1,8 +1,13 @@
 package fr.gaulupeau.apps.Poche.ui;
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+
 import androidx.annotation.StringRes;
 import androidx.annotation.StyleRes;
+
+import com.google.android.material.color.DynamicColors;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -25,7 +30,7 @@ public class Themes {
     }
 
     public static Theme getCurrentTheme() {
-        return theme;
+        return theme.resolve();
     }
 
     public static void applyTheme(Activity activity) {
@@ -33,21 +38,38 @@ public class Themes {
     }
 
     public static void applyTheme(Activity activity, boolean actionBar) {
-        activity.setTheme(actionBar ? theme.getResId() : theme.getNoActionBarResId());
-        appliedThemes.put(activity, theme);
+        Theme currentTheme = getCurrentTheme();
+        activity.setTheme(actionBar ? currentTheme.getResId() : currentTheme.getNoActionBarResId());
+        applyDynamicColors(activity, currentTheme);
+        appliedThemes.put(activity, currentTheme);
     }
 
     public static void applyDialogTheme(Activity activity) {
-        activity.setTheme(theme.getDialogResId());
-        appliedThemes.put(activity, theme);
+        Theme currentTheme = getCurrentTheme();
+        activity.setTheme(currentTheme.getDialogResId());
+        applyDynamicColors(activity, currentTheme);
+        appliedThemes.put(activity, currentTheme);
+    }
+
+    private static void applyDynamicColors(Activity activity, Theme currentTheme) {
+        if(currentTheme.isDynamicColorsSupported()) {
+            DynamicColors.applyToActivityIfAvailable(activity);
+        }
     }
 
     public static void checkTheme(Activity activity) {
         Theme appliedTheme = appliedThemes.get(activity);
-        if(appliedTheme != theme) activity.recreate();
+        if(appliedTheme != getCurrentTheme()) activity.recreate();
     }
 
     public enum Theme {
+        SYSTEM(
+                R.string.themeName_system,
+                R.style.LightTheme,
+                R.style.LightTheme_NoActionBar,
+                R.style.DialogTheme
+        ),
+
         LIGHT(
                 R.string.themeName_light,
                 R.style.LightTheme,
@@ -117,6 +139,22 @@ public class Themes {
 
         public @StyleRes int getDialogResId() {
             return dialogResId;
+        }
+
+        public Theme resolve() {
+            if(this != SYSTEM) {
+                return this;
+            }
+
+            int nightMode = Resources.getSystem().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK
+            ;
+
+            return nightMode == Configuration.UI_MODE_NIGHT_YES ? DARK : LIGHT;
+        }
+
+        public boolean isDynamicColorsSupported() {
+            return this == LIGHT || this == DARK;
         }
 
     }

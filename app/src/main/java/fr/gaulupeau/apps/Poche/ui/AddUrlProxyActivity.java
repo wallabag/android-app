@@ -6,8 +6,9 @@ import android.util.Log;
 import android.util.Patterns;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.regex.Matcher;
 
@@ -38,7 +39,7 @@ public class AddUrlProxyActivity extends AppCompatActivity {
                 && (matcher = Patterns.WEB_URL.matcher(extraText)).find()) {
             foundUrl = matcher.group();
         } else {
-            new AlertDialog.Builder(this)
+            new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.d_add_fail_title)
                     .setMessage(getString(R.string.d_add_fail_text) + extraText)
                     .setPositiveButton(R.string.ok, null)

@@ -24,18 +24,57 @@
         <attr name="icon_open" format="reference"/>
     </declare-styleable>
 
-    <style name="LightTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="MaterialAlertDialogThemeOverlay" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+    </style>
+
+    <style name="LightTheme" parent="Theme.Material3.Light">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_on_primary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_on_primary_container</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_on_secondary_container</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_light_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_on_tertiary_container</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="colorOnError">@color/md_theme_light_on_error</item>
+        <item name="colorErrorContainer">@color/md_theme_light_error_container</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_on_error_container</item>
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorOnBackground">@color/md_theme_light_on_background</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_on_surface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_on_surface_variant</item>
+        <item name="colorOutline">@color/md_theme_light_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_light_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inverse_primary</item>
+        <item name="colorSurfaceDim">@color/md_theme_light_surface_dim</item>
+        <item name="colorSurfaceBright">@color/md_theme_light_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_light_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_light_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/md_theme_light_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_light_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_light_surface_container_highest</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="alertDialogTheme">@style/MaterialAlertDialogThemeOverlay</item>
         <item name="appBarOverlayTheme">@style/LightTheme.AppBarOverlay</item>
         <item name="popupOverlayTheme">@style/LightTheme.PopupOverlay</item>
-        <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
+        <item name="icon_favorite">@drawable/ic_star_border_black_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_black_24dp</item>
-        <item name="icon_favorite_undo">@drawable/ic_star_white_24dp</item>
-        <item name="icon_read">@drawable/ic_done_white_24dp</item>
+        <item name="icon_favorite_undo">@drawable/ic_star_black_24dp</item>
+        <item name="icon_read">@drawable/ic_done_black_24dp</item>
         <item name="icon_read_list">@drawable/ic_done_black_24dp</item>
-        <item name="icon_read_undo">@drawable/ic_undo_white_24dp</item>
-        <item name="icon_search">@drawable/ic_search_white_24dp</item>
-        <item name="icon_sort">@drawable/ic_sort_white_24dp</item>
+        <item name="icon_read_undo">@drawable/ic_undo_black_24dp</item>
+        <item name="icon_search">@drawable/ic_search_black_24dp</item>
+        <item name="icon_sort">@drawable/ic_sort_black_24dp</item>
         <item name="welcome_logo">@drawable/welcome</item>
         <item name="icon_running">@drawable/ic_running_24dp</item>
         <item name="icon_notes">@drawable/ic_musical_notes_24dp</item>
@@ -57,11 +96,41 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-    <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
-    <style name="LightTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="LightTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Toolbar.Surface"/>
+    <style name="LightTheme.PopupOverlay" parent=""/>
 
     <style name="LightThemeContrast" parent="LightTheme">
         <item name="android:textColor">#000000</item>
+        <item name="colorPrimary">@color/darkContrastBlack</item>
+        <item name="colorOnPrimary">@color/darkContrastWhite</item>
+        <item name="colorPrimaryContainer">@color/darkContrastBlack</item>
+        <item name="colorOnPrimaryContainer">@color/darkContrastWhite</item>
+        <item name="colorSecondary">@color/darkContrastBlack</item>
+        <item name="colorOnSecondary">@color/darkContrastWhite</item>
+        <item name="colorSecondaryContainer">@color/lightContrastGray</item>
+        <item name="colorOnSecondaryContainer">@color/darkContrastBlack</item>
+        <item name="colorTertiary">@color/darkContrastBlack</item>
+        <item name="colorOnTertiary">@color/darkContrastWhite</item>
+        <item name="colorTertiaryContainer">@color/lightContrastGray</item>
+        <item name="colorOnTertiaryContainer">@color/darkContrastBlack</item>
+        <item name="android:colorBackground">@color/darkContrastWhite</item>
+        <item name="colorOnBackground">@color/darkContrastBlack</item>
+        <item name="colorSurface">@color/darkContrastWhite</item>
+        <item name="colorOnSurface">@color/darkContrastBlack</item>
+        <item name="colorSurfaceVariant">@color/darkContrastWhite</item>
+        <item name="colorOnSurfaceVariant">@color/darkContrastBlack</item>
+        <item name="colorOutline">@color/darkContrastBlack</item>
+        <item name="colorOutlineVariant">@color/darkContrastGray</item>
+        <item name="colorSurfaceInverse">@color/darkContrastBlack</item>
+        <item name="colorOnSurfaceInverse">@color/darkContrastWhite</item>
+        <item name="colorPrimaryInverse">@color/darkContrastWhite</item>
+        <item name="colorSurfaceDim">@color/darkContrastWhite</item>
+        <item name="colorSurfaceBright">@color/darkContrastWhite</item>
+        <item name="colorSurfaceContainerLowest">@color/darkContrastWhite</item>
+        <item name="colorSurfaceContainerLow">@color/darkContrastWhite</item>
+        <item name="colorSurfaceContainer">@color/darkContrastWhite</item>
+        <item name="colorSurfaceContainerHigh">@color/darkContrastWhite</item>
+        <item name="colorSurfaceContainerHighest">@color/darkContrastWhite</item>
     </style>
 
     <style name="LightThemeContrast.NoActionBar">
@@ -70,8 +139,43 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.AppCompat">
+    <style name="DarkTheme" parent="Theme.Material3.Dark">
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_on_primary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_on_primary_container</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_on_secondary_container</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_on_tertiary_container</item>
+        <item name="colorError">@color/md_theme_dark_error</item>
+        <item name="colorOnError">@color/md_theme_dark_on_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_error_container</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_on_error_container</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_on_background</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_on_surface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_on_surface_variant</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_dark_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inverse_primary</item>
+        <item name="colorSurfaceDim">@color/md_theme_dark_surface_dim</item>
+        <item name="colorSurfaceBright">@color/md_theme_dark_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_dark_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_dark_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/md_theme_dark_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_dark_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_dark_surface_container_highest</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="alertDialogTheme">@style/MaterialAlertDialogThemeOverlay</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="icon_favorite">@drawable/ic_star_border_white_24dp</item>
         <item name="icon_favorite_list">@drawable/ic_star_white_24dp</item>
@@ -102,14 +206,43 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
-    <style name="DarkTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark"/>
+    <style name="DarkTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Toolbar.Surface"/>
+    <style name="DarkTheme.PopupOverlay" parent=""/>
 
     <style name="DarkThemeContrast" parent="DarkTheme">
         <item name="android:windowBackground">@color/darkContrastBlack</item>
         <item name="android:itemBackground">@color/darkContrastBlack</item> <!-- Background Color of Three-dots Menu -->
         <item name="android:textColor">#FFFFFF</item>
-        <item name="colorPrimary">#000000</item>
+        <item name="colorPrimary">@color/darkContrastWhite</item>
+        <item name="colorOnPrimary">@color/darkContrastBlack</item>
+        <item name="colorPrimaryContainer">@color/darkContrastWhite</item>
+        <item name="colorOnPrimaryContainer">@color/darkContrastBlack</item>
+        <item name="colorSecondary">@color/darkContrastWhite</item>
+        <item name="colorOnSecondary">@color/darkContrastBlack</item>
+        <item name="colorSecondaryContainer">@color/darkContrastDarkGray</item>
+        <item name="colorOnSecondaryContainer">@color/darkContrastWhite</item>
+        <item name="colorTertiary">@color/darkContrastWhite</item>
+        <item name="colorOnTertiary">@color/darkContrastBlack</item>
+        <item name="colorTertiaryContainer">@color/darkContrastDarkGray</item>
+        <item name="colorOnTertiaryContainer">@color/darkContrastWhite</item>
+        <item name="android:colorBackground">@color/darkContrastBlack</item>
+        <item name="colorOnBackground">@color/darkContrastWhite</item>
+        <item name="colorSurface">@color/darkContrastBlack</item>
+        <item name="colorOnSurface">@color/darkContrastWhite</item>
+        <item name="colorSurfaceVariant">@color/darkContrastBlack</item>
+        <item name="colorOnSurfaceVariant">@color/darkContrastWhite</item>
+        <item name="colorOutline">@color/darkContrastWhite</item>
+        <item name="colorOutlineVariant">@color/darkContrastGray</item>
+        <item name="colorSurfaceInverse">@color/darkContrastWhite</item>
+        <item name="colorOnSurfaceInverse">@color/darkContrastBlack</item>
+        <item name="colorPrimaryInverse">@color/darkContrastBlack</item>
+        <item name="colorSurfaceDim">@color/darkContrastBlack</item>
+        <item name="colorSurfaceBright">@color/darkContrastBlack</item>
+        <item name="colorSurfaceContainerLowest">@color/darkContrastBlack</item>
+        <item name="colorSurfaceContainerLow">@color/darkContrastBlack</item>
+        <item name="colorSurfaceContainer">@color/darkContrastBlack</item>
+        <item name="colorSurfaceContainerHigh">@color/darkContrastBlack</item>
+        <item name="colorSurfaceContainerHighest">@color/darkContrastBlack</item>
     </style>
 
     <style name="DarkThemeContrast.NoActionBar">
@@ -118,16 +251,44 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
 
-    <style name="SolarizedTheme" parent="Theme.AppCompat.Light" >
+    <style name="SolarizedTheme" parent="Theme.Material3.Light" >
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="alertDialogTheme">@style/MaterialAlertDialogThemeOverlay</item>
         <item name="android:colorBackground">@color/solarizedBase3</item>
         <item name="android:colorForeground">@color/solarizedBase01</item>
         <item name="android:textColor">@color/solarizedBase00</item>
         <item name="android:textColorPrimary">@color/solarizedBase01</item>
         <item name="android:textColorSecondary">@color/solarizedBase01</item>
         <item name="android:windowBackground">@color/solarizedBase3</item>
-        <item name="colorPrimary">@color/solarizedBase2</item>
-        <item name="colorAccent">@color/solarizedYellow</item>
+        <item name="colorPrimary">@color/solarizedYellow</item>
+        <item name="colorOnPrimary">@color/solarizedBase03</item>
+        <item name="colorPrimaryContainer">@color/solarizedBase2</item>
+        <item name="colorOnPrimaryContainer">@color/solarizedBase01</item>
+        <item name="colorSecondary">@color/solarizedBase01</item>
+        <item name="colorOnSecondary">@color/solarizedBase3</item>
+        <item name="colorSecondaryContainer">@color/solarizedBase2</item>
+        <item name="colorOnSecondaryContainer">@color/solarizedBase01</item>
+        <item name="colorTertiary">@color/solarizedCyan</item>
+        <item name="colorOnTertiary">@color/solarizedBase3</item>
+        <item name="colorTertiaryContainer">@color/solarizedBase2</item>
+        <item name="colorOnTertiaryContainer">@color/solarizedBase01</item>
+        <item name="colorOnBackground">@color/solarizedBase01</item>
+        <item name="colorSurface">@color/solarizedBase3</item>
+        <item name="colorOnSurface">@color/solarizedBase01</item>
+        <item name="colorSurfaceVariant">@color/solarizedBase2</item>
+        <item name="colorOnSurfaceVariant">@color/solarizedBase00</item>
+        <item name="colorOutline">@color/solarizedBase1</item>
+        <item name="colorOutlineVariant">@color/solarizedBase2</item>
+        <item name="colorSurfaceInverse">@color/solarizedBase02</item>
+        <item name="colorOnSurfaceInverse">@color/solarizedBase2</item>
+        <item name="colorPrimaryInverse">@color/solarizedYellow</item>
+        <item name="colorSurfaceDim">@color/solarizedBase2</item>
+        <item name="colorSurfaceBright">@color/solarizedBase3</item>
+        <item name="colorSurfaceContainerLowest">@color/solarizedBase3</item>
+        <item name="colorSurfaceContainerLow">@color/solarizedBase3</item>
+        <item name="colorSurfaceContainer">@color/solarizedBase2</item>
+        <item name="colorSurfaceContainerHigh">@color/solarizedBase2</item>
+        <item name="colorSurfaceContainerHighest">@color/solarizedBase2</item>
         <item name="android:colorPrimaryDark">@color/solarizedBase1</item>
         <item name="android:colorButtonNormal">@color/solarizedBase2</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
@@ -159,12 +320,46 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
     </style>
-    <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar"/>
-    <style name="SolarizedTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    <style name="SolarizedTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Toolbar.Surface"/>
+    <style name="SolarizedTheme.PopupOverlay" parent="">
         <item name="android:colorBackground">@color/solarizedBase3</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <style name="DialogTheme" parent="Theme.Material3.Light.Dialog">
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_light_on_primary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_light_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_light_on_primary_container</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_light_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_light_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_light_on_secondary_container</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_light_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_light_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_light_on_tertiary_container</item>
+        <item name="colorError">@color/md_theme_light_error</item>
+        <item name="colorOnError">@color/md_theme_light_on_error</item>
+        <item name="colorErrorContainer">@color/md_theme_light_error_container</item>
+        <item name="colorOnErrorContainer">@color/md_theme_light_on_error_container</item>
+        <item name="android:colorBackground">@color/md_theme_light_background</item>
+        <item name="colorOnBackground">@color/md_theme_light_on_background</item>
+        <item name="colorSurface">@color/md_theme_light_surface</item>
+        <item name="colorOnSurface">@color/md_theme_light_on_surface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_light_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_light_on_surface_variant</item>
+        <item name="colorOutline">@color/md_theme_light_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_light_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_light_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_light_inverse_primary</item>
+        <item name="colorSurfaceDim">@color/md_theme_light_surface_dim</item>
+        <item name="colorSurfaceBright">@color/md_theme_light_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_light_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_light_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/md_theme_light_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_light_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_light_surface_container_highest</item>
         <item name="windowNoTitle">true</item>
 
         <item name="icon_read">@drawable/ic_done_black_24dp</item>
@@ -175,7 +370,41 @@
         <item name="icon_open">@drawable/ic_open_in_new_black_24dp</item>
     </style>
 
-    <style name="DialogThemeDark" parent="Theme.AppCompat.Dialog">
+    <style name="DialogThemeDark" parent="Theme.Material3.Dark.Dialog">
+        <item name="colorPrimary">@color/md_theme_dark_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_on_primary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_on_primary_container</item>
+        <item name="colorSecondary">@color/md_theme_dark_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_on_secondary_container</item>
+        <item name="colorTertiary">@color/md_theme_dark_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_on_tertiary_container</item>
+        <item name="colorError">@color/md_theme_dark_error</item>
+        <item name="colorOnError">@color/md_theme_dark_on_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_error_container</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_on_error_container</item>
+        <item name="android:colorBackground">@color/md_theme_dark_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_on_background</item>
+        <item name="colorSurface">@color/md_theme_dark_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_on_surface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_on_surface_variant</item>
+        <item name="colorOutline">@color/md_theme_dark_outline</item>
+        <item name="colorOutlineVariant">@color/md_theme_dark_outline_variant</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_inverse_primary</item>
+        <item name="colorSurfaceDim">@color/md_theme_dark_surface_dim</item>
+        <item name="colorSurfaceBright">@color/md_theme_dark_surface_bright</item>
+        <item name="colorSurfaceContainerLowest">@color/md_theme_dark_surface_container_lowest</item>
+        <item name="colorSurfaceContainerLow">@color/md_theme_dark_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/md_theme_dark_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/md_theme_dark_surface_container_high</item>
+        <item name="colorSurfaceContainerHighest">@color/md_theme_dark_surface_container_highest</item>
         <item name="windowNoTitle">true</item>
 
         <item name="icon_read">@drawable/ic_done_white_24dp</item>
@@ -186,7 +415,19 @@
         <item name="icon_open">@drawable/ic_open_in_new_white_24dp</item>
     </style>
 
-    <style name="ProxyTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AboutLibrariesThemeOverlay" parent="">
+        <item name="about_libraries_card">?attr/colorSurfaceContainerLow</item>
+        <item name="about_libraries_title_description">?attr/colorOnSurface</item>
+        <item name="about_libraries_text_description">?attr/colorOnSurfaceVariant</item>
+        <item name="about_libraries_divider_description">?attr/colorOutlineVariant</item>
+        <item name="about_libraries_title_openSource">?attr/colorOnSurface</item>
+        <item name="about_libraries_text_openSource">?attr/colorOnSurfaceVariant</item>
+        <item name="about_libraries_special_button_openSource">?attr/colorPrimary</item>
+        <item name="about_libraries_dividerDark_openSource">?attr/colorOutlineVariant</item>
+        <item name="about_libraries_dividerLight_openSource">?attr/colorOutlineVariant</item>
+    </style>
+
+    <style name="ProxyTheme" parent="LightTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.EnumSet;
 
@@ -51,6 +52,7 @@ public class ArticleListsFragment extends Fragment
 
     private ArticleListsPagerAdapter adapter;
     private ViewPager viewPager;
+    private BottomNavigationView bottomNavigation;
 
     private Sortable.SortOrder sortOrder;
     private String searchQuery;
@@ -112,15 +114,29 @@ public class ArticleListsFragment extends Fragment
                 Log.v(TAG, "onPageSelected() position: " + position);
 
                 setParametersToFragment(getCurrentFragment());
+                updateBottomNavigationSelection();
             }
         });
-
-        TabLayout tabLayout = view.findViewById(R.id.articles_list_tab_layout);
-        tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setCurrentItem(1);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        bindBottomNavigation();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (bottomNavigation != null) {
+            bottomNavigation.setOnItemSelectedListener(null);
+        }
     }
 
     @Override
@@ -174,6 +190,35 @@ public class ArticleListsFragment extends Fragment
 
     private void setSearchQueryOnFragment(ArticleListFragment fragment, String searchQuery) {
         if (fragment != null) fragment.setSearchQuery(searchQuery);
+    }
+
+    private void bindBottomNavigation() {
+        bottomNavigation = requireActivity().findViewById(R.id.bottom_navigation);
+        if (bottomNavigation == null) {
+            return;
+        }
+
+        Menu menu = bottomNavigation.getMenu();
+        if (menu.size() == 0) {
+            for (int i = 0; i < adapter.getCount(); i++) {
+                menu.add(Menu.NONE, i + 1, i, adapter.getPageTitle(i))
+                    .setIcon(adapter.getPageIcon(i))
+                ;
+            }
+        }
+
+        updateBottomNavigationSelection();
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            viewPager.setCurrentItem(item.getItemId() - 1);
+            return true;
+        });
+    }
+
+    private void updateBottomNavigationSelection() {
+        if (bottomNavigation != null && viewPager != null) {
+            bottomNavigation.setSelectedItemId(viewPager.getCurrentItem() + 1);
+        }
     }
 
     private ArticleListFragment getCurrentFragment() {

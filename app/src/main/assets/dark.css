@@ -46,9 +46,12 @@ body {
 }
 
 h1, h2, h3, h4 {
+  color: #FFF;
+}
+
+h2, h3, h4 {
   font-family: 'PT Sans', sans-serif;
   text-transform: uppercase;
-  color: #FFF;
 }
 
 p, li {

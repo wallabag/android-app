@@ -18,7 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import fr.gaulupeau.apps.InThePoche.R;
 import fr.gaulupeau.apps.Poche.App;
@@ -130,7 +130,7 @@ public class ArticleActionsHelper {
 
         view.<TextView>findViewById(R.id.editText_title).setText(article.getTitle());
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity)
                 .setView(view);
 
         builder.setPositiveButton(android.R.string.ok, (dialog, which) ->
@@ -152,7 +152,7 @@ public class ArticleActionsHelper {
     }
 
     public void showDeleteArticleDialog(Context context, Article article, Runnable okCallback) {
-        AlertDialog.Builder b = new AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder b = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.d_deleteArticle_title)
                 .setMessage(R.string.d_deleteArticle_message);
 
@@ -215,7 +215,7 @@ public class ArticleActionsHelper {
     }
 
     public void showDownloadFileDialog(Context context, Article article) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.dialog_title_downloadFileFormat);
 
         builder.setItems(R.array.options_downloadFormat_values, (dialog, which) -> {

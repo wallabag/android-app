@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -27,6 +26,8 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import android.view.MenuItem;
 import java.io.File;
@@ -61,9 +62,13 @@ public class SettingsActivity extends BaseActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content), (v, windowInsets) -> {
+        setSupportActionBar(findViewById(R.id.toolbar));
+        addBackButtonToActionBar();
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings_root), (v, windowInsets) -> {
             Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
             return windowInsets;
@@ -71,9 +76,14 @@ public class SettingsActivity extends BaseActionBarActivity implements
 
         if(savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, new SettingsFragment())
+                    .replace(R.id.settings_container, new SettingsFragment())
                     .commit();
         }
+    }
+
+    @Override
+    protected boolean hasOwnToolbar() {
+        return true;
     }
 
     @Override
@@ -83,7 +93,7 @@ public class SettingsActivity extends BaseActionBarActivity implements
         args.putString(PreferenceFragmentCompat.ARG_PREFERENCE_ROOT, pref.getKey());
         fragment.setArguments(args);
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, fragment)
+                .replace(R.id.settings_container, fragment)
                 .addToBackStack(null)
                 .commit();
         return true;
@@ -527,7 +537,7 @@ public class SettingsActivity extends BaseActionBarActivity implements
                 case R.string.pref_key_sync_syncTypes_description: {
                     Activity activity = getActivity();
                     if(activity != null) {
-                        new AlertDialog.Builder(activity)
+                        new MaterialAlertDialogBuilder(activity)
                                 .setTitle(R.string.pref_name_sync_syncTypes)
                                 .setMessage(R.string.pref_desc_sync_syncTypes_text)
                                 .setPositiveButton(R.string.ok, null)
@@ -542,7 +552,7 @@ public class SettingsActivity extends BaseActionBarActivity implements
                 case R.string.pref_key_misc_wipeDB: {
                     Activity activity = getActivity();
                     if(activity != null) {
-                        new AlertDialog.Builder(activity)
+                        new MaterialAlertDialogBuilder(activity)
                                 .setTitle(R.string.pref_name_misc_wipeDB_confirmTitle)
                                 .setMessage(R.string.pref_name_misc_wipeDB_confirmMessage)
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -645,7 +655,7 @@ public class SettingsActivity extends BaseActionBarActivity implements
         private void showDisableTouchSetKeyCodeDialog() {
             Activity activity = getActivity();
             if(activity != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
                 builder.setTitle(R.string.d_disableTouch_changeKey_title);
 
                 @SuppressLint("InflateParams")

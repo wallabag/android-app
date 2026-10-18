@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
 
@@ -177,7 +177,7 @@ public class ConfigurationTestHelper
     }
 
     protected void showSuggestionDialog(final String suggestedUrl, boolean allowToDecline) {
-        AlertDialog.Builder b = new AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder b = new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.d_testConnection_urlSuggestion_title)
                 .setPositiveButton(R.string.d_testConnection_urlSuggestion_acceptButton,
                         new DialogInterface.OnClickListener() {
@@ -246,7 +246,7 @@ public class ConfigurationTestHelper
             }
         }
 
-        new AlertDialog.Builder(context)
+        new MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.d_testConnection_fail_title)
                 .setMessage(errorStr)
                 .setPositiveButton(R.string.ok, null)
@@ -296,7 +296,7 @@ public class ConfigurationTestHelper
                 credentialsHandler.onGetCredentialsFail();
             }
 
-            new AlertDialog.Builder(context)
+            new MaterialAlertDialogBuilder(context)
                     .setTitle(R.string.d_getCredentials_title_fail)
                     .setMessage(R.string.d_getCredentials_title_message)
                     .setPositiveButton(R.string.ok, null)
@@ -365,7 +365,7 @@ public class ConfigurationTestHelper
                     errorMessage = context.getString(messageErrorResId, details);
                 }
 
-                new AlertDialog.Builder(context)
+                new MaterialAlertDialogBuilder(context)
                         .setTitle(R.string.d_checkCredentials_title_fail)
                         .setMessage(errorMessage)
                         .setPositiveButton(R.string.ok, null)

@@ -121,6 +121,10 @@
         </activity>
 
         <activity
+            android:name="fr.gaulupeau.apps.Poche.ui.AboutActivity"
+            android:label="@string/nav_other_about" />
+
+        <activity
             android:name="fr.gaulupeau.apps.Poche.ui.preferences.ConnectionWizardActivity"
             android:exported="true">
             <intent-filter>
