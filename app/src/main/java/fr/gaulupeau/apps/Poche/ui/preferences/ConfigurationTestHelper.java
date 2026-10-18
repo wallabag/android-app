@@ -21,6 +21,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.GetCredentialsTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.network.tasks.TestConnectionTask;
+import fr.gaulupeau.apps.Poche.utils.LocalNetworkPermissionHelper;
 
 public class ConfigurationTestHelper
         implements GetCredentialsTask.ResultHandler,
@@ -104,6 +105,34 @@ public class ConfigurationTestHelper
     public void test() {
         canceled = false;
 
+        ensureLocalNetworkPermission();
+    }
+
+    /**
+     * On Android 17+ (API 37) access to the local network is blocked by default,
+     * so the ACCESS_LOCAL_NETWORK permission is requested first if the server
+     * is on the local network.
+     */
+    private void ensureLocalNetworkPermission() {
+        Activity activity = context instanceof Activity ? (Activity) context : null;
+
+        LocalNetworkPermissionHelper.ensureLocalNetworkPermission(activity, url,
+                new LocalNetworkPermissionHelper.PermissionRequestHandler() {
+            @Override
+            public void onLocalNetworkPermissionResolved(boolean granted) {
+                if (canceled) return;
+
+                if (granted) {
+                    startTest();
+                } else {
+                    Toast.makeText(context, R.string.txtLocalNetworkAccessDenied,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void startTest() {
         progressDialog.setMessage(context.getString(R.string.testConnection_progressDialogMessage));
         progressDialog.show();
 
@@ -114,6 +143,8 @@ public class ConfigurationTestHelper
 
     public void cancel() {
         canceled = true;
+
+        LocalNetworkPermissionHelper.cancelPendingRequest();
 
         dismissDialog(progressDialog);
 

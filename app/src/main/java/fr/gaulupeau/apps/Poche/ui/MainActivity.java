@@ -69,6 +69,7 @@ import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.service.workers.ArticleUpdater;
 import fr.gaulupeau.apps.Poche.ui.preferences.ConfigurationTestHelper;
 import fr.gaulupeau.apps.Poche.ui.preferences.SettingsActivity;
+import fr.gaulupeau.apps.Poche.utils.LocalNetworkPermissionHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -532,6 +533,14 @@ public class MainActivity extends AppCompatActivity
         return handleContextMenuItemInFragment(item) || super.onContextItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        LocalNetworkPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN, priority = -1)
     public void onOfflineQueueChangedEvent(OfflineQueueChangedEvent event) {
         Log.d(TAG, "onOfflineQueueChangedEvent()");
@@ -875,7 +884,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        OperationsHelper.syncQueue(this);
+        ensureLocalNetworkPermission(() -> OperationsHelper.syncQueue(this));
     }
 
     private void sweepDeletedArticles() {
@@ -884,7 +893,7 @@ public class MainActivity extends AppCompatActivity
             return;
         }
 
-        OperationsHelper.sweepDeletedArticles(this);
+        ensureLocalNetworkPermission(() -> OperationsHelper.sweepDeletedArticles(this));
     }
 
     private void updateAllFeedsIfDbIsEmpty() {
@@ -916,7 +925,8 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, getString(R.string.txtConfigNotSet), Toast.LENGTH_SHORT).show();
             }
         } else if (WallabagConnection.isNetworkAvailable()) {
-            OperationsHelper.syncAndUpdate(this, settings, updateType, false);
+            ensureLocalNetworkPermission(
+                    () -> OperationsHelper.syncAndUpdate(this, settings, updateType, false));
         } else {
             if (showErrors) {
                 Toast.makeText(this, getString(R.string.txtNetOffline), Toast.LENGTH_SHORT).show();
@@ -950,6 +960,26 @@ public class MainActivity extends AppCompatActivity
             configurationTestHelper.cancel();
             configurationTestHelper = null;
         }
+    }
+
+    /**
+     * On Android 17+ (API 37) access to the local network is blocked by default,
+     * so the ACCESS_LOCAL_NETWORK permission is requested first if the server
+     * is on the local network.
+     */
+    private void ensureLocalNetworkPermission(Runnable action) {
+        LocalNetworkPermissionHelper.ensureLocalNetworkPermission(this, settings.getUrl(),
+                new LocalNetworkPermissionHelper.PermissionRequestHandler() {
+            @Override
+            public void onLocalNetworkPermissionResolved(boolean granted) {
+                if (granted) {
+                    action.run();
+                } else {
+                    Toast.makeText(MainActivity.this, R.string.txtLocalNetworkAccessDenied,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void showAddBagDialog() {

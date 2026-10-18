@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -33,6 +34,7 @@ import fr.gaulupeau.apps.Poche.network.WallabagWebService;
 import fr.gaulupeau.apps.Poche.network.tasks.TestApiAccessTask;
 import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
+import fr.gaulupeau.apps.Poche.utils.LocalNetworkPermissionHelper;
 
 // TODO: split classes?
 public class ConnectionWizardActivity extends BaseActionBarActivity {
@@ -189,6 +191,14 @@ public class ConnectionWizardActivity extends BaseActionBarActivity {
                 finish();
             }
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        LocalNetworkPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     private ConnectionData parseLoginData(String connectionUri) {

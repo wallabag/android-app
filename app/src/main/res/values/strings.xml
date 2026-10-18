@@ -29,6 +29,7 @@
     <string name="d_deleteArticle_message">Are you sure you want to delete the article?</string>
     <string name="txtNetOffline">Make sure you are connected to the Internet first.</string>
     <string name="txtConfigNotSet">Set up the app before syncing.</string>
+    <string name="txtLocalNetworkAccessDenied">Access to the local network is denied. Please allow it in the app settings to communicate with the wallabag server.</string>
     <string name="txtUrlCopied">Article URL copied to clipboard</string>
     <string name="dialog_add_label">Add a new article</string>
     <string name="page_url">Page URL</string>
@@ -50,6 +51,8 @@
     <string name="d_configurationChanged_answer_decline">Not now</string>
     <string name="d_configurationIsQuestionable_title">Problem detected</string>
     <string name="d_configurationIsQuestionable_message">There was a connection error recently. It is recommended to perform a connection test.</string>
+    <string name="d_localNetworkPermission_title">Local network access</string>
+    <string name="d_localNetworkPermission_message">The wallabag server seems to be on the local network. Android requires permission to connect to local devices, so you will now be asked to allow the app to connect.</string>
     <string name="addLink_success_text">Added</string>
     <string name="settings_parametersAreOk">The parameters are fine</string>
     <string name="settings_parametersAutofilled">Parameters filled</string>

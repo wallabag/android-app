@@ -54,6 +54,7 @@ import fr.gaulupeau.apps.Poche.service.OperationsHelper;
 import fr.gaulupeau.apps.Poche.ui.BaseActionBarActivity;
 import fr.gaulupeau.apps.Poche.ui.Themes;
 import fr.gaulupeau.apps.Poche.utils.LoggingUtils;
+import fr.gaulupeau.apps.Poche.utils.LocalNetworkPermissionHelper;
 
 public class SettingsActivity extends BaseActionBarActivity implements
         PreferenceFragmentCompat.OnPreferenceStartScreenCallback {
@@ -97,6 +98,14 @@ public class SettingsActivity extends BaseActionBarActivity implements
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        LocalNetworkPermissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat
