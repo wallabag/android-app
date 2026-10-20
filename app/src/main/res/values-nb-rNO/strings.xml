@@ -194,7 +194,7 @@
     <string name="pref_name_autoSyncQueue_enabled">Separer automatisk synkronisering for lokale endringer</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dette tillater lokale endringer (tillagte lenker, arkiverte artkler, osv.) å synkroniseres til tjeneren så snart nettverk blir tilgjengelig.</string>
     <string name="pref_name_imageCache_enabled">Legg bilder fra artikler i hurtiglager</string>
-    <string name="pref_desc_imageCache_enabled">Laster ned bilder fra hver artikkel automatisk og lagrer dem på enheten. Avhengig av lengden på din wallabag-artikkelliste, kan dette ta veldig lang tid og bruke mye plass.</string>
+    <string name="pref_desc_imageCache_enabled">Automatisk nedlasting av alle bilder fra hver artikkel til enheten (tar tid og plass dersom artikkellisten er lang)</string>
     <string name="pref_categoryName_miscellaneous">Ymse</string>
     <string name="pref_name_misc_handleHttpScheme">Behandle HTTP-metode</string>
     <string name="pref_desc_misc_handleHttpScheme">Vis wallabag i listen over nettlesere</string>
