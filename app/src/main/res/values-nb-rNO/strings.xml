@@ -47,7 +47,7 @@
     <string name="d_configurationIsQuestionable_title">Problem oppdaget</string>
     <string name="d_configurationIsQuestionable_message">Det var et tilkoblingsproblem nylig. Det anbefales å utføre en tilkoblingstest.</string>
     <string name="addLink_success_text">Lagt til</string>
-    <string name="settings_parametersAreOk">Parameterne ser bra ut</string>
+    <string name="settings_parametersAreOk">Parametrene er fine</string>
     <string name="settings_parametersAutofilled">Parameter utfylt</string>
     <string name="testConnection_progressDialogMessage">Tester tilkobling…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Uriktig nettadresse</string>
@@ -239,8 +239,8 @@
     <string name="lastUpdateTimeLabel">Siste oppdatering: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="message_couldNotOpenUrl">Kunne ikke åpne denne nettadressen</string>
-    <string name="message_disableTouch_inputDisabled">Trykkinndata avskrudd</string>
-    <string name="message_disableTouch_inputEnabled">Trykkinndata påskrudd</string>
+    <string name="message_disableTouch_inputDisabled">Berøringsinndata er av</string>
+    <string name="message_disableTouch_inputEnabled">Berøringsinndata er på</string>
     <string name="d_disableTouch_changeKey_title">Knapp for å slå av berøringsskjerm</string>
     <string name="d_disableTouch_currentCode">Valgt nøkkelkode (trykk på en tast for å endre den):</string>
     <string name="pref_categoryName_ui_misc">Ymse</string>
@@ -255,7 +255,7 @@
     <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
     <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>
     <string name="remove_tag">Fjern stikkord</string>
-    <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
+    <string name="scrolledOverBottom">Rull %d gang(er) til forbi bunnen for å merke artikkelen som lest</string>
     <string name="markedAsRead">Artikkel merket som lest</string>
     <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
     <string name="pref_desc_ui_scrollOverBottom">Trykk her for å sette opp antall ganger du må rulle over bunnen for å markere en artikkel som lest</string>
