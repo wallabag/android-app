@@ -47,7 +47,7 @@
     <string name="d_configurationIsQuestionable_title">Problem oppdaget</string>
     <string name="d_configurationIsQuestionable_message">Det var et tilkoblingsproblem nylig. Det anbefales å utføre en tilkoblingstest.</string>
     <string name="addLink_success_text">Lagt til</string>
-    <string name="settings_parametersAreOk">Parameterne ser bra ut</string>
+    <string name="settings_parametersAreOk">Parametrene er fine</string>
     <string name="settings_parametersAutofilled">Parameter utfylt</string>
     <string name="testConnection_progressDialogMessage">Tester tilkobling…</string>
     <string name="testConnection_errorMessage_incorrectUrl">Uriktig nettadresse</string>
@@ -57,7 +57,7 @@
     <string name="testConnection_errorMessage_noCSRF">Kunne ikke tolke innloggingsskjema</string>
     <string name="testConnection_errorMessage_incorrectCredentials">Kan ikke logge inn — sjekk brukernavn og passord</string>
     <string name="testConnection_errorMessage_authProblems">Kunne ikke logge inn (skyldes vanligvis HTTP-videresendinger)</string>
-    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Skyldes vanligvis tofaktorautentisering (som appen ikke støtter enda)</string>
+    <string name="testConnection_errorMessage_unknownPageAfterLogin">Ukjent side etter innlogging. Skyldes vanligvis tofaktorautentisering (som appen ikke støtter enda).</string>
     <string name="testConnection_errorMessage_unknown">Ukjent feil</string>
     <string name="testConnection_errorMessage_unknownWithMessage">Ukjent feil: %s</string>
     <string name="d_testConnection_urlSuggestion_title">Overvei å endre nettadresse</string>
@@ -194,7 +194,7 @@
     <string name="pref_name_autoSyncQueue_enabled">Separer automatisk synkronisering for lokale endringer</string>
     <string name="pref_desc_autoSyncQueue_enabled">Dette tillater lokale endringer (tillagte lenker, arkiverte artkler, osv.) å synkroniseres til tjeneren så snart nettverk blir tilgjengelig.</string>
     <string name="pref_name_imageCache_enabled">Legg bilder fra artikler i hurtiglager</string>
-    <string name="pref_desc_imageCache_enabled">Laster ned bilder fra hver artikkel automatisk og lagrer dem på enheten. Avhengig av lengden på din wallabag-artikkelliste, kan dette ta veldig lang tid og bruke mye plass.</string>
+    <string name="pref_desc_imageCache_enabled">Automatisk nedlasting av alle bilder fra hver artikkel til enheten (tar tid og plass dersom artikkellisten er lang)</string>
     <string name="pref_categoryName_miscellaneous">Ymse</string>
     <string name="pref_name_misc_handleHttpScheme">Behandle HTTP-metode</string>
     <string name="pref_desc_misc_handleHttpScheme">Vis wallabag i listen over nettlesere</string>
@@ -239,9 +239,9 @@
     <string name="lastUpdateTimeLabel">Siste oppdatering: %s</string>
     <string name="listItem_estimatedReadingTime">%d min</string>
     <string name="message_couldNotOpenUrl">Kunne ikke åpne denne nettadressen</string>
-    <string name="message_disableTouch_inputDisabled">Trykkinndata avskrudd</string>
-    <string name="message_disableTouch_inputEnabled">Trykkinndata påskrudd</string>
-    <string name="d_disableTouch_changeKey_title">SKru av trykkinndatatast</string>
+    <string name="message_disableTouch_inputDisabled">Berøringsinndata er av</string>
+    <string name="message_disableTouch_inputEnabled">Berøringsinndata er på</string>
+    <string name="d_disableTouch_changeKey_title">Knapp for å slå av berøringsskjerm</string>
     <string name="d_disableTouch_currentCode">Valgt nøkkelkode (trykk på en tast for å endre den):</string>
     <string name="pref_categoryName_ui_misc">Ymse</string>
     <string name="pref_name_ui_disableTouch_enabled">Skru av trykkinndata</string>
@@ -255,7 +255,7 @@
     <string name="pref_name_misc_appendWallabagMention">Legg til wallabag-nevning</string>
     <string name="pref_desc_misc_appendWallabagMention">Legg til \"via @wallabagapp\" i delte tekster</string>
     <string name="remove_tag">Fjern stikkord</string>
-    <string name="scrolledOverBottom">Rull %d gang(er) til over bunnen for å markere artikkelen som lest</string>
+    <string name="scrolledOverBottom">Rull %d gang(er) til forbi bunnen for å merke artikkelen som lest</string>
     <string name="markedAsRead">Artikkel merket som lest</string>
     <string name="pref_name_ui_scrollOverBottom">Rull over bunnen for å markere som lest</string>
     <string name="pref_desc_ui_scrollOverBottom">Trykk her for å sette opp antall ganger du må rulle over bunnen for å markere en artikkel som lest</string>
@@ -283,7 +283,7 @@
     <string name="notification_clipboardLabel">Feildetaljer</string>
     <string name="copiedToClipboard">Kopiert til utklippstavle</string>
     <string name="connectionWizard_misc_scanQrCode">Skann en QR-kode</string>
-    <string name="connectionWizard_misc_installQrCodeScanner">Installer en skanner for QR-koder</string>
+    <string name="connectionWizard_misc_installQrCodeScanner">(Installer en QR-kodeskanner først.)</string>
     <string name="pref_categoryName_misc_localQueue">Lokale endringer</string>
     <string name="pref_name_misc_localQueue_notice">ADVARSEL</string>
     <string name="pref_desc_misc_localQueue_notice">Ikke gjør noe her med mindre du vet hva du gjør</string>
@@ -293,9 +293,9 @@
     <string name="pref_desc_misc_localQueue_removeFirstItem">Fjerner første usykroniserte element. Kan hjelpe hvis du får vedvarende feilmeldinger under synkronisering. Dump alle lokale endringer til en fil først.</string>
     <string name="misc_localQueue_empty">Ingen lokale endringer</string>
     <string name="misc_localQueue_removeFirstItem_done">Ferdig</string>
-    <string name="misc_localQueue_dumpToFile_result_dumped">Dumpet til %s</string>
+    <string name="misc_localQueue_dumpToFile_result_dumped">Lagret som %s</string>
     <string name="misc_localQueue_dumpToFile_result_error">Feil: %s</string>
-    <string name="misc_localQueue_dumpToFile_header">Hvis du opplever problemer med synkroniseringen, innrapporter problemet ditt her: %s</string>
+    <string name="misc_localQueue_dumpToFile_header">Rapporter synkroniseringsproblemer her: %s</string>
     <string name="notification_action_media_next">Neste</string>
     <string name="notification_action_media_fastforward">Rask framoverspoling</string>
     <string name="notification_action_media_play">Spill av</string>
@@ -337,7 +337,7 @@
     <string name="pref_desc_ui_onyxworkaround_enabled">Forhindra at Onyx-enheter tvinger svarte lenkefarger</string>
     <string name="pref_name_misc_addTitleToSharedText">Legg til tittel til delt tekst</string>
     <string name="pref_desc_ui_mathRendering_delimiters">Velg miljøavgrensningene som KaTeX skal behandle</string>
-    <string name="pref_name_ui_showArticleAddedDialog">VIs dialog ved innhenting</string>
+    <string name="pref_name_ui_showArticleAddedDialog">Vis dialog ved pakking</string>
     <string name="pref_name_tts_fastForwardTime">Spole forover hopptid</string>
     <string name="pref_desc_tts_previousButtonIsRewind">Trykk «Forrige»-knappen vil spole bakover i stedet for å hoppe til forrige artikkel</string>
     <string name="untagged">&lt;uten_stikkord&gt;</string>
