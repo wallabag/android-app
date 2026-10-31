@@ -204,6 +204,8 @@
     <string name="pref_name_ui_article_fontSize" formatted="false">Article text size (%)</string>
     <string name="pref_name_ui_article_fontSerif">Serif typeface</string>
     <string name="pref_desc_ui_article_fontSerif">Serif font for articles</string>
+    <string name="pref_name_ui_article_scrollbar_enabled">Show article scrollbar</string>
+    <string name="pref_desc_ui_article_scrollbar_enabled">Display the vertical scrollbar while reading articles</string>
     <string name="pref_name_ui_article_textAlignment_justify">Text alignment: Justify</string>
     <string name="pref_desc_ui_article_textAlignment_justify">Stretches lines to equal width (like in newspapers)</string>
     <string name="pref_name_ui_article_handlePreformattedText">Handling Long Preformatted Text</string>

@@ -246,6 +246,7 @@ public class ReadArticleActivity extends AppCompatActivity {
         invalidateOptionsMenu();
 
         scrollView = findViewById(R.id.scroll);
+        scrollView.setVerticalScrollBarEnabled(settings.isArticleScrollbarEnabled());
         scrollViewLastChild = scrollView.getChildAt(scrollView.getChildCount() - 1);
         webViewContent = findViewById(R.id.webViewContent);
         loadingPlaceholder = findViewById(R.id.tv_loading_article);

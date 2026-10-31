@@ -337,6 +337,10 @@ public class Settings {
         return getBoolean(R.string.pref_key_ui_article_fontSerif, false);
     }
 
+    public boolean isArticleScrollbarEnabled() {
+        return getBoolean(R.string.pref_key_ui_article_scrollbar_enabled, false);
+    }
+
     public void setArticleFontSerif(boolean value) {
         setBoolean(R.string.pref_key_ui_article_fontSerif, value);
     }
