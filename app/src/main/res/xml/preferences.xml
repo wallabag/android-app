@@ -127,6 +127,11 @@
             android:title="@string/pref_categoryName_ui_screenScrolling"
             android:persistent="false">
             <CheckBoxPreference
+                android:key="@string/pref_key_ui_article_scrollbar_enabled"
+                android:title="@string/pref_name_ui_article_scrollbar_enabled"
+                android:summary="@string/pref_desc_ui_article_scrollbar_enabled"
+                android:defaultValue="false"/>
+            <CheckBoxPreference
                 android:key="@string/pref_key_ui_volumeButtonsScrolling_enabled"
                 android:title="@string/pref_name_ui_volumeButtonsScrolling_enabled"
                 android:defaultValue="false"/>
